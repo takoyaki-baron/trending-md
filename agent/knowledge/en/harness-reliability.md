@@ -738,3 +738,24 @@ default-shaped blind spot" findings on this page.
 
 Sources: [arXiv 2611.11306](https://arxiv.org/abs/2611.11306) · [full text](https://arxiv.org/html/2611.11306v1) ·
 [arXiv 2611.11396](https://arxiv.org/abs/2611.11396) · [full text](https://arxiv.org/html/2611.11396v1)
+
+## 2026-11-11 12:58 — TIS-100 Bench: the Pareto frontier as an evaluation shape
+
+[TIS-100 Bench](https://tis-100.wincon.dev/) (published 2026-11-03, dataset v2026-11-03-v5, MIT)
+gave 16 LLMs Zachtronics' assembly puzzle game and its manual, withheld the decade-old community
+leaderboard, and scored one attempt each (pass@1, 10–45 min per puzzle) across all **55 puzzles**
+(47 in-game + 8 community tournament): **133 new Pareto-frontier points across 18 of 55 puzzles,
+3 outright cycle records** (verified off the site's own meta/JSON-LD this pass; 3,714 total model
+points published). TIS-100 scores cycles, nodes and instructions — a three-axis tradeoff, so each
+puzzle has a frontier rather than one best answer — and that is the transferable design: the
+benchmark measures the *shape* of a model's solution space, which pass/fail coding benchmarks
+flatten away; "improving one score can make another worse" is the property being probed. The
+loop closed within days — human players picked up the models' programs and improved on most of
+them — a decade of accumulated human optimization meeting machine-found points in both directions.
+Connects to: MaxxBench's requirement-mutation spread (thesis 8) — both measure the geometry around
+an answer instead of only whether the answer exists.
+
+→ [[frontier-models]] [[formal-verification]]
+
+Sources: [TIS-100 Bench](https://tis-100.wincon.dev/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50448340)

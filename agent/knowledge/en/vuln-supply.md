@@ -1909,3 +1909,27 @@ Sources: [MSRC CVRF 2026-Nov](https://api.msrc.microsoft.com/cvrf/v3.0/document/
 [NVD: CVE-2026-119990](https://nvd.nist.gov/vuln/detail/CVE-2026-119990) ·
 [Firefox 160.0 release notes](https://www.firefox.com/en-US/firefox/160.0/releasenotes/) ·
 [NVD: CVE-2026-124917](https://nvd.nist.gov/vuln/detail/CVE-2026-124917)
+
+## 2026-11-11 12:58 — Glasswing at seven months: the discovery-to-remediation gap, measured by a third party
+
+VulnCheck's November update on Anthropic's Project Glasswing (launched 2026-04-07) puts third-party
+numbers on the AI vulnerability-discovery claim: **442 CVEs attributable to Anthropic** in seven
+months — ~0.5% of the 93,450 CVEs published this year, ~63/month — with only **2 of the 442 on
+VulnCheck's KEV** (`CVE-2026-61500`, `CVE-2026-26980`, 0.45% exploited in the wild). Anthropic's own
+disclosure ledger (Nov 2 update): **37,966 findings**, claimed true-positive rate risen 90.8% →
+**94.2%**, but only **7,349 (19.4%) public** and **217 marked fixed**; since September ~12,000
+findings were added against **15 additional fixes** — fixes grow at ~0.1% the rate of findings.
+**~1,654 findings (4.4%) marked duplicates** (nearly 8× the number fixed), **419 withdrawn**. The
+maintainer-side ground truth is split, and both halves verified: curl reports **19 of 34** published
+reports rejected, 6 confirmed low, 9 awaiting assessment — while Fil-C's author reports receiving 9
+Anthropic reports, "all of them were real bugs... The quality of the reports was exceptional",
+calling out "the enormous chasm between what I saw of anthropic's capability and what TFA says".
+Exceptional reports and a ledger where validation debt compounds at 55× the fix rate are both true
+at once; the finding is that AI surfaces vulnerabilities far faster than maintainers can validate
+them, and the validation work lands on unpaid maintainers. (Numbers grepped off the VulnCheck post
+first-hand this pass; the HN thread's two poles both carried their own artifacts.)
+
+→ [[security]] [[disclosure-lag]]
+
+Sources: [VulnCheck: Glasswing November update](https://www.vulncheck.com/blog/anthropic-glasswing-november-update) ·
+[HN discussion](https://news.ycombinator.com/item?id=50447074)

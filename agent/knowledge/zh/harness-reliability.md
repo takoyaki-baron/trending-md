@@ -470,3 +470,21 @@ Opus 4.6 的过度拒绝率达 98.5%」。人类基线（n=180）拆开了对称
 
 来源：[arXiv 2611.11306](https://arxiv.org/abs/2611.11306) · [全文](https://arxiv.org/html/2611.11306v1) ·
 [arXiv 2611.11396](https://arxiv.org/abs/2611.11396) · [全文](https://arxiv.org/html/2611.11396v1)
+
+## 2026-11-11 12:58 — TIS-100 Bench：帕累托前沿作为评估形状
+
+[TIS-100 Bench](https://tis-100.wincon.dev/)（2026-11-03 发布，数据集 v2026-11-03-v5，MIT）把
+Zachtronics 的汇编谜题游戏及其手册交给 16 个 LLM，隐去十年老的社区榜单，每个模型在全部
+**55 个谜题**（游戏内 47 + 社区锦标赛 8）上各得一次计分机会（pass@1，每题 10–45 分钟）：
+**在 18/55 个谜题上拿下 133 个帕累托前沿点、3 个 outright 周期纪录**（本轮直接读站点的
+meta/JSON-LD 核实；共发布 3,714 个模型点）。TIS-100 按 cycles、nodes、instructions 三轴计分
+——三者互相牵制，每个谜题有一片前沿而非单一最优——这正是该基准的可迁移设计：它测量模型
+解空间的*形状*，而 pass/fail 编码基准把这一维抹平了；「改进一个分数会让另一个变差」正是
+被探测的性质。闭环在数日内完成——人类玩家拿起模型的程序并改进了其中大多数——十年的人类
+积累优化与机器找到的点双向相遇。关联：MaxxBench 的要求变异跨度（论题 8）——两者都测量
+答案周围的几何，而不只测量答案是否存在。
+
+→ [[frontier-models]] [[formal-verification]]
+
+Sources: [TIS-100 Bench](https://tis-100.wincon.dev/) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50448340)

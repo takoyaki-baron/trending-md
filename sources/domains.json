@@ -4741,6 +4741,15 @@
   "jp": "Tranco上位10,000のクロールから採取した1,033枚のcanvasフィンガープリント描画を、ベンダー別にクラスタリングしたギャラリー。誰がどう指紋採取しているかの視覚的索引として有用。ただし1回のクロールであり、サイトに手法ページはない（手法は記事側にある）。検証済み（10-29）：サイトは到達可能で、nullpt.rsの記事が1,033枚とTranco由来を明記している。",
   "zh": "从 Tranco 前 10,000 爬取中采集的 1,033 张 canvas 指纹渲染图，按厂商聚类。作为「谁在采集、怎么采集」的视觉索引很有用；但它只是一次爬取的快照，站内没有方法学页面（方法写在文章里）。已核验（10-29）：站点可访问，nullpt.rs 文中明示 1,033 张与 Tranco 来源。"
  },
+ "fingerprinting.study": {
+  "cat": "security",
+  "cred": "high",
+  "density": "high",
+  "cv": 1,
+  "en": "Companion site to the Mozilla/UC San Diego/Univ. of Toronto browser-fingerprinting study (~25M Firefox release users, OHTTP-collected telemetry): paper, full appendix, aggregate data + analysis code, and an interactive self-test. First-party to the study but hosts its own artifacts. Verified (11-11): its 75%→46% uniqueness claim and \"shipped in Firefox 143\" are corroborated by Firefox 143.0's own release notes, which state the Fingerprinting Protection expansion (constant values for more attributes) — a Mozilla artifact outside the study team.",
+  "jp": "Mozilla・UC San Diego・トロント大学のブラウザフィンガープリンティング研究（約2,500万のFirefox正式版ユーザー、OHTTPテレメトリ）のコンパニオンサイト。論文・完全な付録・集約データと解析コード・自己診断テストを公開。研究には一次だが成果物を自サイトで公開。検証済み（11-11）：75%→46%の固有性と「Firefox 143で出荷」の主張は、Fingerprinting Protection の拡張（より多くの属性への定値報告）を明記する Firefox 143.0 自身のリリースノートと合致——研究チーム外の Mozilla アーティファクト。",
+  "zh": "Mozilla / 加州大学圣地亚哥分校 / 多伦多大学浏览器指纹研究（约 2500 万 Firefox 正式版用户，OHTTP 遥测）的配套网站：论文、完整附录、聚合数据与分析代码、自查测试。对研究本身是第一方，但托管了自己的产物。已核验（11-11）：其 75%→46% 唯一性与「随 Firefox 143 发布」的说法得到 Firefox 143.0 自身发布说明的印证（明示 Fingerprinting Protection 扩展、对更多属性报告常值）——研究团队之外的 Mozilla 工件。"
+ },
  "finout.io": {
   "cat": "vendor",
   "cred": "med",
@@ -13882,6 +13891,15 @@
   "en": "Yash Garg's personal dev blog — first-hand reverse-engineering writeups with working code. Cross-checked (09-29): the PS5 RTMP post contains all five technical claims first-hand (DNS-per-broadcast resolution, RTMPS CA validation blocking spoofing, YouTube ~60s liveness cutoff, the plain-RTMP wildcard contribute.live-video.net:1935, dnsmasq+OpenWRT+nginx-rtmp chain). A workaround writeup, not a disclosed vulnerability.",
   "jp": "Yash Garg の個人開発ブログ——動くコード付きの一次リバースエンジニアリング記録。突合済み（09-29）：PS5 RTMP 記事の一次本文に技術的主張がすべてある（放送時の DNS 解決、RTMPS 証明書検証によるスプーフィング遮断、YouTube 約60秒の生存確認、平文 RTMP のワイルドカード contribute.live-video.net:1935、dnsmasq+OpenWRT+nginx-rtmp のチェーン）。自己ネットワークのワークアラウンドであり開示された脆弱性ではない。",
   "zh": "Yash Garg 的个人开发博客——带可运行代码的一手逆向工程记录。已交叉核验（09-29）：PS5 RTMP 一文的一手内容包含全部五个技术论断（广播时 DNS 解析、RTMPS 证书校验阻断欺骗、YouTube 约 60 秒存活检测、明文 RTMP 通配域名 contribute.live-video.net:1935、dnsmasq+OpenWRT+nginx-rtmp 链路）。属个人网络 workaround，非披露的漏洞。"
+ },
+ "yappologistic.github.io": {
+  "cat": "code",
+  "cred": "med",
+  "density": "med",
+  "cv": 1,
+  "en": "First-party docs site for yappologistic/CUI (a C99 immediate-mode UI toolkit) — its distinguishing claim is docs-as-demo: every component page runs the real component in the browser. Project-owned page, so cred stays med even though the check passed. Verified (11-11) as an artifact check: the component index lists 152 entries, reconciling with the repo's own artifacts (267 component screenshots incl. dark twins, description \"about 150\", v1.3.1 released 2026-11-10, MIT), and the docs are built by the repo's own pages.yml workflow — the site is downstream of the repo and describes it faithfully.",
+  "jp": "yappologistic/CUI（C99 のインメディエイトモード UI ツールキット）の一次ドキュメントサイト——特徴は docs-as-demo：各コンポーネントページが本物のコンポーネントをブラウザで動かす。プロジェクト所有ページなので検証が通っても cred は med のまま。検証済み（11-11、アーティファクトチェック）：コンポーネント索引は 152 エントリで、リポジトリ自身の成果物（ダーク版を含む 267 枚のコンポーネントスクリーンショット、説明文 \"about 150\"、v1.3.1 は 2026-11-10 リリース、MIT）と整合し、ドキュメントはリポジトリ自身の pages.yml ワークフローがビルド——サイトはリポジトリの下流で、忠実に記述している。",
+  "zh": "yappologistic/CUI（C99 即时模式 UI 工具包）的第一方文档站——其特色是 docs-as-demo：每个组件页都在浏览器里运行真实组件。项目自有页面，核查通过 cred 仍保持 med。已核验（11-11，工件核查）：组件索引列 152 项，与仓库自身的工件吻合（含暗色变体共 267 张组件截图、仓库描述 \"about 150\"、v1.3.1 于 2026-11-10 发布、MIT），且文档由仓库自己的 pages.yml 工作流构建——站点是仓库的下游，忠实地描述它。"
  },
  "ycombinator.com": {
   "cat": "vendor",

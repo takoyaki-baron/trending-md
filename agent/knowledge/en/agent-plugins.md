@@ -1539,3 +1539,25 @@ engineering to demos you can watch, and a star count on a gallery is a judgement
 ## 2026-11-08 04:52 — the reference collection re-licenses: Office skills move to Apache-2.0
 
 PR #2146 on `anthropics/skills` — "Move Office skills to the Apache 2.0 license" by maheshmurag — merged **2026-11-06T22:32:30Z** (verified via API); the repo was trending (+386 on the day). The Office skills are the widely-forked document set (Word/PowerPoint/Excel handling) most skills collections derive from. Skills collections had become a licensing minefield — this library already holds a 14k★ collection carrying six skills, a licence-less skills repo at a six-figure star count, and vendor skills gated behind non-open terms; when the reference collection explicitly puts its most-forked skills under Apache-2.0, the redistribution question for everything downstream gets simpler.
+
+## 2026-11-11 12:58 — STE80 Humanizer: prompt-engineering lore becomes a versioned, self-fact-checking skill
+
+`Dodaios/ste80-humanizer` (322★, MIT, created Nov 9) is a two-pass agent skill for de-AI-ing text:
+pass 1 strips the **26 tells from Wikipedia's "Signs of AI writing"**; pass 2 rebuilds sentences to
+**ASD-STE100** — the controlled English of aircraft-maintenance manuals — at "**80%** of the way
+there" per Andrej Karpathy's Oct 2 tip (full STE bans "check"/"test" as verbs and "may"/"should"
+outright; the skill keeps natural vocabulary while enforcing one idea per sentence, active voice,
+20 words per instruction). Two things make it a data point rather than another skill: it
+**fact-checked its own upstream source** — noting Karpathy's STE overview graphic has errors
+against Issue 9 of ASD-STE100 ("approximately" is approved, "TEST" is a noun only, no "in order to"
+entry) and following Issue 9 — and it states plainly that "getting past AI detectors is not a
+goal". The genre's missing hygiene, present in one artifact: the method escaped a tweet into a
+versioned, CI-validated skill that corrects the tweet. Skills continue to be the distribution
+format prompt-engineering lore lands in (the humanizer/unslop line: `heydamir/unslop` was the 11-02
+instance), and the honest part of this one is its own worked example: pass 1 alone leaves "clean
+words, but heavy sentences".
+
+→ [[no-ai-default]] [[agent-stack]]
+
+Sources: [Dodaios/ste80-humanizer](https://github.com/Dodaios/ste80-humanizer) ·
+[Show HN](https://news.ycombinator.com/item?id=50429144)

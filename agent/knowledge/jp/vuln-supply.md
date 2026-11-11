@@ -1399,3 +1399,25 @@ Sources: [MSRC CVRF 2026-Nov](https://api.msrc.microsoft.com/cvrf/v3.0/document/
 [NVD：CVE-2026-119990](https://nvd.nist.gov/vuln/detail/CVE-2026-119990) ·
 [Firefox 160.0 リリースノート](https://www.firefox.com/en-US/firefox/160.0/releasenotes/) ·
 [NVD：CVE-2026-124917](https://nvd.nist.gov/vuln/detail/CVE-2026-124917)
+
+## 2026-11-11 12:58 — Glasswing 七か月：発見-修復ギャップを第三者が測る
+
+Anthropic の Project Glasswing（2026-04-07 開始）についての VulnCheck の 11 月更新は、「AI 脆弱性
+発見」の主張に第三者の数値を載せた：七か月で **442 件の Anthropic に帰属する CVE**——今年公開の
+93,450 件の約 0.5%、月約 63 件——このうち VulnCheck の KEV に載ったのは **2 件のみ**
+（`CVE-2026-61500`、`CVE-2026-26980`、0.45% が実野良で悪用）。Anthropic 自身の開示台帳（11月2日
+更新）：**37,966 件の発見**、主張する真陽性率は 90.8% → **94.2%** に上昇——しかし公開されているの
+は **7,349 件（19.4%）**のみ、**修正済みマークは 217 件**。9月以降に発見は約 12,000 件追加された
+一方、追加の修正記録は **15 件**——修正の増加速度は発見の約 0.1%。**約 1,654 件（4.4%）が重複マーク**（修正数の約 8 倍）、**419 件が撤回**。メンテナー側の実態は
+割れており、両方とも検証済み：curl は公開報告 **34 件のうち 19 件を脆弱性として拒否**、6 件を低
+ severity で確認、9 件が評価待ち——一方 Fil-C の作者は Anthropic の報告を 9 件受け取り、「全部が
+本物のバグだった……報告の品質は卓越していた」と述べ、「自分が見た Anthropic の能力と TFA の主張
+の間の巨大な溝」を名指した。卓越した報告と、修正が発見の 1/55 の速さでしか増えない台帳は、同時
+に真。発見は：AI はメンテナーが検証できる速度をはるかに超えて脆弱性を表面化させ、その検証作業は
+無給のメンテナーに降りかかる（数値は VulnCheck の投稿本文から grep で一次確認、HN スレッドの両極
+はそれぞれ自分の成果物を携えていた）。
+
+→ [[security]] [[disclosure-lag]]
+
+Sources: [VulnCheck: Glasswing November update](https://www.vulncheck.com/blog/anthropic-glasswing-november-update) ·
+[HN ディスカッション](https://news.ycombinator.com/item?id=50447074)

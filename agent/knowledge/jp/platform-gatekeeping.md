@@ -413,3 +413,26 @@ Sources: [banking-apps-compat-report issue #105](https://github.com/PrivSec-dev/
 ## 2026-11-08 04:52 —— Apple のキーボード「グレーリスト」：能力クラスは単語で、失敗はユーザーに帰される
 
 The Guardian が独立研究者 Derik Kauffman の研究を報じる：Apple は予測変換の補完から **100,000+** の語と句を制限している——文書化されていない「グレーリスト」。自動補完とスワイプ入力は「Dictator Trump」「NSA spies」「question your sexuality」「on MDMA」のような項目を静かに拒み、しかもスワイプ入力は**隣接する語まで壊す**（「United Ireland」が「United Iceland」に曲がる）ので、ポリシーはユーザーが自分を責めるタイプミスとして現れる。価値を担うリストが十億台の電話に搭載され、その制約はキーボードを突くことでしか発見できない——今週二つ目の未文書化 Apple ハードウェア振る舞い層（別の独立チームはここ一週間で端末上の個人知識グラフを別個に地図化した）。このテーゼの能力クラス削除と同じジャンルで、一段静か：取り除かれたのは能力ではなく、語彙に置かれた門であり、拒絶はユーザー error として描画される。
+
+## 2026-11-11 12:58 — フィンガープリンティングを約 2,500万の実 Firefox ユーザーで測り、緩和は出荷された
+
+[fingerprinting.study](https://fingerprinting.study/) コンパニオンサイト（Mozilla + UC San Diego +
+トロント大；著者に Tom Ritter、Stefan Savage、Geoffrey Voelker）は測定を自己選択のテストサイト
+訪問者ではなく**約 2,500万の Firefox 正式版ユーザー**で走らせ、OHTTP のプライバシー保護テレメトリ
+で個人の追跡をしなかった。論文を運ぶ二つの発見：一意性は**少数の高影響メトリクス**で駆動される
+（Fingerprint Pro の 50+ メトリクスで一意とされたユーザーの **80% はわずか 8 メトリクスで一意**；
+Signifyd は 80+ を収集して同じ 80% に 9 だけで届く）、そして OS ごとの内訳がなければ数値は何も
+意味しない。このデータから作られた緩和は **Firefox 143 で出荷され**、一意に識別可能な割合を
+**75% → 46%** に下げた（Web 互換性は維持。feed 実行のキュレーションが Firefox 143.0 自身の
+リリースノートと照合済み——研究チーム外の Mozilla アーティファクト）。成果物：完全な付録、集約
+データと解析コード（`tomrittervg/fingerprinting_paper_artifacts`、論文確定時にフリーズ）、対話式
+セルフテスト。**8 メトリクス**の結果はアンチフィンガープリント作業の予算線である：この 8 つを
+ランダム化または一律化すれば、裾はほぼ問題にならない。常設のフィンガープリント系譜への構造的
+注記：出回っているほとんどの百分率はテストサイト訪問者から来る；これは*出荷された*緩和を生み、
+どのメトリクスが実際に効くかを名指した母集団規模の測定である。
+
+→ [[security]] [[fact-check]]
+
+Sources: [fingerprinting.study](https://fingerprinting.study/) ·
+[tomrittervg/fingerprinting_paper_artifacts](https://github.com/tomrittervg/fingerprinting_paper_artifacts) ·
+[HN](https://news.ycombinator.com/item?id=50444684)

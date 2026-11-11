@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-10T22:36:06.394Z",
+ "updated": "2026-11-11T06:10:57.463Z",
  "cves": {
   "CVE-2026-48382": {
    "vulnStatus": "Analyzed",
@@ -7822,7 +7822,7 @@
   "CVE-2026-111560": {
    "vulnStatus": "Undergoing Analysis",
    "published": "2026-11-02",
-   "lastModified": "2026-11-10T20:17",
+   "lastModified": "2026-11-11T05:19",
    "metrics": [
     {
      "version": "4.0",
@@ -7843,7 +7843,7 @@
   "CVE-2026-116606": {
    "vulnStatus": "Undergoing Analysis",
    "published": "2026-11-02",
-   "lastModified": "2026-11-10T20:18",
+   "lastModified": "2026-11-11T05:19",
    "metrics": [
     {
      "version": "4.0",
@@ -10470,11 +10470,11 @@
   "CVE-2026-123490": {
    "vulnStatus": "Awaiting Analysis",
    "published": "2026-11-06",
-   "lastModified": "2026-11-06T20:15",
+   "lastModified": "2026-11-11T03:16",
    "metrics": [
     {
      "version": "3.1",
-     "type": "Primary",
+     "type": "Secondary",
      "source": "disclosure@vulncheck.com",
      "baseScore": 8.8,
      "severity": "HIGH",
@@ -10990,11 +10990,11 @@
   "CVE-2026-123499": {
    "vulnStatus": "Deferred",
    "published": "2026-11-08",
-   "lastModified": "2026-11-08T02:16",
+   "lastModified": "2026-11-11T05:19",
    "metrics": [
     {
      "version": "3.1",
-     "type": "Primary",
+     "type": "Secondary",
      "source": "disclosure@vulncheck.com",
      "baseScore": 5.9,
      "severity": "MEDIUM",
@@ -11861,7 +11861,7 @@
   "CVE-2026-120017": {
    "vulnStatus": "Awaiting Analysis",
    "published": "2026-11-10",
-   "lastModified": "2026-11-10T22:11",
+   "lastModified": "2026-11-11T05:19",
    "metrics": [
     {
      "version": "3.1",
@@ -11882,11 +11882,11 @@
   "CVE-2026-76964": {
    "vulnStatus": "Awaiting Analysis",
    "published": "2026-11-10",
-   "lastModified": "2026-11-10T22:11",
+   "lastModified": "2026-11-11T05:19",
    "metrics": [
     {
      "version": "3.1",
-     "type": "Primary",
+     "type": "Secondary",
      "source": "cna@sap.com",
      "baseScore": 10,
      "severity": "CRITICAL",
@@ -11903,11 +11903,11 @@
   "CVE-2026-89103": {
    "vulnStatus": "Awaiting Analysis",
    "published": "2026-11-10",
-   "lastModified": "2026-11-10T22:11",
+   "lastModified": "2026-11-11T05:19",
    "metrics": [
     {
      "version": "3.1",
-     "type": "Primary",
+     "type": "Secondary",
      "source": "cna@sap.com",
      "baseScore": 10,
      "severity": "CRITICAL",
@@ -11924,7 +11924,7 @@
   "CVE-2026-89126": {
    "vulnStatus": "Awaiting Analysis",
    "published": "2026-11-10",
-   "lastModified": "2026-11-10T22:11",
+   "lastModified": "2026-11-11T05:19",
    "metrics": [
     {
      "version": "3.1",
@@ -12078,7 +12078,7 @@
   "CVE-2026-119990": {
    "vulnStatus": "Awaiting Analysis",
    "published": "2026-11-10",
-   "lastModified": "2026-11-10T20:18",
+   "lastModified": "2026-11-11T05:19",
    "metrics": [
     {
      "version": "3.1",
@@ -12099,7 +12099,7 @@
   "CVE-2026-85844": {
    "vulnStatus": "Awaiting Analysis",
    "published": "2026-11-10",
-   "lastModified": "2026-11-10T20:19",
+   "lastModified": "2026-11-11T05:19",
    "metrics": [
     {
      "version": "3.1",
@@ -12120,7 +12120,7 @@
   "CVE-2026-124194": {
    "vulnStatus": "Analyzed",
    "published": "2026-11-10",
-   "lastModified": "2026-11-10T21:29",
+   "lastModified": "2026-11-11T05:19",
    "metrics": [
     {
      "version": "3.1",
@@ -12160,7 +12160,7 @@
   "CVE-2026-20320": {
    "vulnStatus": "Analyzed",
    "published": "2026-08-19",
-   "lastModified": "2026-11-10T21:31",
+   "lastModified": "2026-11-11T05:19",
    "metrics": [
     {
      "version": "3.1",
@@ -12181,7 +12181,7 @@
   "CVE-2026-111793": {
    "vulnStatus": "Analyzed",
    "published": "2026-10-16",
-   "lastModified": "2026-11-10T21:32",
+   "lastModified": "2026-11-11T05:19",
    "metrics": [
     {
      "version": "3.1",
@@ -12219,6 +12219,64 @@
    "kev": null,
    "kevDue": null,
    "nvdAnalyzed": false
+  },
+  "CVE-2026-61500": {
+   "vulnStatus": "Deferred",
+   "published": "2026-07-13",
+   "lastModified": "2026-10-24T22:10",
+   "metrics": [
+    {
+     "version": "3.1",
+     "type": "Secondary",
+     "source": "disclosure@vulncheck.com",
+     "baseScore": 9.8,
+     "severity": "CRITICAL",
+     "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+    },
+    {
+     "version": "4.0",
+     "type": "Secondary",
+     "source": "disclosure@vulncheck.com",
+     "baseScore": 9.3,
+     "severity": "CRITICAL",
+     "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+    }
+   ],
+   "cwe": [
+    "CWE-338"
+   ],
+   "kev": null,
+   "kevDue": null,
+   "nvdAnalyzed": false
+  },
+  "CVE-2026-26980": {
+   "vulnStatus": "Modified",
+   "published": "2026-02-20",
+   "lastModified": "2026-06-17T10:26",
+   "metrics": [
+    {
+     "version": "3.1",
+     "type": "Primary",
+     "source": "nvd@nist.gov",
+     "baseScore": 7.5,
+     "severity": "HIGH",
+     "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N"
+    },
+    {
+     "version": "3.1",
+     "type": "Secondary",
+     "source": "security-advisories@github.com",
+     "baseScore": 9.4,
+     "severity": "CRITICAL",
+     "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:L"
+    }
+   ],
+   "cwe": [
+    "CWE-89"
+   ],
+   "kev": null,
+   "kevDue": null,
+   "nvdAnalyzed": true
   }
  }
 }

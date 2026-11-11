@@ -1239,3 +1239,24 @@ the source of truth; these skills help agents apply them correctly」——ド�
 ## 2026-11-08 04:52 —— 参照コレクションが再ライセンスされる：Office skills が Apache-2.0 へ
 
 `anthropics/skills` の PR #2146——maheshmurag による「Move Office skills to the Apache 2.0 license」——が **2026-11-06T22:32:30Z** にマージされた（API で確認）；リポジトリはその日トレンド中（+386）。Office skills は広くフォークされた文書処理セット（Word/PowerPoint/Excel）で、ほとんどの skills コレクションがこれに由来する。skills コレクションはライセンスの地雷原になっていた——このライブラリには既に、14k★ で skill 六つしか持たないコレクション、六桁のスター数で無ライセンスの skills リポジトリ、非公開条件に釘付けされたベンダー skills が収められている；参照コレクションが最もフォークされた skills を明示的に Apache-2.0 の下に置くとき、下流すべての再配布の問題は単純になる。
+
+## 2026-11-11 12:58 — STE80 Humanizer：プロンプトエンジニアリングの口伝が、自己ファクトチェックするバージョン管理されたスキルに
+
+`Dodaios/ste80-humanizer`（322★、MIT、11月9日作成）はテキストから AI 味を取る二段階の agent
+スキル：第 1 段は Wikipedia の「Signs of AI writing」の **26 の特徴**を剥がす。第 2 段は文を
+**ASD-STE100**——航空機整備マニュアルの制限英語——へ再構築する。Andrej Karpathy の 10月2日の
+助言に従い「**80%** の到達」で（完全な STE は check/test の動詞使用と may/should を全面禁止する；
+このスキルは自然な語彙を保ち、一文一アイデア・能動態・指示 20 語の構造だけを強制する）。これを
+また一つのスキルではなくデータ点にする二つのこと：**自分の上流ソースをファクトチェックした**——
+Karpathy の STE 概要図が ASD-STE100 第 9 版に対して誤りを含むこと（「approximately」は承認語、
+「TEST」は名詞のみ、「in order to」の項目は存在しない）を注記し、スキルは第 9 版に従う——そして
+「AI 検出器を通すことは目標ではない」と平宣している。このジャンルに欠けていた衛生が、一つの成果物
+に現れた：手法がツイートから逃げて、バージョン管理され CI 検証され、ツイートを訂正するスキルに
+なった。スキルはプロンプトエンジニアリングの口伝が落ち着く配布フォーマットであり続けている
+（humanizer/unslop 系統：`heydamir/unslop` は 11-02 の先例）。この一つの正直な部分は自分の実例：
+第 1 段だけでは「語は清いが、文は重い」。
+
+→ [[no-ai-default]] [[agent-stack]]
+
+Sources: [Dodaios/ste80-humanizer](https://github.com/Dodaios/ste80-humanizer) ·
+[Show HN](https://news.ycombinator.com/item?id=50429144)

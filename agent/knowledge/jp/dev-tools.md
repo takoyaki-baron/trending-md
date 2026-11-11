@@ -1279,3 +1279,80 @@ Sources: [Announcing .NET 11](https://devblogs.microsoft.com/dotnet/announcing-d
 [Neil Fraser：.name Grandfathered](https://neil.fraser.name/news/2026/11/10/) ·
 [Do Code That Matters：Home automation](https://docodethatmatters.com/home-automation-overnight-success/) ·
 [HolyArrs/HolyArrs](https://github.com/HolyArrs/HolyArrs)
+
+## 2026-11-11 12:58 — 12:51 バッチのハードウェア/ツール7件
+
+**macOS 版 Sysinternals Process Explorer（`microsoft/Procexp-Mac`）。** Windows を離れた初の
+Sysinternals ツール——Electron ではなく、公開 API（`libproc`、`sysctl`、Mach ホスト統計、
+Security.framework、IOKit、Metal）の上に Swift/SwiftUI/AppKit でネイティブ実装：Procexp 風の
+配色を持つライブプロセスツリー、モジュール/ハンドル/スレッドの下ペイン、プロセスごとの
+Properties（Image、Performance、Threads、逆引き付き TCP/IP、Security、Environment、Strings）、
+GPU 込みのシステム全体パフォーマンスグラフ、Apple Silicon の P/E コア表記。macOS 特有の追加は
+サプライチェーン・ネイティブ：**Security タブが署名者・証明書チェーン・Team ID・公証状態・
+SHA-256 を読み、VirusTotal 統合付き**。リポジトリは 7月6日作成、11月10日プッシュ、312★、
+macOS 14+。**ライセンスファイル無し**——ソースは読めるが再利用の権利は未宣言。ライセンスが
+着地するまで、コードは読めてもオープンソースとしては扱わない。署名/公証列が盗むべき機能：
+Mac を監査するとき、未公証と ad-hoc 署名のプロセスこそ浮上させるべきもの。
+
+**DBDelve（`ShayanAbbas1/dbdelve`、1,005★）。** Rust + **GPUI** のネイティブ クロスプラット
+フォーム DB クライアント——Electron も JVM も無し。近年の記憶で三つ目の非 Zed GPUI アプリ。
+DBeaver 25.3.1 とのベンチマーク（M1 Pro、5 回の中央値）：起動 **1.1 s 対 5.2 s**、アイドル
+**133 MB 対 606 MB**、1,000 行クエリ **0.21 s 対 1.96 s**、100 万行 **56 s 対 208 s**——100 万行の
+メモリ行（**4.9 GB 対 17 GB**）には「このケースは意図的に病的」という脚注が付く（行上限オフ、
+テーブル全量をメモリへ、DBeaver のヒープ上限を手動引き上げ）。エンジン：Postgres、MySQL/
+MariaDB、SQLite、Turso、DuckDB、Snowflake、SQL Server、MongoDB、Redis（+Valkey/KeyDB/
+Dragonfly）、ClickHouse + **ODBC ブリッジ**（Db2、Oracle、SAP HANA、Redshift、BigQuery、
+Databricks）。DBeaver/TablePlus の接続と Zed/VS Code のテーマを取り込み。Homebrew cask 配布、
+**未公証**——企業展開は未署名バイナリの議論が先。
+
+**MeowDisplay（`raiseCatError/meowdisplay`）。** 逆方向の iPhone Mirroring——iPhone、iPad、
+Android 端末または別の Mac が **Mac のディスプレイ**になる（ミラー/拡張、直接タッチ、Apple
+Pencil、統一クリップボード、音声、PiP、リモートアクセス；USB または Wi-Fi）。Mac 2.0/iOS 2.0 が
+安定；**Android 10+ はクローズドテスト**；2.1 は浮遊ウィンドウを予告。Apple の Sidecar/iPhone
+Mirroring が制御を Apple ハードウェアへ一方向に寄せるのに対し、これはそれをひっくり返し
+Android に渡る——第一党の機能はどれもそうしない。オープンソースであることが Android 経路の
+信頼性の根拠。
+
+**Someone Was Here。** 古い「ウェブカメラ罠」を、開示の詳細を明示して製品化：不在中に Mac を
+使った人を撮影（アイドル→使用、ロック画面の試行、解除）、時刻と侵入方法と滞在時間を記録、
+2 分間のオンデバイス設定で顔を学習、全写真でカメラライト点灯、写真は Mac に留まる、アカウント
+無し。配達：無料 iPhone アプリへ**自分の iCloud** 経由で数秒、または Pushover/ntfy/Telegram/
+webhook——ntfy/webhook の経路が一般化する部分：どの通知パイプライン（ローカルファーストの
+Home Assistant 構成を含む）でもベンダーアプリの代わりにイベントを受け取れる。Mac App Store、
+macOS 14+。
+
+**Ableton Live 13。** Step Sequencer クリップ、**ARA 2** プラグイン対応（プラグインが挿入した
+クリップだけでなくプロジェクトのオーディオ文脈を見て編集できる——ツールビルダーにとっての
+荷重項目：処理ツールが Live の*周り*でなく Live の*中に*作られることを変える）、Drum Synth
+（20+ エンジン）、Capture Automation（触りながら調整、Capture を押すとジェスチャがオートメー
+ションに）、Looplet、Transient Shaper/Clipper、Envelope Clips、新ラックタイプ、Softube エフェクト
+同梱；Max for Live はラックタイプとデバイススロットを得る。スレッドを動かした購入の詳細：
+**今 Live 12 を買うと 13 は無料アップグレード**——窓のうちに決める。
+
+**Starlink Mini 2。** 配線なしで停電を乗り切る初の衛星端末：**内蔵バッテリー**（約 71 Wh、初期
+情報で約 4.5 時間）、25–35 W 消費、**60 W ブラック**（Mini 1 は 100 W ソースが必要）、Mini 1 の
+専用ケーブルを **USB-C** が置き換え。オフグリッド層がこぼす取引：Mini 1 は**ネゴシエーション
+なしで 12–48 V を受け付けた**（車のバッテリーやソーラー設置が自明だった）；Mini 2 の USB-C は
+ネゴシエートするので、その技にはまたトリガー変換アダプタが要る——無骨な広範囲 DC 入力を
+愛した既有装備層にとって、「標準化」の変更がダウングレードである実例。999 ドルで 1 年分の
+サブスクリプション付き発売バンドル（スレッド情報）、Mini 1 は 149 ドルで捌き中。仕様数値は
+スレッド情報——公式ページは仕様表のない JS シェル。
+
+**Zen 6 実測（Chips and Cheese、11月10日、George Cozma）。** AMD の Zen 6 コアファミリーの
+初の公開マイクロアーキテクチャ深掘り。鳥瞰では Zen 5 の自然な進化（より大きな OoO 構造）。
+しかし地下では大きく手入れされている——「Zen 1 から Zen 2 の変化を思い出させる」：**整数
+スケジューラが Zen 3/4 を思わせる配置へ回帰**（AMD は Zen 5 の積極的スケジューラ配置をその上に
+積むのでなく展開した）；分岐ミス予測回復が安価に（wrong-path のプラトー ~3.5–4 ns → **~3–3.5 ns**）；
+L1 命令キャッシュ内で**毎サイクル 2 分岐**；単一スレッドが**両方のデコードクラスタ**を使える
+（Zen 5 は一つに制限）；**NOP ペアリングが回帰**（最大 16/サイクル）；**毎サイクル 5.96 回の
+64 ビット加算** 対 Zen 5 の 5.25。方向予測器は Zen 5 の最良測定からの受け継ぎで BTB ルックアップ
+が高速化。コンパイラ/システム エンジニアへの即応詳細は回帰した NOP ペアリングと安価になった
+ミス予測回復；興味深い結果は見出しの IPC ではなく変更の*形状*。このコアは次世代のサーバー、
+デスクトップ、コンソールに載る。
+
+→ [[agent-plugins]] [[platform-gatekeeping]] [[edge-inference]]
+
+Sources: [microsoft/Procexp-Mac](https://github.com/microsoft/Procexp-Mac) ·
+[ShayanAbbas1/dbdelve](https://github.com/ShayanAbbas1/dbdelve) ·
+[Chips and Cheese](https://chipsandcheese.com/p/amds-zen-6-family-feeding-the-beast) ·
+[fingerprinting.study](https://fingerprinting.study/)（→ [[platform-gatekeeping]]）

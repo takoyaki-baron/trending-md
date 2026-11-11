@@ -5731,3 +5731,46 @@ Sources: [Gemini 4 Carbon is now available](https://blog.google/innovation-and-a
 [Claude Whiteboards, Sheets, and Data](https://claude.com/resources/articles/sheets-whiteboards-data) ·
 [arXiv 2611.10123](https://arxiv.org/abs/2611.10123) ·
 [Hugging Face paper page](https://huggingface.co/papers/2611.10123)
+
+## 2026-11-11 12:58 — three items: the pathfinding lens, a tactile foundation model, and a biosecurity policy with dates
+
+**Reasoning as pathfinding (essay, not paper).** Alex Wang's ["What objective is reasoning
+solving?"](https://alexwang.ai/posts/reasoning-as-pathfinding/) formalizes reasoning as pathfinding
+in token space: given prompt x and verifier r(x,y), training maximizes the probability a sampled
+path lands in S_x = {y : r(x,y)=1}. From that one objective the familiar effects fall out as
+*expected behavior*: best-of-k is the guaranteed axis (success 1−(1−p)^k, more samples always help
+when p>0); unfaithful chains of thought are expected because a path need only *reach* S_x, not
+explain how; reward hacking is the shortest path to the verifier's accept region rather than to
+truth. Ten different chains for ten identical asks is the objective working as designed, not noise.
+The lens connects measurements this feed took separately — turn-level best-of-N buying 5–10%
+accuracy, models following `(Reward: 5)` cues 97–100% of the time, footnote 6's prover rewriting
+the program to make the theorem true — under one objective, and states the testable consequence:
+the success probability does not care whether answers arrive via diverse paths or one memorized
+route, but out-of-distribution robustness absolutely does.
+
+**LingBot-Touch (arXiv 2611.12806, #1 HF daily board Nov 10).** One tactile foundation model
+learning a **unified representation across piezoresistive, magnetic and visuotactile sensors**,
+extensible to new types; the resulting tactile tokens are plug-and-play across policy paradigms —
+diffusion policies to VLA models (**π0.5**, LingBot-VLA), "consistently enhancing manipulation
+dexterity". Touch is the modality where robot learning is still dataset-poor; a sensor-agnostic
+representation is the precondition for pooling the field's small heterogeneous datasets the way
+vision and language did. The claim to watch is the integration one — tokens improving *both* a
+diffusion policy and a VLA suggests real representational work, not one policy family's eval fit.
+
+**NSTM-6: synthetic-DNA screening moves from self-attestation to certified suppliers.** Signed Nov
+5 by NSA's Rubio and OSTP's Kratsios under EO 14292 (HN pickup Nov 11): all recipients of Federal
+life-sciences funding must procure synthetic nucleic acids and benchtop synthesis equipment
+**exclusively from certified suppliers** that verify customers and sequences. The clock: NIST
+standards +90 days; HHS adherent-supplier list +160; funded customers buy synthesis from certified
+suppliers +250, all benchtop equipment +340. Framed around "super intelligence (SI)" converging
+with biology — "Powered by SI, screening will shift from list-based to risk-based". Concrete
+compliance deadlines for anyone shipping sequence-screening tooling, synthesis services, or wet-lab
+procurement software; the mechanism change is the part to read: self-attestation → independent
+supplier-level verification with a government list as the enforcement point (the 2024 Framework's
+own words for what it replaces: "relied on self-attestation rather than independent verification").
+
+→ [[formal-verification]] [[harness-reliability]]
+
+Sources: [alexwang.ai](https://alexwang.ai/posts/reasoning-as-pathfinding/) ·
+[arXiv 2611.12806](https://arxiv.org/abs/2611.12806) ·
+[NSTM-6 (PDF)](https://www.whitehouse.gov/wp-content/uploads/2026/11/NSTM-6-NASS-Policy.pdf)

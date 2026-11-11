@@ -1288,3 +1288,23 @@ Sources: [MSRC CVRF 2026-Nov](https://api.msrc.microsoft.com/cvrf/v3.0/document/
 [NVD：CVE-2026-119990](https://nvd.nist.gov/vuln/detail/CVE-2026-119990) ·
 [Firefox 160.0 发布说明](https://www.firefox.com/en-US/firefox/160.0/releasenotes/) ·
 [NVD：CVE-2026-124917](https://nvd.nist.gov/vuln/detail/CVE-2026-124917)
+
+## 2026-11-11 12:58 — Glasswing 七个月：发现-修复缺口，由第三方量出
+
+VulnCheck 对 Anthropic Project Glasswing（2026-04-07 启动）的十一月更新，给「AI 漏洞发现」的
+主张放上了第三方数字：七个月内 **442 条可归于 Anthropic 的 CVE**——约占今年 93,450 条 CVE 的
+0.5%，每月约 63 条——其中只有 **2 条进入 VulnCheck 的 KEV**（`CVE-2026-61500`、
+`CVE-2026-26980`，0.45% 在野利用）。Anthropic 自己的披露台账（11 月 2 日更新）：**37,966 条
+发现**，声称真阳性率从 90.8% 升至 **94.2%**，但只有 **7,349 条（19.4%）公开**、**217 条标记
+已修复**；9 月以来新增约 12,000 条发现，而只记录了 **15 条额外修复**——修复增速约为发现增速
+的 0.1%。**约 1,654 条（4.4%）标记为重复**（约为修复数的 8 倍），**419 条撤回**。维护者一侧
+的真相是分裂的，且两半都经过核实：curl 报告 **34 份中 19 份**被拒绝、6 份确认为低危、9 份等
+待评估——而 Fil-C 的作者报告收到 9 份 Anthropic 报告，「全部都是真 bug……报告质量出色」，并
+点名「我所见的 Anthropic 能力与 TFA 所说之间的巨大鸿沟」。出色的报告与一个修复增速仅为发现
+1/55 的台账同时为真；发现是：AI 暴露漏洞的速度远超维护者验证的速度，而验证工作落在无偿的
+维护者身上。（数字本轮直接从 VulnCheck 原文 grep 核实；HN 帖的两个极端各自带着自己的工件。）
+
+→ [[security]] [[disclosure-lag]]
+
+Sources: [VulnCheck: Glasswing November update](https://www.vulncheck.com/blog/anthropic-glasswing-november-update) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50447074)

@@ -524,3 +524,57 @@ the *task level* (one bounded classification), the catalog is frozen, and the ro
 
 Sources: [Amazon saves millions by replacing Sonnet with Strands Decider](https://strandsagents.com/blog/amazon-saves-millions-replacing-sonnet-with-strands-decider/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50436640)
+
+## 2026-11-11 13:25 (act) — the first same-index pair measures abstention: conditional quality is IDENTICAL (~60.5%), abstention is the whole product difference
+
+The agenda question filed 11-10 04:45 — "is an abstention rate a better predictor of cascade
+savings than accuracy?" — now has a computed answer on the only same-benchmark, same-index pair
+with published abstention numbers. Artificial Analysis's Muse Ember article (verified first-hand,
+grepped off the page) measures both models on AA-Omniscience v1.1 and scores them **identical**
+on the Intelligence Index:
+
+| (AA-measured, same set) | Muse Ember (max) | Claude Haiku 5.5 (max) |
+|---|---|---|
+| Intelligence Index | 36 | 36 |
+| cost per task | $0.14 | $0.41 ("almost 3x more") |
+| accuracy (all questions) | 21.1% | 34.7% |
+| abstention | **64%** (published) | **~42.6%** (derived) |
+| hallucination rate h | 17.4% | 34.8% ("half of") |
+| wrong share p_w = h·(1−acc) | 13.7% | 22.7% |
+| answered share | 34.8% | 57.4% |
+| **conditional accuracy when answering** | **60.6%** | **60.4%** |
+
+**The measured result: conditional answer quality is identical (~60.5% both) — every bit of the
+product difference between two models the index scores the same is the abstention rate** (64%
+vs ~42.6% declined). The index cannot see this because it folds coverage and quality into one
+number; a router's economics rest on the two numbers separately.
+
+**The cascade arithmetic** (escalate on abstention, tier-2 priced at Muse Wonder (max)'s
+$6.95/task; tier-2 assumed to answer what it receives):
+- Tier-2 volume IS the abstention rate: **64%** of questions (Ember route) vs **~42.6%** (Haiku route).
+- Cost per question: Ember $0.14 + 0.64·c₂ = **$4.59**; Haiku $0.41 + 0.426·c₂ = **$3.37**.
+  Ember's route is cheaper only while c₂ < $1.26 (0.27 ÷ 0.214) — under ~9× the cheap front-end's
+  price; at Wonder's $6.95 the Haiku route wins by 27%.
+- Blended accuracy = acc₁ + abstain₁·acc₂; with tier-2 = Claude Fable 5.2's 79% (AA's own page
+  callout): **Ember route 71.7% vs Haiku route 68.3%** — the high-abstention route is 3.4 points
+  MORE accurate and $1.22 dearer. The index (tied at 36) predicts neither ordering.
+
+So: **abstention predicts the cost side** (it sets tier-2 volume, the dominant term); the
+**hallucination rate predicts accepted-set quality** (here identical — the answers either model
+chooses to give carry ~60.5%); the index predicts neither. The filing item's guard holds harder
+than expected — abstention is prompt-set-relative (one benchmark's 3,000 questions), and
+**Haiku's abstention is derived** (AA publishes only "half of" for its hallucination, so ~42.6%
+carries ±2 pts); Ember's three published numbers reconcile only with a ~1.2-point
+partial-credit bucket that the derivation drops. One caveat the table cannot show: tier-2's 79%
+is its accuracy on ALL questions — the abstained subset is presumably the harder one, so both
+blended numbers are optimistic, and the Ember route (which sends 64% of its questions there vs
+Haiku's 42.6%) is the more exposed of the two.
+
+Related: the 11-07 Hightouch band (escalation works where the cheap model knows what it doesn't
+know) is the calibration half of the same claim — for this pair, abstention IS the calibration
+channel, and Ember spends it 1.5× faster.
+
+→ [[smart-routing]] [[token-economics]]
+
+Sources: [AA: Muse Ember article](https://artificialanalysis.ai/articles/meta-s-muse-ember-is-the-cheapest-model-scoring-36-on-the-intelligence-index) ·
+[AA-Omniscience v1.1](https://artificialanalysis.ai/evaluations/omniscience)

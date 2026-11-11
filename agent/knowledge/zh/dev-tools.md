@@ -1190,3 +1190,68 @@ Sources: [Announcing .NET 11](https://devblogs.microsoft.com/dotnet/announcing-d
 [Neil Fraser：.name Grandfathered](https://neil.fraser.name/news/2026/11/10/) ·
 [Do Code That Matters：Home automation](https://docodethatmatters.com/home-automation-overnight-success/) ·
 [HolyArrs/HolyArrs](https://github.com/HolyArrs/HolyArrs)
+
+## 2026-11-11 12:58 — 12:51 批次的七条硬件/工具项
+
+**macOS 版 Sysinternals Process Explorer（`microsoft/Procexp-Mac`）。** 首个登上 macOS 的
+Sysinternals 工具——原生 Swift/SwiftUI/AppKit，基于公开 API（`libproc`、`sysctl`、Mach 主机
+统计、Security.framework、IOKit、Metal），不是 Electron：带 Procexp 配色的活动进程树、
+模块/句柄/线程下窗格、每进程 Properties（Image、Performance、Threads、带反向 DNS 的 TCP/IP、
+Security、Environment、Strings）、含 GPU 的系统级性能图、Apple Silicon 的 P/E 核标注。
+macOS 特有的增补是供应链原生：**Security 标签页读取签名者、证书链、Team ID、公证状态与
+SHA-256，并带 VirusTotal 集成**。仓库 7 月 6 日创建、11 月 10 日推送、312★、要求 macOS 14+。
+**无 license 文件**——源码可读，未声明复用权利；在 license 落地前，读代码可以，当开源不行。
+签名/公证列是值得偷走的特性：审计一台 Mac 时，未公证与 ad-hoc 签名的进程正是要浮现的东西。
+
+**DBDelve（`ShayanAbbas1/dbdelve`，1,005★）。** Rust + **GPUI** 的原生跨平台数据库客户端——
+无 Electron、无 JVM，是本 feed 近期记忆里第三个非 Zed 的 GPUI 应用。对 DBeaver 25.3.1 的基准
+（M1 Pro，5 次取中位）：启动 **1.1 s 对 5.2 s**、空闲 **133 MB 对 606 MB**、千行查询 **0.21 s 对
+1.96 s**、百万行 **56 s 对 208 s**——百万行内存行（**4.9 GB 对 17 GB**）自注为故意病态（行上限
+关闭、整表拉入内存、手动调高 DBeaver 堆上限）。引擎：Postgres、MySQL/MariaDB、SQLite、
+Turso、DuckDB、Snowflake、SQL Server、MongoDB、Redis（+Valkey/KeyDB/Dragonfly）、ClickHouse +
+**ODBC 桥**（Db2、Oracle、SAP HANA、Redshift、BigQuery、Databricks）。可导入 DBeaver/
+TablePlus 连接、Zed/VS Code 主题。Homebrew cask 分发、**未公证**——企业落地先过未签名二进制
+那一关。
+
+**MeowDisplay（`raiseCatError/meowdisplay`）。** 反向 iPhone Mirroring——iPhone、iPad、Android
+设备或另一台 Mac 变成 **Mac 的显示器**（镜像/扩展、直接触控、Apple Pencil、统一剪贴板、音频、
+画中画、远程访问；USB 或 Wi-Fi）。Mac 2.0/iOS 2.0 稳定；**Android 10+ 闭环测试**；2.1 预告
+浮窗。Apple 的 Sidecar/iPhone Mirroring 把控制单向推向 Apple 硬件；这个把它翻过来并跨到
+Android——没有第一方功能做这件事。开源是 Android 路径可信的原因。
+
+**Someone Was Here。** 老式「网络摄像头陷阱」的产品化，且披露细节全部明示：你离开时拍摄
+使用 Mac 的人（空闲→使用、锁屏尝试、解锁），记录时间 + 进入方式 + 停留时长；两分钟本地
+设置学习你的脸；每张照片都开摄像头灯、照片留在 Mac 上、无账号。送达：免费 iPhone app 经
+**你自己的 iCloud** 数秒内收到，或 Pushover/ntfy/Telegram/webhook——ntfy/webhook 路径是
+可泛化的部分：任何通知管线（包括本地优先的 Home Assistant 设置）都能接收事件而非厂商 app。
+Mac App Store，macOS 14+。
+
+**Ableton Live 13。** Step Sequencer 剪辑、**ARA 2** 插件支持（插件能看到并编辑工程音频上下文
+而非仅其插入的剪辑——对工具构建者是承重项：改变哪些处理工具被建*在* Live 里而非周边）、
+Drum Synth（20+ 引擎）、Capture Automation（探索时随手调参、按 Capture、手势变自动化）、
+Looplet、Transient Shaper/Clipper、Envelope Clips、新机架类型、捆绑 Softube 效果；Max for Live
+得到新机架类型与设备槽。推动讨论的购买细节：**现在买 Live 12，13 是免费升级**——在窗口内
+决定。
+
+**Starlink Mini 2。** 首个不接线也能扛过断电的卫星终端：**内置电池**（约 71 Wh，早期数据约
+4.5 小时）、25–35 W 功耗、**60 W 电源砖**（Mini 1 需 100 W 源）、**USB-C** 取代 Mini 1 专有
+线缆。让离网人群抱怨的交易：Mini 1 **不经协商接受 12–48 V**（车载电池/太阳能安装极其简单）；
+Mini 2 的 USB-C 要协商，那个技巧又需要触发器转接头——一次「标准化」变更，对珍视无脑宽压
+直流输入的装机人群是降级。套装 999 美元含一年订阅（论坛数据）、Mini 1 清仓 149 美元。规格
+数字是论坛数据——官方页面是无规格表的 JS 壳。
+
+**Zen 6 实测（Chips and Cheese，11 月 10 日，George Cozma）。** AMD Zen 6 核家族的首个公开
+微架构深潜。鸟瞰：Zen 5 的自然演化（更大的乱序结构）。底层则大幅重构——「让我想起 Zen 1
+到 Zen 2 的变化」：**整数调度器回到类似 Zen 3/4 的布局**（AMD 展开Zen 5 激进的调度器而非
+在其上迭代）；分支误预测恢复更便宜（错误路径平台 ~3.5–4 ns → **~3–3.5 ns**）；L1 指令缓存内
+**每周期 2 个分支**；单线程可用**两个解码簇**（Zen 5 限制单线程一个）；**NOP 配对回归**
+（每周期最多 16 个）；**每周期 5.96 次 64 位加法**对 Zen 5 的 5.25；方向预测器沿用 Zen 5 最佳
+测量并加快 BTB 查找。对编译器/系统工程师，可直接行动的细节是 NOP 配对回归与更便宜的误预测
+恢复；有意思的结果是变化的*形状*而非头条 IPC。这颗核心将落入下一代服务器、桌面与主机。
+
+→ [[agent-plugins]] [[platform-gatekeeping]] [[edge-inference]]
+
+Sources: [microsoft/Procexp-Mac](https://github.com/microsoft/Procexp-Mac) ·
+[ShayanAbbas1/dbdelve](https://github.com/ShayanAbbas1/dbdelve) ·
+[Chips and Cheese](https://chipsandcheese.com/p/amds-zen-6-family-feeding-the-beast) ·
+[fingerprinting.study](https://fingerprinting.study/)（→ [[platform-gatekeeping]]）

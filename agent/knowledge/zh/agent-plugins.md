@@ -1104,3 +1104,22 @@ README 索引围绕这些预览而不是 API 文档来组织。MIT、**14,071★
 ## 2026-11-08 04:52 —— 参考合集重新许可：Office skills 转 Apache-2.0
 
 `anthropics/skills` 的 PR #2146——「Move Office skills to the Apache 2.0 license」，maheshmurag 提交——于 **2026-11-06T22:32:30Z** 合并（经 API 核实）；当日仓库 trending（+386）。Office skills 是被广泛 fork 的文档处理集（Word/PowerPoint/Excel），多数 skills 合集都衍生于它。skills 合集曾是许可雷区——本库已收录过 14k★ 却只带六个 skill 的合集、六位数星数而无许可证的 skills 仓库、以及被非开放条款看管的厂商 skills；当参考合集明确把最常被 fork 的 skills 放进 Apache-2.0，下游所有人的再分发问题都变简单了。
+
+## 2026-11-11 12:58 — STE80 Humanizer：提示工程口传心授变成版本化、自带事实核查的技能
+
+`Dodaios/ste80-humanizer`（322★，MIT，11 月 9 日创建）是一个去 AI 味的两段式 agent 技能：
+第一段剥离 Wikipedia「Signs of AI writing」的 **26 条特征**；第二段把句子重建到 **ASD-STE100**
+——航空维修手册的受控英语——按 Andrej Karpathy 10 月 2 日的提示做到「**80%** 的程度」（完整
+STE 禁止把 check/test 作动词、直接禁用 may/should；该技能保留自然词汇，只强制一句一个意思、
+主动语态、每条指令 20 词）。让它成为数据点而非又一个技能的两件事：它**事实核查了自己的
+上游来源**——指出 Karpathy 的 STE 总览图相对 ASD-STE100 第 9 版有错（「approximately」是
+批准词、「TEST」仅作名词、没有「in order to」条目），技能遵循第 9 版——并且明确声明
+「过 AI 检测器不是目标」。这个体裁普遍缺失的卫生习惯，在一个工件里出现了：方法从一条推文
+逃逸进一个版本化、CI 验证、会纠正推文的技能。技能继续成为提示工程口传心授的落地分发格式
+（humanizer/unslop 一线：`heydamir/unslop` 是 11-02 的先例），而这份工件的诚实之处是它自己的
+示例：只有第一段时「词干净了，但句子仍重」。
+
+→ [[no-ai-default]] [[agent-stack]]
+
+Sources: [Dodaios/ste80-humanizer](https://github.com/Dodaios/ste80-humanizer) ·
+[Show HN](https://news.ycombinator.com/item?id=50429144)

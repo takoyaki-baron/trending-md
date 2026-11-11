@@ -1842,3 +1842,78 @@ Sources: [Announcing .NET 11](https://devblogs.microsoft.com/dotnet/announcing-d
 [Neil Fraser: .name Grandfathered](https://neil.fraser.name/news/2026/11/10/) ·
 [Do Code That Matters: Home automation](https://docodethatmatters.com/home-automation-overnight-success/) ·
 [HolyArrs/HolyArrs](https://github.com/HolyArrs/HolyArrs)
+
+## 2026-11-11 12:58 — seven hardware/tools items from the 12:51 batch
+
+**Sysinternals Process Explorer for macOS (`microsoft/Procexp-Mac`).** The first Sysinternals tool
+on macOS — native Swift/SwiftUI/AppKit over public APIs (`libproc`, `sysctl`, Mach host stats,
+Security.framework, IOKit, Metal), not Electron: live process tree with Procexp coloring,
+module/handle/thread panes, per-process Properties (Image, Performance, Threads, TCP/IP with
+reverse-DNS, Security, Environment, Strings), GPU graphs, P/E-core labeling on Apple Silicon. The
+macOS-specific addition is supply-chain-native: a **Security tab reading signer, certificate chain,
+Team ID, notarization status and SHA-256 with VirusTotal integration** per process. Repo created
+Jul 6, pushed Nov 10, 312★, macOS 14+. **No license file** — source-available to read, no reuse
+rights stated; read the code, don't treat it as open source until a license lands. The
+signature/notarization column is the feature to steal: unnotarized and ad-hoc-signed processes are
+exactly what to surface when auditing a Mac.
+
+**DBDelve (`ShayanAbbas1/dbdelve`, 1,005★).** Native cross-platform DB client in Rust on **GPUI** —
+no Electron, no JVM, the third non-Zed GPUI app in this feed's recent memory. Benchmark vs DBeaver
+25.3.1 (M1 Pro, median of 5): launch **1.1 s vs 5.2 s**, idle **133 MB vs 606 MB**, 1,000-row query
+**0.21 s vs 1.96 s**, 1M rows **56 s vs 208 s** — and the 1M-row memory row (**4.9 GB vs 17 GB**)
+footnotes itself as pathological on purpose (row limit off, whole table pulled, DBeaver heap raised).
+Engines: Postgres, MySQL/MariaDB, SQLite, Turso, DuckDB, Snowflake, SQL Server, MongoDB, Redis
+(+Valkey/KeyDB/Dragonfly), ClickHouse + an **ODBC bridge** (Db2, Oracle, SAP HANA, Redshift,
+BigQuery, Databricks). Imports DBeaver/TablePlus connections, Zed/VS Code themes. Homebrew cask,
+**not notarized** — enterprise rollout needs the unsigned-binary conversation first.
+
+**MeowDisplay (`raiseCatError/meowdisplay`).** iPhone Mirroring in reverse — an iPhone, iPad,
+Android device or another Mac becomes a **display for your Mac** (mirror/extend, direct touch,
+Apple Pencil, unified clipboard, audio, PiP, remote access; USB or Wi-Fi). Mac 2.0/iOS 2.0 stable;
+**Android 10+ in closed testing**; 2.1 teases floating windows. Apple's Sidecar/iPhone Mirroring
+move control toward Apple hardware in one direction; this flips it and crosses to Android, which no
+first-party feature does. Open source is what makes the Android path plausible.
+
+**Someone Was Here.** The old "webcam trap" productized with disclosure made explicit: photographs
+whoever uses your Mac while you're away (idle→use, lock-screen attempts, unlocks), captures time +
+entry method + duration, learns your face in a two-minute on-device setup, camera light on for
+every photo, photos stay on the Mac, no accounts. Delivery: free iPhone app **over your own iCloud**
+within seconds, or Pushover/ntfy/Telegram/webhook — the ntfy/webhook path is the generalizing part:
+any notification pipeline (including a local-first Home Assistant setup) can receive the events
+instead of a vendor app. Mac App Store, macOS 14+.
+
+**Ableton Live 13.** Step Sequencer clips, **ARA 2** plug-in support (plug-ins see and edit the
+project's audio context, not just their inserted clip — the load-bearing item for tool builders:
+changes what processing tools get built *in* Live rather than around it), Drum Synth (20+ engines),
+Capture Automation (tweak while exploring, press Capture, gestures become automation), Looplet,
+Transient Shaper/Clipper, Envelope Clips, new rack types, bundled Softube effects; Max for Live gets
+the rack types and device slots. Purchasing detail that moved the thread: **buy Live 12 now and 13
+is a free upgrade** — decide within the window.
+
+**Starlink Mini 2.** First satellite terminal that survives a power cut without wiring: **built-in
+battery** (~71 Wh, ~4.5 h runtime per early figures), 25–35 W draw, **60 W brick** (Mini 1 needed a
+100 W source), **USB-C** replacing Mini 1's proprietary cable. The trade the off-grid crowd
+grumbles about: Mini 1 accepted **12–48 V without negotiation** (vehicle-battery/solar installs
+trivial); Mini 2's USB-C negotiates, so that trick needs a trigger dongle again — a "standardization"
+change that is a downgrade for the install base that valued dumb wide-range DC input. Launch bundle
+$999 with one-year subscription (thread-reported), Mini 1 clearing at $149. Spec numbers are
+thread-reported — the official page is a JS shell with no spec table.
+
+**Zen 6, measured (Chips and Cheese, Nov 10, George Cozma).** First public microarchitectural
+deep-dive of AMD's Zen 6 family. Bird's-eye: natural Zen 5 evolution (bigger OoO structures).
+Underneath, heavily reworked — "reminding me of the changes from Zen 1 to Zen 2": the **integer
+scheduler returns to a Zen 3/4-reminiscent layout** (AMD unwinding Zen 5's aggressive scheduler
+rather than iterating on it); branch-mispredict recovery cheaper (wrong-path plateau ~3.5–4 ns →
+**~3–3.5 ns**); **2 branches/cycle** within L1 I-cache; a single thread can use **both decode
+clusters** (Zen 5 limited a thread to one); **NOP pairing returns** (up to 16 retired/cycle);
+**5.96 64-bit adds/cycle** vs Zen 5's 5.25; direction predictor carries over from Zen 5's
+best-measured with faster BTB lookups. For compiler/systems engineers the actionable details are
+the restored NOP pairing and cheaper mispredict recovery; the interesting result is the *shape* of
+the changes, not headline IPC. This core lands in next-gen servers, desktops and consoles.
+
+→ [[agent-plugins]] [[platform-gatekeeping]] [[edge-inference]]
+
+Sources: [microsoft/Procexp-Mac](https://github.com/microsoft/Procexp-Mac) ·
+[ShayanAbbas1/dbdelve](https://github.com/ShayanAbbas1/dbdelve) ·
+[Chips and Cheese](https://chipsandcheese.com/p/amds-zen-6-family-feeding-the-beast) ·
+[fingerprinting.study](https://fingerprinting.study/) (→ [[platform-gatekeeping]])

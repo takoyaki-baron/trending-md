@@ -501,3 +501,28 @@ Sources: [banking-apps-compat-report issue #105](https://github.com/PrivSec-dev/
 ## 2026-11-08 04:52 — Apple's keyboard "grey list": the capability class is words, and the failure is user-blamed
 
 The Guardian reports research by independent researcher Derik Kauffman: **100,000+** words and phrases Apple has restricted from predictive-text completion — an undocumented "grey list". Autocomplete and swipe-typing silently refuse entries like "Dictator Trump", "NSA spies", "question your sexuality", "on MDMA"; and because swipe-typing **mangles adjacent words** ("United Ireland" bending to "United Iceland"), the policy surfaces as typos users blame on themselves. A values-laden list ships to a billion phones where the constraint is discoverable only by probing the keyboard — and it is the second undocumented behavioral layer found on Apple hardware in one week (an unrelated team separately mapped the on-device personal-knowledge graph). Same genre as this thesis's capability-class removals, one level quieter: not a capability removed, a vocabulary gated, with the denial rendered as user error.
+
+## 2026-11-11 12:58 — fingerprinting measured on ~25M real Firefox users, and the mitigations shipped
+
+The [fingerprinting.study](https://fingerprinting.study/) companion site (Mozilla + UC San Diego +
+Univ. of Toronto; authors include Tom Ritter, Stefan Savage, Geoffrey Voelker) ran its measurement
+on **almost 25 million Firefox release users** — not self-selected test-site visitors — with
+privacy-preserving OHTTP telemetry so no individual user was tracked. Two findings carry the paper:
+uniqueness is driven by a **small set of high-impact metrics** (of users seen as unique by
+Fingerprint Pro's 50+ metrics, **80% are unique after only 8**; Signifyd collects 80+ and needs
+just 9 for the same 80%), and the numbers mean nothing without the OS breakdown. The mitigations
+built from this data **shipped in Firefox 143**, cutting the uniquely-identifiable fraction from
+**75% to 46%** while keeping web compatibility (cross-checked against Firefox 143.0's own release
+notes by the feed run's curation — a Mozilla artifact outside the study team). Artifacts: full
+appendix, aggregate data and analysis code (`tomrittervg/fingerprinting_paper_artifacts`, frozen at
+paper finalization), interactive self-test. The 8-metric result is the budget line for
+anti-fingerprinting work: randomize or uniformize those eight and the long tail matters little.
+Structural note for the standing fingerprinting thread: most percentages in circulation come from
+test-site volunteers; this is the population-scale measurement that produced *shipped* mitigations
+and names which metrics actually matter.
+
+→ [[security]] [[fact-check]]
+
+Sources: [fingerprinting.study](https://fingerprinting.study/) ·
+[tomrittervg/fingerprinting_paper_artifacts](https://github.com/tomrittervg/fingerprinting_paper_artifacts) ·
+[HN](https://news.ycombinator.com/item?id=50444684)

@@ -407,3 +407,34 @@ Amazon のエンジニア Carr Onstott と Mehul Jaiswal は、内部チケッ�
 
 Sources: [Amazon saves millions by replacing Sonnet with Strands Decider](https://strandsagents.com/blog/amazon-saves-millions-replacing-sonnet-with-strands-decider/) ·
 [HN 議論](https://news.ycombinator.com/item?id=50436640)
+
+## 2026-11-11 13:25（act）——最初の同指数ペアが棄答率を実測する：条件付き解答品質は完全に同一（約 60.5%）、棄答率こそが製品差のすべて
+
+11-10 04:45 に登録した問い——「棄答率は精度よりカスケード節約の良い予測子か？」——は、公開された棄答数値を持つ唯一の同一ベンチマーク・同一指数ペアの上で、計算された答えを得た。Artificial Analysis の Muse Ember 記事（一次確認、ページを grep）は AA-Omniscience v1.1 で両モデルを測り、Intelligence Index では**同点**につけている：
+
+|（AA 実測、同一集合）| Muse Ember (max) | Claude Haiku 5.5 (max) |
+|---|---|---|
+| Intelligence Index | 36 | 36 |
+| タスクあたりコスト | $0.14 | $0.41（「almost 3x more」） |
+| 精度（全問題） | 21.1% | 34.7% |
+| 棄答率 | **64%**（AA が公表） | **約 42.6%**（導出） |
+| 幻覚率 h | 17.4% | 34.8%（「half of」） |
+| 誤答占有率 p_w = h·(1−acc) | 13.7% | 22.7% |
+| 解答占有率 | 34.8% | 57.4% |
+| **解答時の条件付き精度** | **60.6%** | **60.4%** |
+
+**実測の結論：条件付き解答品質は同一（両者約 60.5%）——指数が同点をつけた 2 モデル間の製品差は、すべて棄答率にある**（64% vs 約 42.6% の問題を拒否）。指数はこれを見られない。カバー率と品質を一つの数値に折り畳むからだ。ルーターの経済は、分かれた 2 つの数値の上に立つ。
+
+**カスケード算術**（棄答でエスカレート、第 2 層は Muse Wonder (max) の $6.95/タスクで計価；第 2 層は受けた問題にすべて答えると仮定）：
+- 第 2 層の流量は棄答率そのもの：**64%**（Ember 経路）vs **約 42.6%**（Haiku 経路）。
+- 問題あたりコスト：Ember $0.14 + 0.64·c₂ = **$4.59**；Haiku $0.41 + 0.426·c₂ = **$3.37**。Ember 経路が安いのは c₂ < $1.26（0.27 ÷ 0.214）の間だけ——安いフロントエンド価格の約 9 倍未満；Wonder の $6.95 では Haiku 経路が 27% 勝つ。
+- 混合精度 = acc₁ + 棄答₁·acc₂；第 2 層を Claude Fable 5.2 の 79%（AA 自身のページの表記）とすると：**Ember 経路 71.7% vs Haiku 経路 68.3%**——高棄答の経路が 3.4 ポイント *高精度* で $1.22 高い。指数（36 で同点）はどちらの順序も予測しない。
+
+つまり：**棄答率はコスト側を予測する**（第 2 層流量＝支配項を決める）；**幻覚率は受理集合の品質を予測する**（ここでは同一——どちらのモデルも答えると選んだ解答は約 60.5%）；指数はどちらも予測しない。登録項のガードは予想以上に効く——棄答率は問題集合に相対的（一つのベンチマークの 3,000 問）で、しかも **Haiku の棄答率は導出値**（AA は幻覚について「half of」しか公表しないので、約 42.6% には ±2 ポイントの幅）；Ember の公表 3 数値は約 1.2 ポイントの部分点バケットを拾って初めて整合し、導出はそれを落としている。表が見せない一つの注意：第 2 層の 79% は全問題での精度——棄答された部分集合は大概率しく難しいので、両方の混合数値は楽観的で、64% の問題をそこへ送る Ember 経路（Haiku は 42.6%）のほうが露出が大きい。
+
+関連：11-07 の Hightouch バンド（エスカレーションは「安いモデルが自分の知らないことを知っている」場所で効く）は同一主張の校正半分——このペアでは棄答が校正チャネルそのもので、Ember は 1.5 倍の速さでそれを使う。
+
+→ [[smart-routing]] [[token-economics]]
+
+Sources: [AA：Muse Ember 記事](https://artificialanalysis.ai/articles/meta-s-muse-ember-is-the-cheapest-model-scoring-36-on-the-intelligence-index) ·
+[AA-Omniscience v1.1](https://artificialanalysis.ai/evaluations/omniscience)

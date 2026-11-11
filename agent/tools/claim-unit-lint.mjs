@@ -3635,7 +3635,14 @@ function htmlText(body, raw = false) {
     .replace(/&nbsp;|&#160;/g, ' ')
     .replace(/&#x([0-9a-f]+);/gi, (_, h) => { try { return String.fromCodePoint(parseInt(h, 16)); } catch { return ' '; } })
     .replace(/&#(\d+);/g, (_, d) => { try { return String.fromCodePoint(Number(d)); } catch { return ' '; } })
-    .replace(/&amp;/g, '&').replace(/&#39;|&apos;/g, "'").replace(/&quot;/g, '"')
+    .replace(/&amp;/g, '&').replace(/&#39;|&apos;|&rsquo;|&lsquo;/g, "'").replace(/&quot;|&ldquo;|&rdquo;/g, '"')
+    /* Named typographic entities decode like their numeric siblings: the 2026-11-11 run quoted
+       alexwang.ai's "you'll" verbatim while the page serves `you&rsquo;ll`, and the undecoded
+       `&rsquo;` turned the page side into `yoursquoll` against the quote's `youll` — a verbatim
+       quotation filed `quote-not-found` (sev 3). Same defect the `&#x27;` fix closed, one layer
+       over: a quotation must be greppable in the RENDERED page, and the rendered page renders
+       `&rsquo;` as an apostrophe. */
+    .replace(/&mdash;|&ndash;/g, '—').replace(/&hellip;/g, '…')
     .replace(/&lt;/g, '<').replace(/&gt;/g, '>')
     /* Tags become a space, so `the <a>213</a> fixes` arrives as three spaces in a row. A reader
        checking "does the page carry this sentence" compares one space, so collapse horizontal runs
@@ -3763,7 +3770,7 @@ async function citedPageText(page) {
    v5 detects a binary response (`looksLikePdf`) and either extracts it (`pdftotext`) or leaves it
    UNREAD. A v4 entry for a PDF URL holds ~491 KB of binary that reads as the longest text in the
    run — the 2026-11-09 shape that turned six verbatim quotations into `quote-not-found`. */
-const PAGE_CACHE_V = 5;
+const PAGE_CACHE_V = 6;
 let citedPages_requests = 0;
 
 async function checkCount(it) {
@@ -4421,7 +4428,8 @@ function normQuote(s) {
     .replace(/[‘’]/g, "'")
     .replace(/[‐‑‒–—―]/g, '-')
     .replace(/&nbsp;|&#160;/g, ' ')
-    .replace(/&quot;|&#34;/g, '"').replace(/&#39;|&apos;/g, "'")
+    .replace(/&quot;|&#34;|&ldquo;|&rdquo;/g, '"').replace(/&#39;|&apos;|&rsquo;|&lsquo;/g, "'")
+    .replace(/&mdash;|&ndash;/g, '-').replace(/&hellip;/g, '...')
     .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
     .replace(/\s+/g, ' ')
     .trim()
@@ -5860,6 +5868,20 @@ if (SELFTEST) {
   t('template: ld+json metadata is not a source a reader can see', bt.includes('json metadata'), false);
   t('template: the unwrapped body answers the quotation check',
     checkQuotes(mk('t', 'the post says "This update includes 213 security fixes."'), qsrc(bt)).map((x) => x.verdict), ['ok']);
+
+  /* ── a NAMED typographic entity is the character it renders (filed 2026-11-11, item 25) ────────
+     The feed quoted alexwang.ai's "…and you'll get ten different chains of thought…" verbatim;
+     the page serves `you&rsquo;ll`, and with `&rsquo;` left as text the page side normalized to
+     `yoursquoll` against the quote's `youll` — "19 of 40 words", `quote-not-found` (sev 3) on a
+     quotation that is verbatim in the rendered page. Same species as the `&#x27;` fix
+     (2026-10-31, rule f): a numeric ref was a byte claim; a named entity is one too. */
+  const APOS = htmlText('<p>Ask a reasoning model the same math problem ten times and you&rsquo;ll get ten different chains of thought&hellip; let&rsquo;s think of it as pathfinding.</p>');
+  t('named entities: &rsquo;/&hellip; decode like the rendered page',
+    APOS.includes("you'll get ten different chains of thought… let's think of it as pathfinding."), true);
+  t('named entities: the decoded page answers the quotation check',
+    checkQuotes(mk('t', 'The post says "Ask a reasoning model the same math problem ten times and you\'ll get ten different chains of thought… let\'s think of it as pathfinding."'), qsrc(APOS)).map((x) => x.verdict), ['ok']);
+  t('normQuote: a quote carrying &rsquo; matches its rendered twin',
+    normQuote("you&rsquo;ll") === normQuote("you'll"), true);
 
   /* ── a BINARY response is not a page (filed 2026-11-09 13:52, item 21 of the 11-09 feed) ───────
      Item 21 quotes six sentences from P4454R0.pdf; all six are verbatim in the paper (verified

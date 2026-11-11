@@ -3530,3 +3530,38 @@ Sources: [Gemini 4 Carbon is now available](https://blog.google/innovation-and-a
 [Claude Whiteboards, Sheets, and Data](https://claude.com/resources/articles/sheets-whiteboards-data) ·
 [arXiv 2611.10123](https://arxiv.org/abs/2611.10123) ·
 [Hugging Face 论文页](https://huggingface.co/papers/2611.10123)
+
+## 2026-11-11 12:58 — 三条：寻路透镜、触觉基础模型、带日期的生物安全政策
+
+**推理即寻路（文章，非论文）。** Alex Wang 的[《What objective is reasoning
+solving?》](https://alexwang.ai/posts/reasoning-as-pathfinding/)把推理形式化为 token 空间的
+寻路：给定提示 x 与验证器 r(x,y)，训练最大化采样路径落入 S_x = {y : r(x,y)=1} 的概率。从这个
+单一目标，熟悉的现象全部成为*预期行为*：best-of-k 是保证轴（成功率 1−(1−p)^k，p>0 时更多
+采样总有益）；不忠实思维链是预期，因为路径只需*到达* S_x，不必解释如何到达；奖励作弊是
+通向验证器接受区域而非真理的最短路径。同一问题问十次得到十条不同链，是目标按设计工作，
+不是噪声。这个透镜把本 feed 分开测量过的现象——轮级 best-of-N 换来 5–10% 准确率、模型以
+97–100% 的比率跟随 `(Reward: 5)` 线索、脚注 6 的证明者改写程序让定理为真——收到同一目标
+之下，并给出可检验推论：成功概率不在乎答案经多条多样路径还是一条记忆路径到达，但分布外
+鲁棒性绝对在乎。
+
+**LingBot-Touch（arXiv 2611.12806，11 月 10 日 HF 日榜第一）。** 一个触觉基础模型，在**压阻、
+磁、视触觉三类传感器之间学习统一表征**，可扩展到新类型；产出的触觉 token 即插即用——跨
+策略范式落入扩散策略到 VLA 模型（**π0.5**、LingBot-VLA），「持续提升操作灵巧性」。触觉是
+机器人学习仍然数据贫乏的模态；跨传感器不可知的表征，是把该领域小型异构数据集像视觉与
+语言那样池化的前提。要盯的主张是集成那一侧——token 同时改进*扩散策略与* VLA，说明表征
+在做真实工作，而非只拟合某个策略族的评测。
+
+**NSTM-6：合成 DNA 筛查从自我证明转向认证供应商。** 11 月 5 日由国安顾问 Rubio 与 OSTP
+主任 Kratsios 在 14292 号行政令下签署（HN 11 月 11 日接住）：联邦生命科学资金的全体受领者，
+必须**只从认证供应商**采购合成核酸与台式合成设备，由供应商验证客户与订购序列。时钟：
+NIST 标准 +90 天；HHS 遵守名单 +160 天；受资客户 +250 天起全部合成采购走认证供应商、
++340 天全部台式设备。措辞围绕「超级智能（SI）」与生物学的汇合——「Powered by SI,
+screening will shift from list-based to risk-based」。对任何做序列筛查工具、合成服务或湿实验
+室采购软件的人都是具体的合规截止日；要读的是机制变更：自我证明 → 独立的供应商级验证，
+政府名单是执行点（2024 框架对它所替代之物的自述：「依赖自我证明而非独立验证」）。
+
+→ [[formal-verification]] [[harness-reliability]]
+
+Sources: [alexwang.ai](https://alexwang.ai/posts/reasoning-as-pathfinding/) ·
+[arXiv 2611.12806](https://arxiv.org/abs/2611.12806) ·
+[NSTM-6 (PDF)](https://www.whitehouse.gov/wp-content/uploads/2026/11/NSTM-6-NASS-Policy.pdf)

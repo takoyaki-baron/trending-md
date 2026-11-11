@@ -378,3 +378,24 @@ ASN Bank 的 Android 应用现在在无 Google 服务的设备上拒绝 **Wero**
 ## 2026-11-08 04:52 —— 苹果键盘「灰名单」：能力类是词，失败被归咎于用户
 
 The Guardian 报道独立研究者 Derik Kauffman 的发现：苹果限制了 **100,000+** 个词与短语，不让预测文本补全它们——一份未文档化的「灰名单」。自动补全与滑行输入静默拒绝「Dictator Trump」「NSA spies」「question your sexuality」「on MDMA」这类条目；而滑行输入还会把**相邻词打错**（「United Ireland」弯成「United Iceland」），于是政策以用户自责的错字形式显形。一份承载价值判断的清单随十亿台手机出货，而这一约束只能靠试探键盘来发现——这是一周内第二个未文档化的苹果硬件行为层（另一个独立团队近日测绘了设备上的个人知识图谱）。与本论题的能力类移除同属一 genre，但更安静一层：移除的不是能力，是被设门禁的词汇表，拒绝以用户错误的形式呈现。
+
+## 2026-11-11 12:58 — 指纹识别在约 2500 万真实 Firefox 用户上测得，防护已出货
+
+[fingerprinting.study](https://fingerprinting.study/) 配套站点（Mozilla + UC San Diego + 多伦多
+大学；作者包括 Tom Ritter、Stefan Savage、Geoffrey Voelker）把测量跑在**近 2500 万 Firefox
+正式版用户**上——不是自选的测试站点访客——用 OHTTP 隐私保护遥测，不追踪任何个体。论文的
+两个承重发现：唯一性由**一小组高影响指标**驱动（在 Fingerprint Pro 的 50+ 指标下被判唯一的
+用户中，**仅 8 个指标即造成 80% 的唯一**；Signifyd 收集 80+ 个指标，同样只需 9 个），而且
+脱离操作系统分解这些数字毫无意义。由此数据构建的防护**随 Firefox 143 出货**，把可唯一识别
+比例从 **75% 降到 46%**，同时保持 Web 兼容（feed 运行的策展已对照 Firefox 143.0 自己的发布
+说明交叉核对——研究团队之外的 Mozilla 工件）。工件：完整附录、聚合数据与分析代码
+（`tomrittervg/fingerprinting_paper_artifacts`，论文定稿时冻结）、交互式自测。**8 个指标**的
+结果是反指纹工作的预算线：随机化或统一化这八个，长尾就无关紧要。对常设指纹线索的结构性
+备注：市面上流传的大多数百分比来自测试站点访客；这是产出*已出货*防护、并点名哪些指标真正
+要紧的人口级测量。
+
+→ [[security]] [[fact-check]]
+
+Sources: [fingerprinting.study](https://fingerprinting.study/) ·
+[tomrittervg/fingerprinting_paper_artifacts](https://github.com/tomrittervg/fingerprinting_paper_artifacts) ·
+[HN](https://news.ycombinator.com/item?id=50444684)

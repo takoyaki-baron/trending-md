@@ -372,3 +372,34 @@ Amazon 工程师 Carr Onstott 与 Mehul Jaiswal 把一个内部工单系统的 2
 
 Sources: [Amazon saves millions by replacing Sonnet with Strands Decider](https://strandsagents.com/blog/amazon-saves-millions-replacing-sonnet-with-strands-decider/) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50436640)
+
+## 2026-11-11 13:25（act）——第一对同指数模型实测弃答率：条件答案质量完全相同（约 60.5%），弃答率才是全部的产品差异
+
+11-10 04:45 归档的问题——"弃答率是否比准确率更能预测级联省钱？"——如今在唯一一对同基准、同指数、且公开了弃答数字的模型上有了计算出的答案。Artificial Analysis 的 Muse Ember 文章（一手核实、页面 grep）在 AA-Omniscience v1.1 上实测两个模型，且两者在 Intelligence Index 上**同分**：
+
+|（AA 实测，同一集合）| Muse Ember (max) | Claude Haiku 5.5 (max) |
+|---|---|---|
+| Intelligence Index | 36 | 36 |
+| 每任务成本 | $0.14 | $0.41（"almost 3x more"） |
+| 准确率（全部问题） | 21.1% | 34.7% |
+| 弃答率 | **64%**（AA 直接公布） | **约 42.6%**（推导） |
+| 幻觉率 h | 17.4% | 34.8%（"half of"） |
+| 错答占比 p_w = h·(1−acc) | 13.7% | 22.7% |
+| 作答占比 | 34.8% | 57.4% |
+| **作答时的条件准确率** | **60.6%** | **60.4%** |
+
+**实测结论：条件答案质量完全一致（两者约 60.5%）——两个被指数打了同分的模型之间，全部产品差异就是弃答率**（64% 对约 42.6% 的问题拒绝作答）。指数看不见这一点，因为它把覆盖与质量折成一个数字；而路由的经济账恰恰压在这两个分开的数字上。
+
+**级联算术**（按弃答升级，第二层按 Muse Wonder (max) 的 $6.95/任务计价；假设第二层对其收到的问题全部作答）：
+- 第二层流量就是弃答率：**64%**（Ember 路线）对**约 42.6%**（Haiku 路线）。
+- 每问题成本：Ember $0.14 + 0.64·c₂ = **$4.59**；Haiku $0.41 + 0.426·c₂ = **$3.37**。Ember 路线仅在 c₂ < $1.26（0.27 ÷ 0.214）时更便宜——即低于廉价前端价格约 9 倍；在 Wonder 的 $6.95 下，Haiku 路线便宜 27%。
+- 混合准确率 = acc₁ + 弃答₁·acc₂；取第二层 = Claude Fable 5.2 的 79%（AA 自己页面标注）：**Ember 路线 71.7% 对 Haiku 路线 68.3%**——高弃答路线高 3.4 个百分点、贵 $1.22。指数（同分 36）对两种排序都无预测力。
+
+所以：**弃答率预测成本端**（它决定第二层流量，即主导项）；**幻觉率预测被接受集合的质量**（此处完全相同——两个模型选择作答的答案都只有约 60.5%）；指数对两者都无预测力。归档条目的防线比预期更紧——弃答率是随问题集而变的（一个基准的 3,000 题），而且 **Haiku 的弃答率是推导值**（AA 只公布"half of"，约 42.6% 带有 ±2 点误差）；Ember 的三个公布数字只有在计入约 1.2 点的部分得分桶时才自洽，而推导丢掉了这一项。表格无法显示的一个警示：第二层的 79% 是它在全部问题上的准确率——被弃答的子集大概率更难，所以两个混合数字都偏乐观，其中 Ember 路线（把 64% 的问题送到那里，Haiku 只有 42.6%）暴露更大。
+
+相关：11-07 的 Hightouch 频带（升级只在"廉价模型知道自己不知道"处有效）是同一主张的校准半边——对这一对模型，弃答就是校准通道，而 Ember 花费它的速度是 1.5 倍。
+
+→ [[smart-routing]] [[token-economics]]
+
+Sources: [AA：Muse Ember 文章](https://artificialanalysis.ai/articles/meta-s-muse-ember-is-the-cheapest-model-scoring-36-on-the-intelligence-index) ·
+[AA-Omniscience v1.1](https://artificialanalysis.ai/evaluations/omniscience)

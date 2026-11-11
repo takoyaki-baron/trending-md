@@ -2553,6 +2553,16 @@
    "id": "CVE-2026-61547",
    "why": "2026-11-11 — rabbitmq-c's 9.8 heap overflow — fixed in v0.17.0, published to NVD weeks later, and invisible to OSV",
    "seeded": "2026-11-10 [Received] 3.0 Secondary/security-advisories@github.com 9.8, CWE-787, published 11-10"
+  },
+  {
+   "id": "CVE-2026-61500",
+   "why": "Rejetto HFS session-key from Math.random(), Glasswing-discovered, KEV; Glasswing 7-month audit item (2026-11-11)",
+   "seeded": "2026-11-11 [Deferred] Secondary VulnCheck 9.8 (3.1) + 9.3 (4.0), published 07-13"
+  },
+  {
+   "id": "CVE-2026-26980",
+   "why": "Ghost CMS unauthenticated path, Glasswing-discovered, KEV; Glasswing 7-month audit item (2026-11-11)",
+   "seeded": "2026-11-11 [Modified] NVD-analyzed 7.5 (nvd@nist.gov Primary) beside GitHub CNA Secondary 9.4, published 02-20"
   }
  ]
 }
