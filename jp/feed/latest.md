@@ -1,8 +1,8 @@
 ---
 date: 2026-11-12
-updated: 2026-11-11T20:43:46Z
+updated: 2026-11-12T04:30:29Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 21
+sources: 32
 license: CC-BY-4.0
 ---
 
@@ -30,7 +30,7 @@ Amazon が **aws/aws-emulator**——"AWS API のローカルエミュレータ"
 - **Source:** pietromiotti.com · HN 843 ポイント · 8 時間前（11 月 11 日 ~20:20 UTC+8）
 - **Tags:** `ai-agents` `lidar` `archaeology`
 
-Pietro Miotti の記事——この日の HN 最大の話題で 843 ポイント——は、ペルー旅行中の「とりとめのない考え」（10 月 18 日）からメキシコ INAH の公式回答まで**72 時間未満**しかかからなかったと語る。マヤ地域の公開 NASA LiDAR 約 1,200 km² を、画像として描画した LiDAR ストリップを **48 体のエージェント**が目視検査して一晩で分析した（"There was no special model or classifier involved: the agents literally looked at the pictures"）。エージェントは、整地された広場、高さ 8–12 m の楕円形ピラミッド、盛り上げた中庭、雨溜まりと思われる構造を持つ山頂遺跡を検出し、10 月 21 日に INAH の登録簿がその座標に登録遺跡がないことを確認した。**11 月 11 日のアップデートが見出しが省いた部分だ：**考古学者から、同じ遺跡は **Estrada-Belli ら 2025 年の論文**ですでに公開されていたと指摘された——"they rediscovered it rather than discovered it (it just wasn't in INAH's register yet)."
+Pietro Miotti の記事——この日の HN 最大の話題で 843 ポイント——は、ペルー旅行中の「とりとめのない考え」（10 月 18 日）からメキシコ INAH の公式回答まで**72 時間未満**しかかからなかったと語る。マヤ地域の公開 NASA LiDAR 約 1,200 km² を、画像として描画した LiDAR ストリップを **48 体のエージェント**が目視検査して一晩で分析した（"There was no special model or classifier involved: the agents literally looked at the pictures"）。エージェントは、整地された広場、高さ 8–12 m の楕円形ピラミッド、盛り上げた中庭、雨溜まりと思われる構造を持つ山頂遺跡を検出し、10 月 21 日に INAH の登録簿がその座標に登録遺跡がないことを確認した。**11 月 11 日のアップデートが見出しが省いた部分だ：**考古学者から、同じ遺跡は **Estrada-Belli ら 2025 年の論文**ですでに公開されていたと指摘された——"The agents missed it while going through the literature, so they rediscovered it rather than discovered it (it just wasn't in the register of Mexico's National Institute of Anthropology and History, INAH, yet)."（エージェントは文献を調べる際にこれを見逃しており、発見というより再発見だった——ただしまだメキシコ国立人類学歴史研究所 INAH の登録簿に入っていなかっただけだ。）
 
 **Why it matters:** このワークフロー（レンダリングしたセンサー画像を読むエージェント、同じ週の公式登録照合）は本物で再現可能だ——だが記事自身のアップデートこそ、エージェントの「発見」が報道周期に乗る前に文献検索が必要な理由の実例だ。見出し級の主張は 1 日で崩れた。「公刊された科学が公式登録簿に届いていない」という INAH 登録のギャップこそが、耐久性のある検証可能な発見だ。
 
@@ -296,13 +296,185 @@ Intel の SA-01580 は、**TDX Migration Trust Domain（MigTD）**——機密�
 
 ---
 
+## 21. WSJ が報じる：Nvidia 取締役会が Jensen Huang の解任を準備——11月9日の調査が解任報道に発展、時間外取引で株価下落
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** WSJ · HN 681 ポイント · 5.7 時間前（~06:31 UTC+8）
+- **Tags:** `nvidia` `industry` `governance`
+
+ウォール・ストリート・ジャーナルは 11 月 11 日（米国時間）遅く、Nvidia の取締役会が **CEO Jensen Huang の解任を準備している**と報じた——Reuters と The Verge が同じ時間帯に伝え、会社側は確認していない。その数時間前、ニューヨーク・タイムズが 2 件目の不倫を報道——The Verge の NYT 記事要約によれば、相手は「彼に直属する幹部」。**これは本フィードが 2026-11-09 に取り上げた弧線のエスカレーションだ：**「外国情報活動」をめぐる取締役会の独立調査——その時は侵害の証拠がないと明言していた。報道はこの幹部 Alice Huang を、3 年間で約 75 億ドル規模の Nvidia AI GPU の中国輸入——大半が H100 と H200 という輸出禁止チップ約 24 万個——に結び付ける（Tom's Hardware の見出しレベルの主張。本文はメンバーウォールの内側）。報道の 1 時間以内に、NVDA は時間外取引で通常終盤の約 168 ドルから約 159 ドルへ下落——約 6%——四半期決算は数日以内に控える。
+
+**Why it matters:** もはやガバナンスの脚注ではない——本フィードが追う AI インフラの大部分を形作る会社（CUDA スタック、NVKE などのオープンソースリリース、対中輸出姿勢）の CEO 交代が報じられている。上記はすべて**報道**で、署名付き、未確認。検証可能な数字は時間外価格と決算日であり、Nvidia が発するまでは残りを WSJ・NYT の報道として扱うこと。
+
+[`🔗 WSJ：Nvidia is preparing to oust Jensen Huang`](https://www.wsj.com/business/nvidia-is-preparing-to-oust-nvidia-ceo-jensen-huang-30f421ad) · [`🔗 The Verge：Nvidia is reportedly preparing to fire Jensen Huang`](https://www.theverge.com/tech/1031652/jensen-huang-rumor) · [`🔗 Tom's Hardware：Alice Huang と 24 万個の禁止チップ`](https://www.tomshardware.com/tech-industry/policy/alice-huang-reportedly-instrumental-in-securing-over-usd7-5-billion-of-nvidia-ai-gpu-imports-during-three-year-relationship-with-jensen-huang-helped-move-240-000-banned-chips-into-china-mostly-h100-and-h200) · [`🔗 HN での議論`](https://news.ycombinator.com/item?id=50459703)
+
+---
+
+## 22. ユナイテッド航空が AI エージェントによる予約を禁止——個人エージェントへの最初の明示的な航空会社拒否、資格情報と連邦チェックイン規則を挙げて
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** CBS News · HN 453 ポイント · 6.7 時間前（11 月 11 日 ~21:20 UTC+8）
+- **Tags:** `ai-agents` `policy` `travel`
+
+ユナイテッドは水曜、**AI エージェントが旅行者に代わって航空券を予約することを禁止する**と発表した。理由はセキュリティリスクと連邦規則。"sharing account credentials with personal, third-party, AI assistants can expose sensitive information, and actions taken by these tools may result in unintended purchases, account changes, or use of MileagePlus miles" ——さらに、エージェントによるチェックインは、手荷物に禁制品がないことを本人がその場で確認することを求める規則と衝突しうるという点。執行は両側からだ："United is taking steps to restrict access — directly within our digital platforms and indirectly via travel agencies and aggregators — to prohibit use by unauthorized, third-party personal AI agents or assistants." 対照例も名指しされた：サウスウエスト航空は ChatGPT ユーザーに自社の運賃在庫を表示可能にしている。アナリスト Henry Harteveldt の読み：ユナイテッドは「さらに強力かもしれないもう一つの仲介者」を欲しない——ボット駆動の航空券検索は航空会社の金を焼く。
+
+**Why it matters:** 大手航空会社による個人 AI エージェントの最初の明示的な禁止は、エージェント商取引がどのように門衛されるかの具体的な形を示す：既存業者はエージェントを壁の外に置く（ユナイテッド）か、公認の表面を造る（サウスウエストの ChatGPT 統合）。エージェント開発者にとって、名指しされた 2 つの失敗モード——資格情報の共有と未承認の購入——は、旅行アカウントに触れる前にエージェントが検出し拒否すべきものそのものだ。
+
+> "…prohibit use by unauthorized, third-party personal AI agents or assistants." — ユナイテッド、CBS News へ
+
+[`🔗 CBS News：United Airlines bans AI agents from booking flights`](https://www.cbsnews.com/news/united-airlines-bans-ai-agents-booking-flights/) · [`🔗 HN での議論`](https://news.ycombinator.com/item?id=50458900)
+
+---
+
+## 23. Apache HTTP Server が重大な mod_http2 レースを含む 2.4.71 をリリース——Anthropic の OSS Scanner が発見、報告から 16 日で修正
+
+- **Velocity:** ▮▮ rising
+- **Source:** oss-security / httpd 2.4.71 · HN 33 ポイント · 2 時間前（~10:11 UTC+8）
+- **Tags:** `apache` `http2` `cve`
+
+Apache は 11 月 11 日に **2.4.71** をリリースし、3 件の CVE を含む（プロジェクト自身のページで重大 1・重要 1・低 1）。重大なのは **CVE-2026-119618**："Concurrent Execution using Shared Resource with Improper Synchronization vulnerability in Apache HTTP Server's mod_http2 in assign_headers() can lead to RCE" ——レースコンディションがヒープ破損を生み、Wiz は「リモートの未認証攻撃者」による悪用を評価。その執筆時点で既知のエクスプロイトはなく、野良悪用の報告もない。影響範囲：httpd **2.4.55–2.4.70**、スタンドアロンの **mod_h2 2.0.8–2.0.42**。注目すべきはクレジット行："Anthropic's OSS Scanner, as vulnerability ANT-2026-MAPKT6MZ (finder); Anthony Weems and Simon Scannell of the Google Cloud Vulnerability Research (finder)" ——2026-10-26 に報告され、16 日後に修正・公開された。NVD 記録（11 月 11 日公開）はまだ `Received` で **CVSS スコアなし**——「critical」はプロジェクト自身の深刻度ラベルであり、数値ではない。すぐにパッチを当てられないなら：`Protocols http/1.1` で HTTP/2 を無効化すれば攻撃経路は消える。Wiz の広く読まれた解説には自身の混乱がある——「What is CVE-2026-111497?」という見出しが説明しているのは 119618 だが、**CVE-2026-111497 は 10 月の Google Brotli デコーダ CVE** で Apache とは無関係だ。
+
+**Why it matters:** ほとんどのディストリビューションで HTTP/2 はデフォルト有効であり、修正は日常的なバージョンアップだ——トリアージは 2.4.70 以前のままのホストを探すこと（Wiz 自身のテレメトリでは、クラウド環境の 64% に脆弱なリソースがあり 51% が公開暴露）。そして発見者のクレジットは指標だ：自動化された OSS スキャナが、Google VR の研究者 2 名と並んで Apache のアドバイザリに名を連ねている——これが自動脆弱性発見が実地に降りてきた姿だ。
+
+[`🔗 oss-security：CVE-2026-119618 発表`](https://www.openwall.com/lists/oss-security/2026/11/11/13) · [`🔗 httpd 2.4.71 脆弱性リスト`](https://httpd.apache.org/security/vulnerabilities_24.html) · [`🔗 NVD：CVE-2026-119618`](https://nvd.nist.gov/vuln/detail/CVE-2026-119618) · [`🔗 Wiz 分析`](https://www.wiz.io/blog/cve-2026-119618-rce-apache-http-server-vulnerability)
+
+---
+
+## 24. GitHub Actions がワークフローロックファイルをサポート——フル SHA ピン時代の終わり、読めるタグの復帰
+
+- **Velocity:** ▮▮ rising
+- **Source:** hugovk.dev · HN 171 ポイント · 6 時間前（~06:15 UTC+8）
+- **Tags:** `github-actions` `supply-chain` `security`
+
+GitHub Actions が**ワークフローロックファイル**をサポートし、Hugo van Kemenade の記事が設定全体を歩く：新しい公式 `gh` 拡張 **`github/gh-actions-lock`**（★332）が `uses:` 行を読める `@vX.Y.Z` タグに戻し、`.github/workflows/actions.lock` を生成する——各タグを正確なコミット SHA と `owner_id`/`repo_id` にピン留めする。タグは可変という SHA ピンのアンチサプライチェーン保証を保ちながら、読めない diff はなくなる。エコシステムの支持は既にある："Good news, both already support lockfiles" ——**Renovate と Dependabot**。GitHub は `gh actions-lock --verify` の CI ジョブを推奨し、ロックが同期外れ、またはピンが上流で検証不能のときに失敗する。**zizmor v1.32.0** がロックファイル対応の最初のリリース——それ以前はハッシュピンを勧めていた。
+
+**Why it matters:** 可変タグは Actions サプライチェーンの穴で、SHA ピンは誰もレビューできないワークフローの diff と十六進数だらけの Renovate PR という代償を払ってそれを直した。ロックファイルは読めるピンを復活させ、検証は保つ——Cargo と uv でロックファイルがやったのと同じ動きが、CI で最も攻撃される表面に降りてきた。
+
+> "All forks on github are the same repo you can pin any commit, merged upstream or not." — HN コメンテーター、SHA ピンが実際に信頼しているものについて
+
+[`🔗 hugovk.dev：Lock your GitHub Actions`](https://hugovk.dev/blog/2026/lock-github-actions/) · [`🔗 github/gh-actions-lock`](https://github.com/github/gh-actions-lock) · [`🔗 HN での議論`](https://news.ycombinator.com/item?id=50459485)
+
+---
+
+## 25. Huawei が MACaQ をオープンソース化——122B モデルを 64 分・32.5 GB で量子化すると主張するモデル非依存量子化
+
+- **Velocity:** ▮▮ rising
+- **Source:** huawei-csl/MACaQ · HN 70 ポイント · 7.8 時間前（11 月 11 日 ~04:20 UTC+8）
+- **Tags:** `quantization` `local-inference` `gguf`
+
+Huawei の CSL グループが **MACaQ**（"Model Agnostic Calibrated Quantization"）を公開した——リポジトリは 11 月 10 日作成、Apache-2.0、C++、arXiv **2611.10649**（11 月 7 日提出）："MACaQ: Fast, Model Agnostic Calibrated Quantization for Low-Precision Weights and Activations". 目玉の主張（論文自身の数値）：**わずか 32.5 GB のデバイスメモリで 64 分**という量子化で 1220 億パラメータのモデルを処理し、"lower perplexity than MR-GPTQ and DuQuant++, or match their best Llama-3-8B perplexity with **11× less quantization time**"。広さが要だ：llama.cpp（2/3/4-bit GGUF）、vLLM（W4A4 または weight-only）、Diffusers（W4A4 の画像/動画/音声生成）、PyTorch（音声、W4A4）——そして **Ascend** バックエンド。Hugging Face コレクションが量子化済みモデルを提供する。README はめったに見ない一文で閉じる："Whether you're a human or an AI agent, if you use MACaQ to quantize a model, please star this repository to support the project."
+
+**Why it matters:** ローカル推論の量子化は学術の系譜（GPTQ → AWQ → DuQuant）だった。制裁下のベンダーが、寛容ライセンスでマルチモーダル、llama.cpp/vLLM の経路——加えて Ascend バックエンド——を持つ量子化ツールを出したことは、実用ツールであると同時に Huawei のオープン AI スタックの行き先を示す信号だ。パープレキシティ比較はベンダー自身の論文であり、面白い独立検証は、同じビット幅でこれらの GGUF が llama.cpp の標準量子に勝つかだ。
+
+[`🔗 huawei-csl/MACaQ`](https://github.com/huawei-csl/MACaQ) · [`🔗 arXiv 2611.10649`](https://arxiv.org/abs/2611.10649) · [`🔗 HN での議論`](https://news.ycombinator.com/item?id=50458166)
+
+---
+
+## 26. Vercel の agent-desktop：スクリーンショットなしの computer use——アクセシビリティツリーをエージェントのデスクトップ API として
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending 週間 · 今週 +7,772 · 22.2k スター
+- **Tags:** `computer-use` `agents` `accessibility`
+
+**vercel-labs/agent-desktop** は 22,215 スター・今週 +7,772 で週間ボードに座る："Computer use for AI agents: see and operate desktop apps on macOS, Windows, and Linux through the OS accessibility tree." アクセシビリティツリーを読み JSON で返し、"with a ref for every element the agent can act on" ——エージェントは ref をクリックや入力し、UI を読み直して結果を確認し、繰り返す。スクリーンショットなし、ピクセルマッチングなし、そしてモデルなし："The loop lives in your agent; agent-desktop has no model inside." CLI と **C ライブラリ**として出荷され、スナップショット、クリップボード読み取り、スクリーンショット、コマンド実行がツリーの傍らにある。`agent-browser`（11 月 6 日扱い）のデスクトップ兄弟だ——Vercel Labs は同じ ref ベースの決定論的パターンを両レイヤーで持つことになった。
+
+**Why it matters:** アクセシビリティツリーの computer use はスクリーンショット＋ビジョンループの型付きで速い代替であり、その境界も同じくらい具体的だ：OS のアクセシビリティ層が公開しないもの（canvas 主導のアプリ、ゲーム、独自描画 UI）はすべて見えない。こうしたツール全般の開いた問いは OS ごとのアプリカバレッジで、README はそれを表にしていない。
+
+[`🔗 vercel-labs/agent-desktop`](https://github.com/vercel-labs/agent-desktop) · [`🔗 npm：agent-desktop`](https://www.npmjs.com/package/agent-desktop)
+
+---
+
+## 27. Stela が x86-64 PC で macOS を起動——arm64e トランスレータと NVIDIA 上の Metal ドライバを持つ UEFI レベルの Apple Silicon レイヤー
+
+- **Velocity:** ▮ steady
+- **Source:** tylertms/Stela · HN 73 ポイント · 5.1 時間前（~07:05 UTC+8）
+- **Tags:** `reverse-engineering` `macos` `emulation`
+
+**tylertms/Stela**（Rust、GPL-2.0、v0.1.0、687 スター）は自らを "A general purpose Apple Silicon layer for x86-64 PCs" と呼ぶ——**UEFI ブートプログラム**（下にホスト OS はない）で、3 部構成だ：arm64e を x86-64 に翻訳する ahead-of-time **および** just-in-time コンパイラ（"covers more than 3,000 AArch64 instruction encodings, maps guest registers to host registers and caches translated code"、x86-64-v2 CPU なら動く）；**NVIDIA GPU 向け Metal ドライバ**（GTX 16 / RTX 20 シリーズ以降）は "compiles AIR, Metal's shader IR, directly to NIR, Mesa's IR"；そして Apple シリコンハードウェアのモデル——現時点で **Mac mini（M2）、macOS 27 を実行**。要件は控えめだ：RAM 8 GB、NVIDIA GPU、60 GB の GPT パーティション。セットアップは macOS を USB スティックにダウンロードする。README 自身の判定は正直だ："Your current chances of it booting are low."
+
+**Why it matters:** これは逆 Rosetta だ：Rosetta が ARM Mac の上で x86 アプリを生かしたように、Stela は ARM を x86 に翻訳して、Apple に見捨てられた Intel 時代の PC の上で macOS 自身を生かそうとする。研究グレードの v0.1.0 で、プロジェクト自身が低い期待値の警告を出している——だが注目すべき成果物はそのアーキテクチャ（トランスレータ＋GPU ドライバ＋プラットフォームモデルを一つのブートバイナリに）だ。
+
+[`🔗 tylertms/Stela`](https://github.com/tylertms/Stela) · [`🔗 HN での議論`](https://news.ycombinator.com/item?id=50460154)
+
+---
+
+## 28. OpenAI の Codex Security CLI/SDK が 0.10.0 をリリース——脆弱性スキャンをエージェントワークフローとして再構築、GitHub Action と専用クラウド付き
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending 日次 · 今日 +52 · 11.8k スター
+- **Tags:** `security` `codex` `sast`
+
+**openai/codex-security**（Apache-2.0、TypeScript、11,847 スター）が、**npm 0.10.0**（02:18Z）と対応する GitHub Action 0.10.0（02:23Z）を出した朝にトレンドボードに乗った。売りは "find, investigate, and fix vulnerabilities in your code" ——Codex 内のセキュリティワークフローか、`@openai/codex-security` CLI と TypeScript SDK による自動化で行う。Standard と **Deep スキャン**（deep は standard を繰り返して重複を除く）、候補 findings の検証、パッチ生成、既存修正の検証；`SECURITY.md` の起草と脅威モデルの保存；深刻度は "against your own rubric" で評価；SARIF/JSON/CSV エクスポート；findings を Linear・Jira・GitHub で追跡；対応レポートを **Codex Security Cloud** に公開；サードパーティスキャナの findings をインポートガイドでプレビュー。
+
+**Why it matters:** このパイプライン——スキャン → 検証 → パッチ → 再検証——は、トレンドのセキュリティ監査 *スキル* たちが手で編成していたもので、イシュートラッカーと CI を付けて製品化された。荷重を支えるのは「候補 findings の検証」のステップだ：自らの候補を確認するスキャナは、エージェント駆動セキュリティツールが判定される場所そのものだから、既知の集合上で偽陽性率が測られるまでは「検証済みの数」を主張として扱うこと。
+
+[`🔗 openai/codex-security`](https://github.com/openai/codex-security) · [`🔗 npm：@openai/codex-security`](https://www.npmjs.com/package/@openai/codex-security)
+
+---
+
+## 29. Klad がコーディングエージェントに本物のブラシを渡す——エージェントと人間が同じキャンバスに描くペイントアプリ、画像モデルなし
+
+- **Velocity:** ▮ steady
+- **Source:** klad-app/klad · HN 74 ポイント · 12.1 時間前（11 月 12 日 ~00:00 UTC+8）
+- **Tags:** `creative-tools` `agents` `gui`
+
+Show HN の一つ：**klad**（Rust、ソース利用可能）——"A drawing app built for agent/human collaboration." 人間はエディタでペンで描く；エージェントは `klad` コマンドラインから描く。"with the same brushes, on the same drawing, and each of you sees the other's strokes instantly" ——レイヤー、グループ化、アニメーション用タイムライン込みだ。設計原則は欠如の形で述べられる："**There is no image model in klad.**" キャンバス上のすべては構造化されたまま——"a stroke with its path, pressure, brush and colour, a shape with its points, a fill with its region" ——だから「一枚の葉がおかしければ、その一枚を直す」。サイコロを振り直して祈るのではない。ビルド済みアプリは klad.studio で待つ。
+
+**Why it matters:** エージェントの創造性デモはほぼ prompt → 画像だった；klad はそれを逆にする——エージェントが人間と同じツール API をストローク粒度で操作するので、エージェントの編集はすべてアプリ自身の意味で検査可能で取り消し可能だ。GUI エージェントパターンのクリエイティブソフトウェアへの適用であり、構造化キャンバスの設計こそがそれを生成的でなく審査可能にしている。
+
+[`🔗 klad-app/klad`](https://github.com/klad-app/klad) · [`🔗 HN での議論`](https://news.ycombinator.com/item?id=50454951)
+
+---
+
+## 30. Red Hat Quay：9.9 の LIKE パターンによるテナント横断漏えいと 9.8 の token → 署名鍵チェーン——どちらも Red Hat 自身の CNA が採点
+
+- **Velocity:** ▮ steady
+- **Source:** NVD · 2 件の記録 · 11 月 11 日
+- **Tags:** `quay` `containers` `cve`
+
+11 月 11 日に公開された 2 件の記録は、どちらも `Awaiting Analysis` で、スコアは Red Hat 自身の CNA（`secalert@redhat.com`）による。**CVE-2026-110697（9.9）**：Quay のロボットアカウント一覧機能は "constructs a SQL LIKE pattern from user-controlled namespace names without escaping wildcard metacharacters" ——アンダースコアを含む名前空間は名前空間を跨いで一致し、攻撃者は自分のテナント外のロボットアカウントを列挙できる。**CVE-2026-123710（9.8）**："An unauthenticated client can obtain an anonymous registry token with an audience it controls, present that token to the service key rotation endpoint, and install its own approved signing key with no expiry" ——トークンオーディエンスの取り違えが、レジストリ機構そのものへの恒久鍵の設置で終わる。
+
+**Why it matters:** Quay は OpenShift デプロイの下にあるイメージレジストリなので、両バグともサプライチェーンに隣接する：一方はテナント横断のメタデータ露出、もう一方は思い込んでいた全ローテーションを生き延びる署名鍵だ。スコアは Red Hat のもので NVD の分析は保留。レジストリレベルの制御を信頼する前に、自分の Quay ストリームの修正状態を Red Hat の CVE ページで確認すること。
+
+[`🔗 Red Hat：CVE-2026-110697`](https://access.redhat.com/security/cve/CVE-2026-110697) · [`🔗 Red Hat：CVE-2026-123710`](https://access.redhat.com/security/cve/CVE-2026-123710) · [`🔗 NVD：CVE-2026-123710`](https://nvd.nist.gov/vuln/detail/CVE-2026-123710)
+
+---
+
+## 31. Fortinet の波：FortiMail 9.8 のペア、FortiAnalyzer 9.8、FortiOS の認証欠落——一日に 9.6 以上が少なくとも 7 件、スコアはすべて CNA 自身のもの
+
+- **Velocity:** ▮ steady
+- **Source:** NVD · 7 件以上の記録 · 11 月 11 日
+- **Tags:** `fortinet` `fortimail` `cve`
+
+NVD は 11 月 11 日に **9.6–9.8 の Fortinet 記録を少なくとも 7 件**公開した。すべて Fortinet 自身の CNA（`psirt@fortinet.com`）が採点し、すべてまだ `Received`。先頭は FortiMail のペア：**CVE-2026-126147（9.8）**——FortiMail 8.0.x・7.6.x・7.4.x・7.2 全バージョンに渡る未認証パス・トラバーサル（FG-IR-26-199）；**CVE-2026-126148（9.8）**——FortiMail 8.0.x/7.6.x の未認証 OS コマンドインジェクション（FG-IR-26-200）。続いて **CVE-2026-126170（9.8）**、Cloud と BigData 変種を含む FortiAnalyzer 8.0.x/7.6.x の出力エンコーディング不備（FG-IR-26-219）；**CVE-2026-126259（9.8）**、FortiOS の重要機能への認証欠落——"may allow an unauthenticated attacker with HA FGSP + standalone-config-sync, or autoscale to execute command as super admin via crafted HA packets"（FG-IR-26-273）；**CVE-2026-126254（9.6）**、"a configured ibgp neighbor" が接続先ピアに不正属性を押し込める数値切り捨てエラー（FG-IR-26-268）；同じ波に 9.8 の SQL インジェクションがさらに 2 件（CVE-2026-126262、細工した OFTP パケットで FortiAnalyzer/FortiManager 上を未認証で；CVE-2026-126263、FortiMail 上で認証付き）。
+
+**Why it matters:** FortiMail と FortiAnalyzer はメールとログ保持の経路に座っており、パス・トラバーサル＋コマンドインジェクションのペアは古典的な未認証 RCE の形だ——インターネットに露出した Fortinet アプライアンスはパッチ待ち行列の先頭に置くべきだ。数値は採点者とストッピングポイント付きで引用すること：ここでの 9.8 は NVD が再提供する**ベース**スコア；Fortinet 自身のコンテナはうち 2 件の脅威調整コピー（FGSP バグ 9.0、OFTP SQL インジェクション 9.3）を保存している——同一ベクトルに、どちらも誠実な数字。
+
+[`🔗 Fortinet FG-IR-26-199（FortiMail パス・トラバーサル）`](https://fortiguard.fortinet.com/psirt/FG-IR-26-199) · [`🔗 Fortinet FG-IR-26-200（FortiMail コマンドインジェクション）`](https://fortiguard.fortinet.com/psirt/FG-IR-26-200) · [`🔗 NVD：CVE-2026-126147`](https://nvd.nist.gov/vuln/detail/CVE-2026-126147)
+
+---
+
+## 32. Terence Tao が 2018 年の論理ゲームを "Lean Grimoire" として再構築——作業したのはコーディングエージェント、ゲーム状態は Lean 証明として描画される
+
+- **Velocity:** ▮ steady
+- **Source:** terrytao.wordpress.com · HN 12 ポイント · 1.5 時間前（~10:37 UTC+8）
+- **Tags:** `lean` `math` `agents`
+
+Terence Tao の 11 月 11 日の記事：7 月から彼は "experimenting with using modern coding agents to build a number of mathematical visualization applets"；時間が見つかり、2018 年の JavaScript 対話型教科書 **"QED"** ——命題論理と一階述語論理をクラフティングゲームとして教える——をコーディングエージェントで **Lean Grimoire** として再構築した。新機能には "the option to show an in-progress Lean proof of one's game state" と、"mathematical statements become 'potions', mathematical expressions become 'scrolls'" というファンタジーモードがある。彼は "to make it more useful as a means to teach logical proofs and/or Lean" を目指した playtesting を募集している。
+
+**Why it matters:** 一つのブラウザアプリに収まった QED → Lean-4 パイプラインは、Lean に興味を持つ人にちょうど向いた希少な教材アーティファクトだ——そして数学者がそれについて論文を書くのではなくエージェント構築のツールを出荷するというパターンの、もう一つのデータポイントだ。HN での小さな反応（12 ポイント、UI には批判が集まった）自体が正直な読みだ：価値は Lean 証明ビューにあり、ゲームの磨きにはない。
+
+[`🔗 Terence Tao：Lean Grimoire`](https://terrytao.wordpress.com/2026/11/11/lean-grimoire/) · [`🔗 Lean Grimoire アプリ`](https://teorth.github.io/tao-web/apps/grimoire.html) · [`🔗 HN での議論`](https://news.ycombinator.com/item?id=50462375)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-11T20:43:46Z |
-| Items | 20 |
-| Sources tracked | 21（Hacker News、GitHub Trending、NVD、CISA KEV、arXiv/ICML、ベンダーブログ、セキュリティアドバイザリ） |
+| Generated | 2026-11-12T04:30:29Z |
+| Items | 32 |
+| Sources tracked | 32（Hacker News、GitHub Trending、NVD、CISA KEV、arXiv、oss-security、Apache httpd、ベンダーブログ、セキュリティアドバイザリ） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（1 日 3 回） |
 | Ranking | 速度加重（即時性 × エンゲージメント加速度 × 情報源の権威） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

@@ -1,9 +1,9 @@
 {
- "generated": "2026-11-11T20:43:51.360Z",
+ "generated": "2026-11-12T04:31:39.473Z",
  "files": [
   {
    "file": "2026-11-12.md",
-   "items": 20,
+   "items": 32,
    "findings": [
     {
      "check": "cvss",
@@ -34,32 +34,116 @@
      "detail": "Awaiting Analysis (lastModified 2026-11-10T22:10:04.727)"
     },
     {
+     "check": "status",
+     "item": 23,
+     "verdict": "ok",
+     "claim": "CVE-2026-119618 `Received`",
+     "detail": "Received (lastModified 2026-11-11T19:17:30.313)"
+    },
+    {
+     "check": "range",
+     "item": 23,
+     "verdict": "ok-span",
+     "claim": "CVE-2026-119618 2.4.55 – 2.4.70",
+     "detail": "2.4.55 (inclusive) … 2.4.70 (inclusive) · Apache HTTP Server — non-empty"
+    },
+    {
+     "check": "status",
+     "item": 30,
+     "verdict": "ok",
+     "claim": "CVE-2026-110697 `Awaiting Analysis`",
+     "detail": "Awaiting Analysis (lastModified 2026-11-11T17:17:15.587)"
+    },
+    {
+     "check": "status",
+     "item": 31,
+     "verdict": "ok",
+     "claim": "CVE-2026-126147 `Received`",
+     "detail": "Received (lastModified 2026-11-11T22:17:11.880)"
+    },
+    {
+     "check": "temporal",
+     "item": 31,
+     "verdict": "temporal-disclosed",
+     "claim": "CVE-2026-126147 · CNA 9.8 / base 9.8 / full 8.2",
+     "detail": "the item names a stopping point — silent, because the prose already lets the reader tell which number it read"
+    },
+    {
+     "check": "temporal",
+     "item": 31,
+     "verdict": "temporal-disclosed",
+     "claim": "CVE-2026-126148 · CNA 9.8 / base 9.8 / full 8.5",
+     "detail": "the item names a stopping point — silent, because the prose already lets the reader tell which number it read"
+    },
+    {
+     "check": "temporal",
+     "item": 31,
+     "verdict": "temporal-disclosed",
+     "claim": "CVE-2026-126170 · CNA 9.8 / base 9.8 / full 8.5",
+     "detail": "the item names a stopping point — silent, because the prose already lets the reader tell which number it read"
+    },
+    {
+     "check": "temporal",
+     "item": 31,
+     "verdict": "temporal-disclosed",
+     "claim": "CVE-2026-126259 · CNA 9 / base 9.8 / full 8.5",
+     "detail": "the item names a stopping point — silent, because the prose already lets the reader tell which number it read"
+    },
+    {
+     "check": "temporal",
+     "item": 31,
+     "verdict": "temporal-disclosed",
+     "claim": "CVE-2026-126254 · CNA 9.6 / base 9.6 / full 8.9",
+     "detail": "the item names a stopping point — silent, because the prose already lets the reader tell which number it read"
+    },
+    {
+     "check": "temporal",
+     "item": 31,
+     "verdict": "temporal-disclosed",
+     "claim": "CVE-2026-126262 · CNA 9.3 / base 9.8 / full 8.8",
+     "detail": "the item names a stopping point — silent, because the prose already lets the reader tell which number it read"
+    },
+    {
+     "check": "temporal",
+     "item": 31,
+     "verdict": "temporal-disclosed",
+     "claim": "CVE-2026-126263 · CNA 9.4 / base 9.8 / full 9.4",
+     "detail": "the item names a stopping point — silent, because the prose already lets the reader tell which number it read"
+    },
+    {
+     "check": "repo",
+     "item": 15,
+     "verdict": "star-surge",
+     "claim": "232 quoted vs 487 now",
+     "detail": "FrigadeHQ/yogurt: 232 → 487 (+52%, 255 stars) since the batch was written on a 1-day-old record (launch window) — a rising count is not a wrong one; date the reading if the number will be re-used"
+    },
+    {
      "check": "repo",
      "item": 15,
      "verdict": "ok",
      "claim": "FrigadeHQ/yogurt",
-     "detail": "238★, last push 2026-11-11"
+     "detail": "487★, last push 2026-11-12"
     },
     {
      "check": "repo",
      "item": 19,
      "verdict": "ok",
      "claim": "herdrdev/herdr",
-     "detail": "50278★, last push 2026-11-07"
+     "detail": "50388★, last push 2026-11-07"
     },
     {
      "check": "repo",
      "item": 20,
      "verdict": "ok",
      "claim": "addyosmani/agent-skills",
-     "detail": "115813★, last push 2026-11-01"
+     "detail": "116065★, last push 2026-11-01"
     },
     {
      "check": "batch",
      "item": 12,
-     "verdict": "batch-count-mismatch",
-     "claim": "26 records (MongoDB, 2026-11-10)",
-     "detail": "claimed 26, measured 23 (over-count) from cna@mongodb.com on 2026-11-10 via \"MongoDB\"; the set is the one that retrieves the item's own cited CVE-2026-118383"
+     "verdict": "batch-count-ok",
+     "claim": "26 records (source=cna@mongodb.com, 2026-11-10)",
+     "detail": "26 records from cna@mongodb.com published 2026-11-10 — the claim's own set, retrieved by its own cited id CVE-2026-118383"
     },
     {
      "check": "quotation",
@@ -78,23 +162,9 @@
     {
      "check": "quotation",
      "item": 3,
-     "verdict": "quote-not-found",
-     "claim": "“i am immensely sad to announce that tim peters has died”",
-     "detail": "10 words, 0 hits in 2 readable source(s); news.ycombinator.com/item?id=50450488 carries 4 of 11 words (“tim peters has died”) and continues “hacker news hacker news new past comments ask show jobs submit” — use the source's wording, or drop the quotation marks"
-    },
-    {
-     "check": "quotation",
-     "item": 3,
-     "verdict": "quote-not-found",
-     "claim": "“python would not be what it is today without tim ly yrs”",
-     "detail": "12 words, 0 hits in 2 readable source(s); no source carries it (read discuss.python.org/t/in-memoriam-tim-peters-1952-2026/110028, news.ycombinator.com/item?id=50450488) — if this came from somewhere this item does not cite, cite it; otherwise it is the feed's own words and must not wear quotation marks"
-    },
-    {
-     "check": "quotation",
-     "item": 3,
-     "verdict": "quote-not-found",
-     "claim": "“i am immensely sad to announce that tim peters has died”",
-     "detail": "10 words, 0 hits in 2 readable source(s); news.ycombinator.com/item?id=50450488 carries 4 of 11 words (“tim peters has died”) and continues “hacker news hacker news new past comments ask show jobs submit” — use the source's wording, or drop the quotation marks"
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
     },
     {
      "check": "quotation",
@@ -164,7 +234,7 @@
      "item": 14,
      "verdict": "ok",
      "claim": "3 quotation(s)",
-     "detail": "verbatim in 10 readable source(s)"
+     "detail": "verbatim in 9 readable source(s)"
     },
     {
      "check": "quotation",
@@ -185,14 +255,14 @@
      "item": 17,
      "verdict": "ok",
      "claim": "4 quotation(s)",
-     "detail": "verbatim in 13 readable source(s)"
+     "detail": "verbatim in 12 readable source(s)"
     },
     {
      "check": "quotation",
      "item": 18,
      "verdict": "ok",
      "claim": "1 quotation(s)",
-     "detail": "verbatim in 8 readable source(s)"
+     "detail": "verbatim in 7 readable source(s)"
     },
     {
      "check": "quotation",
@@ -207,6 +277,90 @@
      "verdict": "ok",
      "claim": "3 quotation(s)",
      "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 21,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 22,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 23,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 8 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 24,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 25,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 26,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 1 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 27,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 28,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 1 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 29,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 30,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 6 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 31,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 16 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 32,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
     }
    ]
   }
@@ -214,9 +368,9 @@
  "status_watch": [],
  "api_calls": 0,
  "readme_calls": 0,
- "cited_page_calls": 0,
+ "cited_page_calls": 33,
  "repo_page_calls": 0,
- "nvd_calls": 1,
+ "nvd_calls": 2,
  "nvd_failed_chunks": 0,
  "cna_calls": 0
 }

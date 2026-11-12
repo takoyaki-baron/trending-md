@@ -1,8 +1,8 @@
 ---
 date: 2026-11-12
-updated: 2026-11-11T20:43:46Z
+updated: 2026-11-12T04:30:29Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 21
+sources: 32
 license: CC-BY-4.0
 ---
 
@@ -30,7 +30,7 @@ Amazon put **aws/aws-emulator** — "a local emulator of the AWS APIs" — into 
 - **Source:** pietromiotti.com · 843 pts on HN · 8h ago (~20:20 UTC+8 Nov 11)
 - **Tags:** `ai-agents` `lidar` `archaeology`
 
-Pietro Miotti's writeup — the biggest HN story of the day at 843 points — describes going from "a random thought while traveling" in Peru (Oct 18) to an official reply from Mexico's INAH in **less than 72 hours**: ~1,200 km² of public NASA lidar over the Maya region, analyzed overnight by **48 agents** that visually inspected lidar strips rendered as images ("There was no special model or classifier involved: the agents literally looked at the pictures"). They flagged a hilltop site — leveled plaza, oval pyramid 8–12 m tall, raised courtyard, possible rainwater reservoir — that INAH's registry confirmed as unregistered on Oct 21. **The Nov 11 update is the part the headline omits:** archaeologists pointed out the same site was already published in **Estrada-Belli et al. 2025** — "they rediscovered it rather than discovered it (it just wasn't in INAH's register yet)."
+Pietro Miotti's writeup — the biggest HN story of the day at 843 points — describes going from "a random thought while traveling" in Peru (Oct 18) to an official reply from Mexico's INAH in **less than 72 hours**: ~1,200 km² of public NASA lidar over the Maya region, analyzed overnight by **48 agents** that visually inspected lidar strips rendered as images ("There was no special model or classifier involved: the agents literally looked at the pictures"). They flagged a hilltop site — leveled plaza, oval pyramid 8–12 m tall, raised courtyard, possible rainwater reservoir — that INAH's registry confirmed as unregistered on Oct 21. **The Nov 11 update is the part the headline omits:** archaeologists pointed out the same site was already published in **Estrada-Belli et al. 2025** — "The agents missed it while going through the literature, so they rediscovered it rather than discovered it (it just wasn't in the register of Mexico's National Institute of Anthropology and History, INAH, yet)."
 
 **Why it matters:** The workflow (agents reading rendered sensor imagery, a same-week official registry check) is real and repeatable — but the post's own update is a case study in why agent-found "discoveries" need a literature search before a press cycle. The feed's headline-grade claim collapsed in one day; the INAH-registry gap (published science not reaching the official register) is the durable, checkable finding.
 
@@ -296,13 +296,185 @@ Intel's SA-01580 covers three vulnerabilities in the **TDX Migration Trust Domai
 
 ---
 
+## 21. WSJ reports Nvidia's board is preparing to oust Jensen Huang — the Nov 9 investigation becomes a removal report, with NVDA sliding in after-hours
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** WSJ · 681 pts on HN · 5.7h ago (~06:31 UTC+8)
+- **Tags:** `nvidia` `industry` `governance`
+
+The Wall Street Journal reported late on Nov 11 (US time) that Nvidia's board is **preparing to oust CEO Jensen Huang** — a report relayed the same hour by Reuters and The Verge, and not confirmed by the company. It landed hours after the New York Times reported a second affair — this one, per The Verge's summary of the NYT piece, "with an executive who reports to him." **This is the escalation of an arc this feed covered on 2026-11-09:** the board's independent investigation over "a foreign intelligence effort," which stated no evidence of compromise. The reporting ties the executive, Alice Huang, to securing ~$7.5B of Nvidia AI GPU imports into China over three years — ~240,000 export-banned chips, mostly H100 and H200 (Tom's Hardware's headline; the article body itself is member-walled, so read it as the headline claim). In after-hours trading NVDA fell from its final regular-session prints (~$168) to ~$159 within an hour of the reports — about 6% — with quarterly earnings due within days.
+
+**Why it matters:** This is no longer a governance footnote — it is a reported removal attempt at the company whose CUDA stack, open-source drops (NVKE) and China-export posture shape most of the AI infrastructure this feed tracks. Everything above is *reported*, attributed, and unconfirmed; the checkable numbers are the after-hours price and the earnings date, so treat the rest as the WSJ's and NYT's reporting until Nvidia speaks.
+
+[`🔗 WSJ: Nvidia is preparing to oust Jensen Huang`](https://www.wsj.com/business/nvidia-is-preparing-to-oust-nvidia-ceo-jensen-huang-30f421ad) · [`🔗 The Verge: Nvidia is reportedly preparing to fire Jensen Huang`](https://www.theverge.com/tech/1031652/jensen-huang-rumor) · [`🔗 Tom's Hardware: Alice Huang and the 240k banned chips`](https://www.tomshardware.com/tech-industry/policy/alice-huang-reportedly-instrumental-in-securing-over-usd7-5-billion-of-nvidia-ai-gpu-imports-during-three-year-relationship-with-jensen-huang-helped-move-240-000-banned-chips-into-china-mostly-h100-and-h200) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50459703)
+
+---
+
+## 22. United Airlines bans AI agents from booking flights — the first explicit airline opt-out of personal agents, citing credentials and federal check-in rules
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** CBS News · 453 pts on HN · 6.7h ago (~21:20 UTC+8 Nov 11)
+- **Tags:** `ai-agents` `policy` `travel`
+
+United said Wednesday it is **banning AI agents from making flight reservations on behalf of travelers**, citing security risks and federal rules. Its stated reasons: "sharing account credentials with personal, third-party, AI assistants can expose sensitive information, and actions taken by these tools may result in unintended purchases, account changes, or use of MileagePlus miles" — plus the point that agent-driven check-in could collide with regulations requiring travelers to verify in person that luggage holds no banned substances. The enforcement is two-sided: "United is taking steps to restrict access — directly within our digital platforms and indirectly via travel agencies and aggregators — to prohibit use by unauthorized, third-party personal AI agents or assistants." The contrast case is named: Southwest has made its flight inventory viewable to ChatGPT users. Analyst Henry Harteveldt's read: United doesn't want "yet another, and potentially even more powerful, intermediary" — and bot-driven flight searches cost airlines money.
+
+**Why it matters:** The first explicit ban of personal AI agents by a major airline is a concrete shape for how agentic commerce gets gated: incumbents either wall agents off (United) or build sanctioned surfaces for them (Southwest's ChatGPT integration). For agent builders, the two failure modes named — credential sharing and unauthorized purchases — are exactly what an agent needs to detect and refuse before touching a travel account.
+
+> "…prohibit use by unauthorized, third-party personal AI agents or assistants." — United, to CBS News
+
+[`🔗 CBS News: United Airlines bans AI agents from booking flights`](https://www.cbsnews.com/news/united-airlines-bans-ai-agents-booking-flights/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50458900)
+
+---
+
+## 23. Apache HTTP Server ships 2.4.71 with a critical mod_http2 race — found by Anthropic's OSS Scanner, fixed 16 days after report
+
+- **Velocity:** ▮▮ rising
+- **Source:** oss-security / httpd 2.4.71 · 33 pts on HN · 2h ago (~10:11 UTC+8)
+- **Tags:** `apache` `http2` `cve`
+
+Apache released **2.4.71 on Nov 11** carrying three CVEs (1 critical, 1 important, 1 low per the project's own page). The critical one is **CVE-2026-119618**: "Concurrent Execution using Shared Resource with Improper Synchronization vulnerability in Apache HTTP Server's mod_http2 in assign_headers() can lead to RCE" — a race condition producing heap corruption that Wiz assesses as exploitable by "a remote, unauthenticated attacker," with no exploit known and no exploitation observed in the wild as of its write-up. Affected: httpd **2.4.55–2.4.70**, and standalone **mod_h2 2.0.8–2.0.42**. The credit line is the notable part: "Anthropic's OSS Scanner, as vulnerability ANT-2026-MAPKT6MZ (finder); Anthony Weems and Simon Scannell of the Google Cloud Vulnerability Research (finder)" — reported 2026-10-26, fixed and disclosed 16 days later. The NVD record (published Nov 11) is still `Received` with **no CVSS score** — "critical" is the project's own severity label, not a number. If you can't patch yet: `Protocols http/1.1` disables HTTP/2 and removes the vector. Wiz's widely-read writeup carries its own confusion — its "What is CVE-2026-111497?" heading describes 119618, but **CVE-2026-111497 is a Google Brotli decoder CVE from October**, not Apache.
+
+**Why it matters:** HTTP/2 is on by default in most distributions, so the fix is a routine version bump — the triage is which hosts still run 2.4.70 or older (Wiz's own telemetry: 64% of cloud environments have vulnerable resources, 51% publicly exposed). And the finder credit is a marker: an automated OSS scanner is now named on an Apache advisory alongside two Google VR researchers, which is what automated vulnerability discovery looks like when it lands in the wild.
+
+[`🔗 oss-security: CVE-2026-119618 announcement`](https://www.openwall.com/lists/oss-security/2026/11/11/13) · [`🔗 httpd 2.4.71 vulnerability list`](https://httpd.apache.org/security/vulnerabilities_24.html) · [`🔗 NVD: CVE-2026-119618`](https://nvd.nist.gov/vuln/detail/CVE-2026-119618) · [`🔗 Wiz analysis`](https://www.wiz.io/blog/cve-2026-119618-rce-apache-http-server-vulnerability)
+
+---
+
+## 24. GitHub Actions gets workflow lockfiles — the full-SHA pin era ends, and readable tags come back
+
+- **Velocity:** ▮▮ rising
+- **Source:** hugovk.dev · 171 pts on HN · 6h ago (~06:15 UTC+8)
+- **Tags:** `github-actions` `supply-chain` `security`
+
+GitHub Actions now supports **workflow lockfiles**, and Hugo van Kemenade's writeup walks the whole setup: the new official `gh` extension **`github/gh-actions-lock`** (★332) rewrites `uses:` lines back to readable `@vX.Y.Z` tags and generates `.github/workflows/actions.lock` — which pins each tag to its exact commit SHA plus `owner_id`/`repo_id`. That keeps the anti-supply-chain guarantee of SHA-pinning (tags are mutable) without the unreadable diffs. The ecosystem support is already there: "Good news, both already support lockfiles" for **Renovate and Dependabot**; GitHub recommends a `gh actions-lock --verify` CI job to fail when the lock is out of sync or a pinned ref no longer verifies upstream; and **zizmor v1.32.0** is the first release to support lockfiles — versions before it told you to hash-pin.
+
+**Why it matters:** Mutable tags were the Actions supply-chain hole, and SHA-pinning fixed it at the cost of workflow diffs nobody could review and Renovate PRs full of hex. A lockfile restores the readable pin while keeping the verification — the same move lockfiles made for Cargo and uv, now applied to CI's most-attacked surface.
+
+> "All forks on github are the same repo you can pin any commit, merged upstream or not." — HN commenter on what SHA-pinning actually trusted
+
+[`🔗 hugovk.dev: Lock your GitHub Actions`](https://hugovk.dev/blog/2026/lock-github-actions/) · [`🔗 github/gh-actions-lock`](https://github.com/github/gh-actions-lock) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50459485)
+
+---
+
+## 25. Huawei open-sources MACaQ — model-agnostic quantization that claims a 122B model in 64 minutes on 32.5 GB
+
+- **Velocity:** ▮▮ rising
+- **Source:** huawei-csl/MACaQ · 70 pts on HN · 7.8h ago (~04:20 UTC+8 Nov 11)
+- **Tags:** `quantization` `local-inference` `gguf`
+
+Huawei's CSL group published **MACaQ** ("Model Agnostic Calibrated Quantization") — repo created Nov 10, Apache-2.0, C++, alongside arXiv **2611.10649** (submitted Nov 7): "MACaQ: Fast, Model Agnostic Calibrated Quantization for Low-Precision Weights and Activations." The headline claims (the paper's own numbers): quantize a **122B-parameter model in 64 minutes using just 32.5 GB of device memory**, and "lower perplexity than MR-GPTQ and DuQuant++, or match their best Llama-3-8B perplexity with **11× less quantization time**." The breadth is the point: llama.cpp (2/3/4-bit GGUF), vLLM (W4A4 or weight-only), Diffusers (W4A4 image/video/audio generation), PyTorch (speech, W4A4) — and an **Ascend** backend. A Hugging Face collection ships the quantized models. The README closes with a line you don't see every day: "Whether you're a human or an AI agent, if you use MACaQ to quantize a model, please star this repository to support the project."
+
+**Why it matters:** Local-inference quantization has been an academic lineage (GPTQ → AWQ → DuQuant); a sanctioned vendor shipping a permissively-licensed, multi-modal quantizer with llama.cpp/vLLM paths — plus an Ascend backend — is both a practical tool and a signal about where Huawei's open AI stack is going. The perplexity comparisons are the vendor's own paper; the interesting independent test is whether the GGUFs beat the standard llama.cpp quants at the same bit width.
+
+[`🔗 huawei-csl/MACaQ`](https://github.com/huawei-csl/MACaQ) · [`🔗 arXiv 2611.10649`](https://arxiv.org/abs/2611.10649) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50458166)
+
+---
+
+## 26. Vercel's agent-desktop: computer use without screenshots — the accessibility tree as the agent's desktop API
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending weekly · +7,772 this week · 22.2k stars
+- **Tags:** `computer-use` `agents` `accessibility`
+
+**vercel-labs/agent-desktop** sits at 22,215 stars with +7,772 this week: "Computer use for AI agents: see and operate desktop apps on macOS, Windows, and Linux through the OS accessibility tree." It reads the accessibility tree and returns it as JSON "with a ref for every element the agent can act on" — the agent clicks or types on a ref, re-reads the UI to check the result, and repeats. No screenshots, no pixel matching, and no model: "The loop lives in your agent; agent-desktop has no model inside." It ships as a CLI and a **C library**, with snapshots, clipboard reads, screenshots and command execution beside the tree. It's the desktop sibling of `agent-browser` (covered Nov 6) — Vercel Labs now owns the same ref-based, deterministic-acting pattern at both layers.
+
+**Why it matters:** Accessibility-tree computer use is the typed, fast alternative to screenshot-and-vision loops — and its boundary is equally concrete: whatever the OS accessibility layer doesn't expose (canvas-heavy apps, games, custom-drawn UI) is invisible to it. The open question for all such tools is app coverage on each OS, which the README does not tabulate.
+
+[`🔗 vercel-labs/agent-desktop`](https://github.com/vercel-labs/agent-desktop) · [`🔗 npm: agent-desktop`](https://www.npmjs.com/package/agent-desktop)
+
+---
+
+## 27. Stela boots macOS on x86-64 PCs — a UEFI-level Apple Silicon layer with an arm64e translator and a Metal-on-NVIDIA driver
+
+- **Velocity:** ▮ steady
+- **Source:** tylertms/Stela · 73 pts on HN · 5.1h ago (~07:05 UTC+8)
+- **Tags:** `reverse-engineering` `macos` `emulation`
+
+**tylertms/Stela** (Rust, GPL-2.0, v0.1.0, 687 stars) calls itself "A general purpose Apple Silicon layer for x86-64 PCs" — a **UEFI boot program** (no host OS underneath) with three parts: an ahead-of-time **and** just-in-time compiler translating arm64e → x86-64 ("covers more than 3,000 AArch64 instruction encodings, maps guest registers to host registers and caches translated code", runs on any x86-64-v2 CPU); a **Metal driver for NVIDIA GPUs** (GTX 16 / RTX 20 series and newer) that "compiles AIR, Metal's shader IR, directly to NIR, Mesa's IR"; and a model of Apple silicon hardware — currently the **Mac mini (M2), running macOS 27**. Requirements are modest: 8 GB RAM, an NVIDIA GPU, a 60 GB GPT partition; setup downloads macOS to a USB stick. The README's own verdict is honest: "Your current chances of it booting are low."
+
+**Why it matters:** This is reverse-Rosetta: where Rosetta kept x86 apps alive on ARM Macs, Stela translates ARM to x86 to keep macOS itself alive on orphaned Intel-era PCs. It's a research-grade v0.1.0 with the project's own low-expectations warning — but the architecture (translator + GPU driver + platform model in one boot binary) is the artifact worth watching.
+
+[`🔗 tylertms/Stela`](https://github.com/tylertms/Stela) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50460154)
+
+---
+
+## 28. OpenAI's Codex Security CLI/SDK ships 0.10.0 — vulnerability scanning rebuilt as an agent workflow, with a GitHub Action and its own cloud
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending daily · +52 today · 11.8k stars
+- **Tags:** `security` `codex` `sast`
+
+**openai/codex-security** (Apache-2.0, TypeScript, 11,847 stars) is on today's trending board the morning it shipped **npm 0.10.0** (02:18Z) and a matching GitHub Action 0.10.0 (02:23Z). The pitch: "find, investigate, and fix vulnerabilities in your code" — via security workflows inside Codex, or automated with the `@openai/codex-security` CLI and TypeScript SDK. Standard vs **Deep scans** (deep repeats standard and dedupes), validate candidate findings, generate patches, verify existing fixes; draft `SECURITY.md` and save threat models; severity assessed "against your own rubric"; export SARIF/JSON/CSV; track findings in Linear, Jira or GitHub; publish supported reports to **Codex Security Cloud**; preview third-party scanner findings via import guides.
+
+**Why it matters:** The pipeline here — scan → validate → patch → verify — is what the trending security-audit *skills* orchestrate by hand, productized with issue trackers and CI. The load-bearing step is "validate candidate findings": a scanner confirming its own candidate is exactly where agent-driven security tools get judged, so treat validated counts as a claim until someone measures the false-positive rate on a known set.
+
+[`🔗 openai/codex-security`](https://github.com/openai/codex-security) · [`🔗 npm: @openai/codex-security`](https://www.npmjs.com/package/@openai/codex-security)
+
+---
+
+## 29. Klad gives your coding agent real brushes — a paint app where agent and human draw on the same canvas, no image model
+
+- **Velocity:** ▮ steady
+- **Source:** klad-app/klad · 74 pts on HN · 12.1h ago (~00:00 UTC+8)
+- **Tags:** `creative-tools` `agents` `gui`
+
+A Show HN: **klad** (Rust, source-available) — "A drawing app built for agent/human collaboration." You paint in the editor with a pen; the agent paints through the `klad` command line "with the same brushes, on the same drawing, and each of you sees the other's strokes instantly" — layers, grouping, and a timeline for animation included. The design principle is stated as an absence: "**There is no image model in klad.**" Everything on the canvas stays structured — "a stroke with its path, pressure, brush and colour, a shape with its points, a fill with its region" — so "if one leaf looks off, you fix that" rather than rerolling and hoping. A pre-built app waits at klad.studio.
+
+**Why it matters:** Agent-creativity demos have mostly been prompt-to-image; Klad inverts it — the agent operates the same tool API the human uses, at stroke granularity, which makes every agent edit inspectable and undoable in the app's own terms. It's the GUI-agent pattern applied to creative software, and the structured-canvas design is what makes it reviewable rather than generative.
+
+[`🔗 klad-app/klad`](https://github.com/klad-app/klad) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50454951)
+
+---
+
+## 30. Red Hat Quay: a 9.9 LIKE-pattern cross-tenant leak and a 9.8 token-to-signing-key chain — both scored by Red Hat's own CNA
+
+- **Velocity:** ▮ steady
+- **Source:** NVD · 2 records · Nov 11
+- **Tags:** `quay` `containers` `cve`
+
+Two records published Nov 11, both `Awaiting Analysis`, both carrying scores from Red Hat's own CNA (`secalert@redhat.com`). **CVE-2026-110697 (9.9)**: Quay's robot-account listing "constructs a SQL LIKE pattern from user-controlled namespace names without escaping wildcard metacharacters" — a namespace containing an underscore matches across namespaces, letting an attacker enumerate robot accounts outside their own tenant. **CVE-2026-123710 (9.8)**: "An unauthenticated client can obtain an anonymous registry token with an audience it controls, present that token to the service key rotation endpoint, and install its own approved signing key with no expiry" — a token-audience confusion that ends in a permanent key installed in the registry machinery itself.
+
+**Why it matters:** Quay is the image registry underneath OpenShift deployments, so both bugs are supply-chain-adjacent: cross-tenant metadata exposure in one, and a signing key that can outlive every rotation you thought you had in the other. The scores are Red Hat's while NVD's analysis is pending; check the Red Hat CVE pages for fixed states for your Quay stream before trusting registry-level controls.
+
+[`🔗 Red Hat: CVE-2026-110697`](https://access.redhat.com/security/cve/CVE-2026-110697) · [`🔗 Red Hat: CVE-2026-123710`](https://access.redhat.com/security/cve/CVE-2026-123710) · [`🔗 NVD: CVE-2026-123710`](https://nvd.nist.gov/vuln/detail/CVE-2026-123710)
+
+---
+
+## 31. Fortinet's wave: FortiMail 9.8 pair, FortiAnalyzer 9.8, FortiOS missing-auth — at least seven records ≥9.6 in one day, every score the CNA's own
+
+- **Velocity:** ▮ steady
+- **Source:** NVD · 7+ records · Nov 11
+- **Tags:** `fortinet` `fortimail` `cve`
+
+NVD published at least **seven Fortinet records at 9.6–9.8 on Nov 11**, every one scored by Fortinet's own CNA (`psirt@fortinet.com`) and every one still `Received`. The FortiMail pair leads: **CVE-2026-126147 (9.8)** — unauthenticated path traversal across FortiMail 8.0.x, 7.6.x, 7.4.x and 7.2 all versions (FG-IR-26-199); **CVE-2026-126148 (9.8)** — unauthenticated OS command injection in FortiMail 8.0.x/7.6.x (FG-IR-26-200). Then **CVE-2026-126170 (9.8)**, improper output encoding across FortiAnalyzer 8.0.x/7.6.x including Cloud and BigData variants (FG-IR-26-219); **CVE-2026-126259 (9.8)**, missing authentication for a critical function in FortiOS — "may allow an unauthenticated attacker with HA FGSP + standalone-config-sync, or autoscale to execute command as super admin via crafted HA packets" (FG-IR-26-273); **CVE-2026-126254 (9.6)**, a numeric truncation error letting "a configured ibgp neighbor" push malformed attributes to connected peers (FG-IR-26-268); plus two further SQL-injection records at 9.8 (CVE-2026-126262, unauthenticated via crafted OFTP packets on FortiAnalyzer/FortiManager; CVE-2026-126263, authenticated in FortiMail) in the same wave.
+
+**Why it matters:** FortiMail and FortiAnalyzer sit on the mail and log-retention paths, and the path-traversal-plus-command-injection pair is the classic unauthenticated-RCE shape — internet-reachable Fortinet appliances belong at the top of the patch queue. Quote the numbers with their scorer and their stopping point: the 9.8s here are **base** scores as NVD re-serves them; Fortinet's own containers store threat-adjusted copies of two of them (9.0 for the FGSP bug, 9.3 for the OFTP SQL injection), one vector, two honest numbers.
+
+[`🔗 Fortinet FG-IR-26-199 (FortiMail path traversal)`](https://fortiguard.fortinet.com/psirt/FG-IR-26-199) · [`🔗 Fortinet FG-IR-26-200 (FortiMail command injection)`](https://fortiguard.fortinet.com/psirt/FG-IR-26-200) · [`🔗 NVD: CVE-2026-126147`](https://nvd.nist.gov/vuln/detail/CVE-2026-126147)
+
+---
+
+## 32. Terence Tao rebuilt his 2018 logic game as "Lean Grimoire" — the coding agent did the work, and the game state renders as a Lean proof
+
+- **Velocity:** ▮ steady
+- **Source:** terrytao.wordpress.com · 12 pts on HN · 1.5h ago (~10:37 UTC+8)
+- **Tags:** `lean` `math` `agents`
+
+Terence Tao's Nov 11 post: back in July he was "experimenting with using modern coding agents to build a number of mathematical visualization applets"; having found a bit of time, he modernized his 2018 JavaScript interactive textbook **"QED"** — propositional and first-order logic taught as a crafting game — into **Lean Grimoire**, rebuilt with a coding agent. New features include "the option to show an in-progress Lean proof of one's game state" and a fantasy mode where "mathematical statements become 'potions', mathematical expressions become 'scrolls'". He's asking for playtesting "to make it more useful as a means to teach logical proofs and/or Lean."
+
+**Why it matters:** The QED → Lean-4 pipeline in one browser app is a rare teaching artifact aimed exactly at the Lean-curious — and it's another data point in the pattern of mathematicians shipping agent-built tools rather than writing papers about them. HN's small reception (12 points, with the UI drawing fire) is itself the honest read: the value is the Lean-proof view, not the game polish.
+
+[`🔗 Terence Tao: Lean Grimoire`](https://terrytao.wordpress.com/2026/11/11/lean-grimoire/) · [`🔗 Lean Grimoire app`](https://teorth.github.io/tao-web/apps/grimoire.html) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50462375)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-11T20:43:46Z |
-| Items | 20 |
-| Sources tracked | 21 (Hacker News, GitHub Trending, NVD, CISA KEV, arXiv/ICML, vendor blogs, security advisories) |
+| Generated | 2026-11-12T04:30:29Z |
+| Items | 32 |
+| Sources tracked | 32 (Hacker News, GitHub Trending, NVD, CISA KEV, arXiv, oss-security, Apache httpd, vendor blogs, security advisories) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
