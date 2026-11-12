@@ -1,6 +1,6 @@
 ---
 date: 2026-11-12
-updated: 2026-11-12T12:20:00Z
+updated: 2026-11-12T12:35:50Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 46
 license: CC-BY-4.0
@@ -672,7 +672,7 @@ GitHub 于 11 月 11 日 20:48Z 宣布 **critical** 级事故——"issues impac
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-12T12:20:00Z |
+| Generated | 2026-11-12T12:35:50Z |
 | Items | 46 |
 | Sources tracked | 46（Hacker News、GitHub Trending、NVD、CISA KEV、arXiv、oss-security、Apache httpd、厂商博客、安全公告） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（每日三次） |

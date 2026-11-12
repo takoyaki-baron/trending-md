@@ -1,6 +1,6 @@
 ---
 date: 2026-11-12
-updated: 2026-11-12T12:20:00Z
+updated: 2026-11-12T12:35:50Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 46
 license: CC-BY-4.0
@@ -672,7 +672,7 @@ GitHub は 11 月 11 日 20:48Z に **critical** のインシデントを宣言�
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-12T12:20:00Z |
+| Generated | 2026-11-12T12:35:50Z |
 | Items | 46 |
 | Sources tracked | 46（Hacker News、GitHub Trending、NVD、CISA KEV、arXiv、oss-security、Apache httpd、ベンダーブログ、セキュリティアドバイザリ） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（1 日 3 回） |
