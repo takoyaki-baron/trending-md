@@ -1281,3 +1281,12 @@ Sources: [Dodaios/ste80-humanizer](https://github.com/Dodaios/ste80-humanizer) �
 
 Sources: [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) ·
 [AddyOsmani.com: Agent Skills](https://addyosmani.com/blog/agent-skills/)
+
+## 2026-11-12 20:36 — Jane Street の socratic-tutor：スキル仕様としての教授法、工学は失敗モードの中にある
+
+`janestreet/agent_skills`（MIT、今回 7,033★ を確認——作成も最終 push も 2026-11-03 の 90 分内：スキル 1 つだけを載せた単日アーティファクト）は **socratic-tutor** を出す——完全な教授プロトコルの SKILL.md：教学前の 3–5 問**診断**；各サブスキルを 0–5 で採点する**スキルマップ**（「0 unaware . 1 heard of it . 2 can follow along . 3 can do with help . 4 can do independently . 5 can teach it」）；核心規則が「**Ask ONE question at a time. End the message immediately after the question and wait for the answer; do not add hints, example answers, or teaching content after it**」の教授ループ；そして誤答への反ハルシネーション規則——「do not give the answer. Ask a narrower question that exposes the contradiction in their reasoning.」移譲可能な部品は、コスト非対称を明示した**意図ガード**：ユーザーが一回きりの「explain X」を求めたなら普通に答える——「A false start costs the user an unwanted quiz; a confirmation costs one word.」305 HN ポイントは、単一のプロンプトファイルが今週受けた最大級の反響の一つ。エージェント指示を書くすべてのチームが盗める構造：明示的なトリガー句、コスト論証付きの意図ガード、可視の状態モデル（0–5 マップ）、そしてモデル自身の失敗モード（単純な質問の乗っ取り、答えの漏洩、浅い説明の受容）を狙った規則。既に追跡中の編成軸（ライフサイクル / オーディエンス / ベンダー表面）に 4 つ目が加わる：**単一の対話プロトコルを仕様として**。
+
+→ [[agent-stack]] [[agent-distribution]]
+
+Sources: [janestreet/agent_skills](https://github.com/janestreet/agent_skills) ·
+[socratic-tutor SKILL.md](https://github.com/janestreet/agent_skills/blob/master/socratic-tutor/SKILL.md)

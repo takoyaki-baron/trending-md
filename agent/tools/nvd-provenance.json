@@ -2,6 +2,66 @@
  "_note": "Per-CVE NVD score-provenance watch (agent/tools/nvd-provenance.mjs). Filed 2026-10-14 after one feed batch carried five CNA-assigned high scores whose NVD records were all still unanalyzed. The event worth catching is a record flipping out of its CNA-only state: vulnStatus changing, an `nvd@nist.gov` metric appearing beside (or replacing) the vendor's, or a KEV add. Keyword search (disclosure-watch's NVD channel) cannot see any of those — the record already exists. Verified live at seed time, 2026-10-14 12:4x UTC+8.",
  "watch": [
   {
+   "id": "CVE-2026-64671",
+   "why": "Waline UserList DOM-concatenation XSS",
+   "seeded": "2026-11-12 [Received] no score quoted"
+  },
+  {
+   "id": "CVE-2026-64670",
+   "why": "Waline admin-session stored XSS 9.3; GHSA July 2 vs CVE Nov 11",
+   "seeded": "2026-11-12 [Received] 3.1 Primary 9.3; advisory still 'Patched versions: None'"
+  },
+  {
+   "id": "CVE-2026-126539",
+   "why": "Directus unauth permission-check skip via failed-auth WebSocket 9.2",
+   "seeded": "2026-11-12 [Received] 4.0 Primary (VulnCheck CNA) 9.2"
+  },
+  {
+   "id": "CVE-2026-124737",
+   "why": "BusyBox TFTP blocksize fallback overflow 7.5",
+   "seeded": "2026-11-12 [Awaiting Analysis] 3.1 Primary (Red Hat CNA) 7.5"
+  },
+  {
+   "id": "CVE-2026-124738",
+   "why": "BusyBox auth-check/read-path mismatch (pre-compressed files) 5.3",
+   "seeded": "2026-11-12 [Awaiting Analysis] 3.1 Primary (Red Hat CNA) 5.3"
+  },
+  {
+   "id": "CVE-2026-124739",
+   "why": "BusyBox httpd stack overflow 7.5",
+   "seeded": "2026-11-12 [Awaiting Analysis] 3.1 Primary (Red Hat CNA) 7.5"
+  },
+  {
+   "id": "CVE-2026-124741",
+   "why": "BusyBox udhcpc6 DHCPv6 overflow 7.6, 7-record wave",
+   "seeded": "2026-11-12 [Awaiting Analysis] 3.1 Primary (Red Hat CNA) 7.6"
+  },
+  {
+   "id": "CVE-2026-126617",
+   "why": "hMailServer 18-record wave, unauthenticated bounce-mail SQLi 8.8",
+   "seeded": "2026-11-12 [Received] 3.1 Primary (GitLab CNA) 8.8; fixes shipped Nov 2"
+  },
+  {
+   "id": "CVE-2026-123863",
+   "why": "Node.js HTTP/2 teardown reachable assertion DoS",
+   "seeded": "2026-11-12 [Received] no CVSS"
+  },
+  {
+   "id": "CVE-2026-126051",
+   "why": "Node.js SNICallback use-after-destroy remote DoS",
+   "seeded": "2026-11-12 [Received] no CVSS"
+  },
+  {
+   "id": "CVE-2026-123872",
+   "why": "Node.js client-cert bypass via SNI change in renegotiation",
+   "seeded": "2026-11-12 [Received] no CVSS"
+  },
+  {
+   "id": "CVE-2026-123864",
+   "why": "Node.js re-entrancy TLS-key memory disclosure, 16-CVE wave",
+   "seeded": "2026-11-12 [Received] no CVSS, 'High' is Node's label"
+  },
+  {
    "id": "CVE-2026-126263",
    "why": "Fortinet wave, Secondary 9.8",
    "seeded": "2026-11-12 [Received] 3.1 Secondary 9.8, published 11-11"

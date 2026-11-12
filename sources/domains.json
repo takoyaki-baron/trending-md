@@ -2311,6 +2311,15 @@
   "jp": "ByteShape ベンダーブログ——Qwen 3.8 27B の ShapeLearn GGUF 量子化 run（09-18）は自己計測だが手法を公開し免責が正しい位置（推測デコードのプロットは品質等価を立証せず、VRAM 収まりは構成依存）。HN スレッドと突き合わせ済み；結果はあくまでベンダー自身のもの。",
   "zh": "ByteShape 厂商博客——Qwen 3.8 27B 的 ShapeLearn GGUF 量化 run（09-18）为自测但公布了方法论、免责声明放位得当（投机解码图不确立质量等价、显存占用依配置而定）。已与 HN 讨论串交叉核对；结果仍属厂商自测。"
  },
+ "cabird.com": {
+  "cat": "research",
+  "cred": "med",
+  "density": "med",
+  "cv": 1,
+  "en": "Christian Bird's personal site (empirical software-engineering researcher, ex-Amazon/Microsoft, now Dryden) — talk pages assemble real, checkable bibliographies, but the headline paper may still be in submission with unpublished data. Cross-checked 2026-11-12: cited arXiv 2610.23708 exists (its full title carries a Star-Trek quote prefix the shorthand drops); NBER w35275 confirmed via OpenAlex.",
+  "jp": "Christian Bird（実証ソフトウェア工学研究者、ex-Amazon/Microsoft、現Dryden）の個人サイト——講演ページの文献リストは実際に検証可能だが、旗艦論文は投稿中でデータ未公開の可能性。2026-11-12 に突合：引用の arXiv 2610.23708 は実在（完全タイトルにスタートレックの引用句があり省略形では落ちる）；NBER w35275 は OpenAlex で確認。",
+  "zh": "Christian Bird（实证软件工程研究者，前 Amazon/Microsoft，现 Dryden）的个人网站——演讲页汇编的文献清单真实可查，但旗舰论文可能仍在投稿、数据未公开。2026-11-12 交叉核验：所引 arXiv 2610.23708 确实存在（完整标题带一段星舰迷因引语、简写中省去）；NBER w35275 经 OpenAlex 确认。"
+ },
  "cactuscompute.com": {
   "cat": "vendor",
   "cred": "med",
@@ -2933,6 +2942,15 @@
   "en": "Microsoft's Command Line product blog — first-hand for model announcements, but every benchmark number is vendor-run (Decision-1's 36-benchmark accuracy/speed claims). Existence and pricing cross-checked (10-10) via the HN thread; treat accuracy claims as marketing until independently reproduced.",
   "jp": "Microsoft の Command Line 製品ブログ——モデル発表の一次情報だが、ベンチ数値はすべてベンダー自走（Decision-1 の 36 ベンチ精度/速度主張）。存在と価格は HN スレッドで突合済み（10-10）；独立再現まで精度主張はマーケとして扱う。",
   "zh": "微软 Command Line 产品博客——模型公告的一手来源，但每个基准数字都是厂商自跑（Decision-1 的 36 基准精度/速度主张）。存在性与定价经 HN 讨论交叉核验（10-10）；独立复现之前，精度主张按营销处理。"
+ },
+ "commandlinesystems.com": {
+  "cat": "community",
+  "cred": "med",
+  "density": "med",
+  "cv": 1,
+  "en": "Personal essays on AI and software culture — literary, quotable, prose not data: verify numbers against the quoted parties before citing them. Caught 2026-11-12: its Mathocalypse passage quotes Scott Aaronson's dump post at the PRE-correction figures (8,000 problems/~5%); Aaronson's post now reads ~4,000/~10% with the correction stated in his own text — the feed's item was corrected in place (en/zh/jp).",
+  "jp": "AI とソフトウェア文化についての個人エッセイ——文学的で引用されやすいが、散文でありデータではない：数値は引用先で検証してから使う。2026-11-12 に捕捉：Mathocalypse の一節は Scott Aaronson のポストを訂正*前*の数値（8,000 問/~5%）で引用していた；Aaronson のポストは現在 ~4,000/~10% で訂正を自文に明記——フィードの項目は en/zh/jp でその場修正済み。",
+  "zh": "关于 AI 与软件文化的个人随笔——文学性强、常被引用，但属散文而非数据：引用其中数字前先对照被引用方核验。2026-11-12 捕获：其 Mathocalypse 段落引用的是 Scott Aaronson 帖子**更正前**的数字（8,000 题/~5%）；Aaronson 帖子现读作 ~4,000/~10% 且更正注记写在帖内——feed 对应条目已在 en/zh/jp 原地更正。"
  },
  "community.bitwarden.com": {
   "cat": "vendor",
@@ -6532,6 +6550,15 @@
   "zh": "IP 情报提供商的研究博客；基于每日路由快照的 RPKI/BGP 分析，方法论公开、限制坦率。已于 2026-10-16 交叉核验：其引用的 8 月 28 日 Hetzner 有效 ROA 劫持事件，与 8 月对该事件的独立报道一致。",
   "jp": "IP インテリジェンス提供企業のリサーチブログ。日次ルーティングスナップショットに基づく RPKI/BGP 分析で、手法は公開され限界も率直。2026-10-16 に突合済み:8 月 28 日の Hetzner 有効 ROA ハイジャックへの言及は、同事件の 8 月の独立報道と一致。"
  },
+ "ipo.anthropic.com": {
+  "cat": "vendor",
+  "cred": "med",
+  "density": "med",
+  "cv": 1,
+  "en": "Anthropic's IPO investor-relations microsite — first-party and roadshow-purpose (promotional by design); cred stays med despite verification. The terms it announces (825M Class A shares, $70–78 expected, Nasdaq \"ANT\") verified against SEC EDGAR first-hand 2026-11-12: S-1 filed 2026-10-26 (CIK 0002130357, file 333-299633), amendments 11-02/11-10, five FWPs on 11-12 including the IPO website itself (fwpipowebsi). The site is downstream of its own filing — EDGAR is the confirming artifact.",
+  "jp": "Anthropic の IPO 投資家向けマイクロサイト——一次情報だがロードショー目的（宣伝設計）；検証されても cred は med のまま。告知する条件（Class A 825M 株、想定 $70–78、Nasdaq \"ANT\"）は 2026-11-12 に SEC EDGAR で一次確認：S-1 は 2026-10-26 提出（CIK 0002130357、file 333-299633）、修正 11-02/11-10、11-12 に 5 件の FWP（IPO ウェブサイト自体 fwpipowebsi を含む）。サイトは自らの提出書類の下流——確認アーティファクトは EDGAR。",
+  "zh": "Anthropic 的 IPO 投资者关系微站——一手但属路演用途（天然带宣传属性）；虽经核验 cred 仍保持 med。其公布的条款（8.25 亿 A 类股、预期 $70–78、Nasdaq \"ANT\"）已于 2026-11-12 经 SEC EDGAR 一手核实：S-1 于 2026-10-26 公开提交（CIK 0002130357，档案号 333-299633），11-02/11-10 两次修订，11-12 五份 FWP（含 IPO 网站本身 fwpipowebsi）。该站是自家申报的下游——确认性工件是 EDGAR。"
+ },
  "ipshipyard.com": {
   "cat": "vendor",
   "cred": "high",
@@ -8532,6 +8559,15 @@
   "en": "NBC10 Philadelphia local news. Cross-checked (10-10): its Anthropic false-tip report matches TechCrunch on dates/timeline and adds the police spokesperson's exact quotes and the multi-agency investigation list.",
   "jp": "NBC10 フィラデルフィアの地域報道。クロスチェック済み（10-10）：Anthropic 虚偽通報記事は TechCrunch と日付・経緯が一致し、警察報道官の発言と多機関調査の内実を補完。",
   "zh": "NBC10 费城地方新闻。交叉核验（10-10）：其 Anthropic 虚假线索报道与 TechCrunch 在日期与时间线上一致，并补充了警方发言人的原话与多机构调查名单。"
+ },
+ "nber.org": {
+  "cat": "research",
+  "cred": "high",
+  "density": "high",
+  "cv": 1,
+  "en": "NBER working papers — the registry for the economics side of the AI-productivity debate (w35275, \"Writing Code vs. Shipping Code\"). Working papers are pre-peer-review drafts; treat figures as provisional. Cross-checked 2026-11-12 via OpenAlex: title and DOI 10.3386/w35275 match the record (SSRN mirrors exist).",
+  "jp": "NBER ワーキングペーパー——AI 生産性論争の経済学側のレジストリ（w35275 \"Writing Code vs. Shipping Code\"）。ワーキングペーパーは査読前の草稿；数値は暫定と扱う。2026-11-12 に OpenAlex 経由で突合：タイトルと DOI 10.3386/w35275 がレコードと一致（SSRN ミラーあり）。",
+  "zh": "NBER 工作论文库——AI 生产力之争经济学侧的文献登记处（w35275，\"Writing Code vs. Shipping Code\"）。工作论文系同行评审前草稿；数字按暂定处理。2026-11-12 经 OpenAlex 交叉核验：标题与 DOI 10.3386/w35275 与记录一致（存在 SSRN 镜像）。"
  },
  "ndstudio.gov": {
   "cat": "vendor",

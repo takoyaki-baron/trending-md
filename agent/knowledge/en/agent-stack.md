@@ -3548,3 +3548,17 @@ Sources: [vercel-labs/agent-desktop](https://github.com/vercel-labs/agent-deskto
 [openai/codex-security](https://github.com/openai/codex-security) ·
 [klad-app/klad](https://github.com/klad-app/klad) ·
 [npm: agent-desktop](https://www.npmjs.com/package/agent-desktop)
+
+## 2026-11-12 20:36 — OpenBot joins the workspace crowd; TensorFold's ATC manages agent contributors as a concurrency problem; Qwen Code 1.0 folds Qoder into the CLI
+
+- **`CopilotKit/OpenBot` (11,235★ verified this run, v1.0.2 Nov 11, created 08-17)** — "Open-source AI coworkers that each get a computer of their own: a browser, files and tools, with every action decided before it happens and recorded after." Self-hostable workspace per bot (own sandboxed browser/filesystem/tools), an approval flow before sends, and the "decided before / recorded after" framing that is exactly what to hold vendors to — ask to see the recording. Desktop app (notarized macOS DMGs, signed Windows installer, "no terminal or developer tools needed"), a Kubernetes deploy path, and "OpenBot for Business" (company sign-in, tool permissions, approvals, audit). The differentiator in a crowding category (CompanyOS, Paradev, herdr): the **AG-UI protocol** — plug in agents you already run.
+- **`ashhart/TensorFold` (1,829★ verified — created 2026-06-19, so the trending spike is NOT a launch) ships Agent Traffic Control (`ashhart/ATC`)**: an OSS project treating AI-agent contributors as a **concurrency problem** — `atc check` for duplicate work, `atc claim` to take an issue, a five-minute pulse while the agent works ("Pulse only while the agent is working, before its five-minute check-in expires"), and a live agent radar (tensorfold.dev/atc, fetched this run: 200, 20.6 KB) showing who is working on what. "Building with a coding agent? Have it load the contributor skill before it writes any code." Issue leasing with expiry is the pattern to watch as agent-authored PRs grow; TensorFold is its reference implementation. The engine itself (Zig inference, no Python, Metal/CUDA; repo description adds Vulkan, README's checked paths are Metal/CUDA) joins a crowded field.
+- **`QwenLM/qwen-code` v1.0.0-preview (29,562★ verified, released Nov 11 03:55Z)** — "Brings together the agent capabilities of Qoder and Qwen Code," folding Alibaba's IDE-agent stack into the terminal CLI: Qwen *and* Qoder account login, multiple model providers, custom compatible endpoints, native packages replacing npm-only install. The project's own caveat is load-bearing: "some interfaces, configuration options, and behaviors may change during Preview" — pin and read the changelog. The previous day's 0.27.2 shows the direction beyond the editor: a Web Shell that "can configure WeChat, QQ, and Email channels, including QR login, scan progress, identity display, and logout" — the coding agent as a messaging-channel resident.
+
+→ [[agent-plugins]] [[dev-tools]]
+
+Sources: [CopilotKit/OpenBot](https://github.com/CopilotKit/OpenBot) ·
+[open.bot](https://open.bot) ·
+[ashhart/TensorFold](https://github.com/ashhart/TensorFold) ·
+[ATC radar](https://tensorfold.dev/atc) ·
+[QwenLM/qwen-code v1.0.0-preview](https://github.com/QwenLM/qwen-code/releases/tag/v1.0.0-preview)

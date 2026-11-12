@@ -2353,3 +2353,17 @@ Sources: [vercel-labs/agent-desktop](https://github.com/vercel-labs/agent-deskto
 [openai/codex-security](https://github.com/openai/codex-security) ·
 [klad-app/klad](https://github.com/klad-app/klad) ·
 [npm：agent-desktop](https://www.npmjs.com/package/agent-desktop)
+
+## 2026-11-12 20:36 — OpenBot 加入工作区人潮；TensorFold 的 ATC 把 agent 贡献者当并发问题管理；Qwen Code 1.0 把 Qoder 并进 CLI
+
+- **`CopilotKit/OpenBot`（本轮一手核验 11,235★，v1.0.2（11-11），创建于 08-17）**——「开源的 AI 同事，每个都有一台自己的计算机：浏览器、文件与工具，每个动作发生前被决定、发生后被记录。」每 bot 一个可自托管工作区（独立沙箱化的浏览器/文件系统/工具），发送前审批流，「发生前决定 / 发生后记录」的表述正是该拿去要求厂商的——要求看记录。桌面应用（公证的 macOS DMG、签名的 Windows 安装器、「无需终端或开发者工具」）、Kubernetes 部署路径，以及「OpenBot for Business」（企业登录、工具权限、审批、审计）。在拥挤类别（CompanyOS、Paradev、herdr）中的差异化：**AG-UI 协议**——接上你已在跑的 agent。
+- **`ashhart/TensorFold`（一手核验 1,829★——创建于 2026-06-19，所以这波趋势**不是**发布）带着 Agent Traffic Control（`ashhart/ATC`）**：一个开源项目把 AI agent 贡献者当成**并发问题**来管——`atc check` 查重复工作、`atc claim` 认领 issue、agent 工作时每五分钟一次 pulse（「只在 agent 工作时发 pulse，别让五分钟签到过期」），以及实时 agent 雷达（tensorfold.dev/atc，本轮已取：200、20.6 KB）展示谁在做什么。「用编码 agent 构建？让它先加载贡献者技能再写代码。」带过期的 issue 租约是 agent 参与 PR 增长时该盯的模式；TensorFold 是其参考实现。引擎本身（Zig 推理、无 Python、Metal/CUDA；仓库描述加 Vulkan、README 核查过的路径是 Metal/CUDA）加入的是拥挤领域。
+- **`QwenLM/qwen-code` v1.0.0-preview（一手核验 29,562★，11-11 03:55Z 发布）**——「把 Qoder 与 Qwen Code 的 agent 能力合到一起」，把阿里巴巴的 IDE agent 栈折进终端 CLI：Qwen *与* Qoder 账号登录、多模型 provider、自定义兼容端点、原生安装包取代纯 npm。项目自己的告警是承重的：「Preview 期间部分接口、配置项与行为可能变化」——固定版本并读 changelog。前一天的 0.27.2 显示编辑器之外的方向：Web Shell「可配置微信、QQ 与 Email 通道，包括扫码登录、进度、身份展示与登出」——编码 agent 作为消息通道居民。
+
+→ [[agent-plugins]] [[dev-tools]]
+
+Sources: [CopilotKit/OpenBot](https://github.com/CopilotKit/OpenBot) ·
+[open.bot](https://open.bot) ·
+[ashhart/TensorFold](https://github.com/ashhart/TensorFold) ·
+[ATC 雷达](https://tensorfold.dev/atc) ·
+[QwenLM/qwen-code v1.0.0-preview](https://github.com/QwenLM/qwen-code/releases/tag/v1.0.0-preview)

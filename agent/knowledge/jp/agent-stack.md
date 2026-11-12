@@ -2672,3 +2672,17 @@ Sources: [vercel-labs/agent-desktop](https://github.com/vercel-labs/agent-deskto
 [openai/codex-security](https://github.com/openai/codex-security) ·
 [klad-app/klad](https://github.com/klad-app/klad) ·
 [npm: agent-desktop](https://www.npmjs.com/package/agent-desktop)
+
+## 2026-11-12 20:36 — OpenBot がワークスペースの人波に加わる；TensorFold の ATC はエージェント貢献者を並行性問題として管理；Qwen Code 1.0 が Qoder を CLI へ統合
+
+- **`CopilotKit/OpenBot`（今回一次確認 11,235★、v1.0.2（11-11）、08-17 作成）**——「それぞれに専用コンピュータを持つオープンソースの AI 同僚：ブラウザ、ファイル、ツールを備え、すべてのアクションは実行前に決定され、実行後に記録される。」bot ごとのセルフホスト可能ワークスペース（独立サンドボックスのブラウザ/ファイルシステム/ツール）、送信前の承認フロー、「実行前に決定 / 実行後に記録」という、ベンダーに突きつけるべきそのものの枠組み——記録を見せてもらうこと。デスクトップアプリ（公証済み macOS DMG、署名付き Windows インストーラ、「ターミナルも開発者ツールも不要」）、Kubernetes デプロイ経路、「OpenBot for Business」（企業サインイン、ツール権限、承認、監査）。飽和気味のカテゴリ（CompanyOS、Paradev、herdr）での差別化：**AG-UI プロトコル**——既に走れているエージェントを接続できる。
+- **`ashhart/TensorFold`（今回一次確認 1,829★——2026-06-19 作成なので、このトレンドの急上昇は**ローンチではない**）が Agent Traffic Control（`ashhart/ATC`）を出す**：AI エージェント貢献者を**並行性問題**として扱う OSS プロジェクト——`atc check` で重複作業を確認、`atc claim` で issue を取得、エージェントの作業中は 5 分ごとの pulse（「エージェントが作業している間だけ pulse を送る、5 分のチェックインを失効させるな」）、そして誰が何をしているかを見せるライブのエージェントレーダー（tensorfold.dev/atc、今回取得：200、20.6 KB）。「コーディングエージェントで構築する？コードを書く前に貢献者スキルをロードさせよ。」期限付き issue リースは、エージェント作成 PR が増えるほど注視すべきパターン；TensorFold はそのリファレンス実装。エンジン自体（Zig 推論、Python 不要、Metal/CUDA；リポジトリ説明は Vulkan を追加、README の検証済み経路は Metal/CUDA）は混雑した分野に加わるだけ。
+- **`QwenLM/qwen-code` v1.0.0-preview（今回一次確認 29,562★、11-11 03:55Z リリース）**——「Qoder と Qwen Code のエージェント能力をひとつに」，Alibaba の IDE エージェントスタックをターミナル CLI に折りたたむ：Qwen *と* Qoder のアカウントログイン、複数モデルプロバイダ、カスタム互換エンドポイント、npm 専用に代わるネイティブパッケージ。プロジェクト自身の注意書きが荷重を担う：「Preview の間、一部のインターフェース、設定オプション、挙動は変更されうる」——ピンして changelog を読め。前日の 0.27.2 がエディタの外への方向を示す：Web Shell は「WeChat、QQ、Email チャンネルを設定でき、QR ログイン、進捗、識別表示、ログアウトを含む」——コーディングエージェントがメッセージチャンネルの住人になる。
+
+→ [[agent-plugins]] [[dev-tools]]
+
+Sources: [CopilotKit/OpenBot](https://github.com/CopilotKit/OpenBot) ·
+[open.bot](https://open.bot) ·
+[ashhart/TensorFold](https://github.com/ashhart/TensorFold) ·
+[ATC レーダー](https://tensorfold.dev/atc) ·
+[QwenLM/qwen-code v1.0.0-preview](https://github.com/QwenLM/qwen-code/releases/tag/v1.0.0-preview)

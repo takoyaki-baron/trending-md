@@ -1488,3 +1488,21 @@ Sources: [Anthropic CVD ダッシュボード](https://red.anthropic.com/2026/cv
 [ledger.json](https://red.anthropic.com/2026/cvd/data/ledger.json) ·
 [cveawg：CVE-2026-41401](https://cveawg.mitre.org/api/cve/CVE-2026-41401) ·
 [OSV：GHSA-f26g-jm89-4g65](https://api.osv.dev/v1/vulns/GHSA-f26g-jm89-4g65)
+
+## 2026-11-12 20:36 — CNA 採点の波が 4 件同じ日に；タイムラインの外れ値は 9 日から 4 ヶ月に及ぶ
+
+- **Node.js、3 リリースライン合計 16 CVE（v26.13.1 / v24.22.3 / v22.23.5、11-11 16:44Z リリース）：**最重は `CVE-2026-123864`——`TLSWrap::DoWrite()` の再入欠陥で、未認証クライアントが「他のコネクションに属するメモリ、TLS 秘密鍵や他ユーザーの要求を含めて」読める（Heartble 型）；さらに `CVE-2026-123872`（クライアント証明書認証バイパス：TLS 1.2 再ネゴシエーション/再開/HelloRetryRequest での servername 変更）、`CVE-2026-126051`（SNICallback 遅延コールバックの use-after-destroy、遠隔 DoS）、`CVE-2026-123863`（HTTP/2 切断時の到達可能アサーション、遠隔中止）。7 High / 6 Medium / 3 Low、大半は Matteo Collina と Tim Perry の功績。確認した NVD レコードはすべてまだ `Received` で **CVSS なし——「High」は Node 自身のラベル**；分析が着くまではリリースノートでトリアージする。
+- **hMailServer、1 回に 18 レコード（11-11 09:17Z 公開）、全スコアが GitLab 自身の CNA（`cve@gitlab.com`）、すべて `Received`。**筆頭は `CVE-2026-126617`（**8.8**）：6.0.0-B1–6.2.18 の MySQL/MariaDB または PostgreSQL でのデータベース層 SQL インジェクション、「これら 2 エンジンではパラメータがバインドされない」ため——値がパラメータごとの文字列置換で文テキストに連結され、後続パラメータ名を含む値がリテラルを早く終わらせ SQL を注入する。デフォルト構成の経路はメールボックスだけで届く：greylisting かメッセージ索引が有効のとき、**遠隔の未認証送信者が**「サーバが封筒送信者に送るメッセージ——配信失敗通知や自動返信など」を通じて同じ文に到達する。**修正は 11-02 に既に出荷（v6.2.19 / v6.3.8）——書類の 9 日前。**棚卸しの罠：活動リポジトリは **GitLab**；GitHub ミラーの最新リリース（5.7.2-b3144）はレガシー線で、GitHub キーのスキャナは年齢を誤る。
+- **BusyBox、7 レコード（11-11 10:16–12:19Z）、すべて Red Hat CNA（`secalert@redhat.com`）、すべて `Awaiting Analysis`。**`CVE-2026-124741`（**7.6**）：udhcpc6 がサーバ送信 DHCPv6 オプションをサイズ検証なしでコピー——LAN 上の悪意ある DHCP サーバが、BusyBox でアドレスをリースするすべての組込み機に届く。`CVE-2026-124739`（**7.5**）：httpd サブディレクトリ設定、長すぎるインデックスページ名 → スタックオーバーフロー。`CVE-2026-124737`（**7.5**）：TFTP クライアントが小ブロックサイズを要求してデフォルトにフォールバックし、小さすぎるバッファへ。ほかに udhcpc6 の use-after-free（4.3）と細工 FAT/HFS+ ボリューム識別の欠陥 2 件（5.5）。
+- **Waline は今月のタイムライン外れ値：リポジトリアドバイザリ `GHSA-crj3-q72p-ggqm` は **7 月 2 日**公開（Critical、メンテナー自評）、CVE レコード `CVE-2026-64670`（**9.3** CVSS 3.1）/ `CVE-2026-64671` は **11-11** 公開——CVE キーのトリアージが 4 ヶ月間何も聞かなかった空白。**アドバイザリは今も「**Patched versions: None**」のまま；npm `latest` は 3.16.2（11-03）で影響範囲 `@waline/client ≤ 3.15.2` の上だが、アドバイザリにもリリースノートにもどのリリースが修正かと主張する記述はない——プロジェクトが口を開くまで 3.16.x は**未確認**扱い。メカニズム（編集者プレビュー XSS が管理者を撃つ）→ [[security]]；状態は fix-in-artifact-no-identifier に 4 ヶ月の fix-predates-record が重なる形。
+- **波の算術は持ちこたえている：**5 プロジェクト、2 日で 48+ レコード、全スコアが CNA 自身のもの、NVD 分析はどこにも absent——assigner と、ラベル（「High」は Node の、「critical」は Apache の）と、修正タイムラインが情報量を担い、スコアが最も薄い（テーゼ 20 の常駐パターン、2 日で 4 社目）。
+
+→ [[security]] [[disclosure-lag]] [[cvss-stopping-points]]
+
+Sources: [Node.js v26.13.1](https://github.com/nodejs/node/releases/tag/v26.13.1) ·
+[NVD: CVE-2026-123864](https://nvd.nist.gov/vuln/detail/CVE-2026-123864) ·
+[NVD: CVE-2026-126617](https://nvd.nist.gov/vuln/detail/CVE-2026-126617) ·
+[hMailServer v6.3.8（GitLab）](https://gitlab.com/hmailserver/hmailserver/-/releases/v6.3.8) ·
+[NVD: CVE-2026-124741](https://nvd.nist.gov/vuln/detail/CVE-2026-124741) ·
+[NVD: CVE-2026-64670](https://nvd.nist.gov/vuln/detail/CVE-2026-64670) ·
+[GHSA-crj3-q72p-ggqm](https://github.com/walinejs/waline/security/advisories/GHSA-crj3-q72p-ggqm)

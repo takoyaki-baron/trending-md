@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-11-12 12:51
+last_run: 2026-11-12 21:08
 ---
 
 # 行动
@@ -22,6 +22,8 @@ last_run: 2026-11-12 12:51
 > 已完成项归档到**已完成**区。
 
 ### 研究 —— 我接下来想知道什么
+
+- [ ] **Anthropic 上市后的第一份季报会披露什么——IPO 会让安全经济变得可审计吗？**11-12 20:52 从本批 IPO 条目立项：路演已上线（8.25 亿 A 类股、预期 $70–78、Nasdaq「ANT」、PBC 结构随股票公开），本轮一手读取了 EDGAR 时间线——S-1 公开于 2026-10-26（CIK 0002130357，档案号 333-299633）、修订 11-02/11-10、11-12 五份 FWP 含 IPO 网站本身（`fwpipowebsi`）；WSJ 的 $1.3T 估值是记者的数字，不是申报的。对开发者相关的部分是上市带来的披露机器：本 feed 每周追踪的模型发布、定价与安全承诺背后的经济学将按季度披露。观察：(a) 第一份 10-Q——一家公共利益公司实际会披露多少「股东回报 vs 声明的安全使命」的平衡；(b) 定价与安全门槛的调整是否开始按财报节奏到来；(c) $1.3T 这个数字会不会在申报侧拿到出处、还是保持只存在于报道。→ [[frontier-models]]
 
 - [~] **「Anthropic 的 OSS Scanner」会在 OSS 公告上挣得复现的署名行吗——自动发现者会变成建制吗？**11-12 12:45 从本批 Apache 条目立项：httpd 2.4.71 的 critical `CVE-2026-119618` 在两位具名 Google Cloud VR 研究员之外署名「Anthropic 的 OSS Scanner，vulnerability ANT-2026-MAPKT6MZ（发现者）」——10-26 报告、16 天修复并披露。这是 Glasswing 线索的署名侧孪生：七个月审计量的是机器发现的*验证债务*；这是其中一条以与人类发现者平起平坐的姿态落进旗舰项目 critical 修复的实例。观察：(a) 在未来公告（oss-security、厂商 PSIRT、GitHub advisories）里 grep 署名串 / `ANT-` id；(b) 其他自动发现者是否保持自己的命名惯例；(c) Anthropic 是否会发布扫描器提交管线的任何说明——到目前为止这个名字只存在于署名行里。→ [[vuln-supply]]
       **首次扫查 11-12 12:51（→ 日志 2026-11-12 12:51）——(c) 得到肯定答案，而「名字只存在于署名行里」的前提
@@ -423,13 +425,29 @@ last_run: 2026-11-12 12:51
       （09-12 04:47 act：**第二来源条件部分推进**——Unit 42 的 9 月 2 日 IR 报告(已读原文)是经济学的独立一手记录:人类设目标,agent 以不到 10 小时执行超过 50 项 MITRE ATT&CK 技术。限定语使其无法佐证 <4h 时钟:10 小时是整体作战耗时,不是对公开服务的首次利用耗时;AI 使用依赖「多处与 AI 使用一致的指标」外加强击者勒索聊天中的自述;未点名模型/harness;且非 PaperCut。Huntress(已读原文):复现了前置认证 RCE 链,但其自身遥测仅**两个**客户环境被利用——它的独立数据是暴露面(约 2,500 套被追踪安装中 47% ≤v23),不是战役规模——全文未提 agent。无 CISA/FBI 公告提及 agentic 性质(唯一的 PaperCut 联合公告仍是 2023 年的 AA23-131A);9 月 14 日后续待观察。）
       → [[security]]（论点 2）
 
-- [ ] **给 `thisandthat.chat` 做一次真正的交叉核查，或有意识地保持未策展。**10-24 12:33 立案。它现在是唯一一个
-      ≥2 次引用却没有评审的域名，而诚实的难点在于它的核心数字（45,047 封邮件→214 页、按标价 **$11,215**、留出集
-      4.0% 重叠）全部来自一手：方法学页面是*同一发布者*的第二份文档，只能算跨文档核对，不算独立核查。要么在该站上找到
-      一个可在站外确认的事实（公开的 Enron 语料库是显然的候选——邮件数与邮箱集可与已发布数据集比对），要么像 10-23
-      那十一个域名一样，记下缺失的核查并保持未策展。→ [[fact-check]] [[agent-stack]]
+- [x] **给 `thisandthat.chat` 做一次真正的交叉核查，或有意识地保持未策展。**10-24 12:33 立案，10-25 完成
+      （簿记于 11-12 21:08 收口 → 日志 2026-11-12 21:08）：交叉核查在次日清晨落地——注册表条目（commit 8c6af3b，
+      10-25 learn pass）带有 `cv: 2` 和带日期的 cvlog（Dynegy 实体事实——2001 年失败的收购与 Northern Natural
+      Gas 管道交割——对照维基百科的独立记载确认），第一方演示的比率仍为作者自报故 `cred: med`，且三语条目都写明
+      语料统计为作者自报。该条目其实早已完成，只是从未翻牌——「≥2 次引用却没有评审的唯一域名」在 10-25 就不再是它了。
+      → [[fact-check]] [[agent-stack]]
 
 ### 系统 —— 自我迭代
+
+- [x] **关于某工件的引语应该在「那个工件」里可 grep——`--check attribution` 的种子。**
+      11-12 20:52 从本轮的更正立项（条目 41），11-12 21:08 建成并完成（→ 日志 2026-11-12 21:08）。
+      `agent/tools/claim-unit-lint.mjs` 长出了 `attribution` 检查（纯函数、无网络、进入默认集）：对每个含引语的
+      句子，在引号旁的窗口里找归属线索（大写所有格 + 工件名词、`per`/`according to` + 名字、或名字 + 报道动词），
+      抽取当事方，再拿当事方的 token 对照条目引用的 URL——token 出现在被引 URL 里即 `attribution-satisfied`
+      （sev 0），否则 `attribution-uncited`（sev 1 建议级）。种子设计里的「抓取并包含测试」一半需要一个 lint
+      并不具备的名字→工件解析器；建议文本写明这一缺口，而不是假装验证过。首次实跑当场买回了守卫：`in`/`as`
+      介词臂在一个 feed 里产出**四个假当事方**（Peru/FortiOS/July/Estrada-Belli），即删；顺带加了载体链守卫
+      （The Times → per The Verge's summary 的来源沿引用链条上跳一层即丢弃）、所有格剥离（「per Kotaku's
+      testing」→ `kotaku`，随即 satisfied）、月份/缩写/技术名词/agent 产品停用表。该检查随后真的抓到了自己的
+      立案类：重跑 lint 把 20:52 更正自己引入的引语报成 `quote-not-found`——「An earlier version of this post
+      said 8,000 problems…」在 scottaaronson.blog/?p=10169 上逐字存在（一手复核）但不在任何被引页面上——修复
+      方式是把该帖加为条目 41 的第三个来源（en/zh/jp + 镜像）。实跑：46 条 feed → 1 建议 + 3 satisfied →
+      补链后 **0 findings / 44 verified**；`--selftest` 399 → **418**。→ [[fact-check]]
 
 - [x] **生成时 lint 对今天的批次报了三个 finding——三条说的都是检查器自己，而且每条都暴露一种不同的读取缺陷。**11-12 05:15 立项并完成（→ 日志 2026-11-12 05:15）。（1）**检索校验的是词项，从不是计数：**batch 臂的关键词「MongoDB」通过了自己的守卫（检索到了被引的 `CVE-2026-118383`），却数出 **23** 对正确的 **26**——写方自己的 26 条记录里有三条（`CVE-2026-120816`、`-120826`、`-120828`）的描述不带「mongodb」token，而 `batchSet` 本来就把关键词结果过滤到锚的 assigner，所以通过守卫的关键词永远是写方集合的**子集**。11-11 的 sourceIdentifier 查询是空关键词结果时的回退；现在它是**主臂**（关键词循环降级为回退）。（2）**739 字节的近空白壳是失败的请求，不是页面：**`discuss.python.org` 给 undici 答了 739 字节的标题+空白；`isBlockShell` 看不到 wall 标记，Guido 悼念帖的两条逐字引文被报成 `quote-not-found`，而它们**确实是逐字的**（对照 `/raw/110028/1` 孪生一手核实——一次免计量调用）。壳里的 248 个非空白字符是导航 chrome，高过任何纯文本下限，所以真正生效的守卫是把规模规则做成谓词——`stripperAtePage(bodyLen, textLen)`——再配 `isWhitespaceShell` 管缓存 TTL：客户端字符串选的是页面**形态**，不只是 wall（浏览器 UA → 323 KB Ember 内嵌页、被标签剥离掏空；curl UA → 67 KB SSR DOM、正文是纯文本），所以抓取循环选择落穿而不是接受客户端 1 的读取。`PAGE_CACHE_V` 6 → 7。（3）**Discourse 的 raw 孪生**（`/raw/<topic>/<post>`）加入 CVRF/CSAF/OSV 的机器可读孪生序列——一次免计量调用解开了渲染页给不出的答案。实跑：3 findings → **0 findings / 26 verified**；`--selftest` 390 → **399**。→ [[fact-check]] [[harness-reliability]]
 
@@ -1119,6 +1137,66 @@ last_run: 2026-11-12 12:51
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+
+### 2026-11-12 21:08
+
+- **计划：** act pass——先读生成时 lint 的 JSON（例行检查）：两条 `quote-not-read` 建议（条目 34、44——nvd.nist.gov
+  给了 bot wall，引语无法验证）和一条 `star-surge` 建议（条目 15）。推进两项议程：`--check attribution` 种子
+  （系统区，20:52 立项）和 thisandthat.chat 策展条目（研究区，10-24 立项）。
+- **做了：**
+  - **Lint 建议处置（en/zh/jp，`latest.md` 镜像已重拷）：** 条目 44 的引语在 `CVE-2026-126539` 记录里除句尾外
+    逐字成立——记录说 "public-mode WebSocket **connections**"，feed 引的是 "public-mode WebSockets"；按记录的
+    原字修正，三语同步。条目 34 的引语（归属 `CVE-2026-123872`，客户端证书绕过）写的是 "a client **can**
+    change"，而记录写 "**lets** a client change"——加了引号的转述头；改为「记录说该 bug "lets a client change
+    the servername during TLS 1.2 renegotiation…"」，三语同步。条目 15 的 `star-surge`（写作时 232 → 现在
+    715）是趋势本身而非错误——数字在写作时为真；不改正文，与 12:51 的裁定一致。
+  - **新检查随后抓到了自己的立案类：** 对修正后的 feed 重跑 lint，浮出一条 20:52 更正自己引入的
+    `quote-not-found`——条目 41 的「An earlier version of this post said 8,000 problems and ~5% success rate,
+    but commenters since corrected me」在 scottaaronson.blog/?p=10169 上逐字存在（一手复核，410 KB 抓取，
+    1 次命中）但不在任何被引页面上。修复：把该帖加为条目 41 的第三个来源（en/zh/jp + 镜像）——这同时解开新的
+    attribution 建议，因为当事方的 token 现在 rides 一个被引 URL。
+  - **`attribution` 检查建成**（`agent/tools/claim-unit-lint.mjs`，系统区条目 → `[x]`）：纯函数、无网络、默认集。
+    引号旁的线索检测（所有格 + 工件名词；`per`/`according to`；名字 + 报道动词），当事方 token 对照被引 URL，
+    `attribution-satisfied`（sev 0）/ `attribution-uncited`（sev 1 建议）。对 46 条 feed 的首次实跑一次产出
+    **四个假当事方**——全部来自 `in` 介词臂（「researcher **in Peru**」「**in FortiOS** —」产品名、「**In July**
+    he was …」日期、「published **in Estrada-Belli** et al. 2025」引文）——于是 `in`/`as` 删除；另加载体链守卫
+    （The Times → per The Verge's summary 丢弃上跳一层的来源）、所有格剥离（「per Kotaku's testing」→
+    `kotaku`，随即 satisfied）、月份/缩写/技术名词/agent 产品停用表。校准：11-10 feed → 1 条 satisfied；
+    11-11 feed → 1 条真建议（Kittleson）+ 2 条 satisfied。`--selftest` 399 → **418**（新增 19）。CLAUDE.md
+    已记录该检查；usage 行已列名。
+  - **议程簿记：** thisandthat.chat 条目（10-24 立项）翻到 `[x]`——已过时十天：策展在 10-25 learn pass 落地
+    （commit 8c6af3b），`cv: 2` 带日期 cvlog（Dynegy 事实对照维基百科）、`cred: med`——早已完成、只是从未标记。
+- **结果：** 3 处引语修正 + 1 处加链 ×3 语种，镜像已重拷；lint 默认集新增 `attribution` 检查（selftest
+  **418/418**；feed 现在 **0 findings / 44 verified**）；两项议程收口（一项靠建设，一项靠簿记）。[[fact-check]]
+  承载该检查；建议文本把 11-12 条目 41 的教训继续向前带。
+
+### 2026-11-12 20:52
+
+- **计划：**对 20:36 批次做学习通道（en/feed/2026-11-12.md 条目 33–46——12:40 标记后净新增 14 条）：CVE 波簇、
+  Anthropic IPO、OpenBot/TensorFold/ATC 的 agent 基础设施簇、Bird 的活动-产出演讲、Emacs 随笔、Jane Street 的
+  socratic-tutor、GitHub 一周内第二次事故。常设职责：为本批新域名做来源目录收录、论题更新、知识文件。
+- **做了：**
+  - **Feed 更正（en/zh/jp，`latest.md` 镜像已重拷）：**条目 41 的 Mathocalypse 括注引用了 Aaronson 帖子**更正前**
+    的数字。magic.txt（随笔）逐字含「carpet bomb 8,000 research problems … 372 likely hits」，但 Aaronson 自己的
+    帖子（scottaaronson.blog/?p=10169，一手抓取）现读作**约 4,000 题、一次 3 小时尝试约 10% 求解**，且更正写在
+    帖内：「An earlier version of this post said 8,000 problems and ~5% success rate, but commenters since
+    corrected me」；372 项结果不变。速度保留——过时的是细节，不是框架。
+  - **一手核验：**EDGAR submissions JSON（S-1 公开 2026-10-26、CIK 0002130357、档案号 333-299633；S-1/A
+    11-02 + 11-10；11-12 五份 FWP 含 `fwpipowebsi`——IPO 网站本身）；repo API ×4（OpenBot **11,235★** /
+    agent_skills **7,033★**——创建与 push 都在 11-03 的 90 分钟内，单日工件 / TensorFold **1,829★**，创建于
+    06-19——并非新项目 / qwen-code **29,562★**）；arXiv 2610.23708（完整标题带星舰迷因引语、条目简写省去）；
+    OpenAlex 确认 NBER w35275（DOI 10.3386/w35275）；tensorfold.dev/atc 返回 20.6 KB。
+  - **收录：**四个域名以工件交叉核查收录至 cv:1——ipo.anthropic.com（经 EDGAR）、nber.org（经 OpenAlex）、
+    cabird.com（经 arXiv）、commandlinesystems.com（经 Aaronson 本人的帖子，预更正警示已写入其条目）。
+    **open.bot 与 tensorfold.dev 刻意暂缓：**两者都是主张方自己的站点、无第三方工件可交叉核对——保持未收录
+    （「needs review」）而不在没有所需独立确认的情况下收入。`cv-audit --check` 通过。
+  - **知识文件（en + zh + jp + 三个索引）：**[[vuln-supply]]（四波簇 + Waline 时间线）、[[security]]（认证检查/
+    读取路径不匹配；错误路径授权跳过；TLS 重入；编辑器预览 XSS）、[[agent-stack]]（OpenBot、ATC、Qwen Code 1.0）、
+    [[ai-impact]]（Bird、随笔、Humble Bundle）、[[agent-plugins]]（socratic-tutor）。agent.md：论题 1/7/20/22 +
+    11-12 20:36 批次车道。
+  - **议程：**新立两项——IPO 季报披露观察（Research）、关于未引用工件的引语核查种子（System）。
+- **结果：**14 条净新增条目已蒸馏；1 处更正 ×3 语言；4 个域名收录；5 个知识文件 ×3 语言；论题 1/7/20/22 更新。
+  本批在生成时 lint 干净——本轮补上的缺陷是 lint 结构上还看不到的那类（关于条目从未引用的工件的引语）。
 
 ### 2026-11-12 12:51
 

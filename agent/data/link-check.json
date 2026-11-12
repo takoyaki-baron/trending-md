@@ -5431,195 +5431,186 @@
     },
     "https://news.ycombinator.com/item?id=50456631": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-11-11T21:46:30.544Z",
-      "last_seen": "2026-11-12T05:14:11.339Z",
+      "last_seen": "2026-11-12T13:36:31.919Z",
       "feeds": [
         "2026-11-12.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50449891": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-11-11T21:46:30.544Z",
-      "last_seen": "2026-11-12T05:14:11.339Z",
-      "feeds": [
-        "2026-11-12.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=50454625": {
-      "verdict": "blocked",
-      "streak": 2,
-      "first_seen": "2026-11-11T21:46:30.544Z",
-      "last_seen": "2026-11-12T05:14:11.339Z",
+      "last_seen": "2026-11-12T13:36:31.919Z",
       "feeds": [
         "2026-11-12.md"
       ]
     },
     "https://intel.com/content/www/us/en/security-center/advisory/intel-sa-01580.html": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-11-11T21:46:30.544Z",
-      "last_seen": "2026-11-12T05:14:11.339Z",
-      "feeds": [
-        "2026-11-12.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=50450488": {
-      "verdict": "blocked",
-      "streak": 1,
-      "first_seen": "2026-11-12T05:14:11.339Z",
-      "last_seen": "2026-11-12T05:14:11.339Z",
+      "last_seen": "2026-11-12T13:36:31.919Z",
       "feeds": [
         "2026-11-12.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50453288": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-12T05:14:11.339Z",
-      "last_seen": "2026-11-12T05:14:11.339Z",
+      "last_seen": "2026-11-12T13:36:31.919Z",
       "feeds": [
         "2026-11-12.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50459703": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-12T05:14:11.339Z",
-      "last_seen": "2026-11-12T05:14:11.339Z",
+      "last_seen": "2026-11-12T13:36:31.919Z",
       "feeds": [
         "2026-11-12.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50458900": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-12T05:14:11.339Z",
-      "last_seen": "2026-11-12T05:14:11.339Z",
+      "last_seen": "2026-11-12T13:36:31.919Z",
       "feeds": [
         "2026-11-12.md"
       ]
     },
     "https://www.wsj.com/business/nvidia-is-preparing-to-oust-nvidia-ceo-jensen-huang-30f421ad": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-12T05:14:11.339Z",
-      "last_seen": "2026-11-12T05:14:11.339Z",
+      "last_seen": "2026-11-12T13:36:31.919Z",
       "feeds": [
         "2026-11-12.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50459485": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-12T05:14:11.339Z",
-      "last_seen": "2026-11-12T05:14:11.339Z",
+      "last_seen": "2026-11-12T13:36:31.919Z",
       "feeds": [
         "2026-11-12.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50458166": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-12T05:14:11.339Z",
-      "last_seen": "2026-11-12T05:14:11.339Z",
+      "last_seen": "2026-11-12T13:36:31.919Z",
       "feeds": [
         "2026-11-12.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50460154": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-12T05:14:11.339Z",
-      "last_seen": "2026-11-12T05:14:11.339Z",
+      "last_seen": "2026-11-12T13:36:31.919Z",
       "feeds": [
         "2026-11-12.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50454951": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-12T05:14:11.339Z",
-      "last_seen": "2026-11-12T05:14:11.339Z",
+      "last_seen": "2026-11-12T13:36:31.919Z",
       "feeds": [
         "2026-11-12.md"
       ]
     },
     "https://www.npmjs.com/package/agent-desktop": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-12T05:14:11.339Z",
-      "last_seen": "2026-11-12T05:14:11.339Z",
+      "last_seen": "2026-11-12T13:36:31.919Z",
       "feeds": [
         "2026-11-12.md"
       ]
     },
     "https://www.npmjs.com/package/@openai/codex-security": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-12T05:14:11.339Z",
-      "last_seen": "2026-11-12T05:14:11.339Z",
+      "last_seen": "2026-11-12T13:36:31.919Z",
       "feeds": [
         "2026-11-12.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50462375": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-12T05:14:11.339Z",
-      "last_seen": "2026-11-12T05:14:11.339Z",
+      "last_seen": "2026-11-12T13:36:31.919Z",
       "feeds": [
         "2026-11-12.md"
       ]
     },
-    "https://nvd.nist.gov/vuln/detail/CVE-2026-108167": {
-      "verdict": "transient",
+    "https://news.ycombinator.com/item?id=50452455": {
+      "verdict": "blocked",
       "streak": 1,
-      "first_seen": "2026-11-12T05:14:11.339Z",
-      "last_seen": "2026-11-12T05:14:11.339Z",
+      "first_seen": "2026-11-12T13:36:31.919Z",
+      "last_seen": "2026-11-12T13:36:31.919Z",
       "feeds": [
         "2026-11-12.md"
       ]
     },
-    "https://nvd.nist.gov/vuln/detail/CVE-2026-95691": {
-      "verdict": "transient",
+    "https://news.ycombinator.com/item?id=50453637": {
+      "verdict": "blocked",
       "streak": 1,
-      "first_seen": "2026-11-12T05:14:11.339Z",
-      "last_seen": "2026-11-12T05:14:11.339Z",
+      "first_seen": "2026-11-12T13:36:31.919Z",
+      "last_seen": "2026-11-12T13:36:31.919Z",
       "feeds": [
         "2026-11-12.md"
       ]
     },
-    "https://nvd.nist.gov/vuln/detail/CVE-2026-61887": {
-      "verdict": "transient",
+    "https://news.ycombinator.com/item?id=50465829": {
+      "verdict": "blocked",
       "streak": 1,
-      "first_seen": "2026-11-12T05:14:11.339Z",
-      "last_seen": "2026-11-12T05:14:11.339Z",
+      "first_seen": "2026-11-12T13:36:31.919Z",
+      "last_seen": "2026-11-12T13:36:31.919Z",
       "feeds": [
         "2026-11-12.md"
       ]
     },
-    "https://nvd.nist.gov/vuln/detail/CVE-2026-123710": {
-      "verdict": "transient",
+    "https://news.ycombinator.com/item?id=50463899": {
+      "verdict": "blocked",
       "streak": 1,
-      "first_seen": "2026-11-12T05:14:11.339Z",
-      "last_seen": "2026-11-12T05:14:11.339Z",
+      "first_seen": "2026-11-12T13:36:31.919Z",
+      "last_seen": "2026-11-12T13:36:31.919Z",
       "feeds": [
         "2026-11-12.md"
       ]
     },
-    "https://nvd.nist.gov/vuln/detail/CVE-2026-126147": {
-      "verdict": "transient",
+    "https://news.ycombinator.com/item?id=50455332": {
+      "verdict": "blocked",
       "streak": 1,
-      "first_seen": "2026-11-12T05:14:11.339Z",
-      "last_seen": "2026-11-12T05:14:11.339Z",
+      "first_seen": "2026-11-12T13:36:31.919Z",
+      "last_seen": "2026-11-12T13:36:31.919Z",
+      "feeds": [
+        "2026-11-12.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50458208": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-12T13:36:31.919Z",
+      "last_seen": "2026-11-12T13:36:31.919Z",
       "feeds": [
         "2026-11-12.md"
       ]
     }
   },
-  "runs": 171,
+  "runs": 172,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-11-12T05:14:11.339Z"
+  "last_run": "2026-11-12T13:36:31.919Z"
 }

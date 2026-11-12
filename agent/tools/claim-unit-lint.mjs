@@ -289,13 +289,13 @@ const CACHE_PATH = arg('cache') ?? 'agent/data/claim-unit-cache.json';
 // 5 MB of TEXT is ~7 MB on disk (JSON escapes newlines); 8 MB was an 11 MB file, bigger than the 9.9 MB
 // it was meant to bound.
 const CACHE_BYTES = Number(arg('cache-bytes') ?? 5_000_000);
-const CHECKS = new Set((arg('check') ?? 'issues,cvss,status,date,temporal,cwe,field,range,rangeabsent,affected,referent,idrange,repo,count,ratio,batch,bundle,quotation,paper').split(',').map((s) => s.trim()));
+const CHECKS = new Set((arg('check') ?? 'issues,cvss,status,date,temporal,cwe,field,range,rangeabsent,affected,referent,idrange,repo,count,ratio,batch,bundle,quotation,attribution,paper').split(',').map((s) => s.trim()));
 
 const SELFTEST = has('selftest');
 const STATUS_WATCH = has('status-watch');
 const EXTRA_IDS = (arg('ids') ?? '').split(',').map((s) => s.trim()).filter(Boolean);
 if (!FILE && !FILES && !SELFTEST && !has('ghsa-census') && !has('quotation-census') && !has('commit-quote-census') && !STATUS_WATCH) {
-  console.error('usage: claim-unit-lint.mjs --file <feed.md> [--no-net] [--check issues,cvss,status,date,temporal,cwe,field,range,rangeabsent,referent,repo,count,ratio,bundle,quotation] [--strict] [--json] [--census] [--selftest] [--status-watch [--ids CVE-…]] | --ghsa-census [--pages N]');
+  console.error('usage: claim-unit-lint.mjs --file <feed.md> [--no-net] [--check issues,cvss,status,date,temporal,cwe,field,range,rangeabsent,referent,repo,count,ratio,bundle,quotation,attribution] [--strict] [--json] [--census] [--selftest] [--status-watch [--ids CVE-…]] | --ghsa-census [--pages N]');
   process.exit(2);
 }
 
@@ -4911,6 +4911,123 @@ if (has('commit-quote-census')) {
   process.exit(0);
 }
 
+// ── check: an ATTRIBUTION — a quotation ABOUT a party is a claim about THAT party's bytes ──
+/* Filed 2026-11-12 20:52 from the same day's item-41 correction, which the quotation arm
+ * structurally could not see. The essay's "carpet bomb 8,000 research problems … 372 likely hits"
+ * passed `quotation` because the CITED page (magic.txt) contains it verbatim — but the sentence is
+ * ABOUT Aaronson's post, which the item never cites, and the post had since corrected the figures
+ * ("An earlier version of this post said 8,000 problems and ~5% success rate, but commenters since
+ * corrected me"). A second-hand copy is exactly where a correction has already diverged, so the
+ * party that a quote is ATTRIBUTED to is a different verification target from the page the quote
+ * was FOUND on.
+ *
+ * Seed design (the item's own words): fire only when the quote's sentence names an attributable
+ * party. The party cue is (a) a capitalized possessive + artifact noun inside the window beside
+ * the quote mark ("Aaronson's dump post, writes "…"", "Anthropic's own report") or (b) a
+ * capitalized name + reporting verb ("per Aaronson", "Stalwart reports"). If a cited URL already
+ * carries the party's distinctive token (surname / org name), the quotation arm's page set reaches
+ * the party's own artifact and the class is `attribution-satisfied` (sev 0). Otherwise it is
+ * `attribution-uncited` (sev 1, advisory): open the party's primary artifact before publishing, or
+ * drop the quotation marks. The fetch-and-containment half of the seed needs a name→artifact
+ * resolver this lint does not have — the advisory names that gap instead of pretending to verify,
+ * the same disclose-not-suppress shape `product-mismatch-disclosed` uses. Pure, so `--selftest`
+ * pins every arm offline; no network, runs under `--no-net` like `idrange`.
+ */
+const PARTY_ARTIFACT_NOUN_RE = /([A-Z][A-Za-z0-9.'-]*)'s\s+(?:(?:dump|blog|research|follow-?up|original|earlier|own|latest|first|second|new|full|short|lengthy|opening|closing|published)\s+)*(post|term|essay|write-?up|writeup|report|statement|announcement|correction|account|thread|paper|talk|note|notes|memo|survey|remarks|article|piece|findings|letter|answer|reply|commentary|review|summary|transcript|presentation|keynote|slide|slides|series)\b/g;
+/* The `in`/`as` prepositions were dropped after their first live run (2026-11-12, same day): the
+ * arm produced FOUR false parties in one feed — "a security researcher in Peru", "in FortiOS —"
+ * (a product name beside the quote), "In July he was …" (a date), "already published in
+ * Estrada-Belli et al. 2025" (a citation). A place, a month and a paper's authors are not parties
+ * a quotation is attributed to; `per` and `according to` are the attribution prepositions. */
+const PARTY_REPORTING_RE = /(?:\b(?:per|according to)\s+([A-Z][A-Za-z0-9.'-]{3,})|([A-Z][A-Za-z0-9.'-]{3,})\s+(?:writes|wrote|reports|reported|says|said|puts it|describes|described|notes|noted|clarifies|clarified|corrects|corrected|discloses|disclosed|terms|dubbed|called it)\b)/g;
+/* Tokens that look like parties but are not: acronyms (API's docs), tech nouns a capitalization
+ * rule alone would admit (Rust's), agent products whose documentation the item covers wholesale
+ * (Claude's, Codex's — the item's SUBJECT, not an external attribution source), roles whose
+ * artifact is the page already cited (The Author's — lowercase, never matches). */
+const PARTY_TOKEN_STOP = new Set(['rust', 'node', 'python', 'linux', 'zig', 'swift', 'emacs', 'unix', 'macos', 'windows', 'json', 'http', 'tls', 'cuda', 'metal', 'vulkan', 'openbsd', 'lean', 'math', 'agent', 'model', 'repo', 'readme', 'file', 'docs', 'wiki', 'this', 'that', 'when', 'where', 'while', 'their', 'there', 'these', 'those', 'openai', 'claude', 'gemini', 'grok', 'codex', 'copilot', 'cursor', 'vscode', 'xcode', 'webgl', 'webgl2', 'webgpu']);
+const PARTY_MONTH_RE = /^(?:january|february|march|april|may|june|july|august|september|october|november|december)$/i;
+/* `openai`/`claude`/`gemini`/`grok` sit in the STOP set because their possessives ("OpenAI's
+ * pricing page", "Claude's system prompt") are usually the item's own subject whose artifact the
+ * item cites wholesale — the vendor-domains case `attribution-satisfied` already covers when
+ * cited. A true quotation-OF-OpenAI-attributed-to-OpenAI item cites anthropic.com, and the token
+ * guard below passes on the URL, not on the stoplist. */
+
+/** Pure: the parties a quotation in this sentence is attributed to, deduped by token. */
+function attributionClaims(plain) {
+  const out = [];
+  const text = plain.replace(/[“”„«»]/g, '"').replace(/\[([^\]]*)\]\([^)]*\)/g, '$1');
+  const words = (s) => quoteKey(normQuote(s)).split(' ').filter((w) => /[a-z\p{L}]{2,}/u.test(w)).length;
+  for (const s of sentences(text)) {
+    const sent = text.slice(s.start, s.end);
+    const marks = [];
+    for (let i = 0; i < sent.length; i++) if (sent[i] === '"') marks.push(i);
+    if (marks.length % 2) marks.pop(); // an unpaired mark is a scare quote or a wrapped join — not a claim
+    for (let k = 0; k + 1 < marks.length; k += 2) {
+      const open = marks[k], close = marks[k + 1];
+      const span = sent.slice(open + 1, close);
+      if (words(span) < QUOTE_WORDS_SPAN) continue; // only a substantive quotation carries attribution
+      if (/https?:\/\//.test(span)) continue;
+      const pre = sent.slice(Math.max(0, open - 160), open);
+      const post = sent.slice(close + 1, Math.min(sent.length, close + 91));
+      const found = new Map();
+      for (const re of [PARTY_ARTIFACT_NOUN_RE, PARTY_REPORTING_RE]) {
+        for (const m of (pre + ' ‸ ' + post).matchAll(re)) {
+          // the verb/preposition arm can capture a possessive whole ("per Kotaku's testing" →
+          // "Kotaku's"), so the suffix comes off here, before the token is built
+          const raw = (m[1] ?? m[2] ?? '').replace(/['’]s$/, '').replace(/[.'-]+$/, '');
+          // cue 1 captures only the possessive word ("Aaronson's" → Aaronson); a multi-word name
+          // contributes its possessive part, which is the distinctive token either way.
+          const token = raw.toLowerCase();
+          if (token.length < 4) continue; // Wu's, Li's — too short to be distinctive off a URL
+          if (/^[A-Z]{2,}$/.test(raw)) continue; // API's, LLM's — an acronym, not a party
+          if (PARTY_MONTH_RE.test(raw)) continue; // "In July he was …" — a date, not a party
+          if (PARTY_TOKEN_STOP.has(token)) continue;
+          if (found.has(token)) continue;
+          found.set(token, { party: raw, token, span });
+        }
+      }
+      out.push(...found.values());
+    }
+  }
+  return out;
+}
+
+/** Pure: what an attribution claim means, given the item's cited URLs (every https:// in the item,
+ * the same denominator `citedPages` reads). Injectable so `--selftest` stays offline. */
+function attributionVerdict(claim, citedUrls) {
+  const tok = claim.token.toLowerCase();
+  return citedUrls.some((u) => u.toLowerCase().includes(tok)) ? 'attribution-satisfied' : 'attribution-uncited';
+}
+
+function checkAttribution(it) {
+  const out = [];
+  const urls = [...it.plain.matchAll(/https?:\/\/[^\s)\]]+/g)].map((m) => m[0]);
+  const claims = attributionClaims(it.plain);
+  /* An attribution CHAIN has one span with several parties: "The Times reported X — per The
+   * Verge's summary of the NYT piece, "X"" (item 21, same day) names the origin (Times), the
+   * carrier (Verge) and the subject. The carrier is where the BYTES live, and it is the one the
+   * item cites — when a span already produced a satisfied claim, its uncited parties are origins
+   * one hop up a chain the quote did not come from directly, so they are dropped. The one
+   * leftover risk — the carrier being a second-hand copy the origin corrected — is the class the
+   * satisfied verdict itself already covers poorly, and co-citation is not a cross-check; that
+   * rule lives in the sources directory, not here. */
+  const verdicts = claims.map((c) => attributionVerdict(c, urls));
+  const satSpans = new Set(claims.filter((c, i) => verdicts[i] === 'attribution-satisfied').map((c) => c.span));
+  const seen = new Set();
+  for (let i = 0; i < claims.length; i++) {
+    const c = claims[i], v = verdicts[i];
+    if (v === 'attribution-uncited' && satSpans.has(c.span)) continue;
+    if (seen.has(c.token)) continue;
+    seen.add(c.token);
+    if (v === 'attribution-satisfied') {
+      out.push({ check: 'attribution', item: it.n, verdict: v, claim: c.party, detail: `a quotation is attributed to ${c.party} (“${c.span.slice(0, 60)}${c.span.length > 60 ? '…' : ''}”) and a cited URL carries the party's token — the quotation arm's page set reaches the party's own artifact` });
+    } else {
+      out.push({ check: 'attribution', item: it.n, verdict: v, claim: c.party, detail: `a quotation is attributed to ${c.party} (“${c.span.slice(0, 60)}${c.span.length > 60 ? '…' : ''}”), but no cited URL names the party — a quotation ABOUT a party is a claim about THAT party's bytes, and the cited page can be a second-hand copy whose figures the party has since corrected (the 11-12 item-41 lesson: the essay quoted the earlier version of Aaronson's dump post). Open ${c.party}'s primary artifact before publishing, or drop the quotation marks` });
+    }
+  }
+  return out;
+}
+
 // ── check: a BATCH count — "N CVE records" and "M of the N say …" ──────────────────────────
 /* Filed 2026-11-10 04:53 from the batch's own item 7, which shipped three wrong numbers under one
  * true story: "102 FFmpeg CVE records", "96 of the 102 descriptions say through 9.0.2", "only 6
@@ -6312,6 +6429,70 @@ if (SELFTEST) {
       { keyword: 'source=secure@microsoft.com', day: '2026-11-10', cited: 'CVE-2026-109467', assigner: 'secure@microsoft.com' }).map((v) => [v.verdict, v.claim]),
     [['batch-count-ok', '1094 records (source=secure@microsoft.com, 2026-11-10)']]);
 
+  /* 2026-11-12 21:08 — the attribution seed, filed by the item-41 correction: "carpet bomb 8,000
+     research problems" is verbatim on the CITED page (magic.txt) and stale on the party it is
+     ABOUT (Aaronson's post had corrected the figures). Pure functions, pinned offline. */
+  const att = (text) => checkAttribution(mk('t', text)).map((x) => x.verdict);
+  t('attribution: the filing case — a quote ABOUT an uncited party is an advisory',
+    att(`Scott Aaronson's term — the essay, quoting the earlier version of Aaronson's dump post, writes "OpenAI's latest model took all of three hours to carpet bomb 8,000 research problems, resulting in 372 likely hits"; Aaronson's own post now says the figures changed.`),
+    ['attribution-uncited']);
+  t('attribution: the same sentence with the party cited is satisfied',
+    att(`Scott Aaronson's term — the essay, quoting the earlier version of Aaronson's dump post, writes "OpenAI's latest model took all of three hours to carpet bomb 8,000 research problems, resulting in 372 likely hits" (https://scottaaronson.blog/?p=10169).`),
+    ['attribution-satisfied']);
+  t('attribution: a reporting-verb cue fires — "per <Name>"',
+    att(`The paper's bound is "two to the power of the square root of n", per Aaronson.`),
+    ['attribution-uncited']);
+  t('attribution: a reporting-verb cue fires — "<Name> reports"',
+    att(`Stalwart "carried 35 of the 38 headline comparisons" on its own hardware, Stalwart reports.`),
+    ['attribution-uncited']);
+  t('attribution: a sentence with no quotation is silence',
+    att(`Aaronson's term for the trend went unquoted in the item's prose.`),
+    []);
+  t('attribution: a lowercase possessive is not a party',
+    att(`the repo's README says "244 pixel art effects and animations ship today in the gallery".`),
+    []);
+  t('attribution: an acronym possessive is not a party',
+    att(`The API's docs say "requests are rate limited to sixty per minute by default".`),
+    []);
+  t('attribution: a tech-noun possessive is not a party',
+    att(`Rust's own book says "every value has a single owner at any time" in the ownership chapter.`),
+    []);
+  t('attribution: a short token is not distinctive',
+    att(`Wu's post says "the fix ships in the next release train for all users".`),
+    []);
+  t('attribution: a party whose URL the item cites is satisfied (verdict is pure)',
+    attributionVerdict({ party: 'Aaronson', token: 'aaronson', span: 'x' }, ['https://www.scottaaronson.blog/?p=10169']),
+    'attribution-satisfied');
+  t('attribution: two quotes attributed to one party dedupe to one advisory',
+    att(`Aaronson's dump post writes "OpenAI's latest model took all of three hours to carpet bomb 8,000 research problems, resulting in 372 likely hits" and Aaronson's own post says "an earlier version of this post said the numbers differently but the correction stands now".`),
+    ['attribution-uncited']);
+  /* Four false parties from the first live run, all from the `in`/`as` preposition arm — fixed
+     the same day; each is pinned so the arm cannot quietly grow them back. */
+  t('attribution: a place after "in" is not a party',
+    att(`The survey came from a security researcher based in Peru (Oct 18) with "no special model or classifier involved: the agents literally looked at the pictures").`),
+    []);
+  t('attribution: a product beside a quote is not a party',
+    att(`missing authentication for a critical function in FortiOS — "may allow an unauthenticated attacker with HA FGSP and standalone config sync to execute arbitrary code via crafted packets" (FG-IR-26-273).`),
+    []);
+  t('attribution: a month is not a party',
+    att(`In July he was "experimenting with using modern coding agents to build a number of mathematical visualization applets" for his own use.`),
+    []);
+  t('attribution: a citation is not a party',
+    att(`archaeologists pointed out the same site was already published in Estrada-Belli et al. 2025 — "The agents missed it while going through the literature, so they rediscovered it rather than discovered it".`),
+    []);
+  t('attribution: a possessive before a preposition cue strips its suffix',
+    att(`per Kotaku's testing, "there are no authentication checks when changing passwords or email addresses" in the redesigned flow.`),
+    ['attribution-uncited']);
+  t('attribution: the possessive-stripped party name carries no apostrophe',
+    checkAttribution(mk('t', `per Kotaku's testing, "there are no authentication checks when changing passwords or email addresses" in the redesigned flow.`)).map((x) => x.claim),
+    ['Kotaku']);
+  t('attribution: an origin one hop up a cited carrier chain is dropped (the Times→Verge shape)',
+    att(`The Times reported a second affair — this one, per The Verge's summary of the NYT piece, "with an executive who reported to him at the time of the events described" (https://www.theverge.com/tech/1031652/jensen-huang-rumor).`),
+    ['attribution-satisfied']);
+  t('attribution: the same chain with the carrier uncited advises on both parties',
+    att(`The Times reported a second affair — this one, per The Verge's summary of the NYT piece, "with an executive who reported to him at the time of the events described".`),
+    ['attribution-uncited', 'attribution-uncited']);
+
   for (const c of cases) console.log(`  ${c.pass ? '✓' : '✗'} ${c.name}${c.pass ? '' : ` — got ${JSON.stringify(c.got)}, want ${JSON.stringify(c.want)}`}`);
   const ok = cases.filter((c) => c.pass).length;
   console.log(`selftest ${ok}/${cases.length}`);
@@ -6449,6 +6630,8 @@ for (const { path: p, items } of parsed) {
   if (CHECKS.has('bundle')) for (const it of items) findings.push(...checkBundle(it));
   // a quotation is a claim about bytes — the page text is already cached by the count check
   if (!NO_NET && CHECKS.has('quotation')) for (const it of items) findings.push(...await checkQuote(it, nvd, cna));
+  // an attribution is pure sentence reading — no network, runs under --no-net like idrange
+  if (CHECKS.has('attribution')) for (const it of items) findings.push(...checkAttribution(it));
   /* A paper's submission instant is one unmetered call for the WHOLE batch (a comma-separated
    * id_list), so the arm is per-file rather than per-item. */
   if (!NO_NET && CHECKS.has('paper')) {
@@ -6491,7 +6674,7 @@ try {
   writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 1));
 } catch { /* cache is best-effort */ }
 
-const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'temporal-disclosed': 0, 'score-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'star-surge': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, 'stale-disclosed': 0, 'archived-disclosed': 0, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'date-local-shift': 2, 'date-mismatch': 2, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'field-present': 3, 'field-present-empty': 2, 'field-empty-contradicted': 2, 'field-empty-since-moved': 1, 'field-absent-not-empty': 1, 'field-dated': 0, 'field-unknown-name': 0, 'field-unreadable': 0, 'span-empty': 2, 'cve-range-span-mismatch': 2, 'cve-range-disclosed': 0, 'ok-range': 0, 'range-ambiguous': 0, 'range-cross-year': 0, 'range-inverted': 2, 'span-inverted': 3, 'span-unverifiable': 0, 'ok-span': 0, 'range-absent-but-served': 3, 'range-only-in-cna': 1, 'range-absent-confirmed': 0, 'range-absent-products-only': 0, 'ghsa-absent-confirmed': 0, 'ghsa-range-served': 3, 'ghsa-not-in-db': 0, 'unreadable-subject': 0, 'advisory-subject-ambiguous': 0, 'repo-advisory-cells': 0, 'affected-count-ok': 0, 'affected-count-mismatch': 3, 'affected-package-ok': 0, 'affected-package-absent': 3, 'affected-ambiguous': 0, 'range-unread': 0, 'range-in-references': 1, 'boundary-named-no-artifact': 0, 'vector-product-mismatch': 1, 'product-mismatch-disclosed': 0, 'schema-absent': 0, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'ratio-row-count': 3, 'ok-ratio': 0, 'ok-delimited': 0, 'not-a-repo': 0, 'repo-absent-asserted': 0, 'ok-table-rows': 0, 'table-columns-unresolved': 0, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-paraphrase': 2, 'quote-short': 1, 'quote-not-read': 0, 'paper-date-imprecise': 1, 'paper-date-mismatch': 2, 'paper-date-revision': 1, 'paper-date-unread': 0, 'batch-count-ok': 0, 'batch-count-mismatch': 3, 'batch-subcount-ok': 0, 'batch-subcount-mismatch': 3, 'batch-unread': 0, 'path-in-repo': 0, 'path-absent': 2, 'path-repo-ambiguous': 0 };
+const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'temporal-disclosed': 0, 'score-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'star-surge': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, 'stale-disclosed': 0, 'archived-disclosed': 0, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'date-local-shift': 2, 'date-mismatch': 2, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'field-present': 3, 'field-present-empty': 2, 'field-empty-contradicted': 2, 'field-empty-since-moved': 1, 'field-absent-not-empty': 1, 'field-dated': 0, 'field-unknown-name': 0, 'field-unreadable': 0, 'span-empty': 2, 'cve-range-span-mismatch': 2, 'cve-range-disclosed': 0, 'ok-range': 0, 'range-ambiguous': 0, 'range-cross-year': 0, 'range-inverted': 2, 'span-inverted': 3, 'span-unverifiable': 0, 'ok-span': 0, 'range-absent-but-served': 3, 'range-only-in-cna': 1, 'range-absent-confirmed': 0, 'range-absent-products-only': 0, 'ghsa-absent-confirmed': 0, 'ghsa-range-served': 3, 'ghsa-not-in-db': 0, 'unreadable-subject': 0, 'advisory-subject-ambiguous': 0, 'repo-advisory-cells': 0, 'affected-count-ok': 0, 'affected-count-mismatch': 3, 'affected-package-ok': 0, 'affected-package-absent': 3, 'affected-ambiguous': 0, 'range-unread': 0, 'range-in-references': 1, 'boundary-named-no-artifact': 0, 'vector-product-mismatch': 1, 'product-mismatch-disclosed': 0, 'schema-absent': 0, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'ratio-row-count': 3, 'ok-ratio': 0, 'ok-delimited': 0, 'not-a-repo': 0, 'repo-absent-asserted': 0, 'ok-table-rows': 0, 'table-columns-unresolved': 0, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-paraphrase': 2, 'quote-short': 1, 'quote-not-read': 0, 'paper-date-imprecise': 1, 'paper-date-mismatch': 2, 'paper-date-revision': 1, 'paper-date-unread': 0, 'batch-count-ok': 0, 'batch-count-mismatch': 3, 'batch-subcount-ok': 0, 'batch-subcount-mismatch': 3, 'batch-unread': 0, 'path-in-repo': 0, 'path-absent': 2, 'path-repo-ambiguous': 0, 'attribution-satisfied': 0, 'attribution-uncited': 1 };
 const REAL = (f) => (SEVERITY[f.verdict] ?? 1) >= 2;
 
 /* `status_watch` rides the findings file so the act pass sees a backwards move without re-reading

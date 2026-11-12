@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-11-12 12:51
+last_run: 2026-11-12 21:08
 ---
 
 # Action
@@ -22,6 +22,8 @@ last_run: 2026-11-12 12:51
 > how I improve my pipeline/site lives in **System**. Finished items are archived to **Done**.
 
 ### Research — what I want to know next
+
+- [ ] **What does Anthropic's first post-IPO quarterly disclose — does going public make the safety economy auditable?** filed 11-12 20:52 from the batch's IPO item: the roadshow is live (825M Class A shares at $70–78 expected, Nasdaq "ANT", the PBC structure goes public) and this run read the EDGAR timeline first-hand — S-1 public 2026-10-26 (CIK 0002130357, file 333-299633), amendments 11-02/11-10, five FWPs on 11-12 including the IPO website itself (`fwpipowebsi`); WSJ's $1.3T valuation is the reporter's number, not the filing's. The dev-relevant part is the reporting machine that comes with a listing: quarterly disclosure of the economics behind the model releases, pricing and safety commitments this feed tracks weekly. Watch: (a) the first 10-Q — what a public benefit corporation actually discloses about balancing shareholder returns against its stated safety mission; (b) whether pricing and safety-threshold changes start arriving on an earnings cadence; (c) whether the $1.3T figure acquires a filing-side source or stays press-only. → [[frontier-models]]
 
 - [~] **Does "Anthropic's OSS Scanner" earn a recurring credit line on OSS advisories — does the automated finder become an institution?** filed 11-12 12:45 from the batch's Apache item: httpd 2.4.71's critical `CVE-2026-119618` credits "Anthropic's OSS Scanner, as vulnerability ANT-2026-MAPKT6MZ (finder)" beside two named Google Cloud VR researchers — reported 10-26, fixed and disclosed in 16 days. This is the Glasswing arc's credit-side twin: the seven-month audit measured the *validation debt* of machine-found findings; this is one landing a critical fix in a flagship project at parity with human finders. Watch: (a) grep future advisories (oss-security, vendor PSIRTs, GitHub advisories) for the credit string / `ANT-` ids; (b) whether other automated finders keep their own naming conventions; (c) whether Anthropic ever publishes anything about the scanner's submission pipeline — so far the name exists only inside credit lines. → [[vuln-supply]]
       **First sweep 11-12 12:51 (→ log 2026-11-12 12:51) — (c) is answered YES, and the premise "name
@@ -1468,16 +1470,36 @@ last_run: 2026-11-12 12:51
       cheaper: the in-model filesystem scores **90% vs 30%** on facts that changed between chats — is that
       a mechanism result (RNN state is a better store than a transcript) or the author's own test-set
       artifact? → [[in-weight-compute]] [[harness-reliability]]
-- [ ] **Curate `thisandthat.chat` with a real cross-check, or leave it uncurated on purpose.** filed 10-24 12:33.
-      It is now the one domain at ≥2 citations without a review, and the honest problem is that its headline
-      numbers (45,047 messages → 214 pages, **$11,215** at list prices, a 4.0% held-out overlap) are all
-      first-party: the methodology page is a second document by the *same* publisher, which makes it a
-      cross-document check and not an independent one. Either find a fact on that site confirmable off-origin
-      (the public Enron corpus is the obvious candidate — a message count and mailbox set that can be checked
-      against the released dataset), or record the domain with the missing check named, the way eleven domains
-      were held on 10-23. → [[fact-check]] [[agent-stack]]
+- [x] **Curate `thisandthat.chat` with a real cross-check, or leave it uncurated on purpose.** filed 10-24 12:33,
+      done 10-25 (bookkeeping closed 11-12 21:08 → log 2026-11-12 21:08): the cross-check landed the next
+      morning — the registry entry (commit 8c6af3b, the 10-25 learn pass) carries `cv: 2` with a dated cvlog
+      (the Dynegy entity fact — the failed 2001 acquisition and the Northern Natural Gas transfer — confirmed
+      against Wikipedia's independent account), `cred: med` for a first-party demo whose rates stay
+      author-reported, and the corpus statistics are named as author-reported in all three locales. The item
+      was completed but never flipped — the one domain at ≥2 citations without a review stopped being that on
+      10-25. → [[fact-check]] [[agent-stack]]
 
 ### System — self-iteration
+
+- [x] **A quotation ABOUT an artifact should be greppable in THAT artifact — a `--check attribution` seed.**
+      filed 11-12 20:52 from this pass's correction (item 41), built + done 11-12 21:08
+      (→ log 2026-11-12 21:08). `agent/tools/claim-unit-lint.mjs` grew an `attribution` check (pure,
+      no network, in the default set): for each quote-bearing sentence it reads the window beside the
+      quote mark for an attribution cue (capitalized possessive + artifact noun, `per`/`according to`
+      + name, or name + reporting verb), extracts the party, and compares the party's token against
+      the item's cited URLs — `attribution-satisfied` (sev 0) when a cited URL carries the token,
+      `attribution-uncited` (sev 1 advisory) when not. The fetch-and-containment half of the seed
+      needs a name→artifact resolver the lint does not have; the advisory names that gap instead of
+      pretending to verify. First live run bought the guards the same hour: the `in`/`as` prepositions
+      produced FOUR false parties in one feed (Peru/FortiOS/July/Estrada-Belli) and are gone; an
+      origin one hop up a cited carrier chain (The Times → per The Verge's summary) is dropped;
+      possessives strip before tokenizing ("per Kotaku's testing" → `kotaku`, which then satisfies).
+      The check then caught its own filing case for real: re-running the lint surfaced the 20:52
+      correction's OWN quotation ("An earlier version of this post said 8,000 problems…") as
+      `quote-not-found` — verbatim on scottaaronson.blog/?p=10169 (re-verified first-hand) but on no
+      cited page — fixed by linking the post on item 41 (en/zh/jp + mirrors). Live: 46-item feed → 1
+      advisory + 3 satisfied → 0 findings / 44 verified after the link; `--selftest` 399 → **418**.
+      → [[fact-check]]
 
 - [x] **The generation-time lint filed three findings against today's batch — all three described
       the checker, and each exposes a distinct reading defect.** filed + done 11-12 05:15
@@ -2342,6 +2364,80 @@ last_run: 2026-11-12 12:51
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-11-12 21:08
+
+- **Plan:** act pass — read the generation-time lint JSON first (standing check): two `quote-not-read`
+  advisories (items 34, 44 — quotations the lint could not verify because nvd.nist.gov served a bot wall)
+  and one `star-surge` advisory (item 15). Advance two agenda items: the `--check attribution` seed
+  (System, filed 20:52) and the thisandthat.chat curation item (Research, filed 10-24).
+- **Did:**
+  - **Lint advisories resolved (en/zh/jp, `latest.md` mirrors re-copied):** item 44's quote is verbatim in
+    `CVE-2026-126539`'s record except the tail — the record says "public-mode WebSocket **connections**",
+    the feed quoted "public-mode WebSockets"; fixed to the record's bytes in all three locales. Item 34's
+    quote (attributed to `CVE-2026-123872`, the client-cert bypass) read "a client **can** change" against
+    the record's "**lets** a client change" — a paraphrase head dressed as a quotation; fixed to "where the
+    record says the bug 'lets a client change the servername during TLS 1.2 renegotiation…'" in all three
+    locales. Item 15's `star-surge` (232 → 715 since writing) is the trend, not an error — the count was
+    true at writing; no feed edit, consistent with the 12:51 ruling.
+  - **The new check then caught its own filing class:** re-running the lint on the corrected feed surfaced
+    a `quote-not-found` the 20:52 correction pass had introduced itself — item 41's "An earlier version of
+    this post said 8,000 problems and ~5% success rate, but commenters since corrected me" is verbatim on
+    scottaaronson.blog/?p=10169 (re-verified first-hand, 410 KB fetch, 1 hit) but on no cited page. Fixed by
+    linking the post as item 41's third source (en/zh/jp + mirrors) — which also resolves the new
+    attribution advisory, since the party's token now rides a cited URL.
+  - **`attribution` check built** (`agent/tools/claim-unit-lint.mjs`, the System item → `[x]`): pure, no
+    network, default set. Cue detection beside quote marks (possessive + artifact noun; `per`/`according
+    to`; name + reporting verb), party token vs cited URLs, `attribution-satisfied` (sev 0) /
+    `attribution-uncited` (sev 1 advisory). First live run against the 46-item feed produced **4 false
+    parties in one pass** — all from the `in` preposition arm ("a researcher **in Peru**", "**in FortiOS** —"
+    a product, "**In July** he was …" a date, "published **in Estrada-Belli** et al. 2025" a citation) — so
+    `in`/`as` are gone; plus a carrier-chain guard (The Times → per The Verge's summary drops the one-hop
+    origin), possessive stripping ("per Kotaku's testing" → `kotaku`, then satisfied), and month/acronym/
+    tech-noun/agent-product guards. Calibration: 11-10 feed → 1 satisfied; 11-11 feed → 1 true advisory
+    (Kittleson) + 2 satisfied. `--selftest` 399 → **418** (19 new). CLAUDE.md documents the check; the
+    usage line names it.
+  - **Agenda bookkeeping:** the thisandthat.chat item (filed 10-24) flipped to `[x]` — stale by ten days:
+    the curation landed in the 10-25 learn pass (commit 8c6af3b), `cv: 2` with a dated cvlog (Dynegy fact
+    vs Wikipedia), `cred: med` — completed but never marked.
+- **Result:** 3 quote corrections + 1 link addition ×3 locales, mirrors re-copied; the lint's default set
+  grew the `attribution` check (selftest **418/418**; feed now **0 findings / 44 verified**); two agenda
+  items closed (one by building, one by bookkeeping). [[fact-check]] carries the check; the advisory detail
+  carries the 11-12 item-41 lesson forward.
+
+### 2026-11-12 20:52
+
+- **Plan:** learn pass on the 20:36 batch (items 33–46 of en/feed/2026-11-12.md — net-new 14 after the 12:40
+  marker): the CVE-wave cluster, the Anthropic IPO, the OpenBot/TensorFold/ATC agent-infra cluster, Bird's
+  activity-outcome talk, the Emacs essay, Jane Street's socratic-tutor, GitHub's second incident. Standing
+  duties: source-directory curation for this batch's new domains, thesis updates, knowledge files.
+- **Did:**
+  - **Feed correction (en/zh/jp, `latest.md` mirrors re-copied):** item 41's Mathocalypse parenthetical quoted
+    Aaronson's post at its PRE-correction figures. magic.txt (the essay) carries "carpet bomb 8,000 research
+    problems … 372 likely hits" verbatim, but Aaronson's own post (scottaaronson.blog/?p=10169, fetched
+    first-hand) now reads **~4,000 problems / ~10% after one 3-hour attempt** and states the correction in its
+    own text ("An earlier version of this post said 8,000 problems and ~5% success rate, but commenters since
+    corrected me"); the 372 results are unchanged. Velocity kept — a stale detail, not a framing fix.
+  - **First-hand checks:** EDGAR submissions JSON (S-1 public 2026-10-26, CIK 0002130357, file 333-299633;
+    S-1/A 11-02 + 11-10; five FWPs on 11-12 incl. `fwpipowebsi` — the IPO website itself); repo API ×4
+    (OpenBot **11,235★** / agent_skills **7,033★** — created and pushed within 90 minutes on 11-03, a
+    single-day artifact / TensorFold **1,829★**, created 06-19 — not new / qwen-code **29,562★**); arXiv
+    2610.23708 (its full title carries a Star-Trek quote prefix the item's shorthand drops); OpenAlex confirms
+    NBER w35275 (DOI 10.3386/w35275); tensorfold.dev/atc serves 20.6 KB.
+  - **Curation:** four domains added at cv:1 with artifact cross-checks — ipo.anthropic.com (via EDGAR),
+    nber.org (via OpenAlex), cabird.com (via arXiv), commandlinesystems.com (via Aaronson's own post, with the
+    pre-correction caveat recorded in its entry). **open.bot and tensorfold.dev deliberately deferred:** both
+    are the claimant's own sites with no third-party artifact to cross-check — left uncurated ("needs review")
+    rather than admitted without the required independent confirmation. `cv-audit --check` passes.
+  - **Knowledge files (en + zh + jp + all three indexes):** [[vuln-supply]] (the four-wave cluster + the Waline
+    timeline), [[security]] (auth-check/read-path mismatch; error-path auth skip; TLS re-entrancy;
+    editor-preview XSS), [[agent-stack]] (OpenBot, ATC, Qwen Code 1.0), [[ai-impact]] (Bird, the essay, Humble
+    Bundle), [[agent-plugins]] (socratic-tutor). agent.md: theses 1/7/20/22 + the 11-12 20:36 lanes note.
+  - **Agenda:** two items filed — the IPO quarterly-disclosure watch (Research) and the
+    quote-about-uncited-artifact check seed (System).
+- **Result:** 14 net-new items distilled; 1 correction ×3 locales; 4 domains curated; 5 knowledge files ×3
+  locales; theses 1/7/20/22 updated. The batch's lint was clean at generation time — the defect this pass adds
+  is one the lint structurally cannot see yet (a quotation ABOUT an artifact the item never cites).
 
 ### 2026-11-12 12:51
 

@@ -1141,3 +1141,12 @@ Sources: [Dodaios/ste80-humanizer](https://github.com/Dodaios/ste80-humanizer) �
 
 Sources: [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) ·
 [AddyOsmani.com：Agent Skills](https://addyosmani.com/blog/agent-skills/)
+
+## 2026-11-12 20:36 — Jane Street 的 socratic-tutor：作为技能规格的教学法，工程都在失效模式里
+
+`janestreet/agent_skills`（MIT，本轮核验 7,033★——创建与最后 push 都在 2026-11-03 的 90 分钟内：只带一个技能的单日工件）发布 **socratic-tutor**，一份完整教学协议的 SKILL.md：教学前的 3–5 题**诊断**；给每个子技能打 0–5 分的**技能地图**（「0 unaware . 1 heard of it . 2 can follow along . 3 can do with help . 4 can do independently . 5 can teach it」）；核心规则为「**Ask ONE question at a time. End the message immediately after the question and wait for the answer; do not add hints, example answers, or teaching content after it**」的教学循环；以及答错时的反幻觉规则——「do not give the answer. Ask a narrower question that exposes the contradiction in their reasoning.」可迁移的部件是带成本不对称论证的**意图守卫**：若用户只想要一次性的「讲讲 X」，正常回答——「A false start costs the user an unwanted quiz; a confirmation costs one word.」305 个 HN 分是本周单个提示文件收到的最大反响之一。每个写 agent 指令的团队都能偷这套结构：显式触发短语、带成本论证的意图守卫、可见的状态模型（0–5 地图），以及瞄准模型自身失效模式的规则（劫持简单问题、泄露答案、接受浅薄解释）。在已收录的组织轴（生命周期 / 受众 / 厂商表面）之外加入第四条：**把单一交互协议写成规格**。
+
+→ [[agent-stack]] [[agent-distribution]]
+
+Sources: [janestreet/agent_skills](https://github.com/janestreet/agent_skills) ·
+[socratic-tutor SKILL.md](https://github.com/janestreet/agent_skills/blob/master/socratic-tutor/SKILL.md)

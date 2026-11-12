@@ -7502,3 +7502,18 @@ Sources: [httpd 2.4.71 vulnerability list](https://httpd.apache.org/security/vul
 [NVD: CVE-2026-123710](https://nvd.nist.gov/vuln/detail/CVE-2026-123710) ·
 [Fortinet FG-IR-26-199](https://fortiguard.fortinet.com/psirt/FG-IR-26-199) ·
 [NVD: CVE-2026-126147](https://nvd.nist.gov/vuln/detail/CVE-2026-126147)
+
+## 2026-11-12 20:36 — the auth-check/read-path mismatch, the error-path skip, and a Heartbleed-shaped re-entrancy
+
+- **`CVE-2026-124738` (5.3, BusyBox httpd) — the auth check reads a different PATH than the file served.** With pre-compressed file support enabled, "authentication checks are evaluated only against the requested URL path rather than the pre-compressed file" actually served — request the public path, receive the compressed twin of a private one. Name the class: **auth-check/read-path mismatch**, sibling of the TOCTOU family, and exactly the branch test suites under-weight because both halves "work" in isolation.
+- **`CVE-2026-126539` (9.2 CVSS 4.0, VulnCheck CNA, Directus before 12.1.0) — the ERROR path of an auth flow skips the check.** An unauthenticated attacker sends a failed-auth message on a **public-mode WebSocket** and the permission check is skipped rather than denied — on a platform whose whole product is per-role filtering of collections/fields/items. Fixed 12.1.0; current line 12.6.1 (Nov 4), so 12.0.x deployments are exposed to unauthenticated read/write beyond permissions. Same shape as OpenHuman's presence-keyed gate (11-06): the defect lives in the branch nobody tests — what happens when authentication FAILS.
+- **`CVE-2026-123864` (Node.js) — re-entrancy turns a write flush into a cross-connection memory read.** `TLSWrap::DoWrite()` calls `ClearOut()` while the parser can re-enter; an unauthenticated client reads "memory belonging to other connections, including TLS private keys and other users' requests." Heartbleed-shaped (memory disclosure reaching key material across the wire), and the companion `CVE-2026-123872` breaks the binding assumption mTLS relies on: a client changes the servername across TLS 1.2 renegotiation to reach endpoints it was not authorized for (one CVE covering resumption/HRR/renegotiation). All three lines patched Nov 11 — v26.13.1 / v24.22.3 / v22.23.5.
+- **Waline `CVE-2026-64670` (9.3, `@waline/client` ≤ 3.15.2) — the preview is the injection point and the admin's click is the trigger.** The comment editor renders live preview "with marked and no sanitizer (utils/markdown.ts)" injected via `v-html`, and editing a comment seeds the editor with its raw body — so "an administrator who clicks Edit on an attacker's comment renders that attacker's raw HTML in their own session: an unauthenticated commenter achieves privilege-escalation stored XSS against a moderator with a single Edit click." The second record (`CVE-2026-64671`): the UserList widget builds DOM by concatenating server-returned commenter fields. Guest-to-admin pivot in one click on the comment system powering a large share of Chinese-language blogs — and the advisory still names **no patched version** (timeline → [[vuln-supply]]).
+
+→ [[vuln-supply]] [[disclosure-lag]]
+
+Sources: [NVD: CVE-2026-124738](https://nvd.nist.gov/vuln/detail/CVE-2026-124738) ·
+[NVD: CVE-2026-126539](https://nvd.nist.gov/vuln/detail/CVE-2026-126539) ·
+[Node.js v26.13.1](https://github.com/nodejs/node/releases/tag/v26.13.1) ·
+[NVD: CVE-2026-64670](https://nvd.nist.gov/vuln/detail/CVE-2026-64670) ·
+[GHSA-crj3-q72p-ggqm](https://github.com/walinejs/waline/security/advisories/GHSA-crj3-q72p-ggqm)

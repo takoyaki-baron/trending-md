@@ -1371,3 +1371,21 @@ Sources: [Anthropic CVD 仪表盘](https://red.anthropic.com/2026/cvd/) ·
 [ledger.json](https://red.anthropic.com/2026/cvd/data/ledger.json) ·
 [cveawg：CVE-2026-41401](https://cveawg.mitre.org/api/cve/CVE-2026-41401) ·
 [OSV：GHSA-f26g-jm89-4g65](https://api.osv.dev/v1/vulns/GHSA-f26g-jm89-4g65)
+
+## 2026-11-12 20:36 — 一天之内四个 CNA 打分的波；时间线离群值从九天跨到四个月
+
+- **Node.js，三条发布线共 16 个 CVE（v26.13.1 / v24.22.3 / v22.23.5，11-11 16:44Z 发布）：**最重的是 `CVE-2026-123864`——`TLSWrap::DoWrite()` 重入缺陷，让未认证客户端「读取属于其他连接的内存，包括 TLS 私钥与其他用户的请求」（Heartbleed 形）；另有 `CVE-2026-123872`（客户端证书认证绕过：经 TLS 1.2 重协商/恢复/HelloRetryRequest 改 servername）、`CVE-2026-126051`（SNICallback 延迟回调 use-after-destroy，远程 DoS）、`CVE-2026-123863`（HTTP/2 拆链可达断言，远程中止）。7 High / 6 Medium / 3 Low，多数归功 Matteo Collina 与 Tim Perry。核查过的 NVD 记录全部仍是 `Received`、**无 CVSS——「High」是 Node 自己的标签**；分析落地前按 release notes 分诊。
+- **hMailServer，一次落 18 条记录（11-11 09:17Z 发布），每个分数都是 GitLab 自己的 CNA（`cve@gitlab.com`）给的，全部 `Received`。**头条 `CVE-2026-126617`（**8.8**）：6.0.0-B1–6.2.18 在 MySQL/MariaDB 或 PostgreSQL 上数据库层 SQL 注入，因为「这两种引擎上参数未绑定」——值经逐参数字符串替换拼进语句文本，含后续参数名的值会提前终结字面量并注入 SQL。默认配置路径只需一个邮箱：**远程未认证发送者**在 greylisting 或消息索引开启时，「经由服务器发给信封发送者的消息——如投递失败通知或自动回复」触及同一语句。**修复 11-02 已发布（v6.2.19 / v6.3.8）——比记录早九天。**盘点陷阱：活跃仓库在 **GitLab**；GitHub 镜像的最新 release（5.7.2-b3144）是遗留线，按 GitHub 键控的扫描器会误判项目年龄。
+- **BusyBox，7 条记录（11-11 10:16–12:19Z），全部 Red Hat CNA（`secalert@redhat.com`），全部 `Awaiting Analysis`。**`CVE-2026-124741`（**7.6**）：udhcpc6 拷贝服务器发来的 DHCPv6 选项前不做大小校验——局域网内的恶意 DHCP 服务器，打遍所有用 BusyBox 租地址的嵌入式设备。`CVE-2026-124739`（**7.5**）：httpd 子目录配置，过长的索引页名 → 栈溢出。`CVE-2026-124737`（**7.5**）：TFTP 客户端请求小块尺寸时回退到默认块尺寸、写进过小的缓冲区。另有 udhcpc6 use-after-free（4.3）与两个伪造 FAT/HFS+ 卷识别缺陷（5.5）。
+- **Waline 是本月的时线离群值：仓库公告 `GHSA-crj3-q72p-ggqm` 发布于 **7 月 2 日**（Critical，维护者自评），CVE 记录 `CVE-2026-64670`（**9.3** CVSS 3.1）/ `CVE-2026-64671` **11-11** 才发布——四个月里按 CVE 键控的分诊一无所知。**公告至今仍写「**Patched versions: None**」；npm `latest` 是 3.16.2（11-03），高于受影响区间 `@waline/client ≤ 3.15.2`，但公告或 release notes 里没有任何内容声称哪个版本修复——在项目自己开口前，把 3.16.x 视为**未确认**。机制（编辑器预览 XSS 打管理员）→ [[security]]；状态是 fix-in-artifact-no-identifier 加四个月的 fix-predates-record。
+- **波的算术持续成立：**五个项目、两天 48+ 条记录、每个分数都是 CNA 自己的、NVD 分析处处缺席——assigner、标签（「High」是 Node 的、「critical」是 Apache 的）与修复时间线才是信息量所在，分数最不含量（论题 20 的常驻模式，两天内第四个厂商）。
+
+→ [[security]] [[disclosure-lag]] [[cvss-stopping-points]]
+
+Sources: [Node.js v26.13.1](https://github.com/nodejs/node/releases/tag/v26.13.1) ·
+[NVD: CVE-2026-123864](https://nvd.nist.gov/vuln/detail/CVE-2026-123864) ·
+[NVD: CVE-2026-126617](https://nvd.nist.gov/vuln/detail/CVE-2026-126617) ·
+[hMailServer v6.3.8（GitLab）](https://gitlab.com/hmailserver/hmailserver/-/releases/v6.3.8) ·
+[NVD: CVE-2026-124741](https://nvd.nist.gov/vuln/detail/CVE-2026-124741) ·
+[NVD: CVE-2026-64670](https://nvd.nist.gov/vuln/detail/CVE-2026-64670) ·
+[GHSA-crj3-q72p-ggqm](https://github.com/walinejs/waline/security/advisories/GHSA-crj3-q72p-ggqm)

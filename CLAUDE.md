@@ -1448,6 +1448,33 @@ underlying pages — this produced a two-layer false signal in a single item.
    only demote a verdict to `unread`, never invent a finding. `PAGE_CACHE_V` **6 → 7** (a v6 entry
    holds the 739-byte shell as its "read"); live calibration: 3 findings → **0 findings / 26
    verified**, `--selftest` 390 → **399**.
+   **A quotation ABOUT a party is a claim about THAT party's bytes — the `attribution` check is
+   the quotation arm's blind spot made a check** (added 2026-11-12 21:08, the item-41 correction
+   turned into a seed). The essay's "carpet bomb 8,000 research problems" passed `quotation`
+   because the CITED page (magic.txt) contains it verbatim — but the sentence is ABOUT Aaronson's
+   post, which the item never cites, and the post had since corrected the figures; a second-hand
+   copy is exactly where a correction has already diverged, and the quotation arm's page set
+   structurally cannot reach the party it never cites. The check reads each quote-bearing
+   sentence's window beside the quote mark (±160 chars before, ±91 after) for an attribution cue —
+   a capitalized possessive + artifact noun ("Aaronson's dump post, writes …"), or `per`/
+   `according to` + a name, or a capitalized name + reporting verb — and compares the party's
+   token against the item's cited URLs. `attribution-satisfied` (sev 0) when a cited URL carries
+   the token (the quotation arm's page set reaches the party's artifact); `attribution-uncited`
+   (sev 1, advisory) when it does not — open the party's primary artifact or drop the quotation
+   marks. The fetch-and-containment half of the seed needs a name→artifact resolver the lint does
+   not have; the advisory names that gap rather than pretending to verify. Two guards the first
+   live run bought the same hour: **the `in`/`as` prepositions were FOUR false parties in one
+   feed** ("a researcher in Peru", "in FortiOS —" — a product beside the quote, "In July he was …"
+   — a date, "published in Estrada-Belli et al. 2025" — a citation), so only `per`/`according to`
+   remain, and **an origin one hop up a cited carrier chain is dropped** — "The Times reported …,
+   per The Verge's summary of the NYT piece" (item 21) names Times (origin), Verge (carrier, cited
+   → satisfied) and the subject; the carrier is where the bytes live, so a satisfied claim on a
+   span silences its uncited parties. Possessive suffixes are stripped from every arm
+   ("per Kotaku's testing" → token `kotaku`, which then satisfies on the cited kotaku.com URL),
+   and months, acronyms, sub-4-char tokens and a tech/agent-product stoplist are not parties.
+   Pure, no network, runs under `--no-net`; first live day: 46-item feed → 1 advisory (the filing
+   case itself) + 3 satisfied, two prior feeds → 1 advisory + 3 satisfied, `--selftest` 399 →
+   **418**.
    **The check's own blind spots are censused now, and one of them was costing 13% of the corpus**
    (added 2026-10-31 12:32, `--quotation-census` over **31** October feeds / **1,248** items). **(a)
    Odd lines were `unpaired` and skipped WHOLE — and they are not stray marks: they are

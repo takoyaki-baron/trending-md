@@ -200,3 +200,18 @@ Sources: [gemini_files — 仕組みのドキュメント](https://github.com/th
 
 Sources: [Evan X. Merz: AI usage generates a fragile codebase](https://evanxmerz.com/post/ai-usage-generates-a-fragile-codebase/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50438318)
+
+## 2026-11-12 20:36 — 活動-成果ギャップに最も権威ある著者が付く；個人ソフトウェアのエッセイは後に訂正された数字を引用；あるストアは剥ぎ取られた制御のまま出荷する
+
+- **Christian Bird の UC Irvine 講演（10-30、21 分 + スライド、「Why aren't we shipping faster now? AI, activity, and outcomes in software engineering」）**が「**The Activity-Outcome Gap: Why AI Does Not Solve Software Engineering**」（Cha, Badea, Baym, Bird, Butler, Murphy-Hill, Hadley；30 インタビュー；**投稿中**）を支え、講演ページは検証可能な証拠を汇编する：NBER **w35275**（Demirer, Musolff, Yang、「Writing Code vs. Shipping Code: Productivity Effects Across Generations of AI Coding Tools」——今回 OpenAlex で検証：DOI 10.3386/w35275）、arXiv 2610.23708（「What Has AI Let Developers Unlock?」——完全タイトルはスタートレック引用句を含み、略記では落ちる。今回 arXiv で確認）、2610.13668（ソフトウェアファクトリの lights-off ベンチマーク）、2607.00533（開発者が AI 自主性に線を引く場所）。主張：AI が動かすのは**活動**指標で、**成果**指標は遅れる。正直な限界：旗艦論文は未公開でインタビューも非公開——着地するまで、タイトルは「強い著者リストの付いた仮説」として扱う；NBER と arXiv のリンクが今日の検証可能な部分。これはレビュー容量衝突（テーゼ 22）とクォータ制度の証言（11-11）の測定フレーム：どちらも、出荷が動かないまま活動が上がることを描く。
+- **「Emacs in the Age of Magic」（commandlinesystems.com、249 HN ポイント）**——個人ソフトウェア論の最も引用に値する版：ある高校生が Claude で「over a coffee break」に **cooked.el**（「its full-blown, self-contained implementation of a terminal emulator, in Rust no less」）を出し、著者は「The only catch is you'll have no idea how it works. No one does.」で閉じる。事実確認メモ（今回フィードでその場修正、en/zh/jp）：エッセイの Mathocalypse の数字（「carpet bomb 8,000 research problems, resulting in 372 likely hits」）は **Aaronson のポストの訂正前の状態**を引用——彼のポストは現在 **約 4,000 問、1 回の 3 時間試行で約 10% 解決**と読み、訂正は彼自身のテキストにある：「An earlier version of this post said 8,000 problems and ~5% success rate, but commenters since corrected me」；372 件の結果は不変。scottaaronson.blog/?p=10169 に対して一次確認済み。この項目を越える教訓：**未引用アーティファクトについての引用は、lint が持つすべてのページ grep チェックを通過してしまう**——引用されたページ（エッセイ）は逐語的に含み、描写された当事者（Aaronson のポスト）は一度も開かれなかった。
+- **Humble Bundle のリデザインはアカウント制御を剥ぎ取ったまま出荷された**——2FA は「entirely missing under security settings」、パスワード変更に現在のパスワード不要（「If logged in you can simply enter a new password without having to know the current one」——Kotaku の実測）、メール変更は**新**アドレスだけを検証、そして見つけたのはリリースプロセスではなく Reddit の**ユーザー**だった。「vibe-coded リデザイン」の枠付けはまさに枠付け：リデザインが AI 生成だと示した者は誰もおらず、どう書かれたかにかかわらず退行こそが検証可能な部分。捉えていたであろうテスト：認証チェックは移行を生き延びるか？ユーザーへの暫定助言：2FA が戻るまで保存済み決済情報を削除。
+
+→ [[ai-impact]] [[dev-tools]] [[security]]
+
+Sources: [Christian Bird: Why aren't we shipping faster now?](https://cabird.com/talks/shipping-faster/) ·
+[NBER w35275](https://www.nber.org/papers/w35275) ·
+[Emacs in the Age of Magic](https://commandlinesystems.com/magic.txt) ·
+[Aaronson: Mathocalypse dump（自己訂正付き）](https://scottaaronson.blog/?p=10169) ·
+[Kotaku: Humble Bundle redesign](https://kotaku.com/humble-bundle-vibe-coded-ai-redesign-account-security-password-email-2000756085) ·
+[HN discussion](https://news.ycombinator.com/item?id=50463899)

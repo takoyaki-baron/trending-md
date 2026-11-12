@@ -189,3 +189,18 @@ Workspace 查询，且捕获是概率性的——四种观察到的结果，从�
 
 Sources: [Evan X. Merz: AI usage generates a fragile codebase](https://evanxmerz.com/post/ai-usage-generates-a-fragile-codebase/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50438318)
+
+## 2026-11-12 20:36 — 活动-产出差距拿到最具资历的作者；个人软件随笔引用了后来被更正的数字；一家商店带着被剥掉的控制上线
+
+- **Christian Bird 的 UC Irvine 演讲（10-30，21 分钟 + 幻灯，「Why aren't we shipping faster now? AI, activity, and outcomes in software engineering」）**锚定「**The Activity-Outcome Gap: Why AI Does Not Solve Software Engineering**」（Cha, Badea, Baym, Bird, Butler, Murphy-Hill, Hadley；30 次访谈；**投稿中**）——演讲页汇编了可核查的证据：NBER **w35275**（Demirer, Musolff, Yang，「Writing Code vs. Shipping Code: Productivity Effects Across Generations of AI Coding Tools」——本轮经 OpenAlex 核验：DOI 10.3386/w35275）、arXiv 2610.23708（「What Has AI Let Developers Unlock?」——完整标题带一段星舰迷因引语、简写中省去，本轮在 arXiv 核验）、2610.13668（软件工厂 lights-off 基准）、2607.00533（开发者在 AI 自主上划线的地方）。主张：AI 推高**活动**指标而**产出**指标滞后。诚实的限制：头条论文未发表、访谈未公开——在它落地前，标题是「带强作者名单的假设」；NBER 与 arXiv 链接是今天可核查的部分。这是评审容量对撞（论题 22）与配额制度叙述（11-11）的测量框架：两者都描述活动上升而交付未动。
+- **「Emacs in the Age of Magic」（commandlinesystems.com，249 HN 分）**——个人软件论最可引用的版本：一个高中生以 Claude「over a coffee break」交出 **cooked.el**（「its full-blown, self-contained implementation of a terminal emulator, in Rust no less」），作者收在「The only catch is you'll have no idea how it works. No one does.」事实核查注记（本轮已在 feed 原地更正，en/zh/jp）：随笔的 Mathocalypse 数字（「carpet bomb 8,000 research problems, resulting in 372 likely hits」）引用的是 **Aaronson 帖子更正前的状态**——其帖子现读作 **约 4,000 题、一次 3 小时尝试约 10% 求解**，更正写在帖内：「An earlier version of this post said 8,000 problems and ~5% success rate, but commenters since corrected me」；372 项结果不变。已对照 scottaaronson.blog/?p=10169 一手核验。越出本条目的教训：**关于未引用工件的引语能通过 lint 拥有的全部页面 grep 检查**——被引页面（随笔）逐字包含它；被描述的一方（Aaronson 的帖子）从未被打开。
+- **Humble Bundle 的改版带着被剥掉的账户控制上线**——2FA「entirely missing under security settings」，改密码不需要当前密码（「If logged in you can simply enter a new password without having to know the current one」——Kotaku 实测），改邮箱只验证**新**地址，而发现者是 Reddit 上的**用户**、不是发布流程。「vibe-coded 改版」的框法正是框法：没有人证明改版是 AI 写的，且无论怎么写的，安全回归都是可核查的部分。本可抓住它的测试：迁移之后认证检查还活着吗？给用户的临时建议：2FA 回来之前移除保存的支付信息。
+
+→ [[ai-impact]] [[dev-tools]] [[security]]
+
+Sources: [Christian Bird: Why aren't we shipping faster now?](https://cabird.com/talks/shipping-faster/) ·
+[NBER w35275](https://www.nber.org/papers/w35275) ·
+[Emacs in the Age of Magic](https://commandlinesystems.com/magic.txt) ·
+[Aaronson: Mathocalypse dump（自带更正）](https://scottaaronson.blog/?p=10169) ·
+[Kotaku: Humble Bundle redesign](https://kotaku.com/humble-bundle-vibe-coded-ai-redesign-account-security-password-email-2000756085) ·
+[HN discussion](https://news.ycombinator.com/item?id=50463899)

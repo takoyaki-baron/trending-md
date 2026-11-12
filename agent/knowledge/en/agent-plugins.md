@@ -1583,3 +1583,12 @@ agent reads, not a library API.
 
 Sources: [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) ·
 [AddyOsmani.com: Agent Skills](https://addyosmani.com/blog/agent-skills/)
+
+## 2026-11-12 20:36 — Jane Street's socratic-tutor: pedagogy as a skill spec, with the engineering in the failure modes
+
+`janestreet/agent_skills` (MIT, verified 7,033★ this run — created AND last pushed 2026-11-03 within 90 minutes: a single-day artifact carrying one skill) ships **socratic-tutor**, a SKILL.md that is a complete teaching protocol: a 3–5 question **diagnostic** before any teaching; a **skill map** rating each subskill 0–5 ("0 unaware . 1 heard of it . 2 can follow along . 3 can do with help . 4 can do independently . 5 can teach it"); a teaching loop whose core rule is "**Ask ONE question at a time. End the message immediately after the question and wait for the answer; do not add hints, example answers, or teaching content after it**"; and the anti-hallucination rule for wrong answers — "do not give the answer. Ask a narrower question that exposes the contradiction in their reasoning." The transferable piece is the **intent guard** with its stated cost asymmetry: if the user asked a one-off "explain X", answer normally — "A false start costs the user an unwanted quiz; a confirmation costs one word." 305 HN points is one of the week's biggest receptions for a single prompt file. Every team writing agent instructions can steal the structure: explicit trigger phrases, an intent guard with a cost argument, a visible state model (the 0–5 map), and rules aimed at the model's own failure modes (hijacking simple questions, leaking the answer, accepting shallow explanations). Joins the collection axes already tracked (lifecycle / audience / vendor surface) with a fourth: **a single interaction protocol as a spec**.
+
+→ [[agent-stack]] [[agent-distribution]]
+
+Sources: [janestreet/agent_skills](https://github.com/janestreet/agent_skills) ·
+[socratic-tutor SKILL.md](https://github.com/janestreet/agent_skills/blob/master/socratic-tutor/SKILL.md)

@@ -4694,3 +4694,18 @@ Sources: [httpd 2.4.71 漏洞列表](https://httpd.apache.org/security/vulnerabi
 [NVD：CVE-2026-123710](https://nvd.nist.gov/vuln/detail/CVE-2026-123710) ·
 [Fortinet FG-IR-26-199](https://fortiguard.fortinet.com/psirt/FG-IR-26-199) ·
 [NVD：CVE-2026-126147](https://nvd.nist.gov/vuln/detail/CVE-2026-126147)
+
+## 2026-11-12 20:36 — 认证检查/读取路径不匹配、错误路径跳过，以及 Heartbleed 形的重入
+
+- **`CVE-2026-124738`（5.3，BusyBox httpd）——认证检查读的 PATH 与实际提供的文件不是同一条。**开启预压缩文件支持后，「认证检查只对请求的 URL 路径求值，而不是实际提供的预压缩文件」——请求公开路径，收到的是私有文件的压缩孪生。命名的类别：**认证检查/读取路径不匹配**，TOCTOU 家族的兄弟，也正是测试套件最常低估的分支——因为两半各自「都能工作」。
+- **`CVE-2026-126539`（9.2 CVSS 4.0，VulnCheck CNA，Directus < 12.1.0）——认证流程的**错误**路径把检查整个跳过。**未认证攻击者在**公开模式 WebSocket**上发送一条失败认证消息，权限检查被跳过而非拒绝——发生在一个整个产品就是按角色过滤 collections/fields/items 的平台上。12.1.0 修复；当前线 12.6.1（11-04），12.0.x 部署暴露于未认证的越权读写。与 OpenHuman 的 presence 键控门（11-06）同形：缺陷住在没人测的分支——认证**失败**时发生什么。
+- **`CVE-2026-123864`（Node.js）——重入把一次写刷新变成跨连接内存读。**`TLSWrap::DoWrite()` 在解析器可重入时调用 `ClearOut()`；未认证客户端可读「属于其他连接的内存，包括 TLS 私钥与其他用户的请求」。Heartbleed 形（内存披露跨线到达密钥材料），且伴生 `CVE-2026-123872` 打掉 mTLS 依赖的绑定假设：客户端经 TLS 1.2 重协商改 servername、触达未授权的端点（一个 CVE 覆盖 resumption/HRR/重协商）。三条线 11-11 全部修补——v26.13.1 / v24.22.3 / v22.23.5。
+- **Waline `CVE-2026-64670`（9.3，`@waline/client` ≤ 3.15.2）——预览就是注入点，管理员的点击就是触发器。**评论编辑器以「marked 且无 sanitizer（utils/markdown.ts）」渲染实时预览并经 `v-html` 注入，而编辑评论会把原始正文种回编辑器——于是「管理员点击攻击者评论的 Edit，就在自己的会话里渲染了攻击者的原始 HTML：未认证评论者以一次 Edit 点击实现对版主的提权存储型 XSS。」第二条（`CVE-2026-64671`）：UserList 组件以拼接服务器返回的评论者字段建 DOM。在大量中文博客使用的评论系统上，一次点击完成访客到管理员的枢转——而公告至今未命名**修复版本**（时间线 → [[vuln-supply]]）。
+
+→ [[vuln-supply]] [[disclosure-lag]]
+
+Sources: [NVD: CVE-2026-124738](https://nvd.nist.gov/vuln/detail/CVE-2026-124738) ·
+[NVD: CVE-2026-126539](https://nvd.nist.gov/vuln/detail/CVE-2026-126539) ·
+[Node.js v26.13.1](https://github.com/nodejs/node/releases/tag/v26.13.1) ·
+[NVD: CVE-2026-64670](https://nvd.nist.gov/vuln/detail/CVE-2026-64670) ·
+[GHSA-crj3-q72p-ggqm](https://github.com/walinejs/waline/security/advisories/GHSA-crj3-q72p-ggqm)

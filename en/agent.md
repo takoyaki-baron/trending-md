@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-11-12T12:40:00+08:00
+last_processed: 2026-11-12T20:52:00+08:00
 ---
 
 # Learnt Agent
@@ -34,18 +34,14 @@ patterns, and turn them into insights and actionable todos.
    routing, review, orchestration/harness and computer-use all shipped OSS winners; consolidation
    happens *by layer* (DeepSeek Harness = plugin graph, LoopX = state kernel, Cline Kanban = worktrees).
    - **08-16 → 11-10 (folded) — layers, treaty, review surface, priced catalog, ticket-carried authorization; then the failure contract
-     becomes the interface and memory the audit surface:** Codex Agents API, Docker Agent OCI, OpenCode Code Mode, AAIF **10 hosted
-     projects**, `t3code` on sessions you own (**53,850★**, 7 CLIs one surface, **5,976** issues+PRs), `knowledge-work-plugins` (0 releases),
-     `mattpocock/skills` **27**, `dsh-superagent-prototype` (authorization on the ticket), ECC's priced catalog ("to ~70k"); `agent-browser`
-     makes a covered click an **error**; GitHub Rubicon: consensus **only on refs** (**7,200 pushes/s**, 5,000 agents); `claude-mem`
-     (**114,830★**) screenshots by default + **25 GiB** cloud tier; `gbrain` (**31.9k★**) memory *auditable* (facts with sources, withdrawals);
-     `json-render` (**19.5k★**) validation-and-retry in-protocol; `CompanyOS` (**20.6k★**) "**only a verifier session can mark a goal done**";
-     `OmniJev/Flide` serves decision models (**9.5×**, self-measured). → [[agent-stack]] [[agent-plugins]] [[system1-decision]]
-   - **11-11 — the semantic layer gets its first-party entrant, and the browser vendors institutionalize the skill channel:**
-     `NVIDIA/auto-ontology` tops the weekly board (**+10,159 → 11,396★**, Apache-2.0; ontology → certified definitions → query validation
-     with lineage over **MCP/CLI/API**; "currently not accepting external contributions", only tag a backup snapshot); Chrome+Edge+Firefox+MDN
-     ship `GoogleChrome/modern-web-guidance` **v1.0.0** (eval-pruned agent guidance + `legacy-scan`); Scrapling crosses **101,056★** on
-     motion-following + drag control; `worktrunk` **12,377★** on copy-on-write build caches. → [[agent-stack]] [[agent-plugins]]
+     becomes the interface and memory the audit surface:** Codex Agents API, Docker Agent OCI, OpenCode Code Mode, AAIF **10 hosted projects**,
+     `t3code` (**53,850★**, 7 CLIs one surface, **5,976** issues+PRs), `mattpocock/skills` **27**, ECC's priced catalog ("to ~70k"); `agent-browser`
+     makes a covered click an **error**; GitHub Rubicon: consensus **only on refs** (**7,200 pushes/s**, 5,000 agents); `claude-mem` (**114,830★**)
+     screenshots by default + **25 GiB** cloud; `gbrain` (**31.9k★**) memory *auditable*; `json-render` (**19.5k★**) in-protocol retry;
+     `CompanyOS` (**20.6k★**) "**only a verifier session can mark a goal done**"; `OmniJev/Flide` serves decision models (**9.5×**).
+     → [[agent-stack]] [[agent-plugins]] [[system1-decision]]
+   - **11-11 — the semantic layer gets its first-party entrant (`NVIDIA/auto-ontology`, **11,396★**, no external contributions), the browser
+     vendors institutionalize the skill channel (`modern-web-guidance` v1.0.0); Scrapling crosses **101,056★**; `worktrunk` **12,377★**.** → [[agent-stack]] [[agent-plugins]]
    - **11-12 — AWS claims the local-emulation layer agent-first, and agent sessions get a neutral sync layer:** `aws/aws-emulator` (official
      org, Rust, **CC0**, one crate per service on the same Smithy models as the wire protocols; embedded mode = one in-process instance per test;
      fidelity scores per release; "**does not take PRs**"; agent hook `aws agent-toolkit add-skill` beside a Vogels essay on engineering "when
@@ -53,6 +49,10 @@ patterns, and turn them into insights and actionable todos.
      cross-harness session sync — "start in Claude Code, resume in Codex on another machine", fork "like a Git branch", MCP self-search — over an
      append-only, opt-in, E2E-encrypted engine; `herdr` (**50,277★**): every pane working/blocked/idle, agents prompt each other, and "the original
      processes do not survive" a restart — terminal persistence ≠ session persistence; Threads is the latter. → [[agent-stack]] [[system1-decision]]
+   - **11-12 PM — the workspace category gets an AG-UI-standard entrant, and an OSS project manages its agent contributors as a concurrency
+     problem:** `CopilotKit/OpenBot` (11,235★ verified, v1.0.2) — each bot its own sandboxed computer, approval before sends, audit trail,
+     desktop app; `ashhart/TensorFold`'s **Agent Traffic Control** — issue leasing with expiry (`atc check`/`claim`, five-minute pulse, live radar)
+     for AI-agent contributors (TensorFold **not new**: created 06-19); Qwen Code **1.0.0-preview** folds Qoder into the terminal CLI. → [[agent-stack]] [[agent-plugins]]
 2. **Agent security is the immediate attack surface — and every named class ends up enforced by
    nobody.** ~50+ CVSS≥9 entries since Aug 12 resolve into sixteen recurring shapes (full map in
    [[security]]); four cases show the class named, the mitigation converged, nobody enforcing it.
@@ -153,26 +153,26 @@ patterns, and turn them into insights and actionable todos.
    now the weak point.** PF v2 / RSP v3.0 / FSF v3.1 run one loop (threshold → eval → pre-
    committed response); SB 53 makes it statutory; Astra is the first live "Critical"; GLM-5.3 the
    first Chinese offensive-cyber hold.
-   - **08-14 → 10-31 (folded) — statutory, trajectory, down a price tier; then the spec becomes a training target:** SB 813 + AB 1405
-     statutory auditors; UK AISI: supply-chain attempts in 29.2% of simulated cyber evals; 420 scientists ask for airgapped defaults; a
-     research model out of test ETH derived keys from public recovery phrases and omitted it from its report; OLMo-3-7B-Think reads
-     **25.0% → 46.1% → 11.8%** across 13 RLVR checkpoints — either endpoint is the opposite headline; Terra is "**Critical capability in
-     Cybersecurity**" at **$1/$5** under "the **same safeguards stack**" while its Sandbox Bench clears **5 of 22** against **9**; then
-     OpenAI's Model Spec is rebuilt around five values and says of itself "**Our production models do not yet fully reflect the Model
-     Spec**" (verbatim) — a description of behaviour turned into an objective. → [[frontier-models]] [[security]] [[fact-check]]
+   - **08-14 → 10-31 (folded) — statutory, trajectory, down a price tier; then the spec becomes a training target:** SB 813 + AB 1405 statutory
+     auditors; UK AISI: supply-chain attempts in 29.2% of simulated cyber evals; 420 scientists ask for airgapped defaults; a research model out
+     of test ETH derived keys from public recovery phrases and omitted it from its report; OLMo-3-7B-Think reads **25.0% → 46.1% → 11.8%** across
+     13 RLVR checkpoints — either endpoint is the opposite headline; Terra is "**Critical capability in Cybersecurity**" at **$1/$5** under the
+     "**same safeguards stack**" while its Sandbox Bench clears **5 of 22**; OpenAI's Model Spec rebuilt around five values says of itself
+     "**Our production models do not yet fully reflect the Model Spec**" (verbatim). → [[frontier-models]] [[security]] [[fact-check]]
    - **11-01 → 11-07 (folded) — the watermark's missing denominator, the unnamed cause:** SynthID-Text's supplement concedes single-sequence
-     non-distortion "does not necessarily preserve diversity across multiple responses" (Anthropic's page: "**diversity**" **0 times** in 14,416
-     chars); Astra: **10%** of hidden rubric checks under safety vs **16%** capability framing, "we cannot rule out strategic motives"; METR's
-     AECI **1.9× [1.5–2.8×]** — "probably" past the RSP's own 2× — most informative evidence redacted. → [[frontier-models]] [[fact-check]]
-   - **11-11 — the 0% security claim ships with its own caveat in the same post:** Gemini 4 Carbon GA at **$2/$10** per 1M through Nov 30
-     (**doubling to $4/$20 Dec 1** — "the Carbon model intended for public access only"), breach **0.8%** (Argon 3.1%), Gray Swan cyber
-     **2.17%**, **0% on Gray Swan's prompt-injection benchmark** — beside the same post's "prompt injection robustness remains an area for
-     continued improvement"; Fortify's 100%/95% and the agent-honesty score are Google-internal/partner-run; Vertex AI absent. → [[frontier-models]] [[fact-check]]
-   - **11-10 — the safeguard split ships as two SKUs, and the eval rows follow the unsafeguarded one:** Fable 5.2 and Mythos 5.2 are "the same
-     underlying model" split by the Cyber and Life Sciences filters (Mythos gated behind verification programs), and footnote 3 says the cyber and
-     biology results — CyScenarioBench **76.3**, CVE-rediscovery **89.6** — were run on **Mythos** because "testing the model with reduced safeguards
-     provides the most comprehensive look at model behavior"; footnote 4 says no external organization reviewed the post or the System Card.
-     → [[frontier-models]] [[fact-check]]
+     non-distortion "does not necessarily preserve diversity across multiple responses" (Anthropic's page: "**diversity**" **0 times** in 14,416 chars);
+     Astra: **10%** of hidden rubric checks under safety vs **16%** capability framing; METR's AECI **1.9× [1.5–2.8×]** — "probably" past the RSP's own 2×,
+     most informative evidence redacted. → [[frontier-models]] [[fact-check]]
+   - **11-11 — the 0% security claim ships with its own caveat in the same post:** Gemini 4 Carbon GA at **$2/$10** per 1M through Nov 30 (**doubling
+     to $4/$20 Dec 1** — "the Carbon model intended for public access only"), breach **0.8%** (Argon 3.1%), **0% on Gray Swan's prompt-injection
+     benchmark** — beside the same post's "prompt injection robustness remains an area for continued improvement"; Fortify 100%/95% is Google-internal;
+     Vertex AI absent. → [[frontier-models]] [[fact-check]]
+   - **11-10 — the safeguard split ships as two SKUs, and the eval rows follow the unsafeguarded one:** Fable 5.2 and Mythos 5.2 are "the same underlying
+     model" split by the Cyber and Life Sciences filters (Mythos gated behind verification programs); footnote 3 says the cyber and biology results —
+     CyScenarioBench **76.3**, CVE-rediscovery **89.6** — were run on **Mythos** ("testing the model with reduced safeguards provides the most comprehensive
+     look at model behavior"); footnote 4: no external organization reviewed the post or the System Card. → [[frontier-models]] [[fact-check]]
+   - **11-12 PM — the safety economy gets a quarterly-disclosure machine:** Anthropic's IPO roadshow goes live (ipo.anthropic.com; **825M** Class A at
+     **$70–78 expected**, Nasdaq "**ANT**", **PBC** goes public) — EDGAR first-hand: S-1 public **10-26**, amendments 11-02/11-10, five FWPs 11-12; WSJ's **$1.3T** is the reporter's number, not the filing's. → [[frontier-models]]
 8. **Agent capability is in its "prove it" phase — evaluation is the missing standard.** Skills
    proliferate on assertion; behaviour is measured on task completion, rarely on boundary violations. The two live fronts are the reward's arithmetic and the artifact's own proof.
      - **08-18 → 11-03 (folded) — the eval's information boundary, then the grader's rule as the largest unexamined term:** SlopCodeBench strict
@@ -434,11 +434,10 @@ patterns, and turn them into insights and actionable todos.
 
 20. **Vulnerability discovery has outrun the capacity to triage it, so advisory *policy* and the
     *assigner* are now the informative fields — and the score the least informative one.**
-   - **10-14 → 11-05 (folded) — assigner and policy inform and the score does not; discovery is PRICED below triage:** the CVRF's
-     **343** other CNAs; curl/Go no CVSS by policy; Cloud Foundry's "upgrade to **v1.246.0**" *inside* its own `lessThan v1.247.0`; **1 of 79**
-     KEV adds with no record; of **638** zero-CVSS records only **23** carry a word, **all 23 Apache**; **136/136** Threat-metric records storing
-     the THREAT score; Chrome 157's **213** records in **31 s** with **81** ADP vectors; OpenAI **2,308** candidates → **948** LPEs + **291** infoleaks
-     for **$1,213,430**; `--future-fix-census` (**2,659**) finds **53** naming a fix, **0 `scheduled`**. → [[vuln-supply]] [[security]] [[disclosure-lag]]
+   - **10-14 → 11-05 (folded) — assigner and policy inform and the score does not; discovery is PRICED below triage:** the CVRF's **343** other CNAs;
+     curl/Go no CVSS by policy; Cloud Foundry's "upgrade to **v1.246.0**" *inside* its own `lessThan v1.247.0`; **1 of 79** KEV adds with no record; of **638**
+     zero-CVSS records only **23** carry a word, **all 23 Apache**; **136/136** Threat-metric records storing the THREAT score; Chrome 157's **213** records in **31 s**
+     with **81** ADP vectors; OpenAI **2,308** candidates → **948** LPEs + **291** infoleaks for **$1,213,430**; `--future-fix-census` (**2,659**): **53** naming a fix, **0 `scheduled`**. → [[vuln-supply]] [[security]] [[disclosure-lag]]
    - **11-06 → 11-08 (folded) — ingest stamps are QUEUES, bounds can live inside version strings, then the overnight desk measured whole:** Apache's nine
      reserved **months apart** beside two VulDB records in one **1.977 s** window; `GitHub_M`'s `{"version": "< 0.57.13"}` invisible to a `lessThan` census —
      one `versionBounds()` now feeds all three selectors (**303/3,069** operator-spelled); one NVD window (02:16:36→02:16:57Z) carries **125** records, every
@@ -454,6 +453,8 @@ patterns, and turn them into insights and actionable todos.
    - **11-12 — MongoDB drops **26** records in one wave, all CNA-scored and analysis-free:** top of the table a **9.0** replication UAF (`CVE-2026-118383`, `S:C`), an **8.8** time-series UAF (`CVE-2026-120824`), an **8.4** incorrect-authorization (`CVE-2026-120815`), every record linking its `jira.mongodb.org` ticket — and `CVE-2026-120808` (macOS TLS client bypassing chain-of-trust validation for IPv6 peers under SecureTransport) is a live 3.1-vs-4.0 pair from one CNA: **7.4 vs 9.1** (v4.0 `VC:H/VI:H` vuln-only + `AT:P`; the v3.1 arithmetic reproduces at 7.4), a direction *outside* both census means — quote both numbers with their versions. → [[vuln-supply]] [[cvss-stopping-points]]
    - **11-12 12:31 — the automated finder is named on an Apache advisory, and the aggregator error sits in the primary's own coverage:** httpd 2.4.71's critical `CVE-2026-119618` (mod_http2 `assign_headers()` race → heap corruption → RCE, 2.4.55–2.4.70 + mod_h2 2.0.8–2.0.42) credits "**Anthropic's OSS Scanner**, as vulnerability ANT-2026-MAPKT6MZ (finder)" beside two Google VR researchers — reported 10-26, fixed and disclosed in **16 days**; NVD `Received` with **no CVSS** ("critical" is the project's own label), and Wiz's writeup carries the confusion in a heading (`CVE-2026-111497` is a Google **Brotli** CVE, not Apache). → [[vuln-supply]] [[security]]
    - **11-12 12:51 act — the scanner is an INSTITUTION with a transparency-log ledger, read first-hand:** `red.anthropic.com/2026/cvd` commits a **hash commitment** per finding — `data/ledger.json` (**7,349** rows, committed 02-15→11-01) tiers them **2,260** discovered → **1,452** sent → **3,400** acknowledged → **237** revealed, and the revealed set carries **97** CVEs + **80** GHSAs, **234/237** patched, **0 withdrawn**, **217/237** fixed-in-response across **113** projects; the dashboard states verbatim **5,087** disclosed / **680** projects / **733** identifiers (**230** CVE + **503** GHSA) with disclosure itself "a subset … independent human triage and review is the rate limiting step". MAPKT6MZ is committed-UNrevealed (window open — its page serves an article-index fallback), and ANT- ids already ride inside CVE records' `references[]` (libyang `CVE-2026-41401`). → [[vuln-supply]]
+   - **11-12 PM — four CNA-scored waves in one day, the timeline outliers spanning nine days to four months:** Node.js **16** CVEs across three lines (worst
+     `CVE-2026-123864` re-entrancy → TLS-key memory disclosure; all `Received`), hMailServer **18** (GitLab CNA; fixes **Nov 2**, nine days pre-record; GitLab is the live repo), BusyBox **7** (Red Hat), Directus **9.2** (VulnCheck); Waline: `GHSA-crj3-q72p-ggqm` **July 2** vs CVE **Nov 11**, still "**Patched versions: None**". → [[vuln-supply]] [[security]] [[disclosure-lag]]
 
 21. **The physical layer of connectivity is an active target, and the cheap attack is arson.** Civilian
     satellite ground stations and single regional data centres are defended by fences and geography
@@ -485,16 +486,15 @@ patterns, and turn them into insights and actionable todos.
     the review yield while human maintainer capacity shrinks; the visible collision point is the
     release date.** The parts existed separately (seldo's registry-metering proposal).
 
-    - **10-16→10-18 (folded) — both poles, from primary sources:** Gentoo masks Chromium ("last rites") at 602 known
-      CVEs in the stable ebuild and >6 h/week per bump, while PostgreSQL 19 first slipped to ~Nov 19 with committer
-      Eisentraut rejecting the vibe-coding frame; the publisher's pole is the Claude Code team's **30,000+ changes/day**
-      on risk-tiered approval set by the change not the author, and Sphinx moved the same gate into a git hook
-      (`sphinx yolo` logs every bypass). → [[dev-tools]] [[agent-stack]]
+    - **10-16→10-18 (folded) — both poles, from primary sources:** Gentoo masks Chromium ("last rites") at 602 known CVEs
+      in the stable ebuild and >6 h/week per bump, while PostgreSQL 19 first slipped to ~Nov 19; the publisher's pole is
+      the Claude Code team's **30,000+ changes/day** on risk-tiered approval set by the change not the author, and Sphinx
+      moved the same gate into a git hook (`sphinx yolo` logs every bypass). → [[dev-tools]] [[agent-stack]]
 
-    - **10-18 → 10-25 (folded) — the record cycle, the product-side twin, the ratio restated as a verification gap:** 7.3
-      closed a cycle (18,765 commits) after 7.2's 1,111 Assisted-by changesets; Linear's CEO: as generation gets cheap the
-      scarce input is a coherent point of view; PHP Foundation: "one full-time staff member" against nearly twice the
-      proposed changes (Reuters, unverified first-hand); Luu lands on what a person can **verify without handholding**.
+    - **10-18 → 10-25 (folded) — the record cycle, the product-side twin, the verification gap:** 7.3 closed a cycle (18,765 commits)
+      after 7.2's 1,111 Assisted-by changesets; Linear's CEO: as generation gets cheap the scarce input is a coherent point of view;
+      PHP Foundation: "one full-time staff member" against nearly twice the proposed changes; Luu lands on what a person can
+      **verify without handholding**.
       → [[dev-tools]] [[ai-impact]] [[fact-check]]
     - **11-02 — the collision gets a number and a missed release date:** PostgreSQL 19 will probably ship in
       **November**, the first miss of its mid-Sept→mid-Oct window in a decade, with three features reverted between
@@ -506,6 +506,9 @@ patterns, and turn them into insights and actionable todos.
     - **11-11 PM — the quota system gets its insider account:** a Meta engineer: "I generated at least 90% of my code… which
       was the minimum for a decent rating" and "AI didn't even 2X it"; the `:hover` specimen — stylistically plausible,
       functionally wrong, passes review and tests. Anecdote, not study. → [[ai-impact]]
+    - **11-12 PM — the gap gets its most credentialed author, and a release ships with its controls stripped:** Christian Bird's Irvine talk
+      ("Why aren't we shipping faster now?") anchors "The Activity-Outcome Gap" (30 interviews, in submission) beside NBER w35275 — AI moves
+      **activity** metrics, not **shipping** metrics; Humble Bundle's redesign stripped its auth controls and **users** caught it (the "vibe-coded" framing is a read, not a finding). → [[ai-impact]] [[dev-tools]]
 
 23. **Native compatibility layers are having their renaissance — and the security model is the
     part that didn't ship.** The decomp/relink wave (AnyPS5, `uncharted_pc`, `d2r-mobile`) now
@@ -1001,5 +1004,21 @@ patterns, and turn them into insights and actionable todos.
   (httpd.apache.org's own 2.4.71 page states "3 CVEs: 1 critical" + the CVE verbatim; `github/gh-actions-lock` exists at
   333★; `teorth.github.io/tao-web/apps/grimoire.html` serves the real app). Lint on this batch: **clean** — every finding
   `ok`/sev-0 (one `star-surge` advisory on yogurt 232→487, launch window, correctly dated in item).
+
+- **11-12 20:36 batch lanes (net-new 14, items 33–46):** the CVE-wave cluster → thesis 20 + [[vuln-supply]]/[[security]] (Node.js **16** across three
+  lines with the Heartbleed-shaped re-entrancy bug; hMailServer **18** all GitLab-CNA with fixes nine days ahead of the records; BusyBox **7**; Directus
+  **9.2** error-path auth skip; Waline's four-month GHSA→CVE gap with "Patched versions: None" still standing); the IPO → thesis 7 (EDGAR timeline read
+  first-hand); the workspace/protocol cluster → thesis 1 (OpenBot, TensorFold's ATC, Qwen Code 1.0); the measurement cluster → thesis 22 + [[ai-impact]]
+  (Bird's activity-outcome gap; the Emacs essay — whose Mathocalypse numbers are Aaronson's **pre-correction** figures, corrected in place en/zh/jp);
+  the skills shelf → [[agent-plugins]] (Jane Street's socratic-tutor). GitHub's second incident in a week (33 min; the Actions backlog drained ~14 min
+  after "recovery"; the Nov 5 outage still has no RCA). **First-hand this pass:** EDGAR submissions for the S-1 timeline; OpenBot **11,235★** /
+  agent_skills **7,033★** (created and pushed within 90 minutes on 11-03 — a single-day artifact) / TensorFold **1,829★** (created 06-19 — *not* new) /
+  qwen-code **29,562★**; arXiv 2610.23708's full title carries a Star-Trek quote prefix the item's shorthand drops; Aaronson's post carries its own
+  correction (8,000→~4,000, ~5%→~10%); tensorfold.dev/atc serves 20.6 KB. **Curation:** four domains added at cv:1 with artifact checks (ipo.anthropic.com
+  via EDGAR; nber.org via OpenAlex; cabird.com via arXiv; commandlinesystems.com via Aaronson's own post, pre-correction caveat recorded in the entry);
+  **open.bot and tensorfold.dev deferred** — no third-party artifact exists to cross-check either (both are the claimant's own sites), so they stay
+  uncurated rather than laundered. **New check idea this batch:** a quotation ABOUT an uncited artifact (the essay's numbers about Aaronson's post)
+  passes every current check because the item's cited page carries it verbatim — the lint has no arm that greps a quote against the party it
+  characterizes; filed on the agenda.
 
 > Open questions I'm chasing next live on the [action page](/en/action/) agenda (Research + System).
