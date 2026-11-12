@@ -1,8 +1,8 @@
 ---
 date: 2026-11-12
-updated: 2026-11-12T04:30:29Z
+updated: 2026-11-12T12:20:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 32
+sources: 46
 license: CC-BY-4.0
 ---
 
@@ -390,7 +390,7 @@ Huawei's CSL group published **MACaQ** ("Model Agnostic Calibrated Quantization"
 - **Source:** tylertms/Stela · 73 pts on HN · 5.1h ago (~07:05 UTC+8)
 - **Tags:** `reverse-engineering` `macos` `emulation`
 
-**tylertms/Stela** (Rust, GPL-2.0, v0.1.0, 687 stars) calls itself "A general purpose Apple Silicon layer for x86-64 PCs" — a **UEFI boot program** (no host OS underneath) with three parts: an ahead-of-time **and** just-in-time compiler translating arm64e → x86-64 ("covers more than 3,000 AArch64 instruction encodings, maps guest registers to host registers and caches translated code", runs on any x86-64-v2 CPU); a **Metal driver for NVIDIA GPUs** (GTX 16 / RTX 20 series and newer) that "compiles AIR, Metal's shader IR, directly to NIR, Mesa's IR"; and a model of Apple silicon hardware — currently the **Mac mini (M2), running macOS 27**. Requirements are modest: 8 GB RAM, an NVIDIA GPU, a 60 GB GPT partition; setup downloads macOS to a USB stick. The README's own verdict is honest: "Your current chances of it booting are low."
+**tylertms/Stela** (Rust, GPL-2.0, v0.1.0, 687 stars) calls itself "A general purpose Apple Silicon layer for x86-64 PCs" — a **UEFI boot program** (no host OS underneath) with three parts: an ahead-of-time **and** just-in-time compiler translating arm64e → x86-64 ("covers more than 3,000 AArch64 instruction encodings, maps guest registers to host registers and caches translated code", runs on any x86-64-v2 CPU); a **Metal driver for NVIDIA GPUs** (GTX 16 / RTX 20 series and newer) that "compiles AIR, Metal's shader IR, directly to NIR, Mesa's IR"; and a model of Apple silicon hardware — currently the **Mac mini (M2), running macOS 27**. Requirements are modest: 8 GB RAM, an NVIDIA GPU, a 60 GB GPT partition; setup downloads macOS to a USB stick. The README's own warning is honest: "Stela is still in development. It is slow and still may not boot on supported hardware."
 
 **Why it matters:** This is reverse-Rosetta: where Rosetta kept x86 apps alive on ARM Macs, Stela translates ARM to x86 to keep macOS itself alive on orphaned Intel-era PCs. It's a research-grade v0.1.0 with the project's own low-expectations warning — but the architecture (translator + GPU driver + platform model in one boot binary) is the artifact worth watching.
 
@@ -468,13 +468,213 @@ Terence Tao's Nov 11 post: back in July he was "experimenting with using modern 
 
 ---
 
+## 33. Anthropic files to go public — 825M shares, $70–78 expected, Nasdaq "ANT", and the roadshow is already running
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Anthropic · fresh on HN · 0.3h ago (~20:00 UTC+8)
+- **Tags:** `anthropic` `ipo` `industry`
+
+The company behind Claude has filed to become a public company: **ipo.anthropic.com** is live today — its meta description announces the filing and points to a Founders' letter — and the concrete terms are on Anthropic's own Nov 10 roadshow announcement: **825,000,000 Class A shares** proposed — 801,351,354 offered by Anthropic, 23,648,646 by existing stockholders — priced at an expected **$70.00–$78.00 per share**, listing on the **Nasdaq Global Select Market under "ANT"**, with a 30-day underwriter option for up to 123,750,000 more shares and Goldman Sachs/Morgan Stanley running the books. The filer is "Anthropic, **PBC**" — the public-benefit corporation structure goes public with the stock. The registration statement is filed with the SEC but not yet effective. The Wall Street Journal (Nov 10) reported a **$1.3T valuation target** — that number is the WSJ's report, not Anthropic's announcement; the company's own pages state no valuation.
+
+**Why it matters:** This is the largest AI-lab liquidity event of the cycle, and the dev-relevant part is the reporting machine that comes with it: quarterly disclosure of the economics behind the model releases, pricing and safety commitments this feed tracks weekly. Watch the PBC structure — how a public benefit corporation balances shareholder returns against its stated safety mission is now a live legal question, not a manifesto line.
+
+[`🔗 Anthropic: roadshow launch announcement`](https://www.anthropic.com/news/roadshow-launch) · [`🔗 ipo.anthropic.com (filing + founders' letter)`](https://ipo.anthropic.com/us/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50465829)
+
+---
+
+## 34. Node.js security releases across all three lines — 16 CVEs, including one that reads TLS private keys from other connections
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** nodejs/node releases · Nov 11 16:44Z (~00:44 UTC+8 Nov 12)
+- **Tags:** `nodejs` `cve` `tls`
+
+Node.js shipped coordinated security releases for **v26.13.1, v24.22.3 and v22.23.5** on Nov 11 — 16 CVEs total (7 High, 6 Medium, 3 Low), most of them the work of Matteo Collina and Tim Perry. The worst is **CVE-2026-123864**: "a re-entrancy flaw in Node.js HTTPS lets an unauthenticated client **read memory belonging to other connections, including TLS private keys and other users' requests**" — `TLSWrap::DoWrite()` calls `ClearOut()` while the parser can re-enter. Beside it: **CVE-2026-123872**, a client-certificate authentication bypass where "a client can change the servername during TLS 1.2 renegotiation to reach endpoints it was not authorized for" (one CVE covering resumption/HRR/renegotiation SNI changes); **CVE-2026-126051**, a deferred-callback use-after-destroy that "allows a remote, unauthenticated attacker to terminate the server process" on any TLS server using `SNICallback`; and **CVE-2026-123863**, a reachable assertion in HTTP/2 session teardown that "lets any unauthenticated client abort the server." The remaining Highs are an http2 buffer family (streams abandoned by nghttp2, buffers retained during pending writes). All the NVD records checked were still `Received` with no CVSS — "High" is Node's own label.
+
+**Why it matters:** Memory-disclosure-to-TLS-keys is Heartbleed-shaped, and the SNI/renegotiation bypass breaks the cert-binding assumption mTLS deployments rely on. If you run any Node server, this is a patch-today release on all supported lines — and the records will carry CVSS only after NVD analysis, so triage from the release notes, not from a scanner that hasn't ingested scores yet.
+
+[`🔗 Node.js v26.13.1 security release`](https://github.com/nodejs/node/releases/tag/v26.13.1) · [`🔗 NVD: CVE-2026-123864`](https://nvd.nist.gov/vuln/detail/CVE-2026-123864)
+
+---
+
+## 35. Humble Bundle's redesign ships without 2FA — password changes need no current password, email changes verify nothing
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Kotaku · 297+ pts on HN · 5.5h ago (~14:55 UTC+8)
+- **Tags:** `account-security` `2fa` `supply-chain`
+
+Humble Bundle — the charity game storefront owned by IGN — pushed a site redesign that users on Reddit found had **stripped core account security**: two-factor authentication is "entirely missing under security settings" (Kotaku confirmed on its own account: "the choice to add or remove the feature is entirely missing"), and per Kotaku's testing, "there are no authentication checks when changing passwords or email addresses" — "If logged in you can simply enter a new password without having to know the current one," and an email change sends verification **only to the new address**, nothing to the old one. Also gone: any stay-logged-in option, and any distinction between redeemed and unredeemed keys in purchase history. Kotaku reached out to Humble for comment; no statement at press time. The community's read — the design looks "reminiscent of other Claude interfaces," hence the "vibe-coded redesign" framing with 297+ HN points — is exactly that, a read: **no one has shown the redesign was AI-written**, and the security regressions are the checkable part regardless of how it was built.
+
+**Why it matters:** A storefront holding payment cards and game keys shipped a regression that breaks the three baseline account controls (2FA, password-change confirmation, old-email verification) at once — and the failure was caught by users, not by the release process. Whatever your redesign pipeline is, the test that would have caught this is whether auth checks survive the migration; and if your account is there, the interim advice is to remove saved payment info until 2FA returns.
+
+> "If logged in you can simply enter a new password without having to know the current one." — Kotaku, after testing
+
+[`🔗 Kotaku: Humble Bundle redesign forgets full account security`](https://kotaku.com/humble-bundle-vibe-coded-ai-redesign-account-security-password-email-2000756085) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50463899)
+
+---
+
+## 36. CopilotKit's OpenBot: AI coworkers that each get a computer of their own — 11.2k stars, v1.0.2, plan-then-act with an audit trail
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending daily · 11.2k stars · v1.0.2 Nov 11
+- **Tags:** `agents` `self-hosted` `ag-ui`
+
+**CopilotKit/OpenBot** — from the team behind the AG-UI protocol — hit #3 on the daily trending board at 11,217 stars the day after shipping **v1.0.2** (Nov 11). The pitch: "Open-source AI coworkers that each get a computer of their own: a browser, files and tools, with every action decided before it happens and recorded after. Bring any AG-UI agent." Concretely: a self-hostable workspace where each bot runs in its own sandboxed computer (browser, filesystem, tools), an approval flow before sends (the release notes' migration path still names `0088_approval_reviewer_guidance`), and a desktop app — notarized macOS DMGs for Apple Silicon/Intel, signed Windows installer, "no terminal or developer tools needed" — that bundles the frontend with a Docker-based backend, plus a Kubernetes deploy path for teams. "OpenBot for Business" adds company sign-in, tool permissions, approvals and audit.
+
+**Why it matters:** The agent-workspace category is crowding fast (CompanyOS, Paradev, herdr), and OpenBot's differentiator is the auditable plan-then-act loop plus the AG-UI standard for plugging in agents you already run — self-hosted enterprise deployment is the shape most of this feed's readers actually need. The "every action decided before it happens and recorded after" framing is the right one to hold vendors to: ask to see the recording.
+
+[`🔗 CopilotKit/OpenBot`](https://github.com/CopilotKit/OpenBot) · [`🔗 open.bot`](https://open.bot)
+
+---
+
+## 37. Jane Street ships a Socratic Tutor skill — a complete teaching protocol in one SKILL.md, guard rails included
+
+- **Velocity:** ▮▮ rising
+- **Source:** janestreet/agent_skills · 305+ pts on HN · 50h ago (Nov 10 ~18:00 UTC+8)
+- **Tags:** `agent-skills` `education` `prompting`
+
+Jane Street — the trading firm — published **janestreet/agent_skills** (MIT, created Nov 3, ~7k stars), and its single skill is a genuinely engineered artifact: **socratic-tutor**, a SKILL.md that turns an LLM into "a strict personal tutor" via a full protocol — a 3–5 question **diagnostic** before any teaching, a **skill map** rating each subskill 0–5 ("0 unaware . 1 heard of it . 2 can follow along . 3 can do with help . 4 can do independently . 5 can teach it"), a teaching loop where "**Ask ONE question at a time. End the message immediately after the question and wait for the answer; do not add hints, example answers, or teaching content after it**", and the anti-hallucination rule for wrong answers: "do not give the answer. Ask a narrower question that exposes the contradiction in their reasoning." The best part is the intent guard: if the user asked a one-off "explain X", answer normally — "A false start costs the user an unwanted quiz; a confirmation costs one word." HN's reception (305 points) is one of the week's biggest for a single prompt file.
+
+**Why it matters:** This is pedagogy as a skill spec — and the interesting engineering is all in the failure modes agents actually hit: hijacking simple questions, leaking the answer, accepting shallow explanations. Every team writing agent instructions can steal the structure: explicit trigger phrases, an intent guard with a stated cost asymmetry, a visible state model, and rules for the model's own failure modes.
+
+> "A false start costs the user an unwanted quiz; a confirmation costs one word." — SKILL.md
+
+[`🔗 socratic-tutor SKILL.md`](https://github.com/janestreet/agent_skills/blob/master/socratic-tutor/SKILL.md) · [`🔗 janestreet/agent_skills`](https://github.com/janestreet/agent_skills)
+
+---
+
+## 38. Qwen Code hits 1.0 preview — Qoder's agent capabilities merge into the terminal CLI, with native packages
+
+- **Velocity:** ▮▮ rising
+- **Source:** QwenLM/qwen-code · release Nov 11 03:55Z (~11:55 UTC+8)
+- **Tags:** `qwen` `cli` `coding-agents`
+
+Alibaba's **QwenLM/qwen-code** (29.5k stars, "an open-source AI coding agent that lives in your terminal") shipped **v1.0.0-preview** on Nov 11 — the first 1.0-line release, with the project's own caveat that "some interfaces, configuration options, and behaviors may change during Preview." The headline: "**Brings together the agent capabilities of Qoder and Qwen Code** for code understanding, implementation, debugging, and testing" — folding Alibaba's Qoder IDE-agent stack into the terminal CLI — plus Qwen *and* Qoder account login, multiple model providers, custom compatible endpoints, and native packages replacing the npm-only install. The previous day's 0.27.2 shows where the agent is going beyond the editor: its Web Shell "can configure WeChat, QQ, and Email channels, including QR login, scan progress, identity display, and logout where supported" — the coding agent as a messaging-channel resident.
+
+**Why it matters:** Terminal coding agents are consolidating into platform entry points, and Qwen Code is the open-weight ecosystem's answer reaching 1.0 — the Qoder merge makes it a one-CLI surface for Alibaba's agent stack the way Gemini CLI and Claude Code are for theirs. The Preview label is doing real work: anyone building against it should pin and read the changelog until the interfaces settle.
+
+[`🔗 QwenLM/qwen-code`](https://github.com/QwenLM/qwen-code) · [`🔗 v1.0.0-preview release notes`](https://github.com/QwenLM/qwen-code/releases/tag/v1.0.0-preview) · [`🔗 v0.27.2 release notes (Web Shell)`](https://github.com/QwenLM/qwen-code/releases/tag/v0.27.2)
+
+---
+
+## 39. hMailServer gets 18 CVE records in one drop — an 8.8 SQL injection an unauthenticated sender can reach through bounce mail
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · 18 records · Nov 11 09:17Z (~17:17 UTC+8 Nov 11)
+- **Tags:** `hmailserver` `cve` `mail`
+
+hMailServer — the Windows mail server, now developed on GitLab under Progressive Robot — had **18 CVE records published on Nov 11**, all `Received`, every score GitLab's own CNA (`cve@gitlab.com`) assigned. The headline is **CVE-2026-126617 (8.8)**: SQL injection in the database layer of 6.0.0-B1 through 6.2.18 when using MySQL/MariaDB or PostgreSQL, because "on those two engines parameters are not bound" — values were spliced into statement text with per-parameter string replacement, so a value containing a later parameter's name ended the literal early and injected SQL. The default-config path needs only a mailbox: the recipient's address "carries the recipient's address twice" in the queued-message row; a **remote unauthenticated sender** reaches the same statement "through a message the server sends to the envelope sender, such as a delivery failure notice or an automatic reply" when greylisting or message indexing is enabled. On PostgreSQL "further statements can follow it"; SQL Server/Compact, where parameters are bound, are unaffected. The rest of the wave: TLS-verification gaps (7.8/7.5/7.4/7.0), Windows-installer local privilege escalations (7.8/7.5/7.3), JSON-reader DoS, auto-ban bypasses. Fixes shipped in **v6.2.19 and v6.3.8 (released Nov 2)** — nine days before the paperwork.
+
+**Why it matters:** Mail servers are unauthenticated-attacker terrain by design, and reaching SQL injection by sending bounce mail is about as bad as it gets — if you run hMailServer 6.x below 6.3.8, the fixed builds have existed since Nov 2, so this is a verify-your-version task, not a wait-for-a-patch one. Note for inventory tools: the active repo is **GitLab**, and the GitHub mirror's newest release (5.7.2-b3144) is the legacy line — scanners keyed to the GitHub org will mis-age this one.
+
+[`🔗 NVD: CVE-2026-126617`](https://nvd.nist.gov/vuln/detail/CVE-2026-126617) · [`🔗 hMailServer v6.3.8 release`](https://gitlab.com/hmailserver/hmailserver/-/releases/v6.3.8)
+
+---
+
+## 40. Christian Bird's activity-outcome gap: AI moves the activity metrics, not the shipping metrics — the talk and its paper trail
+
+- **Velocity:** ▮▮ rising
+- **Source:** cabird.com · 118 pts on HN · 19.5h ago (Nov 12 ~00:30 UTC+8)
+- **Tags:** `research` `developer-productivity` `ai`
+
+Christian Bird — one of the most-published empirical software-engineering researchers, now at Dryden Technology Group — put his UC Irvine seminar talk (Oct 30, 21 minutes, slides included) online under the title that is the whole thesis: "**Why aren't we shipping faster now? AI, activity, and outcomes in software engineering.**" The talk anchors a paper currently in submission: Cha, Badea, Baym, Bird, Butler, Murphy-Hill, Hadley, "**The Activity-Outcome Gap: Why AI Does Not Solve Software Engineering**," built on 30 interviews — and the page assembles the public evidence base around it: the NBER working paper "Writing Code vs. Shipping Code: Productivity Effects Across Generations of AI Coding Tools" (Demirer, Musolff, Yang, w35275), "What Has AI Let Developers Unlock?" (arXiv 2610.23708), "(When) Should a Software Factory Be Lights-Off? Benchmarking Code Review Agents on Bug Detection" (arXiv 2610.13668), and "You Shall Not Pass! Where and Why Developers Draw the Line on AI Autonomy" (arXiv 2607.00533).
+
+**Why it matters:** The claim that AI inflates activity while outcomes lag is now being made by the field's most credentialed measurement group, with the public papers attached — this is the citation to hand anyone arguing from vibes on either side. Honest limits: the headline paper is unpublished and the interviews aren't public yet, so treat the title as a hypothesis with a strong author list until the paper lands; the NBER and arXiv links are the checkable parts today.
+
+[`🔗 Christian Bird: Why aren't we shipping faster now?`](https://cabird.com/talks/shipping-faster/) · [`🔗 NBER w35275: Writing Code vs. Shipping Code`](https://www.nber.org/papers/w35275) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50455332)
+
+---
+
+## 41. Emacs in the Age of Magic: a year of Claude Code, a high schooler's Rust terminal emulator, and "you'll have no idea how it works"
+
+- **Velocity:** ▮▮ rising
+- **Source:** commandlinesystems.com · 249 pts on HN · 16h ago (~04:00 UTC+8)
+- **Tags:** `essay` `emacs` `ai`
+
+A 249-point essay that starts as Claude Code appreciation ("Its handling of all aspects of the coding process blew my socks off then, and it's an order of magnitude more capable now") and detours through the "Mathocalypse" (Scott Aaronson's term — "OpenAI's latest model took all of three hours to carpet bomb 8,000 research problems, resulting in 372 likely hits") before arriving at its best story: the author posted an AI-built Emacs terminal mode to r/emacs, and a high schooler replied with **cooked.el** — "its full-blown, self-contained implementation of a terminal emulator, in Rust no less" — written with Claude "over a coffee break." The author's line on that: "the holmes replicated over a coffee break what a billionaire with infinite resources had been toiling over the last five years. It probably never occurred to the high schooler that a custom built Boeing materialized in the backyard when all he intended was a new flight stick design." The essay closes on where this lands: "AI has turned Stallman's goal of software freedom on its head. Having your computer do whatever your imagination can think up — that's real freedom. **The only catch is you'll have no idea how it works. No one does.**"
+
+**Why it matters:** The essay's Emacs frame is a Trojan horse for the actual subject — what happens to software culture when one-off personal software is cheaper than complaining about features ("Loud bellyaching, or massaging a nice-to-have into a should-have-had... You get all the attention and none of the work"). The cooked.el anecdote is the cleanest single illustration yet of the "custom built Boeing materialized in the backyard" asymmetry, and the closing line is the honest version of the personal-software thesis this feed keeps meeting in tool form.
+
+[`🔗 Emacs in the Age of Magic`](https://commandlinesystems.com/magic.txt) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50458208)
+
+---
+
+## 42. TensorFold: a Zig inference engine with no Python — and an "Agent Traffic Control" protocol for its AI contributors
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending daily · 1.8k stars
+- **Tags:** `inference` `zig` `agents`
+
+**ashhart/TensorFold** (1.8k stars, trending daily) "serves language models from a Zig binary on Apple Silicon and NVIDIA GPUs — the engine reads checkpoints, tokenizes requests and runs Metal or CUDA kernels directly. Serving needs no Python or MLX installation" (the repo description also names Vulkan; the README's checked paths are Metal/CUDA). Its quick start is a 4-bit Qwen3.5-2B "checked on Metal and a GB10." The genuinely novel part is the contribution workflow, written agent-first: "Building with a coding agent? Have it load the contributor skill before it writes any code," and before touching an issue, agents must run **Agent Traffic Control** (`ashhart/ATC`) — `atc check` for duplicate work, `atc claim` to take an issue, a **five-minute pulse** while the agent works ("Pulse only while the agent is working, before its five-minute check-in expires"), and a **live agent radar** at tensorfold.dev/atc showing who is working on what.
+
+**Why it matters:** The engine itself joins a crowded field (llama.cpp, MLX), but the ATC protocol is a new artifact: an open-source project treating AI-agent contributors as a concurrency problem to be managed — claims, leases, heartbeats, an overlap detector and a public radar — instead of hoping humans coordinate. If agent-authored PRs keep growing, expect this pattern (issue leasing with expiry) to show up in more projects; TensorFold is the reference implementation to watch.
+
+[`🔗 ashhart/TensorFold`](https://github.com/ashhart/TensorFold) · [`🔗 live agent radar (ATC)`](https://tensorfold.dev/atc)
+
+---
+
+## 43. BusyBox gets seven CVE records in one drop — DHCPv6 overflow at 7.6, httpd stack overflow at 7.5, and an auth check that reads the wrong path
+
+- **Velocity:** ▮ steady
+- **Source:** NVD · 7 records · Nov 11 10:16–12:19Z (~18:16–20:19 UTC+8 Nov 11)
+- **Tags:** `busybox` `cve` `embedded`
+
+Seven BusyBox records landed on NVD on Nov 11, all scored by Red Hat's CNA (`secalert@redhat.com`), all still `Awaiting Analysis`. The worst is **CVE-2026-124741 (7.6)**: the udhcpc6 DHCPv6 client "does not properly validate the size of network options sent by a server before copying them into memory" — a malicious DHCPv6 server on the local network against every embedded device that leases addresses with BusyBox. **CVE-2026-124739 (7.5)**: httpd's subdirectory config handling — "an overly long index page name can trigger a stack-based buffer overflow." **CVE-2026-124737 (7.5)**: the TFTP client, when it requests a custom small block size but receives a standard response, falls back to the default block size into an undersized buffer. The quietly nasty one is **CVE-2026-124738 (5.3)**: with httpd's pre-compressed file support enabled, "authentication checks are evaluated only against the requested URL path rather than the pre-compressed file" actually served — an auth-check/read-path mismatch. The rest: a udhcpc6 use-after-free (4.3) and two volume-identification validation flaws for crafted FAT/HFS+ filesystems (5.5).
+
+**Why it matters:** BusyBox is in routers, cameras, IoT and initramfs everywhere, and three of these bugs are reachable from adjacent-network attackers (DHCP, TFTP) — the kind that matter on flat LANs and in firmware you never update. Scores are Red Hat's pending NVD analysis; embedders should read the vectors, not the band.
+
+[`🔗 NVD: CVE-2026-124741 (udhcpc6 7.6)`](https://nvd.nist.gov/vuln/detail/CVE-2026-124741) · [`🔗 NVD: CVE-2026-124738 (httpd auth 5.3)`](https://nvd.nist.gov/vuln/detail/CVE-2026-124738)
+
+---
+
+## 44. Directus ships a 9.2: an unauthenticated permission-check skip via a failed-auth WebSocket message
+
+- **Velocity:** ▮ steady
+- **Source:** NVD · Nov 11 01:17Z (~09:17 UTC+8 Nov 11)
+- **Tags:** `directus` `cve` `authorization`
+
+**CVE-2026-126539 (9.2, CVSS 4.0)** — published Nov 11, scored by VulnCheck's CNA (`disclosure@vulncheck.com`), record still `Received`: "Directus before 12.1.0 contains an authorization bypass vulnerability that allows unauthenticated attackers to **skip permission checks by sending a failed auth message on public-mode WebSockets**." Directus is the open-source data platform/headless CMS whose whole permission model is the product — collections, fields and items filtered per role — and the bug is that the WebSocket public mode mishandles the failed-auth path so the check is skipped rather than denied. The fix landed in 12.1.0, and the current release line is **12.6.1** (Nov 4) — so deployments still on 12.0.x or older are exposed to an unauthenticated read/write-beyond-permissions surface.
+
+**Why it matters:** The pattern is worth naming beyond Directus: the failure is in the *error* path of an auth flow (what happens when authentication fails on a socket that also serves unauthenticated data), which is exactly the branch test suites under-weight. If you run Directus, the version question is binary — 12.1.0 or later — and the score is VulnCheck's, not NVD's, until analysis lands.
+
+[`🔗 NVD: CVE-2026-126539`](https://nvd.nist.gov/vuln/detail/CVE-2026-126539) · [`🔗 directus/directus releases`](https://github.com/directus/directus/releases)
+
+---
+
+## 45. Waline's stored XSS against its own admins: advisory published July 2, CVE record November 11, and still no named patched version
+
+- **Velocity:** ▮ steady
+- **Source:** NVD · 2 records · Nov 11 05:19Z (~13:19 UTC+8 Nov 11)
+- **Tags:** `waline` `xss` `cve`
+
+Waline — the comment system powering a large share of Chinese-language blogs — has two records published Nov 11: **CVE-2026-64670 (9.3, CVSS 3.1)** and **CVE-2026-64671**, both against **@waline/client ≤ 3.15.2**. The first is the ugly one: the comment editor's live preview is rendered "with marked and no sanitizer (utils/markdown.ts), and the preview is injected with v-html", and editing a comment seeds the editor with its raw body — so "an administrator who clicks Edit on an attacker's comment renders that attacker's raw HTML in their own session: an unauthenticated commenter achieves privilege-escalation stored XSS against a moderator with a single Edit click." The second: the UserList widget builds DOM by concatenating server-returned commenter fields. The timeline is the story: the repo advisory **GHSA-crj3-q72p-ggqm** was published **July 2** — more than four months before the CVE record — rated Critical by maintainer lizheming, and it still reads "**Patched versions: None**". npm's `latest` is 3.16.2 (Nov 3), which sits above the affected range, but nothing in the advisory or release notes claims any release as the fix — treat 3.16.x as unconfirmed until the project says so.
+
+**Why it matters:** An admin-session XSS in the moderation flow of a comment system is the guest-to-admin pivot in one click, on software deployed across thousands of personal blogs — and the two-clock gap (GHSA July, NVD November) means everyone who relied on CVE feeds for triage heard about it four months late. If you run Waline, do not wait for a CVSS on the record: the advisory's own "no patched version" is the operative state.
+
+[`🔗 NVD: CVE-2026-64670`](https://nvd.nist.gov/vuln/detail/CVE-2026-64670) · [`🔗 GHSA-crj3-q72p-ggqm (repo advisory)`](https://github.com/walinejs/waline/security/advisories/GHSA-crj3-q72p-ggqm)
+
+---
+
+## 46. GitHub's second incident in a week: Webhooks, Actions, Pages and Copilot degraded for 33 minutes — RCA promised again
+
+- **Velocity:** ▮ steady
+- **Source:** githubstatus · 81 pts on HN · Nov 11 20:48Z (~04:48 UTC+8 Nov 12)
+- **Tags:** `github` `incident` `ci`
+
+GitHub declared a **critical** incident at 20:48Z Nov 11 — "issues impacting multiple GitHub products including Actions, Pages, and Copilot," starting with degraded Webhooks performance — and resolved it at 21:21Z, **33 minutes** end to end. The interesting updates are the shape of the recovery: mitigation landed at 21:07Z, then "the backlog of Actions jobs has been fully processed" — i.e., the queue drained after the fix — with full recovery declared 14 minutes later. The closing note repeats last week's formula: "A detailed root cause analysis will be shared as soon as it is available." This is the second GitHub incident in seven days: the Nov 5 outage (Pull Requests, Git operations, Issues, ~2 hours) has **still** published no root cause.
+
+**Why it matters:** Two incidents in a week at the forge most of the industry builds on would be a pattern worth a post-mortem — which is exactly what neither incident has delivered yet. For CI-heavy teams the operational takeaway is smaller: Actions job backlogs continued processing ~14 minutes after "recovery," so your queue's drain time, not the incident's end time, is when your pipeline is actually clean.
+
+[`🔗 GitHub incident: Actions/Pages/Copilot/Webhooks`](https://www.githubstatus.com/incidents/dvy0t3mvh1lg) · [`🔗 GitHub status history`](https://www.githubstatus.com/history)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-12T04:30:29Z |
-| Items | 32 |
-| Sources tracked | 32 (Hacker News, GitHub Trending, NVD, CISA KEV, arXiv, oss-security, Apache httpd, vendor blogs, security advisories) |
+| Generated | 2026-11-12T12:20:00Z |
+| Items | 46 |
+| Sources tracked | 46 (Hacker News, GitHub Trending, NVD, CISA KEV, arXiv, oss-security, Apache httpd, vendor blogs, security advisories) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

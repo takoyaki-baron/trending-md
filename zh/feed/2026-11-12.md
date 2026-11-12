@@ -1,8 +1,8 @@
 ---
 date: 2026-11-12
-updated: 2026-11-12T04:30:29Z
+updated: 2026-11-12T12:20:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 32
+sources: 46
 license: CC-BY-4.0
 ---
 
@@ -390,7 +390,7 @@ GitHub Actions 现已支持**工作流 lockfile**，Hugo van Kemenade 的文章�
 - **Source:** tylertms/Stela · HN 73 分 · 5.1 小时前（~07:05 UTC+8）
 - **Tags:** `reverse-engineering` `macos` `emulation`
 
-**tylertms/Stela**（Rust，GPL-2.0，v0.1.0，687 星）自称"A general purpose Apple Silicon layer for x86-64 PCs"——一个 **UEFI 引导程序**（底下没有宿主 OS），由三部分组成：把 arm64e 翻译到 x86-64 的 ahead-of-time **与** just-in-time 编译器（"covers more than 3,000 AArch64 instruction encodings, maps guest registers to host registers and caches translated code"，任何 x86-64-v2 CPU 可跑）；**NVIDIA GPU 的 Metal 驱动**（GTX 16 / RTX 20 系列及更新），"compiles AIR, Metal's shader IR, directly to NIR, Mesa's IR"；以及 Apple 硅硬件的模型——目前是 **Mac mini（M2），运行 macOS 27**。要求不高：8 GB 内存、NVIDIA GPU、60 GB GPT 分区；安装器把 macOS 下载到 U 盘。README 自己的结论很诚实："Your current chances of it booting are low."
+**tylertms/Stela**（Rust，GPL-2.0，v0.1.0，687 星）自称"A general purpose Apple Silicon layer for x86-64 PCs"——一个 **UEFI 引导程序**（底下没有宿主 OS），由三部分组成：把 arm64e 翻译到 x86-64 的 ahead-of-time **与** just-in-time 编译器（"covers more than 3,000 AArch64 instruction encodings, maps guest registers to host registers and caches translated code"，任何 x86-64-v2 CPU 可跑）；**NVIDIA GPU 的 Metal 驱动**（GTX 16 / RTX 20 系列及更新），"compiles AIR, Metal's shader IR, directly to NIR, Mesa's IR"；以及 Apple 硅硬件的模型——目前是 **Mac mini（M2），运行 macOS 27**。要求不高：8 GB 内存、NVIDIA GPU、60 GB GPT 分区；安装器把 macOS 下载到 U 盘。README 自己的警告很诚实："Stela is still in development. It is slow and still may not boot on supported hardware."（项目仍在开发中：速度慢，受支持的硬件上也未必能启动）
 
 **Why it matters:** 这是反向 Rosetta：Rosetta 让 x86 应用活在 ARM Mac 上，Stela 把 ARM 翻译回 x86，让 macOS 本身在被 Apple 抛弃的 Intel 时代 PC 上活下去。这是研究级的 v0.1.0，项目自己都给了低预期警告——但它的架构（翻译器 + GPU 驱动 + 平台模型装进一个引导二进制）才是值得关注的工件。
 
@@ -468,13 +468,213 @@ Terence Tao 11 月 11 日的文章：七月起他在"experimenting with using mo
 
 ---
 
+## 33. Anthropic 正式提交 IPO——8.25 亿股、预期 70–78 美元、纳斯达克代码 "ANT"，路演已在进行
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Anthropic · HN 最新 · 0.3 小时前（~20:00 UTC+8）
+- **Tags:** `anthropic` `ipo` `industry`
+
+Claude 背后的公司已提交公开上市申请：**ipo.anthropic.com** 今日可访问——页面 meta 描述即宣布提交上市申请并指向创始人信——具体条款来自 Anthropic 自己 11 月 10 日的路演公告：拟发行 **825,000,000 股 A 类普通股**——其中 801,351,354 股由 Anthropic 出售、23,648,646 股由现有股东出售——预期发行价 **70.00–78.00 美元/股**，在 **纳斯达克全球精选市场以代码 "ANT"** 上市，另有 30 天超额配售权最多 123,750,000 股，由高盛与摩根士丹利主承销。提交主体是 "Anthropic, **PBC**"——公益公司架构随股票一起上市。注册声明已递交 SEC 但尚未生效。华尔街日报（11 月 10 日）报道了 **1.3 万亿美元的估值目标**——这个数字是 WSJ 的报道，不是 Anthropic 的公告；公司自己的页面没有给出任何估值。
+
+**Why it matters:** 这是本轮周期里最大的 AI 实验室流动性事件，而与开发者相关的部分是随之而来的披露机器：本 feed 每周追踪的模型发布、定价与安全承诺背后的经济数据将进入季度披露。值得盯住 PBC 架构——公益公司如何在股东回报与其声明的安全使命之间取舍，从现在起是一个活的法律问题，不再只是宣言里的一行字。
+
+[`🔗 Anthropic：路演启动公告`](https://www.anthropic.com/news/roadshow-launch) · [`🔗 ipo.anthropic.com（申请文件 + 创始人信）`](https://ipo.anthropic.com/us/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50465829)
+
+---
+
+## 34. Node.js 三条版本线同时发布安全更新——16 个 CVE，其中一个能读到其他连接的 TLS 私钥
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** nodejs/node releases · 11 月 11 日 16:44Z（11 月 12 日 ~00:44 UTC+8）
+- **Tags:** `nodejs` `cve` `tls`
+
+Node.js 于 11 月 11 日为 **v26.13.1、v24.22.3 与 v22.23.5** 发布协调安全更新——共 16 个 CVE（7 个 High、6 个 Medium、3 个 Low），大部分出自 Matteo Collina 与 Tim Perry 之手。最严重的是 **CVE-2026-123864**："a re-entrancy flaw in Node.js HTTPS lets an unauthenticated client **read memory belonging to other connections, including TLS private keys and other users' requests**"——`TLSWrap::DoWrite()` 调用 `ClearOut()` 时解析器可以重入。旁边还有：**CVE-2026-123872**，客户端证书认证绕过——"a client can change the servername during TLS 1.2 renegotiation to reach endpoints it was not authorized for"（一个 CVE 涵盖会话恢复/HRR/重协商三种 SNI 变更路径）；**CVE-2026-126051**，延迟回调 use-after-destroy，"allows a remote, unauthenticated attacker to terminate the server process"，任何使用 `SNICallback` 的 TLS 服务器都受影响；以及 **CVE-2026-123863**，HTTP/2 会话拆除中的可达断言，"lets any unauthenticated client abort the server"。其余 High 是 http2 缓冲区一族（nghttp2 遗弃的流、pending write 期间保留的缓冲）。本次核对的 NVD 记录全部仍是 `Received`、无 CVSS——"High" 是 Node 自己的标签。
+
+**Why it matters:** 内存泄露读到 TLS 密钥是 Heartbleed 形状的漏洞，SNI/重协商绕过则打破了 mTLS 部署依赖的证书绑定假设。只要你在跑任何 Node 服务器，这就是三条支持线全部"今天就打补丁"的发布——而且记录要等 NVD 分析后才带 CVSS，请以 release notes 为准做分诊，别等还没录入分数的扫描器。
+
+[`🔗 Node.js v26.13.1 安全发布`](https://github.com/nodejs/node/releases/tag/v26.13.1) · [`🔗 NVD：CVE-2026-123864`](https://nvd.nist.gov/vuln/detail/CVE-2026-123864)
+
+---
+
+## 35. Humble Bundle 改版上线即丢 2FA——改密码不需要旧密码，改邮箱不验证任何一方
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Kotaku · HN 297+ 分 · 5.5 小时前（~14:55 UTC+8）
+- **Tags:** `account-security` `2fa` `supply-chain`
+
+Humble Bundle——IGN 旗下的慈善游戏捆绑商店——推送了一次站点改版，Reddit 用户发现它**剥离了核心账户安全**：双因素认证"entirely missing under security settings"（Kotaku 在自己的账号上确认："the choice to add or remove the feature is entirely missing"），而且经 Kotaku 实测，"there are no authentication checks when changing passwords or email addresses"——"If logged in you can simply enter a new password without having to know the current one"，改邮箱时验证邮件**只发新地址**，旧地址什么都收不到。同时消失的还有：保持登录选项，以及购买历史里已兑换与未兑换 key 的区分。Kotaku 已向 Humble 求证，发稿时无回应。社区把这轮改版读作"reminiscent of other Claude interfaces"，由此有了 297+ HN 分的"vibe-coded redesign"说法——但这正是字面意义上的"一种读法"：**没有人证明改版是 AI 写的**，而无论它怎么写出来的，安全回归都是可核查的那部分。
+
+**Why it matters:** 一家存着支付卡和游戏 key 的商店，一次性破坏了三条基线账户控制（2FA、改密确认、旧邮箱验证）——而且这个问题是用户发现的，不是发布流程发现的。无论你的改版流水线是什么，本该拦住它的那条测试是：认证检查能否在迁移中存活；如果你的账号在里面，过渡期建议是先移除已存支付信息，等 2FA 回来。
+
+> "If logged in you can simply enter a new password without having to know the current one." ——Kotaku，实测后
+
+[`🔗 Kotaku：Humble Bundle 改版遗漏完整账户安全`](https://kotaku.com/humble-bundle-vibe-coded-ai-redesign-account-security-password-email-2000756085) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50463899)
+
+---
+
+## 36. CopilotKit 的 OpenBot：每个 AI 同事都有自己的电脑——11.2k 星、v1.0.2、先计划后执行带审计轨迹
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending daily · 11.2k stars · v1.0.2（11 月 11 日）
+- **Tags:** `agents` `self-hosted` `ag-ui`
+
+**CopilotKit/OpenBot**——出自 AG-UI 协议团队——在 v1.0.2 发布（11 月 11 日）次日以 11,217 星冲上日榜第 3。卖点是："Open-source AI coworkers that each get a computer of their own: a browser, files and tools, with every action decided before it happens and recorded after. Bring any AG-UI agent." 具体形态：一个可自托管的工作区，每个 bot 跑在自己的沙箱电脑里（浏览器、文件系统、工具），发送前有审批流（release notes 的迁移路径里还留着 `0088_approval_reviewer_guidance`），并带桌面应用——Apple Silicon/Intel 公证的 macOS DMG、签名的 Windows 安装包、"no terminal or developer tools needed"——前端与 Docker 后端打包一体，另有面向团队的 Kubernetes 部署路径。"OpenBot for Business" 追加公司登录、工具权限、审批与审计。
+
+**Why it matters:** agent 工作区这个品类正在快速拥挤（CompanyOS、Paradev、herdr），OpenBot 的差异点是可审计的"先计划后执行"回路加上 AG-UI 标准——能接入你已经在跑的 agent，而自托管企业部署正是本 feed 读者真正需要的形态。"every action decided before it happens and recorded after"这个说法值得拿来要求所有厂商：让他把录像拿出来看。
+
+[`🔗 CopilotKit/OpenBot`](https://github.com/CopilotKit/OpenBot) · [`🔗 open.bot`](https://open.bot)
+
+---
+
+## 37. Jane Street 发布 Socratic Tutor 技能——一个 SKILL.md 装下一整套教学协议，连护栏都带
+
+- **Velocity:** ▮▮ rising
+- **Source:** janestreet/agent_skills · HN 305+ 分 · 50 小时前（11 月 10 日 ~18:00 UTC+8）
+- **Tags:** `agent-skills` `education` `prompting`
+
+Jane Street——那家量化交易公司——发布了 **janestreet/agent_skills**（MIT，11 月 3 日创建，约 7k 星），里面唯一一个技能是件真正的工程制品：**socratic-tutor**，一个把 LLM 变成"strict personal tutor"的 SKILL.md，内含完整协议——任何教学开始前先做 3–5 题的**诊断**，给每个子技能打 0–5 级的**技能地图**（"0 unaware . 1 heard of it . 2 can follow along . 3 can do with help . 4 can do independently . 5 can teach it"），教学循环规定"**Ask ONE question at a time. End the message immediately after the question and wait for the answer; do not add hints, example answers, or teaching content after it**"，还有针对答错情况的反幻觉规则："do not give the answer. Ask a narrower question that exposes the contradiction in their reasoning."。最妙的是意图护栏：如果用户只问一次性的"explain X"，就正常回答——"A false start costs the user an unwanted quiz; a confirmation costs one word."。HN 305 分的反响，是本周单个 prompt 文件能拿到的最大声量之一。
+
+**Why it matters:** 这是把教学法写成技能规格——而真正值得学的工程全在 agent 真实会踩的失败模式里：抢答简单问题、泄露答案、接受肤浅的解释。每个在写 agent 指令的团队都可以偷这个结构：显式触发短语、带成本不对称说明的意图护栏、可见的状态模型、以及针对模型自身失败模式的规则。
+
+> "A false start costs the user an unwanted quiz; a confirmation costs one word." ——SKILL.md
+
+[`🔗 socratic-tutor SKILL.md`](https://github.com/janestreet/agent_skills/blob/master/socratic-tutor/SKILL.md) · [`🔗 janestreet/agent_skills`](https://github.com/janestreet/agent_skills)
+
+---
+
+## 38. Qwen Code 进入 1.0 预览——Qoder 的 agent 能力并入终端 CLI，附带原生安装包
+
+- **Velocity:** ▮▮ rising
+- **Source:** QwenLM/qwen-code · 发布于 11 月 11 日 03:55Z（~11:55 UTC+8）
+- **Tags:** `qwen` `cli` `coding-agents`
+
+阿里巴巴的 **QwenLM/qwen-code**（29.5k 星，"an open-source AI coding agent that lives in your terminal"）于 11 月 11 日发布 **v1.0.0-preview**——1.0 线的首个版本，项目自己标注"some interfaces, configuration options, and behaviors may change during Preview"。头条变化："**Brings together the agent capabilities of Qoder and Qwen Code** for code understanding, implementation, debugging, and testing"——把阿里 Qoder IDE agent 栈并入终端 CLI——外加 Qwen *和* Qoder 双账号登录、多模型供应商、自定义兼容端点，以及取代 npm-only 安装的原生安装包。前一天的 0.27.2 则展示了这个 agent 在编辑器之外的走向：其 Web Shell "can configure WeChat, QQ, and Email channels, including QR login, scan progress, identity display, and logout where supported"——编码 agent 变成消息渠道上的常住者。
+
+**Why it matters:** 终端编码 agent 正在收敛为平台入口，Qwen Code 冲到 1.0 是开放权重生态的回应——Qoder 合并让它成为阿里 agent 栈的一站式 CLI，正如 Gemini CLI 与 Claude Code 之于各自阵营。Preview 标签在起实际作用：在接口稳定前，任何基于它构建的人都应该钉住版本并读 changelog。
+
+[`🔗 QwenLM/qwen-code`](https://github.com/QwenLM/qwen-code) · [`🔗 v1.0.0-preview 发布说明`](https://github.com/QwenLM/qwen-code/releases/tag/v1.0.0-preview) · [`🔗 v0.27.2 发布说明（Web Shell）`](https://github.com/QwenLM/qwen-code/releases/tag/v0.27.2)
+
+---
+
+## 39. hMailServer 一波 18 条 CVE 记录——8.8 的 SQL 注入，未认证发件人借退信即可触达
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · 18 条记录 · 11 月 11 日 09:17Z（11 月 11 日 ~17:17 UTC+8）
+- **Tags:** `hmailserver` `cve` `mail`
+
+hMailServer——这个 Windows 邮件服务器，现已在 GitLab 上由 Progressive Robot 继续开发——11 月 11 日一次发布 **18 条 CVE 记录**，全部 `Received`，每个分数都由 GitLab 自己的 CNA（`cve@gitlab.com`）给出。头条是 **CVE-2026-126617（8.8）**：6.0.0-B1 至 6.2.18 在使用 MySQL/MariaDB 或 PostgreSQL 时数据库层存在 SQL 注入，因为"on those two engines parameters are not bound"——参数值用逐参数的字符串替换拼进语句文本，值里若含有后续参数的名字，字面量就会提前闭合、注入 SQL。默认配置下利用只需一个邮箱：收件人地址在排队邮件行里"carries the recipient's address twice"；而当 greylisting 或消息索引开启时，**远程未认证发件人**可以"through a message the server sends to the envelope sender, such as a delivery failure notice or an automatic reply"触达同一语句。在 PostgreSQL 上"further statements can follow it"；参数有绑定的 SQL Server/Compact 不受影响。这一波的其余部分：TLS 校验缺口（7.8/7.5/7.4/7.0）、Windows 安装器本地提权（7.8/7.5/7.3）、JSON 读取器 DoS、auto-ban 绕过。修复已随 **v6.2.19 与 v6.3.8（11 月 2 日发布）**上线——比文书早了九天。
+
+**Why it matters:** 邮件服务器天然面向未认证攻击者，发退信就能触达 SQL 注入，几乎是最坏情形——如果你在跑 6.3.8 以下的 hMailServer 6.x，修复版本自 11 月 2 日就已存在，这是核对版本的任务，不是等补丁的任务。给资产清点工具的提示：活跃仓库在 **GitLab**，GitHub 镜像的最新 release（5.7.2-b3144）是 legacy 线——按 GitHub org 取版本的扫描器会把这条老化错。
+
+[`🔗 NVD：CVE-2026-126617`](https://nvd.nist.gov/vuln/detail/CVE-2026-126617) · [`🔗 hMailServer v6.3.8 发布`](https://gitlab.com/hmailserver/hmailserver/-/releases/v6.3.8)
+
+---
+
+## 40. Christian Bird 的"活动-结果鸿沟"：AI 推高的是活动指标，不是交付指标——一场讲座和它的论文链
+
+- **Velocity:** ▮▮ rising
+- **Source:** cabird.com · HN 118 分 · 19.5 小时前（11 月 12 日 ~00:30 UTC+8）
+- **Tags:** `research` `developer-productivity` `ai`
+
+Christian Bird——实证软件工程领域发表最多的研究者之一，现于 Dryden Technology Group——把他在 UC Irvine 软件工程研讨会的讲座（10 月 30 日，21 分钟，附幻灯片）放上了网，标题就是全部论点："**Why aren't we shipping faster now? AI, activity, and outcomes in software engineering.**"讲座锚定一篇在投论文：Cha、Badea、Baym、Bird、Butler、Murphy-Hill、Hadley 的"**The Activity-Outcome Gap: Why AI Does Not Solve Software Engineering**"，基于 30 次访谈——页面同时汇集了它周围的公开证据链：NBER 工作论文"Writing Code vs. Shipping Code: Productivity Effects Across Generations of AI Coding Tools"（Demirer、Musolff、Yang，w35275）、"What Has AI Let Developers Unlock?"（arXiv 2610.23708）、"(When) Should a Software Factory Be Lights-Off? Benchmarking Code Review Agents on Bug Detection"（arXiv 2610.13668）、以及"You Shall Not Pass! Where and Why Developers Draw the Line on AI Autonomy"（arXiv 2607.00533）。
+
+**Why it matters:** "AI 抬高活动指标而结果滞后"这个主张，如今出自该领域最有资历的测量团队之口，并附有公开论文——无论你在哪个阵营靠感觉站队，这都是该递过去的那份引用。诚实的边界：头条论文尚未发表、访谈也未公开，标题应视为一个带强作者名单的假设，等论文落地；今天可核查的是 NBER 与 arXiv 那几个链接。
+
+[`🔗 Christian Bird：Why aren't we shipping faster now?`](https://cabird.com/talks/shipping-faster/) · [`🔗 NBER w35275：Writing Code vs. Shipping Code`](https://www.nber.org/papers/w35275) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50455332)
+
+---
+
+## 41. 魔法时代的 Emacs：一年 Claude Code、一个高中生的 Rust 终端模拟器，以及"你根本不知道它是怎么跑起来的"
+
+- **Velocity:** ▮▮ rising
+- **Source:** commandlinesystems.com · HN 249 分 · 16 小时前（~04:00 UTC+8）
+- **Tags:** `essay` `emacs` `ai`
+
+这篇 249 分的文章以 Claude Code 赞歌开场（"Its handling of all aspects of the coding process blew my socks off then, and it's an order of magnitude more capable now"），中途绕经"Mathocalypse"（Scott Aaronson 的说法——"OpenAI's latest model took all of three hours to carpet bomb 8,000 research problems, resulting in 372 likely hits"），最后抵达全文最好的故事：作者把自己用 AI 写的 Emacs 终端模式发到 r/emacs，一个高中生用 Claude"over a coffee break"回了 **cooked.el**——"its full-blown, self-contained implementation of a terminal emulator, in Rust no less"。作者对此的评语："the holmes replicated over a coffee break what a billionaire with infinite resources had been toiling over the last five years. It probably never occurred to the high schooler that a custom built Boeing materialized in the backyard when all he intended was a new flight stick design."。文章收尾落在这一切的归处："AI has turned Stallman's goal of software freedom on its head. Having your computer do whatever your imagination can think up — that's real freedom. **The only catch is you'll have no idea how it works. No one does.**"
+
+**Why it matters:** Emacs 只是这篇文章的特洛伊木马，真正的主题是软件文化：当一次性个人软件比抱怨功能更便宜时会发生什么（"Loud bellyaching, or massaging a nice-to-have into a should-have-had... You get all the attention and none of the work"）。cooked.el 的故事是"a custom built Boeing materialized in the backyard"（后院里凭空出现的定制波音）这一不对称最干净的单例插图，而结尾那句是本 feed 反复以工具形态遇见的"个人软件论"的诚实版本。
+
+[`🔗 Emacs in the Age of Magic`](https://commandlinesystems.com/magic.txt) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50458208)
+
+---
+
+## 42. TensorFold：一个没有 Python 的 Zig 推理引擎——外加一套面向 AI 贡献者的"Agent Traffic Control"协议
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending daily · 1.8k stars
+- **Tags:** `inference` `zig` `agents`
+
+**ashhart/TensorFold**（1.8k 星，日榜在列）"serves language models from a Zig binary on Apple Silicon and NVIDIA GPUs — the engine reads checkpoints, tokenizes requests and runs Metal or CUDA kernels directly. Serving needs no Python or MLX installation"（仓库描述还提到 Vulkan；README 中经核实的路径是 Metal/CUDA）。快速上手是一个 4-bit Qwen3.5-2B，"checked on Metal and a GB10"。真正新颖的部分是它的贡献流程，完全按 agent 优先写就："Building with a coding agent? Have it load the contributor skill before it writes any code"，且在动任何 issue 之前，agent 必须先跑 **Agent Traffic Control**（`ashhart/ATC`）——`atc check` 查重复工作、`atc claim` 认领 issue、agent 工作期间每 **五分钟一次 pulse**（"Pulse only while the agent is working, before its five-minute check-in expires"），外加 tensorfold.dev/atc 上显示谁在做什么的**实时 agent 雷达**。
+
+**Why it matters:** 引擎本身是加入红海（llama.cpp、MLX），但 ATC 协议是个新工件：一个开源项目把 AI agent 贡献者当作要管理的并发问题来对待——认领、租约、心跳、重叠检测、公开雷达——而不是指望人类自己协调。如果 agent 写的 PR 持续增长，这套模式（带过期的 issue 租约）会在更多项目里出现；TensorFold 是值得盯的参照实现。
+
+[`🔗 ashhart/TensorFold`](https://github.com/ashhart/TensorFold) · [`🔗 实时 agent 雷达（ATC）`](https://tensorfold.dev/atc)
+
+---
+
+## 43. BusyBox 一次七条 CVE 记录——DHCPv6 溢出 7.6、httpd 栈溢出 7.5，还有一条读错路径的认证检查
+
+- **Velocity:** ▮ steady
+- **Source:** NVD · 7 条记录 · 11 月 11 日 10:16–12:19Z（11 月 11 日 ~18:16–20:19 UTC+8）
+- **Tags:** `busybox` `cve` `embedded`
+
+七条 BusyBox 记录于 11 月 11 日落到 NVD，全部由红帽 CNA（`secalert@redhat.com`）评分，全部仍是 `Awaiting Analysis`。最重的是 **CVE-2026-124741（7.6）**：udhcpc6 DHCPv6 客户端"does not properly validate the size of network options sent by a server before copying them into memory"——本地网络里一个恶意 DHCPv6 服务器，就能打到所有用 BusyBox 租地址的嵌入式设备。**CVE-2026-124739（7.5）**：httpd 的子目录配置处理——"an overly long index page name can trigger a stack-based buffer overflow"。**CVE-2026-124737（7.5）**：TFTP 客户端请求自定义小块尺寸却收到标准响应时，会按默认块大小回退写进过小的缓冲区。安静但阴险的一条是 **CVE-2026-124738（5.3）**：开启 httpd 的预压缩文件支持后，"authentication checks are evaluated only against the requested URL path rather than the pre-compressed file"——认证检查看的是 URL 路径，不是实际吐出的那个文件。其余：udhcpc6 use-after-free（4.3）、两个构造 FAT/HFS+ 文件系统的卷识别校验缺陷（5.5）。
+
+**Why it matters:** BusyBox 在路由器、摄像头、IoT 和 initramfs 里无处不在，其中三个漏洞可被相邻网络攻击者触达（DHCP、TFTP）——正是扁平局域网和永不升级的固件里最致命的那类。分数是红帽的，NVD 分析还没做；嵌入式从业者请读向量，别读等级。
+
+[`🔗 NVD：CVE-2026-124741（udhcpc6 7.6）`](https://nvd.nist.gov/vuln/detail/CVE-2026-124741) · [`🔗 NVD：CVE-2026-124738（httpd 认证 5.3）`](https://nvd.nist.gov/vuln/detail/CVE-2026-124738)
+
+---
+
+## 44. Directus 交出一条 9.2：借 public-mode WebSocket 上的失败认证消息跳过权限检查
+
+- **Velocity:** ▮ steady
+- **Source:** NVD · 11 月 11 日 01:17Z（~09:17 UTC+8）
+- **Tags:** `directus` `cve` `authorization`
+
+**CVE-2026-126539（9.2，CVSS 4.0）**——11 月 11 日发布，VulnCheck 的 CNA（`disclosure@vulncheck.com`）评分，记录仍为 `Received`："Directus before 12.1.0 contains an authorization bypass vulnerability that allows unauthenticated attackers to **skip permission checks by sending a failed auth message on public-mode WebSockets**." Directus 是那个权限模型本身就是产品的开源数据平台/无头 CMS——集合、字段、条目全按角色过滤——而这个 bug 是 WebSocket 公开模式搞错了认证失败的路径，让检查被跳过而非拒绝。修复落在 12.1.0，当前发布线已是 **12.6.1**（11 月 4 日）——仍停在 12.0.x 或更旧的部署，暴露在一个未认证的越权面上。
+
+**Why it matters:** 这个模式值得在 Directus 之外记住：故障出在认证流程的*错误*路径上（当认证在同时服务未认证数据的 socket 上失败时会发生什么）——恰是测试套件最欠加权的那条分支。如果你在跑 Directus，版本问题是二值的：12.1.0 或更高；而在分析落地前，这个分数是 VulnCheck 的，不是 NVD 的。
+
+[`🔗 NVD：CVE-2026-126539`](https://nvd.nist.gov/vuln/detail/CVE-2026-126539) · [`🔗 directus/directus 发布`](https://github.com/directus/directus/releases)
+
+---
+
+## 45. Waline 对自家管理员的存储型 XSS：公告 7 月 2 日发、CVE 记录 11 月 11 日才来，而且至今没有具名的修复版本
+
+- **Velocity:** ▮ steady
+- **Source:** NVD · 2 条记录 · 11 月 11 日 05:19Z（~13:19 UTC+8）
+- **Tags:** `waline` `xss` `cve`
+
+Waline——撑起中文博客圈大半评论区的评论系统——11 月 11 日发布两条记录：**CVE-2026-64670（9.3，CVSS 3.1）**与 **CVE-2026-64671**，都针对 **@waline/client ≤ 3.15.2**。第一条最刺眼：评论编辑器的实时预览"with marked and no sanitizer (utils/markdown.ts), and the preview is injected with v-html"渲染，编辑评论时编辑器会以原始正文做种子——于是"an administrator who clicks Edit on an attacker's comment renders that attacker's raw HTML in their own session: an unauthenticated commenter achieves privilege-escalation stored XSS against a moderator with a single Edit click."。第二条：UserList 小组件用拼接服务器返回的评论者字段的方式建 DOM。时间线才是这个故事：仓库公告 **GHSA-crj3-q72p-ggqm** 发布于 **7 月 2 日**——比 CVE 记录早四个多月——由维护者 lizheming 定级 Critical，且至今写着"**Patched versions: None**"。npm 的 `latest` 是 3.16.2（11 月 3 日），已高于受影响区间，但公告与 release notes 里没有任何一方声称哪个版本是修复——在项目开口之前，3.16.x 应视为未确认。
+
+**Why it matters:** 评论系统审核流里的管理员会话 XSS，就是一次点击完成"访客到管理员"的横向移动，而这套软件部署在成千上万个个人博客上——GHSA 七月、NVD 十一月的双钟间隔意味着，凡靠 CVE feed 做分诊的人都晚知道了四个月。如果你在跑 Waline，别等记录上的 CVSS：公告里自己写的"没有修复版本"才是当下的有效状态。
+
+[`🔗 NVD：CVE-2026-64670`](https://nvd.nist.gov/vuln/detail/CVE-2026-64670) · [`🔗 GHSA-crj3-q72p-ggqm（仓库公告）`](https://github.com/walinejs/waline/security/advisories/GHSA-crj3-q72p-ggqm)
+
+---
+
+## 46. GitHub 一周内第二次事故：Webhooks、Actions、Pages 与 Copilot 降级 33 分钟——又一次"稍后公布根因"
+
+- **Velocity:** ▮ steady
+- **Source:** githubstatus · HN 81 分 · 11 月 11 日 20:48Z（11 月 12 日 ~04:48 UTC+8）
+- **Tags:** `github` `incident` `ci`
+
+GitHub 于 11 月 11 日 20:48Z 宣布 **critical** 级事故——"issues impacting multiple GitHub products including Actions, Pages, and Copilot"，最初表现为 Webhooks 性能降级——并于 21:21Z 解决，端到端 **33 分钟**。有意思的是恢复的形状：21:07Z 缓解落地，随后"the backlog of Actions jobs has been fully processed"——即修复之后队列还在排空——14 分钟后才宣布完全恢复。收尾注记重复了上周的句式："A detailed root cause analysis will be shared as soon as it is available."。这是 GitHub 七天内的第二次事故：11 月 5 日的故障（Pull Requests、Git 操作、Issues，约 2 小时）**至今**没有公布任何根因。
+
+**Why it matters:** 全行业赖以构建的那家 forge 一周两次事故，本该值得一份事后分析——而这恰恰是两次事故都还没交出的东西。对 CI 重度团队，运营层面的收获更小但更实用：在宣布"恢复"之后约 14 分钟里 Actions 的积压仍在处理——你队列的排空时间，而非事故的结束时间，才是你的流水线真正干净的时刻。
+
+[`🔗 GitHub 事故：Actions/Pages/Copilot/Webhooks`](https://www.githubstatus.com/incidents/dvy0t3mvh1lg) · [`🔗 GitHub 状态历史`](https://www.githubstatus.com/history)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-12T04:30:29Z |
-| Items | 32 |
-| Sources tracked | 32（Hacker News、GitHub Trending、NVD、CISA KEV、arXiv、oss-security、Apache httpd、厂商博客、安全公告） |
+| Generated | 2026-11-12T12:20:00Z |
+| Items | 46 |
+| Sources tracked | 46（Hacker News、GitHub Trending、NVD、CISA KEV、arXiv、oss-security、Apache httpd、厂商博客、安全公告） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（每日三次） |
 | Ranking | 速度加权（时效 × 互动加速度 × 来源权威度） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

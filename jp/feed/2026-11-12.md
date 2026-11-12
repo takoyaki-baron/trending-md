@@ -1,8 +1,8 @@
 ---
 date: 2026-11-12
-updated: 2026-11-12T04:30:29Z
+updated: 2026-11-12T12:20:00Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 32
+sources: 46
 license: CC-BY-4.0
 ---
 
@@ -390,7 +390,7 @@ Huawei の CSL グループが **MACaQ**（"Model Agnostic Calibrated Quantizati
 - **Source:** tylertms/Stela · HN 73 ポイント · 5.1 時間前（~07:05 UTC+8）
 - **Tags:** `reverse-engineering` `macos` `emulation`
 
-**tylertms/Stela**（Rust、GPL-2.0、v0.1.0、687 スター）は自らを "A general purpose Apple Silicon layer for x86-64 PCs" と呼ぶ——**UEFI ブートプログラム**（下にホスト OS はない）で、3 部構成だ：arm64e を x86-64 に翻訳する ahead-of-time **および** just-in-time コンパイラ（"covers more than 3,000 AArch64 instruction encodings, maps guest registers to host registers and caches translated code"、x86-64-v2 CPU なら動く）；**NVIDIA GPU 向け Metal ドライバ**（GTX 16 / RTX 20 シリーズ以降）は "compiles AIR, Metal's shader IR, directly to NIR, Mesa's IR"；そして Apple シリコンハードウェアのモデル——現時点で **Mac mini（M2）、macOS 27 を実行**。要件は控えめだ：RAM 8 GB、NVIDIA GPU、60 GB の GPT パーティション。セットアップは macOS を USB スティックにダウンロードする。README 自身の判定は正直だ："Your current chances of it booting are low."
+**tylertms/Stela**（Rust、GPL-2.0、v0.1.0、687 スター）は自らを "A general purpose Apple Silicon layer for x86-64 PCs" と呼ぶ——**UEFI ブートプログラム**（下にホスト OS はない）で、3 部構成だ：arm64e を x86-64 に翻訳する ahead-of-time **および** just-in-time コンパイラ（"covers more than 3,000 AArch64 instruction encodings, maps guest registers to host registers and caches translated code"、x86-64-v2 CPU なら動く）；**NVIDIA GPU 向け Metal ドライバ**（GTX 16 / RTX 20 シリーズ以降）は "compiles AIR, Metal's shader IR, directly to NIR, Mesa's IR"；そして Apple シリコンハードウェアのモデル——現時点で **Mac mini（M2）、macOS 27 を実行**。要件は控えめだ：RAM 8 GB、NVIDIA GPU、60 GB の GPT パーティション。セットアップは macOS を USB スティックにダウンロードする。README 自身の警告は正直だ："Stela is still in development. It is slow and still may not boot on supported hardware."（まだ開発中：速度は遅く、対応ハードウェアでも起動しないことがある）
 
 **Why it matters:** これは逆 Rosetta だ：Rosetta が ARM Mac の上で x86 アプリを生かしたように、Stela は ARM を x86 に翻訳して、Apple に見捨てられた Intel 時代の PC の上で macOS 自身を生かそうとする。研究グレードの v0.1.0 で、プロジェクト自身が低い期待値の警告を出している——だが注目すべき成果物はそのアーキテクチャ（トランスレータ＋GPU ドライバ＋プラットフォームモデルを一つのブートバイナリに）だ。
 
@@ -468,13 +468,213 @@ Terence Tao の 11 月 11 日の記事：7 月から彼は "experimenting with u
 
 ---
 
+## 33. Anthropic が IPO を正式申請——8.25 億株、想定 70〜78 ドル、ナスダック銘柄コード "ANT"、ロードショーはすでに始動
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Anthropic · HN 新着 · 0.3 時間前（~20:00 UTC+8）
+- **Tags:** `anthropic` `ipo` `industry`
+
+Claude を擁する会社が公開会社への申請を済ませた。**ipo.anthropic.com** が本日アクセス可能になり、ページの meta description は上場申請を告げ、創業者レターを指している。具体的な条件は Anthropic 自身の 11 月 10 日のロードショー告知に載っている。**Class A 普通株式 825,000,000 株**の提案発行——うち 801,351,354 株は Anthropic が、23,648,646 株は既存株主が売り出す——想定発行価格は **1 株 70.00〜78.00 ドル**、**ナスダック・グローバル・セレクト・マーケットに銘柄コード "ANT"** で上場申請。30 日間のオーバーアロットメント・オプションは最大 123,750,000 株、主幹事はゴールドマン・サックスとモルガン・スタンレー。申請主体は "Anthropic, **PBC**"——パブリック・ベネフィット・コーポレーションの構造が株式とともに公開になる。登録届出は SEC に提出済みだが、まだ効力を生じていない。ウォール・ストリート・ジャーナル（11 月 10 日）は **1.3 兆ドルの企業価値目標**を報じた——この数字は WSJ の報道であって Anthropic の発表ではない。会社自身のページには企業価値の記載はない。
+
+**Why it matters:** これはこのサイクル最大の AI ラボの流動性イベントであり、開発者に関わる部分は、それに伴う開示マシンだ。このフィードが毎週追いかけているモデルリリース・価格設定・安全性コミットメントの背後の経済数値が、四半期開示に入る。PBC 構造に注目したい——公益会社が株主リターンと掲げた安全ミッションの間でどう折り合いをつけるかは、宣言の一行ではなく、生きた法問題になる。
+
+[`🔗 Anthropic：ロードショー開始の告知`](https://www.anthropic.com/news/roadshow-launch) · [`🔗 ipo.anthropic.com（申請書類 + 創業者レター）`](https://ipo.anthropic.com/us/) · [`🔗 HN での議論`](https://news.ycombinator.com/item?id=50465829)
+
+---
+
+## 34. Node.js の 3 リリースラインが同時にセキュリティリリース——16 件の CVE、そのひとつは他のコネクションの TLS 秘密鍵が読める
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** nodejs/node releases · 11 月 11 日 16:44Z（11 月 12 日 ~00:44 UTC+8）
+- **Tags:** `nodejs` `cve` `tls`
+
+Node.js は 11 月 11 日、**v26.13.1、v24.22.3、v22.23.5** の 3 線で同期したセキュリティリリースを出した——計 16 件の CVE（High 7、Medium 6、Low 3）。その多くは Matteo Collina と Tim Perry の手による。最悪なのは **CVE-2026-123864**："a re-entrancy flaw in Node.js HTTPS lets an unauthenticated client **read memory belonging to other connections, including TLS private keys and other users' requests**"——`TLSWrap::DoWrite()` が `ClearOut()` を呼ぶ際、パーサーが再入できる。隣には **CVE-2026-123872**、クライアント証明書認証のバイパス——"a client can change the servername during TLS 1.2 renegotiation to reach endpoints it was not authorized for"（1 つの CVE がセッション再開/HRR/再ネゴシエーションの 3 つの SNI 変更経路をカバー）。**CVE-2026-126051** は遅延コールバックの use-after-destroy で、"allows a remote, unauthenticated attacker to terminate the server process"——`SNICallback` を使う TLS サーバーすべてが対象。さらに **CVE-2026-123863** は HTTP/2 セッション解放の到達可能なアサーションで、"lets any unauthenticated client abort the server"。残る High は http2 バッファ一族（nghttp2 に捨てられたストリーム、pending write 中に保持されるバッファ）。確認した NVD レコードはすべてまだ `Received` で CVSS なし——"High" は Node 自身のラベルだ。
+
+**Why it matters:** メモリ露出で TLS 鍵が読めるのは Heartbleed 型の脆弱性であり、SNI/再ネゴシエーションバイパスは mTLS デプロイが依存する証明書バインディングの前提を壊す。Node サーバーを動かしているなら、これはサポート全ラインで「今日パッチ」のリリースだ。レコードに CVSS が載るのは NVD の分析後——スコア未取り込みのスキャナではなく、release notes でトリアージすること。
+
+[`🔗 Node.js v26.13.1 セキュリティリリース`](https://github.com/nodejs/node/releases/tag/v26.13.1) · [`🔗 NVD：CVE-2026-123864`](https://nvd.nist.gov/vuln/detail/CVE-2026-123864)
+
+---
+
+## 35. Humble Bundle のリニューアル、2FA を積んだまま出荷——パスワード変更に現行パスワード不要、メール変更は誰も検証しない
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Kotaku · HN 297+ ポイント · 5.5 時間前（~14:55 UTC+8）
+- **Tags:** `account-security` `2fa` `supply-chain`
+
+IGN 傘下のチャリティゲームストア、Humble Bundle がサイトのリニューアルをプッシュし、Reddit のユーザーが**中核的なアカウントセキュリティの剥離**を発見した。二要素認証は "entirely missing under security settings"（Kotaku が自アカウントで確認："the choice to add or remove the feature is entirely missing"）。さらに Kotaku の実測では "there are no authentication checks when changing passwords or email addresses"——"If logged in you can simply enter a new password without having to know the current one" で、メールアドレス変更の検証は**新しいアドレスにのみ**送られ、旧アドレスには何も届かない。ログイン状態の保持オプションも、購入履歴の「使用済み/未使用キー」の区別も消えた。Kotaku は Humble にコメントを求めたが、執筆時点で回答はない。コミュニティはこのデザインを "reminiscent of other Claude interfaces" と読み、297+ HN ポイントの「vibe-coded リニューアル」論が生まれた——しかしそれは字義通り「読み」であって、**リニューアルが AI 書きだと示した者はいない**。AI 由来かどうかにかかわらず、検証可能なのはセキュリティ退行のほうだ。
+
+**Why it matters:** 決済カードとゲームキーを預かるストアが、3 つの基線アカウント制御（2FA、パスワード変更確認、旧メール検証）を一度に壊す退行を出荷した——しかもそれを捉えたのはユーザーであって、リリースプロセスではなかった。どんなリニューアルパイプラインを持っていても、これを捉えたはずのテストは、認証チェックがマイグレーションを生き延びるかどうかだ。アカウントを持っているなら、当面の助言は保存済み決済情報を外しておくこと。2FA が戻るまで。
+
+> "If logged in you can simply enter a new password without having to know the current one." ——実測後の Kotaku
+
+[`🔗 Kotaku：Humble Bundle のリニューアル、アカウントセキュリティを取り忘れる`](https://kotaku.com/humble-bundle-vibe-coded-ai-redesign-account-security-password-email-2000756085) · [`🔗 HN での議論`](https://news.ycombinator.com/item?id=50463899)
+
+---
+
+## 36. CopilotKit の OpenBot：AI の同僚がそれぞれ専用のコンピュータを持つ——11.2k スター、v1.0.2、計画→実行に監査証跡
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending daily · 11.2k スター · v1.0.2（11 月 11 日）
+- **Tags:** `agents` `self-hosted` `ag-ui`
+
+AG-UI プロトコルのチームによる **CopilotKit/OpenBot** が、v1.0.2 リリース（11 月 11 日）の翌日、日次トレンド 3 位に 11,217 スターで乗った。売り込みはこうだ："Open-source AI coworkers that each get a computer of their own: a browser, files and tools, with every action decided before it happens and recorded after. Bring any AG-UI agent." 具体形は：各 bot を自分のサンドボックス化されたコンピュータ（ブラウザ、ファイルシステム、ツール）で走らせるセルフホスト可能なワークスペース、送信前の承認フロー（リリースノートの移行パスには今も `0088_approval_reviewer_guidance` の名が残る）、そしてデスクトップアプリ——Apple Silicon/Intel 両対応の公証付き macOS DMG、署名付き Windows インストーラ、"no terminal or developer tools needed"——で、フロントエンドと Docker バックエンドを一体化し、チーム向けには Kubernetes デプロイ経路もある。"OpenBot for Business" は会社のサインイン、ツール権限、承認、監査を追加する。
+
+**Why it matters:** エージェントワークスペースというカテゴリは急速に混み合っている（CompanyOS、Paradev、herdr）。OpenBot の差別化は、監査可能な計画→実行ループと、既に走らせているエージェントを受け入れる AG-UI 標準だ——セルフホストのエンタープライズ配備という形は、このフィードの読者が実際に必要としているものだ。"every action decided before it happens and recorded after" という言い回しは、ベンダー全員に向けられるべき要求だ：録画を見せてもらえ。
+
+[`🔗 CopilotKit/OpenBot`](https://github.com/CopilotKit/OpenBot) · [`🔗 open.bot`](https://open.bot)
+
+---
+
+## 37. Jane Street が Socratic Tutor スキルを公開——1 つの SKILL.md に完結した教授プロトコル、ガードレール付き
+
+- **Velocity:** ▮▮ rising
+- **Source:** janestreet/agent_skills · HN 305+ ポイント · 50 時間前（11 月 10 日 ~18:00 UTC+8）
+- **Tags:** `agent-skills` `education` `prompting`
+
+量的トレーディングで知られる Jane Street が **janestreet/agent_skills**（MIT、11 月 3 日作成、約 7k スター）を公開した。収められている単独のスキルは、本物のエンジニアリングが施された成果物だ。**socratic-tutor**——LLM を "a strict personal tutor" に変える SKILL.md で、完全なプロトコルを含む。何を教える前に 3〜5 問の**診断**、各サブスキルを 0〜5 で採点する**スキルマップ**（"0 unaware . 1 heard of it . 2 can follow along . 3 can do with help . 4 can do independently . 5 can teach it"）、教育ループは "**Ask ONE question at a time. End the message immediately after the question and wait for the answer; do not add hints, example answers, or teaching content after it**"、そして誤答に対する反幻覚規則："do not give the answer. Ask a narrower question that exposes the contradiction in their reasoning."。白眉は意図ガードだ。一回性の "explain X" には普通に答えるべし——"A false start costs the user an unwanted quiz; a confirmation costs one word."。HN 305 ポイントの反響は、単一のプロンプトファイルが今週得た最大級の声だ。
+
+**Why it matters:** これは教授法をスキル仕様として書いたものだ——そして学ぶべきエンジニアリングはすべて、エージェントが実際に踏む失敗モードにある：単純な質問への横取り、答えの漏洩、浅い説明の受け入れ。エージェントへの指示を書くすべてのチームが、この構造を盗める：明示的なトリガー句、コストの非対称を明記した意図ガード、可視の状態モデル、そしてモデル自身の失敗モードへの規則。
+
+> "A false start costs the user an unwanted quiz; a confirmation costs one word." ——SKILL.md
+
+[`🔗 socratic-tutor SKILL.md`](https://github.com/janestreet/agent_skills/blob/master/socratic-tutor/SKILL.md) · [`🔗 janestreet/agent_skills`](https://github.com/janestreet/agent_skills)
+
+---
+
+## 38. Qwen Code が 1.0 プレビューに到達——Qoder のエージェント能力をターミナル CLI に統合、ネイティブパッケージも
+
+- **Velocity:** ▮▮ rising
+- **Source:** QwenLM/qwen-code · リリース 11 月 11 日 03:55Z（~11:55 UTC+8）
+- **Tags:** `qwen` `cli` `coding-agents`
+
+アリババの **QwenLM/qwen-code**（29.5k スター、"an open-source AI coding agent that lives in your terminal"）が 11 月 11 日に **v1.0.0-preview** をリリースした——1.0 系最初のリリースで、プロジェクト自身が "some interfaces, configuration options, and behaviors may change during Preview" と但し書きする。見出しは "**Brings together the agent capabilities of Qoder and Qwen Code** for code understanding, implementation, debugging, and testing"——アリババの Qoder IDE エージェントスタックをターミナル CLI に統合——に加え、Qwen と Qoder の両アカウントログイン、複数モデルプロバイダ、カスタム互換エンドポイント、npm のみだったインストールを置き換えるネイティブパッケージ。前日の 0.27.2 は、このエージェントがエディタの外へ向かう方向を示す：その Web Shell は "can configure WeChat, QQ, and Email channels, including QR login, scan progress, identity display, and logout where supported"——コーディングエージェントがメッセージングチャネルに常駐する存在になる。
+
+**Why it matters:** ターミナル型コーディングエージェントはプラットフォーム入口へ収斂しつつあり、Qwen Code が 1.0 に達したのはオープンウェイト生態系の回答だ。Qoder 統合により、Gemini CLI や Claude Code が各陣営のそれであるように、アリババのエージェントスタックのワン CLI 表面になる。Preview のラベルは実際に機能している：インターフェースが落ち着くまで、これを基盤に作る者はバージョンを固定し changelog を読むべきだ。
+
+[`🔗 QwenLM/qwen-code`](https://github.com/QwenLM/qwen-code) · [`🔗 v1.0.0-preview リリースノート`](https://github.com/QwenLM/qwen-code/releases/tag/v1.0.0-preview) · [`🔗 v0.27.2 リリースノート（Web Shell）`](https://github.com/QwenLM/qwen-code/releases/tag/v0.27.2)
+
+---
+
+## 39. hMailServer に一挙 18 件の CVE レコード——8.8 の SQL インジェクション、未認証の送信者がバウンスメールから到達可能
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · 18 レコード · 11 月 11 日 09:17Z（11 月 11 日 ~17:17 UTC+8）
+- **Tags:** `hmailserver` `cve` `mail`
+
+Windows 用メールサーバーの hMailServer——現在は GitLab 上で Progressive Robot が開発——に **11 月 11 日、18 件の CVE レコードが一斉公開**された。すべて `Received`、スコアはすべて GitLab 自身の CNA（`cve@gitlab.com`）による。先頭は **CVE-2026-126617（8.8）**：6.0.0-B1〜6.2.18 で MySQL/MariaDB か PostgreSQL を使う際のデータベース層 SQL インジェクション。"on those two engines parameters are not bound" ため、パラメータ値は 1 パラメータごとの文字列置換でステートメントテキストに埋め込まれ、値が後続パラメータの名前を含むとリテラルが早期に閉じて SQL が注入される。デフォルト構成での到達にはメールボックスがひとつあれば足りる：受取人アドレスは queued メッセージの行に "carries the recipient's address twice"。greylisting かメッセージインデックスが有効なら、**リモートの未認証送信者**が "through a message the server sends to the envelope sender, such as a delivery failure notice or an automatic reply" で同じステートメントに到達できる。PostgreSQL では "further statements can follow it"。パラメータがバインドされる SQL Server/Compact は影響なし。波の残り：TLS 検証の欠落（7.8/7.5/7.4/7.0）、Windows インストーラのローカル権限昇格（7.8/7.5/7.3）、JSON リーダーの DoS、auto-ban のバイパス。修正は **v6.2.19 と v6.3.8（11 月 2 日リリース）**で既に出ている——書類の 9 日前だ。
+
+**Why it matters:** メールサーバーは設計上、未認証攻撃者のテリトリーであり、バウンスメールの送信で SQL インジェクションに到達できるのは、ほぼ最悪の形だ。6.3.8 未満の hMailServer 6.x を動かしているなら、修正ビルドは 11 月 2 日から存在する——パッチ待ちではなく、バージョン確認のタスクだ。資産棚卸ツールへの注意：アクティブなリポジトリは **GitLab** で、GitHub ミラーの最新リリース（5.7.2-b3144）は legacy 線——GitHub org を基準にするスキャナはこれを誤って古い扱いにする。
+
+[`🔗 NVD：CVE-2026-126617`](https://nvd.nist.gov/vuln/detail/CVE-2026-126617) · [`🔗 hMailServer v6.3.8 リリース`](https://gitlab.com/hmailserver/hmailserver/-/releases/v6.3.8)
+
+---
+
+## 40. Christian Bird の「活動と成果のギャップ」：AI が押し上げるのは活動指標であって出荷指標ではない——講演とその論文連鎖
+
+- **Velocity:** ▮▮ rising
+- **Source:** cabird.com · HN 118 ポイント · 19.5 時間前（11 月 12 日 ~00:30 UTC+8）
+- **Tags:** `research` `developer-productivity` `ai`
+
+Christian Bird——実証ソフトウェア工学で最も論文を出版している研究者のひとり、現在は Dryden Technology Group——が、UC アーバインのソフトウェア工学セミナーでの講演（10 月 30 日、21 分、スライド付き）を、その論点全体であるタイトルのまま公開した："**Why aren't we shipping faster now? AI, activity, and outcomes in software engineering.**" 講演は投稿中の論文を錨とする：Cha、Badea、Baym、Bird、Butler、Murphy-Hill、Hadley による "**The Activity-Outcome Gap: Why AI Does Not Solve Software Engineering**"、30 のインタビューに基づく。ページはその周囲の公開エビデンスも束ねる：NBER ワーキングペーパー "Writing Code vs. Shipping Code: Productivity Effects Across Generations of AI Coding Tools"（Demirer、Musolff、Yang、w35275）、"What Has AI Let Developers Unlock?"（arXiv 2610.23708）、"(When) Should a Software Factory Be Lights-Off? Benchmarking Code Review Agents on Bug Detection"（arXiv 2610.13668）、そして "You Shall Not Pass! Where and Why Developers Draw the Line on AI Autonomy"（arXiv 2607.00533）。
+
+**Why it matters:** 「AI は活動指標を膨らませ、成果は追いつかない」という主張が、この分野で最もキャリアのある測定グループの口から、公開論文を添えて為されている——どちらの陣営の「雰囲気」論にも差し出すべき引用だ。正直な限界：看板の論文は未公刊でインタビューも未公開であり、タイトルは強い著者リスト付きの仮説として扱うべきだ。今日検証可能なのは NBER と arXiv のリンクのほうだ。
+
+[`🔗 Christian Bird：Why aren't we shipping faster now?`](https://cabird.com/talks/shipping-faster/) · [`🔗 NBER w35275：Writing Code vs. Shipping Code`](https://www.nber.org/papers/w35275) · [`🔗 HN での議論`](https://news.ycombinator.com/item?id=50455332)
+
+---
+
+## 41. 魔法時代の Emacs：1 年の Claude Code、高校生の Rust ターミナルエミュレータ、そして「どう動くかは誰も知らない」
+
+- **Velocity:** ▮▮ rising
+- **Source:** commandlinesystems.com · HN 249 ポイント · 16 時間前（~04:00 UTC+8）
+- **Tags:** `essay` `emacs` `ai`
+
+249 ポイントを集めたこのエッセイは、Claude Code 賛歌として始まる（"Its handling of all aspects of the coding process blew my socks off then, and it's an order of magnitude more capable now"）。途中で "Mathocalypse"（Scott Aaronson の造語——"OpenAI's latest model took all of three hours to carpet bomb 8,000 research problems, resulting in 372 likely hits"）に寄り道し、最後に全編最高の話に着く。著者が AI で書いた Emacs のターミナルモードを r/emacs に投稿すると、ある高校生が Claude で "over a coffee break" 書いた **cooked.el** で返した——"its full-blown, self-contained implementation of a terminal emulator, in Rust no less"。著者の評： "the holmes replicated over a coffee break what a billionaire with infinite resources had been toiling over the last five years. It probably never occurred to the high schooler that a custom built Boeing materialized in the backyard when all he intended was a new flight stick design."。結びはこう着地する："AI has turned Stallman's goal of software freedom on its head. Having your computer do whatever your imagination can think up — that's real freedom. **The only catch is you'll have no idea how it works. No one does.**"
+
+**Why it matters:** Emacs はこのエッセイのトロイの木馬で、主題はソフトウェア文化だ：個人のための使い捨てソフトウェアが、機能への不満より安くなったとき何が起きるか（"Loud bellyaching, or massaging a nice-to-have into a should-have-had... You get all the attention and none of the work"）。cooked.el の逸話は "a custom built Boeing materialized in the backyard"（裏庭に現れた特注ボーイング）という非対称の、いま最も端的な単一例であり、結びの一文は、このフィードが道具の形で繰り返し出会ってきた「個人ソフトウェア論」の正直版だ。
+
+[`🔗 Emacs in the Age of Magic`](https://commandlinesystems.com/magic.txt) · [`🔗 HN での議論`](https://news.ycombinator.com/item?id=50458208)
+
+---
+
+## 42. TensorFold：Python なしの Zig 推論エンジン——そして AI 貢献者のための "Agent Traffic Control" プロトコル
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending daily · 1.8k スター
+- **Tags:** `inference` `zig` `agents`
+
+**ashhart/TensorFold**（1.8k スター、日次トレンド入り）は "serves language models from a Zig binary on Apple Silicon and NVIDIA GPUs — the engine reads checkpoints, tokenizes requests and runs Metal or CUDA kernels directly. Serving needs no Python or MLX installation"（リポジトリ説明には Vulkan も名前がある。README で確認できる経路は Metal/CUDA）。クイックスタートは 4-bit の Qwen3.5-2B で "checked on Metal and a GB10"。本当に新しい部分は貢献ワークフローで、エージェントファーストに書かれている："Building with a coding agent? Have it load the contributor skill before it writes any code"。さらにどの issue に触れる前にも、エージェントは **Agent Traffic Control**（`ashhart/ATC`）を走らせねばならない——`atc check` で重複作業を確認、`atc claim` で issue を獲得、エージェントの作業中は **5 分ごとの pulse**（"Pulse only while the agent is working, before its five-minute check-in expires"）、そして tensorfold.dev/atc に誰が何をしているか示す**ライブのエージェントレーダー**。
+
+**Why it matters:** エンジン自体はすでに飽和領域に踏み込んでいる（llama.cpp、MLX）。しかし ATC プロトコルは新しい成果物だ：オープンソースプロジェクトが、AI エージェント貢献者を管理すべき並行性の問題として扱っている——認証、リース、ハートビート、重複検出、公開レーダー——人間の連携を当てにするのではなく。エージェント執筆の PR が増え続けるなら、このパターン（期限付き issue リース）はより多くのプロジェクトに現れるはずだ。TensorFold は注視すべきリファレンス実装だ。
+
+[`🔗 ashhart/TensorFold`](https://github.com/ashhart/TensorFold) · [`🔗 ライブエージェントレーダー（ATC）`](https://tensorfold.dev/atc)
+
+---
+
+## 43. BusyBox に一括 7 件の CVE レコード——DHCPv6 オーバーフロー 7.6、httpd スタックオーバーフロー 7.5、そして間違ったパスを読む認証チェック
+
+- **Velocity:** ▮ steady
+- **Source:** NVD · 7 レコード · 11 月 11 日 10:16–12:19Z（11 月 11 日 ~18:16–20:19 UTC+8）
+- **Tags:** `busybox` `cve` `embedded`
+
+7 件の BusyBox レコードが 11 月 11 日に NVD に載った。すべて Red Hat の CNA（`secalert@redhat.com`）による採点で、すべてまだ `Awaiting Analysis`。最重量は **CVE-2026-124741（7.6）**：udhcpc6 DHCPv6 クライアントが "does not properly validate the size of network options sent by a server before copying them into memory"——ローカルネットワーク上の悪意ある DHCPv6 サーバーひとつで、BusyBox でアドレスをリースするすべての組込み機器に届く。**CVE-2026-124739（7.5）**：httpd のサブディレクトリ設定処理——"an overly long index page name can trigger a stack-based buffer overflow"。**CVE-2026-124737（7.5）**：TFTP クライアントが独自の小ブロックサイズを要求して標準の応答を受け取ると、既定のブロックサイズへフォールバックして過小なバッファに書き込む。静かだが陰湿なのは **CVE-2026-124738（5.3）**：httpd のプリ圧縮ファイル対応を有効にすると "authentication checks are evaluated only against the requested URL path rather than the pre-compressed file"——認証チェックは URL パスを見て、実際に吐き出すファイルを見ていない。残り：udhcpc6 の use-after-free（4.3）、細工した FAT/HFS+ ファイルシステムに対するボリューム識別の検証欠落 2 件（5.5）。
+
+**Why it matters:** BusyBox はルータ、カメラ、IoT、initramfs のありとあらゆる場所に居て、このうち 3 件は隣接ネットワークの攻撃者から到達できる（DHCP、TFTP）——フラットな LAN と、決して更新されないファームウェアで効く種類だ。スコアは NVD 分析待ちの Red Hat 版。組込み屋は等級ではなくベクトルを読むこと。
+
+[`🔗 NVD：CVE-2026-124741（udhcpc6 7.6）`](https://nvd.nist.gov/vuln/detail/CVE-2026-124741) · [`🔗 NVD：CVE-2026-124738（httpd 認証 5.3）`](https://nvd.nist.gov/vuln/detail/CVE-2026-124738)
+
+---
+
+## 44. Directus の 9.2：public-mode WebSocket 上の認証失敗メッセージで権限チェックをスキップ可能に
+
+- **Velocity:** ▮ steady
+- **Source:** NVD · 11 月 11 日 01:17Z（~09:17 UTC+8）
+- **Tags:** `directus` `cve` `authorization`
+
+**CVE-2026-126539（9.2、CVSS 4.0）**——11 月 11 日公開、VulnCheck の CNA（`disclosure@vulncheck.com`）採点、レコードはまだ `Received`："Directus before 12.1.0 contains an authorization bypass vulnerability that allows unauthenticated attackers to **skip permission checks by sending a failed auth message on public-mode WebSockets**." Directus は権限モデルそのものが製品であるオープンソースのデータプラットフォーム/ヘッドレス CMS——コレクション、フィールド、アイテムがすべてロールでフィルタされる——であり、このバグは WebSocket の public モードが認証失敗の経路を誤り、拒否ではなくスキップにしてしまうことにある。修正は 12.1.0 に降りており、現在のリリースラインは **12.6.1**（11 月 4 日）——まだ 12.0.x 以下のデプロイは、未認証の権限越え面に晒されている。
+
+**Why it matters:** このパターンは Directus を超えて名指しする価値がある：故障は認証フローの*エラー*経路（未認証データも扱うソケットで認証が失敗したとき何が起きるか）にある——テストスイートが最も重み付けを欠く分岐だ。Directus を動かしているなら、バージョンの問いは二値だ：12.1.0 以降か否か。そして分析が降りるまで、このスコアは NVD のではなく VulnCheck のものだ。
+
+[`🔗 NVD：CVE-2026-126539`](https://nvd.nist.gov/vuln/detail/CVE-2026-126539) · [`🔗 directus/directus リリース`](https://github.com/directus/directus/releases)
+
+---
+
+## 45. Waline の自分の管理者への stored XSS：アドバイザリは 7 月 2 日、CVE レコードは 11 月 11 日、そしてまだ修正版の記載なし
+
+- **Velocity:** ▮ steady
+- **Source:** NVD · 2 レコード · 11 月 11 日 05:19Z（~13:19 UTC+8）
+- **Tags:** `waline` `xss` `cve`
+
+中国語ブログ圏のコメント欄の大半を支える Waline に、11 月 11 日付で 2 件のレコードが出た：**CVE-2026-64670（9.3、CVSS 3.1）** と **CVE-2026-64671**、どちらも **@waline/client ≤ 3.15.2** 向け。最初のものが刺さる：コメントエディタのライブプレビューは "with marked and no sanitizer (utils/markdown.ts), and the preview is injected with v-html" で描画され、コメント編集時には生の本文がエディタに種として入れられる——つまり "an administrator who clicks Edit on an attacker's comment renders that attacker's raw HTML in their own session: an unauthenticated commenter achieves privilege-escalation stored XSS against a moderator with a single Edit click."。2 件目：UserList ウィジェットがサーバー返却のコメント者フィールドを連結して DOM を組む。物語は時間線だ：リポジトリアドバイザリ **GHSA-crj3-q72p-ggqm** の公開は **7 月 2 日**——CVE レコードの 4 ヶ月以上前——で、メンテナ lizheming が Critical とし、いまも "**Patched versions: None**" のままだ。npm の `latest` は 3.16.2（11 月 3 日）で、影響範囲より上に位置するが、アドバイザリにもリリースノートにも、どのリリースが修正だと主張する記述はない——プロジェクトが口を開くまで、3.16.x は未確認として扱うべきだ。
+
+**Why it matters:** コメントシステムのモデレーションフローにおける管理者セッション XSS は、ワンクリックの「ゲストから管理者」横移動であり、そのソフトウェアは数千の個人ブログに配備されている——GHSA が 7 月、NVD が 11 月という二つの時計の間隔は、CVE フィードでトリアージしていたすべての人に 4 ヶ月の遅れを意味した。Waline を動かしているなら、レコードの CVSS を待たないこと：アドバイザリ自体の「修正版なし」が、いまの有効な状態だ。
+
+[`🔗 NVD：CVE-2026-64670`](https://nvd.nist.gov/vuln/detail/CVE-2026-64670) · [`🔗 GHSA-crj3-q72p-ggqm（リポジトリアドバイザリ）`](https://github.com/walinejs/waline/security/advisories/GHSA-crj3-q72p-ggqm)
+
+---
+
+## 46. GitHub、週内 2 度目のインシデント：Webhooks・Actions・Pages・Copilot が 33 分低下——RCA の約束はまた
+
+- **Velocity:** ▮ steady
+- **Source:** githubstatus · HN 81 ポイント · 11 月 11 日 20:48Z（11 月 12 日 ~04:48 UTC+8）
+- **Tags:** `github` `incident` `ci`
+
+GitHub は 11 月 11 日 20:48Z に **critical** のインシデントを宣言——"issues impacting multiple GitHub products including Actions, Pages, and Copilot"、最初は Webhooks の性能低下として現れた——21:21Z に解決し、端から端まで **33 分**だった。興味深いのは回復の形だ：21:07Z に緩和が着地し、その後 "the backlog of Actions jobs has been fully processed"——つまり修正後もキューの排出が続いた——14 分後に完全回復を宣言。締めの注記は先週の言い回しを繰り返す："A detailed root cause analysis will be shared as soon as it is available."。これは 7 日で 2 度目の GitHub インシデントだ：11 月 5 日の障害（Pull Requests、Git 操作、Issues、約 2 時間）は**いまだ**に根因を一切公表していない。
+
+**Why it matters:** 業界のほとんどがその上に build する forge での週 2 度のインシデントは、ポストモーテムに値するはずのパターンだ——そしてそれこそ、どちらのインシデントもまだ届けていないものだ。CI を重く使うチームへの運用上の教訓はより小さいが実用的だ：「回復」の宣言後も約 14 分、Actions のバックログは処理を続けた——パイプラインが本当にきれいなのは、インシデントの終了時刻ではなく、キューの排出が終わる時刻だ。
+
+[`🔗 GitHub インシデント：Actions/Pages/Copilot/Webhooks`](https://www.githubstatus.com/incidents/dvy0t3mvh1lg) · [`🔗 GitHub ステータス履歴`](https://www.githubstatus.com/history)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-12T04:30:29Z |
-| Items | 32 |
-| Sources tracked | 32（Hacker News、GitHub Trending、NVD、CISA KEV、arXiv、oss-security、Apache httpd、ベンダーブログ、セキュリティアドバイザリ） |
+| Generated | 2026-11-12T12:20:00Z |
+| Items | 46 |
+| Sources tracked | 46（Hacker News、GitHub Trending、NVD、CISA KEV、arXiv、oss-security、Apache httpd、ベンダーブログ、セキュリティアドバイザリ） |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8（1 日 3 回） |
 | Ranking | 速度加重（即時性 × エンゲージメント加速度 × 情報源の権威） |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

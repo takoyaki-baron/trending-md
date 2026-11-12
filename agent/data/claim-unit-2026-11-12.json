@@ -1,9 +1,9 @@
 {
- "generated": "2026-11-12T04:31:39.473Z",
+ "generated": "2026-11-12T12:34:51.601Z",
  "files": [
   {
    "file": "2026-11-12.md",
-   "items": 32,
+   "items": 46,
    "findings": [
     {
      "check": "cvss",
@@ -38,7 +38,7 @@
      "item": 23,
      "verdict": "ok",
      "claim": "CVE-2026-119618 `Received`",
-     "detail": "Received (lastModified 2026-11-11T19:17:30.313)"
+     "detail": "Received (lastModified 2026-11-12T10:17:28.360)"
     },
     {
      "check": "range",
@@ -111,32 +111,60 @@
      "detail": "the item names a stopping point — silent, because the prose already lets the reader tell which number it read"
     },
     {
+     "check": "status",
+     "item": 34,
+     "verdict": "ok",
+     "claim": "CVE-2026-123864 `Received`",
+     "detail": "Received (lastModified 2026-11-11T19:17:32.790)"
+    },
+    {
+     "check": "status",
+     "item": 39,
+     "verdict": "ok",
+     "claim": "CVE-2026-126617 `Received`",
+     "detail": "Received (lastModified 2026-11-11T09:17:13.860)"
+    },
+    {
+     "check": "status",
+     "item": 43,
+     "verdict": "ok",
+     "claim": "CVE-2026-124741 `Awaiting Analysis`",
+     "detail": "Awaiting Analysis (lastModified 2026-11-11T11:17:17.397)"
+    },
+    {
+     "check": "status",
+     "item": 44,
+     "verdict": "ok",
+     "claim": "CVE-2026-126539 `Received`",
+     "detail": "Received (lastModified 2026-11-11T01:17:15.173)"
+    },
+    {
      "check": "repo",
      "item": 15,
      "verdict": "star-surge",
-     "claim": "232 quoted vs 487 now",
-     "detail": "FrigadeHQ/yogurt: 232 → 487 (+52%, 255 stars) since the batch was written on a 1-day-old record (launch window) — a rising count is not a wrong one; date the reading if the number will be re-used"
+     "claim": "232 quoted vs 715 now",
+     "detail": "FrigadeHQ/yogurt: 232 → 715 (+68%, 483 stars) since the batch was written on a 2-day-old record (launch window) — a rising count is not a wrong one; date the reading if the number will be re-used"
     },
     {
      "check": "repo",
      "item": 15,
      "verdict": "ok",
      "claim": "FrigadeHQ/yogurt",
-     "detail": "487★, last push 2026-11-12"
+     "detail": "715★, last push 2026-11-12"
     },
     {
      "check": "repo",
      "item": 19,
      "verdict": "ok",
      "claim": "herdrdev/herdr",
-     "detail": "50388★, last push 2026-11-07"
+     "detail": "50507★, last push 2026-11-07"
     },
     {
      "check": "repo",
      "item": 20,
      "verdict": "ok",
      "claim": "addyosmani/agent-skills",
-     "detail": "116065★, last push 2026-11-01"
+     "detail": "116341★, last push 2026-11-01"
     },
     {
      "check": "batch",
@@ -361,6 +389,104 @@
      "verdict": "ok",
      "claim": "4 quotation(s)",
      "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 34,
+     "verdict": "quote-not-read",
+     "claim": "“a client can change the servername during tls 1 2 renegotiation to reach endpoints it was not au…”",
+     "detail": "16 words, 0 hits in 9 readable source(s), but 1 cited page(s) went unread (nvd.nist.gov/vuln/detail/CVE-2026-123864 served a bot wall) — unread is not absent, so this is not called a fabrication; open those page(s) before publishing"
+    },
+    {
+     "check": "quotation",
+     "item": 34,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 9 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 35,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 36,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 37,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 38,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 39,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 1 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 40,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 41,
+     "verdict": "ok",
+     "claim": "8 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 42,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 43,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 4 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 44,
+     "verdict": "quote-not-read",
+     "claim": "“directus before 12 1 0 contains an authorization bypass vulnerability that allows unauthenticate…”",
+     "detail": "24 words, 0 hits in 3 readable source(s), but 1 cited page(s) went unread (nvd.nist.gov/vuln/detail/CVE-2026-126539 served a bot wall) — unread is not absent, so this is not called a fabrication; open those page(s) before publishing"
+    },
+    {
+     "check": "quotation",
+     "item": 45,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 4 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 46,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
     }
    ]
   }
@@ -368,7 +494,7 @@
  "status_watch": [],
  "api_calls": 0,
  "readme_calls": 0,
- "cited_page_calls": 33,
+ "cited_page_calls": 1,
  "repo_page_calls": 0,
  "nvd_calls": 2,
  "nvd_failed_chunks": 0,
