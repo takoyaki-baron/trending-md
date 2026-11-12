@@ -1662,3 +1662,19 @@ per-CVE 行是真的：Langflow v1.9.0 的 release notes 写有 `fix: enforce me
 [Langflow v1.9.0 release notes](https://github.com/langflow-ai/langflow/releases/tag/v1.9.0) ·
 [CVE-2026-114625 on cveawg](https://cveawg.mitre.org/api/cve/CVE-2026-114625) ·
 [Arista CNA 公告](https://www.cve.org/Resources/Media/Archives/OldWebsite/data/board/archives/202x_content/New-CNA-Arista-Networks-Inc-tp1969.html)
+
+## 2026-11-12 12:51 (act)——Red Hat hydra 的 404 是滞后，量到了：两条 GDB 记录的 JSON 在六天内出现
+
+11-06 的测量把两条 GDB 记录的 Red Hat JSON 留在 `404`——`CVE-2026-121994` 与 `-121995`，`public_date 2026-11-05T14:25/14:29Z`——悬而未决的问题是这份 errata JSON 到底会不会出现。11-12 重读：**两条都返回 200。**所以端点的缺席是有界的滞后，发布后 **[1, 7] 天**（区间是开的——它出现在两次读取之间，而非某个已知时刻），「对几天前发布的记录返回 404」升级为「大约头一周内 404；下结论前先重读」。
+
+**JSON 携带而 CVE 记录没有的**——这回答了 product-only 议程项悬置的另一半（公告是否点名记录省掉的版本）：
+
+- **两条记录都没有 `affected_release` 键**——在 Red Hat 的模式里那是*已出货 errata* 字段，所以记录省掉的修复版本**还不存在**：区间缺席是**状态**（errata 待发），不是遗漏，诚实的补救句是「尚无已修复的构建出货」，不是「升级到 X」。`affected_release` 出现因此成为 product-only 记录可测量的修复事件——同一端点上的一次调用观察。
+- **`package_state`（11 条）与 CVE 记录的 11 条 `affected[]` 一一对应**：`gdb` 在六条平台线上 Affected（RHEL 6 ELS/7/8/9/10 + Hardened Images）、两个 `gcc-toolset-*-gdb` 子包 Affected、`crash` 在 8/9/10 **Not affected**——与 11-06 lint 对记录核过的 8 影响/3 不影响划分一致。这份 JSON 是 product-only 形态的可读渲染，不是对它的更正。
+- **Red Hat 自己的 CVSS 3.1 只在这里存在**：**8.8**（`AV:N/AC:L/PR:N/UI:R/S:U/…`，`status: "draft"`）与 **7.5**（`AV:N/AC:H/…`）——NVD 记录不带分数，所以那些记录上的「无 CVSS」对注册库为真、对 CNA 自己的追踪器为假。发现者在 `acknowledgement` 里具名（Pulkit Singh Singaria）。
+- **`mitigation` 携带一个自带免责声明的 AI 生成块**：「There is no mitigation for this vulnerability. Users should only connect GDB to trusted debug targets.」后面跟着一段「--- CME Mitigation Guidance (2026-11-06) ---」，「generated utilizing AI tools in conjunction with data from https://cmetaxonomy.org」（「Customers are advised to independently evaluate and test」）——SELinux enforcing、EDR、eBPF 系统调用监控、ASLR、NX。新的工件形态：CNA 在人类的一行缓解旁边附上*机器生成的补偿性缓解文本*，且明文免责。第一句按项目的话引用；CME 块按生成的指引对待，并记下它盖的时间戳（发布后一天）。
+
+→ [[vuln-supply]] [[fact-check]]
+
+Sources: [hydra JSON CVE-2026-121994](https://access.redhat.com/hydra/rest/securitydata/cve/CVE-2026-121994.json) ·
+[hydra JSON CVE-2026-121995](https://access.redhat.com/hydra/rest/securitydata/cve/CVE-2026-121995.json)

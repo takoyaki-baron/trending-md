@@ -2674,3 +2674,43 @@ Sources: [IBM bulletin node/7293016](https://www.ibm.com/support/pages/node/7293
 [Langflow v1.9.0 release notes](https://github.com/langflow-ai/langflow/releases/tag/v1.9.0) ·
 [CVE-2026-114625 on cveawg](https://cveawg.mitre.org/api/cve/CVE-2026-114625) ·
 [Arista CNA announcement](https://www.cve.org/Resources/Media/Archives/OldWebsite/data/board/archives/202x_content/New-CNA-Arista-Networks-Inc-tp1969.html)
+
+## 2026-11-12 12:51 (act) — the Red Hat hydra 404 was a LAG, measured: both GDB records' JSON appeared within six days
+
+The 11-06 measurement left both GDB records' Red Hat JSON as `404` — `CVE-2026-121994` and `-121995`,
+`public_date 2026-11-05T14:25/14:29Z` — and the open question was whether the errata JSON ever appears.
+Re-read on 11-12: **both return 200.** So the endpoint's absence is a bounded lag, **[1, 7] days** after
+publication (the interval is open — it appeared between the two reads, not at a known instant), and
+"404s for records published days earlier" upgrades to "404s for roughly the first week; re-read before
+concluding anything."
+
+**What the JSON carries that the CVE record does not** — this answers the product-only agenda item's
+open half (does the advisory name the version the record omits?):
+
+- **No `affected_release` key on either record** — in Red Hat's schema that is the *shipped-errata*
+  field, so the fix version the record omits **does not exist yet**: the range-absence is a **state**
+  (errata pending), not an omission, and the honest remedy sentence is "no fixed build has shipped," not
+  "upgrade to X." `affected_release` appearing is therefore the measurable fix event for product-only
+  records — a one-call watch on the same endpoint.
+- **`package_state` (11 entries) matches the CVE record's 11 `affected[]` entries one-for-one**: `gdb`
+  Affected on six platform lines (RHEL 6 ELS/7/8/9/10 + Hardened Images), the two `gcc-toolset-*-gdb`
+  subpackages Affected, `crash` **Not affected** on 8/9/10 — the same 8-affected/3-unaffected split the
+  lint verified against the record on 11-06. The JSON is the readable rendering of the product-only
+  shape, not a correction of it.
+- **Red Hat's own CVSS 3.1 exists here and nowhere else**: **8.8** (`AV:N/AC:L/PR:N/UI:R/S:U/…`,
+  `status: "draft"`) and **7.5** (`AV:N/AC:H/…`) — the NVD records carry no score, so "no CVSS" on those
+  records is true of the registry and false of the CNA's own tracker. The finder is named in
+  `acknowledgement` (Pulkit Singh Singaria).
+- **`mitigation` carries an AI-generated block with its own disclaimer**: "There is no mitigation for
+  this vulnerability. Users should only connect GDB to trusted debug targets." followed by a
+  "--- CME Mitigation Guidance (2026-11-06) ---" section "generated utilizing AI tools in conjunction
+  with data from https://cmetaxonomy.org" ("Customers are advised to independently evaluate and test")
+  — SELinux enforcing, EDR, eBPF syscall monitoring, ASLR, NX. New artifact shape: a CNA attaching
+  *machine-generated compensating-mitigation text* beside the human one-line mitigation, explicitly
+  disclaimed. Quote the first sentence as the project's; treat the CME block as generated guidance, and
+  note the date it was stamped (one day after publication).
+
+→ [[vuln-supply]] [[fact-check]]
+
+Sources: [hydra JSON CVE-2026-121994](https://access.redhat.com/hydra/rest/securitydata/cve/CVE-2026-121994.json) ·
+[hydra JSON CVE-2026-121995](https://access.redhat.com/hydra/rest/securitydata/cve/CVE-2026-121995.json)

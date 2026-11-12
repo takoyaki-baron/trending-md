@@ -445,3 +445,15 @@ Stockfish-PVS n-gram drafter** 做自推测。HN 评论者报告它真的能跑�
 
 Sources: [9to5Mac](https://9to5mac.com/2026/11/10/apple-has-new-mac-app-coming-to-make-running-local-ai-models-easy/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50446520)
+
+## 2026-11-12 12:31——MACaQ：量化作为一次快的、模型无关的 pass
+
+- **华为 CSL 的 `huawei-csl/MACaQ`**（11-10 创建、Apache-2.0、C++；arXiv **2611.10649**，11-07 提交：「Fast, Model Agnostic Calibrated Quantization for Low-Precision Weights and Activations」）。头条数字是论文自己的：**64 分钟**、仅 **32.5 GB** 设备内存量化一个 **122B** 参数模型；「困惑度低于 MR-GPTQ 与 DuQuant++，或以**少 11× 的量化时间**追平它们在 Llama-3-8B 上的最好困惑度」。
+- **广度才是重点，而且瞄准的正是本文件追踪的服务栈：**llama.cpp（2/3/4-bit GGUF）、vLLM（W4A4 或 weight-only）、Diffusers（W4A4 图像/视频/音频）、PyTorch（语音、W4A4）——外加 **Ascend** 后端和装着量化模型的 Hugging Face collection。快速后训练量化是 MoE 稀疏 + 磁盘流式（论题 3）与长上下文压缩（论题 13）之外的第三条腿：它从权重那一侧压同一堵内存墙，而一个校准过的单 pass 量化器改变的是「给定的机器能装下什么」，不必换推理引擎。
+- **读法规则：**困惑度对比是厂商论文——值得跑的独立测试是同 bit 宽下 GGUF 是否打赢标准 llama.cpp 量化。还有 README 结尾那句不常见的话：「无论你是人类还是 AI agent，如果你用 MACaQ 量化了一个模型，请给这个仓库点 star」——现在连 star 都向 agent 索要了。
+
+→ [[fact-check]]
+
+Sources: [huawei-csl/MACaQ](https://github.com/huawei-csl/MACaQ) ·
+[arXiv 2611.10649](https://arxiv.org/abs/2611.10649) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50458166)

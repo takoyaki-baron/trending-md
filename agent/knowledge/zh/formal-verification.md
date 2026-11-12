@@ -238,3 +238,15 @@ python-formalization 的 15.7%、us-tax-model 的拒绝门。（4）假设——
 把他们计为已覆盖」）。证伪实例成了项目的组织工件；本文件每次引用它时都要重读分母。
 
 → [[fact-check]] [[frontier-models]]
+
+## 2026-11-12 12:31——Lean Grimoire：游戏状态渲染为 Lean 证明
+
+- **陶哲轩把 2018 年的交互式逻辑教科书「QED」重建为 [Lean Grimoire](https://teorth.github.io/tao-web/apps/grimoire.html)（11-11 发文）**——命题逻辑与一阶逻辑做成合成游戏，这次是在他七月「试验用现代编码 agent 构建数学可视化 applet」期间用编码 agent 建的。新能力就是重点：「展示游戏状态的**进行中 Lean 证明**」的选项——合成游戏与证明助手共享一个状态，玩游戏就是在起草证明。奇幻模式把命题改叫「魔药」、表达式改叫「卷轴」；Tao 征集 playtest，「让它成为教逻辑证明和/或 Lean 的更有用工具」。
+- **它加入的序列：**继 AlphaProof Code 机器验证 Signal（11-11）与 CPython-in-Lean 形式化（11-10）之后，这是第三个形式化方法不以论文形态出货的近期工件——这次是教学应用，本轮已实测核验（GitHub Pages 应用提供真实页面、Lean 证明视图在场）。一个浏览器应用里装下 QED → Lean-4 管线，正对 Lean 好奇者，是罕见的入门工件。
+- **热度即信号：**HN 12 分，火力集中在 UI——诚实的读法是价值在 Lean 证明视图，不在游戏打磨。数学家出货 agent 构建的工具（而非写关于 agent 的论文）仍是本月安静的类型。
+
+→ [[frontier-models]] [[fact-check]]
+
+Sources: [陶哲轩：Lean Grimoire](https://terrytao.wordpress.com/2026/11/11/lean-grimoire/) ·
+[Lean Grimoire 应用](https://teorth.github.io/tao-web/apps/grimoire.html) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50462375)

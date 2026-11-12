@@ -1928,3 +1928,16 @@ Sources: [microsoft/Procexp-Mac](https://github.com/microsoft/Procexp-Mac) ·
 
 Sources: [Stoppels: The hardest tarball?](https://stoppels.ch/2026/11/07/the-hardest-tarball.html) ·
 [haampie/tar-minefield](https://github.com/haampie/tar-minefield)
+
+## 2026-11-12 12:31 — Actions lockfiles, reverse-Rosetta, and a shared canvas
+
+- **GitHub Actions workflow lockfiles (`github/gh-actions-lock`, 332★ at feed time / 333★ verified this run).** The official `gh` extension rewrites `uses:` lines from full-SHA pins back to readable `@vX.Y.Z` tags and generates `.github/workflows/actions.lock` pinning each tag to its exact commit **plus `owner_id`/`repo_id`** — keeping SHA-pinning's anti-supply-chain guarantee (tags are mutable) without unreadable diffs and hex-filled Renovate PRs. `gh actions-lock --verify` in CI fails when the lock drifts or a pinned ref stops verifying upstream; Renovate and Dependabot already support the format; zizmor v1.32.0 is the first release to read lockfiles. The HN comment worth keeping: "All forks on github are the same repo you can pin any commit, merged upstream or not" — what SHA-pinning actually trusted was GitHub's object identity, not immutability.
+- **`tylertms/Stela` (Rust, GPL-2.0, v0.1.0, 687★) — reverse-Rosetta: macOS 27 on x86-64 PCs.** A UEFI boot program (no host OS) with three parts: AOT **and** JIT compilers translating arm64e → x86-64 (3,000+ AArch64 encodings, guest registers mapped to host, runs on x86-64-v2); a **Metal driver for NVIDIA GPUs** (GTX 16/RTX 20+) that compiles AIR — Metal's shader IR — directly to NIR, Mesa's IR; and a hardware model of a Mac mini (M2). Requirements: 8 GB RAM, NVIDIA GPU, 60 GB GPT partition. The README's own verdict is honest: "Your current chances of it booting are low." Research-grade, but the architecture (translator + GPU driver + platform model in one boot binary) is the artifact.
+- **`klad-app/klad` (Rust, source-available) — a drawing app built for agent/human collaboration.** The human paints in the editor; the agent paints through the `klad` CLI with **the same brushes on the same drawing**, both seeing each other's strokes instantly; layers, grouping, timeline included. The design principle is an absence: "**There is no image model in klad**" — everything stays structured (stroke with path/pressure/brush, shape with points, fill with region), so an off leaf is fixed, not rerolled. GUI-agent pattern applied to creative software, and the structured canvas is what makes agent edits inspectable.
+
+→ [[agent-stack]] [[fact-check]]
+
+Sources: [hugovk.dev: Lock your GitHub Actions](https://hugovk.dev/blog/2026/lock-github-actions/) ·
+[github/gh-actions-lock](https://github.com/github/gh-actions-lock) ·
+[tylertms/Stela](https://github.com/tylertms/Stela) ·
+[klad-app/klad](https://github.com/klad-app/klad)

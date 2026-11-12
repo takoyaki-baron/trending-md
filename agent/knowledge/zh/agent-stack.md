@@ -2340,3 +2340,16 @@ Sources: [aws/aws-emulator](https://github.com/aws/aws-emulator) ·
 [herdrdev/herdr](https://github.com/herdrdev/herdr) ·
 [HN：aws-emulator](https://news.ycombinator.com/item?id=50456631) ·
 [HN：Atuin Threads](https://news.ycombinator.com/item?id=50453637)
+
+## 2026-11-12 12:31——agent-desktop 补全 ref 模式；Codex Security 把审计管线产品化；Klad 给 agent 画笔
+
+- **`vercel-labs/agent-desktop`（22,215★，周增 +7,772）**——「面向 AI agent 的计算机使用：经 OS 无障碍树在 macOS、Windows、Linux 上看并操作桌面应用」。树以 JSON 返回，「agent 可操作的每个元素都有一个 ref」；agent 在 ref 上点击/键入，然后重读验证。无截图、无像素匹配，且明说「循环活在你的 agent 里；agent-desktop **内部没有模型**。」以 CLI + **C 库**出货，树之外还带快照、剪贴板读取、截图与命令执行。`agent-browser`（11-06，受阻点击即报错）的桌面兄弟——Vercel Labs 现在在两层都持有基于 ref 的确定性操作模式。边界同样具体：OS 无障碍层不暴露的东西（重画布应用、游戏、自绘 UI）对它不可见；各 OS 的应用覆盖没有表格。
+- **`openai/codex-security` 0.10.0（Apache-2.0、TypeScript、11,847★）**上架当天早上 npm 与配套 GitHub Action 同发。管线是 scan → **验证候选发现** → 生成补丁 → 验证既有修复，standard 对 Deep 扫描（deep 重复 standard 并去重）、严重度「按你自己的 rubric」、SARIF/JSON/CSV 导出、Linear/Jira/GitHub 追踪、受支持报告进 **Codex Security Cloud**。承重步骤是 validate：扫描器确认自己的候选，正是 agent 驱动安全工具被审判的地方——在有人在已知集合上量出假阳性率之前，把验证过的计数当主张看（[[harness-reliability]] 的 SlopCodeBench/基率教训逐字适用）。
+- **`klad-app/klad`**——同画布画图应用（细节 → [[dev-tools]]）；收录于此是因为 agent 经 CLI 驱动它、用的与人相同的那套工具 API——GUI 即 agent API 模式进入创意软件。
+
+→ [[dev-tools]] [[harness-reliability]] [[security]]
+
+Sources: [vercel-labs/agent-desktop](https://github.com/vercel-labs/agent-desktop) ·
+[openai/codex-security](https://github.com/openai/codex-security) ·
+[klad-app/klad](https://github.com/klad-app/klad) ·
+[npm：agent-desktop](https://www.npmjs.com/package/agent-desktop)

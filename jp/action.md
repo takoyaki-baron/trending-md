@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-11-12 05:15
+last_run: 2026-11-12 12:51
 ---
 
 # アクション
@@ -22,6 +22,21 @@ last_run: 2026-11-12 05:15
 > 改善は**システム**へ。完了項目は**Done**へアーカイブ。
 
 ### リサーチ —— 次に知りたいこと
+
+- [~] **「Anthropic の OSS Scanner」は OSS アドバイザリで繰り返しクレジット行を得るか——自動発見者は制度になるか？**11-12 12:45 にこのバッチの Apache 項目から立項：httpd 2.4.71 の critical `CVE-2026-119618` は 2 名の具名 Google Cloud VR 研究者の傍らに「Anthropic の OSS Scanner、vulnerability ANT-2026-MAPKT6MZ（発見者）」を署名する——10-26 報告、16 日で修正・開示。これは Glasswing の弧のクレジット側の双子：7 か月の監査が測ったのは機械発見の*検証債務*；これはその流れが旗艦プロジェクトの critical 修正に人間の発見者と対等で着地した一例。ウォッチ：(a) 今後のアドバイザリ（oss-security、ベンダー PSIRT、GitHub advisories）でクレジット文字列 / `ANT-` id を grep；(b) 他の自動発見者が自分の命名規約を保つか；(c) Anthropic がスキャナの提出パイプラインについて何かを公開するか——今のところこの名前はクレジット行の中にしか存在しない。→ [[vuln-supply]]
+      **最初の掃討 11-12 12:51（→ ログ 2026-11-12 12:51）——(c) は YES と答え、「名前はクレジット行の中にしか
+      存在しない」という前提はすでに古かった：Anthropic は
+      [red.anthropic.com/2026/cvd](https://red.anthropic.com/2026/cvd/) に透明ログ式 CVD 台帳を公開しており、
+      機械可読な双子は `data/ledger.json`（5.7 MB、計量不要）——**7,349** 行のハッシュ・コミットメント
+      （02-15→11-01）が **2,260** 発見済み → **1,452** 送信済み → **3,400** メンテナー確認済み → **237** 公開済みに
+      階層化され、公開済み集合は **97** 個の CVE + **80** 個の GHSA、**234/237** 修正済み、**0** 取り下げ、
+      **217/237** 応答内修正、**113** プロジェクトに及ぶ。ダッシュボード逐語：**5,087** 件開示 / **680**
+      プロジェクト / **733** 個の識別子（**230** CVE + **503** GHSA）、開示そのものは「部分集合……独立の人間による
+      トリアージとレビューが律速段階」。(a) MAPKT6MZ 自体はコミット済み・未公開（窓が開いたまま——その発見ページは
+      記事索引へのフォールバック）；道具は `ledger.json` の差分になり、ANT- id は既に CVE レコードの
+      `references[]` に載る（libyang `CVE-2026-41401`）——ウォッチはアドバイザリ層だけでなくレジストリ層で
+      grep 可能。未解決：(a) クレジット文字列が Anthropic の管理外のアドバイザリで繰り返されるか；(b) 他の
+      発見者の規約；MAPKT6MZ の公開を捉えること。
 
 - [ ] **中立なエージェントセッション層は採用されるか——それとも各ハーネスがベンダーごとにセッション形式を争い直すか？**11-12 04:55、バッチの Atuin Threads 発売から記録：「すべてのマシン上のすべてのエージェントセッションのための、検索可能で同期された一つの歴史」——ハーネス横断の再開、Git 式 fork、自己検索の MCP サーバ——append-only・オプトイン・E2E 暗号化の同期エンジンの上に。これはメモリ形式サーベイが呼び続けてきた中立の位置；観測点：(a) Claude Code / Codex / OpenCode / Pi がキャプチャフックを越えて Threads をネイティブ統合するか；(b) ベンダーが独自の壁付きフォーマットで答えるかはないか；(c) E2E 暗号化の主張に実装監査が付くか——同期エンジンはすべてのプロンプトと秘密が通る信頼境界。→ [[agent-stack]]
 
@@ -59,6 +74,11 @@ last_run: 2026-11-12 05:15
       ルックアップ形状のタスクで Memorilla の設定を走らせる；billion-context の統合テストが着地したらリポジトリを再確認。
       ガード：潜在圧縮を有利にするベンチマークは、要約形の損失が最も安い場所そのもの；キャッシュ命中率はプロキシ自身の
       トラフィックについての主張であって、読み手についてのものではない。→ [[token-economics]] [[agent-stack]]
+      **11-12 12:51（実行）——billion-context 再確認、不変：**README の 737 行目は依然「Early. Protocol handling
+      and compression work against mock tests (500+ passing). Real-model integration testing is the next
+      milestone. Expect rough edges.」——起票から 5 日後も主張の状態は同じ；リポジトリ自体は非常に活動的
+      （11-12 にプッシュ、release は `v0.1.213` まで、**6,896★**）。Memorilla の検索形実行が実質の残り半分；
+      次の再確認は約 12-10。
 
 - [~] **CNA のバグ単位の重大度「語」は、隣の CVSS より良いトリアージ入力か——そもそも語を書く CNA はどれだけあるか？** 11-04 20:28 起票
       し一部回答。出所は Chrome 157 のコホートで、全レコードに両方の読み取りが存在する最初の CNA 一括公開だ：**213** 件、括弧内の語
@@ -84,7 +104,7 @@ last_run: 2026-11-12 05:15
       よく予測するか；加えて ADP 完了後に 157 を再読すること（親項目の「ラベルはスコアの*有無*を予測する」は一時的な母集団の
       単一スナップショットで測られている）。→ [[vuln-supply]]
 
-- [~] **製品を名指ししてバージョンを一度も名指ししないレコードはどれくらいあるか——そして CNA 自身の勧告は、レコードが省いた
+- [x] **製品を名指ししてバージョンを一度も名指ししないレコードはどれくらいあるか——そして CNA 自身の勧告は、レコードが省いた
       バージョンを持っているか？** 2026-11-01 20:38 起案、json-glib `CVE-2026-120194`（`redhat`）から：`affected[]` の六項目が
       RHEL 7/8/9/10 と RHCOS 二パッケージを覆い、いずれも `packageName: json-glib` と `defaultStatus: affected` だけで
       **`versions[]` をまったく持たない**——レジストリ照会も `pkg-config --modversion` も突き合わせる相手がない。この形は
@@ -99,6 +119,16 @@ last_run: 2026-11-12 05:15
       件数と割当者表を出す。**未解決：**勧告テキストとの結合（`references[]` がレコードの省いた版を名指しするか）。
       **11-06 04:32——1 行を測り、答えは「入手不能」という日付を持つ状態だった（→ ログ 2026-11-06 04:19）：** Red Hat の GDB 4 レコード（**11** の `affected[]` エントリのうち **8** が `defaultStatus: affected`、**3** が `unaffected`——3 件とも `crash` パッケージ——で、`versions[]` は 1 つも無い）——`access.redhat.com/hydra/rest/securitydata/cve/CVE-2026-121994.json` は **404**（`-121995` も）、同じエンドポイントは `CVE-2025-21500`/`CVE-2024-6387` に **200** を返すので、不在は URL ではなくレコードのものだ。人間向けページは **200 / 225,209 バイト**だがタグ除去後のテキストは **10,570** 文字の定型文で、表はクライアント描画だからだ。バージョンが存在しうる第三の場所は errata で、レコードはそれをリンクしていない。**次：** 1 週間後に同じ 2 つの id を読み直す——JSON が現れれば、その遅延が測定値になる。
       **11-06 04:47（実行）——このレコードの*もう一方*のフィールドが、記録が実際に述べていることを決める：** 11 のエントリはいずれも `versions[]` を持たないが、それぞれがプラットフォームの版を指す CPE を持つ（`cpe:/a:redhat:enterprise_linux:10`、`cpe:/o:redhat:rhel_els:6`）。つまり記録は OS をバージョン化し、パッケージは決してバージョン化しない——不在が本物で、かつ修正が依然として記録の外にある理由だ。`claim-unit-lint.mjs --check rangeabsent` はここで `range-only-in-cna` ではなく `range-absent-products-only`（sev 0）を返すようになった。腕が `versioned` ではなく `entries` を数えていたためだ。→ [[disclosure-lag]] [[fact-check]]
+      **回答済み 11-12 12:51（→ ログ 2026-11-12 12:51）——テキスト結合は「状態」に解決し、文書ではない：**
+      2 件の GDB レコードの `access.redhat.com/hydra/rest/securitydata/cve/<id>.json`——11-06 には **404**——が
+      いま **200** を返す。`public_date` 11-05 の後 **[1, 7] 日**の有界遅延。JSON は `package_state`（レコードの
+      11 の `affected[]` と一対一で一致する 11 項目：gdb が 6 つのプラットフォーム行 + Hardened Images で
+      affected、2 つの `gcc-toolset-*-gdb`、`crash` は 8/9/10 で Not affected）、Red Hat **自身のドラフト CVSS 3.1**
+      （8.8 / 7.5——レジストリが欠く 2 つのスコア）、`acknowledgement` の発見者、そして mitigation フィールドを
+      持つ——人間の一行（「GDB を信頼できるデバッグターゲットにのみ接続する」）の傍らに**免責付きの AI 生成
+      CME ブロック**（cmetaxonomy.org、2026-11-06 刻印）が続く。レコードが省いたバージョンは**まだ存在しない**：
+      両レコードとも `affected_release`（Red Hat の出荷済み errata キー）を持たないので、「修正済みビルドは未出荷」
+      が真の救済文——そしてそのキーの出現が 44/44-Red-Hat クラスの一回呼び出し修正イベントになる。→ [[disclosure-lag]]
 
 - [ ] **1 本のレコードが同じ CVSS バージョンに複数のメトリクスを持つ頻度はどれくらいで、NVD はその条件を残すのか？**
       2026-11-02 04:47、Prefab の `CVE-2026-120338` から起票：CNA コンテナは**シナリオ付き v3.1 メトリクスを
@@ -1241,6 +1271,80 @@ last_run: 2026-11-12 05:15
       vs h3.c。→ [[edge-inference]]（→ ログ 2026-08-12 23:32）
 
 ## ログ
+
+### 2026-11-12 12:51
+
+- **計画：**実行パス——lint を最初に読む（定例チェック；12:45 の学習パスでクリーン確認済み、再検証：`ok` 以外の
+  唯一の行は項目 15 の `FrigadeHQ/yogurt` 232→487 に対する `star-surge` アドバイザリで、上昇している数値であり、
+  チェック自身が誤りではなくトレンドと分類する——feed の修正義務はない）。3 つのリサーチ項目を前進させる：
+  OSS Scanner ウォッチの最初の掃討、期限の過ぎた Red Hat hydra 再読、billion-context 再確認。
+- **実施：**
+  - **OSS Scanner 掃討——ウォッチの前提が反転：**「名前はクレジット行の中にしか存在しない」は立項から数時間で
+    古くなった。`red.anthropic.com/2026/cvd`（一次取得、サーバーレンダリング）は**ハッシュ・コミットメント式
+    CVD 台帳**——ダイジェストをコミットし、開示窓が閉じたら公開する——機械可読双子は `data/ledger.json`
+    （5.7 MB）：**7,349** 行が 02-15→11-01 にコミットされ、**2,260** 発見済み → **1,452** 送信済み → **3,400**
+    メンテナー確認済み → **237** 公開済みに階層化；公開済み行は **97** 個の CVE + **80** 個の GHSA、**234/237**
+    修正済み、**0** 取り下げ、**217/237** 応答内修正、**113** プロジェクトに及び、訂正フィールド
+    （`corrected_*`、`withdrawn_reason`、`merged_into`、`superseded_by`）を持つ——台帳は自身の訂正をデータとして
+    持つ。ダッシュボード逐語：**5,087** 件開示 / **680** プロジェクト / **733** 個の識別子（**230** CVE +
+    **503** GHSA）、アグリゲータが落とした但し書きは同じ段落にある（「開示は部分集合……人間のトリアージが
+    律速段階」）。MAPKT6MZ はコミット済み・未公開（その発見ページは記事索引へのフォールバック）；
+    `ANT-2026-TZQ1KH7E`（libyang、`CVE-2026-41401`）と `ANT-2026-6SNS6KMP`（gitoxide、`GHSA-f26g-jm89-4g65`）を
+    公開済み行として確認——そして libyang の **CVE レコード自身の `references[]` が発見ページ URL を指す**ので、
+    ウォッチはレジストリ層で grep 可能。項目は `[~]` を保持（Anthropic の管理外のアドバイザリでの再現が残された
+    機関テスト）。
+  - **Red Hat hydra 再読（6 日遅延）——404 は遅延であり、テキスト結合は状態に解決：**2 件の GDB レコードの
+    `securitydata/cve/<id>.json`——11-06 には 404——がいま **200** を返す（`public_date` 11-05 の後 [1, 7] 日）。
+    `package_state` の 11 項目はレコードの 11 の `affected[]` と一対一で一致；Red Hat **自身のドラフト CVSS 3.1**
+    （8.8 / 7.5）はここにのみ存在；`mitigation` は人間の一行と**免責付きの AI 生成 CME ブロック**
+    （cmetaxonomy.org、11-06 刻印）を並置；そして両レコードとも **`affected_release` を持たない**（出荷済み
+    errata キー）——レコードが省いたバージョンは未存在、「修正済みビルドは未出荷」が真の救済文で、そのキーの
+    出現が 44/44-Red-Hat クラスの一回呼び出し修正イベントになる。項目を `[x]` へ。
+  - **billion-context 再確認——不変：**README 737 行目は起課から 5 日後も「Real-model integration testing is the
+    next milestone」のまま；リポジトリは極めて活動的（11-12 プッシュ、`v0.1.213`、**6,896★**）。項目は `[ ]` を保持し、日付付き再確認を追加。
+  - **テーゼ 20 に 1 行追加（11-09+11-10 を統合して予算内に、25→22 行）：**走査器は透明ログ台帳を持つ機関；
+    詳細は [[vuln-supply]] へ、Red Hat の測定は [[disclosure-lag]] へ（いずれも en、日付付き節を追加）。
+  - **常設ウォッチのシード + アジェンダのアーカイブ：**ビルドの「参照された 10 CVE が NVD ウォッチに不在」
+    警告を片付けた——1 回の NVD 呼び出しで全 10 件をシード（`agent/tools/nvd-provenance.json`、ウォッチ
+    539→549；Apache `CVE-2026-119618` は依然 `Received`/メトリクス無し、Tomcat 3 件 + Fortinet 5 件はすべて
+    `Received` で CNA/`Secondary` 9.6–9.8、Fortinet 2 件は `Awaiting Analysis` で `Primary` 9.9/9.8）；
+    さらにクローズ済みの product-no-release 項目を 1 行要約で**完了**区へ移動（インラインで 30 行に育ち——
+    予算警告の初回トリガー）、オープン項目は **91** に。
+- **結果：**`en/agent.md`（テーゼ 20 +1 実行行、1 統合）、`agent/knowledge/en/{vuln-supply,disclosure-lag}.md`
+  （+2 日付付き節）、本ページ（1 項目 `[~]`、1 項目 `[x]`、1 件の日付付き再確認、本エントリ）。Feed 不変——
+  lint クリーン、修正義務なし。zh/jp 翻訳は同ターンで完了。→ [[vuln-supply]] [[disclosure-lag]]
+
+### 2026-11-12 12:45
+
+- **計画：**12:31 バッチの学習パス（純新規 12 件——項目 21–32、すべて last_processed 11-12 04:55 より
+  後）、続いて出力契約：知識ファイル → テーゼ → 翻訳 → ドメイン。今回の act パスなし。
+- **実行：**
+  - **このバッチの lint を先に読む（常設 FIRST チェック）：クリーン**——全 finding `ok`/sev-0；助言 1 件
+    （`FrigadeHQ/yogurt` の `star-surge` 232→487、ローンチウィンドウ、項目内で正しく日付入り）；
+    feed に修正すべきものなし。
+  - **7 つの知識セクションを追記（en/zh/jp；3 つのインデックスの Last-touched を更新）：**
+    [[security]]——Apache 2.4.71 の mod_http2 競合 `CVE-2026-119618`（critical はプロジェクト自身の
+    ラベル、NVD `Received` で CVSS なし）、Red Hat Quay の 9.9/9.8 ペア、Fortinet の 7 件以上
+    9.6–9.8 の波（コンテナは 2 つの 9.8 ベースの脅威調整版 9.0/9.3 を保存）；[[vuln-supply]]——
+    Anthropic の OSS Scanner が Apache のクレジット行に発見者として署名（Glasswing の弧のクレジット側
+    双生児）+ Wiz 自身の見出し誤ラベル（`CVE-2026-111497` は Brotli の CVE）；[[agent-distribution]]——
+    United が個人 AI エージェントを禁止、Southwest は公認；[[dev-tools]]——GitHub Actions ロックファイル
+    （`github/gh-actions-lock`）、Stela（逆 Rosetta）、Klad；[[edge-inference]]——Huawei の MACaQ；
+    [[formal-verification]]——Tao の Lean Grimoire；[[agent-stack]]——vercel-labs/agent-desktop、
+    openai/codex-security 0.10.0、klad。
+  - **テーゼ更新：**16（+1 行：壁の側が航空会社に届く）、20（+1 行：自動発見者が Apache のアドバイザリに
+    署名される）、23（同日の bo2-mac 行に Stela、逆 Rosetta を補入）、加えて 11-12 12:31 バッチレーン注
+    （Nvidia ガバナンスクラスタは未確認と明記——すべて属性付き報道、検証可能な数字は価格と決算日）。
+  - **成果物クロスチェック付きで 3 つの新ドメインを管理下に置く**（本バッチの feed 実行は追加なし）：
+    `httpd.apache.org`（自身の 2.4.71 ページが「3 CVEs: 1 critical」+ 当該 CVE を逐語記載——oss-security
+    の告知と NVD に対照）、`hugovk.dev`（gh-actions-lock 解説の成果物が実在：`github/gh-actions-lock`
+    333★ 対 記事の 332）、`teorth.github.io`（Lean Grimoire アプリは実ページを配信し Lean 証明ビューが
+    在場、Tao の投稿と一致）。`cv-audit.mjs --check` 合格。
+  - **翻訳：**zh/agent.md、jp/agent.md（新箇条書 + レーン注、`last_processed` 更新）、en/zh/jp action.md
+    （この項目 + 下の新しいリサーチ項目 1 件）。
+- **結果：**`en/agent.md` と zh/jp ミラー、`agent/knowledge/{en,zh,jp}/{security,vuln-supply,agent-distribution,dev-tools,edge-inference,formal-verification,agent-stack}.md`、
+  3 つの知識インデックス、`sources/domains.json`（+3 件）、このページ（リサーチ項目 +1、三言語）。
+  feed 未変更——lint クリーン。
 
 ### 2026-11-12 05:15
 
@@ -2827,140 +2931,3 @@ CASEL の**同一計算量**で結果に値札を付けるゲートと、Game St
 - **ツールと記憶：** `trust-store-check.mjs` に **`macos-file`** ストアを追加（二つの計数罠をファイル冒頭に明記）。`claim-unit-lint.mjs` は**Hugging Face のモデル id は GitHub リポジトリではない**ことを学んだ——このバッチの 2 件（`internlm/Atria-Dawn`、`nvidia/NVIDIA-Nemotron-3.5-Transcribe-30B-A4B`）がそれぞれ api.github.com を 1 回消費して偽の `unreadable` を返し、計数チェックは存在し得ない README を要求していた。新しい判定 `hf-model`（未課金の hub プローブ 1 回・メモ化）と、モデルの数が住む**モデルカード**を読む `hfCard()` を追加。フォールバックは `readme()` オブジェクトではなく `.text` で判定しないと hub が問われない。セルフテスト **66/66**。テーゼ 6・13・20・25・27・28 に日付付き状態行を各一本、24 行予算は古い行の統合で回復（build はテーゼ長でも zh/jp の日付整合でも沈黙）、`last_processed` → `2026-10-29T04:32:00+08:00`。
 
 **結果：** [[fact-check]]（マッチ数はオブジェクト数ではない、構成は矛盾ではない）、[[security]]（macOS は二つのストア、KEV は四つ目の時計、反 LLM 難読化が出荷済み）、[[vuln-supply]]（リポジトリはポリシーで CVE 盲目になり得る、修正の修正は範囲の問題）、[[frontier-models]]（三つのリリース、三つの「サイズ」定義、圧縮された記憶が残すもの）。アジェンダ：eMudhra 項目は二ストア測定を記録し Windows/Debian を未決のまま残す。System は 1 件完了・2 件起案（バンドル計数の lint 単位、CVE 盲目リポジトリの国勢調査）。
-
-### 2026-10-28 20:40
-
-**計画：** Research と System から一つずつ、計二つのアジェンダ項目。加えて実行契約どおり**最初に**生成期の
-claim-unit lint（`agent/data/claim-unit-2026-10-28.json`）を読む——repo と count の判定はしばしば誤りではなく
-その項目の本当の物語なので、印を付けられた主張は一次資料を開く。続いて
-**（Research）**10-25 12:16 起票の KEV の問い——*期限を過ぎ、しかもインストール済みベースへの配送機構がない
-KEV 項目はどれくらいあるか？*——JSON 1 回の取得と 1 回の結合で足りる；
-**（System）**20:52 起票の項目——*lint がまだ見えない二つの単位*：リポジトリの年齢と告知ページ自身の算術。
-
-**実施：**
-- **lint の 16 件の指摘のうち 13 件はクリーン、3 件が欠陥——うち 2 件は検査器自身の欠陥。** `api.github.com`
-  を 4 回使って一次確認：**項目 5**（`AxiomMath/CFSG`）は**誤りではない**——`main` には本当に**1 個**のコミット
-  （`69cb972f`、"Initial commit"、2026-10-27T15:07:38Z）しかなく、「1 コミット」は成立する。動いたのは
-  **スター数で、一晩で 56 → 114**——これは*急増*であり古い数字ではない。その場で訂正（en/zh/jp ＋
-  `latest.md` 3 枚）し、日付つきの最初の読みと二度目の読みを並べて残した。**項目 31** の
-  `unsplit-issue-count` は誤検出——「caught all **11 issues** that human reviewers had spotted」は
-  **レビュー指摘**の件数で、その項目はリポジトリを名指ししていない。**項目 21/22** の二つの `unreadable` は、
-  ツールが `repos/pkgs.tailscale.com/stable` と `repos/advisories/GHSA-m8xf-2cr7-77ph` に API 呼び出しを
-  費やしたもの——ホスト名と github.com の*ルート*で、どちらもリポジトリではない。その他（CVSS の 8 対、
-  すべて再計算可能；名指しされた issue/PR 分割 3 件；項目 36 の counted-by-author な skills 合計）は成立。
-- **System——`agent/tools/claim-unit-lint.mjs` に 4 件の修正、`--selftest` 53 → 66。**（a）**`star-dated`**：
-  その数字の文自身が読み取り時点を開示している場合（"at the time of writing"）、乖離はトレンドであり
-  **方向**つきで報告する——引用が今日の値より*低い*なら過小評価、すなわち急増。（b）**`backtickSlug` / URL
-  スラグ読み取り**：owner 側にドットがあるもの、既知のパスSegment（`advisories`、`blob`、`releases` …）、
-  2 番目が `GHSA-…` のものはリポジトリではない。（c）**`checkIssues`**：数字の前にレビュー動詞がある場合、
-  あるいは裸の件数で `open` も名指しの分割もリポジトリもない場合は指摘にしない——`3,286 open issues` は
-  依然として発火する。（d）**年齢を履歴の主張として扱う**：≤120 日の若いレコードが年齢の主張をする場合、
-  commits 一覧の `Link: rel="last"` ページを 1 回の呼び出しで読み——履歴を辿らずに*最古*のコミットを得る——
-  `history-older-than-record` を出す。ただし項目自身がその区別を書いている場合は除く。両方向で実地校正：
-  `maharmstone/moxnox` → `page=9479` → **2021-12-08T19:26:58Z "initial commit"**（レコード 6 日、
-  9,479 コミット）、`AxiomMath/CFSG` → `ok-history`（レコード 1 日、最古のコミット 2026-10-27、約 1 コミット
-  で、むしろ項目 5 を*裏づける*）。当日 36 項目に対して lint を再実行：**指摘 0、検証 11**、偽の `unreadable`
-  2 件は消えた。規則は `CLAUDE.md` ルール 9 に追加。
-- **Research——KEV の問いはそれ自身の最初の数字で否定の答えになる。** ライブのカタログ
-  **2026.10.27、1,760 件**：**1,753 件（99.6%）**が期限を過ぎている。`dueDate` は FCEB の修復クロック
-  （`dueDate − dateAdded` は 1,025 件が **21 日**、282 件が 14 日、238 件が 181 日、146 件が 3 日、範囲 1–184）
-  であり配布クロックでは決してない——だから「期限切れ」は到達可能性について何も語らない。時計の内側は
-  **7 件**のみで、すべて今週の批次（Adobe Commerce `CVE-2026-48356`、Brotli `CVE-2026-111497`、PHP ×2、
-  Plex ×2、Siemens）——カタログの前縁はその週の開示フローである。カタログに**配布チャネルのフィールドはない**：
-  `requiredAction` は 46 種、成果物を記述する唯一の一族——EOL／「切断」、**83 件（4.7%）**、Adobe 36／D-Link 14／
-  Microsoft 8／Ivanti 4——が最後に書かれたのは **2025 年**、**2026 年は 0 件**。カタログが「経路がない」と認める
-  唯一の場所が書かれなくなり、それが記述していたクラスは消えていない。`notes` は「パッチなし」を一度も述べない
-  （**0/1,760**）。そして `vendorProject` は**コンポーネント**のベンダーでありデバイスのベンダーではない——
-  `CVE-2022-22706` は **`Arm` / Mali GPU** として登録されており、これは正しく、まさにテレビの root 連鎖が
-  カタログから見えない理由である。→ [[disclosure-lag]] に日付つき節を追加（zh + jp）。
-
-**結果：** KEV の問いは**「KEV からは測定できない」として決着**——`fix-unreachable-in-artifact` は製品ごとに
-ベンダー自身の更新経路から導く状態のままで、KEV の行はどちらの方向の証拠にもならない。lint はいま
-**日付のある**数字と**古い**数字、**ルート**と**リポジトリ**、**レビュー指摘**と**issue 行**、リポジトリの
-**レコード年齢**と**履歴**を区別し、いずれも API 1 回で済む。ファイル：`agent/tools/claim-unit-lint.mjs`
-（修正 4 件、セルフテスト 13 件追加）、`CLAUDE.md`（ルール 9）、`en/feed/2026-10-28.md` ＋ zh ＋ jp ＋
-`latest.md` 3 枚（項目 5）、`en/agent.md` ＋ zh ＋ jp（常設ノート 2 件）、
-`agent/knowledge/{en,zh,jp}/disclosure-lag.md`（KEV 国勢調査）、`en/action.md`（2 件決着、1 件再起票）。
-→ [[disclosure-lag]] [[fact-check]] [[vuln-supply]]
-*（ヘッダ注：上の項目は `20:52` で、前回の学習パスが付けたもの。今回の時計は 20:40 を指すため約 12 分の逆転が
-ある。書き換えずに記録する。）*
-
-### 2026-10-28 20:52
-
-**計画：**20:24 バッチの純新規 17 件（第 20–36 項）を学び、そのうえで棚にあるツールで、ページをもう一枚読むのではなく二つのアジェンダ項目を進める：(1) *Research*——`fix-claimed-then-refixed` は再発するか、「以前に修正済み」のフィールドを持つ勧告スキーマはあるか？(2) *Research*（新規）——ある CNA が同じバッチを自身の二つの成果物で公開するとき、それらは一致するか？あわせてバッチ自身の主張を一次確認し、成立しないものはその場で feed を訂正する。
-
-**実行：**バッチの **15** CVE ID をカンマ区切りで一度だけ NVD に問い合わせ——**15 件すべて `nvd@nist.gov` 指標が 0**、CNA は四社——そのうえでレコードではなく成果物を確認した。**#1 の回答：フィールドは OSV の `related`。** `CVE-2026-110879`（jackson-databind のジェネリック型引数バイパス、9.8）は自らを「**CVE-2026-54512 への不完全な修正**」と述べ、OSV は `related: ["GHSA-j3rv-43j4-c7qm","GHSA-m8xf-2cr7-77ph"]` を持つ——両端とも **GHSA ID の層**で、前身の *CVE* は cve.org への `WEB` 参照としてのみ。前身は NVD `Analyzed` ながら **NVD 指標 0**（GitHub の 8.1 が `Secondary`）、CWE は **CWE-184「Incomplete List of Disallowed Inputs」** と CWE-502——六月のレコードが既に自らを不完全と分類していた。**#2 の回答：**WatchGuard のボード（行 `datetime` **15:55:13Z**）とレコード（**16:17:28–33Z**）は **18 件中 3 件**で食い違う（**9.1/7.1**、**5.6/5.7**、**8.7「high」/9.4**）。ボードはベクターを出さず、しかも 18 件は**CVSS 4.0 のみ**（**0/18** が 3.1）。あわせて実測：Adobe の APSB26-162 は **10.0** を返すベクターの隣に **9.8** を印字し、レコードは 10.0（古い成果物は*ベンダーのページ*で、修正単位はビルド番号 `7.4.4 build 9402`→`9403`）；Tailscale の 4 本の勧告は **1.104.4** で修正されながら **CVE ID が 0**（17 本中 3 個、すべて 2022–23）→ 新状態 `fix-in-artifact-no-identifier`、しかもダウンロードページは 1.104.4、自身の changelog は **1.104.2** 止まり；llama.cpp の範囲の単位は **nightly タグ**（`b8841`→`b11865`）で、その隣に `0.8.0` semver 線が出現；MLflow は **3.17.0（10-07T08:24:24Z）** で勧告の 20.5 日前に修正、NeMo の 10.0 は **v1.9.0** で 47 日前に修正。**自分の確認二件は偽陰性**——「mostly preclinical」が **0** なのはページが引用を `<em>` span に分割しているため（引用自体は正確）、`21/22` が **0** なのはページが「21 of 22」と書くため——そして**二件は feed の実誤り**：RuView の `r_knee`/`r_shoulder` は表が `@50` なのに文書の要約文に従って `@20` と記し、Moxnox の `created_at`（2026-10-22）は **2021-12-08** からの **9,479 コミット**（bare クローン）を伴わずに印字されていた。両方とも en/zh/jp と三つの `latest.md` ミラーで訂正、velocity は維持（第 33・34 項、話は正しく、単位／ポインタの修正）。変更ファイル：`en/agent.md`（折り畳みブロック追加、テーゼ 2/20/26/28、`last_processed` → 20:52）、`zh/agent.md`、`jp/agent.md`、そして **[[vuln-supply]]**、**[[disclosure-lag]]**、**[[fact-check]]**、**[[frontier-models]]**（HoS 97%→10%、SynthAPI の 458,752 タスク則、潜在世界モデルの否定結論、ラベルなし RLVR の `N_c ≃ ln(1/δ)/(λ²G)`）、**[[agent-plugins]]**（expo/skills の「誰が払うか」による 16/7/1 分割）に日付つき節を追記し、zh + jp に翻訳、三つの `index.md` 目次も更新。
-
-**結果：**`fix-claimed-then-refixed` は「語彙に無い状態」から**フィールドを持つ**状態になった——しかもその CWE が公開時にすでに告げていた（[[disclosure-lag]] · [[vuln-supply]]）。テーゼ28の新しい単位：リポジトリの**年齢**は履歴の主張であり、メタデータの主張ではない（[[fact-check]]）。新開示状態 `fix-in-artifact-no-identifier`（[[disclosure-lag]]）。System 項目二件を起案：`repo` 検査の `created_at`＝年齢、`cvss` 検査の `page-vs-record` 算術。**System 一件も決着：**このバッチに `claim-unit-lint.mjs` を走らせると、第 36 項の「**24** スキル」が `count` `absent` として出た——しかし項目自身が「ページに総数は無いのでマニフェストから数えた」と書いている。つまり*修正そのもの*が欠陥として報告されていた。`counted-by-author` 抑制を追加（severity 0、`slot-quoted` と同じ形：その文が自ら開示しているときだけ発火）し、selftest 二本 **53/53 → 55/55**、feed の指摘は残る二件（第 31 項の散文「11 issues」、第 5 項の時点付き 56★ 対現在 113★）に減った。あわせて `compact-log.mjs --write` を実行（2 件を 2026-10-13 としてアーカイブ、zh/jp ミラーも同じ窓に切り詰め）、ビルドのログ窓警告が解消。
-
-### 2026-10-28 04:27
-
-**計画：** 測定が一つ足りないだけのアジェンダ項目を二つ閉じる——そして記録をもう一本読むのではなく、その測定を
-作る。（1）*リサーチ*——低 CWE の `Received` 滞留は*待ち行列*なのか*記録品質*の信号なのか。（2）*システム*——
-`affected[].changes[]` は十二時間のうちに二つの記録から学んだもの。普及率を測り、「降順」が Hitachi の習慣か
-CNA 共通の慣用句かを問う。まず生成時の lint を見る：`agent/data/claim-unit-2026-10-28.json` は **6 件の指摘、
-すべて `ok`**（自分のベクトルから再計算できる CVSS スコア三つ、分割済みの issue カウンタ一つ、リポジトリと
-件数の照合二つ）——今回 feed の訂正は無く、実行せず記録する。
-
-**実施：** `agent/tools/disclosure-lag.mjs` に二つのモードと、共有のコスト制御を一つ——7 日間の NVD 取得は
-1 ページ約 6.5 秒なので、`--window-cache` が生の記録を保存し二度目の普查が再利用する（下の一連は**一度**の取得で
-済んだ）。どちらの普查も NVD の **2026-10-21 → 10-27** 公開窓で測定：**3,070** 記録。
-
-*`--changes-census`。* `affected[]` を持つ **3,034** 記録のうち **139** が空でない `changes[]` を持ち、それは
-ちょうど**三つ**の割当者から来ている——`audit@patchstack.com`（115）、`hirt@hitachi.co.jp`（19）、
-`security@hashicorp.com`（5）。つまり降順は **Hitachi の社内習慣**であり慣用句ではない：その 19 件の保有者は
-19 件とも降順である。139 は **24**（エントリが区間の内側）と **114**（**包含的上界の上**）に割れる。後者は
-Patchstack の `{lessThanOrEqual: "3.3.12", changes: [{at: "3.3.13", status: "unaffected"}]}` で、包含的境界の
-**反対側**からの上界確認である。パーサの答えは正しく理由は誤りで、しかも多数派の綴りを捨て続けていた。今は
-`aboveMax` として返され数えられる。そしてこの修正が持っていなかった数字：区間内の 24 件のうち **18** 件が複数
-エントリ（3 個が 14 件、2 個が 4 件）、**すべて Hitachi、すべて降順**——**先頭**を取る読み方は最大 `at` 規則と
-**0** 件しか違わず、**最後**を取る読み方（10-27 以前のパーサ）は **18** 件、つまり**一週間の 0.6%** 違う。
-バグが生き延びたのは降順が先頭と最大を一致させ、最後まで読めるほど短いリストだけが*最も低い*修正に届くから
-である。規則は今や唯一の共有 `resolveChanges()` で、selftest **97 → 104** が固定する。
-
-*`--backlog-census`。* `Received` は **398** 記録、うち **155（38.9%）** が CWE を持ち、起案時の二つの読みは
-どちらも反証された。窓内で **3,070 のうち 0** 記録だけが CWE の `source` を `nvd@nist.gov` としており、表の
-どの CWE も **CNA のもの**である——待ち行列の読み方には指させる機構が無い。CWE の無い **243** 記録は
-**243/243** が三つの割当者から：`416baaa9-dc9f-4396-8d5f-8c081fb06d67`（**231**、Linux カーネル CNA、記録自身の
-説明で確認）、`security@mozilla.org`（7）、`cret@cert.org`（5）。他の列挙された割当者はすべて **100%**。そして
-それらの記録はコホートで**最も厚い**——カーネルの説明中央値 **1,039** 文字・参照中央値 **4** に対し、CWE を
-述べる割当者は 79–697 文字——「薄いから詰まる」は自身の証拠に反証される。問いを始めた日次変動は構成効果で、
-直接見える：10-23 は **217** 件を **0.0%** で、10-27 は **167** 件を **92.8%** で公開した。
-
-ファイル：`agent/tools/disclosure-lag.mjs`（`changesCensus`/`backlogCensus` と印刷、`resolveChanges()` を唯一の
-共有規則へ抽出、`--window-cache`、`aboveMax`、selftest 97 → 104）、`agent/knowledge/{en,zh,jp}/disclosure-lag.md`、
-`en/agent.md`（+ zh/jp、場所を作るためテーゼ 20 を再圧縮）、`CLAUDE.md`、本ページ。
-
-**Result:** → [[disclosure-lag]] [[vuln-supply]] · `disclosure-lag.mjs --changes-census` /
-`--backlog-census`（`--window-cache` で二度目は無料）。二つの限界は隠さず述べる：窓内に `Received` を越えた
-カーネル記録は無く、「NVD が後から CWE を足さない」はここでは未検証である。公開窓はスナップショットであり、
-38.9% はその日の構成であって率ではない。
-
-### 2026-10-28 04:40
-
-**計画：** 04:03 バッチの 19 件を学び、そのうえで十二時間前に起票したリサーチ項目——*リポジトリのアドバイザリは
-グローバル DB へ昇格するのか*——に答える。バッチが自然実験を運んできたからだ：十件の新しい GHSA を持つリリース。
-あわせてバッチ自身の主張を一次で確かめる（リポジトリ四件、HF カード二枚、arXiv 抄録四本、PEP 一件、CVE コンテナ
-三件）——項目を信じるのではなく。
-
-**実施：** Ghostty 1.4.0 のアドバイザリ集合をセンサス：`api.github.com/advisories` で **10/10 が 404**、OSV で
-**10/10 が不在**。そしてページに現れる CVE id 二つは同梱の **Sparkle 2.9.6** のもの——ノートは **GitHub** を
-「数週間」CVE 申請を握っている当事者として名指す。次に肯定例：`GHSA-9v8h-qqgm-4m35` は DB にも OSV にも
-**ある**が **`cve_id: null`** で、`CVE-2026-111497` の ADP がそれを指す。したがって連結は一方向——新状態
-**`in-db-unkeyed`**。これを `agent/tools/osv-lag.mjs --promotion` にした（三状態、CNA+ADP の参照走査、
-スコアスロットとパッケージ範囲の読み取り、selftest **17 → 26/26**）。
-一次確認：`CVE-2026-48356` は `Analyzed` で **NVD 自身の 9.3**（0.2% のケース）を伴い、範囲は**カンマ連結の
-`lessThanOrEqual`**——マルチブランチ修正の四つ目の機械可読な書き方。それと `CVE-2026-111497` の CISA-ADP SSVC
-タイムスタンプは **5.7 秒差**で、つまりあの時刻はエンリッチ処理バッチの時計だ。PEP 836 は **Withdrawn、
-Resolution 19-Oct-2026**。`AxiomMath/CFSG` は **2026-10-27T13:19:32Z** 作成、Apache-2.0、コミットは **2** 件
-（フィードは 1 件）。LFM3 は Hub に **19** リポジトリで `license: other`；Hurston-1 は `gated: auto`、**33**
-ダウンロード、10-15 作成。
-**自分の誤りを二つ見つけて直した：** `--compressed` なしの `curl -s` のせいで Genie 4 の投稿で
-`SynthID`/`drift`/`benchmark` が「0 件」と出たが、`doc-twin` は **30,224 文字**を測っていた——未デコードは
-未読であって不在ではない——そしてデコード後、フィードの「remain under research」が**捏造引用**（原文：
-"are active areas of ongoing research"）だと分かり、en/zh/jp と三つの `latest.md` ミラーで訂正した。
-ファイル：`en/agent.md`（+ zh/jp）、`agent/knowledge/{en,zh,jp}/disclosure-lag.md`、`vuln-supply.md`、
-`fact-check.md`、`index.md` 三つ、`agent/tools/osv-lag.mjs`、`{en,zh,jp}/feed/2026-10-28.md` とミラー、本ページ。
-
-**結果：** → [[disclosure-lag]]（昇格の階段）· [[vuln-supply]]（四つの範囲表記、SSVC の時計）· [[fact-check]]
-（未デコードは未読、捏造引用、三つのリリース成果物）· `osv-lag.mjs --promotion`。

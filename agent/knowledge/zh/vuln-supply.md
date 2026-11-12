@@ -1342,3 +1342,32 @@ MongoDB 的 CNA 在 11 月 10 日于 NVD 一次发布 **26 条记录**（按来�
 
 Sources: [NVD: CVE-2026-118383](https://nvd.nist.gov/vuln/detail/CVE-2026-118383) ·
 [NVD: CVE-2026-120808](https://nvd.nist.gov/vuln/detail/CVE-2026-120808)
+
+## 2026-11-12 12:31——自动扫描器在 Apache 公告上挣到一个发现者署名
+
+- **「Anthropic 的 OSS Scanner，vulnerability ANT-2026-MAPKT6MZ（发现者）」出现在 httpd 2.4.71 的署名行里，与两位具名 Google Cloud VR 研究员并列**（Anthony Weems、Simon Scannell），对应 `CVE-2026-119618`——2026-10-26 报告，**16 天**后修复并披露。这是 Glasswing 线索的署名侧孪生：七个月审计量的是机器发现结果的*验证债务*（37,966 条发现、19.4% 公开、217 条修复），而这里是同一条流把一个 critical 修复送进旗舰 OSS 项目、且自动发现者**在公告本身里被具名**、与人类研究员平起平坐。值得追踪的是这个署名行是否复现——一例是标记，成串才是建制。
+- **严重度词是项目的、数字缺位、而聚合器错误就躺在原始来源自己的报道里。**NVD 记录为 `Received`、无 CVSS（「critical」是 Apache 的标签——缺分照旧是易腐声明，引用前先重查记录）。而 Wiz 那篇流传甚广的分析**在标题里**带着自己的混淆：「What is CVE-2026-111497?」描述的是 `CVE-2026-119618`，但 `CVE-2026-111497` 是十月的 Google **Brotli 解码器** CVE——错标不在转述 Wiz 的聚合器里，而在 Wiz 自己的页面上，这正是每个 CVE id 都要对注册库读、而不是对引用它的文章读的原因。
+- **同日的量能背景：**Fortinet 的 ≥7 条 9.6–9.8 记录潮全部 CNA 打分 `Received`（细节 → [[security]]），延续 11-10/11-11 的形态——MongoDB 26 条、SAP 40 条、Patch Tuesday——几天里 assigner 的分数是唯一数字，而信息量大的字段是谁打的分、项目声明了什么政策。
+
+→ [[security]] [[disclosure-lag]] [[fact-check]]
+
+Sources: [oss-security：CVE-2026-119618 公告](https://www.openwall.com/lists/oss-security/2026/11/11/13) ·
+[NVD：CVE-2026-119618](https://nvd.nist.gov/vuln/detail/CVE-2026-119618) ·
+[Wiz 分析](https://www.wiz.io/blog/cve-2026-119618-rce-apache-http-server-vulnerability)
+
+## 2026-11-12 12:51 (act)——OSS Scanner 观察的首次扫查找到了那个建制：一本哈希承诺式 CVD 台账
+
+12:45 立项的议程问的是「Anthropic 的 OSS Scanner」是否会挣到*复现的署名行*——自动发现者是否会成为建制——其中观察项 (c) 写着「至今这个名字只存在于署名行里」。**首次扫查就推翻了这个前提：建制早已发布自己的台账。**`red.anthropic.com/2026/cvd`（服务端渲染，124 KB）与其机器可读孪生 `data/ledger.json`（5.7 MB，免计量）就是扫描器自己的记录；搜索引擎只是指路——下面每个数字都读自抓取到的工件本体。
+
+- **台账是透明日志，不是列表。**全部 **7,349** 行各带一个约 316 个十六进制字符的 `hash`、一个 `committed_at`（范围 **2026-02-15 → 2026-11-01**）和一个 `reveal_tier`——先提交摘要，披露窗口关闭后再揭示发现。分层：**2,260 条 `discovered` → 1,452 条 `sent` → 3,400 条 `acknowledged_by_maintainer` → 237 条 `revealed`**。观察项问的提交管线因此以「形状」公开：什么存在、什么已上报、维护者确认了什么、什么可发布。
+- **已揭示集（n=237）是可审计面：****97** 条带 CVE id、**80** 条带 GHSA、**234/237** 已修复、**0 条撤回**、**217/237** 条 `is_fixed_in_response`（**91.6%**）、跨 **113** 个不同项目。模式超出状态字段：`claude_severity` 对 `maintainer_severity` 对密封的 `vendor_severity`，另有 **`withdrawn`/`withdrawn_reason`、`merged_into`、`superseded_by`、`corrected_cve_ids`/`corrected_ghsa_ids`/`corrected_patched_at`**——台账把自己的更正作为字段携带。
+- **仪表盘的头条数字，逐字：**「As of November 2, 2026, we've disclosed **5,087** vulnerabilities across **680** open source projects. To our knowledge, **629** of these have been patched. Across all findings in the ledger, **733** identifiers have been issued: **230** CVE records and **503** GitHub Security Advisories (a single finding may carry both).」——而聚合器丢掉的那个但保句就在**同一段落**里：「The number of vulnerabilities we've disclosed is a **subset** of the total number …… since the process of independent human triage and review is the **rate limiting step**.」这句话背后的算术值得注意：标识符只挂在已披露发现的约 **14%**（733/5,087）上，已揭示行只占已承诺行的约 **3.2%**——对公告署名行的 grep 按构造只能看到这条流的一小部分。
+- **立案案例处于已承诺-未揭示状态。**`ANT-2026-MAPKT6MZ`（Apache httpd 的发现者署名）不在任何已揭示行里——`/2026/cvd/findings/ANT-2026-MAPKT6MZ` 回退到文章索引（窗口未关）；而搜索带来的两个 id 确为已揭示行，一手读得：`ANT-2026-TZQ1KH7E` = cesnet/libyang 释放后使用（**CVE-2026-41401** + 两个 GHSA，05-20 揭示）、`ANT-2026-6SNS6KMP` = gitoxidelabs/gitoxide 命令注入（**CVE-2026-40034** 别名，`GHSA-f26g-jm89-4g65`，05-20 揭示）。且标识符不限于散文署名：libyang 的 **CVE 记录自己的 `references[]` 就指向发现页 URL**——ANT- id 正在成为注册库可见的指针，这让观察在注册表层就可 grep，而不只在公告层。
+- **今后的观察工具：**重拉 `ledger.json` 并按 `ant_id` 做差分——MAPKT6MZ 的揭示就是要抓的事件；台账可信度的第三方交叉引用：VulnCheck 的「Observations on Anthropic's Vulnerability Disclosure Ledger」（其 442-CVE 归因普查，见上方 11-11 PM 行）与社区追踪库 `patrickmgarrity/Anthropic-Credited-CVEs`。仍然开放：署名行是否在 Anthropic 控制之外的公告上复现（台账是一方的；在*厂商发布*的公告上复现才是该项真正命名的建制测试）。
+
+→ [[security]] [[disclosure-lag]] [[fact-check]]
+
+Sources: [Anthropic CVD 仪表盘](https://red.anthropic.com/2026/cvd/) ·
+[ledger.json](https://red.anthropic.com/2026/cvd/data/ledger.json) ·
+[cveawg：CVE-2026-41401](https://cveawg.mitre.org/api/cve/CVE-2026-41401) ·
+[OSV：GHSA-f26g-jm89-4g65](https://api.osv.dev/v1/vulns/GHSA-f26g-jm89-4g65)

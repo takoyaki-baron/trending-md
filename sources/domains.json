@@ -14380,5 +14380,32 @@
   "en": "Okta/Auth0 vendor trust center — first-hand (2026-11-12): four advisories behind the Nov 10 NVD wave (auth0-ai-js/-ai-python FGA-retriever RAG authorization gaps, Node SDK path redirect, ASP.NET back-channel logout). Artifact cross-check: cveawg registry carries the same descriptions with Okta as assigner (CVE-2026-107372 published 2026-11-10T21:05Z) — registry, not downstream of this site. Vendor does not assign CVSS on the records.",
   "jp": "Okta/Auth0 ベンダー信頼センター——一次確認（2026-11-12）：11月10日の NVD の波の背後にある4つのアドバイザリ（auth0-ai-js/-ai-python の FGA リトリーバによる RAG 認可の欠落、Node SDK のパス リダイレクト、ASP.NET のバックチャネル ログアウト）。成果物クロスチェック：cveawg レジストリが同じ記述を Okta を assigner として収録（CVE-2026-107372 公開 2026-11-10T21:05Z）——レジストリでありこのサイトの下流ではない。ベンダーはレコードに CVSS を付けない。",
   "zh": "Okta/Auth0 厂商信任中心——一手核验（2026-11-12）：11 月 10 日 NVD 记录潮背后的四份公告（auth0-ai-js/-ai-python FGA 检索器的 RAG 授权缺口、Node SDK 路径重定向、ASP.NET 后通道登出）。工件交叉核查：cveawg 注册库以 Okta 为 assigner 收录同样描述（CVE-2026-107372 发布于 2026-11-10T21:05Z）——注册库而非本站下游。厂商不在记录上给 CVSS。"
+ },
+ "httpd.apache.org": {
+  "cat": "vendor",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "Apache HTTP Server's own per-release vulnerability pages — first-hand (2026-11-12): the 2.4.71 entry states verbatim \"3 CVEs : 1 critical, 1 important, 1 low\" and \"CVE-2026-119618 (critical): mod_http2: heap corruption and RCE in assign_headers\" with the affected range (2.4.55–2.4.70), matching the oss-security announcement and the NVD record (Received, no CVSS — \"critical\" is the project's own label). Artifact cross-check: page text vs registry, not downstream.",
+  "jp": "Apache HTTP Server のリリース別脆弱性ページ——一次確認（2026-11-12）：2.4.71 の項は「3 CVEs : 1 critical, 1 important, 1 low」と「CVE-2026-119618 (critical): mod_http2: heap corruption and RCE in assign_headers」を影響範囲（2.4.55–2.4.70）込みで逐語記載。oss-security の告知および NVD レコード（Received、CVSS なし——critical はプロジェクト自身のラベル）と一致。成果物クロスチェック：ページ本文対レジストリ、下流ではない。",
+  "zh": "Apache HTTP Server 官方按发布版列出的漏洞页——一手核验（2026-11-12）：2.4.71 条目逐字写明「3 CVEs : 1 critical, 1 important, 1 low」和「CVE-2026-119618 (critical): mod_http2: heap corruption and RCE in assign_headers」及影响范围（2.4.55–2.4.70），与 oss-security 公告和 NVD 记录（Received、无 CVSS——critical 是项目自己的标签）一致。工件交叉核查：页面正文对注册库，非其下游。"
+ },
+ "hugovk.dev": {
+  "cat": "community",
+  "cred": "high",
+  "cv": 1,
+  "density": "med",
+  "en": "Hugo van Kemenade's personal blog (Python release manager) — first-hand how-to posts. Cross-checked (2026-11-12): the Actions-lockfile walkthrough's central artifact exists as described — github/gh-actions-lock (333★ at check; the post said 332) with generate/verify lockfile semantics; the ecosystem-support claims (Renovate, Dependabot, zizmor v1.32.0) are quoted from the post and its links, not yet independently exercised.",
+  "jp": "Hugo van Kemenade（Python リリースマネージャ）の個人ブログ——一次情報の how-to 記事。突合済み（2026-11-12）：Actions ロックファイル解説の中心成果物は記述どおり存在——github/gh-actions-lock（確認時 333★、記事は 332）、lockfile の生成/検証セマンティクスも一致。エコシステム対応（Renovate、Dependabot、zizmor v1.32.0）の主張は記事とそのリンクからの引用で、独立検証は未実施。",
+  "zh": "Hugo van Kemenade（Python 发布经理）的个人博客——一手操作指南文章。已交叉核验（2026-11-12）：Actions lockfile 指南的核心工件确实存在——github/gh-actions-lock（核验时 333★；文章写 332），生成/校验 lockfile 的语义一致；生态支持的说法（Renovate、Dependabot、zizmor v1.32.0）引自文章及其链接，尚未独立验证。"
+ },
+ "teorth.github.io": {
+  "cat": "research",
+  "cred": "high",
+  "cv": 1,
+  "density": "med",
+  "en": "Terence Tao's GitHub Pages applets — first-hand artifacts. Cross-checked (2026-11-12): the Lean Grimoire app serves a real page (title \"Lean Grimoire — Terence Tao\", 93.6 KB, Lean-proof view present), matching his wordpress post announcing the agent-rebuilt 2018 QED logic game. Artifact check: the page itself vs the blog post.",
+  "jp": "Terence Tao の GitHub Pages アプレット——一次成果物。突合済み（2026-11-12）：Lean Grimoire アプリは実ページを配信（タイトル「Lean Grimoire — Terence Tao」、93.6 KB、Lean 証明ビューあり）。エージェントで再構築した 2018 年の QED 論理ゲームを告知する wordpress 投稿と一致。成果物チェック：ページそのもの対ブログ記事。",
+  "zh": "陶哲轩的 GitHub Pages 小程序——一手工件。已交叉核验（2026-11-12）：Lean Grimoire 应用提供真实页面（标题「Lean Grimoire — Terence Tao」，93.6 KB，含 Lean 证明视图），与其 wordpress 文章（宣布用编码代理重建 2018 年的 QED 逻辑游戏）一致。工件核查：页面本身对博客文章。"
  }
 }

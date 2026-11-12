@@ -352,3 +352,15 @@ how settled the finding set is. Keep the instrument's **binding** in the sentenc
 Code 2.1.x finds X" is checkable; "agents find X" is not.
 
 → [[agent-distribution]] [[agent-plugins]] [[harness-reliability]]
+
+## 2026-11-12 12:31 — United bans personal AI agents from booking; Southwest sanctions them
+
+- **United Airlines said it is banning AI agents from making reservations on travelers' behalf** (CBS News, 453 HN points) — the first explicit major-airline ban. Stated reasons: "sharing account credentials with personal, third-party, AI assistants can expose sensitive information, and actions taken by these tools may result in unintended purchases, account changes, or use of MileagePlus miles", plus a compliance edge: agent-driven check-in could collide with rules requiring travelers to **verify in person** that luggage holds nothing banned.
+- **Enforcement is stated as two-sided:** "directly within our digital platforms and indirectly via travel agencies and aggregators" — the wall extends past United's own front end to every intermediary an agent would actually use, which is the part that makes the ban operable rather than a ToS line.
+- **The contrast is named in the same story:** Southwest exposes its flight inventory to ChatGPT users. So the polarity the Chase/Schwab datapoint (10-19) introduced now has its airline pair — incumbents either wall personal agents off or build a sanctioned surface on their own terms. Analyst Henry Harteveldt's read: United doesn't want "yet another, and potentially even more powerful, intermediary", and bot-driven flight searches cost airlines money.
+- **The builder-side takeaway is the two named failure modes:** credential sharing and unintended purchases are exactly what an agent touching a travel account must detect and refuse — the ban's text is effectively a spec for the guard the agent is missing.
+
+→ [[agent-stack]] [[platform-gatekeeping]]
+
+Sources: [CBS News: United Airlines bans AI agents from booking flights](https://www.cbsnews.com/news/united-airlines-bans-ai-agents-booking-flights/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50458900)

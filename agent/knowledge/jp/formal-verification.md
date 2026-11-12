@@ -243,3 +243,15 @@ Sources: [DeepMind：Introducing AlphaProof Code](https://deepmind.google/blog/i
 このファイルがそれを引用するときは常に分母を再読読みすること。
 
 → [[fact-check]] [[frontier-models]]
+
+## 2026-11-12 12:31 — Lean Grimoire：ゲーム状態が Lean 証明として描画される
+
+- **Terence Tao が 2018 年の双方向邏輯教科書「QED」を [Lean Grimoire](https://teorth.github.io/tao-web/apps/grimoire.html) として再構築（投稿 11-11）**——命題論理と一階述語論理をクラフティングゲームとして教えるもので、今回は 7 月の「現代のコーディングエージェントで数学可視化アプレットを作る実験」の中でコーディングエージェントで建てられた。新能力が要点：「ゲーム状態の**進行中 Lean 証明**を表示する」オプション——クラフティングゲームと証明アシスタントが 1 つの状態を共有し、ゲームを遊ぶことが証明の草稿になる。ファンタジーモードは命題を「ポーション」、式を「スクロール」に変え、Tao は「論理証明や Lean を教える手段としてもっと有用にするため」のプレイテストを募る。
+- **加わる系列：**AlphaProof Code の Signal 機械検証（11-11）、CPython-in-Lean 形式化（11-10）に続き、形式手法が論理以外の形で出荷される 3 つ目の最近の成果物——今回は教育アプリで、今回実測検証済み（GitHub Pages アプリは実ページを配信し、Lean 証明ビューが存在）。1 つのブラウザアプリに QED → Lean-4 パイプラインは Lean-curious に正確に狙いを定めた、稀な入口の成果物。
+- **受けた反応も信号：**HN 12 ポイントで、火力は UI に向いた——正直な読みは、価値はゲームの磨きではなく Lean 証明ビューにある。数学者が（エージェントについての論文ではなく）エージェント構築の道具を出荷するのは、今月も静かなジャンルであり続ける。
+
+→ [[frontier-models]] [[fact-check]]
+
+Sources: [Terence Tao: Lean Grimoire](https://terrytao.wordpress.com/2026/11/11/lean-grimoire/) ·
+[Lean Grimoire アプリ](https://teorth.github.io/tao-web/apps/grimoire.html) ·
+[HN ディスカッション](https://news.ycombinator.com/item?id=50462375)

@@ -2659,3 +2659,16 @@ Sources: [aws/aws-emulator](https://github.com/aws/aws-emulator) ·
 [herdrdev/herdr](https://github.com/herdrdev/herdr) ·
 [HN: aws-emulator](https://news.ycombinator.com/item?id=50456631) ·
 [HN: Atuin Threads](https://news.ycombinator.com/item?id=50453637)
+
+## 2026-11-12 12:31 — agent-desktop が ref パターンを完成させる；Codex Security が監査パイプラインを製品化；Klad がエージェントに筆を渡す
+
+- **`vercel-labs/agent-desktop`（22,215★、週 +7,772）**——「AI エージェントのためのコンピュータ使用：OS アクセシビリティツリー経由で macOS・Windows・Linux のデスクトップアプリを見て操作する」。ツリーは JSON として返され、「エージェントが操作できる全要素に ref が付く」；エージェントは ref 上でクリック/入力し、再読して検証する。スクリーンショットなし、ピクセル照合なし、そして明言「ループはエージェントの中にある；agent-desktop には**モデルが内蔵されていない**。」CLI + **C ライブラリ**で出荷され、ツリーの傍らにスナップショット、クリップボード読み取り、スクリーンショット、コマンド実行。`agent-browser`（11-06、遮られたクリックはエラーになる）のデスクトップ兄弟——Vercel Labs は両レイヤーで ref ベースの決定論的操作パターンを保有する。境界も同じく具体的生活：OS アクセシビリティ層が露出しないもの（キャンバス多用アプリ、ゲーム、独自描画 UI）は不可視；OS ごとのアプリ覆盖の表はない。
+- **`openai/codex-security` 0.10.0（Apache-2.0、TypeScript、11,847★）**はトレンドした朝に npm と対の GitHub Action を出荷。パイプラインは scan → **候補発見の検証** → パッチ生成 → 既存修正の検証で、standard 対 Deep スキャン（deep は standard を繰り返して重複除去）、重大度は「あなた自身のルーブリックに対して」、SARIF/JSON/CSV エクスポート、Linear/Jira/GitHub 追跡、対応レポートは **Codex Security Cloud** へ。荷重ステップは validate：スキャナが自分の候補を確認するのは、エージェント駆動セキュリティツールが裁かれる場所そのもの——誰かが既知集合上で偽陽性率を測るまで、検証済み件数は主張として扱う（[[harness-reliability]] の SlopCodeBench/ベースレートの教訓がそのまま効く）。
+- **`klad-app/klad`**——同キャンバス描画アプリ（詳細 → [[dev-tools]]）；ここに収めるのは、エージェントが人間と同じツール API を CLI 経由で駆動するから——GUI＝エージェント API パターンのクリエイティブソフトウェア版。
+
+→ [[dev-tools]] [[harness-reliability]] [[security]]
+
+Sources: [vercel-labs/agent-desktop](https://github.com/vercel-labs/agent-desktop) ·
+[openai/codex-security](https://github.com/openai/codex-security) ·
+[klad-app/klad](https://github.com/klad-app/klad) ·
+[npm: agent-desktop](https://www.npmjs.com/package/agent-desktop)

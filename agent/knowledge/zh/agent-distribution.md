@@ -258,3 +258,15 @@ Sources: [pengchujin/aerial-tv](https://github.com/pengchujin/aerial-tv) · [sim
 **限定是结构性的，不是保守措辞：** 结果由某个 agent 在某个模型上产出，所以一次绿灯是关于*那个组合*的陈述——这是每个"agent 当评测者"都会继承的缺陷（论点 8 的 judge-vs-signal 问题）。一个三周大的包有 36 个版本，是关于这套发现集有多未定型的诚实信号。句子里要保留仪器的**绑定**："Gauge on Claude Code 2.1.x finds X"是可核验的；"agents find X"不是。
 
 → [[agent-distribution]] [[agent-plugins]] [[harness-reliability]]
+
+## 2026-11-12 12:31——United 禁止个人 AI agent 订票，Southwest 把它们放进来
+
+- **United Airlines 宣布禁止 AI agent 代旅客预订机票**（CBS News，HN 453 分）——首个大型航空公司的明示禁令。给出的理由：「与个人的、第三方的 AI 助手共享账户凭据可能暴露敏感信息，这些工具采取的行动可能导致意外购买、账户变更或 MileagePlus 里程被使用」，外加一条合规棱角：agent 驱动的值机可能与要求旅客**当面**确认行李无违禁品的规定相撞。
+- **执行被表述为两侧的：**「在我们自己的数字平台内直接地、并经由旅行社与聚合平台间接地」——墙越过了 United 自己的前端，延伸到 agent 真正会用的每一个中介，这是禁令可操作而非一纸条款的部分。
+- **对照组在同一篇报道里被点名：**Southwest 把航班库存开放给 ChatGPT 用户。于是 Chase/Schwab 数据点（10-19）确立的两极如今有了航空版本——在位者要么把个人 agent 封在外面，要么按自己的条款建一个 sanctioned 表面。分析师 Henry Harteveldt 的解读：United 不想要「又一个、而且可能更强大的中介」，bot 驱动的机票搜索让航空公司花钱。
+- **对构建者的启示就是那两个被点名的失效模式：**凭据共享与意外购买，正是任何触碰旅行账户的 agent 必须检测并拒绝的东西——禁令文本实际上就是那份缺失护栏的规格书。
+
+→ [[agent-stack]] [[platform-gatekeeping]]
+
+Sources: [CBS News：United Airlines 禁止 AI agent 订票](https://www.cbsnews.com/news/united-airlines-bans-ai-agents-booking-flights/) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50458900)

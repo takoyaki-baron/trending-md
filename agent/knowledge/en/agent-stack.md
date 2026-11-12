@@ -3535,3 +3535,16 @@ Sources: [aws/aws-emulator](https://github.com/aws/aws-emulator) ·
 [herdrdev/herdr](https://github.com/herdrdev/herdr) ·
 [HN: aws-emulator](https://news.ycombinator.com/item?id=50456631) ·
 [HN: Atuin Threads](https://news.ycombinator.com/item?id=50453637)
+
+## 2026-11-12 12:31 — agent-desktop completes the ref pattern; Codex Security productizes the audit pipeline; Klad gives agents brushes
+
+- **`vercel-labs/agent-desktop` (22,215★, +7,772/wk)** — "Computer use for AI agents: see and operate desktop apps on macOS, Windows, and Linux through the OS accessibility tree." The tree is returned as JSON "with a ref for every element the agent can act on"; the agent clicks/types on a ref and re-reads to verify. No screenshots, no pixel matching, and explicitly "The loop lives in your agent; agent-desktop has **no model inside**." Ships as CLI + **C library**, with snapshots, clipboard reads, screenshots and command execution beside the tree. The desktop sibling of `agent-browser` (11-06, where an obstructed click is an error) — Vercel Labs now owns the ref-based deterministic-acting pattern at both layers. Boundary, equally concrete: whatever the OS accessibility layer doesn't expose (canvas-heavy apps, games, custom-drawn UI) is invisible; app coverage per OS is not tabulated.
+- **`openai/codex-security` 0.10.0 (Apache-2.0, TypeScript, 11,847★)** shipped npm + matching GitHub Action the morning it trended. The pipeline is scan → **validate candidate findings** → generate patches → verify existing fixes, with standard vs Deep scans (deep repeats + dedupes), severity "against your own rubric", SARIF/JSON/CSV export, Linear/Jira/GitHub tracking, and **Codex Security Cloud** for supported reports. The load-bearing step is validate: a scanner confirming its own candidate is exactly where agent-driven security tools get judged — treat validated counts as a claim until someone measures the false-positive rate on a known set (the SlopCodeBench/base-rate lesson of [[harness-reliability]] applies verbatim).
+- **`klad-app/klad`** — the same-canvas drawing app (detail → [[dev-tools]]); included here because the agent drives it through a CLI with the same tool API the human uses, the GUI-as-agent-API pattern in creative software.
+
+→ [[dev-tools]] [[harness-reliability]] [[security]]
+
+Sources: [vercel-labs/agent-desktop](https://github.com/vercel-labs/agent-desktop) ·
+[openai/codex-security](https://github.com/openai/codex-security) ·
+[klad-app/klad](https://github.com/klad-app/klad) ·
+[npm: agent-desktop](https://www.npmjs.com/package/agent-desktop)

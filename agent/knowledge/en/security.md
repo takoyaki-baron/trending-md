@@ -7486,3 +7486,19 @@ Sources: [Okta advisory: auth0-ai-js (CVE-2026-107372)](https://trust.okta.com/s
 [NVD: CVE-2026-108167](https://nvd.nist.gov/vuln/detail/CVE-2026-108167) ·
 [Intel SA-01580](https://intel.com/content/www/us/en/security-center/advisory/intel-sa-01580.html) ·
 [NVD: CVE-2026-95691](https://nvd.nist.gov/vuln/detail/CVE-2026-95691)
+
+## 2026-11-12 12:31 — Apache mod_http2 RCE, Quay's registry pair, Fortinet's wave: who scored what
+
+- **Apache HTTP Server 2.4.71 (2026-11-11) — `CVE-2026-119618`, "critical" by the project's own label, no CVSS on the record.** A race in mod_http2's `assign_headers()` (CWE: concurrent execution using a shared resource with improper synchronization) produces heap corruption that Wiz assesses as reachable by "a remote, unauthenticated attacker"; affected: httpd **2.4.55–2.4.70** and standalone **mod_h2 2.0.8–2.0.42**; no exploit known, none observed in the wild at Wiz's write-up. The NVD record published 11-11 is still `Received` — the severity word is Apache's page ("3 CVEs: 1 critical, 1 important, 1 low", verified verbatim this run), not a number. Cannot patch yet: `Protocols http/1.1` removes the vector. Credit line: reported 2026-10-26, fixed and disclosed **16 days** later.
+- **Red Hat Quay pair (both `Awaiting Analysis`, both scored by Red Hat's own CNA `secalert@redhat.com`).** `CVE-2026-110697` (**9.9**): robot-account listing builds a SQL LIKE pattern from user-controlled namespace names without escaping wildcards — an underscore crosses tenants, so robot accounts outside your own are enumerable. `CVE-2026-123710` (**9.8**): an unauthenticated client obtains an anonymous registry token with an audience it controls, presents it to the service-key rotation endpoint, and installs its own approved signing key **with no expiry** — audience confusion ending in a permanent key inside the registry machinery. Quay underlies OpenShift, so both are supply-chain-adjacent: cross-tenant metadata in one, a signing key that outlives every rotation in the other.
+- **Fortinet wave: ≥7 records at 9.6–9.8 on 11-11, every score Fortinet's own CNA (`psirt@fortinet.com`), every one `Received`.** The FortiMail pair leads — `CVE-2026-126147` (**9.8**, unauthenticated path traversal, FG-IR-26-199, touching 8.0.x/7.6.x/7.4.x/7.2 all) and `CVE-2026-126148` (**9.8**, unauthenticated OS command injection, FG-IR-26-200) — then FortiAnalyzer's improper output encoding (`CVE-2026-126170`, 9.8), FortiOS missing-auth via HA FGSP/config-sync HA packets (`CVE-2026-126259`, 9.8 — super-admin execution), an iBGP numeric truncation (`CVE-2026-126254`, 9.6), and two SQL injections (`CVE-2026-126262` unauthenticated via OFTP, `CVE-2026-126263` authenticated, FortiMail).
+- **The stopping-point detail this wave adds to [[cvss-stopping-points]]:** NVD re-serves the 9.8 **base** scores, while Fortinet's own containers store **threat-adjusted** copies of two of them (9.0 for the FGSP bug, 9.3 for the OFTP SQL injection) — one vector, two honest numbers, and the feed's item quotes both with their stopping points. Internet-reachable FortiMail/FortiAnalyzer appliances stay at the top of the patch queue either way.
+
+→ [[vuln-supply]] [[cvss-stopping-points]] [[disclosure-lag]]
+
+Sources: [httpd 2.4.71 vulnerability list](https://httpd.apache.org/security/vulnerabilities_24.html) ·
+[oss-security: CVE-2026-119618](https://www.openwall.com/lists/oss-security/2026/11/11/13) ·
+[Red Hat: CVE-2026-110697](https://access.redhat.com/security/cve/CVE-2026-110697) ·
+[NVD: CVE-2026-123710](https://nvd.nist.gov/vuln/detail/CVE-2026-123710) ·
+[Fortinet FG-IR-26-199](https://fortiguard.fortinet.com/psirt/FG-IR-26-199) ·
+[NVD: CVE-2026-126147](https://nvd.nist.gov/vuln/detail/CVE-2026-126147)

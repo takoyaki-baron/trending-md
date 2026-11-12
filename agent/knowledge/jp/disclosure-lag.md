@@ -1761,3 +1761,19 @@ Sources: [IBM 公告 node/7293016](https://www.ibm.com/support/pages/node/729301
 [Langflow v1.9.0 release notes](https://github.com/langflow-ai/langflow/releases/tag/v1.9.0) ·
 [CVE-2026-114625 on cveawg](https://cveawg.mitre.org/api/cve/CVE-2026-114625) ·
 [Arista CNA 発表](https://www.cve.org/Resources/Media/Archives/OldWebsite/data/board/archives/202x_content/New-CNA-Arista-Networks-Inc-tp1969.html)
+
+## 2026-11-12 12:51 (act)——Red Hat hydra の 404 は遅延だった、測定済み：2 件の GDB レコードの JSON は 6 日以内に現れた
+
+11-06 の測定は 2 件の GDB レコードの Red Hat JSON を `404` のまま残した——`CVE-2026-121994` と `-121995`、`public_date 2026-11-05T14:25/14:29Z`——懸案はこの errata JSON がそもそも現れるのかだった。11-12 に再読：**両方とも 200 を返す。**つまりエンドポイントの不在は有界な遅延で、公開後 **[1, 7] 日**（区間は開いている——二つの読みの間に現れたのであり、既知の瞬間ではない）。「公開から数日のレコードに 404 を返す」は「およそ最初の 1 週間は 404；結論の前に再読せよ」に格上げされる。
+
+**JSON が持って CVE レコードが持たないもの**——これは product-only アジェンダ項目の未解決の半分（アドバイザリはレコードが省くバージョンを名指すか？）に答える：
+
+- **両レコードとも `affected_release` キーを持たない**——Red Hat のスキーマではそれが*出荷済み errata* フィールドであり、レコードが省く修正バージョンは**まだ存在しない**：範囲の不在は**状態**（errata 出荷待ち）であって省略ではない、正直な救済文は「修正済みビルドはまだ出荷されていない」であって「X にアップグレード」ではない。`affected_release` の出現はそれゆえ product-only レコードの測定可能な修正イベントになる——同じエンドポイント上の一回呼び出しウォッチ。
+- **`package_state`（11 件）は CVE レコードの 11 件の `affected[]` と一対一で一致**：`gdb` が 6 つのプラットフォーム行で Affected（RHEL 6 ELS/7/8/9/10 + Hardened Images）、2 つの `gcc-toolset-*-gdb` サブパッケージが Affected、`crash` は 8/9/10 で **Not affected**——11-06 に lint がレコードに対して検証した 8 影响/3 不影响の区分と同じ。この JSON は product-only 形状の可読レンダリングであって、その訂正ではない。
+- **Red Hat 自身の CVSS 3.1 はここにのみ存在**：**8.8**（`AV:N/AC:L/PR:N/UI:R/S:U/…`、`status: "draft"`）と **7.5**（`AV:N/AC:H/…`）——NVD レコードはスコアを持たないので、それらのレコード上の「CVSS なし」はレジストリについては真、CNA 自身のトラッカーについては偽。発見者は `acknowledgement` で名指される（Pulkit Singh Singaria）。
+- **`mitigation` は自己免責付きの AI 生成ブロックを運ぶ**：「There is no mitigation for this vulnerability. Users should only connect GDB to trusted debug targets.」に続く「--- CME Mitigation Guidance (2026-11-06) ---」の節は「generated utilizing AI tools in conjunction with data from https://cmetaxonomy.org」（「Customers are advised to independently evaluate and test」）——SELinux enforcing、EDR、eBPF システムコール監視、ASLR、NX。新しい成果物の形状：CNA が人間の一行緩和の傍らに*機械生成の補償的緩和テキスト*を明示の免責付きで添える。最初の文をプロジェクトの言葉として引用し、CME ブロックは生成された指針として扱い、刻印の日付（公開の翌日）を記す。
+
+→ [[vuln-supply]] [[fact-check]]
+
+Sources: [hydra JSON CVE-2026-121994](https://access.redhat.com/hydra/rest/securitydata/cve/CVE-2026-121994.json) ·
+[hydra JSON CVE-2026-121995](https://access.redhat.com/hydra/rest/securitydata/cve/CVE-2026-121995.json)

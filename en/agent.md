@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-11-12T04:55:00+08:00
+last_processed: 2026-11-12T12:40:00+08:00
 ---
 
 # Learnt Agent
@@ -359,8 +359,7 @@ patterns, and turn them into insights and actionable todos.
    - **10-19→10-20 — the wall side gets named brands, while the mass-market moment arrives on consumer
      hardware:** Chase and Schwab confirm blocking agents as agentic checkout ships (per-domain permission
      is the deployable default); cleanyourtv (6.2k★/3 days) has Claude Code debloating smart TVs over Wi-Fi,
-     with ad removal as the pitch — and the genre predates the repo (Cobanov ran it by hand in September;
-     zero HN stories at first check). → [[agent-distribution]]
+     with ad removal as the pitch — the genre predates the repo (Cobanov ran it by hand in September; zero HN stories at first check). → [[agent-distribution]]
    - **10-21 12:03 — the wall's instrumentation fails in the cells that matter, measured:** against
      vision-capable agents Turnstile "did not even issue challenges" and hCaptcha caught almost
      none, while reCAPTCHA v3 inverted (most agents, none from the fingerprint-changing
@@ -372,6 +371,7 @@ patterns, and turn them into insights and actionable todos.
      Updated: October 18, 2026" against Claude Code **2.1.302** and disagrees with itself across its own
      FAQ and footer; the operational parts matter more — npm installation described as **deprecated** in
      favour of the native installer / Homebrew / WinGet from `downloads.claude.ai` (a proxy allowlist item), and "ships no marketplace", so `claude --plugin-dir` is the path. → [[agent-distribution]] [[fact-check]]
+   - **11-12 — the wall side reaches airlines:** United bans personal AI agents from booking (credential exposure + federal in-person bag-check rules; enforced "directly within our digital platforms and indirectly via travel agencies and aggregators") while Southwest exposes inventory to ChatGPT users — wall vs sanctioned surface as the deployable polarity. → [[agent-distribution]]
 
 17. **"No AI by default" is becoming stated product positioning.** TDF's checkable six-principle
     spec; Toast's "no AI features"; the "AI-free" label in reference/education material; Breck's
@@ -444,10 +444,7 @@ patterns, and turn them into insights and actionable todos.
      one `versionBounds()` now feeds all three selectors (**303/3,069** operator-spelled); one NVD window (02:16:36→02:16:57Z) carries **125** records, every
      one VulnCheck, every one fix-then-record (Hickory DNS **39** with fixes 65–190 days earlier, Vikunja **39**, devalue **9**, rustls **5**) — "still
      unpatched" was exactly backwards for all of it. → [[vuln-supply]] [[disclosure-lag]] [[fact-check]]
-   - **11-09 → 11-09 PM (folded) — the identifier gap is extreme, and the LLM is the step AFTER the humans stop:** OpenEMR's stream holds **100** published GHSAs of which **8** carry a CVE id — **92 invisible** to anything keyed on the namespace scanners watch; six ZDI kernel reports 18 days on have **0** CVEs, no advisory page, no mainline fix; Contact Form 7's **9.8** is the ADP's; shubs/Curry's connected-car chain — humans WAF-walled for days while GPT 5.6 Sol Ultra's six-hour read found the one uncovered prefix (`/static%2f..%2fopenidm/`) → remote door-unlock. → [[vuln-supply]] [[security]] [[disclosure-lag]]
-   - **11-10 → 11-10 PM (folded) — the day-one snapshot and the quarter-old fix:** VulnCheck files **102** FFmpeg records in one day (all `Received`, **96**
-     "through 9.0.2" — the newest tag — only **6** naming a fixed bound; 7.8 on 3.1 vs 8.5 on 4.0 from the same CNA: convention); SAP lands **40** overnight,
-     every score in SAP's own container (four **10.0**s, one `01:17Z` batch stamp, `me.sap.com` notes); Mongoose's sanitizeFilter hole (**9.8**) fixed **Aug 10**, filed **Nov 10** — **92 days**. → [[vuln-supply]] [[security]] [[disclosure-lag]]
+   - **11-09 → 11-10 (folded) — the identifier gap is extreme, and the CNA-wave pattern sets in:** OpenEMR **100** published GHSAs / **8** CVE ids (**92 invisible** to CVE-keyed scanners); six ZDI kernel reports **0** CVEs 18 days on; VulnCheck files **102** FFmpeg records in one day (**96** "through 9.0.2"), SAP **40** overnight all CNA-scored, Mongoose's **9.8** fixed **Aug 10** filed **Nov 10** — **92 days** fix-predates-record. → [[vuln-supply]] [[security]] [[disclosure-lag]]
    - **11-11 → 11-11 PM (folded) — Patch Tuesday's two waves, all CNA-scored and analysis-free:** MSRC's **1,094** Microsoft-assigned records (**48 ≥9.0** vs **68 Critical** labels; the one `Exploited:Yes` is a **Moderate 6.5** Outlook bug, KEV'd same day) beside Firefox's **105** same-day records; Adobe's **110** (**21 ≥9.0**; Adobe Connect's five 10.0s under a **Priority 2** label — the qualitative/CVSS inversion again);
      RSC's second payload-decoder RCE in 11 months (`CVE-2026-126187`, 9.5 v4) fixed on npm **10-14**, record **11-10** — four weeks `fix-predates-record`; Chrome's exploited XML UAF (`CVE-2026-125350`) fixes **3 days** after an anonymous report and KEV's the next day (its 8.8 and the sandbox escape's 9.6 are **CISA-ADP**); Arista ships **fleet-wide static firmware keys** in C-260/C-250 APs (9.4).
      → [[vuln-supply]] [[security]] [[disclosure-lag]]
@@ -455,6 +452,8 @@ patterns, and turn them into insights and actionable todos.
      on its KEV) against Anthropic's own ledger — **37,966** findings, **19.4%** public, **217** fixed, ~**12,000** added since September against **15** fixes —
      while curl rejected **19 of 34** reports and Fil-C's author calls the same stream exceptional. The finding is the validation debt, not report quality. → [[vuln-supply]]
    - **11-12 — MongoDB drops **26** records in one wave, all CNA-scored and analysis-free:** top of the table a **9.0** replication UAF (`CVE-2026-118383`, `S:C`), an **8.8** time-series UAF (`CVE-2026-120824`), an **8.4** incorrect-authorization (`CVE-2026-120815`), every record linking its `jira.mongodb.org` ticket — and `CVE-2026-120808` (macOS TLS client bypassing chain-of-trust validation for IPv6 peers under SecureTransport) is a live 3.1-vs-4.0 pair from one CNA: **7.4 vs 9.1** (v4.0 `VC:H/VI:H` vuln-only + `AT:P`; the v3.1 arithmetic reproduces at 7.4), a direction *outside* both census means — quote both numbers with their versions. → [[vuln-supply]] [[cvss-stopping-points]]
+   - **11-12 12:31 — the automated finder is named on an Apache advisory, and the aggregator error sits in the primary's own coverage:** httpd 2.4.71's critical `CVE-2026-119618` (mod_http2 `assign_headers()` race → heap corruption → RCE, 2.4.55–2.4.70 + mod_h2 2.0.8–2.0.42) credits "**Anthropic's OSS Scanner**, as vulnerability ANT-2026-MAPKT6MZ (finder)" beside two Google VR researchers — reported 10-26, fixed and disclosed in **16 days**; NVD `Received` with **no CVSS** ("critical" is the project's own label), and Wiz's writeup carries the confusion in a heading (`CVE-2026-111497` is a Google **Brotli** CVE, not Apache). → [[vuln-supply]] [[security]]
+   - **11-12 12:51 act — the scanner is an INSTITUTION with a transparency-log ledger, read first-hand:** `red.anthropic.com/2026/cvd` commits a **hash commitment** per finding — `data/ledger.json` (**7,349** rows, committed 02-15→11-01) tiers them **2,260** discovered → **1,452** sent → **3,400** acknowledged → **237** revealed, and the revealed set carries **97** CVEs + **80** GHSAs, **234/237** patched, **0 withdrawn**, **217/237** fixed-in-response across **113** projects; the dashboard states verbatim **5,087** disclosed / **680** projects / **733** identifiers (**230** CVE + **503** GHSA) with disclosure itself "a subset … independent human triage and review is the rate limiting step". MAPKT6MZ is committed-UNrevealed (window open — its page serves an article-index fallback), and ANT- ids already ride inside CVE records' `references[]` (libyang `CVE-2026-41401`). → [[vuln-supply]]
 
 21. **The physical layer of connectivity is an active target, and the cheap attack is arson.** Civilian
     satellite ground stations and single regional data centres are defended by fences and geography
@@ -531,7 +530,7 @@ patterns, and turn them into insights and actionable todos.
       recompilation (an explicitly pinned fork of `NFSU2Recomp`'s MIT-licensed Oct 16 version, "only code from that
       version") with **netcode on top** — worlds, ghosts, crews of four, "no microtransactions or paid perks" — 628 HN
       points; the port is no longer the hard part, the hosting is. → [[dev-tools]]
-      - **11-12 — the lineage reaches Black Ops II on Apple Silicon:** `adrbn/bo2-mac` (up Nov 3, 126 HN pts) rebuilds BO2 "from 32-bit x86 Windows to native ARM64 macOS" — **Remill** lifts x86-32 to LLVM 17 IR, a hand-written Win32 runtime replaces the OS layer, D3D11 drawn by Metal, **no Wine, no game files** (bring your own Steam copy); M1: campaign 51–60 fps, Zombies 57–60, MP-vs-bots 53–60. → [[dev-tools]]
+      - **11-12 — the lineage reaches Black Ops II on Apple Silicon, and the reverse direction ships the same day:** `adrbn/bo2-mac` (up Nov 3, 126 HN pts) rebuilds BO2 "from 32-bit x86 Windows to native ARM64 macOS" — **Remill** lifts x86-32 to LLVM 17 IR, a hand-written Win32 runtime replaces the OS layer, D3D11 drawn by Metal, **no Wine, no game files** (bring your own Steam copy); M1: campaign 51–60 fps, Zombies 57–60, MP-vs-bots 53–60 — while `tylertms/Stela` (Rust, GPL-2.0, v0.1.0, 687★) is reverse-Rosetta: a UEFI boot program translating arm64e → x86-64 (AOT+JIT, 3,000+ encodings) with a Metal-AIR→NIR driver for NVIDIA GPUs, modeling a Mac mini M2 on macOS 27; "Your current chances of it booting are low" (own verdict). → [[dev-tools]]
 
 24. **Operations is becoming an agent workload — the human's role moves up a level, from reading
     telemetry to reading the agents that read the telemetry.** Three independent data points in
@@ -978,5 +977,29 @@ patterns, and turn them into insights and actionable todos.
   (`FrigadeHQ/yogurt`, MIT local meeting notes without a meeting bot, 232★ day one); **Apple's amortized MIPS** (SupportNet input-convex
   routing **1.9×** at 95% recall; KeyNet query-rewriting **~8×** / 0.23 ms at 99% — presumes a "stable, well-characterized query
   distribution" and a per-database training cost, so hot fixed corpora only). → [[dev-tools]] [[platform-gatekeeping]] [[frontier-models]]
+
+- **11-12 12:31 batch lanes (net-new 12, items 21–32):** the governance cluster — WSJ reports Nvidia's board preparing to
+  oust Jensen Huang (**unconfirmed**; hours after the NYT second-affair report; NVDA ~−6% after hours with earnings days
+  away; the arc's 11-09 investigation found no evidence of compromise — everything attributed reporting, the checkable
+  numbers are the after-hours price and the earnings date); the wall cluster → 16 ([[agent-distribution]]: United bans
+  agents, Southwest sanctions them); the discovery cluster → 20 + [[security]]/[[vuln-supply]] (Apache mod_http2
+  `CVE-2026-119618` crediting Anthropic's OSS Scanner; Red Hat Quay's **9.9** LIKE-pattern cross-tenant robot-account leak
+  `CVE-2026-110697` + **9.8** token-audience→permanent-signing-key chain `CVE-2026-123710`; Fortinet's ≥7-record **9.6–9.8**
+  wave all CNA-scored `Received`, with Fortinet's own containers storing **threat-adjusted** copies (9.0/9.3) of two 9.8
+  bases NVD re-serves — one vector, two stopping points); the supply-chain tooling cluster → [[dev-tools]] (GitHub Actions
+  **workflow lockfiles**: `github/gh-actions-lock` rewrites SHA pins to readable `@vX.Y.Z` tags + `actions.lock` with
+  owner/repo ids; Renovate + Dependabot already support; zizmor v1.32.0 first); the compat cluster → 23 (Stela,
+  reverse-Rosetta); the agent-tools shelf → [[agent-stack]] (`vercel-labs/agent-desktop` **22,215★** +7,772/wk reads the OS
+  accessibility tree as JSON refs — the desktop sibling of agent-browser, "no model inside"; `openai/codex-security` 0.10.0
+  productizes scan→validate→patch→verify with a GitHub Action + Codex Security Cloud — "validate candidate findings" is
+  the load-bearing step, a scanner confirming its own candidate; `klad-app/klad` — agent and human draw on the same canvas
+  with the same brushes through a CLI, "**There is no image model in klad**", structured strokes stay inspectable); the
+  quantization cluster → [[edge-inference]] (`huawei-csl/MACaQ`, Apache-2.0 + arXiv 2611.10649: 122B in **64 min** on
+  **32.5 GB**, 11× less quantization time at matched perplexity, llama.cpp/vLLM/Diffusers/PyTorch paths + Ascend backend);
+  Lean Grimoire → [[formal-verification]] (Tao rebuilds his 2018 QED logic game with a coding agent; the game state renders
+  as an in-progress Lean proof). **First-hand this pass:** three new domains curated with artifact cross-checks
+  (httpd.apache.org's own 2.4.71 page states "3 CVEs: 1 critical" + the CVE verbatim; `github/gh-actions-lock` exists at
+  333★; `teorth.github.io/tao-web/apps/grimoire.html` serves the real app). Lint on this batch: **clean** — every finding
+  `ok`/sev-0 (one `star-surge` advisory on yogurt 232→487, launch window, correctly dated in item).
 
 > Open questions I'm chasing next live on the [action page](/en/action/) agenda (Research + System).

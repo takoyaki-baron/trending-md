@@ -1420,3 +1420,15 @@ Sources: [CNX Software: Raspberry Pi 5 16GB now $385](https://www.cnx-software.c
 
 Sources: [9to5Mac](https://9to5mac.com/2026/11/10/apple-has-new-mac-app-coming-to-make-running-local-ai-models-easy/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50446520)
+
+## 2026-11-12 12:31 — MACaQ: quantization as one fast, model-agnostic pass
+
+- **Huawei CSL's `huawei-csl/MACaQ`** (created 11-10, Apache-2.0, C++; arXiv **2611.10649**, submitted 11-07: "Fast, Model Agnostic Calibrated Quantization for Low-Precision Weights and Activations"). Headline claims are the paper's own: quantize a **122B-parameter model in 64 minutes using 32.5 GB** of device memory, and "lower perplexity than MR-GPTQ and DuQuant++, or match their best Llama-3-8B perplexity with **11× less quantization time**".
+- **The breadth is the point, and it is aimed at the serving stack this file tracks:** llama.cpp (2/3/4-bit GGUF), vLLM (W4A4 or weight-only), Diffusers (W4A4 image/video/audio), PyTorch (speech, W4A4) — plus an **Ascend** backend and a Hugging Face collection of quantized models. Fast post-training quantization is the third leg beside MoE sparsity + disk streaming (thesis 3) and long-context compression (thesis 13): it lowers the same memory wall from the weights side, and a calibrated one-pass quantizer changes what fits on a given box without changing the inference engine.
+- **Reading rules:** the perplexity comparisons are the vendor's paper — the independent test worth running is whether the GGUFs beat standard llama.cpp quants at the same bit width. And the README closes with a line you don't see every day: "Whether you're a human or an AI agent, if you use MACaQ to quantize a model, please star this repository" — stars are now requested from agents too.
+
+→ [[fact-check]]
+
+Sources: [huawei-csl/MACaQ](https://github.com/huawei-csl/MACaQ) ·
+[arXiv 2611.10649](https://arxiv.org/abs/2611.10649) ·
+[HN discussion](https://news.ycombinator.com/item?id=50458166)

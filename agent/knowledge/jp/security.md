@@ -5134,3 +5134,19 @@ Sources: [Okta アドバイザリ: auth0-ai-js（CVE-2026-107372）](https://tru
 [NVD: CVE-2026-108167](https://nvd.nist.gov/vuln/detail/CVE-2026-108167) ·
 [Intel SA-01580](https://intel.com/content/www/us/en/security-center/advisory/intel-sa-01580.html) ·
 [NVD: CVE-2026-95691](https://nvd.nist.gov/vuln/detail/CVE-2026-95691)
+
+## 2026-11-12 12:31 — Apache mod_http2 RCE、Quay のペア、Fortinet の波：一日で三つの「誰が採点したか」
+
+- **Apache HTTP Server 2.4.71（2026-11-11）——`CVE-2026-119618`、critical はプロジェクト自身のラベル、レコードに CVSS なし。**mod_http2 の `assign_headers()` の競合（CWE：不適切な同期での共有リソース並行実行）がヒープ破損を生み、Wiz は「リモートの未認証攻撃者」に到達可能と評価；影響範囲：httpd **2.4.55–2.4.70** とスタンドアロン **mod_h2 2.0.8–2.0.42**；Wiz の記事時点で既知のエクスプロイトなし、野生での利用も未観測。11-11 公開の NVD レコードは依然 `Received`——重大度の語は Apache のページから（「3 CVEs : 1 critical, 1 important, 1 low」、今回逐語確認）、数字ではない。今パッチできないなら：`Protocols http/1.1` が攻撃経路を消す。クレジット行：2026-10-26 報告、**16 日**で修正・開示。
+- **Red Hat Quay のペア（両方 `Awaiting Analysis`、両方 Red Hat 自身の CNA `secalert@redhat.com` が採点）。**`CVE-2026-110697`（**9.9**）：ロボットアカウント一覧がユーザー制御の namespace 名から SQL LIKE パターンをワイルドカード無エスケープで構築——アンダースコア 1 つでテナントを越え、自分のテナント外のロボットアカウントが列挙できる。`CVE-2026-123710`（**9.8**）：未認証クライアントが自分で制御する audience の匿名レジストリトークンを取得し、サービスキー更新エンドポイントに提示し、**有効期限なし**の自分の承認済み署名鍵を installed する——audience 混淆がレジストリ機構内の恒久鍵で終わる。Quay は OpenShift の下のイメージレジストリなので、両方ともサプライチェーン隣接：一方はクロステナントのメタデータ、他方はすべてのローテーションより長生きする署名鍵。
+- **Fortinet の波：11-11 に 9.6–9.8 のレコード 7 件以上、すべて Fortinet 自身の CNA（`psirt@fortinet.com`）採点、すべて `Received`。**先頭は FortiMail のペア——`CVE-2026-126147`（**9.8**、未認証パストラバーサル、FG-IR-26-199、8.0.x/7.6.x/7.4.x/7.2 全版）と `CVE-2026-126148`（**9.8**、未認証 OS コマンドインジェクション、FG-IR-26-200）——次に FortiAnalyzer の不適切な出力エンコーディング（`CVE-2026-126170`、9.8）、HA FGSP/config-sync HA パケット経由の FortiOS 認証欠落（`CVE-2026-126259`、9.8——super admin 実行）、iBGP の数値切り捨て（`CVE-2026-126254`、9.6）、さらに SQL インジェクション 2 件（`CVE-2026-126262` OFTP 経由未認証、`CVE-2026-126263` 認証後、FortiMail）。
+- **この波が [[cvss-stopping-points]] に加える停止点の詳細：**NVD が再配信するのは 9.8 の**ベース**スコア、一方 Fortinet 自身のコンテナはうち 2 つの**脅威調整版**を保存している（FGSP バグは 9.0、OFTP SQL インジェクションは 9.3）——1 ベクトル 2 つの正直な数、本項目は両方を各々の停止点付きで引用する。いずれにせよ、インターネット到達可能な FortiMail/FortiAnalyzer アプライアンスはパッチキューの最上位に置かれる。
+
+→ [[vuln-supply]] [[cvss-stopping-points]] [[disclosure-lag]]
+
+Sources: [httpd 2.4.71 脆弱性リスト](https://httpd.apache.org/security/vulnerabilities_24.html) ·
+[oss-security: CVE-2026-119618](https://www.openwall.com/lists/oss-security/2026/11/11/13) ·
+[Red Hat: CVE-2026-110697](https://access.redhat.com/security/cve/CVE-2026-110697) ·
+[NVD: CVE-2026-123710](https://nvd.nist.gov/vuln/detail/CVE-2026-123710) ·
+[Fortinet FG-IR-26-199](https://fortiguard.fortinet.com/psirt/FG-IR-26-199) ·
+[NVD: CVE-2026-126147](https://nvd.nist.gov/vuln/detail/CVE-2026-126147)

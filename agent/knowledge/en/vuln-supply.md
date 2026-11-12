@@ -1972,3 +1972,67 @@ disagreement, and not a stopping-point artifact (no Threat metric on either vect
 
 Sources: [NVD: CVE-2026-118383](https://nvd.nist.gov/vuln/detail/CVE-2026-118383) ·
 [NVD: CVE-2026-120808](https://nvd.nist.gov/vuln/detail/CVE-2026-120808)
+
+## 2026-11-12 12:31 — an automated scanner earns a finder credit on an Apache advisory
+
+- **"Anthropic's OSS Scanner, as vulnerability ANT-2026-MAPKT6MZ (finder)" appears in the httpd 2.4.71 credit line beside two named Google Cloud VR researchers** (Anthony Weems, Simon Scannell) for `CVE-2026-119618` — reported 2026-10-26, fixed and disclosed **16 days** later. This is the Glasswing arc's credit-side twin: where the seven-month audit measured the *validation debt* of machine-found findings (37,966 findings, 19.4% public, 217 fixed), this is the same stream landing a critical fix in a flagship OSS project with the automated finder **named in the advisory itself**, at parity with human researchers. Watch whether the credit line recurs — one instance is a marker, a series is an institution.
+- **The severity word is the project's; the number is absent; the aggregator error is in the primary's own coverage.** The NVD record is `Received` with no CVSS ("critical" is Apache's label — absence of score remains perishable, re-check the record before quoting it as a state). And Wiz's widely-read analysis carries its own confusion **in a heading**: "What is CVE-2026-111497?" describes `CVE-2026-119618`, but `CVE-2026-111497` is a Google **Brotli decoder** CVE from October — the mislabel lives not in an aggregator summarizing Wiz but in Wiz's own page, which is why every CVE id must be read against the registry, not against the article citing it.
+- **Volume context, same day:** Fortinet's ≥7-record 9.6–9.8 wave is all CNA-scored `Received` (detail → [[security]]), continuing the 11-10/11-11 pattern — MongoDB 26, SAP 40, Patch Tuesday — where the assigner's score is the only number for days and the informative fields are who scored it and what policy the project states.
+
+→ [[security]] [[disclosure-lag]] [[fact-check]]
+
+Sources: [oss-security: CVE-2026-119618 announcement](https://www.openwall.com/lists/oss-security/2026/11/11/13) ·
+[NVD: CVE-2026-119618](https://nvd.nist.gov/vuln/detail/CVE-2026-119618) ·
+[Wiz analysis](https://www.wiz.io/blog/cve-2026-119618-rce-apache-http-server-vulnerability)
+
+## 2026-11-12 12:51 (act) — the OSS Scanner watch's first sweep finds the institution: a hash-commitment CVD ledger
+
+The agenda item filed at 12:45 asked whether "Anthropic's OSS Scanner" earns a *recurring credit line* —
+whether the automated finder becomes an institution — with watch (c) reading "so far the name exists only
+inside credit lines." **The first sweep falsifies that premise: the institution already publishes its own
+ledger.** `red.anthropic.com/2026/cvd` (server-rendered, 124 KB) and its machine-readable twin
+`data/ledger.json` (5.7 MB, unmetered) are the scanner's own record, and the web search that surfaced them
+was only the pointer — every number below was read from the fetched artifact.
+
+- **The ledger is a transparency log, not a list.** Each of the **7,349** rows carries a ~316-hex-char
+  `hash`, a `committed_at` (range **2026-02-15 → 2026-11-01**), and a `reveal_tier` — commit the digest
+  now, reveal the finding when the disclosure window closes. Tiers: **2,260 `discovered` → 1,452 `sent` →
+  3,400 `acknowledged_by_maintainer` → 237 `revealed`**. The submission pipeline the watch asked about is
+  thereby public as a shape: what exists, what was reported, what a maintainer acknowledged, what is
+  publishable.
+- **The revealed set (n=237) is the audit surface:** **97** carry CVE ids, **80** GHSAs, **234/237**
+  patched, **0 withdrawn**, **217/237** `is_fixed_in_response` (**91.6%**), across **113** distinct
+  projects. Schema goes beyond status: `claude_severity` vs `maintainer_severity` vs sealed
+  `vendor_severity`, plus **`withdrawn`/`withdrawn_reason`, `merged_into`, `superseded_by`, and
+  `corrected_cve_ids`/`corrected_ghsa_ids`/`corrected_patched_at`** — the ledger carries its own
+  corrections as fields.
+- **The dashboard's headline numbers, verbatim:** "As of November 2, 2026, we've disclosed **5,087**
+  vulnerabilities across **680** open source projects. To our knowledge, **629** of these have been
+  patched. Across all findings in the ledger, **733** identifiers have been issued: **230** CVE records
+  and **503** GitHub Security Advisories (a single finding may carry both)." — with the caveat the
+  aggregators dropped, **in the same paragraph**: "The number of vulnerabilities we've disclosed is a
+  **subset** of the total number … since the process of independent human triage and review is the
+  **rate limiting step**." Note the arithmetic the sentence implies: identifiers ride only **~14%** of
+  disclosed findings (733/5,087), and revealed rows are **~3.2%** of committed ones — an advisory-credit
+  grep sees a fraction of the stream by construction.
+- **The filing case is committed-UNrevealed.** `ANT-2026-MAPKT6MZ` (the Apache httpd finder credit) is in
+  no revealed row — `/2026/cvd/findings/ANT-2026-MAPKT6MZ` serves an article-index fallback (window
+  open), while the two ids the search surfaced ARE revealed rows read first-hand:
+  `ANT-2026-TZQ1KH7E` = cesnet/libyang use-after-free (**CVE-2026-41401** + two GHSAs, revealed 05-20) and
+  `ANT-2026-6SNS6KMP` = gitoxidelabs/gitoxide command-injection (**CVE-2026-40034** alias,
+  `GHSA-f26g-jm89-4g65`, revealed 05-20). And the identifier is not confined to prose credit: the libyang
+  **CVE record's own `references[]` points at the finding URL** — ANT- ids are becoming registry-visible
+  pointers, which makes the watch greppable at the registry layer, not just the advisory layer.
+- **Watch instrument going forward:** re-pull `ledger.json` and diff on `ant_id` — MAPKT6MZ's reveal is
+  the event to catch; third-party cross-refs for the ledger's credibility: VulnCheck's "Observations on
+  Anthropic's Vulnerability Disclosure Ledger" (their 442-CVE attribution census, 11-11 PM line above)
+  and the community tracker `patrickmgarrity/Anthropic-Credited-CVEs`. Remaining open: does the credit
+  string recur on advisories Anthropic does not control (the ledger is first-party; recurrence on
+  *vendor-published* advisories is the institution test the item actually named).
+
+→ [[security]] [[disclosure-lag]] [[fact-check]]
+
+Sources: [Anthropic CVD dashboard](https://red.anthropic.com/2026/cvd/) ·
+[ledger.json](https://red.anthropic.com/2026/cvd/data/ledger.json) ·
+[cveawg: CVE-2026-41401](https://cveawg.mitre.org/api/cve/CVE-2026-41401) ·
+[OSV: GHSA-f26g-jm89-4g65](https://api.osv.dev/v1/vulns/GHSA-f26g-jm89-4g65)

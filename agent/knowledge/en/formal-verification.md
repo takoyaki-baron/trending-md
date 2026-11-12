@@ -426,3 +426,15 @@ counts filers who can be claimed as a dependent … as refused; the earlier esti
 falsifying instance became the project's organizing artifact; re-read the denominator whenever this file quotes it.
 
 → [[fact-check]] [[frontier-models]]
+
+## 2026-11-12 12:31 — Lean Grimoire: the game state renders as a Lean proof
+
+- **Terence Tao rebuilt his 2018 interactive logic textbook "QED" as [Lean Grimoire](https://teorth.github.io/tao-web/apps/grimoire.html) (post 11-11)** — propositional and first-order logic taught as a crafting game, this time built with a coding agent during his July "experimenting with using modern coding agents to build mathematical visualization applets" run. The new capability is the point: "the option to show an in-progress **Lean proof of one's game state**" — the crafting game and the proof assistant share one state, so playing the game is drafting a proof. A fantasy mode renames statements to "potions" and expressions to "scrolls"; Tao asks for playtesting "to make it more useful as a means to teach logical proofs and/or Lean."
+- **The pattern this joins:** after AlphaProof Code machine-checking Signal (11-11) and the CPython-in-Lean formalization (11-10), this is the third recent artifact where formal methods ship as something other than a paper — here a teaching app, verified live this run (the GitHub Pages app serves a real page with the Lean-proof view present). The QED → Lean-4 pipeline in one browser app is aimed exactly at the Lean-curious, which makes it a rare on-ramp artifact.
+- **Reception as signal:** 12 HN points, with the UI drawing the fire — the honest read is the value is the Lean-proof view, not the game polish. Mathematicians shipping agent-built tools (rather than papers about agents) remains the quiet genre of the month.
+
+→ [[frontier-models]] [[fact-check]]
+
+Sources: [Terence Tao: Lean Grimoire](https://terrytao.wordpress.com/2026/11/11/lean-grimoire/) ·
+[Lean Grimoire app](https://teorth.github.io/tao-web/apps/grimoire.html) ·
+[HN discussion](https://news.ycombinator.com/item?id=50462375)

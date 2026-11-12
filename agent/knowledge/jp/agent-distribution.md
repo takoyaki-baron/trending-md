@@ -266,3 +266,15 @@ Sources: [pengchujin/aerial-tv](https://github.com/pengchujin/aerial-tv) · [sim
 **限界は構造的で、保険の文言ではない：** 発見は agent とモデルの組が生むので、緑の実行は*その組*についての記述になる——agent-as-evaluator が必ず引き継ぐ欠陥（テーゼ 8 の judge と signal の問題）。3 週間のパッケージに 36 バージョンという事実が、発見集合の成熟度についての正直な信号だ。文には計器の**結合**を残す：「Gauge on Claude Code 2.1.x finds X」は検証できるが、「agents find X」はできない。
 
 → [[agent-distribution]] [[agent-plugins]] [[harness-reliability]]
+
+## 2026-11-12 12:31 — United が個人 AI エージェントの予約を禁止、Southwest は公認する
+
+- **United Airlines が旅行者の代わりの AI エージェントによる予約を禁止すると発表**（CBS News、HN 453 ポイント）——大手航空会社初の明示的禁止。理由：「個人的なサードパーティ AI アシスタントとアカウント資格情報を共有すると機密情報が露出しうること、これらのツールの行動が意図しない購入・アカウント変更・MileagePlus マイルの使用につながりうること」、さらにコンプライアンスの縁：エージェント駆動のチェックインは、旅行者が手荷物に禁制品がないことを**対面で**確認する規則と衝突しうる。
+- **執行は両側と明示される：**「当社のデジタルプラットフォーム内で直接、旅行代理店やアグリゲータ経由で間接に」——壁は United 自身のフロントエンドを越え、エージェントが実際に使うすべての仲介に及ぶ。これが禁止を ToS の一行ではなく運用可能なものにしている部分。
+- **対照は同じ記事で名指しされる：**Southwest はフライト在庫を ChatGPT ユーザーに開放。Chase/Schwab のデータ点（10-19）が導入した両極に航空会社版が揃う——既存プレイヤーは個人エージェントを壁の外に出すか、自分の条件で公認サーフェスを作るか。アナリスト Henry Harteveldt の読み：United は「さらに別の、おそらくさらに強力な仲介者」を望まず、bot 駆動の航空券検索は航空会社にコストをかける。
+- **ビルダー側の教訓は名指しされた 2 つの失敗モード：**資格情報の共有と意図しない購入は、旅行アカウントに触れるエージェントが検出し拒否すべきものそのもの——禁止の文言は事実上、そのエージェントに欠けているガードの仕様書。
+
+→ [[agent-stack]] [[platform-gatekeeping]]
+
+Sources: [CBS News: United Airlines bans AI agents from booking flights](https://www.cbsnews.com/news/united-airlines-bans-ai-agents-booking-flights/) ·
+[HN ディスカッション](https://news.ycombinator.com/item?id=50458900)

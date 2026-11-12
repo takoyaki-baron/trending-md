@@ -1367,3 +1367,16 @@ Sources: [microsoft/Procexp-Mac](https://github.com/microsoft/Procexp-Mac) ·
 
 Sources: [Stoppels: The hardest tarball?](https://stoppels.ch/2026/11/07/the-hardest-tarball.html) ·
 [haampie/tar-minefield](https://github.com/haampie/tar-minefield)
+
+## 2026-11-12 12:31 — Actions ロックファイル、逆 Rosetta、共有キャンバス
+
+- **GitHub Actions ワークフローロックファイル（`github/gh-actions-lock`、発稿時 332★／今回検証 333★）。**公式 `gh` 拡張が `uses:` 行を完全 SHA ピンから可読な `@vX.Y.Z` タグに書き戻し、各タグを正確なコミット**に加えて `owner_id`/`repo_id`** で固定する `.github/workflows/actions.lock` を生成——SHA ピニングの反サプライチェーン保証（タグは可変）を保ちながら、読めない diff と十六進だらけの Renovate PR をなくす。CI で `gh actions-lock --verify` を回すと、ロックの逸脱やピン参照の上流失効で失敗する；Renovate と Dependabot は既に対応；zizmor v1.32.0 がロックファイルを読む最初のリリース。残しておきたい HN コメント：「github の全フォークは同じリポジトリで、上流にマージされたかどうかにかかわらず任意のコミットをピンできる」——SHA ピニングが実際に信頼していたのは GitHub のオブジェクト同一性であって、不変性ではない。
+- **`tylertms/Stela`（Rust、GPL-2.0、v0.1.0、687★）——逆 Rosetta：x86-64 PC 上の macOS 27。**ホスト OS を持たない UEFI ブートプログラムで、三部構成：arm64e を x86-64 へ翻訳する AOT **と** JIT コンパイラ（3,000+ AArch64 命令エンコーディング、ゲストレジスタをホストにマップ、x86-64-v2 で動作）；**NVIDIA GPU 向け Metal ドライバ**（GTX 16/RTX 20+）は AIR——Metal のシェーダ IR——を直接 NIR（Mesa の IR）へコンパイル；そして Mac mini（M2）のハードウェアモデル。要件：RAM 8 GB、NVIDIA GPU、60 GB の GPT パーティション。README 自身の評決は正直：「現時点で起動する見込みは低い。」研究グレードだが、アーキテクチャ（翻訳器 + GPU ドライバ + プラットフォームモデルを 1 つのブートバイナリに）が注視すべき成果物。
+- **`klad-app/klad`（Rust、source-available）——エージェント/人間コラボレーション向けに作られた描画アプリ。**人間はエディタで描き、エージェントは `klad` CLI 経由で**同じブラシで同じ絵に**描く、互いのストロークを即時に見る；レイヤー、グループ化、タイムライン付き。設計原理は欠如の形をとる：「**klad に画像モデルはない**」——すべてが構造化され続ける（パス/筆圧/ブラシ付きのストローク、頂点付きの形状、領域付きの塗り）、歪んだ葉はリロールではなくその葉を直す。GUI エージェントパターンのクリエイティブソフトウェアへの適用で、構造化キャンバスこそがエージェント編集を検査可能にする。
+
+→ [[agent-stack]] [[fact-check]]
+
+Sources: [hugovk.dev: Lock your GitHub Actions](https://hugovk.dev/blog/2026/lock-github-actions/) ·
+[github/gh-actions-lock](https://github.com/github/gh-actions-lock) ·
+[tylertms/Stela](https://github.com/tylertms/Stela) ·
+[klad-app/klad](https://github.com/klad-app/klad)

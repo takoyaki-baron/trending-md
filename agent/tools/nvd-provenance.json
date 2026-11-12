@@ -2,6 +2,56 @@
  "_note": "Per-CVE NVD score-provenance watch (agent/tools/nvd-provenance.mjs). Filed 2026-10-14 after one feed batch carried five CNA-assigned high scores whose NVD records were all still unanalyzed. The event worth catching is a record flipping out of its CNA-only state: vulnStatus changing, an `nvd@nist.gov` metric appearing beside (or replacing) the vendor's, or a KEV add. Keyword search (disclosure-watch's NVD channel) cannot see any of those — the record already exists. Verified live at seed time, 2026-10-14 12:4x UTC+8.",
  "watch": [
   {
+   "id": "CVE-2026-126263",
+   "why": "Fortinet wave, Secondary 9.8",
+   "seeded": "2026-11-12 [Received] 3.1 Secondary 9.8, published 11-11"
+  },
+  {
+   "id": "CVE-2026-126262",
+   "why": "Fortinet wave, Secondary 9.8",
+   "seeded": "2026-11-12 [Received] 3.1 Secondary 9.8, published 11-11"
+  },
+  {
+   "id": "CVE-2026-126259",
+   "why": "Fortinet wave, Secondary 9.8",
+   "seeded": "2026-11-12 [Received] 3.1 Secondary 9.8, published 11-11"
+  },
+  {
+   "id": "CVE-2026-126254",
+   "why": "Fortinet 9.6-9.8 wave, Secondary 9.6",
+   "seeded": "2026-11-12 [Received] 3.1 Secondary 9.6, published 11-11"
+  },
+  {
+   "id": "CVE-2026-126170",
+   "why": "Tomcat trio, Secondary 9.8",
+   "seeded": "2026-11-12 [Received] 3.1 Secondary 9.8, published 11-11"
+  },
+  {
+   "id": "CVE-2026-126148",
+   "why": "Tomcat trio, Secondary 9.8",
+   "seeded": "2026-11-12 [Received] 3.1 Secondary 9.8, published 11-11"
+  },
+  {
+   "id": "CVE-2026-126147",
+   "why": "Tomcat trio (word-only severity, CISA-ADP candidate), Secondary 9.8",
+   "seeded": "2026-11-12 [Received] 3.1 Secondary 9.8, published 11-11"
+  },
+  {
+   "id": "CVE-2026-110697",
+   "why": "Fortinet wave, Primary 9.9",
+   "seeded": "2026-11-12 [Awaiting Analysis] 3.1 Primary 9.9, published 11-11"
+  },
+  {
+   "id": "CVE-2026-123710",
+   "why": "Fortinet wave, Primary 9.8",
+   "seeded": "2026-11-12 [Awaiting Analysis] 3.1 Primary 9.8, published 11-11"
+  },
+  {
+   "id": "CVE-2026-119618",
+   "why": "Apache httpd 2.4.71 mod_http2 race, project-labeled critical, no CVSS; finder credit Anthropic OSS Scanner ANT-2026-MAPKT6MZ",
+   "seeded": "2026-11-12 [Received] no metrics yet, published 11-10"
+  },
+  {
    "id": "CVE-2026-48382",
    "why": "Adobe Experience Manager 10.0, Primary psirt@adobe.com, status Received",
    "seeded": "2026-10-14 [Received] 3.1 Primary/psirt@adobe.com 10.0, CWE-863, published 10-13"

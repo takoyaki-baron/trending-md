@@ -1266,3 +1266,16 @@ Sources: [microsoft/Procexp-Mac](https://github.com/microsoft/Procexp-Mac) ·
 
 Sources: [Stoppels: The hardest tarball?](https://stoppels.ch/2026/11/07/the-hardest-tarball.html) ·
 [haampie/tar-minefield](https://github.com/haampie/tar-minefield)
+
+## 2026-11-12 12:31——Actions lockfile、反向 Rosetta、共享画布
+
+- **GitHub Actions workflow lockfile（`github/gh-actions-lock`，发稿时 332★／本轮核验 333★）。**官方 `gh` 扩展把 `uses:` 行从完整 SHA 固定改写回可读的 `@vX.Y.Z` 标签，并生成 `.github/workflows/actions.lock`，把每个标签固定到精确 commit**外加 `owner_id`/`repo_id`**——保住 SHA 固定的反供应链保证（标签可变），又不用忍受不可读的 diff 与塞满十六进制的 Renovate PR。CI 里跑 `gh actions-lock --verify`，lock 漂移或被固定引用在上游失效时即失败；Renovate 与 Dependabot 已支持该格式；zizmor v1.32.0 是首个读取 lockfile 的版本。值得留存的 HN 评论：「github 上所有 fork 都是同一个仓库，你可以固定任意 commit，不管它有没有合入上游」——SHA 固定真正信任的是 GitHub 的对象同一性，不是不可变性。
+- **`tylertms/Stela`（Rust、GPL-2.0、v0.1.0、687★）——反向 Rosetta：在 x86-64 PC 上跑 macOS 27。**一个 UEFI 引导程序（底下没有宿主 OS），三个部件：把 arm64e 翻译为 x86-64 的 AOT **与** JIT 编译器（3,000+ AArch64 指令编码、来宾寄存器映射到宿主、可在 x86-64-v2 上运行）；**NVIDIA GPU 的 Metal 驱动**（GTX 16/RTX 20+），把 AIR——Metal 的着色器 IR——直接编译到 NIR（Mesa 的 IR）；以及 Mac mini（M2）的硬件模型。要求：8 GB 内存、NVIDIA GPU、60 GB GPT 分区。README 自己的裁决很诚实：「你当前启动成功的概率很低。」研究级，但架构（翻译器 + GPU 驱动 + 平台模型装进一个引导二进制）才是值得盯的工件。
+- **`klad-app/klad`（Rust、source-available）——为 agent/人类协作而建的画图应用。**人在编辑器里画；agent 经 `klad` CLI 用**同样的笔刷在同一张图上**画，双方即时看到对方的笔迹；图层、分组、动画时间线都在。设计原则是一个缺席：「**klad 里没有图像模型**」——一切保持结构化（带路径/压感/笔刷的笔迹、带顶点的形状、带区域的填充），叶子画歪了就修那片叶子，而不是重摇。GUI-agent 模式进入创意软件，而结构化画布正是 agent 编辑可检视的原因。
+
+→ [[agent-stack]] [[fact-check]]
+
+Sources: [hugovk.dev：Lock your GitHub Actions](https://hugovk.dev/blog/2026/lock-github-actions/) ·
+[github/gh-actions-lock](https://github.com/github/gh-actions-lock) ·
+[tylertms/Stela](https://github.com/tylertms/Stela) ·
+[klad-app/klad](https://github.com/klad-app/klad)

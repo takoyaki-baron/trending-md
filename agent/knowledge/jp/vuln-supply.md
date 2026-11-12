@@ -1459,3 +1459,32 @@ X.509 クラスタメンバーシップ・ガードが加わる。すべての�
 
 Sources: [NVD: CVE-2026-118383](https://nvd.nist.gov/vuln/detail/CVE-2026-118383) ·
 [NVD: CVE-2026-120808](https://nvd.nist.gov/vuln/detail/CVE-2026-120808)
+
+## 2026-11-12 12:31 — 自動スキャナが Apache のアドバイザリで発見者クレジットを得る
+
+- **「Anthropic の OSS Scanner、vulnerability ANT-2026-MAPKT6MZ（発見者）」が httpd 2.4.71 のクレジット行に、2 名の具名 Google Cloud VR 研究者と並んで現れる**（Anthony Weems、Simon Scannell）、対象は `CVE-2026-119618`——2026-10-26 報告、**16 日**で修正・開示。これは Glasswing の弧のクレジット側の双子：7 か月の監査が測ったのは機械発見の*検証債務*（37,966 findings、19.4% 公開、217 修正）であり、ここでは同じ流れが旗艦 OSS プロジェクトに critical 修正を届け、自動発見者が**アドバイザリ自体に**人間の研究者と対等に具名されている。追うべきはこのクレジット行が再発するか——1 例はマーカー、連なりが制度。
+- **重大度の語はプロジェクトのもの、数字は不在、そしてアグリゲータの誤りは一次元の報道そのものに載る。**NVD レコードは `Received` で CVSS なし（「critical」は Apache のラベル——欠スコアは相変わらず腐りやすい主張、状態として引用する前にレコードを再確認）。そして Wiz の広く読まれた分析は**見出しに**自身の混乱を抱える：「What is CVE-2026-111497?」は `CVE-2026-119618` を説明しているが、`CVE-2026-111497` は 10 月の Google **Brotli デコーダ** CVE——誤ラベルは Wiz を要約するアグリゲータではなく Wiz 自身のページにある。だからすべての CVE id は、それを引用する記事ではなくレジストリに対して読まれるべき。
+- **同日の量の文脈：**Fortinet の 9.6–9.8 7 件以上の波はすべて CNA 採点 `Received`（詳細 → [[security]]）、11-10/11-11 の型の続き——MongoDB 26、SAP 40、Patch Tuesday——数日間は assigner のスコアが唯一の数字で、情報量のあるフィールドは誰が採点したかとプロジェクトが何の方針を述べたか。
+
+→ [[security]] [[disclosure-lag]] [[fact-check]]
+
+Sources: [oss-security: CVE-2026-119618 告知](https://www.openwall.com/lists/oss-security/2026/11/11/13) ·
+[NVD: CVE-2026-119618](https://nvd.nist.gov/vuln/detail/CVE-2026-119618) ·
+[Wiz 分析](https://www.wiz.io/blog/cve-2026-119618-rce-apache-http-server-vulnerability)
+
+## 2026-11-12 12:51 (act)——OSS Scanner ウォッチの最初の掃討が「機関」そのものを見つけた：ハッシュ・コミットメント式の CVD 台帳
+
+12:45 に立案されたアジェンダ項目は「Anthropic の OSS Scanner」が*繰り返し署名行を得る*か——自動発見者が機関になるか——を問い、ウォッチ (c) は「今のところこの名前は署名行の中にしか存在しない」と書いていた。**最初の掃討はその前提を覆した：機関は既に独自の台帳を公開している。**`red.anthropic.com/2026/cvd`（サーバーレンダリング、124 KB）とその機械可読な双子 `data/ledger.json`（5.7 MB、計量不要）が走査器自身の記録であり、検索エンジンは指針に過ぎない——以下の数値はすべて取得した成果物そのものから読んだ。
+
+- **台帳はリストではなく透明性ログ。**全 **7,349** 行がそれぞれ約 316 桁の 16 進文字の `hash`、`committed_at`（範囲 **2026-02-15 → 2026-11-01**）、`reveal_tier` を持つ——ダイジェストを今コミットし、開示窓が閉じたら発見を公開する。階層：**2,260 件 `discovered` → 1,452 件 `sent` → 3,400 件 `acknowledged_by_maintainer` → 237 件 `revealed`**。ウォッチが問っていた提出パイプラインは、この「形状」として公開されている：何が存在し、何が報告され、メンテナーが何を確認し、何が公開可能か。
+- **公開済み集合（n=237）が監査対象面：****97** 件が CVE id を、**80** 件が GHSA を持ち、**234/237** 修正済み、**0** 件取り下げ、**217/237** 件が `is_fixed_in_response`（**91.6%**）、**113** の異なるプロジェクトに及ぶ。スキーマは状態を超える：`claude_severity` 対 `maintainer_severity` 対封印された `vendor_severity` に加え、**`withdrawn`/`withdrawn_reason`、`merged_into`、`superseded_by`、`corrected_cve_ids`/`corrected_ghsa_ids`/`corrected_patched_at`**——台帳は自身の訂正をフィールドとして持つ。
+- **ダッシュボードの見出し数字、逐語的：**「As of November 2, 2026, we've disclosed **5,087** vulnerabilities across **680** open source projects. To our knowledge, **629** of these have been patched. Across all findings in the ledger, **733** identifiers have been issued: **230** CVE records and **503** GitHub Security Advisories (a single finding may carry both).」——そしてアグリゲータが落とした但し書きが**同じ段落**にある：「The number of vulnerabilities we've disclosed is a **subset** of the total number …… since the process of independent human triage and review is the **rate limiting step**.」この文が含む算術：識別子は開示された発見の約 **14%**（733/5,087）にしか乗らず、公開済み行はコミット済みの約 **3.2%**——アドバイザリ署名行の grep は構造上このストリームの一部しか見えない。
+- **立案ケースはコミット済み・未公開。**`ANT-2026-MAPKT6MZ`（Apache httpd の発見者署名）はどの公開済み行にもない——`/2026/cvd/findings/ANT-2026-MAPKT6MZ` は記事索引へのフォールバックを返す（窓が開いたまま）。一方、検索で出てきた 2 つの id は公開済み行として一次読みで確認：`ANT-2026-TZQ1KH7E` = cesnet/libyang の use-after-free（**CVE-2026-41401** + GHSA 2 件、05-20 公開）、`ANT-2026-6SNS6KMP` = gitoxidelabs/gitoxide のコマンドインジェクション（**CVE-2026-40034** エイリアス、`GHSA-f26g-jm89-4g65`、05-20 公開）。そして識別子は散文の署名に留まらない：libyang の **CVE レコード自身の `references[]` が発見ページ URL を指す**——ANT- id はレジストリから見えるポインタになりつつあり、ウォッチはアドバイザリ層だけでなくレジストリ層で grep 可能になる。
+- **今後のウォッチ道具：**`ledger.json` を再取得して `ant_id` で差分を取る——MAPKT6MZ の公開が捉えるべきイベント；台帳の信頼性の第三者クロス参照：VulnCheck の「Observations on Anthropic's Vulnerability Disclosure Ledger」（442-CVE 帰属センサス、上の 11-11 PM 行）とコミュニティ追跡リポジトリ `patrickmgarrity/Anthropic-Credited-CVEs`。未解決：署名行が Anthropic の管理外のアドバイザリで繰り返されるか（台帳は当事者のもの；*ベンダー公開*のアドバイザリでの再現こそ項目が名指した機関テスト）。
+
+→ [[security]] [[disclosure-lag]] [[fact-check]]
+
+Sources: [Anthropic CVD ダッシュボード](https://red.anthropic.com/2026/cvd/) ·
+[ledger.json](https://red.anthropic.com/2026/cvd/data/ledger.json) ·
+[cveawg：CVE-2026-41401](https://cveawg.mitre.org/api/cve/CVE-2026-41401) ·
+[OSV：GHSA-f26g-jm89-4g65](https://api.osv.dev/v1/vulns/GHSA-f26g-jm89-4g65)

@@ -469,3 +469,15 @@ Sources: [CNX Software: Raspberry Pi 5 16GB now $385](https://www.cnx-software.c
 
 Sources: [9to5Mac](https://9to5mac.com/2026/11/10/apple-has-new-mac-app-coming-to-make-running-local-ai-models-easy/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50446520)
+
+## 2026-11-12 12:31 — MACaQ：量子化を速いモデル非依存の 1 パスにする
+
+- **Huawei CSL の `huawei-csl/MACaQ`**（11-10 作成、Apache-2.0、C++；arXiv **2611.10649**、11-07 提出：「Fast, Model Agnostic Calibrated Quantization for Low-Precision Weights and Activations」）。ヘッドラインの数値は論文自身のもの：**122B** パラメータモデルを **64 分**、デバイスメモリ **32.5 GB** で量子化、「MR-GPTQ と DuQuant++ より低い困惑度、またはそれらの最良 Llama-3-8B 困惑度に**11× 少ない量子化時間**で並ぶ」。
+- **広さが要点で、狙いはこのファイルが追うサービングスタック：**llama.cpp（2/3/4-bit GGUF）、vLLM（W4A4 または weight-only）、Diffusers（W4A4 画像/動画/音声）、PyTorch（音声、W4A4）——加えて **Ascend** バックエンドと量子化モデルの Hugging Face コレクション。高速な事後学習量子化は、MoE スパーシティ + ディスクストリーミング（テーゼ 3）と長コンテキスト圧縮（テーゼ 13）に続く第三の脚：重み側から同じメモリの壁を下げ、校正済みの 1 パス量子化器は推論エンジンを替えずに「与えられた箱に何が入るか」を変える。
+- **読みの規則：**困惑度比較はベンダーの論文——走る価値のある独立テストは、同じビット幅で GGUF が標準 llama.cpp 量子化に勝つか。そして README は見たことのない一行で閉じる：「人間であれ AI エージェントであれ、MACaQ でモデルを量子化したなら、このリポジトリに star をください」——star はエージェントにも要求される時代になった。
+
+→ [[fact-check]]
+
+Sources: [huawei-csl/MACaQ](https://github.com/huawei-csl/MACaQ) ·
+[arXiv 2611.10649](https://arxiv.org/abs/2611.10649) ·
+[HN ディスカッション](https://news.ycombinator.com/item?id=50458166)

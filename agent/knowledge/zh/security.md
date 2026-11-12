@@ -4678,3 +4678,19 @@ Sources: [Okta 公告：auth0-ai-js（CVE-2026-107372）](https://trust.okta.com
 [NVD: CVE-2026-108167](https://nvd.nist.gov/vuln/detail/CVE-2026-108167) ·
 [Intel SA-01580](https://intel.com/content/www/us/en/security-center/advisory/intel-sa-01580.html) ·
 [NVD: CVE-2026-95691](https://nvd.nist.gov/vuln/detail/CVE-2026-95691)
+
+## 2026-11-12 12:31——Apache mod_http2 RCE、Quay 注册表双响、Fortinet 记录潮：一天里的三个「谁打的分」
+
+- **Apache HTTP Server 2.4.71（2026-11-11）——`CVE-2026-119618`，critical 是项目自己的标签，记录上没有 CVSS。**mod_http2 的 `assign_headers()` 竞态（CWE：共享资源并发使用但同步不当）产生堆损坏，Wiz 评估可被「远程未认证攻击者」触达；受影响：httpd **2.4.55–2.4.70** 与独立 **mod_h2 2.0.8–2.0.42**；截至 Wiz 行文时无已知利用、无在野利用。11-11 发布的 NVD 记录仍是 `Received`——严重度词来自 Apache 页面（「3 CVEs：1 critical、1 important、1 low」，本轮逐字核验），不是数字。暂时打不了补丁：`Protocols http/1.1` 移除攻击面。署名行：2026-10-26 报告，**16 天**后修复并披露。
+- **Red Hat Quay 双响（都是 `Awaiting Analysis`，都由 Red Hat 自己的 CNA `secalert@redhat.com` 打分）。**`CVE-2026-110697`（**9.9**）：机器人账号列表用用户可控的命名空间名构造 SQL LIKE 模式且不转义通配符——一个下划线即可跨租户，枚举你租户之外的机器人账号。`CVE-2026-123710`（**9.8**）：未认证客户端拿到一个 audience 可控的匿名注册表 token、呈给服务密钥轮换端点、装入自己的Approved 签名密钥**且无过期**——audience 混淆以注册表机器内部的一把永久密钥收尾。Quay 是 OpenShift 底下的镜像注册表，两者都与供应链相邻：一边是跨租户元数据，另一边是活得比每一次轮换都久的签名密钥。
+- **Fortinet 记录潮：11-11 当天 ≥7 条 9.6–9.8，每一条都是 Fortinet 自己的 CNA（`psirt@fortinet.com`）打分，每一条都还是 `Received`。**打头的是 FortiMail 一对——`CVE-2026-126147`（**9.8**，未认证路径穿越，FG-IR-26-199，覆盖 8.0.x/7.6.x/7.4.x/7.2 全部）与 `CVE-2026-126148`（**9.8**，未认证 OS 命令注入，FG-IR-26-200）——随后是 FortiAnalyzer 的输出编码不当（`CVE-2026-126170`，9.8）、FortiOS 经 HA FGSP/config-sync HA 包的缺失认证（`CVE-2026-126259`，9.8——super admin 执行）、iBGP 数值截断（`CVE-2026-126254`，9.6），以及两条 SQL 注入（`CVE-2026-126262` 经 OFTP 未认证、`CVE-2026-126263` 认证后，FortiMail）。
+- **这一波给 [[cvss-stopping-points]] 补的停止点细节：**NVD 转载的是 9.8 **base** 分，而 Fortinet 自己的容器对其中两条存了**威胁调整版**（FGSP bug 9.0、OFTP SQL 注入 9.3）——一个向量两个诚实的数，本条目把两个数连同各自的停止点一起引用。无论如何，暴露在互联网上的 FortiMail/FortiAnalyzer 设备都排在补丁队列最前面。
+
+→ [[vuln-supply]] [[cvss-stopping-points]] [[disclosure-lag]]
+
+Sources: [httpd 2.4.71 漏洞列表](https://httpd.apache.org/security/vulnerabilities_24.html) ·
+[oss-security：CVE-2026-119618](https://www.openwall.com/lists/oss-security/2026/11/11/13) ·
+[Red Hat：CVE-2026-110697](https://access.redhat.com/security/cve/CVE-2026-110697) ·
+[NVD：CVE-2026-123710](https://nvd.nist.gov/vuln/detail/CVE-2026-123710) ·
+[Fortinet FG-IR-26-199](https://fortiguard.fortinet.com/psirt/FG-IR-26-199) ·
+[NVD：CVE-2026-126147](https://nvd.nist.gov/vuln/detail/CVE-2026-126147)
