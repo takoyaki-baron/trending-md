@@ -457,3 +457,14 @@ Sources: [9to5Mac](https://9to5mac.com/2026/11/10/apple-has-new-mac-app-coming-t
 Sources: [huawei-csl/MACaQ](https://github.com/huawei-csl/MACaQ) ·
 [arXiv 2611.10649](https://arxiv.org/abs/2611.10649) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50458166)
+
+## 2026-11-13 04:33 —— smolmaxxing：$30 设备机队拿到带记分板的实测日志
+
+`hyperionaidev/smolmaxxing`（「I'm making LLMs work on small and old devices」）是一份研究日志：每条主张都带实验编号（E1–E160），每个数字都在硬件本体上测得。设备 #1，小米 TV Box S（4× Cortex-A55，**1.9 GB RAM**，无 root）：Qwen3.5-0.8B 从原版 7.5 调到 **16.8 tok/s**；Qwen3.5-2B 真实聊天 **7.7 tok/s**（bits/byte 0.909）；头条是——**16B MoE（Ling-mini-2.0）跑出 5.1 tok/s**，靠 **Q2_K expert paging 从闪存分页**专家、配缓存感知路由与预取，expert miss 从 **13% 降到 ~2%**，600 词回答保持连贯。设备 #2，越狱的 2013 iPad Air（Apple A7，**1 GB**）：1.7B 模型从 Safari 跑 **24–26 tok/s**。技术按瓶颈分组：面向 base-NEON 芯片的 1-bit LUT 内核、2-bit 字段存三值权重、O_DIRECT 权重流送 + MTP 投机。
+
+**为什么属于本文件。** 这是论题 3 的阶梯抵达最底一格——expert paging 是把 MoE 稀疏性用到 1.9 GB 的盒子上，与 Strata/`kimi-k3-in-c` 同一个赌注、缩到世界实际拥有的设备。值得从这个体裁抄的两个习惯：失败是公开发布的行（稠密 9B 只有 **0.27 tok/s**）；质量用 **bits/byte** 度量、让不同 tokenizer 的模型可比——外加退化测试（12/13 → 1/13 条退化长回答）。发现本身：「在这台盒子上，只有当更大的模型同时也更好时，更大才有用。」
+
+→ [[edge-inference]] [[fact-check]]
+
+Sources: [hyperionaidev/smolmaxxing](https://github.com/hyperionaidev/smolmaxxing) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50468888)

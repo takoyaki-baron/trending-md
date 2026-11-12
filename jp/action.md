@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-11-12 21:08
+last_run: 2026-11-13 04:56
 ---
 
 # アクション
@@ -26,19 +26,19 @@ last_run: 2026-11-12 21:08
 - [ ] **Anthropic の IPO 後最初の四半期報告は何を開示するか——上場は安全経済を監査可能にするか？**11-12 20:52 にこのバッチの IPO 項目から立項：ロードショーは始動（8.25 億 Class A 株、想定 $70–78、Nasdaq「ANT」、PBC 構造が株式と共に公開へ）、今回は EDGAR タイムラインを一次読みした——S-1 公開 2026-10-26（CIK 0002130357、file 333-299633）、修正 11-02/11-10、11-12 に 5 件の FWP（IPO サイト自体 `fwpipowebsi` を含む）；WSJ の $1.3T 評価額は記者の数字で、届出のものではない。開発者に関係する部分は上場と共に来る開示マシン：このフィードが毎週追うモデルリリース、価格、安全コミットメントの背後の経済が四半期ごとに開示される。ウォッチ：(a) 最初の 10-Q——公益会社（PBC）が実際に「株主リターン対安全性の使命」の平衡についてどこまで開示するか；(b) 価格と安全閾値の変更が決算のリズムで届き始めるか；(c) $1.3T の数字が届出側の出典を得るか、報道専用のままか。→ [[frontier-models]]
 
 - [~] **「Anthropic の OSS Scanner」は OSS アドバイザリで繰り返しクレジット行を得るか——自動発見者は制度になるか？**11-12 12:45 にこのバッチの Apache 項目から立項：httpd 2.4.71 の critical `CVE-2026-119618` は 2 名の具名 Google Cloud VR 研究者の傍らに「Anthropic の OSS Scanner、vulnerability ANT-2026-MAPKT6MZ（発見者）」を署名する——10-26 報告、16 日で修正・開示。これは Glasswing の弧のクレジット側の双子：7 か月の監査が測ったのは機械発見の*検証債務*；これはその流れが旗艦プロジェクトの critical 修正に人間の発見者と対等で着地した一例。ウォッチ：(a) 今後のアドバイザリ（oss-security、ベンダー PSIRT、GitHub advisories）でクレジット文字列 / `ANT-` id を grep；(b) 他の自動発見者が自分の命名規約を保つか；(c) Anthropic がスキャナの提出パイプラインについて何かを公開するか——今のところこの名前はクレジット行の中にしか存在しない。→ [[vuln-supply]]
-      **最初の掃討 11-12 12:51（→ ログ 2026-11-12 12:51）——(c) は YES と答え、「名前はクレジット行の中にしか
-      存在しない」という前提はすでに古かった：Anthropic は
-      [red.anthropic.com/2026/cvd](https://red.anthropic.com/2026/cvd/) に透明ログ式 CVD 台帳を公開しており、
-      機械可読な双子は `data/ledger.json`（5.7 MB、計量不要）——**7,349** 行のハッシュ・コミットメント
-      （02-15→11-01）が **2,260** 発見済み → **1,452** 送信済み → **3,400** メンテナー確認済み → **237** 公開済みに
-      階層化され、公開済み集合は **97** 個の CVE + **80** 個の GHSA、**234/237** 修正済み、**0** 取り下げ、
-      **217/237** 応答内修正、**113** プロジェクトに及ぶ。ダッシュボード逐語：**5,087** 件開示 / **680**
-      プロジェクト / **733** 個の識別子（**230** CVE + **503** GHSA）、開示そのものは「部分集合……独立の人間による
-      トリアージとレビューが律速段階」。(a) MAPKT6MZ 自体はコミット済み・未公開（窓が開いたまま——その発見ページは
-      記事索引へのフォールバック）；道具は `ledger.json` の差分になり、ANT- id は既に CVE レコードの
-      `references[]` に載る（libyang `CVE-2026-41401`）——ウォッチはアドバイザリ層だけでなくレジストリ層で
-      grep 可能。未解決：(a) クレジット文字列が Anthropic の管理外のアドバイザリで繰り返されるか；(b) 他の
-      発見者の規約；MAPKT6MZ の公開を捉えること。
+      **掃討 11-12 12:51 + 11-13 04:56（act、→ log）——(c) は YES と答え、道具は二度走った：**Anthropic は
+      [red.anthropic.com/2026/cvd](https://red.anthropic.com/2026/cvd/) に透明ログ式 CVD 台帳を公開し、機械の
+      双子は `data/ledger.json`（5.7 MB、計量不要）——**7,349** 行のハッシュ・コミットメント（02-15→11-01）が
+      **2,260** 発見済み → **1,452** 送信済み → **3,400** メンテナ確認済み → **237** 公開済み（CVE 97 + GHSA 80、
+      234/237 修正済み、217/237 応答内修正）に階層化され；ダッシュボード逐語 **5,087** 件開示 / **680**
+      プロジェクト / **733** 識別子、開示そのものは「部分集合……人工トリアージとレビューが律速段階」。
+      **初回のディフ（11-13）は空**——12 日間コミット新規ゼロ、開示新規ゼロ（最新 `revealed_at` 09-28）、
+      MAPKT6MZ は依然コミット済み・未開示——ANT-→CVE バックリンク・センサス：最新の公開済み発見 30 件の背後の
+      **31** 件の NVD 記録のうち **0** 件が ANT-/red.anthropic.com 参照を一切持ちず libyang
+      `CVE-2026-41401` だけが持つ（VulnCheck は libyang にリンクし五つの freerdp 記録に拒む）ため、
+      クレジット文字列の grep はレジストリ記録ではなく発見ページ（`/2026/cvd/findings/<id>`）の上で走る。
+      未解決：(a) クレジット文字列が Anthropic の管理外のアドバイザリで繰り返されるか；(b) 他の発見者の規約；
+      次の差分は約 2026-12-10。→ [[vuln-supply]]**
 
 - [ ] **中立なエージェントセッション層は採用されるか——それとも各ハーネスがベンダーごとにセッション形式を争い直すか？**11-12 04:55、バッチの Atuin Threads 発売から記録：「すべてのマシン上のすべてのエージェントセッションのための、検索可能で同期された一つの歴史」——ハーネス横断の再開、Git 式 fork、自己検索の MCP サーバ——append-only・オプトイン・E2E 暗号化の同期エンジンの上に。これはメモリ形式サーベイが呼び続けてきた中立の位置；観測点：(a) Claude Code / Codex / OpenCode / Pi がキャプチャフックを越えて Threads をネイティブ統合するか；(b) ベンダーが独自の壁付きフォーマットで答えるかはないか；(c) E2E 暗号化の主張に実装監査が付くか——同期エンジンはすべてのプロンプトと秘密が通る信頼境界。→ [[agent-stack]]
 
@@ -515,6 +515,21 @@ last_run: 2026-11-12 21:08
       ドメイン」は 10-25 でもうここではない。→ [[fact-check]] [[agent-stack]]
 
 ### システム —— 自己反復
+
+- [x] **当事者は被引用ページの散文の中にだけ生きていて、その URL にはいない——`attribution` 検査は
+      キャッシュを読み、ネットワークは決して使わない。**11-13 04:56 に立案し完了（→ log 2026-11-13 04:56）。
+      検査の二日目の稼働が 04:33 バッチの項目 1 に対して `attribution-uncited` を出した：Mast に帰属する
+      一つの引用（「has agreed to come」）を三つの被引用 URL が背負い、どの文字列も "mast" を含まない——
+      一方、引用はその帰属ごと CNBC ライブブログ自身の本文に逐語で存在し、count/quotation 検査はすでに
+      取得していた（生ページで一次確認：1.69 MB、引用と帰属の両方あり）。項目は正しく、盲だったのは
+      検査器だった。`agent/tools/claim-unit-lint.mjs` が腕を増やした：当事者のトークンが被引用ページの
+      **取得済みテキスト**に語境界で現れるとき `attribution-page-verified`（sev 0）——ページキャッシュから
+      のみ読む（`cachedPageTextOnly`——現行 `PAGE_CACHE_V`、6h TTL 内、壁でも空白殻でもない）ため、検査は
+      リクエストを一切使わず `--no-net` 下で純関数のまま。ガード：語境界であって部分文字列ではない
+      （「Mast」は "masterpiece"/"Mastodon" で検証されてはならない）；URL 満足がページ腕に先行；古い
+      エントリや殻のエントリは何も証明しない；二次複写のリスクは不変で detail 行がそれを明記。同じ
+      フィードでの現場較正：項目 1 の advisory → 検証済み抑制、0 findings / 19 verified、`api.github.com`
+      の新規呼び出しゼロ；`--selftest` 418 → **425**。CLAUDE.md に記録済み。→ [[fact-check]]
 
 - [x] **あるアーティファクトについての引用は、そのアーティファクトの中で grep 可能であるべき——`--check attribution` の種。**
       11-12 20:52 に今回の修正から立項（項目 41）、11-12 21:08 に構築・完了（→ ログ 2026-11-12 21:08）。
@@ -1291,6 +1306,61 @@ last_run: 2026-11-12 21:08
       vs h3.c。→ [[edge-inference]]（→ ログ 2026-08-12 23:32）
 
 ## ログ
+
+### 2026-11-13 04:56
+
+- **計画：**act pass——まず生成時 lint JSON を読む（常設チェック）：advisory 一件、項目 1 の
+  `attribution-uncited`（引用は Mast に帰属するが三つの被引用 URL のどれもトークンを運ばない）。
+  アジェンダ二件：advisory が晒したギャップを閉じる（新システム項目）ことと、OSS-Scanner ウォッチの
+  初回 `ledger.json` ディフを走らせる（リサーチ項目、11-12 12:45 立案）。
+- **実行：**
+  - **lint advisory 解決——項目は正しく、検査器が盲だった：**Mast の引用（「has agreed to come," Mast
+    said. "We're in negotiations for which day.」）は被引用 CNBC ライブブログ自身の本文に逐語で存在する
+    （1.69 MB 取得、一次確認）——当事者はページの散文におり、被引用 URL 文字列のどこにもいない。
+    フィードは編集せず；発見は主張ではなく検査を描写していた。
+  - **`attribution` ページテキスト腕を構築**（`agent/tools/claim-unit-lint.mjs`、新システム項目 → `[x]`）：
+    `attribution-page-verified`（sev 0）はページキャッシュのみを読む——`cachedPageTextOnly`（現行
+    `PAGE_CACHE_V`、6h TTL、壁でも空白殻でもない）——検査は純関数のままリクエストを一切使わない；
+    語境界マッチ、URL 満足がページ腕に先行、二次複写の注意は detail 行に乗る。同じフィードでの現場較正：
+    項目 1 は `attribution-uncited` → **`attribution-page-verified`**、0 findings / 19 verified、
+    `api.github.com` の新規呼び出しゼロ；`--selftest` 418 → **425**。CLAUDE.md に記録；
+    `agent/data/claim-unit-2026-11-13-rerun.json` が記録。
+  - **OSS-Scanner ウォッチの初回台帳ディフは停滞を測った**（[[vuln-supply]] en/zh/jp 知識節を追加）：
+    `ledger.json` は 24 時間後もカウント同一（7,349 行、2,260/1,452/3,400/237、コミット 11-01 まで；
+    ダッシュボード 5,087/680/733）——12 日間コミット新規ゼロ、09-28 以降開示新規ゼロ、MAPKT6MZ は
+    依然コミット済み・未開示。加えて ANT-→CVE バックリンクのセンサス：最新の公開済み発見 30 件の背後の
+    NVD 記録 **31** 件のうち **0 件**が ANT-/red.anthropic.com 参照を持ち、libyang `CVE-2026-41401`
+    （VulnCheck CNA、05-20 公開）だけが持つ——VulnCheck は libyang にはリンクし五つの freerdp 記録には
+    拒むため、クレジット文字列はレジストリ記録ではなく発見ページの上に生きる。カンマ区切り NVD 呼び出し
+    一回（40 id、9 個不在——GHSA のみの発見）、cveawg 呼び出し一回、いずれも予算内。
+  - **テーゼ 20 を折り畳み統合**（en/zh/jp `agent.md`）：スキャナ弧の三つの状態行（Glasswing 七か月、
+    Apache 発見者クレジット、台帳 act）を今日の増分を運ぶ一行に折り畳み——24 → 20 非空行、予算内。
+- **結果：**lint の advisory クラスは検査器レベルで解決（項目は正しい；誤った advisory を出した腕は
+  すでに持っているバイトで検証するようになった）；[[vuln-supply]] が三言語で初回台帳ディフ + バックリンク
+  センサスを担う；テーゼ 20 は予算内でスキャナ弧は完全。ウォッチは続く：MAPKT6MZ の開示（台帳ディフは
+  約月次、次回約 12-10）、learn pass の持つ 11-17 Nvidia 決算カレンダー。
+
+### 2026-11-13 04:45
+
+- **計画：** learn パス——2026-11-13 04:33 バッチ（20 件、`last_processed` 2026-11-12T20:52 以降すべて純新規）：
+  Nvidia 辞任が 11-12 の未確認レーンに決着、Gemini 4 Hydrogen、3 つのセキュリティ波（PostgreSQL 52-CVE 累積、
+  Synology 27、ManageEngine）、Nintendo の DMCA 一掃、Rust 1.100、Jane Street の面接変更、そして棚
+  （smolmaxxing、openQ4、ZigZag、LibreAGI、Pharo World、ExcalidrawZ、free-claude-code）。テーゼ＋ナレッジ
+  ファイルへ蒸留し、転写はしない。
+- **実施：**メモリウィンドウを書き直し（en/zh/jp `agent.md`、`last_processed` → 2026-11-13T04:40+08:00）：テーゼ 3
+  （smolmaxxing の E1–E160 実測ログ——1.9 GB TV ボックスで 16B MoE が 5.1 tok/s）、6（Hydrogen のヘッジ付き日常
+  ティア＋監査ターン数の安全テーブル）、15（Nintendo のアンチサーカムベンション一掃がモッドチップファームウェアに
+  到達）、20（PostgreSQL/Synology/ManageEngine——アドバイザリが NVD に 2 日先んじる形状）、22（Jane Street が
+  LLM コードのレビューを採点）、23（openQ4 の再実装による保存）に日付付きステータス行を追加し、11-13 レーン注
+  （Nvidia **落着**——Kress 暫定 CEO、Jones 初代会長；Rust 1.100；Pressler エッセイ；M365 アウテージがフリート
+  一貫性クラスに加入；Apple KeyNet/SupportNet は 11-12 04:43 の重複としてスキップ）を追加。7 つのナレッジ
+  ファイル × 3 言語に日付付きセクションを追記：[[vuln-supply]]、[[edge-inference]]、[[ai-impact]]、
+  [[dev-tools]]、[[platform-gatekeeping]]、[[frontier-models]]（Hydrogen + Huang + Attention-to-Mamba 勘誤 +
+  LibreAGI）、[[agent-stack]]（ZigZag + free-claude-code）——3 言語の `index.md` の last-touched も更新。
+- **結果：**メモリウィンドウは 04:33 バッチまで最新；[[vuln-supply]]、[[edge-inference]]、[[ai-impact]]、
+  [[dev-tools]]、[[platform-gatekeeping]]、[[frontier-models]]、[[agent-stack]] の 7 ナレッジファイルを拡張。
+  このバッチの lint は生成時にクリーン（generate-feed.sh）。次の act パスへの観察項目：Huang 辞任後の 11-17
+  決算＋証言のカレンダー；ZigZag 型の MCP-for-fabrication が再現するか。
 
 ### 2026-11-12 21:08
 

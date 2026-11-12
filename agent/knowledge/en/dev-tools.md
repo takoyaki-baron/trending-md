@@ -1941,3 +1941,55 @@ Sources: [hugovk.dev: Lock your GitHub Actions](https://hugovk.dev/blog/2026/loc
 [github/gh-actions-lock](https://github.com/github/gh-actions-lock) ·
 [tylertms/Stela](https://github.com/tylertms/Stela) ·
 [klad-app/klad](https://github.com/klad-app/klad)
+
+## 2026-11-13 04:33 — Rust 1.100 lands the decade-long sagas; openQ4 preserves by re-implementing; Pharo in a tab; Zen 6c becomes the flagship
+
+**Rust 1.100.0** (Nov 12, 5,340 commits since 1.99) stabilizes two long-running design constraints at once:
+**never type `!`** (with `Infallible` becoming a type alias to `!`) and **custom allocators** —
+`std::alloc::Allocator`, `Global`, `System`, `Box::new_in`/`Vec::new_in`/`Vec::allocator`, `Box::map`/`Arc::map`/`Rc::map`
+— removing a decade of `#[feature]`-gated workarounds and unlocking allocator-generic containers in stable Rust.
+Cargo gets its own lint table (`[lints.cargo]`, e.g. `cargo::unused_dependencies`) and **dependency cooldowns** — a
+minimum publish age per RFC 3923: supply-chain policy arriving as a first-class lint rather than a CI hack.
+Platform notes: `wasm32-wasip3` to Tier 2, a new Tier 3 `powerpc64-sony-ps3` target, `i686-pc-windows-gnu` demoted
+to Tier 2 without host tools, stdlib on Unicode 18.
+
+**openQ4 0.14.1** ships **The Awakening** — the Quake 4 expansion Raven Software and Ritual Entertainment never
+released — recovered by Justin Marshall and **re-implemented on the port's own engine and game code**: "All 13 maps
+run on openQ4's own engine and game code", it "never loads the alpha's game DLL" (you supply the expansion files).
+This is the statically-recompiled-modding wave (cf. `adrbn/bo2-mac`, 11-12) choosing the branch that sidesteps the
+legal and compatibility grey zone entirely — **re-implementation, not recompilation**, no lost binaries packaged.
+The same release adds stable cached shadow mapping (OpenGL + Vulkan), a Remastered HUD, Vulkan as Windows' default
+renderer, an experimental signed ARM64 Android APK, bots/voice chat, experimental VR and a level editor — and the
+notes are honest about the **withdrawn 0.14.0**.
+
+**Pharo World** (Massimo Nocentini) loads a real Pharo image (`.image` + `.changes` + `.sources`) into a
+WebAssembly-compiled VM in the page: in-image REPL, drop in `.st` files or whole images, Iceberg/Metacello Git
+operations from inside the browser through a configurable **Git HTTP proxy** — direct clones only work "for hosts
+that let this page in" via CORS. The caveat is stated plainly: a proxy "sees the code and any credentials that pass
+through it", so run your own. Smalltalk was the original live-programming environment; a WASM Pharo makes the image
+workflow a shareable URL.
+
+**Zen 6, the architect's account (Chips and Cheese interviews Mike Clark, 33 years in core design).** Extends
+11-11's measured deep-dive with the structural decisions: **Zen 6c graduates from area-optimized variant to
+flagship** (32 cores, full 128 MB L3, family-highest IPC) while classic Zen 6 becomes the high-frequency part —
+"we don't want to create a delta between the two architectures that software has to be optimized for";
+**integer multipliers drop from three to two**, **vector loads double to four**, two VNNI units squeezed into an
+already-set floorplan late in the project for orchestration-class AI ("It's not going to beat a GPU, and that's not
+the point"); mispredict recovery cheaper; and Clark admits to **AI-assisted tuning of TAGE branch-predictor tables**
+while calling the team "monomaniacally focused" on redirect speed. The interviewer's hands-on SPECint 2026 run
+(Zen 6c matching AMD's fastest Zen 5 server chip at a clock deficit) is the first measurable cross-generation
+checkpoint.
+
+**ExcalidrawZ resurfaces** (`chocoford/ExcalidrawZ`, 1,718★, pure SwiftUI, created Dec 2022, last push Oct 24 — a
+resurfacing, not a release): native macOS/iOS Excalidraw storing diagrams as **local files** instead of browser
+localStorage, with the ecosystem's multi-file sync and versioning quirks worked around. The HN thread is the useful
+artifact: a working list of what a diagram tool must do to feel native (file providers, shortcuts, iCloud sync)
+without forking the format.
+
+→ [[dev-tools]] [[platform-gatekeeping]] [[edge-inference]]
+
+Sources: [Rust 1.100.0 release notes](https://github.com/rust-lang/rust/releases/tag/1.100.0) ·
+[openQ4 v0.14.1 release notes](https://github.com/themuffinator/openQ4/releases/tag/v0.14.1) ·
+[Pharo World](https://massimo-nocentini.github.io/pharo-vm/world.html) ·
+[Chips and Cheese: Talking Zen 6 with Mike Clark](https://chipsandcheese.com/p/talking-zen-6-with-mike-clark-at) ·
+[chocoford/ExcalidrawZ](https://github.com/chocoford/ExcalidrawZ)

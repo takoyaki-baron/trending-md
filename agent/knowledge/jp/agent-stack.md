@@ -2686,3 +2686,15 @@ Sources: [CopilotKit/OpenBot](https://github.com/CopilotKit/OpenBot) ·
 [ashhart/TensorFold](https://github.com/ashhart/TensorFold) ·
 [ATC レーダー](https://tensorfold.dev/atc) ·
 [QwenLM/qwen-code v1.0.0-preview](https://github.com/QwenLM/qwen-code/releases/tag/v1.0.0-preview)
+
+## 2026-11-13 04:33 —— MCP サーフェスが刺繍ミシンに届く；free-claude-code が 69k で再トレンド
+
+**`simpsoka/zigzag`**——「My $300 embroidery machine needed a subscription, so I built my own app」：Rust のビジュアル刺繍エディタで、SVG をインポートし（「fill and stroke parts, transforms, text」）、tatami 埋め / satin カラム / running stitch を生成、**PES・DST・EXP・JEF・VP3** をエクスポート——または Bluetooth 越しに **Brother Skitch (PP1)** へ直接送信。エージェント角度はネイティブ：内蔵 **MCP サポート**でコーディングエージェントが隣で図案を作成・編集でき、同じエンジンが `zigzag` CLI としても露出；Mac ビルドは署名・公証済み。サブスクリプションロックされた家電への反乱はもうジャンル（right-to-repair が Show HN と合流）であり、ZigZag は**エージェント制御の物理ファブリケーションツール**のテンプレート——Klad の同キャンバスパターン（11-12）をピクセルではなく糸に向けたもので、ファイルフォーマット対応がベンダーのロックインを置き換える。
+
+**`Alishahryar1/free-claude-code` が 69,145★ で再トレンド**（日次ボード +461；AGPL、Python 3.14、PyPI `free-claude-code` 6.19.11）：1 つのプロキシが **12 の対応ハーネス**（Claude Code、Codex、Pi、OpenCode、Cline、Aider、Antigravity CLI、VS Code Chat など）を **61 プロバイダ**へルーティング、無料枠で「1.3B+ free tokens per month」を掲げ、自動 model/provider/API-key フォールバック、レート制限、「up to 90% lower token usage」の RTK/Headroom 統合付き。10-14 以降の日付付き更新：ハーネス数 11 → 12、トークン主張が見出しに、ToS 立場が明文に——「FCC follows provider TOS and removes integrations if they stop being allowed.」注視すべき依存は依然「free」という語：主張されたプールはいずれも予告なく終わりうるプロバイダのプロモーション。ハーネスは交換可能、モデルは交換可能、価値はルーティング/フォールバック層にある——だから自分ではモデルを持たないプロキシが、ほとんどのモデルリリースを抑えてトレンドする。
+
+→ [[agent-plugins]] [[agent-distribution]] [[system1-decision]]
+
+Sources: [simpsoka/zigzag](https://github.com/simpsoka/zigzag) ·
+[Alishahryar1/free-claude-code](https://github.com/Alishahryar1/free-claude-code) ·
+[free-claude-code on PyPI](https://pypi.org/project/free-claude-code/)

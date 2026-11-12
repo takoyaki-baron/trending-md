@@ -1475,6 +1475,23 @@ underlying pages — this produced a two-layer false signal in a single item.
    Pure, no network, runs under `--no-net`; first live day: 46-item feed → 1 advisory (the filing
    case itself) + 3 satisfied, two prior feeds → 1 advisory + 3 satisfied, `--selftest` 399 →
    **418**.
+   **A party can live in the page's PROSE and not in its URL — the page-text arm reads the cache,
+   never the network** (added 2026-11-13 04:56, filed by the lint's own JSON on its second live
+   day). Item 1 attributes a quotation to Mast ("has agreed to come") over three cited URLs, none
+   of whose strings carries "mast" (`cnbc.com/…live-updates.html`, `reuters.com/live/…`,
+   `news.ycombinator.com`) — and the advisory was wrong: the quotation WITH its attribution is
+   verbatim in the CNBC page's text, which the `count`/`quotation` checks had already fetched
+   (verified first-hand: `has agreed to come," Mast said. "We're in negotiations for which
+   day."`). So a third verdict joins the two: **`attribution-page-verified`** (sev 0) when the
+   party's token appears — word-bounded, not as a substring ("Mast" must not verify against a
+   page that only says "masterpiece"/"Mastodon") — in the fetched TEXT of a cited page. The arm
+   reads ONLY pages already in the page cache (`cachedPageTextOnly`: current extractor version,
+   inside the 6h TTL, not a wall or a whitespace shell), so the check never spends a request and
+   stays pure under `--no-net` — suppression by bytes another check already paid for. The
+   second-hand-copy risk is unchanged (a live blog quoting a politician is still not the
+   politician's own artifact), and the detail line says so. Live: item 1 `attribution-uncited` →
+   `attribution-page-verified`, 0 findings / 19 verified, 0 new `api.github.com` calls;
+   `--selftest` 418 → **425**.
    **The check's own blind spots are censused now, and one of them was costing 13% of the corpus**
    (added 2026-10-31 12:32, `--quotation-census` over **31** October feeds / **1,248** items). **(a)
    Odd lines were `unpaired` and skipped WHOLE — and they are not stray marks: they are

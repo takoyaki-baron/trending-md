@@ -1380,3 +1380,23 @@ Sources: [hugovk.dev: Lock your GitHub Actions](https://hugovk.dev/blog/2026/loc
 [github/gh-actions-lock](https://github.com/github/gh-actions-lock) ·
 [tylertms/Stela](https://github.com/tylertms/Stela) ·
 [klad-app/klad](https://github.com/klad-app/klad)
+
+## 2026-11-13 04:33 —— Rust 1.100 が十年の長い物語を安定化；openQ4 は再実装で保存；タブの中の Pharo；Zen 6c がフラッグシップに
+
+**Rust 1.100.0**（11-12、1.99 から 5,340 commits）は二つの長年の設計制約を一度に安定化：**never type `!`**（`Infallible` は `!` の型エイリアスに）と**カスタムアロケータ**——`std::alloc::Allocator`、`Global`、`System`、`Box::new_in`/`Vec::new_in`/`Vec::allocator`、`Box::map`/`Arc::map`/`Rc::map`——十年分の `#[feature]` ゲート回避策を一掃し、安定版 Rust でアロケータ汎用コンテナが解禁。Cargo は独自の lint テーブル（`[lints.cargo]`、例 `cargo::unused_dependencies`）と**依存クールダウン**——RFC 3923 による最低公開年齢：サプライチェーン政策が CI ハックではなく第一級 lint として到着。プラットフォーム注：`wasm32-wasip3` が Tier 2 へ、新 Tier 3 `powerpc64-sony-ps3` ターゲット、`i686-pc-windows-gnu` はホストツールなしの Tier 2 に降格、stdlib は Unicode 18。
+
+**openQ4 0.14.1** が **The Awakening** を出荷——Raven Software と Ritual Entertainment がリリースしなかった Quake 4 拡張——を Justin Marshall が復元し、**ポート自身のエンジンとゲームコード上で再実装**：「All 13 maps run on openQ4's own engine and game code」、「never loads the alpha's game DLL」（拡張ファイルは持ち込み）。静的再コンパイル modding の波（`adrbn/bo2-mac` 参照、11-12）が、法と互換性の灰色地帯を完全に回避する枝を選んだ——**再コンパイルではなく再実装**、失われたバイナリは梱包しない。同リリースは安定したキャッシュシャドウマッピング（OpenGL + Vulkan）、Remastered HUD、Windows の既定レンダラとしての Vulkan、実験的な署名済み ARM64 Android APK、bot/ボイスチャット、実験的 VR とレベルエディタも追加——そしてリリースノートは**撤回された 0.14.0** についても正直。
+
+**Pharo World**（Massimo Nocentini）は本物の Pharo イメージ（`.image` + `.changes` + `.sources`）をページ内の WebAssembly コンパイル済み VM に読み込む：イメージ内 REPL、`.st` ファイルやイメージ全体のドロップ、設定可能な **Git HTTP プロキシ**経由でのブラウザ内 Iceberg/Metacello Git 操作——直接クローンは「このページを通してくれる」CORS ホストでしか動かない。注意書きは率直：プロキシは「通るコードと任意の資格情報が見える」ので自分で走らせよ。Smalltalk はライブプログラミング環境の元祖；WASM Pharo はイメージワークフローを共有可能な URL にする。
+
+**Zen 6、アーキテクト本人の語り（Chips and Cheese が Mike Clark にインタビュー、コア設計 33 年）。** 11-11 の実測深掘りに構造的決定を補う：**Zen 6c が面積最適化バリアントからフラッグシップへ卒業**（32 コア、フル 128 MB L3、ファミリー最高 IPC）、クラシック Zen 6 は高周波パートに——「we don't want to create a delta between the two architectures that software has to be optimized for」；**整数乗算器は 3 から 2 へ**、**ベクトルロードは 4 に倍増**、2 つの VNNI ユニットは floorplan 既定後に遅れて押し込み、オーケストレーション級 AI 向け（「It's not going to beat a GPU, and that's not the point」）；ミス予測回復は安価に；そして Clark は **TAGE 分岐予測テーブルの AI 支援チューニング**を認め、リダイレクト速度への「monomaniacally focused」を語る。インタビュアーの実測 SPECint 2026（クロック不利で Zen 6c が AMD 最速の Zen 5 サーバーチップに並ぶ）が最初の測定可能な世代間チェックポイント。
+
+**ExcalidrawZ 再浮上**（`chocoford/ExcalidrawZ`、1,718★、純 SwiftUI、2022-12 作成、最終 push 10-24——リリースではなく再浮上）：ネイティブ macOS/iOS の Excalidraw、図をブラウザ localStorage ではなく**ローカルファイル**に保存、エコシステムお決まりの複数ファイル同期とバージョニングの癖を回避。HN スレッドこそが有用なアーティファクト：フォーマットをフォークせずにダイアグラムツールをネイティブらしくする方法の作業リスト（ファイルプロバイダ、ショートカット、iCloud 同期）。
+
+→ [[dev-tools]] [[platform-gatekeeping]] [[edge-inference]]
+
+Sources: [Rust 1.100.0 リリースノート](https://github.com/rust-lang/rust/releases/tag/1.100.0) ·
+[openQ4 v0.14.1 リリースノート](https://github.com/themuffinator/openQ4/releases/tag/v0.14.1) ·
+[Pharo World](https://massimo-nocentini.github.io/pharo-vm/world.html) ·
+[Chips and Cheese: Talking Zen 6 with Mike Clark](https://chipsandcheese.com/p/talking-zen-6-with-mike-clark-at) ·
+[chocoford/ExcalidrawZ](https://github.com/chocoford/ExcalidrawZ)

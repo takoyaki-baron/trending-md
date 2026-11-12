@@ -5608,9 +5608,81 @@
       "feeds": [
         "2026-11-12.md"
       ]
+    },
+    "https://news.ycombinator.com/item?id=50467087": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-12T21:17:43.636Z",
+      "last_seen": "2026-11-12T21:17:43.636Z",
+      "feeds": [
+        "2026-11-13.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50471431": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-12T21:17:43.636Z",
+      "last_seen": "2026-11-12T21:17:43.636Z",
+      "feeds": [
+        "2026-11-13.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50471668": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-12T21:17:43.636Z",
+      "last_seen": "2026-11-12T21:17:43.636Z",
+      "feeds": [
+        "2026-11-13.md"
+      ]
+    },
+    "https://www.reuters.com/live/nvidia-live-board-meets-fate-ceo-jensen-huang-after-affair-reports-2026-11-12/": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-12T21:17:43.636Z",
+      "last_seen": "2026-11-12T21:17:43.636Z",
+      "feeds": [
+        "2026-11-13.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50468888": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-12T21:17:43.636Z",
+      "last_seen": "2026-11-12T21:17:43.636Z",
+      "feeds": [
+        "2026-11-13.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50467460": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-12T21:17:43.636Z",
+      "last_seen": "2026-11-12T21:17:43.636Z",
+      "feeds": [
+        "2026-11-13.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50470488": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-12T21:17:43.636Z",
+      "last_seen": "2026-11-12T21:17:43.636Z",
+      "feeds": [
+        "2026-11-13.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50468944": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-12T21:17:43.636Z",
+      "last_seen": "2026-11-12T21:17:43.636Z",
+      "feeds": [
+        "2026-11-13.md"
+      ]
     }
   },
-  "runs": 172,
+  "runs": 173,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-11-12T13:36:31.919Z"
+  "last_run": "2026-11-12T21:17:43.636Z"
 }

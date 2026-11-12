@@ -537,3 +537,26 @@ Sources: [fingerprinting.study](https://fingerprinting.study/) ·
 
 Sources: [Kate's blog: Using voltage glitching to unleash the A100](https://blog.kate.land/posts/using-voltage-glitching-to-unlock-the-a100/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50451903)
+
+## 2026-11-13 04:33 — Nintendo's DMCA sweep reaches modchip firmware, with entire-repository claims
+
+Four Nintendo takedown notices dated **Nov 6** (`2026-11-06-nintendo.md` through `-4.md` in github/dmca; the HN wave
+broke Nov 12) invoke **anti-circumvention**, not plain copying: Nintendo describes Switch TPMs as "the encryption of
+video game files using certain proprietary cryptographic keys, such as those referred to as prod.keys", and claims
+**entire repositories** as infringing — including yuzu fork `IpwnedU/yuzu-android-master` and **`Ansem-SoD/Picofly`,
+firmware for hardware mods, not an emulator**. GitHub's standard pre-takedown process (owner contact, counter-notice
+window) is noted in each.
+
+Thesis 15's mechanism list gains its legal-maximum case: the capability class removed here is not a permission or a
+key but **anything touching `prod.keys`** — the modchip-firmware takedowns extend the yuzu/Ryujinx precedent from
+emulator *code* to the *hardware-mod ecosystem* around it (the Synaptics letter of 11-12 killed a hobbyist driver
+without a court; Nintendo works through github/dmca without one). Two watchables: **entire-repository claims are the
+most reversible kind** — the counter-notice window exists, and forks of taken-down code typically reappear within
+days — and the anti-circumvention framing is broader than copyright, reaching firmware that never ships game
+content.
+
+→ [[platform-gatekeeping]] [[dev-tools]]
+
+Sources: [github/dmca: 2026-11-06-nintendo.md](https://github.com/github/dmca/blob/master/2026/11/2026-11-06-nintendo.md) ·
+[github/dmca: 2026-11-06-nintendo-2.md (Picofly)](https://github.com/github/dmca/blob/master/2026/11/2026-11-06-nintendo-2.md) ·
+[HN discussion](https://news.ycombinator.com/item?id=50469994)

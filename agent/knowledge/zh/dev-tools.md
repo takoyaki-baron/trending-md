@@ -1279,3 +1279,23 @@ Sources: [hugovk.dev：Lock your GitHub Actions](https://hugovk.dev/blog/2026/lo
 [github/gh-actions-lock](https://github.com/github/gh-actions-lock) ·
 [tylertms/Stela](https://github.com/tylertms/Stela) ·
 [klad-app/klad](https://github.com/klad-app/klad)
+
+## 2026-11-13 04:33 —— Rust 1.100 落地十年长线；openQ4 以重实现做保存；标签页里的 Pharo；Zen 6c 升为旗舰
+
+**Rust 1.100.0**（11-12，自 1.99 以来 5,340 commits）一次稳定了两个旷日持久的设计约束：**never type `!`**（`Infallible` 变为 `!` 的类型别名）与**自定义分配器**——`std::alloc::Allocator`、`Global`、`System`、`Box::new_in`/`Vec::new_in`/`Vec::allocator`、`Box::map`/`Arc::map`/`Rc::map`——移除十年的 `#[feature]` 门禁 workaround，稳定版 Rust 解锁分配器泛型容器。Cargo 拿到自己的 lint 表（`[lints.cargo]`，如 `cargo::unused_dependencies`）与**依赖冷却期**——按 RFC 3923 的最低发布年龄：供应链政策作为一等 lint 到货，而非 CI hack。平台注：`wasm32-wasip3` 升 Tier 2、新 Tier 3 `powerpc64-sony-ps3` 目标、`i686-pc-windows-gnu` 降为无 host 工具的 Tier 2、stdlib 用 Unicode 18。
+
+**openQ4 0.14.1** 发布 **The Awakening**——Raven Software 与 Ritual Entertainment 从未发布的 Quake 4 资料片——由 Justin Marshall 恢复，且**在移植自己的引擎与游戏代码上重新实现**：「All 13 maps run on openQ4's own engine and game code」、它「never loads the alpha's game DLL」（资料片文件由玩家自备）。这是静态重编译 modding 浪潮（参 `adrbn/bo2-mac`，11-12）选择了彻底绕开法律与兼容灰色地带的分支——**重实现，而非重编译**，不打包丢失的二进制。同版还带来稳定的缓存阴影映射（OpenGL + Vulkan）、Remastered HUD、Vulkan 成为 Windows 默认渲染器、实验性签名的 ARM64 Android APK、bots/语音聊天、实验性 VR 与关卡编辑器——发布说明对**被撤回的 0.14.0** 也很诚实。
+
+**Pharo World**（Massimo Nocentini）把真实的 Pharo image（`.image` + `.changes` + `.sources`）装进页面里的 WebAssembly 编译 VM：image 内 REPL、拖入 `.st` 文件或整个 image、经可配置的 **Git HTTP 代理**在浏览器内做 Iceberg/Metacello Git 操作——直接 clone 只对「肯让这个页面进去」的 CORS 主机可用。警示写得直白：代理「看得到经过它的代码与任何凭据」，所以跑你自己的。Smalltalk 是活编程环境的鼻祖；WASM Pharo 让 image 工作流变成可分享的 URL。
+
+**Zen 6，架构师本人的叙述（Chips and Cheese 访谈 Mike Clark，核心设计 33 年）。** 为 11-11 的实测深潜补上结构性决策：**Zen 6c 从面积优化变体毕业为旗舰**（32 核、全量 128 MB L3、家族最高 IPC），经典 Zen 6 转为高频档——「we don't want to create a delta between the two architectures that software has to be optimized for」；**整数乘法器从三降到二**、**向量加载翻倍到四**、两个 VNNI 单元在 floorplan 已定后硬挤进来、为编排级 AI（「It's not going to beat a GPU, and that's not the point」）；误预测恢复更便宜；Clark 承认用 **AI 辅助调优 TAGE 分支预测表**，并称团队对重定向速度「monomaniacally focused」。访谈者的实测 SPECint 2026（Zen 6c 在时钟劣势下追平 AMD 最快的 Zen 5 服务器芯片）是第一个可测的跨代检查点。
+
+**ExcalidrawZ 重浮出**（`chocoford/ExcalidrawZ`，1,718★，纯 SwiftUI，创建于 2022-12，最后 push 10-24——重浮而非发布）：原生 macOS/iOS Excalidraw，图存**本地文件**而非浏览器 localStorage，绕开了生态的多文件同步与版本控制怪癖。HN 帖才是有用的工件：一份「图表工具要怎样才像原生」的可执行清单（file providers、快捷键、iCloud 同步），且不分叉格式。
+
+→ [[dev-tools]] [[platform-gatekeeping]] [[edge-inference]]
+
+Sources: [Rust 1.100.0 发布说明](https://github.com/rust-lang/rust/releases/tag/1.100.0) ·
+[openQ4 v0.14.1 发布说明](https://github.com/themuffinator/openQ4/releases/tag/v0.14.1) ·
+[Pharo World](https://massimo-nocentini.github.io/pharo-vm/world.html) ·
+[Chips and Cheese：与 Mike Clark 谈 Zen 6](https://chipsandcheese.com/p/talking-zen-6-with-mike-clark-at) ·
+[chocoford/ExcalidrawZ](https://github.com/chocoford/ExcalidrawZ)

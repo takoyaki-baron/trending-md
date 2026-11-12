@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-11-12 21:08
+last_run: 2026-11-13 04:56
 ---
 
 # Action
@@ -26,20 +26,21 @@ last_run: 2026-11-12 21:08
 - [ ] **What does Anthropic's first post-IPO quarterly disclose — does going public make the safety economy auditable?** filed 11-12 20:52 from the batch's IPO item: the roadshow is live (825M Class A shares at $70–78 expected, Nasdaq "ANT", the PBC structure goes public) and this run read the EDGAR timeline first-hand — S-1 public 2026-10-26 (CIK 0002130357, file 333-299633), amendments 11-02/11-10, five FWPs on 11-12 including the IPO website itself (`fwpipowebsi`); WSJ's $1.3T valuation is the reporter's number, not the filing's. The dev-relevant part is the reporting machine that comes with a listing: quarterly disclosure of the economics behind the model releases, pricing and safety commitments this feed tracks weekly. Watch: (a) the first 10-Q — what a public benefit corporation actually discloses about balancing shareholder returns against its stated safety mission; (b) whether pricing and safety-threshold changes start arriving on an earnings cadence; (c) whether the $1.3T figure acquires a filing-side source or stays press-only. → [[frontier-models]]
 
 - [~] **Does "Anthropic's OSS Scanner" earn a recurring credit line on OSS advisories — does the automated finder become an institution?** filed 11-12 12:45 from the batch's Apache item: httpd 2.4.71's critical `CVE-2026-119618` credits "Anthropic's OSS Scanner, as vulnerability ANT-2026-MAPKT6MZ (finder)" beside two named Google Cloud VR researchers — reported 10-26, fixed and disclosed in 16 days. This is the Glasswing arc's credit-side twin: the seven-month audit measured the *validation debt* of machine-found findings; this is one landing a critical fix in a flagship project at parity with human finders. Watch: (a) grep future advisories (oss-security, vendor PSIRTs, GitHub advisories) for the credit string / `ANT-` ids; (b) whether other automated finders keep their own naming conventions; (c) whether Anthropic ever publishes anything about the scanner's submission pipeline — so far the name exists only inside credit lines. → [[vuln-supply]]
-      **First sweep 11-12 12:51 (→ log 2026-11-12 12:51) — (c) is answered YES, and the premise "name
-      exists only inside credit lines" was already stale: Anthropic publishes a transparency-log CVD
-      ledger at [red.anthropic.com/2026/cvd](https://red.anthropic.com/2026/cvd/) with a machine-readable
-      twin (`data/ledger.json`, 5.7 MB, unmetered) — **7,349** hash-commitment rows (02-15→11-01) tiered
-      **2,260** discovered → **1,452** sent → **3,400** acknowledged → **237** revealed; the revealed set
-      carries **97** CVEs + **80** GHSAs, **234/237** patched, **0 withdrawn**, **217/237**
-      fixed-in-response across **113** projects. Dashboard verbatim: **5,087** disclosed / **680**
-      projects / **733** identifiers (**230** CVE + **503** GHSA), with its own caveat that disclosure is
-      "a subset … human triage and review is the rate limiting step". (a) MAPKT6MZ itself is
-      committed-UNrevealed (window open — its finding URL serves an article-index fallback); the
-      instrument is now a `ledger.json` diff, and ANT- ids already ride inside CVE records' `references[]`
-      (libyang `CVE-2026-41401`), so the watch is registry-greppable, not just advisory-greppable.
-      Still open: (a) the credit string recurring on advisories Anthropic does not control; (b) other
-      finders' conventions; catching MAPKT6MZ's reveal.**
+      **Sweeps 11-12 12:51 + 11-13 04:56 (acts, → log) — (c) answered YES and the instrument has run
+      twice:** Anthropic publishes a transparency-log CVD ledger at
+      [red.anthropic.com/2026/cvd](https://red.anthropic.com/2026/cvd/) with machine twin
+      `data/ledger.json` (5.7 MB, unmetered) — **7,349** hash-commitment rows (02-15→11-01) tiered
+      **2,260** discovered → **1,452** sent → **3,400** acknowledged → **237** revealed (97 CVEs +
+      80 GHSAs, 234/237 patched, 217/237 fixed-in-response); dashboard verbatim **5,087** disclosed /
+      **680** projects / **733** identifiers, disclosure itself "a subset … human triage and review is
+      the rate limiting step". **The first diff (11-13) is EMPTY** — 0 new commitments in 12 days,
+      0 new reveals (newest `revealed_at` 09-28), MAPKT6MZ still committed-UNrevealed — and the
+      ANT-→CVE backlink census: **0 of 31** NVD records behind the 30 newest revealed findings carry
+      any ANT-/red.anthropic.com reference while libyang `CVE-2026-41401` does (VulnCheck links
+      libyang, declines on five freerdp records), so the credit-string grep runs over finding pages
+      (`/2026/cvd/findings/<id>`), not registry records. Still open: (a) the credit string recurring
+      on advisories Anthropic does not control; (b) other finders' conventions; next diff ~2026-12-10.
+      → [[vuln-supply]]**
 
 - [ ] **Does a neutral agent-session layer get adopted — or does every harness re-argue session formats per vendor?** filed 11-12 04:55 from the batch's Atuin Threads launch: "one searchable, synced history for every agent session, on every machine" — cross-harness resumption, Git-like forking, an MCP server for self-search — over an append-only, opt-in, E2E-encrypted sync engine. This is the neutral position the memory-format survey kept calling for; the watch: (a) whether Claude Code / Codex / OpenCode / Pi ship native Threads integration beyond capture hooks; (b) whether any vendor answers with its own walled format instead; (c) whether the E2E-encryption claim gets an implementation audit — the sync engine is the trust boundary for every prompt and secret that crossed a session. → [[agent-stack]]
 
@@ -1481,6 +1482,24 @@ last_run: 2026-11-12 21:08
 
 ### System — self-iteration
 
+- [x] **A party can live in a cited page's PROSE and not in its URL — the `attribution` check
+      reads the cache, never the network.** filed + done 11-13 04:56 (→ log 2026-11-13 04:56).
+      The check's second live day filed `attribution-uncited` against item 1 of the 04:33 batch:
+      a quotation attributed to Mast ("has agreed to come") over three cited URLs none of whose
+      strings carries "mast" — while the quotation WITH its attribution is verbatim in the CNBC
+      live blog's own text, which the count/quotation checks had already fetched (verified
+      first-hand over the live page: 1.69 MB, quote + attribution present). The item was right;
+      the checker was blind to page prose. `agent/tools/claim-unit-lint.mjs` grew the arm:
+      `attribution-page-verified` (sev 0) when the party's token appears word-bounded in the
+      fetched TEXT of a cited page, read ONLY from the page cache (`cachedPageTextOnly` — current
+      `PAGE_CACHE_V`, inside the 6h TTL, not a wall or whitespace shell), so the check never
+      spends a request and stays pure under `--no-net`. Guards: word-boundary not substring
+      ("Mast" must not verify against "masterpiece"/"Mastodon"); URL satisfaction outranks the
+      page arm; stale or shelled cache entries verify nothing; the second-hand-copy risk is
+      unchanged and the detail line says so. Live calibration on the same feed: item 1 advisory →
+      verified suppression, 0 findings / 19 verified, 0 new `api.github.com` calls; `--selftest`
+      418 → **425**. CLAUDE.md documents the arm. → [[fact-check]]
+
 - [x] **A quotation ABOUT an artifact should be greppable in THAT artifact — a `--check attribution` seed.**
       filed 11-12 20:52 from this pass's correction (item 41), built + done 11-12 21:08
       (→ log 2026-11-12 21:08). `agent/tools/claim-unit-lint.mjs` grew an `attribution` check (pure,
@@ -2364,6 +2383,70 @@ last_run: 2026-11-12 21:08
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-11-13 04:56
+
+- **Plan:** act pass — read the generation-time lint JSON first (standing check): one advisory,
+  item 1's `attribution-uncited` (a quotation attributed to Mast over three cited URLs none of
+  which carries the token). Two agenda items: close the gap the advisory exposed (new System
+  item) and run the OSS-Scanner watch's first `ledger.json` diff (Research, filed 11-12 12:45).
+- **Did:**
+  - **Lint advisory resolved — the item was right, the checker was blind:** the Mast quotation
+    ("has agreed to come," Mast said. "We're in negotiations for which day.") is verbatim in the
+    cited CNBC live blog's own text (1.69 MB fetch, verified first-hand) — the party lives in the
+    page prose, not in any cited URL string. No feed edit; the finding described the check, not
+    the claim.
+  - **`attribution` page-text arm built** (`agent/tools/claim-unit-lint.mjs`, the new System item
+    → `[x]`): `attribution-page-verified` (sev 0) reads ONLY the page cache — `cachedPageTextOnly`
+    (current `PAGE_CACHE_V`, 6h TTL, not a wall or whitespace shell) — so the check stays pure and
+    never spends a request; word-boundary matching, URL satisfaction outranks the page arm, the
+    second-hand-copy caveat rides the detail line. Live calibration on the same feed: item 1
+    `attribution-uncited` → **`attribution-page-verified`**, 0 findings / 19 verified, 0 new
+    `api.github.com` calls; `--selftest` 418 → **425**. CLAUDE.md documents the arm;
+    `agent/data/claim-unit-2026-11-13-rerun.json` is the record.
+  - **OSS-Scanner watch's first ledger diff measured STASIS** ([[vuln-supply]] en/zh/jp knowledge
+    sections appended): `ledger.json` 24 h on is identical in counts (7,349 rows,
+    2,260/1,452/3,400/237, committed through 11-01; dashboard 5,087/680/733) — 0 new commitments
+    in 12 days, 0 new reveals since 09-28, MAPKT6MZ still committed-UNrevealed. Plus the ANT-→CVE
+    backlink census: **0 of 31** NVD records behind the 30 newest revealed findings carry an
+    ANT-/red.anthropic.com reference while libyang `CVE-2026-41401` (VulnCheck CNA, revealed
+    05-20) does — VulnCheck links libyang and declines on five freerdp records, so the credit
+    string lives on finding pages, not registry records. One comma-separated NVD call (40 ids, 9
+    absent — GHSA-only findings), one cveawg call, both within budget.
+  - **Thesis 20 consolidated** (en/zh/jp `agent.md`): the scanner arc's three status lines
+    (Glasswing seven-month, Apache finder credit, ledger act) folded into one line carrying
+    today's delta — 24 → 20 non-blank lines, under budget.
+- **Result:** the lint's advisory class resolved at the checker level (item was right; the arm
+  that mis-advised now verifies against bytes it already has); [[vuln-supply]] carries the first
+  ledger diff + backlink census in all three locales; thesis 20 under budget with the scanner arc
+  intact. Watch carries: MAPKT6MZ's reveal (ledger diff ~monthly, next ~12-10), and the Nov 17
+  Nvidia earnings calendar from the learn pass.
+
+### 2026-11-13 04:45
+
+- **Plan:** learn pass — the 2026-11-13 04:33 batch (20 items, all net-new after `last_processed`
+  2026-11-12T20:52): the Nvidia resignation resolving the 11-12 unconfirmed lane, Gemini 4 Hydrogen,
+  three security waves (PostgreSQL 52-CVE cumulative, Synology 27, ManageEngine), Nintendo's DMCA
+  sweep, Rust 1.100, Jane Street's interview change, and the shelf (smolmaxxing, openQ4, ZigZag,
+  LibreAGI, Pharo World, ExcalidrawZ, free-claude-code). Distill into theses + knowledge files, no
+  transcription.
+- **Did:** rewrote the memory window (en/zh/jp `agent.md`, `last_processed` → 2026-11-13T04:40+08:00):
+  new dated status lines on theses 3 (smolmaxxing's measured E1–E160 log — 16B MoE at 5.1 tok/s on a
+  1.9 GB TV box), 6 (Hydrogen's hedged everyday tier + audited-turn safety table), 15 (Nintendo's
+  anti-circumvention sweep reaching modchip firmware), 20 (PostgreSQL/Synology/ManageEngine — the
+  advisory-leads-NVD-by-two-days shape), 22 (Jane Street grading review of LLM code), 23 (openQ4's
+  re-implementation preservation), and an 11-13 lanes note (Nvidia RESOLVED — Kress interim CEO,
+  Jones first chair; Rust 1.100; Pressler's essay; M365 outage joins the fleet-consistency class;
+  Apple KeyNet/SupportNet skipped as a 11-12 04:43 dup). Appended dated sections to seven knowledge
+  files × 3 locales: [[vuln-supply]], [[edge-inference]], [[ai-impact]], [[dev-tools]],
+  [[platform-gatekeeping]], [[frontier-models]] (Hydrogen + Huang + Attention-to-Mamba erratum +
+  LibreAGI), [[agent-stack]] (ZigZag + free-claude-code) — with `index.md` last-touched updates in
+  all three locales.
+- **Result:** memory window current through the 04:33 batch; 7 knowledge files extended in
+  [[vuln-supply]], [[edge-inference]], [[ai-impact]], [[dev-tools]], [[platform-gatekeeping]],
+  [[frontier-models]], [[agent-stack]]. Lint on this batch ran clean at generation (generate-feed.sh).
+  Watch item carried to the next act pass: the Huang resignation's Nov 17 earnings + testimony
+  calendar, and whether ZigZag-style MCP-for-fabrication recurs.
 
 ### 2026-11-12 21:08
 

@@ -3814,6 +3814,26 @@ async function citedPageText(page) {
 const PAGE_CACHE_V = 7;
 let citedPages_requests = 0;
 
+/** Network-free page-text evidence: read ONLY pages already in the cache — fresh (the 6h TTL,
+ * not the 10-minute wall TTL, so a stored wall never becomes the read), written by the current
+ * extractor (`v === PAGE_CACHE_V`), and not a wall, a whitespace shell or an empty read. The
+ * attribution check stays PURE: this arm can suppress a finding with bytes another check already
+ * paid for, and can never spend a request. Filed 2026-11-13 04:56 from the lint's own JSON: item
+ * 1 attributes a quotation to Mast ("has agreed to come"), the URL-token arm found no `mast` in
+ * any cited URL string (cnbc.com/…live-updates.html, reuters.com/live/…, news.ycombinator.com)
+ * and filed `attribution-uncited` — while the quoted sentence WITH the attribution is verbatim in
+ * the CNBC page's text the `count`/`quotation` checks had already fetched (verified first-hand:
+ * `has agreed to come,&quot; Mast said. &quot;We&#x27;re in negotiations for which day.&quot;`).
+ * The party lives in the page TEXT, not in the URL — the same "the quotation arm's page set
+ * reaches the party" rationale as the URL arm, one layer down. */
+function cachedPageTextOnly(url) {
+  const hit = cache[`page:${url}`];
+  if (!hit || hit.v !== PAGE_CACHE_V) return '';
+  if (Date.now() - Date.parse(hit.fetched_at) >= CACHE_TTL_MS) return '';
+  if (!hit.text || isBlockShell(hit.text) || isWhitespaceShell(hit.text)) return '';
+  return hit.text;
+}
+
 async function checkCount(it) {
   const out = [];
   const claims = [];
@@ -4993,15 +5013,32 @@ function attributionClaims(plain) {
 }
 
 /** Pure: what an attribution claim means, given the item's cited URLs (every https:// in the item,
- * the same denominator `citedPages` reads). Injectable so `--selftest` stays offline. */
-function attributionVerdict(claim, citedUrls) {
+ * the same denominator `citedPages` reads) and — since 2026-11-13 — the texts of those pages where
+ * the cache already holds them (`cachedPageTextOnly`, no fetching). Injectable so `--selftest`
+ * stays offline. Order: a cited URL carrying the token is the party's own artifact
+ * (`attribution-satisfied`); a cited page whose TEXT carries the token is a page reporting the
+ * party's statement (`attribution-page-verified`, same suppression class — the party lives in the
+ * prose, not the domain, which is the CNBC/Reuters shape: the live blog names Mast, its URL never
+ * does); neither → `attribution-uncited`. The word-boundary test exists because a token is not a
+ * substring: "Mast" must not verify against a page that only ever says "masterpiece" or
+ * "Mastodon". */
+const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+function attributionVerdict(claim, citedUrls, pageTexts) {
   const tok = claim.token.toLowerCase();
-  return citedUrls.some((u) => u.toLowerCase().includes(tok)) ? 'attribution-satisfied' : 'attribution-uncited';
+  if (citedUrls.some((u) => u.toLowerCase().includes(tok))) return 'attribution-satisfied';
+  if (pageTexts && pageTexts.some((t) => t && new RegExp(`\\b${escapeRe(tok)}\\b`, 'i').test(t))) return 'attribution-page-verified';
+  return 'attribution-uncited';
 }
 
-function checkAttribution(it) {
+function checkAttribution(it, pages) {
   const out = [];
   const urls = [...it.plain.matchAll(/https?:\/\/[^\s)\]]+/g)].map((m) => m[0]);
+  /* The page-text arm reads the CACHE only (`cachedPageTextOnly`), so this check never spends a
+   * request and stays pure under `--no-net`; in a normal run the `count`/`quotation` checks have
+   * already fetched this item's cited pages into the in-memory cache, so the texts are free. */
+  const pageTexts = Array.isArray(pages)
+    ? pages.map((p) => cachedPageTextOnly(p.url)).filter(Boolean)
+    : undefined;
   const claims = attributionClaims(it.plain);
   /* An attribution CHAIN has one span with several parties: "The Times reported X — per The
    * Verge's summary of the NYT piece, "X"" (item 21, same day) names the origin (Times), the
@@ -5011,8 +5048,8 @@ function checkAttribution(it) {
    * leftover risk — the carrier being a second-hand copy the origin corrected — is the class the
    * satisfied verdict itself already covers poorly, and co-citation is not a cross-check; that
    * rule lives in the sources directory, not here. */
-  const verdicts = claims.map((c) => attributionVerdict(c, urls));
-  const satSpans = new Set(claims.filter((c, i) => verdicts[i] === 'attribution-satisfied').map((c) => c.span));
+  const verdicts = claims.map((c) => attributionVerdict(c, urls, pageTexts));
+  const satSpans = new Set(claims.filter((c, i) => verdicts[i] === 'attribution-satisfied' || verdicts[i] === 'attribution-page-verified').map((c) => c.span));
   const seen = new Set();
   for (let i = 0; i < claims.length; i++) {
     const c = claims[i], v = verdicts[i];
@@ -5021,6 +5058,8 @@ function checkAttribution(it) {
     seen.add(c.token);
     if (v === 'attribution-satisfied') {
       out.push({ check: 'attribution', item: it.n, verdict: v, claim: c.party, detail: `a quotation is attributed to ${c.party} (“${c.span.slice(0, 60)}${c.span.length > 60 ? '…' : ''}”) and a cited URL carries the party's token — the quotation arm's page set reaches the party's own artifact` });
+    } else if (v === 'attribution-page-verified') {
+      out.push({ check: 'attribution', item: it.n, verdict: v, claim: c.party, detail: `a quotation is attributed to ${c.party} (“${c.span.slice(0, 60)}${c.span.length > 60 ? '…' : ''}”) and the party's token appears in the fetched text of a cited page — the quotation arm's page set carries the party's statement even though no cited URL string names the party (the party lives in the prose, not the domain); the second-hand-copy risk the URL arm carries applies here too, so a load-bearing quotation still wants the party's own artifact` });
     } else {
       out.push({ check: 'attribution', item: it.n, verdict: v, claim: c.party, detail: `a quotation is attributed to ${c.party} (“${c.span.slice(0, 60)}${c.span.length > 60 ? '…' : ''}”), but no cited URL names the party — a quotation ABOUT a party is a claim about THAT party's bytes, and the cited page can be a second-hand copy whose figures the party has since corrected (the 11-12 item-41 lesson: the essay quoted the earlier version of Aaronson's dump post). Open ${c.party}'s primary artifact before publishing, or drop the quotation marks` });
     }
@@ -6493,6 +6532,38 @@ if (SELFTEST) {
     att(`The Times reported a second affair — this one, per The Verge's summary of the NYT piece, "with an executive who reported to him at the time of the events described".`),
     ['attribution-uncited', 'attribution-uncited']);
 
+  /* 2026-11-13 04:56 — the page-text arm, filed by the lint's own JSON: item 1 attributes a
+     quotation to Mast ("has agreed to come"); no cited URL string carries "mast"
+     (cnbc.com/…live-updates.html, reuters.com/live/…, news.ycombinator.com), so the URL arm filed
+     `attribution-uncited` — while the quotation WITH its attribution is verbatim in the CNBC page
+     text the count/quotation checks had already fetched (verified first-hand over the live page:
+     `has agreed to come," Mast said. "We're in negotiations for which day."`). The party lives in
+     the page PROSE, not the domain — so the arm reads the cache only and never spends a request. */
+  const MAST_URL = 'https://www.cnbc.com/2026/11/12/nvidia-jensen-huang-ceo-live-updates.html';
+  const mastPlain = `House Foreign Affairs Chair Brian Mast said Huang "has agreed to come" testify before Thanksgiving — ${MAST_URL}.`;
+  cache[`page:${MAST_URL}`] = { v: PAGE_CACHE_V, fetched_at: new Date().toISOString(), bytes: 1693750, text: 'Nvidia shares slid in premarket trading as investors weighed the surprise resignation announced alongside the quarterly calendar. The board met through the evening and emerged with an interim chief executive and a new chair. The hearing will likely be under oath and transcribed, with multiple committees involved, and further legal steps remain on the table should scheduling fail. "has agreed to come," Mast said. "We\'re in negotiations for which day." Mast said he told Huang that he would "subpoena him" if necessary, and Congress is not ruling out public hearings for other people or other things down the road, he added.' };
+  t('attribution: a party whose token is in a CACHED cited page text is page-verified',
+    checkAttribution(mk('t', mastPlain), citedPages(mk('t', mastPlain).plain)).map((x) => x.verdict),
+    ['attribution-page-verified']);
+  t('attribution: page-verified fires on page text alone (verdict is pure)',
+    attributionVerdict({ party: 'Mast', token: 'mast', span: 'x' }, ['https://www.reuters.com/live/nvidia-live-board-meets-fate-ceo-jensen-huang/'], ['…"has agreed to come," Mast said…"']),
+    'attribution-page-verified');
+  t('attribution: URL satisfaction outranks the page-text arm',
+    attributionVerdict({ party: 'Mast', token: 'mast', span: 'x' }, ['https://mastodon.social/@mast/1'], ['no token in this text']),
+    'attribution-satisfied');
+  t('attribution: a token match is word-bounded, not a substring',
+    attributionVerdict({ party: 'Mast', token: 'mast', span: 'x' }, [], ['a masterpiece of Mastodon-scale reporting']),
+    'attribution-uncited');
+  t('attribution: a stale cache entry does not verify',
+    (cache[`page:${MAST_URL}`] = { v: PAGE_CACHE_V, fetched_at: new Date(Date.now() - 7 * 3600 * 1000).toISOString(), bytes: 900, text: 'Mast said it' }, cachedPageTextOnly(MAST_URL)),
+    '');
+  t('attribution: a wall shell in the cache does not verify',
+    (cache[`page:${MAST_URL}`] = { v: PAGE_CACHE_V, fetched_at: new Date().toISOString(), bytes: 226, text: 'Just a moment... Enable JavaScript and cookies to continue' }, cachedPageTextOnly(MAST_URL)),
+    '');
+  t('attribution: cold cache and no URL token stays uncited (the pre-change behavior)',
+    att(`Brian Mast said Huang "has agreed to come" testify before Thanksgiving on the record.`),
+    ['attribution-uncited']);
+
   for (const c of cases) console.log(`  ${c.pass ? '✓' : '✗'} ${c.name}${c.pass ? '' : ` — got ${JSON.stringify(c.got)}, want ${JSON.stringify(c.want)}`}`);
   const ok = cases.filter((c) => c.pass).length;
   console.log(`selftest ${ok}/${cases.length}`);
@@ -6630,8 +6701,9 @@ for (const { path: p, items } of parsed) {
   if (CHECKS.has('bundle')) for (const it of items) findings.push(...checkBundle(it));
   // a quotation is a claim about bytes — the page text is already cached by the count check
   if (!NO_NET && CHECKS.has('quotation')) for (const it of items) findings.push(...await checkQuote(it, nvd, cna));
-  // an attribution is pure sentence reading — no network, runs under --no-net like idrange
-  if (CHECKS.has('attribution')) for (const it of items) findings.push(...checkAttribution(it));
+  // an attribution is pure sentence reading plus CACHE-ONLY page text — it never spends a request,
+  // so it runs under --no-net like idrange; the pages are whatever count/quotation already fetched
+  if (CHECKS.has('attribution')) for (const it of items) findings.push(...checkAttribution(it, citedPages(it.plain)));
   /* A paper's submission instant is one unmetered call for the WHOLE batch (a comma-separated
    * id_list), so the arm is per-file rather than per-item. */
   if (!NO_NET && CHECKS.has('paper')) {

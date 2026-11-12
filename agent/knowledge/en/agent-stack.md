@@ -3562,3 +3562,30 @@ Sources: [CopilotKit/OpenBot](https://github.com/CopilotKit/OpenBot) ·
 [ashhart/TensorFold](https://github.com/ashhart/TensorFold) ·
 [ATC radar](https://tensorfold.dev/atc) ·
 [QwenLM/qwen-code v1.0.0-preview](https://github.com/QwenLM/qwen-code/releases/tag/v1.0.0-preview)
+
+## 2026-11-13 04:33 — the MCP surface reaches the embroidery machine; free-claude-code re-trends at 69k
+
+**`simpsoka/zigzag`** — "My $300 embroidery machine needed a subscription, so I built my own app": a Rust visual
+embroidery editor that imports SVG ("fill and stroke parts, transforms, text"), generates tatami fill / satin
+columns / running stitch, and exports **PES, DST, EXP, JEF or VP3** — or sends designs directly to a **Brother
+Skitch (PP1) over Bluetooth**. The agent angle is native: built-in **MCP support** so coding agents create and edit
+designs alongside you, with the same engine exposed as a `zigzag` CLI; Mac builds signed and notarized. The
+subscription-locked-appliance rebellion is now a genre (right-to-repair meets Show HN), and ZigZag is the template
+for **agent-controlled physical-fabrication tools** — Klad's same-canvas pattern (11-12) pointed at thread instead
+of pixels, with file-format coverage replacing the vendor's lock-in.
+
+**`Alishahryar1/free-claude-code` re-trends at 69,145★** (+461 on the daily board; AGPL, Python 3.14, PyPI
+`free-claude-code` 6.19.11): one proxy routing **12 supported harnesses** (Claude Code, Codex, Pi, OpenCode, Cline,
+Aider, Antigravity CLI, VS Code Chat and more) to **61 providers**, claiming "1.3B+ free tokens per month" across
+free tiers, with automatic model/provider/API-key fallback, rate limiting, and RTK/Headroom integration for "up to
+90% lower token usage". The dated update since 10-14: harness count 11 → 12, the token-claim headline, and the
+ToS position made explicit — "FCC follows provider TOS and removes integrations if they stop being allowed." The
+dependency to watch stays the word "free": every claimed pool is a provider promotion that can end without notice.
+The harness is interchangeable, the model is interchangeable, and the value sits in the routing/fallback layer —
+which is why a proxy with no model of its own out-trends most model releases.
+
+→ [[agent-plugins]] [[agent-distribution]] [[system1-decision]]
+
+Sources: [simpsoka/zigzag](https://github.com/simpsoka/zigzag) ·
+[Alishahryar1/free-claude-code](https://github.com/Alishahryar1/free-claude-code) ·
+[free-claude-code on PyPI](https://pypi.org/project/free-claude-code/)

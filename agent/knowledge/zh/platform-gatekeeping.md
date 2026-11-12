@@ -410,3 +410,15 @@ Sources: [fingerprinting.study](https://fingerprinting.study/) ·
 
 Sources: [Kate's blog: Using voltage glitching to unleash the A100](https://blog.kate.land/posts/using-voltage-glitching-to-unlock-the-a100/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50451903)
+
+## 2026-11-13 04:33 —— Nintendo 的 DMCA 扫荡抵达调制芯片固件，主张整个仓库
+
+四份日期 **11-06** 的 Nintendo 删除通知（github/dmca 的 `2026-11-06-nintendo.md` 到 `-4.md`；HN 浪潮 11-12 破岸）援引的是**反规避**而非普通复制：Nintendo 把 Switch TPM 描述为「the encryption of video game files using certain proprietary cryptographic keys, such as those referred to as prod.keys」，并主张**整个仓库**侵权——包括 yuzu fork `IpwnedU/yuzu-android-master` 与 **`Ansem-SoD/Picofly`，硬件改装的固件、不是模拟器**。GitHub 的标准删除前流程（联系所有者、反通知窗口）在每份通知中都有注明。
+
+论题 15 的机制清单补上其法律最大值案例：这里移除的能力类不是某个权限或密钥，而是**一切触碰 `prod.keys` 的东西**——调制芯片固件的下架把 yuzu/Ryujinx 先例从模拟器*代码*延伸到其周围的*硬件改装生态*（11-12 的 Synaptics 函件不经法院杀掉一个爱好者驱动；Nintendo 经 github/dmca 同样不经法院）。两个观察点：**整仓主张是最可逆的一种**——反通知窗口存在，被删代码的 fork 通常数日内重现——且反规避框架比版权更宽，触及从不出货游戏内容的固件。
+
+→ [[platform-gatekeeping]] [[dev-tools]]
+
+Sources: [github/dmca: 2026-11-06-nintendo.md](https://github.com/github/dmca/blob/master/2026/11/2026-11-06-nintendo.md) ·
+[github/dmca: 2026-11-06-nintendo-2.md（Picofly）](https://github.com/github/dmca/blob/master/2026/11/2026-11-06-nintendo-2.md) ·
+[HN discussion](https://news.ycombinator.com/item?id=50469994)

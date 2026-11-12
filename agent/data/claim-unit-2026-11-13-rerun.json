@@ -1,0 +1,166 @@
+{
+ "generated": "2026-11-12T21:02:02.858Z",
+ "files": [
+  {
+   "file": "2026-11-13.md",
+   "items": 20,
+   "findings": [
+    {
+     "check": "status",
+     "item": 18,
+     "verdict": "ok",
+     "claim": "CVE-2026-12591 `Awaiting Analysis`",
+     "detail": "Awaiting Analysis (lastModified 2026-11-12T19:02:35.830)"
+    },
+    {
+     "check": "repo",
+     "item": 17,
+     "verdict": "ok",
+     "claim": "Alishahryar1/free-claude-code",
+     "detail": "69160★, last push 2026-11-12"
+    },
+    {
+     "check": "repo",
+     "item": 20,
+     "verdict": "ok",
+     "claim": "chocoford/ExcalidrawZ",
+     "detail": "1723★, last push 2026-10-24"
+    },
+    {
+     "check": "quotation",
+     "item": 1,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 2,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 3,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 5,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 6,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 7,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 5 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 8,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 9,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 11,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 12 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 12,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 13,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 14,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 15,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 16,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 17,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 19,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "attribution",
+     "item": 1,
+     "verdict": "attribution-page-verified",
+     "claim": "Mast",
+     "detail": "a quotation is attributed to Mast (“has agreed to come”) and the party's token appears in the fetched text of a cited page — the quotation arm's page set carries the party's statement even though no cited URL string names the party (the party lives in the prose, not the domain); the second-hand-copy risk the URL arm carries applies here too, so a load-bearing quotation still wants the party's own artifact"
+    },
+    {
+     "check": "attribution",
+     "item": 7,
+     "verdict": "attribution-satisfied",
+     "claim": "Nintendo",
+     "detail": "a quotation is attributed to Nintendo (“the encryption of video game files using certain proprietary…”) and a cited URL carries the party's token — the quotation arm's page set reaches the party's own artifact"
+    }
+   ]
+  }
+ ],
+ "status_watch": [],
+ "api_calls": 0,
+ "readme_calls": 0,
+ "cited_page_calls": 12,
+ "repo_page_calls": 0,
+ "nvd_calls": 1,
+ "nvd_failed_chunks": 0,
+ "cna_calls": 0
+}

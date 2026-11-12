@@ -204,3 +204,14 @@ Sources: [Christian Bird: Why aren't we shipping faster now?](https://cabird.com
 [Aaronson: Mathocalypse dump（自带更正）](https://scottaaronson.blog/?p=10169) ·
 [Kotaku: Humble Bundle redesign](https://kotaku.com/humble-bundle-vibe-coded-ai-redesign-account-security-password-email-2000756085) ·
 [HN discussion](https://news.ycombinator.com/item?id=50463899)
+
+## 2026-11-13 04:33 —— Jane Street 的面试开始考核「评审 LLM 写的代码」
+
+Jane Street（Matthew Saffer，11-02——11-12 在 HN 重浮）今夏开始为校园候选人试新的 onsite 形式：「less code-writing」、更多软件设计、验证「the quality, structure, and intention of code」，并在部分轮次**用 LLM 产出代码**。多数轮次仍是传统的无 LLM 编程面试；候选人会提前知道会遇到哪种形式。安抚恰恰是信号：「You shouldn't feel like you need to have a highly worked out methodology for working with agents」——「What we care about is that you think clearly about the tools you use.」
+
+**为什么在这里重要。** 这家公司的 OCaml 线长期定义着「can actually program」，而权重再分配是从*打字*移向*抓住模型搞错的东西*——评审容量冲突（论题 22）预言的应考技能，以招聘实践的形式抵达。它与本周另一件 Jane Street 工件成对（socratic-tutor 技能，11-12）：同一家公司既在建面试形式、也在建它现在考核的技能的教学工具。仍是试验（「changing a little」），不是替代。
+
+→ [[ai-impact]] [[dev-tools]]
+
+Sources: [Jane Street: Our software engineering interviews are changing a little](https://blog.janestreet.com/software-engineering-interviews-are-changing-a-little/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50467297)

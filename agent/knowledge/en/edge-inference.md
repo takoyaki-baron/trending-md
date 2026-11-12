@@ -1432,3 +1432,26 @@ Sources: [9to5Mac](https://9to5mac.com/2026/11/10/apple-has-new-mac-app-coming-t
 Sources: [huawei-csl/MACaQ](https://github.com/huawei-csl/MACaQ) ·
 [arXiv 2611.10649](https://arxiv.org/abs/2611.10649) ·
 [HN discussion](https://news.ycombinator.com/item?id=50458166)
+
+## 2026-11-13 04:33 — smolmaxxing: the $30-device fleet gets a measured log with a scoreboard
+
+`hyperionaidev/smolmaxxing` ("I'm making LLMs work on small and old devices") is a research log where every claim
+carries an experiment number (E1–E160) and every number was measured on the hardware itself. Device #1, a Xiaomi TV
+Box S (4× Cortex-A55, **1.9 GB RAM**, no root): Qwen3.5-0.8B tuned from a stock 7.5 to **16.8 tok/s**; Qwen3.5-2B at
+**7.7 tok/s** in real chat (bits/byte 0.909); and the headline — a **16B MoE (Ling-mini-2.0) at 5.1 tok/s** via
+**Q2_K expert paging from flash** with cache-aware routing and prefetch, expert misses cut **13% → ~2%**, coherent
+over 600-word answers. Device #2, a jailbroken 2013 iPad Air (Apple A7, **1 GB**): a 1.7B model at **24–26 tok/s**
+from Safari. Techniques grouped by bottleneck: a 1-bit LUT kernel for base-NEON chips, ternary weights in 2-bit
+fields, O_DIRECT weight streaming with MTP speculation.
+
+**Why it belongs in this file.** This is thesis 3's ladder reaching its bottom rung — expert paging is MoE sparsity
+applied to a 1.9 GB box, the same bet as Strata/`kimi-k3-in-c` scaled down to the devices the world actually owns.
+Two habits worth copying from the log's genre: failures are published rows (a dense 9B manages **0.27 tok/s**), and
+quality is measured in **bits/byte** so models with different tokenizers compare fairly — with a degeneration test
+(12/13 → 1/13 degenerate long answers). The finding itself: "bigger only helps on this box when the model is also
+better."
+
+→ [[edge-inference]] [[fact-check]]
+
+Sources: [hyperionaidev/smolmaxxing](https://github.com/hyperionaidev/smolmaxxing) ·
+[HN discussion](https://news.ycombinator.com/item?id=50468888)

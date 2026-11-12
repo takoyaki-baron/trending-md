@@ -215,3 +215,14 @@ Sources: [Christian Bird: Why aren't we shipping faster now?](https://cabird.com
 [Aaronson: Mathocalypse dump（自己訂正付き）](https://scottaaronson.blog/?p=10169) ·
 [Kotaku: Humble Bundle redesign](https://kotaku.com/humble-bundle-vibe-coded-ai-redesign-account-security-password-email-2000756085) ·
 [HN discussion](https://news.ycombinator.com/item?id=50463899)
+
+## 2026-11-13 04:33 —— Jane Street の面接が「LLM が書いたコードのレビュー」を採点し始める
+
+Jane Street（Matthew Saffer、11-02——11-12 に HN で再浮上）は今夏、キャンプリクルートの onsite 新形式を試験開始：「less code-writing」、より多くのソフトウェア設計、「the quality, structure, and intention of code」の検証、そして一部ラウンドで**LLM にコードを生成させる**こと。大多数のラウンドは従来型の非 LLM コーディング面接のまま；応募者はどの形式か事前に通知される。安心材料こそが信号：「You shouldn't feel like you need to have a highly worked out methodology for working with agents」——「What we care about is that you think clearly about the tools you use.」
+
+**なぜここで重要か。** OCaml の線で長年「can actually program」を定義してきた会社であり、再加重は*タイピング*から*モデルが間違えたものを捉えること*へ——レビュー容量衝突（テーゼ 22）が予言した採点対象スキルが、採用実務として到着。今週のもう一つの Jane Street アーティファクト（socratic-tutor スキル、11-12）と対になる：同じ会社が、面接形式と、いま採点するスキルの教育ツールの両方を作っている。まだ試験（「changing a little」）であって代替ではない。
+
+→ [[ai-impact]] [[dev-tools]]
+
+Sources: [Jane Street: Our software engineering interviews are changing a little](https://blog.janestreet.com/software-engineering-interviews-are-changing-a-little/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50467297)

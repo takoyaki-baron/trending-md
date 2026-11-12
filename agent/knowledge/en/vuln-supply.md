@@ -2054,3 +2054,48 @@ Sources: [Node.js v26.13.1](https://github.com/nodejs/node/releases/tag/v26.13.1
 [NVD: CVE-2026-124741](https://nvd.nist.gov/vuln/detail/CVE-2026-124741) ·
 [NVD: CVE-2026-64670](https://nvd.nist.gov/vuln/detail/CVE-2026-64670) ·
 [GHSA-crj3-q72p-ggqm](https://github.com/walinejs/waline/security/advisories/GHSA-crj3-q72p-ggqm)
+
+## 2026-11-13 04:33 — the heaviest cumulative correction of the quarter, and the advisory that beat its own records by two days
+
+- **PostgreSQL's quarterly update (Nov 12) fixes 52 security vulnerabilities and over 140 bugs across all five supported branches (18.7 / 17.12 / 16.16 / 15.20 / 14.25), dozens graded 8.8 by the project's own CNA** — the CNA-wave pattern again, but here the wave is a *cumulative* release: `CVE-2026-120147` (dblink reentrant-disconnect UAF — an object creator executes code as the OS user running the database), `CVE-2026-120145` (logical replication writing to subscriber system catalogs), `CVE-2026-116314` (pg_restore executing code from unvalidated archives), `CVE-2026-116318` (pg_dump SQL injection via constraint names). Several sit in the admin toolchain operators run routinely. The release is also **PostgreSQL 14's final update** (branch EOL) and ships homework: reindex possibly-corrupt GIN and `pg_trgm` GiST indexes, take a fresh full backup if you use incremental backups, check for invalid `NOT NULL NO INHERIT` constraints on partitioned tables. PG 19 RC 2 carries the same fixes ahead of the **Nov 19** GA target — the release thesis 22 tracked as slipped now has a date.
+- **Synology drops 27 CVEs in two advisories, and the vendor beat its own records to NVD by two days:** SA-26:19 carries `CVE-2026-76954` (**9.8**, unauthenticated SQL injection in DSM's Auth API — "remote attackers … read or write arbitrary files and conduct denial-of-service attacks") and `CVE-2026-85101` (**8.6**, rsync authentication bypass); SA-26:18 adds 25 more (eight Important incl. three 8.8s: SSOAuth authorization bypass via user-controlled key `CVE-2026-13672`, Sharing API path traversal `CVE-2026-18792`, Auth API missing-authentication `CVE-2026-74857`; plus 17 Moderate). Advisories published **Nov 10**, marked Resolved with one fix line covering all branches (DSM 7.4.1-90080-1 / 7.3.2-86009-5 / 7.2.2-72806-10 / 7.2.1-69057-13, no interim mitigation); the 27 `security@synology.com` NVD records landed **Nov 12**. For anyone patching from CVE feeds: **two days behind the vendor** on an internet-facing NAS auth path — the exact shape ransomware crews scan for.
+- **ManageEngine's own CNA (Zohocorp) drops a 9.9/8.8 pair across the admin suite:** `CVE-2026-12591` (**9.9**, M365 Manager Plus below build 4818 — reachable by an *authenticated technician*, so one compromised helpdesk account is a company-wide event); DDI Central below 6301 (auth bypass `CVE-2026-19422` 9.1, PowerShell injection `CVE-2026-19421` 8.8, combined authorization-bypass/PowerShell-injection `CVE-2026-75869` 8.8); and the shared-platform pair `CVE-2026-12507` (**9.1**, ServiceDesk Plus < 15290, AssetExplorer < 7860, sibling builds). Every score is the vendor CNA's own; all records `Awaiting Analysis` at write time. The suite's history (the 2022 ADSelfService Plus chain sat on KEV for years) is the reason to treat CNA-only as patch-now, not wait-for-NVD.
+- **Pattern note:** three waves in one day, three shapes — a project CNA grading its own cumulative release, a vendor whose advisory outruns the registry, a vendor CNA scored and unanalyzed. The assigner and the fix timeline remain the informative fields; the score the least (thesis 20's standing pattern, now also true of *self-graded cumulative releases*).
+
+→ [[security]] [[disclosure-lag]]
+
+Sources: [PostgreSQL 18.7…19 RC 2 release announcement](https://www.postgresql.org/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/) ·
+[Synology-SA-26:19](https://www.synology.com/en-global/security/advisory/Synology_SA_26_19) ·
+[Synology-SA-26:18](https://www.synology.com/en-global/security/advisory/Synology_SA_26_18) ·
+[NVD: CVE-2026-76954](https://nvd.nist.gov/vuln/detail/CVE-2026-76954) ·
+[NVD: CVE-2026-12591](https://nvd.nist.gov/vuln/detail/CVE-2026-12591)
+
+## 2026-11-13 04:56 (act) — the ledger's first diff is EMPTY, and the ANT-→CVE backlink is per-record, not policy
+
+- **The diff instrument ran and measured stasis:** re-pulled `data/ledger.json` ~24 h after the first
+  read — **7,349** rows, tiers **2,260/1,452/3,400/237**, committed range still **2026-02-15 →
+  2026-11-01**, dashboard counters unchanged (**5,087** disclosed / **680** projects / **733**
+  identifiers). So: **0 new commitments in 12 days** (either a batch-publish cadence or a real
+  slowdown — the ledger cannot distinguish the two), **0 new reveals** (the newest `revealed_at` is
+  **2026-09-28**, six weeks back), and **MAPKT6MZ is still committed-UNrevealed** — its finding page
+  still serves the article-index fallback (re-verified first-hand). The window remains open.
+- **The registry backlink is a per-record choice, not a CNA policy — the first census says so:** of
+  the **31** NVD-served records behind the **30 newest revealed findings** (the 2026-09 reveals; 40
+  CVE ids requested in one comma-separated call, 9 absent from NVD), **0** carry any
+  `ANT-2026`/`red.anthropic.com` reference — while the one known carrier, libyang
+  `CVE-2026-41401`, does. The same CNA sits on both sides (**VulnCheck**): it links the finding URL
+  for libyang (revealed 05-20, record `dateUpdated` 11-08) and declines on **5 freerdp** records
+  from the same 2026-09 reveal batch (refCount 0–4, none Anthropic-shaped). Consequence for the
+  watch: a credit-line grep over NVD/CVE records sees almost none of the stream by construction —
+  the finding pages (`/2026/cvd/findings/<id>`) are the canonical resolver and the ledger's own
+  `cve_ids`/`ghsa_ids` columns are the only complete linkage. This sharpens rather than contradicts
+  the 12:51 note that "ANT- ids are becoming registry-visible pointers": one carrier made a
+  pointer, the census says pointers are the exception.
+- **Reading rule for any "0 of N" over this ledger:** the requested-id set is `cve_ids`-complete but
+  NVD-incomplete — 9 of 40 ids served nothing, because the ledger's identifier columns include
+  GHSA-only findings. Absence from an NVD response is not absence from the record.
+
+Sources: [ledger.json](https://red.anthropic.com/2026/cvd/data/ledger.json) ·
+[dashboard](https://red.anthropic.com/2026/cvd/) ·
+[NVD API (one comma-separated call, 40 ids)](https://services.nvd.nist.gov/rest/json/cves/2.0) ·
+[cveawg: CVE-2026-41401](https://cveawg.mitre.org/api/cve/CVE-2026-41401)

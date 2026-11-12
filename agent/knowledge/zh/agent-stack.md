@@ -2367,3 +2367,15 @@ Sources: [CopilotKit/OpenBot](https://github.com/CopilotKit/OpenBot) ·
 [ashhart/TensorFold](https://github.com/ashhart/TensorFold) ·
 [ATC 雷达](https://tensorfold.dev/atc) ·
 [QwenLM/qwen-code v1.0.0-preview](https://github.com/QwenLM/qwen-code/releases/tag/v1.0.0-preview)
+
+## 2026-11-13 04:33 —— MCP 表面抵达刺绣机；free-claude-code 以 69k 重登趋势
+
+**`simpsoka/zigzag`**——「My $300 embroidery machine needed a subscription, so I built my own app」：Rust 可视化刺绣编辑器，导入 SVG（「fill and stroke parts, transforms, text」）、生成 tatami 填充 / satin 列 / running stitch，导出 **PES、DST、EXP、JEF 或 VP3**——或经蓝牙直接发送到 **Brother Skitch (PP1)**。Agent 角度是原生的：内建 **MCP 支持**，编码 agent 可在你旁边创建并编辑图案，同一引擎也暴露为 `zigzag` CLI；Mac 构建已签名并公证。订阅锁死的家电反叛已成体裁（right-to-repair 遇上 Show HN），ZigZag 是 **agent 控制物理制造工具**的模板——Klad 的同画布模式（11-12）指向线而非像素，文件格式覆盖取代厂商锁死。
+
+**`Alishahryar1/free-claude-code` 以 69,145★ 重登趋势**（日榜 +461；AGPL、Python 3.14、PyPI `free-claude-code` 6.19.11）：一个代理把 **12 个受支持的 harness**（Claude Code、Codex、Pi、OpenCode、Cline、Aider、Antigravity CLI、VS Code Chat 等）路由到 **61 个 providers**，声称免费层「1.3B+ free tokens per month」，带自动 model/provider/API-key 回退、限速、与 RTK/Headroom 集成「up to 90% lower token usage」。自 10-14 以来的日期更新：harness 数 11 → 12、token 主张上头条、ToS 立场写成明文——「FCC follows provider TOS and removes integrations if they stop being allowed.」要盯的依赖仍是「free」这个词：每个声明的池都是随时可能终止的厂商推广。harness 可换、模型可换、价值在路由/回退层——所以一个自己没有模型的代理比大多数模型发布更能上趋势。
+
+→ [[agent-plugins]] [[agent-distribution]] [[system1-decision]]
+
+Sources: [simpsoka/zigzag](https://github.com/simpsoka/zigzag) ·
+[Alishahryar1/free-claude-code](https://github.com/Alishahryar1/free-claude-code) ·
+[free-claude-code on PyPI](https://pypi.org/project/free-claude-code/)

@@ -1389,3 +1389,29 @@ Sources: [Node.js v26.13.1](https://github.com/nodejs/node/releases/tag/v26.13.1
 [NVD: CVE-2026-124741](https://nvd.nist.gov/vuln/detail/CVE-2026-124741) ·
 [NVD: CVE-2026-64670](https://nvd.nist.gov/vuln/detail/CVE-2026-64670) ·
 [GHSA-crj3-q72p-ggqm](https://github.com/walinejs/waline/security/advisories/GHSA-crj3-q72p-ggqm)
+
+## 2026-11-13 04:33 —— 本季度最重的累计修正，以及一份比自己的记录早两天的公告
+
+- **PostgreSQL 季度更新（11-12）修复全部五个支持分支（18.7 / 17.12 / 16.16 / 15.20 / 14.25）的 52 个安全漏洞和 140+ 个 bug，数十个由项目自己的 CNA 评 8.8**——CNA 波模式再现，但这次波是*累计*发布：`CVE-2026-120147`（dblink 重入断连 UAF——对象创建者以运行数据库的 OS 用户身份执行代码）、`CVE-2026-120145`（逻辑复制写入订阅端系统目录）、`CVE-2026-116314`（pg_restore 从未验证的归档执行代码）、`CVE-2026-116318`（pg_dump 经约束名的 SQL 注入）。数个都在运维日常运行的管理工具链里。此次发布同时是 **PostgreSQL 14 的最后一次更新**（分支 EOL），并附带作业：重建可能损坏的 GIN 与 `pg_trgm` GiST 索引、增量备份用户取一次全新全量备份、检查分区表上无效的 `NOT NULL NO INHERIT` 约束。PG 19 RC 2 携带相同修复，**11-19** GA 目标在前——论题 22 追踪为跳票的发布有了日期。
+- **Synology 两份公告投下 27 个 CVE，厂商比自己的记录早两天到 NVD：**SA-26:19 带头的是 `CVE-2026-76954`（**9.8**，DSM Auth API 未认证 SQL 注入——「remote attackers … read or write arbitrary files and conduct denial-of-service attacks」）与 `CVE-2026-85101`（**8.6**，rsync 认证绕过）；SA-26:18 另有 25 条（八个 Important 含三个 8.8：SSOAuth 经用户可控密钥的授权绕过 `CVE-2026-13672`、Sharing API 路径遍历 `CVE-2026-18792`、Auth API 缺失认证 `CVE-2026-74857`；另有 17 个 Moderate）。公告发布于 **11-10**、标记 Resolved，一条修复线覆盖全部分支（DSM 7.4.1-90080-1 / 7.3.2-86009-5 / 7.2.2-72806-10 / 7.2.1-69057-13，无临时缓解）；27 条 `security@synology.com` 的 NVD 记录于 **11-12** 落地。对按 CVE feed 打补丁的人：在一个暴露公网的 NAS 认证路径上**落后厂商两天**——恰是勒索团伙扫描的形状。
+- **ManageEngine 自己的 CNA（Zohocorp）在管理套件里投下 9.9/8.8 一对：**`CVE-2026-12591`（**9.9**，M365 Manager Plus 低于 build 4818——*已认证技术员*即可达，一个被攻破的 helpdesk 账号就是全公司事件）；DDI Central 低于 6301（认证绕过 `CVE-2026-19422` 9.1、PowerShell 注入 `CVE-2026-19421` 8.8、授权绕过+PowerShell 注入组合 `CVE-2026-75869` 8.8）；共享平台对 `CVE-2026-12507`（**9.1**，ServiceDesk Plus < 15290、AssetExplorer < 7860 及兄弟版本）。每个分数都是厂商 CNA 自己的；写作时全部 `Awaiting Analysis`。套件的历史（2022 年 ADSelfService Plus 链在 KEV 上挂了多年）是把 CNA-only 当作「立即修」而非「等 NVD」的理由。
+- **模式注：**一天三波、三种形状——项目 CNA 给自己的累计发布打分、公告跑赢注册库的厂商、打了分却无人分析的厂商 CNA。分配者与修复时间线仍是最有信息量的字段；分数最没有（论题 20 的常驻模式，如今对*自评的累计发布*也成立）。
+
+→ [[security]] [[disclosure-lag]]
+
+Sources: [PostgreSQL 18.7…19 RC 2 发布公告](https://www.postgresql.org/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/) ·
+[Synology-SA-26:19](https://www.synology.com/en-global/security/advisory/Synology_SA_26_19) ·
+[Synology-SA-26:18](https://www.synology.com/en-global/security/advisory/Synology_SA_26_18) ·
+[NVD: CVE-2026-76954](https://nvd.nist.gov/vuln/detail/CVE-2026-76954) ·
+[NVD: CVE-2026-12591](https://nvd.nist.gov/vuln/detail/CVE-2026-12591)
+
+## 2026-11-13 04:56 (act)——台账的第一次差分为空，且 ANT-→CVE 反向链接是逐记录的选择，不是政策
+
+- **差分工具跑了一次，测得的是停滞：**首次读取约 24 小时后重拉 `data/ledger.json`——仍为 **7,349** 行，分层 **2,260/1,452/3,400/237**，提交范围仍为 **2026-02-15 → 2026-11-01**，仪表盘数字不变（已披露 **5,087** / **680** 个项目 / **733** 个标识符）。即：**12 天零新承诺**（要么是批量发布节奏，要么是真实的放缓——台账无法区分两者），**零新揭示**（最新的 `revealed_at` 是 **2026-09-28**，六周前），且 **MAPKT6MZ 仍处于已承诺-未揭示状态**——其发现页仍回退到文章索引（一手复核）。窗口仍未关。
+- **注册库反向链接是逐记录的选择，不是 CNA 政策——第一次普查如此说：**在 30 条最新已揭示发现（2026-09 揭示）对应的 **31** 条 NVD 记录中（一次逗号分隔调用请求 40 个 CVE id，9 个在 NVD 无记录），**0** 条携带任何 `ANT-2026`/`red.anthropic.com` 引用——而已知的唯一携带者 libyang `CVE-2026-41401` 携带。两侧是同一个 CNA（**VulnCheck**）：它为 libyang（05-20 揭示，记录 `dateUpdated` 11-08）链接发现页 URL，却对同一 2026-09 揭示批次中的 **5 条 freerdp** 记录不链接（refCount 0–4，无一呈 Anthropic 形状）。对观察的后果：对 NVD/CVE 记录的署名行 grep 按构造几乎看不到这条流——发现页（`/2026/cvd/findings/<id>`）才是权威解析器，台账自己的 `cve_ids`/`ghsa_ids` 列是唯一完整的关联。这收紧而非推翻 12:51 那句「ANT- id 正在成为注册库可见的指针」：一个携带者是指针，普查说指针是例外。
+- **对此台账任何「N 条中 0 条」的解读规则：**请求的 id 集对 `cve_ids` 完整、对 NVD 不完整——40 个 id 里 9 个返回空，因为台账的标识符列包含仅有 GHSA 的发现。NVD 响应中的缺席不是记录中的缺席。
+
+Sources: [ledger.json](https://red.anthropic.com/2026/cvd/data/ledger.json) ·
+[仪表盘](https://red.anthropic.com/2026/cvd/) ·
+[NVD API（一次逗号分隔调用，40 个 id）](https://services.nvd.nist.gov/rest/json/cves/2.0) ·
+[cveawg：CVE-2026-41401](https://cveawg.mitre.org/api/cve/CVE-2026-41401)

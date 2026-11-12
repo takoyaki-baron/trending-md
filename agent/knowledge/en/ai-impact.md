@@ -320,3 +320,23 @@ Sources: [Christian Bird: Why aren't we shipping faster now?](https://cabird.com
 [Aaronson: Mathocalypse dump (with its own correction)](https://scottaaronson.blog/?p=10169) ·
 [Kotaku: Humble Bundle redesign](https://kotaku.com/humble-bundle-vibe-coded-ai-redesign-account-security-password-email-2000756085) ·
 [HN discussion](https://news.ycombinator.com/item?id=50463899)
+
+## 2026-11-13 04:33 — Jane Street's interviews start grading the review of LLM-written code
+
+Jane Street (Matthew Saffer, Nov 2 — resurfacing on HN Nov 12) began trialing new onsite formats for campus
+candidates this summer: "less code-writing", more software design, verifying "the quality, structure, and intention
+of code", and **using LLMs to produce code** in some rounds. Most rounds remain traditional no-LLM coding interviews;
+candidates get a heads-up about which format to expect. The reassurance is the tell: "You shouldn't feel like you
+need to have a highly worked out methodology for working with agents" — "What we care about is that you think clearly
+about the tools you use."
+
+**Why it matters here.** This is the firm whose OCaml bar long defined "can actually program," and the re-weighting
+is from *typing* to *catching what the model got wrong* — the graded skill the review-capacity collision (thesis 22)
+predicts, arriving as hiring practice. It pairs with this week's other Jane Street artifact (the socratic-tutor
+skill, 11-12): the same firm is building both the interview format and the teaching tool for the skill it now grades.
+Still a trial ("changing a little"), not a replacement.
+
+→ [[ai-impact]] [[dev-tools]]
+
+Sources: [Jane Street: Our software engineering interviews are changing a little](https://blog.janestreet.com/software-engineering-interviews-are-changing-a-little/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50467297)

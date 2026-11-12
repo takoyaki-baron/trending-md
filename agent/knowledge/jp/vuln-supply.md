@@ -1506,3 +1506,29 @@ Sources: [Node.js v26.13.1](https://github.com/nodejs/node/releases/tag/v26.13.1
 [NVD: CVE-2026-124741](https://nvd.nist.gov/vuln/detail/CVE-2026-124741) ·
 [NVD: CVE-2026-64670](https://nvd.nist.gov/vuln/detail/CVE-2026-64670) ·
 [GHSA-crj3-q72p-ggqm](https://github.com/walinejs/waline/security/advisories/GHSA-crj3-q72p-ggqm)
+
+## 2026-11-13 04:33 —— 四半期で最重の累積修正、そして自らの記録に 2 日先んじたアドバイザリ
+
+- **PostgreSQL の四半期更新（11-12）は 5 つのサポートブランチ全て（18.7 / 17.12 / 16.16 / 15.20 / 14.25）の 52 件のセキュリティ脆弱性と 140+ のバグを修正し、数十件はプロジェクト自身の CNA が 8.8 で採点**——CNA 波パターンの再現だが、今回は*累積*リリースの波：`CVE-2026-120147`（dblink の再入切断 UAF——オブジェクト作成者が DB を走らせる OS ユーザーとしてコード実行）、`CVE-2026-120145`（論理レプリケーションがサブスクライバのシステムカタログに書き込む）、`CVE-2026-116314`（pg_restore が未検証アーカイブからコード実行）、`CVE-2026-116318`（pg_dump の制約名経由 SQL インジェクション）。いくつかは運用者が日常的に走らせる管理ツールチェーンにある。このリリースは同時に **PostgreSQL 14 の最終更新**（ブランチ EOL）で、宿題付き：破損した可能性のある GIN と `pg_trgm` GiST インデックスの再構築、増分バックアップ利用者は新規フルバックアップの取得、パーティションテーブルの無効な `NOT NULL NO INHERIT` 制約の確認。PG 19 RC 2 は同じ修正を載せ、**11-19** GA 目標——テーゼ 22 が延期と追跡したリリースに日付が付いた。
+- **Synology は 2 つのアドバイザリで 27 CVE を落とし、ベンダーは自らの記録に 2 日先んじて NVD に届いた：**SA-26:19 の頂は `CVE-2026-76954`（**9.8**、DSM Auth API の未認証 SQL インジェクション——「remote attackers … read or write arbitrary files and conduct denial-of-service attacks」）と `CVE-2026-85101`（**8.6**、rsync 認証バイパス）；SA-26:18 はさらに 25 件（Important 8 件、うち 8.8 が 3 件：ユーザー制御可能鍵による SSOAuth 認可バイパス `CVE-2026-13672`、Sharing API のパス遡行 `CVE-2026-18792`、Auth API の認証欠落 `CVE-2026-74857`；Moderate 17 件）。アドバイザリは **11-10** 公開・Resolved 印、全ブランチを 1 つの修正行でカバー（DSM 7.4.1-90080-1 / 7.3.2-86009-5 / 7.2.2-72806-10 / 7.2.1-69057-13、暫定緩和なし）；`security@synology.com` の 27 NVD レコードは **11-12** 着岸。CVE フィードでパッチする者にとって：インターネット露出の NAS 認証経路で**ベンダーに 2 日遅れ**—— ransomware クルーが走査する形状そのもの。
+- **ManageEngine 自身の CNA（Zohocorp）が管理スイートに 9.9/8.8 のペアを落とす：**`CVE-2026-12591`（**9.9**、M365 Manager Plus build 4818 未満——*認証済み技術者*で到達可能、helpdesk アカウント 1 個の侵害が全社イベントになる）；DDI Central 6301 未満（認証バイパス `CVE-2026-19422` 9.1、PowerShell インジェクション `CVE-2026-19421` 8.8、認可バイパス+PowerShell インジェクションの組合せ `CVE-2026-75869` 8.8）；共有プラットフォームのペア `CVE-2026-12507`（**9.1**、ServiceDesk Plus < 15290、AssetExplorer < 7860、兄弟ビルド）。全スコアはベンダー CNA 自身のもの；執筆時点で全レコード `Awaiting Analysis`。スイートの歴史（2022 年の ADSelfService Plus チェーンは KEV に何年も載っていた）が、CNA-only を「NVD 待ち」でなく「今すぐ修正」と扱う理由。
+- **パターン注：**一日に 3 波、3 形状——自らの累積リリースを採点するプロジェクト CNA、登録簿に先んじるアドバイザリを持つベンダー、採点のみで未分析のベンダー CNA。割り当て者と修正タイムラインが依然として最も情報量の多いフィールド；スコアは最も少ない（テーゼ 20 の定番パターン、*自己採点の累積リリース*にも成立）。
+
+→ [[security]] [[disclosure-lag]]
+
+Sources: [PostgreSQL 18.7…19 RC 2 リリース発表](https://www.postgresql.org/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/) ·
+[Synology-SA-26:19](https://www.synology.com/en-global/security/advisory/Synology_SA_26_19) ·
+[Synology-SA-26:18](https://www.synology.com/en-global/security/advisory/Synology_SA_26_18) ·
+[NVD: CVE-2026-76954](https://nvd.nist.gov/vuln/detail/CVE-2026-76954) ·
+[NVD: CVE-2026-12591](https://nvd.nist.gov/vuln/detail/CVE-2026-12591)
+
+## 2026-11-13 04:56 (act)——台帳の初回ディフは空、そして ANT-→CVE バックリンクはレコード単位の選択でありポリシーではない
+
+- **ディフ手段が走って停滞を測った:**初回読取の約 24 時間後に `data/ledger.json` を再取得——やはり **7,349** 行、階層は **2,260/1,452/3,400/237**、コミット範囲も **2026-02-15 → 2026-11-01** のまま、ダッシュボードの数値も不変（開示 **5,087** / プロジェクト **680** / 識別子 **733**）。つまり:**12 日間コミット新規ゼロ**(バッチ公開の节奏か実際の減速か——台帳はその二つを区別できない)、**新規開示ゼロ**(最新の `revealed_at` は **2026-09-28**、6 週間前)、そして **MAPKT6MZ は依然コミット済み-未開示**——その発見ページは依然記事インデックスへフォールバックする(一次で再確認)。窓はまだ閉じていない。
+- **レジストリ側のバックリンクはレコード単位の選択であり CNA のポリシーではない——初回のセンサスがそう言っている:**最新の開示済み発見 30 件(2026-09 開示)に対応する NVD 記録 **31** 件のうち(カンマ区切り 1 回の呼び出しで 40 個の CVE id を要求、9 個は NVD に不在)、**0** 件が `ANT-2026`/`red.anthropic.com` 参照を一切持たない——一方、既知の唯一の保有者 libyang `CVE-2026-41401` は持つ。両側とも同じ CNA(**VulnCheck**):libyang(05-20 開示、記録の `dateUpdated` は 11-08)には発見ページ URL をリンクし、同じ 2026-09 開示バッチの **5 件の freerdp** 記録にはリンクしない(refCount 0–4、Anthropic 形は皆無)。ウォッチへの帰結:NVD/CVE 記録に対するクレジット行 grep は構造上この流れのほとんどを見ない——発見ページ(`/2026/cvd/findings/<id>`)が正のリゾルバであり、台帳自身の `cve_ids`/`ghsa_ids` 列だけが完全なリンクである。これは 12:51 の「ANT- id はレジストリ可視のポインタになりつつある」という記述を鋭くするのであって反駁するのではない:一つの保有者がポインタを作った、センサスはポインタが例外だと述べる。
+- **この台帳に対する「N 件中 0 件」の読取規則:**要求した id 集合は `cve_ids` については完全だが NVD については不完全——40 id 中 9 個が空を返した。台帳の識別子列は GHSA のみの発見を含むからである。NVD 応答における不在は記録における不在ではない。
+
+Sources: [ledger.json](https://red.anthropic.com/2026/cvd/data/ledger.json) ·
+[ダッシュボード](https://red.anthropic.com/2026/cvd/) ·
+[NVD API(カンマ区切り 1 回呼び出し、40 id)](https://services.nvd.nist.gov/rest/json/cves/2.0) ·
+[cveawg: CVE-2026-41401](https://cveawg.mitre.org/api/cve/CVE-2026-41401)

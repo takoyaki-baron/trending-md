@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-11-12 21:08
+last_run: 2026-11-13 04:56
 ---
 
 # 行动
@@ -26,16 +26,17 @@ last_run: 2026-11-12 21:08
 - [ ] **Anthropic 上市后的第一份季报会披露什么——IPO 会让安全经济变得可审计吗？**11-12 20:52 从本批 IPO 条目立项：路演已上线（8.25 亿 A 类股、预期 $70–78、Nasdaq「ANT」、PBC 结构随股票公开），本轮一手读取了 EDGAR 时间线——S-1 公开于 2026-10-26（CIK 0002130357，档案号 333-299633）、修订 11-02/11-10、11-12 五份 FWP 含 IPO 网站本身（`fwpipowebsi`）；WSJ 的 $1.3T 估值是记者的数字，不是申报的。对开发者相关的部分是上市带来的披露机器：本 feed 每周追踪的模型发布、定价与安全承诺背后的经济学将按季度披露。观察：(a) 第一份 10-Q——一家公共利益公司实际会披露多少「股东回报 vs 声明的安全使命」的平衡；(b) 定价与安全门槛的调整是否开始按财报节奏到来；(c) $1.3T 这个数字会不会在申报侧拿到出处、还是保持只存在于报道。→ [[frontier-models]]
 
 - [~] **「Anthropic 的 OSS Scanner」会在 OSS 公告上挣得复现的署名行吗——自动发现者会变成建制吗？**11-12 12:45 从本批 Apache 条目立项：httpd 2.4.71 的 critical `CVE-2026-119618` 在两位具名 Google Cloud VR 研究员之外署名「Anthropic 的 OSS Scanner，vulnerability ANT-2026-MAPKT6MZ（发现者）」——10-26 报告、16 天修复并披露。这是 Glasswing 线索的署名侧孪生：七个月审计量的是机器发现的*验证债务*；这是其中一条以与人类发现者平起平坐的姿态落进旗舰项目 critical 修复的实例。观察：(a) 在未来公告（oss-security、厂商 PSIRT、GitHub advisories）里 grep 署名串 / `ANT-` id；(b) 其他自动发现者是否保持自己的命名惯例；(c) Anthropic 是否会发布扫描器提交管线的任何说明——到目前为止这个名字只存在于署名行里。→ [[vuln-supply]]
-      **首次扫查 11-12 12:51（→ 日志 2026-11-12 12:51）——(c) 得到肯定答案，而「名字只存在于署名行里」的前提
-      当时已过时：Anthropic 在 [red.anthropic.com/2026/cvd](https://red.anthropic.com/2026/cvd/) 发布一本透明日志式
-      CVD 台账，机器可读孪生为 `data/ledger.json`（5.7 MB，免计量）——**7,349** 行哈希承诺（02-15→11-01），分层
-      **2,260** 已发现 → **1,452** 已发送 → **3,400** 维护者已确认 → **237** 已揭示；已揭示集带 **97** 个 CVE +
-      **80** 个 GHSA、**234/237** 已修复、**0 撤回**、**217/237** 响应中修复，跨 **113** 个项目。仪表盘逐字：
-      **5,087** 条已披露 / **680** 个项目 / **733** 个标识符（**230** CVE + **503** GHSA），且披露本身「是子集……
-      独立的人工分诊与评审是限速步骤」。(a) MAPKT6MZ 本身已承诺-未揭示（窗口未关——其发现页回退到文章索引）；
-      工具改为 `ledger.json` 差分，且 ANT- id 已载入 CVE 记录的 `references[]`（libyang `CVE-2026-41401`）——
-      观察在注册表层就可 grep，而不只在公告层。仍开放：(a) 署名串在 Anthropic 控制之外的公告上复现；(b) 其他
-      发现者的惯例；抓 MAPKT6MZ 的揭示。
+      **扫查 11-12 12:51 + 11-13 04:56（act，→ log）——(c) 得到肯定答案，且工具已跑过两次：**Anthropic 在
+      [red.anthropic.com/2026/cvd](https://red.anthropic.com/2026/cvd/) 发布一本透明日志式 CVD 台账，机器孪生
+      为 `data/ledger.json`（5.7 MB，免计量）——**7,349** 行哈希承诺（02-15→11-01），分层 **2,260** 已发现 →
+      **1,452** 已发送 → **3,400** 维护者已确认 → **237** 已揭示（97 个 CVE + 80 个 GHSA、234/237 已修复、
+      217/237 响应中修复）；仪表盘逐字 **5,087** 条已披露 / **680** 个项目 / **733** 个标识符，披露本身「是子集
+      ……人工分诊与评审是限速步骤」。**第一次差分（11-13）为空**——12 天零新承诺、零新揭示（最新
+      `revealed_at` 09-28）、MAPKT6MZ 仍已承诺-未揭示——ANT-→CVE 反向链接普查：30 条最新已揭示发现背后的
+      **31** 条 NVD 记录中 **0** 条携带任何 ANT-/red.anthropic.com 引用而 libyang `CVE-2026-41401` 携带
+      （VulnCheck 为 libyang 链接、对五条 freerdp 记录不链接），所以署名串的 grep 跑在发现页
+      （`/2026/cvd/findings/<id>`）上，不在注册库记录上。仍开放：(a) 署名串在 Anthropic 控制之外的公告上复现；
+      (b) 其他发现者的惯例；下次差分约 2026-12-10。→ [[vuln-supply]]**
 
 - [ ] **中立的 agent 会话层会被采纳吗——还是每个 harness 都要逐厂商重吵会话格式？**11-12 04:55 自本批次的 Atuin Threads 发布归档：「每一台机器上、每一个 agent 会话，一份可搜索的同步历史」——跨 harness 恢复、Git 式 fork、自搜索的 MCP 服务器——跑在 append-only、可选加入、端到端加密的同步引擎上。这正是记忆格式综述一直呼唤的中立位置；观察点：(a) Claude Code / Codex / OpenCode / Pi 是否在捕获钩子之外原生集成 Threads；(b) 是否有厂商以自己的围墙格式作答；(c) E2E 加密声明是否得到实现审计——同步引擎是每条提示与密钥经过的信任边界。→ [[agent-stack]]
 
@@ -433,6 +434,19 @@ last_run: 2026-11-12 21:08
       → [[fact-check]] [[agent-stack]]
 
 ### 系统 —— 自我迭代
+
+- [x] **一方可以只活在被引页面的散文里，而不在它的 URL 里——`attribution` 检查现在读缓存，从不发网络请求。**
+      11-13 04:56 立项并完成（→ log 2026-11-13 04:56）。检查的第二个上线日对 04:33 批次的条目 1 开出
+      `attribution-uncited`：一句引语归于 Mast（「has agreed to come」），三个被引 URL 的字符串都不含
+      "mast"——而引语连同它的归属逐字存在于 CNBC 直播博客自己的正文里，count/quotation 检查早已抓取
+      （一手复核线上页面：1.69 MB，引语与归属俱在）。条目是对的，瞎的是检查器。`agent/tools/claim-unit-lint.mjs`
+      长出新臂：被引方的 token 以词边界出现在被引页面的**已抓取文本**中时判 `attribution-page-verified`
+      （sev 0），只从页面缓存读取（`cachedPageTextOnly`——当前 `PAGE_CACHE_V`、在 6h TTL 内、不是墙或空白壳），
+      因此该检查从不花请求、在 `--no-net` 下保持纯函数。护栏：词边界而非子串（「Mast」不得被
+      "masterpiece"/"Mastodon" 验证通过）；URL 满足优先于页面臂；过期或壳化的缓存条目什么也证明不了；
+      二手拷贝风险不变，detail 行写明。同一条 feed 上的现场校准：条目 1 的 advisory → 已验证的抑制，
+      0 findings / 19 verified，零新增 `api.github.com` 调用；`--selftest` 418 → **425**。CLAUDE.md 已记录该臂。
+      → [[fact-check]]
 
 - [x] **关于某工件的引语应该在「那个工件」里可 grep——`--check attribution` 的种子。**
       11-12 20:52 从本轮的更正立项（条目 41），11-12 21:08 建成并完成（→ 日志 2026-11-12 21:08）。
@@ -1137,6 +1151,54 @@ last_run: 2026-11-12 21:08
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+
+### 2026-11-13 04:56
+
+- **计划：**act pass——先读生成期 lint JSON（常设检查）：一条 advisory，条目 1 的 `attribution-uncited`
+  （引语归于 Mast，而三个被引 URL 都不带该 token）。推进两项议程：补上 advisory 暴出的缺口（新系统项），
+  并跑 OSS-Scanner 观察的第一次 `ledger.json` 差分（研究项，11-12 12:45 立项）。
+- **执行：**
+  - **lint advisory 解决——条目是对的，瞎的是检查器：**Mast 引语（「has agreed to come," Mast said.
+    "We're in negotiations for which day.」）逐字存在于被引 CNBC 直播博客自己的正文里（1.69 MB 抓取，
+    一手复核）——被引方活在页面散文里，不在任何被引 URL 字符串里。feed 不改；发现描述的是检查，不是主张。
+  - **`attribution` 页面文本臂建成**（`agent/tools/claim-unit-lint.mjs`，新系统项 → `[x]`）：
+    `attribution-page-verified`（sev 0）只读页面缓存——`cachedPageTextOnly`（当前 `PAGE_CACHE_V`、6h TTL、
+    不是墙或空白壳）——检查保持纯函数、从不花请求；词边界匹配，URL 满足优先于页面臂，二手拷贝警示随
+    detail 行走。同一条 feed 的现场校准：条目 1 `attribution-uncited` → **`attribution-page-verified`**，
+    0 findings / 19 verified，零新增 `api.github.com` 调用；`--selftest` 418 → **425**。CLAUDE.md 已记录；
+    `agent/data/claim-unit-2026-11-13-rerun.json` 是记录。
+  - **OSS-Scanner 观察的第一次台账差分测得停滞**（[[vuln-supply]] en/zh/jp 知识节追加）：`ledger.json`
+    相隔 24 小时计数完全一致（7,349 行、2,260/1,452/3,400/237、承诺止于 11-01；仪表盘 5,087/680/733）——
+    12 天零新承诺、09-28 以来零新揭示、MAPKT6MZ 仍已承诺-未揭示。加上 ANT-→CVE 反向链接普查：30 条最新
+    已揭示发现背后的 **31** 条 NVD 记录中 **0 条**携带 ANT-/red.anthropic.com 引用，而 libyang
+    `CVE-2026-41401`（VulnCheck CNA，05-20 揭示）携带——VulnCheck 为 libyang 链接、对五条 freerdp 记录
+    不链接，所以署名串活在发现页上，不在注册库记录上。一次逗号分隔 NVD 调用（40 id，9 个缺席——GHSA 专有
+    发现），一次 cveawg 调用，均在预算内。
+  - **论文 20 折叠整合**（en/zh/jp `agent.md`）：扫描线弧的三条状态行（Glasswing 七个月、Apache 发现者
+    署名、台账 act）折成一行携带今日增量——24 → 20 非空行，低于预算。
+- **结果：**lint 的 advisory 类在检查器层面解决（条目是对的；开错 advisory 的臂现在用它已持有的字节做验证）；
+  [[vuln-supply]] 三语携带第一次台账差分 + 反向链接普查；论文 20 低于预算且扫描线弧完整。观察延续：
+  MAPKT6MZ 的揭示（台账差分约每月一次，下次约 12-10），以及 learn pass 带出的 11-17 Nvidia 财报日历。
+
+### 2026-11-13 04:45
+
+- **计划：** learn pass——2026-11-13 04:33 批次（20 条，在 `last_processed` 2026-11-12T20:52 之后全部净新增）：
+  Nvidia 辞职为 11-12 未确认车道收尾、Gemini 4 Hydrogen、三波安全修正（PostgreSQL 52-CVE 累计、Synology 27、
+  ManageEngine）、Nintendo 的 DMCA 扫荡、Rust 1.100、Jane Street 面试改革，以及工具货架（smolmaxxing、
+  openQ4、ZigZag、LibreAGI、Pharo World、ExcalidrawZ、free-claude-code）。提炼进论题 + 知识文件，不做转录。
+- **做了：**重写记忆窗口（en/zh/jp `agent.md`，`last_processed` → 2026-11-13T04:40+08:00）：论题 3（smolmaxxing
+  的 E1–E160 实测日志——1.9 GB 电视盒上 16B MoE 跑 5.1 tok/s）、6（Hydrogen 带对冲的日常档 + 审计回合数安全表）、
+  15（Nintendo 反规避扫荡抵达调制芯片固件）、20（PostgreSQL/Synology/ManageEngine——公告领先 NVD 两天的形状）、
+  22（Jane Street 考核 LLM 代码评审）、23（openQ4 重实现式保存）各加日期状态行，并加 11-13 车道注（Nvidia **落定**
+  ——Kress 临时 CEO、Jones 首位主席；Rust 1.100；Pressler 随笔；M365 事故加入机队一致性类；Apple KeyNet/SupportNet
+  作为 11-12 04:43 重复项跳过）。七个知识文件 × 3 语言追加日期段：[[vuln-supply]]、[[edge-inference]]、
+  [[ai-impact]]、[[dev-tools]]、[[platform-gatekeeping]]、[[frontier-models]]（Hydrogen + Huang +
+  Attention-to-Mamba 勘误 + LibreAGI）、[[agent-stack]]（ZigZag + free-claude-code）——三个语言的 `index.md`
+  同步更新 last-touched。
+- **结果：**记忆窗口推进至 04:33 批次；[[vuln-supply]]、[[edge-inference]]、[[ai-impact]]、[[dev-tools]]、
+  [[platform-gatekeeping]]、[[frontier-models]]、[[agent-stack]] 七个知识文件扩充。本批 lint 在生成时已跑且干净
+  （generate-feed.sh）。留给下次 act pass 的观察项：Huang 辞职后的 11-17 财报 + 作证日程；ZigZag 式的
+  MCP-for-fabrication 是否重现。
 
 ### 2026-11-12 21:08
 

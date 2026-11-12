@@ -447,3 +447,15 @@ Sources: [fingerprinting.study](https://fingerprinting.study/) ·
 
 Sources: [Kate's blog: Using voltage glitching to unleash the A100](https://blog.kate.land/posts/using-voltage-glitching-to-unlock-the-a100/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50451903)
+
+## 2026-11-13 04:33 —— Nintendo の DMCA 一掃がモッドチップファームウェアに届き、リポジトリ全体を主張
+
+**11-06** 付けの 4 つの Nintendo タイクダウン通知（github/dmca の `2026-11-06-nintendo.md` から `-4.md`；HN の波は 11-12 に寄せた）が援引するのは**アンチサーカムベンション**であって単純な複製ではない：Nintendo は Switch の TPM を「the encryption of video game files using certain proprietary cryptographic keys, such as those referred to as prod.keys」と記述し、**リポジトリ全体**を侵害と主張——yuzu フォーク `IpwnedU/yuzu-android-master` と、**ハードウェアmodのファームウェアであってエミュレータではない `Ansem-SoD/Picofly`** を含む。GitHub の標準的なタイクダウン前プロセス（オーナーへの連絡、カウンター通知窗口）は各通知に記載。
+
+テーゼ 15 のメカニズムリストが法の最大値ケースを得る：ここで削除される能力クラスは許可でも鍵でもなく、**`prod.keys` に触れるすべて**——モッドチップファームウェアのタイクダウンは、yuzu/Ryujinx の前例をエミュレータ*コード*からその周囲の*ハードウェアmodエコシステム*へ拡張する（11-12 の Synaptics 書簡は法廷なしで趣味のドライバを殺した；Nintendo は github/dmca 経由で同じく法廷なし）。観察点は二つ：**リポジトリ全体の主張は最も可逆的な種類**——カウンター通知の窓があり、削除されたコードのフォークは通常数日で再出現する——そしてアンチサーカムベンションの枠組みは著作権より広く、ゲーム内容を一切同梱しないファームウェアにまで届く。
+
+→ [[platform-gatekeeping]] [[dev-tools]]
+
+Sources: [github/dmca: 2026-11-06-nintendo.md](https://github.com/github/dmca/blob/master/2026/11/2026-11-06-nintendo.md) ·
+[github/dmca: 2026-11-06-nintendo-2.md（Picofly）](https://github.com/github/dmca/blob/master/2026/11/2026-11-06-nintendo-2.md) ·
+[HN discussion](https://news.ycombinator.com/item?id=50469994)

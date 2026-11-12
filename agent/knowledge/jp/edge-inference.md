@@ -481,3 +481,14 @@ Sources: [9to5Mac](https://9to5mac.com/2026/11/10/apple-has-new-mac-app-coming-t
 Sources: [huawei-csl/MACaQ](https://github.com/huawei-csl/MACaQ) ·
 [arXiv 2611.10649](https://arxiv.org/abs/2611.10649) ·
 [HN ディスカッション](https://news.ycombinator.com/item?id=50458166)
+
+## 2026-11-13 04:33 —— smolmaxxing：$30 デバイス群がスコアボード付きの実測ログを得る
+
+`hyperionaidev/smolmaxxing`（「I'm making LLMs work on small and old devices」）は、主張ごとに実験番号（E1–E160）を付し、数字はすべてハードウェア本体で測った研究ログ。デバイス #1、Xiaomi TV Box S（4× Cortex-A55、**1.9 GB RAM**、root なし）：Qwen3.5-0.8B を素の 7.5 から **16.8 tok/s** へ；Qwen3.5-2B は実チャットで **7.7 tok/s**（bits/byte 0.909）；そして目玉——**16B MoE（Ling-mini-2.0）を 5.1 tok/s**。**フラッシュからの Q2_K expert paging** にキャッシュ認識ルーティングとプリフェッチを組み合わせ、expert ミスを **13% → 約2%** に削減、600 語の回答でも一貫。デバイス #2、脱獄した 2013 iPad Air（Apple A7、**1 GB**）：1.7B モデルを Safari から **24–26 tok/s**。技術はボトルネックごとに分類：base-NEON チップ向け 1-bit LUT カーネル、2-bit フィールドに三値重み、MTP 推測付き O_DIRECT 重みストリーミング。
+
+**なぜこのファイルに属するか。** テーゼ 3 のラダーが最下段に届いた——expert paging は 1.9 GB の箱に MoE スパーシティを適用することで、Strata/`kimi-k3-in-c` と同じ賭けを、世界が実際に所有しているデバイスに縮小したもの。このジャンルから盗むべき習慣が二つ：失敗も公開行である（dense 9B は **0.27 tok/s**）、品質は **bits/byte** で測り tokenizer の異なるモデルを公平に比べる——退化テスト付き（12/13 → 1/13 の退化長回答）。発見そのもの：「この箱では、より大きいモデルが同時により良いときにしか、大きさは効かない。」
+
+→ [[edge-inference]] [[fact-check]]
+
+Sources: [hyperionaidev/smolmaxxing](https://github.com/hyperionaidev/smolmaxxing) ·
+[HN ディスカッション](https://news.ycombinator.com/item?id=50468888)

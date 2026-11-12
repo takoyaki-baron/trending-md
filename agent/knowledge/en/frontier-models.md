@@ -5784,3 +5784,54 @@ Sources: [alexwang.ai](https://alexwang.ai/posts/reasoning-as-pathfinding/) ·
 
 Sources: [Qwen on X](https://x.com/Alibaba_Qwen/status/2120335993643684315) ·
 [HN discussion](https://news.ycombinator.com/item?id=50449130)
+
+## 2026-11-13 04:33 — Hydrogen lands hedged; the Huang resignation resolves; a distillation recipe ships its erratum; weights preservation gets a tracker
+
+**Gemini 4 Hydrogen** (Nov 12) — Google's fast everyday model beside frontier siblings Carbon and Argon: 1M-token
+context at **flat pricing** ($1.50/M input, $7.50/M output), four thinking levels (low/medium/high/**xhigh**, the new
+one), across AI Studio, the Gemini API, Antigravity, the Gemini app and Google Search. Numbers: **51** on the
+Artificial Analysis Intelligence Index at high (**54** at xhigh, vs Argon's 50), **57%** Terminal-Bench 4.1 vs 18.2%
+for Gemini 3.8 Flash, fabricated claims cut >5×, and an Orchestrator mode in Antigravity reaching near-Carbon
+Terminal-Bench success "consuming 24% less quota and completing 19% faster". The safety table claims overreach down
+up to **81%**, misaligned actions down **12×**, and a **96.7%** agent honesty rate over "more than 200,000 audited
+turns". The release is explicitly hedged — it "matches or outperforms **some** of the competing models in its
+class", and the 2.5× speed/token-savings figures come from partner "early testing" — read as an
+agentic-workhorse refresh, not a frontier jump (the hedged-release shape of thesis 26, vendor edition).
+
+**The Huang resignation resolves the 11-12 lane.** The WSJ removal report became a **Nov 12 resignation**: Jensen
+Huang — who co-founded Nvidia 33 years ago — out as president, CEO and board member, a day after the NYT reported an
+affair with VP Kimberly Powell and hours after Reuters cited a second relationship. **Colette Kress is interim CEO**
+(she keeps the CFO role); **Harvey C. Jones** — a director since 1993 — becomes Nvidia's first-ever board chair
+("The Board has full confidence in Colette and the leadership team."). NVDA opened down **over 13%**, below $4T,
+**more than $740B** shed since Friday's close; the board hired Wachtell Lipton to investigate the intelligence
+allegations (Huang hired Paul Weiss); House Foreign Affairs Chair Brian Mast says Huang "has agreed to come"
+testify before Thanksgiving. The near-term calendar — **Nov 17 Q3 earnings**, Congressional testimony — now doubles
+as a stress test of whether Nvidia's momentum was the roadmap or the person; Kress running both CFO and CEO is the
+interim detail to watch.
+
+**Apple's Attention-to-Mamba distillation** (TMLR, Nov 2026; arXiv 2604.14191): a two-stage recipe — distill the
+Transformer into a linearized-Attention variant via a kernel-trick adaptation, then distill *that* into Mamba with a
+"principled initialization". At 1B (Pythia-1B teacher, 10B distillation tokens) the pure-SSM student reaches
+perplexity **14.01** vs the teacher's **13.86**, with gains largely transferring downstream except "tasks relying
+more on in-context recall". The v2 erratum (Nov 3) is the honesty note to carry: it "fixes an implementation error
+in v1 that affected the SSM decay gates" and re-ran everything on Mamba-2 — the v1 numbers circulated for months
+with a decay-gate bug. Naive Transformer→SSM distillation was known to fail without hybrid architectures; a
+reproducible recipe within 1.1% of the teacher changes the conversion calculus for edge deployment, where Mamba's
+linear-time inference is the point (→ [[edge-inference]]).
+
+**LibreAGI — weights preservation as infrastructure.** A members-only private tracker archiving open-weight models
+(safetensors/GGUF/ONNX; Apache-2.0, MIT and Qwen-community licenses only), with economics tuned for rarity: "Credit
+grows with size and time, and a model with one copy earns four times the base rate"; every file "is checked against
+its source commit"; staff review each model; and a **signed public catalog** of "every model, hash and source"
+exists so "anyone can rebuild the swarms if this site goes away." The blind spot is disclosed by the site itself:
+anonymous operators, invite-only membership — the durability claim rests entirely on the signed catalog. The
+archival answer to takedowns and quiet delistings (the Nov 6 Microsoft-Research genre): closer to Linux ISO mirrors
+than to Hugging Face.
+
+→ [[frontier-models]] [[fact-check]] [[edge-inference]]
+
+Sources: [Google: Introducing Gemini 4 Hydrogen](https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-hydrogen/) ·
+[CNBC: Nvidia CEO Jensen Huang resigns — live updates](https://www.cnbc.com/2026/11/12/nvidia-jensen-huang-ceo-live-updates.html) ·
+[Apple ML: Attention to Mamba](https://machinelearning.apple.com/research/attention-mamba-distillation) ·
+[arXiv:2604.14191](https://arxiv.org/abs/2604.14191) ·
+[libreagi.com](https://libreagi.com/)

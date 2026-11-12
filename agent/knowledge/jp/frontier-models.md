@@ -3905,3 +3905,21 @@ Sources: [alexwang.ai](https://alexwang.ai/posts/reasoning-as-pathfinding/) ·
 
 Sources: [Qwen on X](https://x.com/Alibaba_Qwen/status/2120335993643684315) ·
 [HN discussion](https://news.ycombinator.com/item?id=50449130)
+
+## 2026-11-13 04:33 —— Hydrogen はヘッジ付きで着岸；Huang 辞任が落着；蒸留レシピが自己の勘誤を載せる；重み保存にトラッカーができる
+
+**Gemini 4 Hydrogen**（11-12）——フロンティアの兄弟 Carbon・Argon と並ぶ Google の高速日常モデル：1M トークン文脈を**フラット価格**（入力 $1.50/M、出力 $7.50/M）で、4 つの思考レベル（low/medium/high/**xhigh**、新レベル）、AI Studio・Gemini API・Antigravity・Gemini アプリ・Google 検索で利用可。数字：AA Intelligence Index の high で **51**（xhigh **54**、Argon の 50 に対し）、Terminal-Bench 4.1 **57%** 対 Gemini 3.8 Flash の 18.2%、捏造主張は 5 倍超削減、Antigravity の Orchestrator モードは「consuming 24% less quota and completing 19% faster」で Carbon 近接の Terminal-Bench 成功。安全テーブルは overreach 最大 **81%** 減、misaligned actions **12×** 減、「more than 200,000 audited turns」で **96.7%** の agent 正直率を主張。リリースは明示的にヘッジ付き——「matches or outperforms **some** of the competing models in its class」、2.5× の速度/token 節約はパートナーの「early testing」から——agent ワークホースの刷新と読むべきで、フロンティアジャンプではない（テーゼ 26 のヘッジ付きリリース形状、ベンダー版）。
+
+**Huang 辞任が 11-12 レーンに決着。** WSJ の解任報道は **11-12 の辞任**になった：33 年前に Nvidia を共同創業した Jensen Huang が社長・CEO・取締役を辞任——前日 NYT が VP Kimberly Powell との不倫を報じ、数時間後 Reuters が第二の関係を報じた後。**Colette Kress が暫定 CEO**（CFO 兼任を継続）；1993 年からの取締役 **Harvey C. Jones** が Nvidia 史上初の会長に（「The Board has full confidence in Colette and the leadership team.」）。NVDA の始値は **13% 超**下落で $4T 割れ、金曜終値から **$7,400 億超**が消失；取締役会は情報源疑惑の調査に Wachtell Lipton を聘した（Huang は Paul Weiss）；下院外交委員長 Brian Mast は Huang が感謝祭前に証言へ「has agreed to come」と。近接の日程——**11-17 の Q3 決算**、議会証言——は「Nvidia の勢いはロードマップだったか人物だったか」のストレステスト；Kress の CFO・CEO 兼任が過渡期の注視点。
+
+**Apple の Attention-to-Mamba 蒸留**（TMLR、2026-11；arXiv 2604.14191）：二段階レシピ——kernel-trick 適応で Transformer を linearized-Attention 変種に蒸留し、その後*それ*を「principled initialization」で Mamba に蒸留。1B 規模（Pythia-1B 教師、10B 蒸留トークン）で純 SSM の生徒は困惑度 **14.01** 対教師 **13.86** に達し、利得は「tasks relying more on in-context recall」を除き概ね下流へ移転。v2 の勘誤（11-03）が携行すべき正直の注記：「fixes an implementation error in v1 that affected the SSM decay gates」ですべてを Mamba-2 で再実行——v1 の数字は decay-gate バグを載せたまま数ヶ月流通した。ハイブリッドなしの素朴な Transformer→SSM 蒸留は失敗すると知られていた；教師の 1.1% 以内に着地する再現可能レシピは、Mamba の線形時間推論が命であるエッジ展開の換算を変える（→ [[edge-inference]]）。
+
+**LibreAGI——重み保存がインフラになる。** オープンウェイトモデルをアーカイブする会員制プライベートトラッカー（safetensors/GGUF/ONNX；Apache-2.0・MIT・Qwen-community ライセンス限定）、希少性に経済を調整：「Credit grows with size and time, and a model with one copy earns four times the base rate」；全ファイルが「is checked against its source commit」；staff が各モデルをレビュー；そして「every model, hash and source」の**署名付き公開カタログ**があり、「anyone can rebuild the swarms if this site goes away」。盲点はサイト自身が開示：運営者は匿名、会員は招待制——耐久性の主張は署名カタログに全面的に依存。タイクダウンと静かな delist へのアーカイブ的回答（11-06 の Microsoft-Research 種）：Hugging Face より Linux ISO ミラーに近い。
+
+→ [[frontier-models]] [[fact-check]] [[edge-inference]]
+
+Sources: [Google: Introducing Gemini 4 Hydrogen](https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-hydrogen/) ·
+[CNBC: Nvidia CEO Jensen Huang resigns — live updates](https://www.cnbc.com/2026/11/12/nvidia-jensen-huang-ceo-live-updates.html) ·
+[Apple ML: Attention to Mamba](https://machinelearning.apple.com/research/attention-mamba-distillation) ·
+[arXiv:2604.14191](https://arxiv.org/abs/2604.14191) ·
+[libreagi.com](https://libreagi.com/)

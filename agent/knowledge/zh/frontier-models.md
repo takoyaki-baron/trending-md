@@ -3575,3 +3575,21 @@ Sources: [alexwang.ai](https://alexwang.ai/posts/reasoning-as-pathfinding/) ·
 
 Sources: [Qwen on X](https://x.com/Alibaba_Qwen/status/2120335993643684315) ·
 [HN discussion](https://news.ycombinator.com/item?id=50449130)
+
+## 2026-11-13 04:33 —— Hydrogen 带着对冲落地；Huang 辞职落定；蒸馏配方自带勘误；权重保存有了 tracker
+
+**Gemini 4 Hydrogen**（11-12）——Google 的快速日常档，与前沿兄弟 Carbon、Argon 并列：1M-token 上下文**平价定价**（输入 $1.50/M、输出 $7.50/M）、四个思考档（low/medium/high/**xhigh**，新档）、覆盖 AI Studio、Gemini API、Antigravity、Gemini 应用与 Google 搜索。数字：AA Intelligence Index 高档 **51**（xhigh **54**，对 Argon 的 50）、Terminal-Bench 4.1 **57%** 对 Gemini 3.8 Flash 的 18.2%、编造主张砍掉 >5×、Antigravity 的 Orchestrator 模式以「consuming 24% less quota and completing 19% faster」达到接近 Carbon 的 Terminal-Bench 成功率。安全表声称 overreach 最高降 **81%**、misaligned actions 降 **12×**、在「more than 200,000 audited turns」上 **96.7%** 的 agent 诚实率。发布措辞明确对冲——它「matches or outperforms **some** of the competing models in its class」，2.5× 速度与 token 节省数字来自伙伴「early testing」——读作 agent 工作马的刷新，不是前沿跳跃（论题 26 的对冲发布形状，厂商版）。
+
+**Huang 辞职为 11-12 车道收尾。** WSJ 的罢免报道变成 **11-12 的辞职**：Jensen Huang——33 年前共同创立 Nvidia——辞去总裁、CEO 与董事，前一天 NYT 报道与 VP Kimberly Powell 的婚外情、数小时后 Reuters 引述第二段关系。**Colette Kress 任临时 CEO**（保留 CFO 职位）；1993 年起的董事 **Harvey C. Jones** 成为 Nvidia 史上首位董事会主席（「The Board has full confidence in Colette and the leadership team.」）。NVDA 开盘跌超 **13%**、跌破 $4T、自周五收盘蒸发逾 **$7,400 亿**；董事会聘 Wachtell Lipton 调查情报指控（Huang 聘 Paul Weiss）；众议院外交事务主席 Brian Mast 称 Huang「has agreed to come」感恩节前作证。近期日程——**11-17 Q3 财报**、国会作证——现在是对「Nvidia 的动能是路线图还是个人」的压力测试；Kress 同时执掌 CFO 与 CEO 是过渡期值得盯的细节。
+
+**Apple 的 Attention-to-Mamba 蒸馏**（TMLR，2026-11；arXiv 2604.14191）：两阶段配方——先用 kernel-trick 改编把 Transformer 蒸馏进 linearized-Attention 变体，再把*那个*用「principled initialization」蒸馏进 Mamba。1B 规模（Pythia-1B 教师、10B 蒸馏 token）下纯 SSM 学生达到困惑度 **14.01** 对教师 **13.86**，收益大体迁移到下游、唯「tasks relying more on in-context recall」除外。v2 勘误（11-03）是必须携带的诚实注：「fixes an implementation error in v1 that affected the SSM decay gates」并在 Mamba-2 上重跑全部实验——v1 的数字带着 decay-gate bug 流传了数月。没有混合架构的朴素 Transformer→SSM 蒸馏已知会失败；一个落在教师 1.1% 内的可复现配方改变边缘部署的换算——Mamba 的线性时间推理正是那里要的东西（→ [[edge-inference]]）。
+
+**LibreAGI——权重保存成为基础设施。** 一个会员制私有 tracker，归档开放权重模型（safetensors/GGUF/ONNX；仅 Apache-2.0、MIT 与 Qwen-community 许可），经济学为稀缺性调优：「Credit grows with size and time, and a model with one copy earns four times the base rate」；每个文件「is checked against its source commit」；staff 逐一评审；并有**签名公开目录**记录「every model, hash and source」，让「anyone can rebuild the swarms if this site goes away」。盲点由站点自己披露：运营者匿名、会员邀请制——耐久性主张完全压在签名目录上。对下架与悄然除名的档案性回答（11-06 Microsoft-Research 一类）：更像 Linux ISO 镜像网络，而非 Hugging Face。
+
+→ [[frontier-models]] [[fact-check]] [[edge-inference]]
+
+Sources: [Google: Introducing Gemini 4 Hydrogen](https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-hydrogen/) ·
+[CNBC: Nvidia CEO Jensen Huang resigns — live updates](https://www.cnbc.com/2026/11/12/nvidia-jensen-huang-ceo-live-updates.html) ·
+[Apple ML: Attention to Mamba](https://machinelearning.apple.com/research/attention-mamba-distillation) ·
+[arXiv:2604.14191](https://arxiv.org/abs/2604.14191) ·
+[libreagi.com](https://libreagi.com/)
