@@ -1,9 +1,9 @@
 {
- "generated": "2026-11-12T20:33:50.982Z",
+ "generated": "2026-11-13T04:29:40.904Z",
  "files": [
   {
    "file": "2026-11-13.md",
-   "items": 20,
+   "items": 29,
    "findings": [
     {
      "check": "status",
@@ -13,18 +13,32 @@
      "detail": "Awaiting Analysis (lastModified 2026-11-12T19:02:35.830)"
     },
     {
+     "check": "status",
+     "item": 25,
+     "verdict": "ok",
+     "claim": "CVE-2026-107412 `Received`",
+     "detail": "Received (lastModified 2026-11-13T03:17:28.877)"
+    },
+    {
+     "check": "cvss",
+     "item": 29,
+     "verdict": "ok",
+     "claim": "3.1 9.8",
+     "detail": "CVE-2026-124002 · Primary/disclosure@vulncheck.com · vector reproduces 9.8"
+    },
+    {
      "check": "repo",
      "item": 17,
      "verdict": "ok",
      "claim": "Alishahryar1/free-claude-code",
-     "detail": "69160★, last push 2026-11-12"
+     "detail": "69444★, last push 2026-11-12"
     },
     {
      "check": "repo",
      "item": 20,
      "verdict": "ok",
      "claim": "chocoford/ExcalidrawZ",
-     "detail": "1723★, last push 2026-10-24"
+     "detail": "1823★, last push 2026-10-24"
     },
     {
      "check": "quotation",
@@ -79,7 +93,7 @@
      "check": "quotation",
      "item": 9,
      "verdict": "ok",
-     "claim": "3 quotation(s)",
+     "claim": "2 quotation(s)",
      "detail": "verbatim in 2 readable source(s)"
     },
     {
@@ -139,11 +153,67 @@
      "detail": "verbatim in 2 readable source(s)"
     },
     {
+     "check": "quotation",
+     "item": 21,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 22,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 10 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 23,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 24,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 26,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 27,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 28,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 29,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 9 readable source(s)"
+    },
+    {
      "check": "attribution",
      "item": 1,
-     "verdict": "attribution-uncited",
+     "verdict": "attribution-page-verified",
      "claim": "Mast",
-     "detail": "a quotation is attributed to Mast (“has agreed to come”), but no cited URL names the party — a quotation ABOUT a party is a claim about THAT party's bytes, and the cited page can be a second-hand copy whose figures the party has since corrected (the 11-12 item-41 lesson: the essay quoted the earlier version of Aaronson's dump post). Open Mast's primary artifact before publishing, or drop the quotation marks"
+     "detail": "a quotation is attributed to Mast (“has agreed to come”) and the party's token appears in the fetched text of a cited page — the quotation arm's page set carries the party's statement even though no cited URL string names the party (the party lives in the prose, not the domain); the second-hand-copy risk the URL arm carries applies here too, so a load-bearing quotation still wants the party's own artifact"
     },
     {
      "check": "attribution",
@@ -151,6 +221,20 @@
      "verdict": "attribution-satisfied",
      "claim": "Nintendo",
      "detail": "a quotation is attributed to Nintendo (“the encryption of video game files using certain proprietary…”) and a cited URL carries the party's token — the quotation arm's page set reaches the party's own artifact"
+    },
+    {
+     "check": "attribution",
+     "item": 23,
+     "verdict": "attribution-satisfied",
+     "claim": "Apple",
+     "detail": "a quotation is attributed to Apple (“at least 50% of submissions in less than 24 hours and 90% in…”) and a cited URL carries the party's token — the quotation arm's page set reaches the party's own artifact"
+    },
+    {
+     "check": "attribution",
+     "item": 23,
+     "verdict": "attribution-page-verified",
+     "claim": "Hetrick",
+     "detail": "a quotation is attributed to Hetrick (“the editor hallucinated that 'Polyharmonic' was an audio tec…”) and the party's token appears in the fetched text of a cited page — the quotation arm's page set carries the party's statement even though no cited URL string names the party (the party lives in the prose, not the domain); the second-hand-copy risk the URL arm carries applies here too, so a load-bearing quotation still wants the party's own artifact"
     }
    ]
   }
@@ -160,7 +244,7 @@
  "readme_calls": 0,
  "cited_page_calls": 0,
  "repo_page_calls": 0,
- "nvd_calls": 1,
+ "nvd_calls": 2,
  "nvd_failed_chunks": 0,
  "cna_calls": 0
 }

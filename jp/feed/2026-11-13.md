@@ -1,8 +1,8 @@
 ---
 date: 2026-11-13
-updated: 2026-11-12T20:33:45Z
+updated: 2026-11-13T04:29:26Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 18
+sources: 26
 license: CC-BY-4.0
 ---
 
@@ -136,9 +136,9 @@ AppleのML研究記事(11月5日、ICML 2026論文「Amortizing Maximum Inner Pr
 
 「I'm making LLMs work on small and old devices」はスコアボード付きの研究ログだ:1号機はXiaomi TV Box(4× Cortex-A55、**RAM 1.9 GB**、非root)で、Qwen3.5-0.8Bが在庫の7.5 tok/sから**16.8**へ。Qwen3.5-2Bは実チャットで**7.7 tok/s**(bits/byte 0.909)。さらにQ2_Kエキスパートのflashページング、キャッシュ認識ルーティング、プリフェッチにより、**16B MoE(Ling-mini-2.0)が5.1 tok/s**で、600語の回答でも一貫性を保つ。2号機は脱獄した2013年製iPad Air(Apple A7、1 GB)で、Safariから1.7Bモデルを**24〜26 tok/s**で実行。技法はボトルネックごとに整理:ベースNEONチップ向け1-bit LUTカーネル、2-bitフィールドに詰め込んだternaryウェイト、MTP投機つきO_DIRECTウェイトストリーミング、エキスパートmissを13%→約2%に圧縮したエキスパートページャ。すべてが実験E1〜E160として書かれ、劣化テスト(劣化長文回答は12/13→1/13)と、トークナイザが異なるモデルを公正比較するbits/byteの品質指標を備える。
 
-**Why it matters:** 小さなデバイスでLLMを動かす系の投稿の大半は見栄えの良いベンチマークを選ぶ。これは自らの失敗(密度9Bは0.27 tok/s)と正直な横断品質指標を公開しており、「bigger only helps on this box when the model is also better(このボックスでより大きいことが効くのは、モデル自体がより良いときだけ)」という発見こそ、世界が実際に所有する30ドルデバイス群における最先端だ。
+**Why it matters:** 小さなデバイスでLLMを動かす系の投稿の大半は見栄えの良いベンチマークを選ぶ。これは自らの失敗(密度9Bは0.27 tok/s)と正直な横断品質指標を公開しており、このボックスでより大きいことが効くのは、モデル自体がより良いときだけ(bigger only helps on this box when the model is also better)という発見こそ、世界が実際に所有する30ドルデバイス群における最先端だ。
 
-> "Every claim is measured on the hardware itself." — smolmaxxing README
+> "Every number in this repo was measured on the device itself." — smolmaxxing README
 
 [`🔗 hyperionaidev/smolmaxxing`](https://github.com/hyperionaidev/smolmaxxing) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50468888)
 
@@ -296,15 +296,145 @@ Appleの研究ページ(TMLR、2026年11月;arXiv 2604.14191)は、Attention教�
 
 [`🔗 chocoford/ExcalidrawZ`](https://github.com/chocoford/ExcalidrawZ) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50468944)
 
+## 21. 中国のフロントエンドモデル6個が、輸出規制対象のBlackwell GPUの初期化フィンガープリントを保持——公開重みそのものから復元
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** unemploymentlabs.com · 212+ pts on HN · 6.1h ago (~05:55 UTC+8)
+- **Tags:** `checkpoint-forensics` `export-controls` `deepseek`
+
+Will DePue のフォレンジック報告(11月12日)は、モデル初期化時に焼き込まれたPRNGシードとスレッドレイアウトを復元し、どのGPUクラスが学習を開始したかを読み取る:**DeepSeek-V4-Flash と MiniMax-M3 は 148-SM の B200/B300 レイアウトに、DeepSeek-V4-Pro・Kimi K3・K3.1-Pro・アントグループ(Ant)の Ling-3.1-flash は 152-SM の GB200/GB300 レイアウトに一致**——同じ企業のそれ以前のモデルはすべて 132-SM の Hopper と読める。手法は物理チップで再現可能:DeepSeek のシード 953049583 を H100 で使うと V3 の保存値 57,344 個をビット単位で再現するが V4-Flash は再現せず、B300 では V4-Flash を再現(469 抽出行のうち 445 行が完全一致)。GB200 ではシード 20256586 で Kimi K3 の保存行 13 行を再現した。AMD MI300X の代替説明は V4-Flash について排除——両ベンダーの値が異なる 377 個のうち、公開重みは 363 回 NVIDIA に一致し、AMD には 0 回。この手法はハードウェアが公表されている 24 モデルすべてと合致し、最強の証拠は 49〜1,385 sigma に達する(偶然一致の基準線は約 8 sigma)。報告書自身の推定:最終学習1回につき Blackwell GPU 約 1,500〜3,500 枚、5 モデル合計で約 12,000 枚、WSJ の単価ベースで 5 億ドル超。
+
+**Why it matters:** これは輸出規制の疑惑を裏付ける最初の技術的証拠——当局者の主張ではなく——しかも完全に公開重みから導かれている。報告書は天井も明示している:フィンガープリントが示すのは初期化ハードウェアであり、「Blackwell が学習も行ったという推論を支持するが証明はしない」、「法違反の認定ではない」。注目すべきは、Qwen・GLM・テンセント・小米・StepFun の最新モデルは依然としてすべて Hopper と読めること、そして一部のモデル(CPU 初期化の Qwen3、PaddlePaddle の ERNIE、ASIC 学習の美団 LongCat)は GPU フィンガープリントを一切残さないこと。
+
+> "These flags describe the hardware class under the U.S. export rules of October 2022 and October 2023. They are not a finding that any law was broken."
+
+[`🔗 Unemployment Labs: checkpoint forensics`](https://unemploymentlabs.com/checkpoint-forensics) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50474883)
+
+---
+
+## 22. PostgreSQL 52-CVE アップデートデーの裏側:研究者が22年物の複合型プリミティブを root RCE に変えた記録
+
+- **Velocity:** ▮▮ rising
+- **Source:** mehmetince.net · 155+ pts on HN · 9.7h ago (~02:25 UTC+8)
+- **Tags:** `postgresql` `type-confusion` `exploit-research`
+
+Mehmet Ince のシリーズ第3部(11月9日公開、11月12日に HN で再浮上)は、本日の項目10が扱った修正波の研究者自身の証言:`uuid` フィールドを持つ複合型を作り、それを返すクエリを `PREPARE` し、`ALTER TYPE ... ALTER ATTRIBUTE key TYPE bytea CASCADE` を実行してから `EXECUTE` すると——`record_out()` は保存済みの UUID バイトを `byteaout()` に渡し、接頭辞 `01 02` が展開オブジェクトポインタとして読まれる。偽装したヘッダと methods テーブルで、detoast 処理は間接呼び出しに化ける:`system(H)`。同じプリミティブが ASLR も破る——配列の要素型を `bigint[]` に変えると、`unnest()` はポインタを整数として返す(UUID 3個で 48 バイトの配列ヘッダを偽装)。可変行型の挙動はコミット `077db40fa1f3`(2004年5月5日)にまで遡り、エクスプロイトは 2015 年に追加された展開オブジェクトポインタに依存する。Ince は 21 バリアントを報告し、11月9日リリースの 52 CVE のうち 6 個がこの族だと指摘(**CVE-2026-6460** の包括修正、ほか CVE-2026-120142・-120148・-116329・-116306・-120139)、最小権限のログインロールで発火可能。包括修正の記録そのもの——**8.8**、NVD への公開は 11月12日、CNA は PostgreSQL 自身——は率直に言っている:「PostgreSQL の型混同により、オブジェクトの作成者はデータベースを実行している OS ユーザーとして任意のコードを実行できる」。マネージド Postgres 業界と非公開で調整し——「影響を受けていないベンダーはひとつも見なかった」——Databricks は即検証、Google は AlloyDB を P0 に昇格、AWS・Azure・Supabase には 8 月に動く PoC が渡った。修正コミットの Reported-by は PostgreSQL コア、OpenAI のセキュリティ研究チーム、Anthropic の Nicholas Carlini に及ぶ。
+
+**Why it matters:** 火曜日リリースの抽象的な型混同 8.8 スコアが、ここでは具体的な最悪ケースになる——権限のない SQL ロールがマネージド Postgres のフリートで OS コード実行に達する。agent 支援の脆弱性研究の率直な記録でもある:Ince は Opus 製の「pg_expert」チューターに Datum の内部を学びながら、自分自身でバグを見つけた経緯を明かしている。
+
+> "I gave PostgreSQL a value inside a composite type, changed the type of one of its fields, and asked it to read the value back. That type confusion led to one of the most reliable memory-corruption exploit I have seen."
+
+[`🔗 Mehmet Ince: Part 3/6, CVE-2026-6460`](https://mehmetince.net/part-3-6-how-i-ended-up-turning-a-22-year-old-postgresql-type-confusion-primitive-into-rce-cve-2026-6460) · [`🔗 NVD: CVE-2026-6460`](https://nvd.nist.gov/vuln/detail/CVE-2026-6460) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50471761)
+
+---
+
+## 23. AI 生成アプリの洪水が Apple の審査パイプラインを壊し始めた——シンセ開発者が幻覚された理由でリジェクト
+
+- **Velocity:** ▮▮ rising
+- **Source:** synthanatomy.com · 128+ pts on HN · 6.9h ago (~05:05 UTC+8)
+- **Tags:** `app-store` `apple` `industry`
+
+Synth Anatomy は iOS 音楽アプリをめぐる両面の AI 失敗を記録している:現在は毎日推定 **10〜20 本の新 iOS 音楽アプリ**が vibe coding で登場し、一方 Apple の審査——ガイドラインは「提出の少なくとも 50% が 24 時間以内、90% が 48 時間以内」と謳う——は数週間に伸びている。Pittsburgh Modular の Microvolt 3901 は 10月27日に VST 版が出たのに iOS 版は 11月12日まで届かなかった。Unfiltered Audio の Michael Hetrick は自社の Sinusoidal Run Rhythm が **4 回リジェクトされた**と報告——「審査担当は 'Polyharmonic' が音響技術の一種だと幻覚し、その用語の使用許諾書を求めてきた」、次に「必要な専用ハードウェア」に接続した動画を要求し、さらに MIDI 版を音声版と類似したスパムと判定——1か月の往復の末、音声のみのリリースに。さらに開発者 Marek Dendes の CRUX Synth は「デザインスパム」、「アプリ生成テンプレートサービス」の産物として 4 連続リジェクトされ、異議申立ては 5 日経っても無回答:提出は「'審査待ち'から'審査中'へ、そして瞬時に'リジェクト'へ」切り替わるという。
+
+**Why it matters:** App Review はプラットフォームの中核的な信頼製品——店にあるものはすべて検査済みという約束——だ。安価な生成がゲートを氾濫させ、自動審査は幻覚したリジェクト理由を生み、異議の道は袋小路に読める。これが続けば、コストはまさに審査制度が守るべき小規模開発者に落ちる。
+
+> "Apple seems to be using AI for automated App Store reviews. SRR got rejected 4 times." — Michael Hetrick, Unfiltered Audio、Loopy Pro フォーラムより
+
+[`🔗 Synth Anatomy: AI is turning Apple's app review into a nightmare`](https://synthanatomy.com/2026/11/ai-is-turning-apples-app-review-process-into-a-nightmare-for-developers.html) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50474311)
+
+---
+
+## 24. Edge0-145B を公開:145B パラメータ、ノート PC でピーク 29 GB・80+ tok/s デコードを主張
+
+- **Velocity:** ▮▮ rising
+- **Source:** edge0.ai · 116+ pts on HN · 5.0h ago (~07:05 UTC+8)
+- **Tags:** `on-device-ai` `moe` `open-weights`
+
+Edge0 チーム(リポジトリ **Edge0-AI/Edge0**、10.4k★)は Edge0-145B と Edge0-120B の重みと推論フレームワークを公開した。アーキテクチャは行列共有 MoE——64 エキスパートの各グループが 2 つの大きな行列を共有し、各エキスパートは小さな差分のみ保持するため、各ステップで計算するのは 145B のうち約 10B——さらに 3 層ローダー(ホットなエキスパートは GPU メモリ、約 40 GB のエキスパートライブラリはシステム RAM、約 48 GB の語彙データは SSD から必要時に読み込み)と CPU+GPU の協調スケジューリング。主張する数値:**ピークメモリ 29 GB、プリフィル 1,100+ tok/s、デコード 80+ tok/s、約 120 W**、128K〜256K コンテキストまで速度はほぼ一定、Apple Silicon と RTX 4090/5090 を初日からサポート。ベンチマークは Qwen3.8-Flash-Next(Terminal-Bench 2.1 で 86.52 対 83.3)や DeepSeek-V4-Flash-0731 を上回る——ただし投稿自身がこれらの比較は「Edge0 の内部評価による」と明記し、ベースラインのメモリ数値(例:Qwen3.8-Flash-Next の「約 70 GB」)は「測定が待たれる」推定値に星印が付く。同じ投稿は 9 月の Edge0-35B スマホ版(iPhone 18 Pro Max で 37+ tok/s)も振り返る。
+
+**Why it matters:** メモリ数値が第三者の実行に耐えれば、「ノート PC 上のフロンティアエージェント」はマーケのキャッチコピーではなくなる——145B が 29 GB というのは、ラックの話ではなくワークステーションの話だ。誰かが独立にハーネスを走せるまで、比較の各行はベンダーの主張として扱うべき;HN の反応(113 pt かつ上昇中、懐疑色強い)が正しい事前分布だ。
+
+[`🔗 Edge0 blog: Introducing Edge0-145B`](https://edge0.ai/blog/introducing-edge0-145b-frontier-ai-capabilities-on-your-own-computer) · [`🔗 Edge0-AI/Edge0`](https://github.com/Edge0-AI/Edge0) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50475713)
+
+---
+
+## 25. NetScaler の CVE 記録 9 件が一夜で到着——ADC/Gateway のメモリ破壊、修正は 14.1-73.57 と 13.1-64.39
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD records (CNA: Citrix) · published 00:20–03:17 UTC Nov 13 (~08:20–11:17 UTC+8)
+- **Tags:** `citrix` `netscaler` `cve-wave`
+
+Citrix の CNA は一夜で **NetScaler ADC/Gateway の 9 件の記録**を公開し、すべてがアドバイザリ **CTX697305** を指し、スコアはすべて CVSS 4.0:CVE-2026-107412 が **9.5**(複数のメモリオーバーフロー)、9.3 が 5 件——パケット処理、SMPP、DNS と DNS-over-HTTPS、NetScaler Push——さらに 8.7 が 3 件(RTSP ALG、SAML、WebAuth)。cveawg コンテナが修正ビルドを明示する:**14.1-73.57**(FIPS は 14.1-73.58)、**13.1-64.39**(FIPS/NDcPP は 13.1-37.293)、これ以上は影響なし。説明文は「メモリオーバーフロー……が……DoS を引き起こしうる」に留まり、執筆時点で 9 件すべて `Received` ステータス。Citrix のアドバイザリページは素の取得には JavaScript シェルとして描画されるため、この項目はアドバイザリ本文ではなく CVE 記録を読んでいる——記録こそ CNA 自身の記述だ。
+
+**Why it matters:** NetScaler のメモリ破壊族にはエッジ機器のエクスプロイトチェーン化の前例がある(Citrix Bleed、2023)、そして ADC/Gateway はまさに管理インターフェースが事前認証偵察を受けやすい境界資産だ。「DoS」の文言に対する 8.7〜9.5 のスコアは「深刻度を決める前にアドバイザリを読め」という意味——だがエッジのパッチは今週、評価のいかんを問わず適用すべきだ。
+
+[`🔗 NVD: CVE-2026-107408 (DNS/DoH memory corruption)`](https://nvd.nist.gov/vuln/detail/CVE-2026-107408) · [`🔗 Citrix advisory CTX697305`](https://support.citrix.com/support-home/kbsearch/article?articleNumber=CTX697305)
+
+---
+
+## 26. AgentRun がエージェントハーネス向けの自己改善型コントロールプレーンをオープンソース化——Pi、Claude Agents、Codex、OpenCode が ACP で接続
+
+- **Velocity:** ▮ rising
+- **Source:** Parcha-ai/agentrun · 86+ pts on HN (Show) · 9.8h ago (~02:15 UTC+8)
+- **Tags:** `agent-infra` `self-improvement` `acp`
+
+GREP.AI(YC F26)は AgentRun をオープンソース化した(Apache-2.0、npm `@parcha/agentrun`、640★):お気に入りのエージェントハーネスの上に「自己改善、永続実行、コントロールプレーン」を追加し、ACP 経由で任意のハーネスを接続(Pi、Claude Agents、Codex、OpenCode)。サンドボックス、計算機環境、数千のツール、そしてエージェントが何を保持したかを見せる Learning タブを備える——デモのコピーは「回答は 10 秒から 2 秒に、1 実行のコストは $0.05 から $0.0077 に」。ケーススタディが最も誠実な部分だ:コードレビューが 1 件 1 ドルになると請求は月 $180 から $6,451 に膨らみ、彼らは安いモデルを自社 PR でチューニングした独自レビュアーを作った——**レビュー 1 件 18 セント**、30 PR で「捕まえた本物のバグは Greptile の 1.6 倍」と主張;マーチャント分類は「仕事を学んだ後 7 倍安く」。Render へのワンクリックデプロイとホスト型コンソールもある。
+
+**Why it matters:** 注目すべき賭けは、自己改善を記憶機能ではなく測定可能なコスト曲線として扱う点だ——30 PR のサンプルは自社データだが、この形(ハーネス非依存のコントロールプレーン + 複利で効く学習ループ)はエージェントインフラが収束しつつある方向であり、今朝のルーティングプロキシより一段上の層だ。
+
+[`🔗 Parcha-ai/agentrun`](https://github.com/Parcha-ai/agentrun) · [`🔗 HN discussion (Show)`](https://news.ycombinator.com/item?id=50471650)
+
+---
+
+## 27. Lambda Web Functions は最後のリクエスト後も 5〜7 分メモリを課金し続ける——だからあるスタートアップは自社コンピュートを作った
+
+- **Velocity:** ▮ rising
+- **Source:** easel.sh · 71+ pts on HN · 11.1h ago (~00:55 UTC+8)
+- **Tags:** `aws` `lambda` `cloud-costs`
+
+Easel は AWS の 10 月ローンチされた Lambda Web Functions をベンチマークし、知っておくべき課金形状に当たった:**us-east-1 の 6 環境すべてで、最後のリクエスト後も実行環境が 313〜411 秒生き続けた**(10月26日のデータ)、しかも設定可能なアイドルタイムアウトはない——CPU はアクティブな間だけ課金されるが、メモリは環境の全寿命で課金される。200 ミリ秒のリクエストに 345 秒のアイドルが続くと「課金されるメモリ時間がリクエスト時間の約 1,700 倍」になり、メモリは実験の計算コストの約 88% を占めた。アイドル 10 秒後に環境を自終了させれば課金時間は約 20 分の 1 になるが、AWS は意図的な終了のすべてをランタイム障害として記録した。そこで Easel は実行を自社ホストに移し(11月2日稼働)、Lambda はオーバーフロー専用に——同じ Next.js 16 アプリで:**ウォームな中央値が 1.5〜3 倍速く、コールドスタートは約 3.5 倍速い**(アイドル 12 分後で 216〜250 ms 対 810〜854 ms)、一時停止環境の再開は 14 ms で、Web Functions は 908 ms かかった。投稿は自らの限界も明示:単一リージョン、小さなアプリ一つ、コールドスタートのペア試験は 2 回のみ。
+
+**Why it matters:** サーバーレス経済学には静かな底値がある——バースト型の低トラフィックアプリは、1 ミリ秒の実 work あたり数分のメモリ秒を払い続け、Web Functions はその底値を可視化した。対応も示唆的だ:ホスティング スタートアップが下した結論は「多くのアプリで一台の温かいマシンを共有する方が、アプリごとの隔離環境に勝る」というもの——古い専用ホストモデルが、ミリ秒課金の世界で再浮上している。
+
+[`🔗 easel.sh: Why we chose our own compute over Lambda Web Functions`](https://www.easel.sh/blog/lambda-web-functions-idle-memory) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50470445)
+
+---
+
+## 28. CPython を yk に適応させる:約 450 行でメタトレーシング JIT が 13 基準中 12 個で CPython を上回る
+
+- **Velocity:** ▮ steady
+- **Source:** tratt.net · 56+ pts on HN · 15.2h ago (~20:50 UTC+8 Nov 12)
+- **Tags:** `cpython` `jit` `interpreters`
+
+Laurie Tratt の yk は C インタプリタにメタトレーシング JIT を追加するツールキット(yklua は PUC Lua の 2 倍)だが、「大きなインタプリタで効くとどうやって知る?」という公正な疑問に答えたのが **ykcpython**——直接の作業 3〜4 日と yk 汎用修正 1.5 週間、変更は約 450 行。示唆的なのは道筋だ:CPython の tier-1 インタプリタの適応(200 行)は素のより*遅く*なった——quickening の特殊化↔非特殊化の遷移がトレースを絶えず捨てたため——そこで tier-2 の uop インタプリタに移行した(わずか 80 行)。30 行の幂等ロードヒント一つで Mandelbrot は 2.7 倍速くなった(11.67 秒 → 5.0 秒)。CPython 3.15.1 と実験的 JIT に対する最終数値:ykcpython は 13 の AWFY ベンチマーク中 12 で素のより速く(DeltaBlue のみ約 2.5% 遅い)、CPython 自身の JIT に対しては 13 中 8 で速い——Mandelbrot 4.20 秒 対 6.94 秒(JIT)対 11.66 秒;Richards 33.18 秒 対 40.56 秒 対 54.80 秒。限界も同じく率直だ:「実用には絶対に使えない」、そして「ベンチスイートの成績は飛び越えるべきハードルであって目的そのものではない」。
+
+**Why it matters:** 使える JIT は書き直しではなく約 450 行のフォークとして主流インタプリタに追加できる、という第三の証拠だ——しかも CPython 自身の tier-2 uop 基盤に依存しており、実験的 JIT が敷いた土台が競合する JIT 設計にも利益を還元していることを意味する。再現可能な実験と生データも公開済み。
+
+[`🔗 Laurie Tratt: Adapting CPython for yk`](https://tratt.net/laurie/blog/2026/adapting_cpython_for_yk.html) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50466410)
+
+---
+
+## 29. Dixell/Copeland XWEB EVO に一波 14 件の CVE 記録——スーパーマーケット冷凍サーバ上の認証前 root コマンドインジェクションとハードコードされたバックドア
+
+- **Velocity:** ▮ steady
+- **Source:** NVD records (CNA: VulnCheck) · published from Nov 12 20:18 UTC (~04:18 UTC+8 Nov 13)
+- **Tags:** `iot-security` `backdoor` `cve-wave`
+
+VulnCheck の CNA は 11月12日に記録 20 件を公開し、そのうち **14 件が XWEB EVO**——食品小売で広く使われる Dixell(Copeland)冷凍コントローラの Web サーバ——に関するもので、研究者は Valentin Lobstein。上位 3 件はすべて CVSS 3.1 **9.8**:**CVE-2026-124002**、login.lua・cleanout.lua・api.lua の*ユーザー名フィールド*経由の認証前 OS コマンドインジェクション(「パスワード確認の前に」発生)、setuid-root の `wlua` インタプリタと連鎖して root へ;**CVE-2026-124004**、ハードコードされたバックドアパスワードで完全な管理者アクセス;**CVE-2026-124010**、setuid-root CGI `xwconsole.cgi` 経由の root コマンドインジェクション。認証不要の任意ファイル書き込み(CVE-2026-124014、9.1)がクリティカル群を補う。アドバイザリの一文が対応を決める:「この製品ラインは 2026 年 3月にサービス終了日に達しました」——修正経路は存在せず、影響する導入(インジェクションは ≥ 5.2.3、< 5.7.0)は隔離か交換しない限り永久に残る。(VulnCheck 自身のページは同じ記録に CVSS 4.0 で 9.3 を表示し、NVD が提供するのは 9.8/3.1——同じ評価者、二つのフレームワーク。)
+
+**Why it matters:** 露出した PLC/バックドアのパターンは通常カメラとルータを連想させるが、今回はスーパーマーケット冷凍の制御プレーンだ——インターネットから到達可能、認証情報は設計上推測可能、そして EOL。「未パッチ」は恒久的な種類で、対応はパッチのスケジューリングから今日のネットワーク隔離へと移る。
+
+[`🔗 VulnCheck advisory: XWEB EVO pre-auth command injection`](https://www.vulncheck.com/advisories/dixell-copeland-xweb-evo-pre-authentication-os-command-injection-via-username) · [`🔗 NVD: CVE-2026-124002`](https://nvd.nist.gov/vuln/detail/CVE-2026-124002)
+
 ---
 
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-12T20:33:45Z |
-| Items | 20 |
-| Sources tracked | 18 (Hacker News, GitHub Trending, NVD, vendor advisories, vendor blogs, research pages) |
+| Generated | 2026-11-13T04:29:26Z |
+| Items | 29 |
+| Sources tracked | 26 (Hacker News, GitHub Trending, NVD, cveawg, vendor advisories, vendor blogs, research pages) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

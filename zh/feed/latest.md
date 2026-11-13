@@ -1,8 +1,8 @@
 ---
 date: 2026-11-13
-updated: 2026-11-12T20:33:45Z
+updated: 2026-11-13T04:29:26Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 18
+sources: 26
 license: CC-BY-4.0
 ---
 
@@ -136,9 +136,9 @@ Apple 的 ML 研究文章(11 月 5 日,ICML 2026 论文 "Amortizing Maximum Inne
 
 "I'm making LLMs work on small and old devices" 是一份带排行榜的研究日志:一号设备是小米电视盒子(4× Cortex-A55,**1.9 GB 内存**,无 root),Qwen3.5-0.8B 从原版 7.5 tok/s 提到 **16.8**;Qwen3.5-2B 在真实对话中 **7.7 tok/s**(bits/byte 0.909);再借助 Q2_K 专家从 flash 分页、缓存感知路由与预取,一台 **16B MoE(Ling-mini-2.0)跑到 5.1 tok/s**,600 词回答保持连贯。二号设备是越狱的 2013 款 iPad Air(Apple A7,1 GB),在 Safari 里以 **24–26 tok/s** 跑 1.7B 模型。技术按瓶颈分组:面向基础 NEON 芯片的 1-bit LUT kernel、塞进 2-bit 字段的 ternary 权重、带 MTP 投机的 O_DIRECT 权重流式加载,以及把 expert miss 从 13% 压到约 2% 的专家分页器。全部以实验 E1–E160 记录,附带退化测试(退化长回答从 12/13 降到 1/13),并用 bits/byte 度量质量以便不同 tokenizer 公平比较。
 
-**Why it matters:** 大多数小设备跑 LLM 的帖子会挑好看的基准;这一份公布了自己的失败(稠密 9B 只有 0.27 tok/s)和诚实的跨模型质量指标,而"bigger only helps on this box when the model is also better"(更大只在这个盒子上、当模型本身也更好时才有帮助)这一发现,才是全球真实持有的 30 美元设备舰队上的最先进水平。
+**Why it matters:** 大多数小设备跑 LLM 的帖子会挑好看的基准;这一份公布了自己的失败(稠密 9B 只有 0.27 tok/s)和诚实的跨模型质量指标,而更大只在这个盒子上、当模型本身也更好时才有帮助(bigger only helps on this box when the model is also better)这一发现,才是全球真实持有的 30 美元设备舰队上的最先进水平。
 
-> "Every claim is measured on the hardware itself." —— smolmaxxing README
+> "Every number in this repo was measured on the device itself." —— smolmaxxing README
 
 [`🔗 hyperionaidev/smolmaxxing`](https://github.com/hyperionaidev/smolmaxxing) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50468888)
 
@@ -296,15 +296,145 @@ Apple 的研究页(TMLR,2026 年 11 月;arXiv 2604.14191)发布了一个两阶�
 
 [`🔗 chocoford/ExcalidrawZ`](https://github.com/chocoford/ExcalidrawZ) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50468944)
 
+## 21. 六个中国前沿模型携带受出口管制的 Blackwell GPU 初始化指纹——直接从公开权重中恢复
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** unemploymentlabs.com · 212+ pts on HN · 6.1h ago (~05:55 UTC+8)
+- **Tags:** `checkpoint-forensics` `export-controls` `deepseek`
+
+Will DePue 的取证报告(11 月 12 日)从模型初始化时烧录的 PRNG 种子与线程布局中,读出每次训练是由哪一代 GPU 启动的:**DeepSeek-V4-Flash 与 MiniMax-M3 匹配 148-SM 的 B200/B300 布局;DeepSeek-V4-Pro、Kimi K3、K3.1-Pro 以及蚂蚁 Ling-3.1-flash 匹配 152-SM 的 GB200/GB300 布局**——而同一家实验室更早的模型全部读作 132-SM 的 Hopper。方法可以在物理芯片上复现:用 DeepSeek 的种子 953049583 在 H100 上逐位复现 V3 的 57,344 个保留值、但无法复现 V4-Flash;在 B300 上则逐位复现 V4-Flash(469 个抽样行中 445 行完全一致);GB200 用种子 20256586 复现了 Kimi K3 的 13 个保留行。AMD MI300X 替代解释在 V4-Flash 上被排除——在两家厂商数值有差异的 377 个值里,公开权重 363 次匹配 NVIDIA、0 次匹配 AMD。该方法与 24 个公开过硬件信息的模型全部吻合,最强证据在 49 到 1,385 sigma 之间,而偶然匹配的基准线只有约 8 sigma。报告自己给出的估算:每次最终训练约需 1,500–3,500 张 Blackwell GPU,五个模型合计约 12,000 张,按 WSJ 的单卡价格超过五亿美元。
+
+**Why it matters:** 这是出口管制指控背后第一份技术证据——而非官员的口头断言——而且完全来自公开权重。报告同样明确了天花板:指纹只能证明初始化硬件,"支持但不能证明 Blackwell 也执行了训练",也"不构成任何违法认定"。值得注意的是 Qwen、GLM、腾讯、小米和 StepFun 的最新模型仍全部读作 Hopper,而若干模型(CPU 初始化的 Qwen3、用 PaddlePaddle 的 ERNIE、用 ASIC 训练的美团 LongCat)根本不留下 GPU 指纹。
+
+> "These flags describe the hardware class under the U.S. export rules of October 2022 and October 2023. They are not a finding that any law was broken."
+
+[`🔗 Unemployment Labs: checkpoint forensics`](https://unemploymentlabs.com/checkpoint-forensics) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50474883)
+
+---
+
+## 22. PostgreSQL 52-CVE 补丁日背后的研究者故事:把一个 22 年历史的复合类型原语变成 root RCE
+
+- **Velocity:** ▮▮ rising
+- **Source:** mehmetince.net · 155+ pts on HN · 9.7h ago (~02:25 UTC+8)
+- **Tags:** `postgresql` `type-confusion` `exploit-research`
+
+Mehmet Ince 的第三篇(11 月 9 日发表,11 月 12 日重新登上 HN)是本日第 10 条所覆盖补丁潮的研究者自述:创建一个带 `uuid` 字段的复合类型,`PREPARE` 一条返回该类型的查询,执行 `ALTER TYPE ... ALTER ATTRIBUTE key TYPE bytea CASCADE`,再 `EXECUTE`——此时 `record_out()` 会把已存储的 UUID 字节交给 `byteaout()`,而前缀 `01 02` 会被读作展开对象指针。伪造的 header 加 methods 表让 detoast 过程变成一次间接调用:`system(H)`。同一原语还能击穿 ASLR——把数组元素类型改成 `bigint[]`,`unnest()` 就会把指针当作整数交还(三个 UUID 即可伪造 48 字节数组头)。可变行类型的行为可以追溯到提交 `077db40fa1f3`(2004 年 5 月 5 日);利用链依赖 2015 年加入的展开对象指针。Ince 报告了 21 个变体,并指出 11 月 9 日发布中的 52 个 CVE 有六个属于这个家族(**CVE-2026-6460** 总修复,外加 CVE-2026-120142、-120148、-116329、-116306、-120139),最低权限的登录角色即可触发。总修复记录本身——**8.8 分**,直到 11 月 12 日才由 PostgreSQL 自己的 CNA 发布到 NVD——说得直白:"PostgreSQL 中的类型混淆允许对象创建者以运行数据库的操作系统用户身份执行任意代码。"他与托管 Postgres 行业私下协调——"我没有看到任何不受影响的厂商"——Databricks 立即验证、Google 将 AlloyDB 升级到 P0,AWS、Azure 和 Supabase 在 8 月就收到了可用的 PoC。修复提交的 Reported-by 名单横跨 PostgreSQL 核心、OpenAI 安全研究团队与 Anthropic 的 Nicholas Carlini。
+
+**Why it matters:** 周二发布中那些抽象的类型混淆 8.8 分,在这里是最坏情形的具体化——一个无特权 SQL 角色在托管 Postgres 机群上抵达操作系统代码执行。它也是一份坦诚的 agent 辅助漏洞研究记录:Ince 明确感谢一个由 Opus 驱动的"pg_expert"导师陪他学完 Datum 内部机制,同时自己动手找到了漏洞。
+
+> "I gave PostgreSQL a value inside a composite type, changed the type of one of its fields, and asked it to read the value back. That type confusion led to one of the most reliable memory-corruption exploit I have seen."
+
+[`🔗 Mehmet Ince: Part 3/6, CVE-2026-6460`](https://mehmetince.net/part-3-6-how-i-ended-up-turning-a-22-year-old-postgresql-type-confusion-primitive-into-rce-cve-2026-6460) · [`🔗 NVD: CVE-2026-6460`](https://nvd.nist.gov/vuln/detail/CVE-2026-6460) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50471761)
+
+---
+
+## 23. AI 生成的应用洪流正在压垮 Apple 审核流水线——合成器开发者因幻觉理由被拒
+
+- **Velocity:** ▮▮ rising
+- **Source:** synthanatomy.com · 128+ pts on HN · 6.9h ago (~05:05 UTC+8)
+- **Tags:** `app-store` `apple` `industry`
+
+Synth Anatomy 记录了 iOS 音乐应用两侧同时发生的 AI 失效:如今每天约有 **10–20 款新 iOS 音乐应用**以 vibe coding 方式涌现,而 Apple 的审核——其指南承诺"至少 50% 的提交在 24 小时内完成、90% 在 48 小时内"——已经拖延到数周。Pittsburgh Modular 的 Microvolt 3901 在 10 月 27 日发出 VST 版,iOS 版却拖到 11 月 12 日。Unfiltered Audio 的 Michael Hetrick 报告其 Sinusoidal Run Rhythm **被拒四次**——"审核员幻觉出 'Polyharmonic' 是一种音频技术,要求我们出示该术语的使用许可文件",随后要求拍摄与"必需的专有硬件"连接的视频,再把 MIDI 版判为与音频版雷同的垃圾应用——一个月往返后只能先发纯音频版。更糟的是,开发者 Marek Dendes 的 CRUX Synth 连续四次被拒,理由是"设计垃圾"、由"应用生成模板服务"产出,申诉五天无回复:提交状态"从'等待审核'变成'审核中',然后瞬间变成'已拒绝'"。
+
+**Why it matters:** App Review 是平台的核心信任产品——店里的每样东西都被检查过。廉价生成让闸门被淹没,而自动化审核在幻觉中制造拒审理由,申诉通道形同虚设;如果这个状态延续,成本将恰好落在审核制度本应保护的小开发者身上。
+
+> "Apple seems to be using AI for automated App Store reviews. SRR got rejected 4 times." — Michael Hetrick, Unfiltered Audio, Loopy Pro 论坛
+
+[`🔗 Synth Anatomy: AI is turning Apple's app review into a nightmare`](https://synthanatomy.com/2026/11/ai-is-turning-apples-app-review-process-into-a-nightmare-for-developers.html) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50474311)
+
+---
+
+## 24. Edge0-145B 开源:145B 参数,宣称在笔记本上以 29 GB 峰值内存跑出 80+ tok/s 解码
+
+- **Velocity:** ▮▮ rising
+- **Source:** edge0.ai · 116+ pts on HN · 5.0h ago (~07:05 UTC+8)
+- **Tags:** `on-device-ai` `moe` `open-weights`
+
+Edge0 团队(仓库 **Edge0-AI/Edge0**,10.4k★)发布了 Edge0-145B 与 Edge0-120B 权重及其推理框架。架构是共享矩阵 MoE——每组 64 个专家共享两个大矩阵,各专家只保留小的增量参数,因此每步只有约 10B/145B 参数参与计算——配合三层加载(热专家驻留显存、约 40 GB 专家库放系统内存、约 48 GB 词表数据按需从 SSD 读取)与 CPU+GPU 协同调度。宣称数字:**29 GB 峰值内存、1,100+ tok/s 预填充、80+ tok/s 解码、约 120 W**,直到 128K–256K 上下文速度基本不变,首发支持 Apple Silicon 与 RTX 4090/5090。基准测试将其排在 Qwen3.8-Flash-Next(Terminal-Bench 2.1 上 86.52 对 83.3)与 DeepSeek-V4-Flash-0731 之前——但帖子自己写明这些对比"来自 Edge0 的内部评估",基线内存数字(例如 Qwen3.8-Flash-Next 的"约 70 GB")带星号、属"尚待实测"的估算。同帖还回顾了 9 月的 Edge0-35B 手机版(iPhone 18 Pro Max 上 37+ tok/s)。
+
+**Why it matters:** 如果内存数字经得起第三方复测,"笔记本上跑前沿 agent"就不再是一句营销话术——145B 只要 29 GB,决定的是工作站的规格而不是机房的规格。在有人独立跑过同一套评测之前,每一行对比都应视为厂商主张;HN 的反应(113 分且仍在涨,以怀疑为主)是正确的先验。
+
+[`🔗 Edge0 blog: Introducing Edge0-145B`](https://edge0.ai/blog/introducing-edge0-145b-frontier-ai-capabilities-on-your-own-computer) · [`🔗 Edge0-AI/Edge0`](https://github.com/Edge0-AI/Edge0) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50475713)
+
+---
+
+## 25. 九条 NetScaler CVE 记录一夜落地——ADC/Gateway 内存破坏,修复版本 14.1-73.57 与 13.1-64.39
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD records (CNA: Citrix) · published 00:20–03:17 UTC Nov 13 (~08:20–11:17 UTC+8)
+- **Tags:** `citrix` `netscaler` `cve-wave`
+
+Citrix 的 CNA 一夜之间发布了 **9 条 NetScaler ADC/Gateway 记录**,每条都指向公告 **CTX697305**,评分全部采用 CVSS 4.0:CVE-2026-107412 达 **9.5**(多处内存溢出),5 条 9.3——包处理、SMPP、DNS 与 DNS-over-HTTPS、NetScaler Push——另有 3 条 8.7(RTSP ALG、SAML、WebAuth)。cveawg 容器给出了修复构建:**14.1-73.57**(FIPS 为 14.1-73.58)、**13.1-64.39**(FIPS/NDcPP 为 13.1-37.293),达到或高于这些版本则不受影响。描述止步于"内存溢出……可能导致……拒绝服务";写稿时九条记录仍为 `Received` 状态。Citrix 公告页对普通抓取呈现为 JavaScript 壳,因此本条读的是 CVE 记录而非公告正文——记录本身就是 CNA 的原始表述。
+
+**Why it matters:** NetScaler 的内存破坏家族有变成边缘设备利用链的前科(Citrix Bleed,2023),而 ADC/Gateway 恰恰是管理接口最常被预认证侦察的边界资产。"拒绝服务"措辞对 8.7–9.5 的分数,意思是"定级前先读公告"——但边缘设备本周就该打补丁,无论定级如何。
+
+[`🔗 NVD: CVE-2026-107408 (DNS/DoH memory corruption)`](https://nvd.nist.gov/vuln/detail/CVE-2026-107408) · [`🔗 Citrix advisory CTX697305`](https://support.citrix.com/support-home/kbsearch/article?articleNumber=CTX697305)
+
+---
+
+## 26. AgentRun 开源一个会自我改进的 agent 控制平面——Pi、Claude Agents、Codex、OpenCode 走 ACP 接入
+
+- **Velocity:** ▮ rising
+- **Source:** Parcha-ai/agentrun · 86+ pts on HN (Show) · 9.8h ago (~02:15 UTC+8)
+- **Tags:** `agent-infra` `self-improvement` `acp`
+
+GREP.AI(YC F26)开源了 AgentRun(Apache-2.0,npm `@parcha/agentrun`,640★):在你喜欢的 agent harness 之上提供"自我改进、持久执行与控制平面",经 ACP 接入任意 harness(Pi、Claude Agents、Codex、OpenCode),带沙箱、计算机环境、数千种工具,以及一个 Learning 标签页展示 agent 保留了什么——演示文案称"回答从 10 秒缩短到 2 秒,单次运行成本从 $0.05 降到 $0.0077"。案例研究是其中最诚实的部分:当每次代码审查收费 1 美元后,他们的账单从每月 180 美元涨到 6,451 美元,于是他们用便宜模型、以自己的 PR 微调,自建了一个审查器——**每次审查 18 美分**,自称在 30 个 PR 上"抓到的真实 bug 是 Greptile 的 1.6 倍";商户分类"学会这份工作后便宜了 7 倍"。支持 Render 一键部署,也有托管控制台。
+
+**Why it matters:** 值得关注的是把"自我改进"当作一条可测量的成本曲线而非一个记忆功能——30 个 PR 的样本是公司自己的数据,但这个形态(跨 harness 的控制平面 + 会复利的学习回路)正是 agent 基础设施正在收敛的方向,比今早的路由代理高一层。
+
+[`🔗 Parcha-ai/agentrun`](https://github.com/Parcha-ai/agentrun) · [`🔗 HN discussion (Show)`](https://news.ycombinator.com/item?id=50471650)
+
+---
+
+## 27. Lambda Web Functions 在最后一次请求之后仍计费内存 5–7 分钟——于是有创业公司自建了算力
+
+- **Velocity:** ▮ rising
+- **Source:** easel.sh · 71+ pts on HN · 11.1h ago (~00:55 UTC+8)
+- **Tags:** `aws` `lambda` `cloud-costs`
+
+Easel 对 AWS 10 月推出的 Lambda Web Functions 做了基准测试,撞上一种值得记住的计费形态:**六个 us-east-1 环境在最后一次请求后仍存活 313–411 秒**(10 月 26 日数据),且没有可配置的空闲超时——CPU 只在活跃时计费,内存却按环境整个生命周期计费。一次 200 毫秒的请求加 345 秒空闲,等于"约 1,700 倍于请求时长的内存计量时间";内存占了该实验计算成本的约 88%。空闲 10 秒后自行终止环境能把计量时间降约 20 倍,但 AWS 把每次主动退出都记为运行时故障。于是 Easel 把执行搬到了自建主机上(11 月 2 日上线),Lambda 只做溢出——同一个 Next.js 16 应用:**暖请求中位数快 1.5–3 倍,冷启动快约 3.5 倍**(空闲 12 分钟后 216–250 毫秒对 810–854 毫秒),暂停环境恢复只要 14 毫秒,而 Web Functions 需要 908 毫秒。帖子也写明了自己的局限:单一区域、单个小应用、仅两次配对冷启动试验。
+
+**Why it matters:** Serverless 经济学存在一个安静的底价——每个突发型低流量应用,每毫秒真实工作都要为几分钟的内存秒买单,而 Web Functions 把这个底价摆到了明处。应对方式同样说明问题:一家托管创业公司得出的结论是"许多应用共享一台温热机器"胜过"每个应用一个隔离环境"——老的独享主机模型,在按毫秒计费的世界里重新出现。
+
+[`🔗 easel.sh: Why we chose our own compute over Lambda Web Functions`](https://www.easel.sh/blog/lambda-web-functions-idle-memory) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50470445)
+
+---
+
+## 28. 把 CPython 适配给 yk:约 450 行代码,让一个元追踪 JIT 在 13 个基准中的 12 个上跑赢 CPython
+
+- **Velocity:** ▮ steady
+- **Source:** tratt.net · 56+ pts on HN · 15.2h ago (~20:50 UTC+8 Nov 12)
+- **Tags:** `cpython` `jit` `interpreters`
+
+Laurie Tratt 的 yk 是给 C 解释器加装元追踪 JIT 的工具包(yklua 比 PUC Lua 快 2 倍),但一个公平的质疑是"你怎么知道它对大型解释器也有效?"答案:**ykcpython**,3–4 天直接工作量加 1.5 周的 yk 通用修复,改动约 450 行。最有教益的是路径:先适配 CPython 的 tier-1 解释器(200 行),结果比原版更*慢*——quickening 在特化与去特化之间的反复切换不断作废 trace——于是改投 tier-2 uop 解释器(只需 80 行)。一个 30 行的幂等加载提示就让 Mandelbrot 快了 2.7 倍(11.67 秒 → 5.0 秒)。对比 CPython 3.15.1 及其实验性 JIT 的最终数字:ykcpython 在 13 个 AWFY 基准中的 12 个上快于原版(DeltaBlue 慢约 2.5%),在 13 个中的 8 个上快于 CPython 自家的 JIT——Mandelbrot 4.20 秒 vs 6.94 秒(JIT)vs 11.66 秒;Richards 33.18 秒 vs 40.56 秒 vs 54.80 秒。限定条件同样写得直白:"它绝对不是"可用于生产的,且"基准套件成绩是必须跨过的横杆,而不是目的本身"。
+
+**Why it matters:** 这是第三个证据,说明一个可用的 JIT 可以以约 450 行的 fork 加进主流解释器,而不是一场重写——而且它借力 CPython 自己的 tier-2 uop 基础设施,意味着实验性 JIT 打下的地基正在回馈竞争性的 JIT 设计。可复现实验与原始数据都已公开。
+
+[`🔗 Laurie Tratt: Adapting CPython for yk`](https://tratt.net/laurie/blog/2026/adapting_cpython_for_yk.html) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50466410)
+
+---
+
+## 29. Dixell/Copeland XWEB EVO 一波收到 14 条 CVE 记录——超市制冷服务器上的预认证 root 命令注入加硬编码后门
+
+- **Velocity:** ▮ steady
+- **Source:** NVD records (CNA: VulnCheck) · published from Nov 12 20:18 UTC (~04:18 UTC+8 Nov 13)
+- **Tags:** `iot-security` `backdoor` `cve-wave`
+
+VulnCheck 的 CNA 在 11 月 12 日发布了 20 条记录,其中 **14 条针对 XWEB EVO**——这是 Dixell(Copeland)制冷控制器的 Web 服务器,广泛用于食品零售——研究者署名 Valentin Lobstein。三条最高的都是 CVSS 3.1 **9.8**:**CVE-2026-124002**,经由 login.lua、cleanout.lua 或 api.lua 的*用户名字段*进行预认证 OS 命令注入,"发生在密码校验之前",再串联 setuid-root 的 `wlua` 解释器直达 root;**CVE-2026-124004**,硬编码后门密码,直接获得完整管理员权限;**CVE-2026-124010**,经由 setuid-root CGI `xwconsole.cgi` 的 root 命令注入。免认证任意文件写入(CVE-2026-124014,9.1)补齐了危急组。公告里的一句话决定了应对方式:"该产品线已于 2026 年 3 月到达服务终止日"——没有修复路径,因此受影响安装(注入为 ≥ 5.2.3、< 5.7.0)除非隔离或更换,否则将永久存在。(VulnCheck 自己的页面对同一条记录打印的 CVSS 4.0 是 9.3,而 NVD 提供的是 9.8/3.1——同一评估方,两套框架。)
+
+**Why it matters:** 暴露的 PLC/后门模式通常让人想起摄像头和路由器;这次是超市制冷的控制平面——可从互联网触达、凭据在设计上可猜、且已 EOL。"无补丁"是永久的那种,应对方式从排期打补丁变成今天就做网络隔离。
+
+[`🔗 VulnCheck advisory: XWEB EVO pre-auth command injection`](https://www.vulncheck.com/advisories/dixell-copeland-xweb-evo-pre-authentication-os-command-injection-via-username) · [`🔗 NVD: CVE-2026-124002`](https://nvd.nist.gov/vuln/detail/CVE-2026-124002)
+
 ---
 
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-12T20:33:45Z |
-| Items | 20 |
-| Sources tracked | 18 (Hacker News, GitHub Trending, NVD, vendor advisories, vendor blogs, research pages) |
+| Generated | 2026-11-13T04:29:26Z |
+| Items | 29 |
+| Sources tracked | 26 (Hacker News, GitHub Trending, NVD, cveawg, vendor advisories, vendor blogs, research pages) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

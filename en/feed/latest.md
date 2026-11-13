@@ -1,8 +1,8 @@
 ---
 date: 2026-11-13
-updated: 2026-11-12T20:33:45Z
+updated: 2026-11-13T04:29:26Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 18
+sources: 26
 license: CC-BY-4.0
 ---
 
@@ -136,9 +136,9 @@ openQ4 — an open-source Quake 4 source port — shipped **v0.14.1** (Nov 11), 
 
 "I'm making LLMs work on small and old devices" is a research log with a scoreboard: device #1 is a Xiaomi TV Box S (4× Cortex-A55, **1.9 GB RAM**, no root) that went from a stock 7.5 tok/s on Qwen3.5-0.8B to **16.8**; runs Qwen3.5-2B at **7.7 tok/s** in real chat (bits/byte 0.909); and — via Q2_K expert paging from flash with cache-aware routing and prefetch — a **16B MoE (Ling-mini-2.0) at 5.1 tok/s**, coherent over 600-word answers. Device #2 is a jailbroken 2013 iPad Air (Apple A7, 1 GB) running a 1.7B model at **24–26 tok/s** from Safari. Techniques are grouped by bottleneck: a 1-bit LUT kernel for base-NEON chips, ternary weights in 2-bit fields, O_DIRECT weight streaming with MTP speculation, and an expert pager that cut expert misses from 13% to ~2%. All of it is written up as experiments E1–E160, with a degeneration test (12/13 → 1/13 degenerate long answers) and quality measured in bits/byte so tokenizers compare fairly.
 
-**Why it matters:** Most tiny-device LLM posts cherry-pick a benchmark; this one publishes its own failures (a dense 9B manages 0.27 tok/s) and an honest cross-model quality metric, and the finding that "bigger only helps on this box when the model is also better" is the actual state of the art for the $30-device fleet the world actually owns.
+**Why it matters:** Most tiny-device LLM posts cherry-pick a benchmark; this one publishes its own failures (a dense 9B manages 0.27 tok/s) and an honest cross-model quality metric, and the finding that bigger only helps on this box when the model is also better is the actual state of the art for the $30-device fleet the world actually owns.
 
-> "Every claim is measured on the hardware itself." — smolmaxxing README
+> "Every number in this repo was measured on the device itself." — smolmaxxing README
 
 [`🔗 hyperionaidev/smolmaxxing`](https://github.com/hyperionaidev/smolmaxxing) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50468888)
 
@@ -298,13 +298,145 @@ A four-day-old HN post pushed chocoford/ExcalidrawZ (1,718★, pure SwiftUI, cre
 
 ---
 
+## 21. Six Chinese frontier models carry the initialization fingerprint of export-controlled Blackwell GPUs — recovered from the public weights themselves
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** unemploymentlabs.com · 212+ pts on HN · 6.1h ago (~05:55 UTC+8)
+- **Tags:** `checkpoint-forensics` `export-controls` `deepseek`
+
+Will DePue's forensic report (Nov 12) recovers the PRNG seed and thread layout burned into model initializations and reads which GPU class started each run: **DeepSeek-V4-Flash and MiniMax-M3 match the 148-SM B200/B300 layout; DeepSeek-V4-Pro, Kimi K3, K3.1-Pro and Ant's Ling-3.1-flash match the 152-SM GB200/GB300 layout** — while every earlier model from the same labs reads as 132-SM Hopper. The method is reproducible on physical chips: DeepSeek's seed 953049583 on an H100 reproduces V3's 57,344 preserved values bit-for-bit but not V4-Flash's, and on a B300 reproduces V4-Flash (445 of 469 selected rows bit-exact); a GB200 reproduces Kimi K3's 13 preserved rows with seed 20256586. The AMD MI300X alternative was excluded for V4-Flash — in the 377 values where the vendors differ, the published weights match NVIDIA 363 times and AMD zero. The method agrees with all 24 models whose hardware is publicly known, and the strongest evidence ranges from 49 to 1,385 sigma against an ~8-sigma chance benchmark. The report's own estimates: ~1,500–3,500 Blackwell GPUs per final run, ~12,000 across five models, half a billion dollars at the WSJ's per-GPU figure.
+
+**Why it matters:** This is the first technical evidence — as opposed to officials' assertions — behind the export-control allegations, derived entirely from published weights. The report is equally explicit about the ceiling: fingerprints show initialization hardware, "supports, without proving, the inference that Blackwell also performed the training", and "are not a finding that any law was broken". Notably Qwen, GLM, Tencent, Xiaomi and StepFun's newest models all still read as Hopper, and several models (CPU-initialized Qwen3, PaddlePaddle's ERNIE, Meituan's ASIC-trained LongCat) leave no GPU fingerprint at all.
+
+> "These flags describe the hardware class under the U.S. export rules of October 2022 and October 2023. They are not a finding that any law was broken."
+
+[`🔗 Unemployment Labs: checkpoint forensics`](https://unemploymentlabs.com/checkpoint-forensics) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50474883)
+
+---
+
+## 22. The story behind PostgreSQL's 52-CVE Tuesday: a researcher turns a 22-year-old composite-type primitive into root RCE
+
+- **Velocity:** ▮▮ rising
+- **Source:** mehmetince.net · 155+ pts on HN · 9.7h ago (~02:25 UTC+8)
+- **Tags:** `postgresql` `type-confusion` `exploit-research`
+
+Mehmet Ince's part 3/6 (Nov 9, resurfacing on HN Nov 12) is the researcher's account of the wave item 10 covered: create a composite type with a `uuid` field, `PREPARE` a query returning it, `ALTER TYPE ... ALTER ATTRIBUTE key TYPE bytea CASCADE`, then `EXECUTE` — `record_out()` now hands stored UUID bytes to `byteaout()`, whose `01 02` prefix reads as an expanded-object pointer. Forged header + methods table turn detoasting into an indirect call: `system(H)`. The same primitive defeats ASLR — flip an array's element type to `bigint[]` and `unnest()` hands its pointer back as an integer (three UUIDs forge the 48-byte array header). The mutable-row-type behavior dates to commit `077db40fa1f3` (May 5, 2004); the exploit leans on expanded-object pointers added in 2015. Ince reports 21 variants and says six of the 52 CVEs in Nov 9's release are this family (**CVE-2026-6460** umbrella, plus CVE-2026-120142, -120148, -116329, -116306, -120139), triggerable by a lowest-privileged login role. The umbrella record — **8.8**, published to NVD Nov 12 by PostgreSQL's own CNA — states it plainly: "Type confusion in PostgreSQL allows an object creator to execute arbitrary code as the operating system user running the database." He privately coordinated with the managed-Postgres industry — "I haven't seen any vendor who is not affected" — with Databricks validating, Google escalating AlloyDB to P0, and AWS, Azure and Supabase receiving working PoCs in August. The commit's Reported-by line spans PostgreSQL core, OpenAI's Security Research Team and Anthropic's Nicholas Carlini.
+
+**Why it matters:** The type-confusion 8.8s in Tuesday's release were abstract; this is the concrete worst case — an unprivileged SQL role reaching OS code execution on the managed-Postgres fleet. It is also a candid record of agent-assisted vulnerability research: Ince credits an Opus-powered "pg_expert" tutor for walking him through Datum internals between finding bugs himself.
+
+> "I gave PostgreSQL a value inside a composite type, changed the type of one of its fields, and asked it to read the value back. That type confusion led to one of the most reliable memory-corruption exploit I have seen."
+
+[`🔗 Mehmet Ince: Part 3/6, CVE-2026-6460`](https://mehmetince.net/part-3-6-how-i-ended-up-turning-a-22-year-old-postgresql-type-confusion-primitive-into-rce-cve-2026-6460) · [`🔗 NVD: CVE-2026-6460`](https://nvd.nist.gov/vuln/detail/CVE-2026-6460) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50471761)
+
+---
+
+## 23. AI-generated app flood is breaking Apple's review pipeline — synth developers rejected on hallucinated grounds
+
+- **Velocity:** ▮▮ rising
+- **Source:** synthanatomy.com · 128+ pts on HN · 6.9h ago (~05:05 UTC+8)
+- **Tags:** `app-store` `apple` `industry`
+
+Synth Anatomy documents the two-sided AI failure around iOS music apps: an estimated **10–20 new iOS music apps per day** now arrive vibe-coded, while Apple's review — its guidelines promise "at least 50% of submissions in less than 24 hours and 90% in less than 48 hours" — has stretched to weeks. Pittsburgh Modular's Microvolt 3901 shipped as a VST on Oct 27 but only reached iOS on Nov 12. Unfiltered Audio's Michael Hetrick reports his Sinusoidal Run Rhythm was **rejected four times** — "the editor hallucinated that 'Polyharmonic' was an audio technology that we needed to show a documented license for", then demanded a video with "the required proprietary hardware", then flagged the MIDI build as spam for resembling the audio build — a month of back-and-forth ending in an audio-only release. Worse, developer Marek Dendes' CRUX Synth was rejected four times in a row as "design spam" produced by "app generation template services", with appeals unanswered five days on: submissions flip "from 'Waiting for Review' into 'In Review' and then instantly ... 'Rejected'".
+
+**Why it matters:** App Review is the platform's core trust product — the promise that everything on the store was checked. Cheap generation floods the gate while automated review hallucinates rejection reasons, and the appeal path reads as a dead end; if that holds, the cost lands on exactly the small developers the review exists to protect.
+
+> "Apple seems to be using AI for automated App Store reviews. SRR got rejected 4 times." — Michael Hetrick, Unfiltered Audio, on the Loopy Pro forum
+
+[`🔗 Synth Anatomy: AI is turning Apple's app review into a nightmare`](https://synthanatomy.com/2026/11/ai-is-turning-apples-app-review-process-into-a-nightmare-for-developers.html) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50474311)
+
+---
+
+## 24. Edge0-145B open-sourced: a 145B model claiming 29 GB peak memory and 80+ tok/s decode on a laptop
+
+- **Velocity:** ▮▮ rising
+- **Source:** edge0.ai · 116+ pts on HN · 5.0h ago (~07:05 UTC+8)
+- **Tags:** `on-device-ai` `moe` `open-weights`
+
+Edge0's team (repo **Edge0-AI/Edge0**, 10.4k★) released Edge0-145B and Edge0-120B weights plus its inference framework. The architecture is a shared-matrix MoE — each group of 64 experts shares two large matrices while retaining small per-expert deltas, so only ~10B of 145B parameters compute per step — with a three-tier loader (hot experts in GPU memory, a ~40 GB expert library in system RAM, ~48 GB of vocabulary data read from SSD on demand) and CPU+GPU co-scheduling. Reported numbers: **29 GB peak memory, 1,100+ tok/s prefill, 80+ tok/s decode, ~120 W**, flat speed to 128K–256K context, day-one support for Apple Silicon and RTX 4090/5090. Benchmarks put it ahead of Qwen3.8-Flash-Next (86.52 vs 83.3 on Terminal-Bench 2.1) and DeepSeek-V4-Flash-0731 — but the post itself states the comparisons "come from Edge0's internal evaluations", and the baseline memory figures (e.g. "~70 GB" for Qwen3.8-Flash-Next) are asterisked as estimates that "remain to be measured". The same post follows September's Edge0-35B phone release (37+ tok/s on an iPhone 18 Pro Max).
+
+**Why it matters:** If the memory numbers survive third-party runs, the frontier-agent-on-your-laptop tier stops being a marketing line — 145B at 29 GB is the difference between a workstation and a server rack. Until someone independent runs the harness, treat every comparison row as the vendor's claim; the HN reception (113 pts and climbing, mostly skeptical) is the right prior.
+
+[`🔗 Edge0 blog: Introducing Edge0-145B`](https://edge0.ai/blog/introducing-edge0-145b-frontier-ai-capabilities-on-your-own-computer) · [`🔗 Edge0-AI/Edge0`](https://github.com/Edge0-AI/Edge0) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50475713)
+
+---
+
+## 25. Nine NetScaler CVE records land overnight — memory corruption across ADC/Gateway, fixed in 14.1-73.57 and 13.1-64.39
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD records (CNA: Citrix) · published 00:20–03:17 UTC Nov 13 (~08:20–11:17 UTC+8)
+- **Tags:** `citrix` `netscaler` `cve-wave`
+
+Citrix's CNA published **nine NetScaler ADC/Gateway records** overnight, every one pointing at advisory **CTX697305** and every score CVSS 4.0: CVE-2026-107412 at **9.5** (multiple memory overflows), five at 9.3 — packet processing, SMPP, DNS and DNS-over-HTTPS, NetScaler Push — and three at 8.7 (RTSP ALG, SAML, WebAuth). The cveawg containers name the fixed builds: **14.1-73.57** (14.1-73.58 FIPS), **13.1-64.39** (13.1-37.293 FIPS/NDcPP), with everything at or above unaffected. Descriptions stop at memory-overflow and denial-of-service wording; all nine records were still `Received` at write time. Citrix's advisory page renders as a JavaScript shell to a plain fetch, so this item reads the CVE records rather than the advisory text — the records are the CNA's own statements.
+
+**Why it matters:** NetScaler memory-corruption families have a history of turning into edge-device exploit chains (Citrix Bleed, 2023), and ADC/Gateway boxes are exactly the perimeter asset whose admin interfaces get pre-auth reconnaissance. The DoS-worded descriptions versus 8.7–9.5 scores say read the advisory before deciding severity — and patch the edge this week regardless.
+
+[`🔗 NVD: CVE-2026-107408 (DNS/DoH memory corruption)`](https://nvd.nist.gov/vuln/detail/CVE-2026-107408) · [`🔗 Citrix advisory CTX697305`](https://support.citrix.com/support-home/kbsearch/article?articleNumber=CTX697305)
+
+---
+
+## 26. AgentRun open-sources a self-improving control plane for agent harnesses — Pi, Claude Agents, Codex, OpenCode over ACP
+
+- **Velocity:** ▮ rising
+- **Source:** Parcha-ai/agentrun · 86+ pts on HN (Show) · 9.8h ago (~02:15 UTC+8)
+- **Tags:** `agent-infra` `self-improvement` `acp`
+
+GREP.AI (YC F26) open-sourced AgentRun (Apache-2.0, npm `@parcha/agentrun`, 640★): "self-improvement, durable execution and a control plane on top of your favorite agent harness", bring-your-own over ACP (Pi, Claude Agents, Codex, OpenCode), with sandboxes, computer environments, thousands of tools, and a console whose Learning tab shows what the agent kept — the demo caption claims answers drop from 10 s to 2 s and a run from $0.05 to $0.0077. The case study is the honest part: their code-review bill went from $180 to $6,451/month when reviews cost a dollar each, so they built their own reviewer on a cheap model tuned on their own PRs — **18 cents a review**, claiming 1.6× the real bugs Greptile caught on 30 PRs; merchant classification got 7× cheaper once it learned the job. One-click Render deploy, or the hosted console.
+
+**Why it matters:** The bet worth watching is self-improvement as a measurable cost curve rather than a memory feature — the claims are the company's own 30-PR sample, but the shape (harness-agnostic control plane + a learning loop that compounds) is where agent infra is consolidating, one layer above this morning's routing proxies.
+
+[`🔗 Parcha-ai/agentrun`](https://github.com/Parcha-ai/agentrun) · [`🔗 HN discussion (Show)`](https://news.ycombinator.com/item?id=50471650)
+
+---
+
+## 27. Lambda Web Functions bill memory for 5–7 minutes after your last request — so one startup built its own compute
+
+- **Velocity:** ▮ rising
+- **Source:** easel.sh · 71+ pts on HN · 11.1h ago (~00:55 UTC+8)
+- **Tags:** `aws` `lambda` `cloud-costs`
+
+Easel benchmarked AWS's October-launched Lambda Web Functions and hit a billing shape worth knowing: **execution environments stayed alive 313–411 seconds after their last request** across six us-east-1 environments (Oct 26 data), with no configurable idle timeout — CPU bills only while active, but memory bills for the environment's whole lifetime. A 200 ms request followed by 345 s of idle is "roughly 1,700 times the request duration in metered memory time"; memory was ~88% of their experiment's compute cost. Self-terminating environments after 10 s idle cut metered time ~20×, but AWS logged every intentional exit as a runtime failure. So Easel moved execution onto its own hosts (live Nov 2) with Lambda as overflow — same Next.js 16 app: **1.5–3× faster warm medians, ~3.5× faster cold starts** (216–250 ms vs 810–854 ms after 12 min idle), resuming a paused environment in 14 ms where Web Functions needed 908 ms. The post states its own limits: one region, one small app, two paired cold-start trials.
+
+**Why it matters:** Serverless economics have a quiet floor — every bursty low-traffic app pays minutes of memory-seconds per real millisecond of work, and Web Functions made that floor visible. The response is telling: a hosting startup concluded that sharing one warm machine across many apps beats per-app isolated environments, which is the old dedicated-host model re-emerging under per-millisecond billing.
+
+[`🔗 easel.sh: Why we chose our own compute over Lambda Web Functions`](https://www.easel.sh/blog/lambda-web-functions-idle-memory) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50470445)
+
+---
+
+## 28. Adapting CPython for yk: ~450 LoC turns a meta-tracing JIT that beats CPython on 12 of 13 benchmarks
+
+- **Velocity:** ▮ steady
+- **Source:** tratt.net · 56+ pts on HN · 15.2h ago (~20:50 UTC+8 Nov 12)
+- **Tags:** `cpython` `jit` `interpreters`
+
+Laurie Tratt's yk — a toolkit that adds meta-tracing JIT compilers to C interpreters (yklua ran 2× PUC Lua) — faced the fair question "how do you know if this works for large interpreters?" Answer: **ykcpython**, built in 3–4 days of direct work plus 1.5 weeks of generic yk fixes, ~450 LoC changed. The instructive part is the path: adapting CPython's tier-1 interpreter (200 LoC) was *slower* than stock — quickening's specialized↔unspecialized transitions kept discarding traces — so he moved to the tier-2 uop interpreter instead (just 80 LoC). One 30-LoC idempotent-load hint made Mandelbrot 2.7× faster (11.67 s → 5.0 s). Final numbers vs CPython 3.15.1 and its experimental JIT: ykcpython is faster than stock on 12 of 13 AWFY benchmarks (DeltaBlue ~2.5% slower) and faster than CPython's own JIT on 8 of 13 — Mandelbrot 4.20 s vs 6.94 s (JIT) vs 11.66 s; Richards 33.18 s vs 40.56 s vs 54.80 s. The caveats are stated as plainly: "it definitely is not" ready for use, and "benchmark suite performance is a hoop to jump through rather than an end in itself".
+
+**Why it matters:** It is a third data point that a usable JIT can be added to a mainstream interpreter as a ~450-line fork rather than a rewrite — and it leans on CPython's own tier-2 uop infrastructure, meaning the experimental JIT's groundwork is paying off for competing JIT designs. Repeatable experiment and raw data are published.
+
+[`🔗 Laurie Tratt: Adapting CPython for yk`](https://tratt.net/laurie/blog/2026/adapting_cpython_for_yk.html) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50466410)
+
+---
+
+## 29. Dixell/Copeland XWEB EVO gets 14 CVE records in one wave — pre-auth root command injection plus a hardcoded backdoor on supermarket-refrigeration servers
+
+- **Velocity:** ▮ steady
+- **Source:** NVD records (CNA: VulnCheck) · published from Nov 12 20:18 UTC (~04:18 UTC+8 Nov 13)
+- **Tags:** `iot-security` `backdoor` `cve-wave`
+
+VulnCheck's CNA published 20 records on Nov 12, **14 of them on XWEB EVO** — the web server for Dixell (Copeland) refrigeration controllers used across food retail — credited to Valentin Lobstein. The top three, all CVSS 3.1 **9.8**: **CVE-2026-124002**, pre-auth OS command injection via the *username field* of login.lua, cleanout.lua or api.lua "before the password check occurs", chained with the setuid-root `wlua` interpreter for root; **CVE-2026-124004**, a hardcoded backdoor password granting full administrative access; **CVE-2026-124010**, root command injection via the setuid-root CGI `xwconsole.cgi`. An unauthenticated arbitrary file write (CVE-2026-124014, 9.1) rounds out the criticals. One line in the advisory decides the response: "This product line reached it's end of service date in March 2026" — there is no fix path, so affected installs (≥ 5.2.3, < 5.7.0 on the injection) are permanent unless isolated or replaced. (VulnCheck's own page prints 9.3 for CVSS 4.0 on the same record NVD serves at 9.8/3.1 — same assessor, two frameworks.)
+
+**Why it matters:** The exposed-PLC/classifier backdoor pattern usually evokes cameras and routers; here it is the control plane for supermarket refrigeration — internet-reachable, credential-guessable by design, and EOL. "Unpatched" is the permanent kind, which moves the advice from patch-scheduling to network isolation today.
+
+[`🔗 VulnCheck advisory: XWEB EVO pre-auth command injection`](https://www.vulncheck.com/advisories/dixell-copeland-xweb-evo-pre-authentication-os-command-injection-via-username) · [`🔗 NVD: CVE-2026-124002`](https://nvd.nist.gov/vuln/detail/CVE-2026-124002)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-12T20:33:45Z |
-| Items | 20 |
-| Sources tracked | 18 (Hacker News, GitHub Trending, NVD, vendor advisories, vendor blogs, research pages) |
+| Generated | 2026-11-13T04:29:26Z |
+| Items | 29 |
+| Sources tracked | 26 (Hacker News, GitHub Trending, NVD, cveawg, vendor advisories, vendor blogs, research pages) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
