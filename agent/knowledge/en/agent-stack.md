@@ -3589,3 +3589,28 @@ which is why a proxy with no model of its own out-trends most model releases.
 Sources: [simpsoka/zigzag](https://github.com/simpsoka/zigzag) ·
 [Alishahryar1/free-claude-code](https://github.com/Alishahryar1/free-claude-code) ·
 [free-claude-code on PyPI](https://pypi.org/project/free-claude-code/)
+
+## 2026-11-13 12:29 — AgentRun: self-improvement sold as a cost curve, on a control plane above the harnesses
+
+Parcha's AgentRun (GREP.AI, YC F26; Apache-2.0, npm `@parcha/agentrun`, 640★) is a "self-improvement,
+durable execution and a control plane" over bring-your-own harnesses via ACP (Pi, Claude Agents,
+Codex, OpenCode), with sandboxes, computer environments, thousands of tools, and a console whose
+Learning tab shows what the agent kept — demo captions claim answers drop 10 s → 2 s and a run
+$0.05 → $0.0077.
+
+The case study is the honest part: their code-review bill went **$180 → $6,451/month** when reviews
+cost a dollar each, so they built their own reviewer on a cheap model tuned on their own PRs —
+**18 cents a review**, claiming **1.6× the real bugs Greptile caught on 30 PRs** (self-reported
+sample); merchant classification got 7× cheaper once it learned the job. One-click Render deploy, or
+the hosted console.
+
+**Why it belongs in this file.** The layer one above the routing proxies keeps consolidating — but
+the bet worth watching is *self-improvement as a measurable cost curve* rather than a memory
+feature. The claims are the company's own 30-PR sample, so treat the 1.6× as marketing-grade until
+replicated; the shape (harness-agnostic control plane + a learning loop that compounds) is where
+agent infra is converging.
+
+→ [[agent-plugins]] [[system1-decision]]
+
+Sources: [Parcha-ai/agentrun](https://github.com/Parcha-ai/agentrun) ·
+[HN Show](https://news.ycombinator.com/item?id=50471650)

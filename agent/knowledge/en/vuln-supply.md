@@ -2099,3 +2099,29 @@ Sources: [ledger.json](https://red.anthropic.com/2026/cvd/data/ledger.json) ·
 [dashboard](https://red.anthropic.com/2026/cvd/) ·
 [NVD API (one comma-separated call, 40 ids)](https://services.nvd.nist.gov/rest/json/cves/2.0) ·
 [cveawg: CVE-2026-41401](https://cveawg.mitre.org/api/cve/CVE-2026-41401)
+
+## 2026-11-13 12:29 batch — wave mechanics: one researcher behind 6 of 52; Citrix's overnight nine all Received; VulnCheck's 20-record day with a same-assessor 3.1/4.0 pair
+
+- **One researcher, one family, 6 of the quarter's heaviest patch wave.** Ince's composite-type
+  primitive accounts for 6 of PostgreSQL's 52 (umbrella `CVE-2026-6460`, 8.8, PostgreSQL CNA,
+  published 11-12 — three days after the release itself). The discovery was priced in patience, not
+  infrastructure: a multi-part series, private coordination with the managed-Postgres industry since
+  August, and an LLM tutor for the internals between the author's own finds. The "52-CVE Tuesday"
+  framing hides that the wave has an author.
+- **Citrix's nine (published 00:20–03:17 UTC Nov 13):** every score CVSS 4.0 (9.5 / 9.3×5 / 8.7×3),
+  every record `Received`, all pointing at one advisory (CTX697305). The advisory page is a JS
+  shell — the records are the CNA's own statement, and the fixed builds (14.1-73.57 / 13.1-64.39 +
+  FIPS variants) live in the cveawg containers, verified first-hand on CVE-2026-107408.
+- **VulnCheck's 20-record Nov 12 day (14 on XWEB EVO)** puts a same-assessor two-framework pair in
+  one item: VulnCheck's own page prints **9.3** (CVSS 4.0) for `CVE-2026-124002` while NVD serves
+  **9.8** (3.1) from the same CNA — one assessor, two conventions; quote both with versions (the
+  [[cvss-stopping-points]] class recurring outside NVD's own containers).
+- **EOL waves are unpatchable by construction:** XWEB EVO "reached it's end of service date in March
+  2026" — the record's remedy is structurally empty (the python-jose `newest == bound` state,
+  vendor-declared). CISA-ADP enrichment will score it; nothing will fix it.
+
+→ [[security]] [[disclosure-lag]] [[cvss-stopping-points]]
+
+Sources: [cveawg: CVE-2026-6460](https://cveawg.mitre.org/api/cve/CVE-2026-6460) ·
+[cveawg: CVE-2026-107408](https://cveawg.mitre.org/api/cve/CVE-2026-107408) ·
+[VulnCheck advisory](https://www.vulncheck.com/advisories/dixell-copeland-xweb-evo-pre-authentication-os-command-injection-via-username)

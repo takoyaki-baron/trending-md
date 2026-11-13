@@ -4709,3 +4709,48 @@ Sources: [NVD: CVE-2026-124738](https://nvd.nist.gov/vuln/detail/CVE-2026-124738
 [Node.js v26.13.1](https://github.com/nodejs/node/releases/tag/v26.13.1) ·
 [NVD: CVE-2026-64670](https://nvd.nist.gov/vuln/detail/CVE-2026-64670) ·
 [GHSA-crj3-q72p-ggqm](https://github.com/walinejs/waline/security/advisories/GHSA-crj3-q72p-ggqm)
+
+## 2026-11-13 12:29 batch —— PostgreSQL 之波的机制浮出；NetScaler 隔夜九条 4.0 打分记录；制冷控制平面在 EOL 上开着预认证 root 与硬编码后门
+
+**PostgreSQL：周二 52 个 CVE 背后的研究者自述（Mehmet Ince，3/6 部分，11-09；HN 11-12）。**
+原语：建一个带 `uuid` 字段的复合类型，`PREPARE` 一条返回它的查询，`ALTER TYPE ... ALTER ATTRIBUTE
+key TYPE bytea CASCADE`，然后 `EXECUTE`——`record_out()` 把存储的 UUID 字节交给 `byteaout()`，
+其 `01 02` 前缀被读成展开对象指针；伪造的头部 + 方法表把 detoast 变成间接调用：`system(H)`。同一
+原语还能打败 ASLR——把数组元素类型改成 `bigint[]`，`unnest()` 会把指针当整数递回来。可变行类型
+行为可追溯到提交 `077db40fa1f3`（2004 年 5 月 5 日）；利用依赖 2015 年加入的展开对象指针。共 21
+个变体；11-09 发布的 **52** 个 CVE 中有 **6 个**属于这一家族（`CVE-2026-6460` 伞记录——**8.8**，
+PostgreSQL 自己的 CNA 于 11-12 发布到 NVD，描述写得很直白："allows an object creator to execute
+arbitrary code as the operating system user running the database"）。协调私下覆盖整个托管
+Postgres 行业——"I haven't seen any vendor who is not affected"（Databricks 验证、Google 把
+AlloyDB 升到 P0、AWS/Azure/Supabase 8 月即收到可用 PoC）。提交的 Reported-by 一行横跨 PostgreSQL
+核心、OpenAI 安全研究组与 Anthropic 的 Nicholas Carlini——而博文对智能体辅助研究毫不讳言：
+一个 Opus 驱动的 "pg_expert" 导师在他自己找漏洞的间隙里给他讲解 Datum 内部结构。
+
+**NetScaler：隔夜九条记录（11-13 00:20–03:17 UTC 发布），全部 CVSS 4.0，全部指向公告
+CTX697305。** CVE-2026-107412 打 9.5（多处内存溢出），五条 9.3（包处理、SMPP、DNS 与 DoH、
+NetScaler Push），三条 8.7（RTSP ALG、SAML、WebAuth）。cveawg 容器写明修复版本——**14.1-73.57**
+（14.1-73.58 FIPS）、**13.1-64.39**（13.1-37.293 FIPS/NDcPP），其上全部不受影响——已在
+`CVE-2026-107408` 上第一手验证（NetScaler CNA，2026-11-13T02:04Z 发布，"Memory corruption in DNS /
+DNS-over-HTTPS … Denial of Service"）。Citrix 的公告页对普通抓取只渲染出 JavaScript 壳——CVE
+记录才是可读孪生。撰写时九条仍全部 `Received`；描述停在内存溢出/拒绝服务的措辞上而分数在
+8.7–9.5 之间，定级前先读公告——但边缘这一周无论如何先打补丁（Citrix Bleed（2023）是这个家族的
+前科）。
+
+**XWEB EVO：暴露 PLC 这一类抵达超市制冷，且已 EOL。** VulnCheck 的 CNA 在 11-12 发布 20 条记录，
+其中 14 条针对 Dixell/Copeland XWEB EVO（食品零售制冷控制器 web 服务器），归功 Valentin
+Lobstein。三个 9.8（CVSS 3.1）：`CVE-2026-124002` 经 login.lua/cleanout.lua/api.lua 的*用户名字段*
+在"密码检查发生之前"注入 OS 命令，再链到 setuid-root 的 `wlua` 解释器拿 root；`CVE-2026-124004`
+硬编码后门密码给完整管理员权限；`CVE-2026-124010` 经 setuid-root 的 `xwconsole.cgi` 注入 root
+命令；`CVE-2026-124014` 未认证任意文件写（9.1）。决定响应方式的一句话："This product line
+reached it's end of service date in March 2026"——**没有修复路径；"未修补"是永久性的**，建议从
+排期打补丁改为网络隔离。注意同评估者的双框架对：VulnCheck 自己页面在同一记录上印 9.3
+（CVSS 4.0），NVD 提供 9.8（3.1）。这就是论点 21 的制冷剂类——法国 IRGC 制冷剂攻击（11-10）
+不需要利用就能扰乱的设备，其控制平面本身在设计上就是可猜凭证的。
+
+→ [[vuln-supply]] [[checkpoint-forensics]]
+
+Sources: [Mehmet Ince part 3/6](https://mehmetince.net/part-3-6-how-i-ended-up-turning-a-22-year-old-postgresql-type-confusion-primitive-into-rce-cve-2026-6460) ·
+[cveawg: CVE-2026-6460](https://cveawg.mitre.org/api/cve/CVE-2026-6460) ·
+[cveawg: CVE-2026-107408](https://cveawg.mitre.org/api/cve/CVE-2026-107408) ·
+[VulnCheck: XWEB EVO](https://www.vulncheck.com/advisories/dixell-copeland-xweb-evo-pre-authentication-os-command-injection-via-username) ·
+[NVD: CVE-2026-124002](https://nvd.nist.gov/vuln/detail/CVE-2026-124002)

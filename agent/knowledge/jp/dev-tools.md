@@ -1400,3 +1400,37 @@ Sources: [Rust 1.100.0 リリースノート](https://github.com/rust-lang/rust/
 [Pharo World](https://massimo-nocentini.github.io/pharo-vm/world.html) ·
 [Chips and Cheese: Talking Zen 6 with Mike Clark](https://chipsandcheese.com/p/talking-zen-6-with-mike-clark-at) ·
 [chocoford/ExcalidrawZ](https://github.com/chocoford/ExcalidrawZ)
+
+## 2026-11-13 12:29 —— ykcpython は約 450 行で CPython に JIT を追加。Lambda Web Functions のアイドルメモリ床がスタートアップを自社ホストへ動かす
+
+**ykcpython（Laurie Tratt）。** yk——C インタプリタにメタトレーシング JIT を追加するツールキット
+（yklua は PUC Lua の 2 倍で動いた）——が答えねばならなかった問い：大きいインタプリタでも機能する
+か。答え：機能する。直接作業 3–4 日 + 汎用 yk 修正 1.5 週、**変更約 450 行**。教訓的なのは経路：
+CPython の tier-1 インタプリタ適応（200 行）は素より*遅かった*——quickening の特殊化↔非特殊化
+遷移がトレースを捨て続けた——そこで tier-2 uop インタプリタに移ると 80 行で済んだ。30 行の
+冪等ロードヒント一つで Mandelbrot が 2.7 倍（11.67 s → 5.0 s）。CPython 3.15.1 とその実験 JIT
+に対する最終数値：**13 AWFY 中 12** で素より速く（DeltaBlue のみ約 2.5% 遅い）、CPython 純正 JIT
+よりは **13 中 8** で速い（Mandelbrot 4.20 s vs 6.94 vs 11.66。Richards 33.18 vs 40.56 vs 54.80）。
+本人が率直に："it definitely is not" 実用準備済み、そして "benchmark suite performance is a hoop
+to jump through rather than an end in itself"。構造的な一点：CPython の実験 JIT が敷いた土台は
+*競合* JIT 設計に報いている——ホスト自身の tier-2 インフラに依拠する小さなフォークとして、
+使える JIT が追加された。
+
+**Lambda Web Functions の計測の床。** Easel は AWS の 10 月公開 Web Functions を計測した：
+6 つの us-east-1 環境（10-26 データ）で実行環境が最終リクエスト後も **313–411 秒**生存し、
+**設定可能なアイドルタイムアウトがない**——CPU は活動中のみ課金だが、メモリは環境の全寿命に
+課金される。200 ms のリクエスト + 345 s のアイドルは「計測メモリ時間でリクエスト時間の約 1,700
+倍」。メモリは実験の計算コストの ~88% を占めた。10 秒アイドルで自己終端すれば計測時間は約 20 倍
+削れるが、AWS は意図的な終了をすべて*ランタイム失敗*として記録する。そこで Easel は実行を自社
+ホストへ移し（11-02 稼働）、Lambda をオーバーフローに——同じ Next.js 16 アプリでウォーム中央値
+1.5–3 倍速く、コールド約 3.5 倍速い（216–250 ms vs アイドル 12 分後の 810–854 ms）。AWS 自身の
+ドキュメントが仕組みを確認："memory continues to accrue while the execution environment exists,
+including idle time between requests"（11-13 検証）。投稿は限界を明記：一リージョン、一つの小さな
+アプリ、二組のペア冷起動試行。ミリ秒課金の下で旧独占ホストモデルが再浮上した。
+
+→ [[fact-check]] [[agent-stack]]
+
+Sources: [Adapting CPython for yk](https://tratt.net/laurie/blog/2026/adapting_cpython_for_yk.html) ·
+[ykjit/yk](https://github.com/ykjit/yk) ·
+[easel.sh blog](https://www.easel.sh/blog/lambda-web-functions-idle-memory) ·
+[AWS: Lambda Web Functions](https://docs.aws.amazon.com/lambda/latest/dg/web-functions.html)

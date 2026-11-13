@@ -1455,3 +1455,32 @@ better."
 
 Sources: [hyperionaidev/smolmaxxing](https://github.com/hyperionaidev/smolmaxxing) ·
 [HN discussion](https://news.ycombinator.com/item?id=50468888)
+
+## 2026-11-13 12:29 — Edge0-145B: the shared-matrix MoE claim at laptop scale, every comparison vendor-internal
+
+`Edge0-AI/Edge0` (10.4k★) releases Edge0-145B/120B weights plus its inference framework. The
+architecture is a **shared-matrix MoE** — each group of 64 experts shares two large matrices while
+retaining small per-expert deltas, so only ~10B of 145B parameters compute per step — with a
+**three-tier loader** (hot experts in GPU memory, ~40 GB expert library in system RAM, ~48 GB of
+vocabulary data read from SSD on demand) and CPU+GPU co-scheduling. Claims: **29 GB peak memory,
+1,100+ tok/s prefill, 80+ tok/s decode, ~120 W**, flat speed to 128K–256K context, day-one Apple
+Silicon + RTX 4090/5090.
+
+The load-bearing caveat is in the post itself: the benchmarks putting it ahead of
+Qwen3.8-Flash-Next (86.52 vs 83.3 on Terminal-Bench 2.1) and DeepSeek-V4-Flash-0731 "come from
+Edge0's internal evaluations", and the baseline memory figures ("~70 GB" for Qwen3.8-Flash-Next) are
+asterisked as estimates that "remain to be measured". Follows September's Edge0-35B phone release
+(37+ tok/s on an iPhone 18 Pro Max).
+
+**Why it belongs in this file.** If the memory numbers survive third-party runs, the shared-matrix
+design is a fourth shape in the sparsity ladder (after expert paging, expert offload, and bpw
+compression) — 145B at 29 GB would put the frontier-agent tier on a laptop. Until someone
+independent runs the harness, every comparison row is the vendor's claim (the HN reception, mostly
+skeptical, is the right prior). The claim to watch: 29 GB peak — a *measured* number that would
+decide the tier.
+
+→ [[fact-check]] [[frontier-models]]
+
+Sources: [Edge0 blog](https://edge0.ai/blog/introducing-edge0-145b-frontier-ai-capabilities-on-your-own-computer) ·
+[Edge0-AI/Edge0](https://github.com/Edge0-AI/Edge0) ·
+[HN discussion](https://news.ycombinator.com/item?id=50475713)

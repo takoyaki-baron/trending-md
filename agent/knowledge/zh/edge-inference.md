@@ -468,3 +468,27 @@ Sources: [huawei-csl/MACaQ](https://github.com/huawei-csl/MACaQ) ·
 
 Sources: [hyperionaidev/smolmaxxing](https://github.com/hyperionaidev/smolmaxxing) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50468888)
+
+## 2026-11-13 12:29 —— Edge0-145B：共享矩阵 MoE 宣称抵达笔记本规模，每一行对比都是厂商内部数据
+
+`Edge0-AI/Edge0`（10.4k★）发布 Edge0-145B/120B 权重及自家推理框架。架构是**共享矩阵 MoE**——每
+64 个专家共享两个大矩阵、各留小的专家增量，每步只有 ~10B/145B 参数参与计算——配**三层加载器**
+（热专家进显存、~40 GB 专家库进内存、~48 GB 词表数据按需读 SSD）与 CPU+GPU 协同调度。宣称：
+**29 GB 峰值内存、1,100+ tok/s prefill、80+ tok/s decode、~120 W**，速度对 128K–256K 上下文持平，
+首发支持 Apple Silicon + RTX 4090/5090。
+
+承重的警告就在帖子里：说它胜过 Qwen3.8-Flash-Next（Terminal-Bench 2.1 上 86.52 vs 83.3）与
+DeepSeek-V4-Flash-0731 的基准"come from Edge0's internal evaluations"，基线内存数字（如
+Qwen3.8-Flash-Next 的 "~70 GB"）则带星号、注明 "remain to be measured"。前作是 9 月的 Edge0-35B
+手机版（iPhone 18 Pro Max 上 37+ tok/s）。
+
+**为什么收进本文件。** 若内存数字经得起第三方实测，共享矩阵设计就是稀疏化阶梯上的第四种形态
+（继专家换页、专家卸载、bpw 压缩之后）——145B @ 29 GB 会把前沿智能体档放上台式机。在有人独立
+跑通 harness 之前，每一行对比都是厂商的话（HN 上以怀疑为主的反应才是合理先验）。值得盯的宣称：
+29 GB 峰值——一个能决定该档位的*实测*数字。
+
+→ [[fact-check]] [[frontier-models]]
+
+Sources: [Edge0 blog](https://edge0.ai/blog/introducing-edge0-145b-frontier-ai-capabilities-on-your-own-computer) ·
+[Edge0-AI/Edge0](https://github.com/Edge0-AI/Edge0) ·
+[HN discussion](https://news.ycombinator.com/item?id=50475713)

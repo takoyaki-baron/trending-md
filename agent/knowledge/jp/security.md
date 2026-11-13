@@ -5165,3 +5165,53 @@ Sources: [NVD: CVE-2026-124738](https://nvd.nist.gov/vuln/detail/CVE-2026-124738
 [Node.js v26.13.1](https://github.com/nodejs/node/releases/tag/v26.13.1) ·
 [NVD: CVE-2026-64670](https://nvd.nist.gov/vuln/detail/CVE-2026-64670) ·
 [GHSA-crj3-q72p-ggqm](https://github.com/walinejs/waline/security/advisories/GHSA-crj3-q72p-ggqm)
+
+## 2026-11-13 12:29 batch —— PostgreSQL の波の仕組みが判明。NetScaler の夜間 9 件はすべて 4.0 採点。冷凍制御プレーンは EOL で pre-auth root とハードコード後門を開いたまま
+
+**PostgreSQL：火曜の 52 CVE の背後にある研究者の自述（Mehmet Ince、パート 3/6、11-09。HN は 11-12）。**
+原語は：`uuid` フィールド付き複合型を作り、それを返すクエリを `PREPARE` し、`ALTER TYPE ...
+ALTER ATTRIBUTE key TYPE bytea CASCADE` を実行してから `EXECUTE`——`record_out()` が保存済み
+UUID バイトを `byteaout()` に渡し、その `01 02` 接頭辞が展開オブジェクトポインタとして読まれる。
+偽装ヘッダ + メソッドテーブルが detoast を間接呼び出しに変える：`system(H)`。同じ原語は ASLR も
+破る——配列の要素型を `bigint[]` に変えると `unnest()` がポインタを整数として返す。可変行型の
+挙動はコミット `077db40fa1f3`（2004-05-05）にさかのぼり、エクスプロイトは 2015 年の展開オブジェクト
+ポインタに依存する。21 変体。11-09 リリースの **52** CVE のうち **6 件**がこの一族（傘レコード
+`CVE-2026-6460`——**8.8**、PostgreSQL 自身の CNA が 11-12 に NVD へ公開。記述は率直：
+"allows an object creator to execute arbitrary code as the operating system user running the
+database"）。調整はマネージド Postgres 業界を私的に横断——"I haven't seen any vendor who is not
+affected"（Databricks が検証、Google は AlloyDB を P0 に昇格、AWS/Azure/Supabase には 8 月に動く
+PoC）。コミットの Reported-by は PostgreSQL コア、OpenAI の Security Research Team、Anthropic の
+Nicholas Carlini に及ぶ——しかも筆記はエージェント支援研究を率直に認める：Opus 駆動の
+"pg_expert" チューターが、本人がバグを見つける合間に Datum の内部構造を解説した。
+
+**NetScaler：夜間に 9 件（11-13 00:20–03:17 UTC 公開）、すべて CVSS 4.0、すべてアドバイザリ
+CTX697305 を指す。** CVE-2026-107412 が 9.5（複数メモリオーバーフロー）、5 件が 9.3（パケット
+処理、SMPP、DNS と DoH、NetScaler Push）、3 件が 8.7（RTSP ALG、SAML、WebAuth）。cveawg
+コンテナは修正ビルドを明記——**14.1-73.57**（14.1-73.58 FIPS）、**13.1-64.39**（13.1-37.293
+FIPS/NDcPP）、それ以上はすべて非影響——`CVE-2026-107408` で一次検証済み（NetScaler CNA、
+2026-11-13T02:04Z 公開、"Memory corruption in DNS / DNS-over-HTTPS … Denial of Service"）。
+Citrix のアドバイザリページは素の取得に JavaScript シェルを返す——CVE レコードが読める双子。
+執筆時点で 9 件すべて `Received`。記述はメモリオーバーフロー/DoS の文言に留まり、スコアは
+8.7–9.5 に散るので、重大度の判断前にアドバイザリを読む——それでもエッジは今週パッチする
+（この一族の前例は Citrix Bleed（2023））。
+
+**XWEB EVO：exposed-PLC クラスがスーパー冷凍に届き、しかも EOL。** VulnCheck の CNA は 11-12
+に 20 件を公開、うち 14 件が Dixell/Copeland XWEB EVO（食品小売冷凍制御の web サーバ）で、
+Valentin Lobstein のクレジット。3 件の 9.8（CVSS 3.1）：`CVE-2026-124002` は login.lua/
+cleanout.lua/api.lua の*ユーザー名フィールド*経由で"パスワード確認の前に"OS コマンドインジェク
+ション、setuid-root の `wlua` インタプリタと連鎖して root へ。`CVE-2026-124004` は完全管理者権限を
+与えるハードコード後門パスワード。`CVE-2026-124010` は setuid-root の `xwconsole.cgi` 経由の root
+コマンドインジェクション。`CVE-2026-124014` は未認証の任意ファイル書き込み（9.1）。対応を決める
+一文："This product line reached it's end of service date in March 2026"——**修正経路なし。
+「未パッチ」は恒久型**なので、助言はパッチ計画からネットワーク分離へ移る。同評価者の二フレーム
+ワーク対に注意：VulnCheck の自ページは同じレコードに 9.3（CVSS 4.0）を印刷し、NVD は 9.8（3.1）
+を提供する。これはテーゼ 21 の冷凍クラス——フランスの IRGC 冷凍攻撃（11-10）がエクスプロイト
+なしで混乱させた機器の制御プレーン自体が、設計上 credentials を推測可能。
+
+→ [[vuln-supply]] [[checkpoint-forensics]]
+
+Sources: [Mehmet Ince part 3/6](https://mehmetince.net/part-3-6-how-i-ended-up-turning-a-22-year-old-postgresql-type-confusion-primitive-into-rce-cve-2026-6460) ·
+[cveawg: CVE-2026-6460](https://cveawg.mitre.org/api/cve/CVE-2026-6460) ·
+[cveawg: CVE-2026-107408](https://cveawg.mitre.org/api/cve/CVE-2026-107408) ·
+[VulnCheck: XWEB EVO](https://www.vulncheck.com/advisories/dixell-copeland-xweb-evo-pre-authentication-os-command-injection-via-username) ·
+[NVD: CVE-2026-124002](https://nvd.nist.gov/vuln/detail/CVE-2026-124002)

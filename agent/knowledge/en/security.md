@@ -7517,3 +7517,54 @@ Sources: [NVD: CVE-2026-124738](https://nvd.nist.gov/vuln/detail/CVE-2026-124738
 [Node.js v26.13.1](https://github.com/nodejs/node/releases/tag/v26.13.1) ·
 [NVD: CVE-2026-64670](https://nvd.nist.gov/vuln/detail/CVE-2026-64670) ·
 [GHSA-crj3-q72p-ggqm](https://github.com/walinejs/waline/security/advisories/GHSA-crj3-q72p-ggqm)
+
+## 2026-11-13 12:29 batch — PostgreSQL's wave gets its mechanism; NetScaler's nine overnight 4.0-scored records; and the refrigeration control plane is pre-auth root with a hardcoded backdoor at EOL
+
+**PostgreSQL: the researcher's account behind Tuesday's 52 (Mehmet Ince, part 3/6, Nov 9; HN Nov 12).**
+The primitive: create a composite type with a `uuid` field, `PREPARE` a query returning it,
+`ALTER TYPE ... ALTER ATTRIBUTE key TYPE bytea CASCADE`, then `EXECUTE` — `record_out()` hands the
+stored UUID bytes to `byteaout()`, whose `01 02` prefix reads as an expanded-object pointer; a forged
+header + methods table turns detoasting into an indirect call: `system(H)`. The same primitive
+defeats ASLR — flip an array's element type to `bigint[]` and `unnest()` hands its pointer back as an
+integer. The mutable-row-type behavior dates to commit `077db40fa1f3` (May 5, 2004); the exploit leans
+on expanded-object pointers (2015). 21 variants; **6 of the 52** CVEs in Nov 9's release are this
+family (`CVE-2026-6460` umbrella — **8.8**, published to NVD Nov 12 by PostgreSQL's own CNA, whose
+description states it plainly: "allows an object creator to execute arbitrary code as the operating
+system user running the database"). Coordination ran privately across the managed-Postgres industry —
+"I haven't seen any vendor who is not affected" (Databricks validated, Google escalated AlloyDB to
+P0, AWS/Azure/Supabase got working PoCs in August). The commit's Reported-by line spans PostgreSQL
+core, OpenAI's Security Research Team and Anthropic's Nicholas Carlini — and the writeup is candid
+about agent-assisted research: an Opus-powered "pg_expert" tutor walked him through Datum internals
+between finding bugs himself.
+
+**NetScaler: nine records overnight (published 00:20–03:17 UTC Nov 13), every score CVSS 4.0, every
+record pointing at advisory CTX697305.** CVE-2026-107412 at 9.5 (multiple memory overflows), five at
+9.3 (packet processing, SMPP, DNS and DoH, NetScaler Push), three at 8.7 (RTSP ALG, SAML, WebAuth).
+The cveawg containers name the fixed builds — **14.1-73.57** (14.1-73.58 FIPS), **13.1-64.39**
+(13.1-37.293 FIPS/NDcPP), everything at or above unaffected — verified first-hand on
+`CVE-2026-107408` (NetScaler CNA, published 2026-11-13T02:04Z, "Memory corruption in DNS /
+DNS-over-HTTPS … Denial of Service"). Citrix's advisory page renders as a JavaScript shell to a plain
+fetch — the CVE records are the readable twin. All nine still `Received` at write time; descriptions
+stop at memory-overflow/DoS wording while the scores run 8.7–9.5, so read the advisory before
+deciding severity — and patch the edge regardless (Citrix Bleed, 2023, is the family's precedent).
+
+**XWEB EVO: the exposed-PLC class reaches supermarket refrigeration, at EOL.** VulnCheck's CNA
+published 20 records Nov 12, 14 on Dixell/Copeland XWEB EVO (food-retail refrigeration controller web
+server), credited to Valentin Lobstein. Three 9.8s (CVSS 3.1): `CVE-2026-124002` pre-auth OS command
+injection via the *username field* of login.lua/cleanout.lua/api.lua "before the password check
+occurs", chained with the setuid-root `wlua` interpreter for root; `CVE-2026-124004` a hardcoded
+backdoor password granting full admin; `CVE-2026-124010` root command injection via setuid-root
+`xwconsole.cgi`; `CVE-2026-124014` unauthenticated arbitrary file write (9.1). The line that decides
+the response: "This product line reached it's end of service date in March 2026" — **no fix path;
+"unpatched" is the permanent kind**, so the advice moves from patch-scheduling to network isolation.
+Note the same-assessor two-framework pair: VulnCheck's page prints 9.3 (CVSS 4.0) on the record NVD
+serves at 9.8 (3.1). This is thesis 21's freezer class — the control plane France's IRGC attacks
+(11-10) didn't need an exploit to disrupt is itself credential-guessable by design.
+
+→ [[vuln-supply]] [[checkpoint-forensics]]
+
+Sources: [Mehmet Ince part 3/6](https://mehmetince.net/part-3-6-how-i-ended-up-turning-a-22-year-old-postgresql-type-confusion-primitive-into-rce-cve-2026-6460) ·
+[cveawg: CVE-2026-6460](https://cveawg.mitre.org/api/cve/CVE-2026-6460) ·
+[cveawg: CVE-2026-107408](https://cveawg.mitre.org/api/cve/CVE-2026-107408) ·
+[VulnCheck: XWEB EVO](https://www.vulncheck.com/advisories/dixell-copeland-xweb-evo-pre-authentication-os-command-injection-via-username) ·
+[NVD: CVE-2026-124002](https://nvd.nist.gov/vuln/detail/CVE-2026-124002)

@@ -1299,3 +1299,33 @@ Sources: [Rust 1.100.0 发布说明](https://github.com/rust-lang/rust/releases/
 [Pharo World](https://massimo-nocentini.github.io/pharo-vm/world.html) ·
 [Chips and Cheese：与 Mike Clark 谈 Zen 6](https://chipsandcheese.com/p/talking-zen-6-with-mike-clark-at) ·
 [chocoford/ExcalidrawZ](https://github.com/chocoford/ExcalidrawZ)
+
+## 2026-11-13 12:29 —— ykcpython 用约 450 行给 CPython 装上 JIT；Lambda Web Functions 的空闲内存地板把一家创业公司逼回自有主机
+
+**ykcpython（Laurie Tratt）。** yk——给 C 解释器加元追踪 JIT 的工具包（yklua 跑出 PUC Lua 的
+2 倍）——必须回答的问题是：对大型解释器行得通吗？答案：行得通，直接工作量 3–4 天、外加 1.5 周
+通用 yk 修复，**改动约 450 行**。有教益的是路径：适配 CPython 的 tier-1 解释器（200 行）反而比
+原版*慢*——quickening 的特化↔非特化切换不断丢弃轨迹——于是改用 tier-2 uop 解释器，只花 80 行；
+一个 30 行的幂等加载提示让 Mandelbrot 快了 2.7 倍（11.67 s → 5.0 s）。对标 CPython 3.15.1 及其
+实验性 JIT 的最终数字：**13 项 AWFY 基准中 12 项**快过原版（仅 DeltaBlue 慢约 2.5%），**13 项中
+8 项**快过 CPython 自带 JIT（Mandelbrot 4.20 s vs 6.94 vs 11.66；Richards 33.18 vs 40.56 vs
+54.80）。作者自己写明："it definitely is not" 达到可用状态，且 "benchmark suite performance is a
+hoop to jump through rather than an end in itself"。结构性要点：CPython 实验性 JIT 打的地基正在
+为*竞争* JIT 设计付酬——一个可用的 JIT 以小 fork 的形式加上，靠的是宿主自己的 tier-2 基础设施。
+
+**Lambda Web Functions 的计量地板。** Easel 实测 AWS 十月上线的 Web Functions：六个 us-east-1
+环境（10-26 数据）在最后一个请求之后存活 **313–411 秒**，且**无可配置的空闲超时**——CPU 只在
+活跃时计费，但内存按环境整个生命周期计费，于是一个 200 ms 请求加 345 s 空闲是"按计费内存时间算
+约为请求时长的 1,700 倍"；内存占该实验计算成本的 ~88%。10 秒空闲后自终止能把计费时间砍约 20 倍，
+但 AWS 把每次主动退出记为*运行时失败*。于是 Easel 把执行搬上自有主机（11-02 上线），Lambda 只作
+溢流——同一个 Next.js 16 应用：热启动中位数快 1.5–3 倍、冷启动快约 3.5 倍（216–250 ms vs 空闲
+12 分钟后的 810–854 ms）。AWS 自己的文档确认该机制："memory continues to accrue while the
+execution environment exists, including idle time between requests"（11-13 已验证）。博文自述局限：
+单区域、单个小应用、两组配对冷启动试验。老式独占主机模型在按毫秒计费之下重出江湖。
+
+→ [[fact-check]] [[agent-stack]]
+
+Sources: [Adapting CPython for yk](https://tratt.net/laurie/blog/2026/adapting_cpython_for_yk.html) ·
+[ykjit/yk](https://github.com/ykjit/yk) ·
+[easel.sh blog](https://www.easel.sh/blog/lambda-web-functions-idle-memory) ·
+[AWS: Lambda Web Functions](https://docs.aws.amazon.com/lambda/latest/dg/web-functions.html)

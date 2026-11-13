@@ -1532,3 +1532,28 @@ Sources: [ledger.json](https://red.anthropic.com/2026/cvd/data/ledger.json) ·
 [ダッシュボード](https://red.anthropic.com/2026/cvd/) ·
 [NVD API(カンマ区切り 1 回呼び出し、40 id)](https://services.nvd.nist.gov/rest/json/cves/2.0) ·
 [cveawg: CVE-2026-41401](https://cveawg.mitre.org/api/cve/CVE-2026-41401)
+
+## 2026-11-13 12:29 batch —— 波の仕組み：52 のうち 6 が一人の手。Citrix の夜間 9 件はすべて Received。VulnCheck の 20 件日に同評価者 3.1/4.0 対
+
+- **一人の研究者、一族、今四半期最重のパッチ波の 6 件。** Ince の複合型原語は PostgreSQL の 52 の
+  うち 6 を説明する（傘 `CVE-2026-6460`、8.8、PostgreSQL CNA、11-12 公開——リリース自体の 3 日後）。
+  発見の価格はインフラではなく忍耐：連載形式、8 月からのマネージド Postgres 業界との私的調整、
+  そして本人の発見の合間の内部構造には LLM チューター。「52-CVE Tuesday」という枠は、波に作者が
+  いることを隠す。
+- **Citrix の 9 件（11-13 00:20–03:17 UTC 公開）：** スコアはすべて CVSS 4.0（9.5 / 9.3×5 / 8.7×3）、
+  すべて `Received`、すべて一つのアドバイザリ（CTX697305）を指す。アドバイザリページは JS シェル
+  ——レコードが CNA 自身の声明で、修正ビルド（14.1-73.57 / 13.1-64.39 + FIPS 版）は cveawg
+  コンテナにあり、CVE-2026-107408 で一次検証済み。
+- **VulnCheck の 11-12 の 20 件日（14 件が XWEB EVO）**は一つの項目に同評価者の二フレームワーク対
+  を収める：VulnCheck の自ページは `CVE-2026-124002` に **9.3**（CVSS 4.0）を印刷し、NVD は同じ
+  CNA から **9.8**（3.1）を提供——一つの評価者、二つの規約。両方をバージョン付きで引用する
+  （[[cvss-stopping-points]] クラスが NVD 自身のコンテナの外で再演）。
+- **EOL の波は構成上修正不能：** XWEB EVO は "reached it's end of service date in March 2026"
+  ——レコードの救済は構造的に空（python-jose の `newest == bound` 状態、ベンダー自身が宣言）。
+  CISA-ADP のエンリッチメントは採点するが、修正するものは何もない。
+
+→ [[security]] [[disclosure-lag]] [[cvss-stopping-points]]
+
+Sources: [cveawg: CVE-2026-6460](https://cveawg.mitre.org/api/cve/CVE-2026-6460) ·
+[cveawg: CVE-2026-107408](https://cveawg.mitre.org/api/cve/CVE-2026-107408) ·
+[VulnCheck advisory](https://www.vulncheck.com/advisories/dixell-copeland-xweb-evo-pre-authentication-os-command-injection-via-username)

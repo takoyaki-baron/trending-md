@@ -1212,12 +1212,53 @@ if (fs.existsSync(actionAgendaPath)) {
     for (let j = t.start + 1; j < stop; j++) { if (/^#{2,3} /.test(aLines[j])) { stop = j; break; } }
     t.len = aLines.slice(t.start, stop).filter(l => l.trim()).length;
     t.name = (aLines[t.start].match(/\*\*([^*]+)/) || [])[1] || aLines[t.start].slice(0, 48);
+    t.state = aLines[t.start].charAt(3); // ' ' | '~' | 'x'
+    t.text = aLines.slice(t.start, stop).join('\n');
   });
+  const openCount = items.filter(t => t.state !== 'x').length;
+  const doneCount = items.length - openCount;
   const over = items.filter(t => t.len > AGENDA_ITEM_LINE_BUDGET).sort((a, b) => b.len - a.len);
-  console.log(`  ✓ en/action.md agenda: ${items.length} open items (Research + System)`);
+  console.log(`  ✓ en/action.md agenda: ${items.length} items (Research + System) — ${openCount} open [ ]/[~], ${doneCount} done [x] awaiting archive`);
   if (over.length) {
     console.log(`  ⚠ ${over.length} agenda item(s) over the ${AGENDA_ITEM_LINE_BUDGET}-line budget — compact to claim + dated status lines; history belongs in the linked knowledge files`);
     over.forEach(t => console.log(`      [${t.bucket}] ${t.name}… (${t.len} lines)`));
+  }
+
+  /* ── Agenda staleness check ──
+     The line budget above caps how LONG an item grows, not how LONG AGO it last moved — and the
+     buckets only ever grow: every watch filed since late September still sits open with nothing
+     prompting closure (the log has a 14-day window, theses a 24-line budget; an open `[ ]`/`[~]`
+     item can drift for months, which is how watches become permanent `[~]` limbo). Rule: an open
+     item whose latest dated movement note is older than 30 days (or that carries no date at all)
+     warns, so the next act pass advances it, closes it, or re-files it with a dated note.
+     Dates read BOTH spellings the agenda actually uses — `2026-11-13` and `filed 11-12` /
+     `next re-check ~12-10` — with month/day validity guards so `2026-11-13` never short-matches
+     `20-26`. Future dates (a scheduled `next ~2026-12-10`) are plans, printed but never counted
+     fresh: once the last movement note ages out, the item warns even while a future check is on
+     the calendar, because the cure is the same — move it, close it, or re-date it.
+     Known limit: a claim's own content dates (a release date the item quotes) are ≤ the note that
+     wrote them, so they can only add day-level noise, never revive a month-stale item.
+     En-only: the agenda is en-canonical; zh/jp are translations. Added 2026-11-13 12:52. */
+  const AGENDA_STALE_DAYS = 30;
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const yr = new Date().getUTCFullYear();
+  const RE_FULL_DATE = /\b(\d{4}-\d{2}-\d{2})\b/g;
+  const RE_SHORT_DATE = /(?<![\d-])(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])(?![\d-])/g;
+  const staleItems = [];
+  items.forEach(t => {
+    if (t.state === 'x') return;
+    const dates = [...t.text.matchAll(RE_FULL_DATE)].map(m => m[1]);
+    [...t.text.matchAll(RE_SHORT_DATE)].forEach(m => dates.push(`${yr}-${m[1]}-${m[2]}`));
+    const past = [...new Set(dates)].filter(d => d <= todayStr);
+    const future = [...new Set(dates)].filter(d => d > todayStr);
+    t.lastMove = past.length ? past.sort().pop() : null;
+    t.nextPlan = future.length ? future.sort()[0] : null;
+    if (t.lastMove === null || t.lastMove < new Date(Date.now() - AGENDA_STALE_DAYS * 86400000).toISOString().slice(0, 10)) staleItems.push(t);
+  });
+  staleItems.sort((a, b) => (a.lastMove || '0000') < (b.lastMove || '0000') ? -1 : 1);
+  if (staleItems.length) {
+    console.log(`  ⚠ ${staleItems.length} open agenda item(s) with no dated movement in ${AGENDA_STALE_DAYS} days (cutoff ${todayStr}) — advance, close, or re-file with a dated note`);
+    staleItems.slice(0, 5).forEach(t => console.log(`      [${t.bucket}] ${t.name.slice(0, 64)}… (last ${t.lastMove || 'never'}${t.nextPlan ? `, next ~${t.nextPlan}` : ''})`));
   }
 
   /* ── Log-window budget check ──

@@ -2698,3 +2698,27 @@ Sources: [CopilotKit/OpenBot](https://github.com/CopilotKit/OpenBot) ·
 Sources: [simpsoka/zigzag](https://github.com/simpsoka/zigzag) ·
 [Alishahryar1/free-claude-code](https://github.com/Alishahryar1/free-claude-code) ·
 [free-claude-code on PyPI](https://pypi.org/project/free-claude-code/)
+
+## 2026-11-13 12:29 —— AgentRun：自己改善をコスト曲線として売り、ハーネスの上の制御プレーンに載せる
+
+Parcha の AgentRun（GREP.AI、YC F26。Apache-2.0、npm `@parcha/agentrun`、640★）は「自己改善、
+永続実行、そして制御プレーン」を ACP 経由で持ち込みハーネス（Pi、Claude Agents、Codex、
+OpenCode）の上に重ねる。サンドボックス、計算機環境、数千ツールを備え、コンソールの Learning タブ
+はエージェントが保持したものを見せる——デモのキャプションは回答が 10 s → 2 s、実行が $0.05 →
+$0.0077 に下がると主張。
+
+ケーススタディが正直な部分：レビュー 1 件に 1 ドルかかるようになったとき、彼らのコードレビュー
+請求は **$180 → $6,451/月**になった。そこで自分の PR でチューニングした安いモデルで自前レビュ
+アーを作り——**1 レビュー 18 セント**、30 PR で Greptile が捕えた実バグの **1.6 倍**を主張
+（自己報告サンプル）。マーチャント分類は仕事を学んで 7 倍安くなった。Render へのワンクリック
+デプロイ、またはホスト型コンソール。
+
+**なぜこのファイルに。** ルーティングプロキシの上の層は統合を続けている——だが注視すべき賭けは
+記憶機能としてではなく*測定可能なコスト曲線としての自己改善*。主張は会社自身の 30 PR サンプル
+なので、再現されるまで 1.6× はマーケ級。形（ハーネス非依存の制御プレーン + 複利で効く学習ループ）
+こそエージェントインフラが収束している場所。
+
+→ [[agent-plugins]] [[system1-decision]]
+
+Sources: [Parcha-ai/agentrun](https://github.com/Parcha-ai/agentrun) ·
+[HN Show](https://news.ycombinator.com/item?id=50471650)

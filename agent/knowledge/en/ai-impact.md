@@ -340,3 +340,29 @@ Still a trial ("changing a little"), not a replacement.
 
 Sources: [Jane Street: Our software engineering interviews are changing a little](https://blog.janestreet.com/software-engineering-interviews-are-changing-a-little/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50467297)
+
+## 2026-11-13 12:29 — Apple's App Review is the newest collision point: generation floods the gate, review hallucinates the rejections
+
+Synth Anatomy documents the two-sided failure around iOS music apps: an estimated **10–20 new iOS
+music apps per day** arrive vibe-coded, while Apple's review — its own page promises "at least 50%
+of submissions in less than 24 hours and 90% in less than 48 hours" (verified verbatim 11-13) — has
+stretched to weeks (Pittsburgh Modular's Microvolt 3901: VST on Oct 27, iOS only on Nov 12). The
+rejection quality is the new part: Unfiltered Audio's Michael Hetrick was rejected **four times** —
+the editor "hallucinated that 'Polyharmonic' was an audio technology that we needed to show a
+documented license for", then demanded a video with "the required proprietary hardware", then
+flagged the MIDI build as spam for resembling the audio build; Marek Dendes' CRUX Synth was rejected
+four times as "design spam" produced by "app generation template services", appeals unanswered five
+days on.
+
+**Why it matters here.** App Review is the platform's core trust product — the promise that
+everything on the store was checked. This is the review-capacity collision (thesis 22) arriving at
+Apple: cheap generation inflates the supply side while automated review hallucinates on the demand
+side, and the appeal path reads as a dead end. The Debian unannounced-LLM-review shape (10-27)
+recurring: nobody claims the automated decisions are *right*, only that nobody can establish whether
+they are — and the cost lands on the small developers the gate exists to protect.
+
+→ [[dev-tools]] [[platform-gatekeeping]]
+
+Sources: [Synth Anatomy](https://synthanatomy.com/2026/11/ai-is-turning-apples-app-review-process-into-a-nightmare-for-developers.html) ·
+[Apple: App Review](https://developer.apple.com/distribute/app-review/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50474311)

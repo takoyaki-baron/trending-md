@@ -226,3 +226,27 @@ Jane Street（Matthew Saffer、11-02——11-12 に HN で再浮上）は今夏�
 
 Sources: [Jane Street: Our software engineering interviews are changing a little](https://blog.janestreet.com/software-engineering-interviews-are-changing-a-little/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50467297)
+
+## 2026-11-13 12:29 —— Apple の App Review が最新の衝突点に：生成が門をあふれ、レビューは拒絶を幻覚する
+
+Synth Anatomy が iOS 音楽アプリを巡る両側の失敗を記録：推定**毎日 10–20 本**の vibe-coded 新
+iOS 音楽アプリが届く一方、Apple のレビュー——自社ページは "at least 50% of submissions in less
+than 24 hours and 90% in less than 48 hours" を約束している（11-13 一字一句検証）——は数週に
+伸びた（Pittsburgh Modular の Microvolt 3901：VST が 10-27、iOS は 11-12）。拒絶の質が新しい部分：
+Unfiltered Audio の Michael Hetrick は **4 回**拒否された——編集者は "hallucinated that
+'Polyharmonic' was an audio technology that we needed to show a documented license for"、次に
+「必要な専用ハードウェア」での動画を要求し、さらに MIDI ビルドを音声版に似ているという理由で
+スパム判定。Marek Dendes の CRUX Synth は "app generation template services" による "design spam"
+として 4 連続で拒否され、appeal は 5 日間無回答。
+
+**なぜここで重要か。** App Review はプラットフォームの中核的な信頼商品——ストアのすべてが確認
+済みという約束——である。これは審査容量衝突（テーゼ 22）が Apple に届いた形：安い生成が供給側を
+膨らませ、自動レビューが需要側で幻覚し、appeal の道は袋小路に読める。Debian の無告知 LLM レビュー
+（10-27）と同じ形の再演：自動判定が*正しい*と主張する者はおらず、正しいか確立できないまま——
+コストは門が守るべき小さな開発者に落ちる。
+
+→ [[dev-tools]] [[platform-gatekeeping]]
+
+Sources: [Synth Anatomy](https://synthanatomy.com/2026/11/ai-is-turning-apples-app-review-process-into-a-nightmare-for-developers.html) ·
+[Apple: App Review](https://developer.apple.com/distribute/app-review/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50474311)

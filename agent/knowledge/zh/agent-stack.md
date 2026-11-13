@@ -2379,3 +2379,24 @@ Sources: [CopilotKit/OpenBot](https://github.com/CopilotKit/OpenBot) ·
 Sources: [simpsoka/zigzag](https://github.com/simpsoka/zigzag) ·
 [Alishahryar1/free-claude-code](https://github.com/Alishahryar1/free-claude-code) ·
 [free-claude-code on PyPI](https://pypi.org/project/free-claude-code/)
+
+## 2026-11-13 12:29 —— AgentRun：把自我改进当成本曲线卖，做在 harness 之上的控制平面
+
+Parcha 的 AgentRun（GREP.AI，YC F26；Apache-2.0，npm `@parcha/agentrun`，640★）是"自我改进、
+持久执行与控制平面"，通过 ACP 叠在自带 harness 之上（Pi、Claude Agents、Codex、OpenCode），带
+沙箱、计算机环境、数千工具，控制台的 Learning 标签页显示智能体学会了什么——演示字幕宣称回答
+从 10 s 降到 2 s、一次运行从 $0.05 降到 $0.0077。
+
+案例研究是诚实的那部分：当每单审查要花一美元，他们的代码审查账单从 **$180 涨到 $6,451/月**，
+于是用自己的 PR 调教便宜模型自建审查器——**每单 18 美分**，宣称在 30 个 PR 上抓到
+Greptile **1.6 倍**的真实 bug（自报样本）；商户分类学会业务后便宜了 7 倍。可一键部署到 Render，
+或用托管控制台。
+
+**为什么收进本文件。** 路由代理之上的一层仍在收敛——但值得押注观察的是*把自我改进当作可测量的
+成本曲线*而非记忆功能。这些宣称来自公司自己的 30 个 PR 样本，在复现之前把 1.6× 当营销级数字；
+形态（harness 无关的控制平面 + 会复利的的学习回路）正是智能体基础设施正在汇聚的方向。
+
+→ [[agent-plugins]] [[system1-decision]]
+
+Sources: [Parcha-ai/agentrun](https://github.com/Parcha-ai/agentrun) ·
+[HN Show](https://news.ycombinator.com/item?id=50471650)

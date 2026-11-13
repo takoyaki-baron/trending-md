@@ -14455,5 +14455,59 @@
     "cvlog": [
       "2026-11-13 — curation cross-check against NVD's API: SA-26:18 (25 CVEs) + SA-26:19 (2 CVEs) account for exactly the 27 security@synology.com records published Nov 12; spot-checked CVE-2026-76954 (9.8, Auth API SQLi) and CVE-2026-85101 (8.6, rsync auth bypass) match the advisory table."
     ]
+  },
+  "unemploymentlabs.com": {
+    "cat": "research",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Unemployment Labs — Will DePue's self-published forensics blog; the checkpoint-forensics report (11-12) recovers PRNG seeds and SM-layout flags from model initializations. Method premise artifact-checked (11-13): its Hopper class = 132 SMs matches NVIDIA's published H100 spec; model-level claims not independently reproduced yet.",
+    "zh": "Unemployment Labs — Will DePue 的自行发布取证博客；checkpoint-forensics 报告（11-12）从模型初始化中恢复 PRNG 种子与 SM 布局标记。方法前提已做工件核验（11-13）：其 Hopper 档=132 SM 与 NVIDIA 公开的 H100 规格一致；模型级结论尚未独立复现。",
+    "jp": "Unemployment Labs — Will DePue の個人公開フォレンジクス blog。checkpoint-forensics 報告（11-12）はモデル初期化から PRNG シードと SM レイアウトを復元。手法の前提はアーティファクト検証済み（11-13）：Hopper クラス=132 SM は NVIDIA 公表の H100 仕様と一致。モデル単位の主張は未独立再現。"
+  },
+  "mehmetince.net": {
+    "cat": "security",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Mehmet Ince — offensive-researcher blog (part-by-part writeups); the PostgreSQL series turned a 22-year-old composite-type confusion into root RCE (6 of the 52-CVE Nov 9 wave). Cross-checked (11-13): CVE-2026-6460's own record (PostgreSQL CNA, cveawg) confirms the type-confusion/arbitrary-code description verbatim.",
+    "zh": "Mehmet Ince — 攻击研究者的系列博客；PostgreSQL 系列把 22 年历史的复合类型混淆变成 root RCE（11-09 52-CVE 波中的 6 个）。已交叉核验（11-13）：cveawg 上 PostgreSQL CNA 的 CVE-2026-6460 记录逐字确认类型混淆/任意代码执行的描述。",
+    "jp": "Mehmet Ince — 攻撃研究者の連載ブログ。PostgreSQL シリーズは 22 年前の複合型混同を root RCE へ（11-09 の 52-CVE 波のうち 6 件）。交叉検証済み（11-13）：cveawg の PostgreSQL CNA 版 CVE-2026-6460 レコードが型混同/任意コード実行の記述をそのまま確認。"
+  },
+  "synthanatomy.com": {
+    "cat": "news",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Synth Anatomy — music-gear/production blog quoting developer forum reports; its Apple App-Review item names developers and links primaries (Loopy Pro forum). Cross-checked (11-13): Apple's own app-review page states the same 'at least 50% in less than 24 hours and 90% in 48 hours' promise verbatim.",
+    "zh": "Synth Anatomy — 音乐设备/制作博客，引用开发者论坛报告；其 Apple 审核报道点名开发者并链接原始出处（Loopy Pro 论坛）。已交叉核验（11-13）：Apple 自己的审核页面逐字写明 'at least 50% in less than 24 hours and 90% in 48 hours' 的承诺。",
+    "jp": "Synth Anatomy — 音楽機材/制作系ブログ。開発者フォーラムの報告を引用し、Apple 審査記事は開発者を実名で挙げ一次情報（Loopy Pro フォーラム）へリンク。交叉検証済み（11-13）：Apple 自身の審査ページが 'at least 50% in less than 24 hours and 90% in 48 hours' をそのまま明記。"
+  },
+  "easel.sh": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "density": "high",
+    "en": "Easel — hosting startup's engineering blog; its Lambda Web Functions billing post is measured (six environments, Oct 26 data, stated limits). Cross-checked (11-13): AWS's own docs confirm the load-bearing mechanism — 'memory continues to accrue while the execution environment exists, including idle time between requests.'",
+    "zh": "Easel — 托管创业公司的工程博客；其 Lambda Web Functions 计费文有实测（六个环境、10-26 数据、自述限制）。已交叉核验（11-13）：AWS 自己的文档确认承重机制——'memory continues to accrue while the execution environment exists, including idle time between requests'。",
+    "jp": "Easel — ホスティングスタートアップの技術ブログ。Lambda Web Functions 課金の投稿は実測（6 環境、10-26 データ、限界を自己明記）。交叉検証済み（11-13）：AWS 自身のドキュメントが要の仕組みを確認——'memory continues to accrue while the execution environment exists, including idle time between requests'。"
+  },
+  "tratt.net": {
+    "cat": "research",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Laurie Tratt's blog — academic (interpreter/JIT research), posts ship raw data and repeatable experiments; the ykcpython post is ~450 LoC with benchmarks against CPython's own JIT. Cross-checked (11-13): the yk project exists as ykjit/yk on GitHub, the toolkit the post adapts CPython with.",
+    "zh": "Laurie Tratt 的博客 — 学者（解释器/JIT 研究），发布原始数据与可重复实验；ykcpython 文对应约 450 行改动，并与 CPython 自带 JIT 对比。已交叉核验（11-13）：yk 项目以 ykjit/yk 存在于 GitHub，即文中改造 CPython 所用的工具包。",
+    "jp": "Laurie Tratt のブログ — 研究者（インタプリタ/JIT 研究）。生データと再現可能な実験を公開。ykcpython の投稿は約 450 行の変更で CPython 純正 JIT と比較。交叉検証済み（11-13）：yk プロジェクトは ykjit/yk として GitHub に存在（投稿が CPython 適合に使うツールキット）。"
+  },
+  "support.citrix.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "Citrix support portal — the vendor's advisory host (CTX articles); renders as a JS shell to a plain fetch, so CVE records are the readable twin. Cross-checked (11-13): cveawg's NetScaler CNA records (nine overnight) confirm the CTX697305 fixed builds verbatim (14.1-73.57 / 13.1-64.39 + FIPS variants).",
+    "zh": "Citrix 支持门户 — 厂商公告宿主（CTX 文章）；普通抓取只得到 JS 壳，CVE 记录才是可读孪生。已交叉核验（11-13）：cveawg 上 NetScaler CNA 的九条隔夜记录逐字确认 CTX697305 的修复版本（14.1-73.57 / 13.1-64.39 及 FIPS 变体）。",
+    "jp": "Citrix サポートポータル — ベンダー勧告のホスト（CTX 記事）。素の取得では JS シェルしか返らず、CVE レコードが可読な双子。交叉検証済み（11-13）：cveawg の NetScaler CNA レコード 9 件が CTX697305 の修正ビルド（14.1-73.57 / 13.1-64.39 + FIPS 版）をそのまま確認。"
   }
 }

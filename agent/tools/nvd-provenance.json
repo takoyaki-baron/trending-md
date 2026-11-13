@@ -2933,6 +2933,46 @@
    "id": "CVE-2026-12507",
    "why": "2026-11-13 — ManageEngine's own CNA drops a 9.9 and an 8.8 PowerShell-injection pair across its admin suite",
    "seeded": "2026-11-12 [Awaiting Analysis] 3.1 Secondary/0fc0942c-577d-436f-ae8e-945763c79b02 9.1, CWE-89, published 11-12"
+  },
+  {
+   "id": "CVE-2026-6460",
+   "why": "2026-11-13 — The story behind PostgreSQL's 52-CVE Tuesday: a researcher turns a 22-year-old composite-type primitive into root RCE",
+   "seeded": "2026-11-13 [Awaiting Analysis] 3.1 Secondary/f86ef6dc-4d3a-42ad-8f28-e6d5547a5007 8.8, CWE-843, published 11-12"
+  },
+  {
+   "id": "CVE-2026-120142",
+   "why": "2026-11-13 — The story behind PostgreSQL's 52-CVE Tuesday: a researcher turns a 22-year-old composite-type primitive into root RCE",
+   "seeded": "2026-11-13 [Awaiting Analysis] 3.1 Secondary/f86ef6dc-4d3a-42ad-8f28-e6d5547a5007 8.8, CWE-843, published 11-12"
+  },
+  {
+   "id": "CVE-2026-107412",
+   "why": "2026-11-13 — Nine NetScaler CVE records land overnight — memory corruption across ADC/Gateway, fixed in 14.1-73.57 and 13.1-64.39",
+   "seeded": "2026-11-13 [Received] 4.0 Secondary/50a63c94-1ea7-4568-8c11-eb79e7c5a2b5 9.5, published 11-13"
+  },
+  {
+   "id": "CVE-2026-107408",
+   "why": "2026-11-13 — Nine NetScaler CVE records land overnight — memory corruption across ADC/Gateway, fixed in 14.1-73.57 and 13.1-64.39",
+   "seeded": "2026-11-13 [Received] 4.0 Secondary/50a63c94-1ea7-4568-8c11-eb79e7c5a2b5 9.3, published 11-13"
+  },
+  {
+   "id": "CVE-2026-124002",
+   "why": "2026-11-13 — Dixell/Copeland XWEB EVO gets 14 CVE records in one wave — pre-auth root command injection plus a hardcoded backdoor on supermarket-refriger",
+   "seeded": "2026-11-13 [Deferred] 3.1 Primary/disclosure@vulncheck.com 9.8, 4.0 Secondary/disclosure@vulncheck.com 9.3, CWE-306/CWE-78, published 11-12"
+  },
+  {
+   "id": "CVE-2026-124004",
+   "why": "2026-11-13 — Dixell/Copeland XWEB EVO gets 14 CVE records in one wave — pre-auth root command injection plus a hardcoded backdoor on supermarket-refriger",
+   "seeded": "2026-11-13 [Deferred] 3.1 Primary/disclosure@vulncheck.com 9.8, 4.0 Secondary/disclosure@vulncheck.com 9.3, CWE-798, published 11-12"
+  },
+  {
+   "id": "CVE-2026-124010",
+   "why": "2026-11-13 — Dixell/Copeland XWEB EVO gets 14 CVE records in one wave — pre-auth root command injection plus a hardcoded backdoor on supermarket-refriger",
+   "seeded": "2026-11-13 [Deferred] 3.1 Primary/disclosure@vulncheck.com 9.8, 4.0 Secondary/disclosure@vulncheck.com 9.3, CWE-250/CWE-78, published 11-12"
+  },
+  {
+   "id": "CVE-2026-124014",
+   "why": "2026-11-13 — Dixell/Copeland XWEB EVO gets 14 CVE records in one wave — pre-auth root command injection plus a hardcoded backdoor on supermarket-refriger",
+   "seeded": "2026-11-13 [Deferred] 3.1 Primary/disclosure@vulncheck.com 9.1, 4.0 Secondary/disclosure@vulncheck.com 8.8, CWE-306, published 11-12"
   }
  ]
 }

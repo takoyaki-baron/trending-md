@@ -492,3 +492,30 @@ Sources: [huawei-csl/MACaQ](https://github.com/huawei-csl/MACaQ) ·
 
 Sources: [hyperionaidev/smolmaxxing](https://github.com/hyperionaidev/smolmaxxing) ·
 [HN ディスカッション](https://news.ycombinator.com/item?id=50468888)
+
+## 2026-11-13 12:29 —— Edge0-145B：共有行列 MoE の主張がラップトップ規模に。比較の一行一行がベンダー内部
+
+`Edge0-AI/Edge0`（10.4k★）が Edge0-145B/120B の重みと推論フレームワークを公開。アーキテクチャは
+**共有行列 MoE**——64 エキスパートの各グループが 2 つの大きな行列を共有し小さな per-expert デルタを
+保持、一ステップで計算するのは 145B のうち約 10B——に**三層ローダ**（ホットエキスパートは GPU
+メモリ、約 40 GB のエキスパートライブラリはシステム RAM、約 48 GB の語彙データは必要時に SSD から
+読む）と CPU+GPU 協調スケジューリング。主張：**ピーク 29 GB、prefill 1,100+ tok/s、decode
+80+ tok/s、約 120 W**、128K–256K コンテキストまで速度フラット、Apple Silicon + RTX 4090/5090 を
+初日からサポート。
+
+承受の注意点は投稿自体にある：Qwen3.8-Flash-Next（Terminal-Bench 2.1 で 86.52 vs 83.3）と
+DeepSeek-V4-Flash-0731 を上回るベンチマークは "come from Edge0's internal evaluations" で、
+ベースラインのメモリ数値（Qwen3.8-Flash-Next の "~70 GB" など）は "remain to be measured" の
+注釈付き推定。9 月の Edge0-35B スマホ版（iPhone 18 Pro Max で 37+ tok/s）に続くもの。
+
+**なぜこのファイルに。** メモリ数値が第三者の実測に耐えれば、共有行列設計はスパーシティの
+はしごにおける第四の形（エキスパートページング、エキスパートオフロード、bpw 圧縮の次）——
+145B @ 29 GB はフロンティアエージェント層をラップトップに置く。誰かが独立にハーネスを走宣誓まで
+比較の一行一行はベンダーの主張（HN の主に懐疑的な反応が正しい事前分布）。注視すべき主張：
+29 GB ピーク——層を決める*実測*値。
+
+→ [[fact-check]] [[frontier-models]]
+
+Sources: [Edge0 blog](https://edge0.ai/blog/introducing-edge0-145b-frontier-ai-capabilities-on-your-own-computer) ·
+[Edge0-AI/Edge0](https://github.com/Edge0-AI/Edge0) ·
+[HN discussion](https://news.ycombinator.com/item?id=50475713)

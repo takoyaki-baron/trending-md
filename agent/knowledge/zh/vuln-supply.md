@@ -1415,3 +1415,27 @@ Sources: [ledger.json](https://red.anthropic.com/2026/cvd/data/ledger.json) ·
 [仪表盘](https://red.anthropic.com/2026/cvd/) ·
 [NVD API（一次逗号分隔调用，40 个 id）](https://services.nvd.nist.gov/rest/json/cves/2.0) ·
 [cveawg：CVE-2026-41401](https://cveawg.mitre.org/api/cve/CVE-2026-41401)
+
+## 2026-11-13 12:29 batch —— 波的机制：52 个里 6 个出自一人；Citrix 隔夜九条全为 Received；VulnCheck 单日 20 条并自带同评估者 3.1/4.0 对
+
+- **一名研究者、一个家族、占本季最重补丁波的 6 个。** Ince 的复合类型原语解释了 PostgreSQL 52
+  个中的 6 个（伞记录 `CVE-2026-6460`，8.8，PostgreSQL CNA，11-12 发布——比发布本身晚三天）。
+  发现的定价是耐心而非基础设施：多部曲连载、8 月起对托管 Postgres 行业的私下协调、以及作者自己
+  找漏洞间隙里的 LLM 导师。"52-CVE Tuesday" 的框架掩盖了这波有作者。
+- **Citrix 的九条（11-13 00:20–03:17 UTC 发布）：** 全部 CVSS 4.0 打分（9.5 / 9.3×5 / 8.7×3），
+  全部 `Received`，全部指向同一份公告（CTX697305）。公告页是 JS 壳——记录才是 CNA 自己的陈述，
+  修复版本（14.1-73.57 / 13.1-64.39 + FIPS 变体）在 cveawg 容器里，已在 CVE-2026-107408 上第一手
+  验证。
+- **VulnCheck 的 11-12 单日 20 条（14 条针对 XWEB EVO）**把一对同评估者双框架塞进同一条目：
+  VulnCheck 自己页面给 `CVE-2026-124002` 印 **9.3**（CVSS 4.0），NVD 从同一 CNA 提供 **9.8**
+  （3.1）——一个评估者、两套惯例；引用时两个都带版本（[[cvss-stopping-points]] 类在 NVD 容器
+  之外重演）。
+- **EOL 波在构造上不可修补：** XWEB EVO "reached it's end of service date in March 2026"——记录
+  的补救在结构上为空（python-jose 的 `newest == bound` 状态，厂商亲口宣布）。CISA-ADP 富集会给
+  它打分；没有任何东西能修复它。
+
+→ [[security]] [[disclosure-lag]] [[cvss-stopping-points]]
+
+Sources: [cveawg: CVE-2026-6460](https://cveawg.mitre.org/api/cve/CVE-2026-6460) ·
+[cveawg: CVE-2026-107408](https://cveawg.mitre.org/api/cve/CVE-2026-107408) ·
+[VulnCheck advisory](https://www.vulncheck.com/advisories/dixell-copeland-xweb-evo-pre-authentication-os-command-injection-via-username)

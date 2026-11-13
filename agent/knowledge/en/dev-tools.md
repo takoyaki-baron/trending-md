@@ -1993,3 +1993,38 @@ Sources: [Rust 1.100.0 release notes](https://github.com/rust-lang/rust/releases
 [Pharo World](https://massimo-nocentini.github.io/pharo-vm/world.html) ·
 [Chips and Cheese: Talking Zen 6 with Mike Clark](https://chipsandcheese.com/p/talking-zen-6-with-mike-clark-at) ·
 [chocoford/ExcalidrawZ](https://github.com/chocoford/ExcalidrawZ)
+
+## 2026-11-13 12:29 — ykcpython adds a JIT to CPython in ~450 LoC; Lambda Web Functions' idle-memory floor moves a startup to its own hosts
+
+**ykcpython (Laurie Tratt).** The question yk — a meta-tracing JIT toolkit for C interpreters
+(yklua ran 2× PUC Lua) — had to answer: does it work on large interpreters? Answer: yes, in 3–4 days
+of direct work plus 1.5 weeks of generic yk fixes, **~450 LoC changed**. The instructive part is the
+path: adapting CPython's tier-1 interpreter (200 LoC) was *slower* than stock — quickening's
+specialized↔unspecialized transitions kept discarding traces — so the tier-2 uop interpreter took
+just 80 LoC; one 30-LoC idempotent-load hint made Mandelbrot 2.7× faster (11.67 s → 5.0 s). Final
+numbers vs CPython 3.15.1 and its experimental JIT: faster than stock on **12 of 13** AWFY
+benchmarks (DeltaBlue ~2.5% slower), faster than CPython's own JIT on **8 of 13** (Mandelbrot 4.20 s
+vs 6.94 vs 11.66; Richards 33.18 vs 40.56 vs 54.80). Stated plainly: "it definitely is not" ready
+for use, and "benchmark suite performance is a hoop to jump through rather than an end in itself".
+The structural point: CPython's experimental-JIT groundwork is paying off for *competing* JIT
+designs — a usable JIT added as a small fork leaning on the host's own tier-2 infrastructure.
+
+**Lambda Web Functions' metering floor.** Easel benchmarked AWS's October-launched Web Functions:
+execution environments stayed alive **313–411 s** after the last request across six us-east-1
+environments (Oct 26 data), with **no configurable idle timeout** — CPU bills only while active, but
+memory bills for the environment's whole lifetime, so a 200 ms request plus 345 s idle is "roughly
+1,700 times the request duration in metered memory time"; memory was ~88% of the experiment's
+compute cost. Self-terminating after 10 s idle cuts metered time ~20×, but AWS logs every
+intentional exit as a *runtime failure*. So Easel moved execution onto its own hosts (live Nov 2)
+with Lambda as overflow — same Next.js 16 app: 1.5–3× faster warm medians, ~3.5× faster cold starts
+(216–250 ms vs 810–854 ms after 12 min idle). AWS's own docs confirm the mechanism: "memory
+continues to accrue while the execution environment exists, including idle time between requests"
+(verified 11-13). The post states its limits: one region, one small app, two paired cold-start
+trials. The old dedicated-host model re-emerging under per-millisecond billing.
+
+→ [[fact-check]] [[agent-stack]]
+
+Sources: [Adapting CPython for yk](https://tratt.net/laurie/blog/2026/adapting_cpython_for_yk.html) ·
+[ykjit/yk](https://github.com/ykjit/yk) ·
+[easel.sh blog](https://www.easel.sh/blog/lambda-web-functions-idle-memory) ·
+[AWS: Lambda Web Functions](https://docs.aws.amazon.com/lambda/latest/dg/web-functions.html)

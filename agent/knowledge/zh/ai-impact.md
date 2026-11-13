@@ -215,3 +215,25 @@ Jane Street（Matthew Saffer，11-02——11-12 在 HN 重浮）今夏开始为�
 
 Sources: [Jane Street: Our software engineering interviews are changing a little](https://blog.janestreet.com/software-engineering-interviews-are-changing-a-little/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50467297)
+
+## 2026-11-13 12:29 —— Apple 的 App Review 成为最新碰撞点：生成灌满闸门，审核幻觉出拒信
+
+Synth Anatomy 记录了 iOS 音乐应用两侧同时失败：估计**每天有 10–20 个** vibe-coded 新 iOS 音乐
+应用涌入，而 Apple 的审核——它自己的页面承诺 "at least 50% of submissions in less than 24 hours
+and 90% in less than 48 hours"（11-13 逐字验证）——已拖到数周（Pittsburgh Modular 的 Microvolt
+3901：VST 10-27，iOS 11-12 才上）。拒信质量是新东西：Unfiltered Audio 的 Michael Hetrick 被拒
+**四次**——审核者"hallucinated that 'Polyharmonic' was an audio technology that we needed to show
+a documented license for"，接着要求一段带"所需的专有硬件"的视频，又把 MIDI 版判为垃圾因为长得像
+音频版；Marek Dendes 的 CRUX Synth 连续四次被拒，理由是"app generation template services"产出的
+"design spam"，申诉五天无回音。
+
+**为什么收进这里。** App Review 是平台的核心信任产品——商店里每样东西都被查过的承诺。这正是
+审查容量碰撞（论点 22）抵达 Apple：廉价生成抬高供给侧，自动化审核在需求侧幻觉，而申诉路径读起来
+就是死胡同。Debian 未公告的 LLM 审查（10-27）形态重演：没人说自动裁决*对*，只说没人能确立它们
+是否对——而成本落在审核本来要保护的小开发者身上。
+
+→ [[dev-tools]] [[platform-gatekeeping]]
+
+Sources: [Synth Anatomy](https://synthanatomy.com/2026/11/ai-is-turning-apples-app-review-process-into-a-nightmare-for-developers.html) ·
+[Apple: App Review](https://developer.apple.com/distribute/app-review/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50474311)
