@@ -1,8 +1,8 @@
 ---
 date: 2026-11-13
-updated: 2026-11-13T04:29:26Z
+updated: 2026-11-13T12:28:15Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 26
+sources: 29
 license: CC-BY-4.0
 ---
 
@@ -428,13 +428,157 @@ VulnCheck 的 CNA 在 11 月 12 日发布了 20 条记录,其中 **14 条针对 
 
 ---
 
+## 30. Claude 宕机两小时——一次身份验证故障让 claude.ai、Claude Code、Console 和 Cowork 全线搁浅,随后恢复
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** status.claude.com · 230+ pts on HN · 1.9h ago (~18:18 UTC+8)
+- **Tags:** `outage` `anthropic` `claude-code`
+
+Anthropic 的状态页在 **09:58 UTC** 开出事故 `nn11wk485zfn`:"We are investigating an issue with users authenticating to Claude.ai and Claude Code."(我们正在调查用户登录 claude.ai 和 Claude Code 时遇到的问题。)**11:05 UTC** 部署修复并进入 Monitoring,**11:58 UTC** 标记为 Resolved——一场持续两小时的身份验证故障,波及 claude.ai、Claude Console(platform.claude.com)、Claude Code 和 Claude Cowork。HN 同时出现三个帖子(状态页链接 230+ 分、"Claude Is Down" 118 分、一个 Tell HN),照例伴随着状态页从未点名的故障原因的各种猜测。
+
+**Why it matters:** 对 Claude 宕机感受最深的是 agent 集群——两小时的认证故障不是丢聊天记录,而是成千上万个进行到一半的编码 agent 会话卡在下一次 API 调用上。恢复那半是令人鼓舞的:两小时内三次状态更新、当日上午解决,比下文 Microsoft 365 这一波干净得多的事件响应。
+
+[`🔗 Claude status: incident nn11wk485zfn`](https://status.claude.com/incidents/nn11wk485zfn) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50481187)
+
+---
+
+## 31. "把 THE boss 带回来":Nvidia 员工请愿让黄仁勋回归——内部建议箱帖子收到 1,600+ 条评论
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** wired.com · 639+ pts on HN · 9.9h ago (~10:16 UTC+8)
+- **Tags:** `nvidia` `industry` `leadership`
+
+今晨的 feed(第 1 条)报道了辞职,续集来了:WIRED(Paresh Dave 与 Zoë Schiffer,11 月 12 日晚 8:17 ET)查阅了内部通信,其中一条内部"建议箱"帖子——由一位资深工程师在辞职*之前*提交,敦促董事会在采取行动前考虑员工情绪——已吸引 **1,600 多条评论**,"大多数都全力支持让他复职"("If you believe in the mission, bring back THE boss"——如果你相信这个使命,就把 THE boss 带回来)。一名员工更进一步,发了全公司邮件要求对黄仁勋的离任保持透明:"I stand by Jensen."(我站在 Jensen 这边。)黄仁勋 63 岁,自 1993 年创立以来一直执掌 Nvidia,周日致员工的邮件中承认自己"unfaithful to [his] wife"(对妻子不忠),并表示"no excuse"(没有任何借口)。Nvidia 与新任董事长 Harvey Jones 未回应 WIRED 的置评请求。
+
+**Why it matters:** 辞职事件的悬而未决之处已不再是"他走不走",而是过渡班子(Kress 身兼 CFO/CEO,Jones 任董事长)能否在员工中站得住——而请愿书正是对这一点的一次可见测量。盯住 **11 月 17 日**的财报电话会:这是公司第一次必须在公开场合表演"一切如常",而它有相当一部分员工正记录在案地想让被赶下台的 CEO 回来。
+
+> "If you believe in the mission, bring back THE boss." —— 一位匿名的 Nvidia 员工,写在内网建议箱里
+
+[`🔗 WIRED: 'Bring Back THE Boss'`](https://www.wired.com/story/nvidia-employees-petition-for-jensen-huangs-return/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50477231)
+
+---
+
+## 32. llama.cpp 发布 v1.0.0——b 编号时代有了稳定的 semver 线,详情定在 CET 下午 3 点
+
+- **Velocity:** ▮▮ rising
+- **Source:** ggml-org/llama.cpp · v1.0.0 released 10:20 UTC (~18:20 UTC+8) · +176★ today on GitHub Trending
+- **Tags:** `llama.cpp` `local-llm` `release`
+
+ggml-org 于今天 10:20 UTC 发布 **llama.cpp v1.0.0**,距 v0.9.0(11 月 4 日)九天——同步发布的照例还有 nightly(b12359/b12360)和配套的 **ggml 1.0.0** 版本号提升。发布说明刻意极简:"New version has been released. … More info at 3PM CET"(CET 下午 3 点,即 14:00 UTC——在本期 feed 截稿*之后*),并指向 ggml 讨论 #1579"Releases and versioning of `ggml-org` projects"——ggml-org 各项目以 semver vX.Y.Z 打标签,而 llama.cpp 的 b 编号继续作为 nightly 构建。v0.9.0 以来的 changelog 本身就很有料:server 安全修复(CORS 代理与媒体 URL 的 SSRF 修复、经非回环地址访问工具改为显式 opt-in、客户端断开时取消 MCP 工具调用),外加 Intel FlashAttention Vulkan prefill 内核、ARM NEON 上的 4×4 `simd_gemm` 分块、CUDA MMQ epilogue 对 nvfp4 checkpoint 的 `w_s` 缩放融合,以及 Qwen3.5 在转换期的张量合并。
+
+**Why it matters:** llama.cpp 是大多数本地 LLM 工具链脚下的依赖,下游多年来只能钉在一个个变动的 b 编号上——一条 1.x semver 线终于给打包者一个稳定目标。"1.0"到底*意味着*什么还是悬念:承诺的 CET 下午 3 点说明尚未落地,所以在那之前,把语义当作"已宣布、未发布"来对待。
+
+[`🔗 llama.cpp v1.0.0 release`](https://github.com/ggml-org/llama.cpp/releases/tag/v1.0.0) · [`🔗 ggml: Releases and versioning of ggml-org projects`](https://github.com/ggml-org/ggml/discussions/1579)
+
+---
+
+## 33. Microsoft 365 宕机第 20 小时:修复"不如预期",随后"取得额外进展"——学校、全科医生和国会仍在等待
+
+- **Velocity:** ▮▮ rising
+- **Source:** bbc.com live · 355+ pts on HN · 7.1h ago (~13:08 UTC+8)
+- **Tags:** `outage` `microsoft-365` `exchange-online`
+
+第 5 条的更新:11 月 12 日 16:17 UTC 开出的事故(EX1550543)**约 20 小时后仍未修复**,BBC 直播页(在 feed 截稿前几分钟更新)此前的大标题是"Attempts to Fix Global Outage Not Going 'as Expected'"(修复全球宕机的尝试'不如预期')。到 UTC 上午中段,微软表示正在取得"additional progress towards recovery"(额外进展),优先事项是"reducing email queues and backlogs"(清减邮件队列与积压),并重申原因不是"a cyber-security breach"(网络安全攻击)。影响报道:已知 **4.3 亿** Microsoft 365 用户;英国全科医生警告"there will be major problems NHS-wise"(NHS 会出现大问题),学校要求家长改用电话联系,英国国会启用"alternative communication arrangements"(替代通信安排)。
+
+**Why it matters:** 第 5 条的判断(舰队一致性故障、健康检查欠债、状态页自己也在闪断)现在有了下半场:一次横跨邮件、会议、文档、Copilot 和 Defender、拖过整个工作日的降级。要盯的观测点是恢复瓶颈——邮件积压的清排;"修复完成"但队列还在排空的状态可能看起来已打好补丁,实际还要再等一天才能真正送达。
+
+[`🔗 BBC: Microsoft outage live updates`](https://www.bbc.com/news/live/cq5y10ge3dp3t) · [`🔗 HN: Microsoft Outlook/365 still down after 12 hours`](https://news.ycombinator.com/item?id=50478609)
+
+---
+
+## 34. 台积电就员工数据泄露提交 6-K——云服务商的系统,"no evidence that TSMC's systems have been compromised"
+
+- **Velocity:** ▮▮ rising
+- **Source:** sec.gov (Form 6-K) · 103+ pts on HN · 4.5h ago (~15:39 UTC+8)
+- **Tags:** `tsmc` `data-leak` `third-party-breach`
+
+HN 标题写的是"TSMC Hacked"(103 分);一手来源要窄得多。台积电的 SEC **Form 6-K**(11 月 12 日,CFO Wendell Huang 签署)陈述:"some of our current and former employee data was made available on an external website without authorization"(部分现任与前任员工的数据在未经授权的情况下出现在一个外部网站上),并且两次声明了它*没有*声称的事:"Currently, we have found no evidence that TSMC's systems have been compromised"(目前没有证据表明台积电自身的系统遭到入侵),数据"has been verified to match data stored in the system services of a cloud service provider, but is unrelated to the company's operations or customer-related data"(经核实与某云服务商系统服务中存储的数据相符,与公司运营或客户相关数据无关)。台积电表示正与云服务商、调查机构和一家第三方网络安全机构合作,并通知、支持受影响员工。
+
+**Why it matters:** 标题与文件之间的差距就是这条新闻:这读起来是第三方云系统暴露员工数据,而非晶圆厂被攻破——而文件自己的限定语(无系统失陷证据、无客户数据)恰恰是聚合媒体没有带上的事实。待观察项是哪家云服务商,以及外部网站上那份副本是否已被撤下。
+
+[`🔗 TSMC Form 6-K: Statement Regarding the Unauthorized Access of Employee Personal Data`](https://www.sec.gov/Archives/edgar/data/1046179/000104617926000800/a20261112statementregardin.htm) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50479721)
+
+---
+
+## 35. Brave Search API 经 x402 协议接受 agentic 支付——按次以 USDC 付费,无需 API key
+
+- **Velocity:** ▮ steady
+- **Source:** brave.com · 129+ pts on HN · 9.0h ago (~11:08 UTC+8)
+- **Tags:** `agentic-payments` `search-api` `x402`
+
+Brave 的博客(11 月 12 日):Search API 现已支持"instant, pay-as-you-go, agentic payments enabled by the open x402 payment protocol"(由开放 x402 支付协议启用的即时、按量付费的 agentic 支付),让 agent 查询 Brave 的独立索引并"实时结算请求,从而免除传统 API key 管理"。机制就是协议本身:"A request sent without payment receives an HTTP 402 Payment Required response that states the price of that search and the payment details needed to pay it. The agent signs a USDC payment for that amount and retries the request with the signed payment attached."(未附支付的请求会收到 HTTP 402 Payment Required 响应,其中写明本次搜索的价格与所需支付细节;agent 签署一笔等额 USDC 支付,附在请求上重试。)Brave 运营自己的 facilitator,接受 Base 区块链上的 USDC,其他网络与其他稳定币"incoming soon"(即将到来);事先无需注册账号或选择套餐。
+
+**Why it matters:** 搜索是 agent 技术栈里调用频率最高的付费原语,而这是主流搜索索引第一次以 HTTP 原生方式暴露按请求结算——402 流程把开通与密钥管理整个拿掉,换成一只有钱的钱包。它同时也给了 x402 第一个搜索领域的规模化参考客户,这正是该协议一直缺的接受度信号。
+
+[`🔗 Brave: Search API agentic payments via x402`](https://brave.com/blog/search-api-agentic-payments/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50477649)
+
+---
+
+## 36. Google 发布 A2UI 1.0——其 agent 生成式 UI 协议的首个稳定版
+
+- **Velocity:** ▮ steady
+- **Source:** developers.googleblog.com · 42+ pts on HN · 34.5h ago (~09:42 UTC+8 Nov 12)
+- **Tags:** `generative-ui` `agents` `protocol`
+
+Google 的 A2UI 团队(PM Vishal Motwani,11 月 11 日):"Today, we're releasing A2UI 1.0, the first stable version of our open protocol for generative UI."(今天,我们发布 A2UI 1.0——我们开放式生成式 UI 协议的首个稳定版本。)Agent 以交互屏幕作答——一张确认表单、一张图表——agent 只描述要展示什么,而**每个应用用它自己的原生组件来渲染**:web、Android、iOS 的渲染 SDK,Python、TypeScript、Dart 的 agent SDK。安全模型是白名单加服务端绑定——agent"只能放置和配置你注册的组件",并且 A2UI"reliably binds to your data and child components on the server, so sensitive values never reach the model"(在服务端可靠地绑定到你的数据与子组件,敏感值永远不会到达模型)。组合方式是"A2UI Express"或"system one"决策模型——"pick components instead of writing text"(挑选组件而非书写文本),协议还能在托管 MCP 应用的第三方助手里运行,"such as Gemini or Claude"(例如 Gemini 或 Claude)。"Companies such as Atlassian, Alation, Bloomberg, and ByteDance are already building with it."(Atlassian、Alation、Bloomberg 与字节跳动等公司已在用它构建。)
+
+**Why it matters:** 生成式 UI 正收敛到同一条路:agent 输出受限规格,应用负责原生渲染。A2UI 1.0 是这个押注的 widest-industry 版本,点名的采用者加上 SDK 矩阵(三端渲染、三语言 agent)让它成为值得评估的候选标准。组件白名单加服务端绑定,正是让模型驱动的 UI 能走出 demo、进入生产的那个东西。
+
+[`🔗 Google: A2UI 1.0`](https://developers.googleblog.com/a2ui-10-build-delightful-fast-reliable-agentic-experiences/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50461919)
+
+---
+
+## 37. Microsoft Defender 三个月里上传了一位开发者的未发布构建 217 次——都在"safe samples"默认设置下
+
+- **Velocity:** ▮ steady
+- **Source:** garrettstimpson.ca · 64+ pts on HN · 34.7h ago (~09:27 UTC+8 Nov 12)
+- **Tags:** `defender` `telemetry` `windows`
+
+Garrett Stimpson 的帖子(11 月 11 日):他在排查连接迟缓问题时用上了 Hodometer(他自己写的按进程追踪流量的托盘工具),随后发现 Defender 的事件日志记录了"**217 sample submissions from my PC over three months. I hadn't seen a prompt for any of them**"(三个月里我电脑上的 217 次样本提交,我一次也没见过提示)——其中大多数是他自己未发布程序的构建。`MpCmdRun.exe`"一天内向 Azure 存储发送了 224 MB",以每分钟约 28 MB 的突发进行;Event 2050 记录每次提交的文件名与 SHA-256;217 次里 201 次是同一个 Go 测试程序的构建,横跨 216 个不同哈希——是新鲜二进制,不是重复上传——最忙的一天 75 次。Windows 的按应用流量统计显示 `MpCmdRun.exe` 30 天上传 **2.8 GB,约占该电脑上传给微软总量的 80%**。允许这一切的默认项是"Send safe samples automatically",而"safe"的意思是"不太可能包含个人身份信息"。帖子最锋利的细节:10 月 28 日他运行了 `Set-MpPreference -SubmitSamplesConsent 2`;Event 5007 记录了改为"never send"——当天 19:53,另一条记录显示它被改**回了 1**("I don't know what changed it back"——我不知道是什么改回来的),重新启用后又上传了 25 次。
+
+**Why it matters:** 信任问题不在 PII——而在于未发布的专有二进制默认离开你的机器、没有任何提示、藏在一个多数用户不知道存在的设置里。对任何在 Windows 上开发闭源软件的人来说,sample submission 是一张要审计的数据出口;帖子结尾附上了如何检查你自己 Defender Operational 日志的方法。
+
+> "Microsoft Defender Antivirus has uploaded a file for further analysis" —— Event 2050,引自该帖子
+
+[`🔗 Garrett Stimpson: I caught Microsoft red-handed with Hodometer`](https://garrettstimpson.ca/posts/2026/11/11/caught-microsoft-red-handed-with-hodometer/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50461786)
+
+---
+
+## 38. FrankenPHP 一波收到 14 条 CVE 记录——worker 模式状态泄漏、点号头部认证绕过,以及一条针对陈旧 Docker 基础镜像的 9.8
+
+- **Velocity:** ▮ steady
+- **Source:** NVD records (CNA: VulnCheck) · published 10:18 UTC Nov 13 (~1.9h ago)
+- **Tags:** `frankenphp` `php` `security`
+
+VulnCheck 的 CNA 今晨为 `php/frankenphp`(把 PHP 嵌入 Go 二进制的项目)一次性发布了 **14 条记录**(CVE-2026-128014 至 -128027)。最高分 **CVE-2026-128027(9.8)** 不是代码缺陷而是构建流程缺口:"FrankenPHP Docker images before 1.1.11 were rebuilt only when new base image tags were created, so security fixes that Alpine, PHP, and Go applied under existing tags were not propagated."(1.1.11 之前的 Docker 镜像只在新基础镜像标签出现时才重建,Alpine、PHP 与 Go 在既有标签下发布的安全修复因此未被吸收。)**CVE-2026-128014(8.1)** 打的是独立静态二进制——它们捆绑了链接 Brotli 1.2.0 的 PHP brotli 扩展,该解码器存在越界写入(即底层的 CVE-2026-111497)。**CVE-2026-128023(7.4)** 是经点号头部的认证绕过:客户端发送 `X.Authenticated.User` 这类名字,PHP 会改写成下划线形式的 `$_SERVER` 键,从而伪造用户身份、客户端 IP 或协议。其余是一个 worker 模式家族——`putenv()` 写入进程级 OS 环境导致数据库密码等秘密跨并发请求泄漏(6.4)、每请求环境变量在线程上残留(4.8)、libxml 错误状态在客户端之间泄漏(3.7)、SplTempFileObject 流的释放后使用(6.5)——外加一组 DoS。每一条分数都是 **VulnCheck 自己的 CVSS 3.1**(Primary,CNA 指定),且所有 NVD 记录均处于 `Deferred`。修复分布在 1.13.0–1.13.4(10 月 4 日至 10 月 26 日),11 月 5 日还有 1.13.5——记录比补丁晚到了一个月。
+
+**Why it matters:** worker 模式是 FrankenPHP 的卖点,而这个家族的形态——请求状态在共享线程上跨请求存留——是租户边界故障,生产环境里会变成跨用户泄漏。跑 **≥ 1.13.4**(当前 1.13.5),并且因为那条 9.8,请核实你部署的 Docker 镜像真的重建过,而不是假设拉个基础标签就吸收了修复。
+
+[`🔗 NVD: CVE-2026-128023 (dot-header auth bypass)`](https://nvd.nist.gov/vuln/detail/CVE-2026-128023) · [`🔗 GHSA-x9p2-77v6-6vhf (stale Docker base images)`](https://github.com/php/frankenphp/security/advisories/GHSA-x9p2-77v6-6vhf)
+
+---
+
+## 39. HermesEnabler:解锁任意 Apple Watch 上 Hermès 表盘的侧载 watch 应用——今日 218★,随 watchOS 27 beta 重新钉版本
+
+- **Velocity:** ▮ steady
+- **Source:** pookjw/HermesEnabler · 1,699★, +218 today on GitHub Trending
+- **Tags:** `watchos` `sideloading` `apple`
+
+`pookjw/HermesEnabler` 位列今日 GitHub Trending 第 4 名,触发器是苹果自己的发布列车:**1.5.2**(11 月 12 日)加入 watchOS 27.0 beta 3 支持,**1.5.3**(11 月 13 日 01:34 UTC)加入"support for watchOS 27.0 RC (24R363) and 27.2 beta 1 (24S5086l)",**1.5.4**(11 月 13 日 04:21 UTC)加入越南语本地化——两天三个版本。机制按 README:通过 Sideloadly 或 Xcode 侧载一个 IPA(一个 iPhone 宿主应用加一个 `HermesEnabler2` watch 应用)——Windows 上用 WatchBridge——在两台设备上都启用开发者模式,然后在 Watch 上运行该应用;支持范围是"watchOS 27.0 through 27.3 beta 1"。README 诚实地记录了摩擦点:Sideloadly 0.72 的已知 bug 会在签名时剥掉内嵌 watch 应用、开发者证书信任步骤、以及一个未签名的 Windows 辅助工具。
+
+**Why it matters:** 它是侧载一切模式在 watchOS 上的脸面,其发布史本身就是一份维护成本估算:苹果每个 beta 都会弄坏它,每个 release 都要重新钉上精确的构建号(24R363、24S5086l)。把它当作一份实地报告来读——看看未签名开发者模式工具目前在 watchOS 上能走多远,以及对未发布苹果操作系统做开发实际要付多少钱。
+
+[`🔗 pookjw/HermesEnabler`](https://github.com/pookjw/HermesEnabler) · [`🔗 Releases (1.5.2–1.5.4)`](https://github.com/pookjw/HermesEnabler/releases)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-13T04:29:26Z |
-| Items | 29 |
-| Sources tracked | 26 (Hacker News, GitHub Trending, NVD, cveawg, vendor advisories, vendor blogs, research pages) |
+| Generated | 2026-11-13T12:28:15Z |
+| Items | 39 |
+| Sources tracked | 29 (Hacker News, GitHub Trending, NVD, status pages, SEC filings, vendor advisories, vendor blogs, research pages) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

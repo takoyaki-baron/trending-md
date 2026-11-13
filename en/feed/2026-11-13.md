@@ -1,8 +1,8 @@
 ---
 date: 2026-11-13
-updated: 2026-11-13T04:29:26Z
+updated: 2026-11-13T12:28:15Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 26
+sources: 29
 license: CC-BY-4.0
 ---
 
@@ -430,13 +430,159 @@ VulnCheck's CNA published 20 records on Nov 12, **14 of them on XWEB EVO** — t
 
 ---
 
+---
+
+## 30. Claude is down for two hours — an authentication failure idles claude.ai, Claude Code, Console and Cowork, then resolves
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** status.claude.com · 230+ pts on HN · 1.9h ago (~18:18 UTC+8)
+- **Tags:** `outage` `anthropic` `claude-code`
+
+Anthropic's status page opened incident `nn11wk485zfn` at **09:58 UTC**: "We are investigating an issue with users authenticating to Claude.ai and Claude Code." A fix deployed at **11:05 UTC** moved it to Monitoring, and **11:58 UTC** marked it Resolved — a two-hour authentication outage affecting claude.ai, the Claude Console (platform.claude.com), Claude Code and Claude Cowork. HN carried three threads at once (the status link at 230+ points, "Claude Is Down" at 118, and a Tell HN), with the usual mid-outage speculation about causes the status page never names.
+
+**Why it matters:** The audience that feels a Claude outage hardest is agent fleets — a two-hour auth failure isn't lost chat history, it's thousands of mid-task coding-agent sessions stalled at their next API call. The recovery is the encouraging half: three status updates in two hours and a same-morning resolve, which is better incident hygiene than this week's Microsoft 365 wave below.
+
+[`🔗 Claude status: incident nn11wk485zfn`](https://status.claude.com/incidents/nn11wk485zfn) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50481187)
+
+---
+
+## 31. "Bring back THE boss": Nvidia employees petition for Jensen Huang's return — 1,600+ comments on an internal suggestion-box post
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** wired.com · 639+ pts on HN · 9.9h ago (~10:16 UTC+8)
+- **Tags:** `nvidia` `industry` `leadership`
+
+Since we covered the resignation in this morning's feed (item 1), the second act: WIRED (Paresh Dave and Zoë Schiffer, Nov 12 8:17 PM ET) reviews internal correspondence in which an internal "suggestion box" post — submitted by a longtime engineer *before* the resignation, urging the board to weigh employee sentiment — has drawn **more than 1,600 comments**, "the majority in full support of reinstalling him" ("If you believe in the mission, bring back THE boss"). One employee went further with a companywide email demanding transparency into the exit: "I stand by Jensen." Huang, 63, had led Nvidia since its founding in 1993 and wrote employees on Sunday that he had been "unfaithful to [his] wife" and that there was "no excuse". Nvidia and new board chair Harvey Jones didn't respond to WIRED's comment requests.
+
+**Why it matters:** The resignation's open question is no longer whether he leaves but whether the interim regime (Kress as dual CFO/CEO, Jones as chair) holds legitimacy with the workforce — and the petition is a visible measurement of that. Watch the **Nov 17** earnings call: it's the first forum where the company must perform continuity while a large part of its employee base is on record wanting the ousted CEO back.
+
+> "If you believe in the mission, bring back THE boss." — anonymous Nvidia employee, on the internal suggestion box
+
+[`🔗 WIRED: 'Bring Back THE Boss'`](https://www.wired.com/story/nvidia-employees-petition-for-jensen-huangs-return/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50477231)
+
+---
+
+## 32. llama.cpp ships v1.0.0 — the b-number era gets a stable semver line, details promised at 3PM CET
+
+- **Velocity:** ▮▮ rising
+- **Source:** ggml-org/llama.cpp · v1.0.0 released 10:20 UTC (~18:20 UTC+8) · +176★ today on GitHub Trending
+- **Tags:** `llama.cpp` `local-llm` `release`
+
+ggml-org released **llama.cpp v1.0.0** at 10:20 UTC today, nine days after v0.9.0 (Nov 4) — alongside the usual nightlies (b12359/b12360) and a matching **ggml 1.0.0** bump. The release note is deliberately minimal: "New version has been released. … More info at 3PM CET" (14:00 UTC, *after* this feed's deadline), pointing at ggml discussion #1579 on "Releases and versioning of `ggml-org` projects" — ggml-org projects tag semver releases, while llama.cpp's b-numbers continue as nightly builds. The changelog since v0.9.0 is substantive on its own: server security fixes (an SSRF fix for the CORS proxy and media URLs, tool access via non-loopback addresses made explicit opt-in, MCP tool calls cancelled on client disconnect), plus an Intel FlashAttention Vulkan prefill kernel, a 4×4 `simd_gemm` tile on ARM NEON, fused `w_s` scale in CUDA MMQ epilogues for nvfp4 checkpoints, and Qwen3.5 tensor merging at convert time.
+
+**Why it matters:** llama.cpp is the dependency underneath most local-LLM tooling, and downstreams have pinned to moving b-numbers for years — a 1.x semver line finally gives packagers a stable target. What "1.0" *means* is the open part: the promised 3PM CET note hasn't landed yet, so treat the semantics as announced, not released.
+
+[`🔗 llama.cpp v1.0.0 release`](https://github.com/ggml-org/llama.cpp/releases/tag/v1.0.0) · [`🔗 ggml: Releases and versioning of ggml-org projects`](https://github.com/ggml-org/ggml/discussions/1579)
+
+---
+
+## 33. Microsoft 365 outage, hour 20: fixes "not going as expected", then "additional progress" — schools, GPs and Parliament still waiting
+
+- **Velocity:** ▮▮ rising
+- **Source:** bbc.com live · 355+ pts on HN · 7.1h ago (~13:08 UTC+8)
+- **Tags:** `outage` `microsoft-365` `exchange-online`
+
+Update to item 5: the outage that opened 16:17 UTC Nov 12 (EX1550543) is **still not fixed ~20 hours in**, with the BBC's live page (updated minutes before feed time) carrying the earlier headline "Attempts to Fix Global Outage Not Going 'as Expected'". By mid-morning UTC Microsoft said it was making "additional progress towards recovery", with priority "reducing email queues and backlogs", and repeated that the cause was not "a cyber-security breach". Impact reporting: **430 million** known Microsoft 365 users; UK GPs warning "there will be major problems NHS-wise", schools asking parents to phone instead of email, and the UK Parliament on "alternative communication arrangements".
+
+**Why it matters:** Item 5's framing (fleet-consistency failure, health-check debt, a status page that flaked) now has its second half: a degradation that outlasts a full business day across mail, meetings, docs, Copilot and Defender. The recovery bottleneck — draining mail backlogs — is the observable to watch; a fix that "completes" while queues drain can look patched and still take another day to deliver.
+
+[`🔗 BBC: Microsoft outage live updates`](https://www.bbc.com/news/live/cq5y10ge3dp3t) · [`🔗 HN: Microsoft Outlook/365 still down after 12 hours`](https://news.ycombinator.com/item?id=50478609)
+
+---
+
+## 34. TSMC files a 6-K on an employee-data leak — a cloud vendor's systems, and "no evidence that TSMC's systems have been compromised"
+
+- **Velocity:** ▮▮ rising
+- **Source:** sec.gov (Form 6-K) · 103+ pts on HN · 4.5h ago (~15:39 UTC+8)
+- **Tags:** `tsmc` `data-leak` `third-party-breach`
+
+HN titled it "TSMC Hacked" (103 pts); the primary source is narrower. TSMC's SEC **Form 6-K** (Nov 12, signed by CFO Wendell Huang) states that "some of our current and former employee data was made available on an external website without authorization", and — twice — what it does *not* claim: "Currently, we have found no evidence that TSMC's systems have been compromised", and the data "has been verified to match data stored in the system services of a cloud service provider, but is unrelated to the company's operations or customer-related data". TSMC says it is working with the cloud vendor, investigating authorities, and a third-party cybersecurity agency, and is notifying and supporting affected personnel.
+
+**Why it matters:** The gap between the headline and the filing is the item: this reads as a third-party cloud-systems exposure of employee data, not a breach of the foundry — and the filing's own hedges (no evidence of system compromise, no customer data) are the facts no aggregator carried. The watch-item is which cloud vendor, and whether the "external website" copy gets taken down.
+
+[`🔗 TSMC Form 6-K: Statement Regarding the Unauthorized Access of Employee Personal Data`](https://www.sec.gov/Archives/edgar/data/1046179/000104617926000800/a20261112statementregardin.htm) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50479721)
+
+---
+
+## 35. Brave Search API accepts agentic payments via x402 — pay per query in USDC, no API key
+
+- **Velocity:** ▮ steady
+- **Source:** brave.com · 129+ pts on HN · 9.0h ago (~11:08 UTC+8)
+- **Tags:** `agentic-payments` `search-api` `x402`
+
+Brave's blog (Nov 12): the Search API now supports "instant, pay-as-you-go, agentic payments enabled by the open x402 payment protocol", letting agents query Brave's independent index "and settle requests in real time, which eliminates the need for traditional API key management". The mechanics are the protocol's: "A request sent without payment receives an HTTP 402 Payment Required response that states the price of that search and the payment details needed to pay it. The agent signs a USDC payment for that amount and retries the request with the signed payment attached." Brave runs its own facilitator accepting USDC on the **Base** blockchain, with other networks and stablecoins "incoming soon"; no account or plan selection is required first.
+
+**Why it matters:** Search is the highest-frequency paid primitive in agent stacks, and this is a major search index exposing per-request settlement natively over HTTP — the 402 flow removes provisioning and key management entirely, trading them for a funded wallet. It also gives x402 its first at-scale reference customer in search, which is the acceptance signal the protocol has been missing.
+
+[`🔗 Brave: Search API agentic payments via x402`](https://brave.com/blog/search-api-agentic-payments/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50477649)
+
+---
+
+## 36. Google ships A2UI 1.0 — the first stable release of its generative-UI protocol for agents
+
+- **Velocity:** ▮ steady
+- **Source:** developers.googleblog.com · 42+ pts on HN · 34.5h ago (~09:42 UTC+8 Nov 12)
+- **Tags:** `generative-ui` `agents` `protocol`
+
+Google's A2UI team (PM Vishal Motwani, Nov 11): "Today, we're releasing A2UI 1.0, the first stable version of our open protocol for generative UI." Agents answer with interactive screens — a confirmation form, a chart — by describing what to show while **each app renders it with its own native components**: renderer SDKs for web, Android and iOS, agent SDKs for Python, TypeScript and Dart. The security model is allowlisting plus server binding — agents "place and configure only the components you register", and A2UI "reliably binds to your data and child components on the server, so sensitive values never reach the model". Composition is by "A2UI Express" or by "system one" decision models that "pick components instead of writing text", and the protocol works inside third-party assistants hosting MCP apps, "such as Gemini or Claude". "Companies such as Atlassian, Alation, Bloomberg, and ByteDance are already building with it."
+
+**Why it matters:** Generative UI is consolidating around one shape: the agent emits a constrained spec, and the app renders natively. A2UI 1.0 is the widest-industry version of that bet, and the named adopters plus the SDK matrix (three renderers, three agent languages) make it the candidate standard to evaluate against. The component-allowlist-and-bind model is what makes model-driven UI shippable outside demos.
+
+[`🔗 Google: A2UI 1.0`](https://developers.googleblog.com/a2ui-10-build-delightful-fast-reliable-agentic-experiences/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50461919)
+
+---
+
+## 37. Microsoft Defender uploaded a developer's unreleased builds 217 times in three months — under the "safe samples" default
+
+- **Velocity:** ▮ steady
+- **Source:** garrettstimpson.ca · 64+ pts on HN · 34.7h ago (~09:27 UTC+8 Nov 12)
+- **Tags:** `defender` `telemetry` `windows`
+
+Garrett Stimpson's post (Nov 11), while investigating a lagging connection with Hodometer (his per-process traffic tray tool): Defender's event log recorded "**217 sample submissions from my PC over three months. I hadn't seen a prompt for any of them**" — most of them builds of his own unreleased programs. `MpCmdRun.exe` "sent 224 MB to Azure storage in one day", in bursts of ~28 MB a minute; Event 2050 logs each submission with filename and SHA-256; 201 of the 217 were builds of the same Go test program, across 216 distinct hashes — fresh binaries, not re-uploads — and the busiest day saw 75 submissions. Windows' per-app data usage puts `MpCmdRun.exe` at **2.8 GB uploaded over 30 days, ~80% of the PC's uploads to Microsoft**. The default that permits it is "Send safe samples automatically", where "safe" means "unlikely to contain personally identifiable information". And the post's sharpest detail: on Oct 28 he ran `Set-MpPreference -SubmitSamplesConsent 2`; Event 5007 recorded the change to "never send" — and at 19:53 that evening, another entry recorded it flipped **back to 1** ("I don't know what changed it back"), with 25 uploads after re-enable.
+
+**Why it matters:** The trust question isn't PII — it's that unreleased proprietary binaries leave the machine by default, with no prompt, under a setting most users don't know exists. For anyone building closed-source software on Windows, sample submission is a data-egress surface to audit; the post ends with how to check your own Defender Operational log.
+
+> "Microsoft Defender Antivirus has uploaded a file for further analysis" — Event 2050, as quoted in the post
+
+[`🔗 Garrett Stimpson: I caught Microsoft red-handed with Hodometer`](https://garrettstimpson.ca/posts/2026/11/11/caught-microsoft-red-handed-with-hodometer/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50461786)
+
+---
+
+## 38. FrankenPHP gets 14 CVE records in one drop — worker-mode state leaks, a dot-header auth bypass, and a 9.8 for stale Docker base images
+
+- **Velocity:** ▮ steady
+- **Source:** NVD records (CNA: VulnCheck) · published 10:18 UTC Nov 13 (~1.9h ago)
+- **Tags:** `frankenphp` `php` `security`
+
+VulnCheck's CNA published **14 records** (CVE-2026-128014 through -128027) this morning for `php/frankenphp`, the project that embeds PHP into a Go binary. The top score, **CVE-2026-128027 (9.8)**, is not a code flaw but a build-process gap: "FrankenPHP Docker images before 1.1.11 were rebuilt only when new base image tags were created, so security fixes that Alpine, PHP, and Go applied under existing tags were not propagated." **CVE-2026-128014 (8.1)** hits the standalone static binaries — they bundle the PHP brotli extension linked against Brotli 1.2.0, whose decoder has an out-of-bounds write (the underlying CVE-2026-111497). **CVE-2026-128023 (7.4)** is an authentication bypass via dot-form headers: clients send `X.Authenticated.User`-style names that PHP rewrites to underscore `$_SERVER` keys, spoofing user identity, client IP or scheme. The rest is a worker-mode family — `putenv()` writing to the process-wide OS environment so secrets like database passwords leak across concurrent requests (6.4), per-request env vars surviving on a thread (4.8), libxml error state leaking between clients (3.7), a SplTempFileObject stream use-after-free (6.5) — plus a DoS set. Every score is **VulnCheck's own CVSS 3.1** (Primary, CNA-assigned) and every NVD record sits at `Deferred`. The fixes shipped across 1.13.0–1.13.4 (Oct 4–Oct 26), with 1.13.5 on Nov 5 — the records landed a month behind the patches.
+
+**Why it matters:** Worker mode is FrankenPHP's selling point, and the family's shape — request state persisting across requests on a shared thread — is a tenant-boundary failure, the class that becomes a cross-user leak in production. Run **≥ 1.13.4** (1.13.5 current) and, because of the 9.8, verify your deployed Docker images actually rebuilt rather than assuming a base-tag pull picked up the fixes.
+
+[`🔗 NVD: CVE-2026-128023 (dot-header auth bypass)`](https://nvd.nist.gov/vuln/detail/CVE-2026-128023) · [`🔗 GHSA-x9p2-77v6-6vhf (stale Docker base images)`](https://github.com/php/frankenphp/security/advisories/GHSA-x9p2-77v6-6vhf)
+
+---
+
+## 39. HermesEnabler: the sideloaded watch app that unlocks Apple's Hermès faces on any Apple Watch — 218★ today, re-pinned to watchOS 27 betas
+
+- **Velocity:** ▮ steady
+- **Source:** pookjw/HermesEnabler · 1,699★, +218 today on GitHub Trending
+- **Tags:** `watchos` `sideloading` `apple`
+
+`pookjw/HermesEnabler` sits at #4 on today's GitHub Trending, and the trigger is Apple's own release train: **1.5.2** (Nov 12) added watchOS 27.0 beta 3 support, **1.5.3** (Nov 13 01:34 UTC) added "support for watchOS 27.0 RC (24R363) and 27.2 beta 1 (24S5086l)", and **1.5.4** (Nov 13 04:21 UTC) added Vietnamese localization — three releases in two days. The mechanism, per the README: sideload an IPA (an iPhone host app plus a `HermesEnabler2` watch app) via Sideloadly or Xcode — or WatchBridge on Windows — enable Developer Mode on both devices, then run the app on the Watch; supported range is "watchOS 27.0 through 27.3 beta 1". The README documents the friction honestly: a known Sideloadly 0.72 bug that strips the embedded watch app while signing, developer-cert trust steps, and an unsigned Windows helper.
+
+**Why it matters:** It is the watchOS face of the sideload-everything pattern, and its release history doubles as a maintenance-cost estimate: every Apple beta breaks it, and every release re-pins exact build numbers (24R363, 24S5086l). Read it as a field report on how far unsigned developer-mode tooling currently goes on watchOS — and what shipping against unreleased Apple OSes actually costs.
+
+[`🔗 pookjw/HermesEnabler`](https://github.com/pookjw/HermesEnabler) · [`🔗 Releases (1.5.2–1.5.4)`](https://github.com/pookjw/HermesEnabler/releases)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-13T04:29:26Z |
-| Items | 29 |
-| Sources tracked | 26 (Hacker News, GitHub Trending, NVD, cveawg, vendor advisories, vendor blogs, research pages) |
+| Generated | 2026-11-13T12:28:15Z |
+| Items | 39 |
+| Sources tracked | 29 (Hacker News, GitHub Trending, NVD, status pages, SEC filings, vendor advisories, vendor blogs, research pages) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

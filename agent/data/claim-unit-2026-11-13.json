@@ -1,9 +1,9 @@
 {
- "generated": "2026-11-13T04:29:40.904Z",
+ "generated": "2026-11-13T12:28:29.673Z",
  "files": [
   {
    "file": "2026-11-13.md",
-   "items": 29,
+   "items": 39,
    "findings": [
     {
      "check": "status",
@@ -27,18 +27,32 @@
      "detail": "CVE-2026-124002 · Primary/disclosure@vulncheck.com · vector reproduces 9.8"
     },
     {
+     "check": "field",
+     "item": 35,
+     "verdict": "field-unknown-name",
+     "claim": "“no API key”",
+     "detail": "“API” is not a CVE record field this check knows — the claim is about something else, or FIELD_VOCAB needs the name"
+    },
+    {
+     "check": "status",
+     "item": 38,
+     "verdict": "ok",
+     "claim": "CVE-2026-128014 `Deferred`",
+     "detail": "Deferred (lastModified 2026-11-13T10:18:06.583)"
+    },
+    {
      "check": "repo",
      "item": 17,
      "verdict": "ok",
      "claim": "Alishahryar1/free-claude-code",
-     "detail": "69444★, last push 2026-11-12"
+     "detail": "69701★, last push 2026-11-12"
     },
     {
      "check": "repo",
      "item": 20,
      "verdict": "ok",
      "claim": "chocoford/ExcalidrawZ",
-     "detail": "1823★, last push 2026-10-24"
+     "detail": "1867★, last push 2026-10-24"
     },
     {
      "check": "quotation",
@@ -209,6 +223,76 @@
      "detail": "verbatim in 9 readable source(s)"
     },
     {
+     "check": "quotation",
+     "item": 30,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 31,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 32,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 4 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 33,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 34,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 35,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 36,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 37,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 38,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 11 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 39,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
      "check": "attribution",
      "item": 1,
      "verdict": "attribution-page-verified",
@@ -235,6 +319,13 @@
      "verdict": "attribution-page-verified",
      "claim": "Hetrick",
      "detail": "a quotation is attributed to Hetrick (“the editor hallucinated that 'Polyharmonic' was an audio tec…”) and the party's token appears in the fetched text of a cited page — the quotation arm's page set carries the party's statement even though no cited URL string names the party (the party lives in the prose, not the domain); the second-hand-copy risk the URL arm carries applies here too, so a load-bearing quotation still wants the party's own artifact"
+    },
+    {
+     "check": "attribution",
+     "item": 33,
+     "verdict": "attribution-page-verified",
+     "claim": "Microsoft",
+     "detail": "a quotation is attributed to Microsoft (“additional progress towards recovery”) and the party's token appears in the fetched text of a cited page — the quotation arm's page set carries the party's statement even though no cited URL string names the party (the party lives in the prose, not the domain); the second-hand-copy risk the URL arm carries applies here too, so a load-bearing quotation still wants the party's own artifact"
     }
    ]
   }

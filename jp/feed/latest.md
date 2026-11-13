@@ -1,8 +1,8 @@
 ---
 date: 2026-11-13
-updated: 2026-11-13T04:29:26Z
+updated: 2026-11-13T12:28:15Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 26
+sources: 29
 license: CC-BY-4.0
 ---
 
@@ -428,13 +428,157 @@ VulnCheck の CNA は 11月12日に記録 20 件を公開し、そのうち **14
 
 ---
 
+## 30. Claude が2時間ダウン——認証障害で claude.ai、Claude Code、Console、Cowork が停止し、その後復旧
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** status.claude.com · 230+ pts on HN · 1.9h ago (~18:18 UTC+8)
+- **Tags:** `outage` `anthropic` `claude-code`
+
+Anthropic のステータスページは **09:58 UTC** にインシデント `nn11wk485zfn` を登録:"We are investigating an issue with users authenticating to Claude.ai and Claude Code."(claude.ai と Claude Code へのユーザー認証の問題を調査しています。)**11:05 UTC** に修正をデプロイして Monitoring へ移行、**11:58 UTC** に Resolved ——claude.ai、Claude Console(platform.claude.com)、Claude Code、Claude Cowork に影響した2時間の認証障害でした。HN には同時に3つのスレッドが立ちはじめました(ステータスへのリンクが230+ポイント、"Claude Is Down" が118、Tell HN が1件)。ステータスページが名前をつけない原因について、お決まりの推測が飛び交いました。
+
+**Why it matters:** Claude のダウンを最も痛手感じるのはエージェントのフリートです——2時間の認証障害で失われるのはチャット履歴ではなく、次の API 呼び出しで止まった数千の作業中コーディングエージェントのセッションです。復旧の半分は心強い:2時間で3回のステータス更新、当日午前中の解決。下の Microsoft 365 の波よりきれいなインシデント対応です。
+
+[`🔗 Claude status: incident nn11wk485zfn`](https://status.claude.com/incidents/nn11wk485zfn) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50481187)
+
+---
+
+## 31. 「THE boss を連れ戻して」:Nvidia 従業員が Jensen Huang の復帰を請願——社内提案箱の投稿に 1,600+ コメント
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** wired.com · 639+ pts on HN · 9.9h ago (~10:16 UTC+8)
+- **Tags:** `nvidia` `industry` `leadership`
+
+今朝のフィード(第1項)で辞任を報じた続きです:WIRED(Paresh Dave と Zoë Schiffer、11月12日午後8:17 ET)が内部通信を確認したところ、辞任*前*にベテランエンジニアが投稿した社内「提案箱」の書き込み——取締役会に従業員の sentiment を考慮するよう促すもの——に **1,600 件超のコメント**が集まり、「大多数が復帰への全面支持」でした("If you believe in the mission, bring back THE boss"——使命を信じるなら、THE boss を連れ戻せ)。さらに進んだ従業員もいて、退社の透明性を求める全社メールを送りました:"I stand by Jensen."(私は Jensen の側に立ちます。)Huang は63歳、1993年の創業以来 Nvidia を率い、日曜の従業員へのメールで「unfaithful to [his] wife」(妻に不忠実だった)と認め「no excuse」(言い訳はない)と書きました。Nvidia と新会長の Harvey Jones は WIRED の取材に応じていません。
+
+**Why it matters:** 辞任の未決事項はもう「彼が去るかどうか」ではなく、暫定体制(Kress が CFO/CEO 兼任、Jones が会長)が従業員の信頼を得られるかどうかです——そして請願はそれの目に見える測定値です。**11月17日**の決算説明会に注目:従業員の相当部分が追い出された CEO の復帰を公に望んでいる中、会社が初めて「平常運転」を演じなければならない場です。
+
+> "If you believe in the mission, bring back THE boss." —— 匿名の Nvidia 従業員、社内提案箱にて
+
+[`🔗 WIRED: 'Bring Back THE Boss'`](https://www.wired.com/story/nvidia-employees-petition-for-jensen-huangs-return/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50477231)
+
+---
+
+## 32. llama.cpp が v1.0.0 をリリース——b 番号時代に安定した semver ラインが誕生、詳細は CET 午後3時に
+
+- **Velocity:** ▮▮ rising
+- **Source:** ggml-org/llama.cpp · v1.0.0 released 10:20 UTC (~18:20 UTC+8) · +176★ today on GitHub Trending
+- **Tags:** `llama.cpp` `local-llm` `release`
+
+ggml-org は本日 10:20 UTC に **llama.cpp v1.0.0** をリリースしました。v0.9.0(11月4日)から9日——例通り nightly(b12359/b12360)と対になる **ggml 1.0.0** のバージョン上げと同時です。リリースノートは意図的に最小限:"New version has been released. … More info at 3PM CET"(CET 午後3時=14:00 UTC、このフィードの締切*後*)で、ggml のディスカッション #1579「Releases and versioning of `ggml-org` projects」を指します——ggml-org のプロジェクトは semver vX.Y.Z でタグを打ち、llama.cpp の b 番号は nightly として続きます。v0.9.0 以降の changelog だけでも中身があります:server のセキュリティ修正(CORS プロキシとメディア URL の SSRF 修正、ループバック以外からのツールアクセスを明示的な opt-in に、クライアント切断時の MCP ツール呼び出しキャンセル)に加え、Intel FlashAttention Vulkan prefill カーネル、ARM NEON 向け 4×4 `simd_gemm` タイル、nvfp4 checkpoint 向け CUDA MMQ epilogue の `w_s` スケール融合、Qwen3.5 の変換時テンソルマージ。
+
+**Why it matters:** llama.cpp はほぼすべてのローカル LLM ツールの足元にある依存で、下流は何年も動き続ける b 番号にピン留めされてきました——1.x の semver ラインはようやくパッケージャーに安定したターゲットを与えます。「1.0」が何を*意味*するかは未決:約束された CET 午後3時の説明はまだ届いていないので、意味づけは「発表済み、リリース済みではない」と扱ってください。
+
+[`🔗 llama.cpp v1.0.0 release`](https://github.com/ggml-org/llama.cpp/releases/tag/v1.0.0) · [`🔗 ggml: Releases and versioning of ggml-org projects`](https://github.com/ggml-org/ggml/discussions/1579)
+
+---
+
+## 33. Microsoft 365 障害・20時間目:復旧は「期待どおりでない」から「前進へ」——学校、開業医、議会はまだ待機
+
+- **Velocity:** ▮▮ rising
+- **Source:** bbc.com live · 355+ pts on HN · 7.1h ago (~13:08 UTC+8)
+- **Tags:** `outage` `microsoft-365` `exchange-online`
+
+第5項のアップデート:11月12日 16:17 UTC に始まった障害(EX1550543)は **約20時間経っても未解消**で、BBC のライブページ(フィード締切の数分前に更新)には先行見出し「Attempts to Fix Global Outage Not Going 'as Expected'」(全球障害の復旧の試みは「期待どおりに進んでいない」)が載っていました。UTC 午前中には Microsoft が「additional progress towards recovery」(復旧に向けた前進)を報告し、優先事項は「reducing email queues and backlogs」(メールキューとバックログの解消)、原因は「a cyber-security breach」(サイバー攻撃)ではないと繰り返しました。影響報告:既知の **4.3億** の Microsoft 365 ユーザー。英国の開業医は「there will be major problems NHS-wise」(NHS に関して大きな問題になる)と警告、学校は保護者にメールでなく電話での連絡を求め、英国議会は「alternative communication arrangements」(代替通信手段)に移行しました。
+
+**Why it matters:** 第5項の見立て(フリート一貫性の失敗、ヘルスチェックの負債、ステータスページ自身の不調)に後半が加わりました:メール・会議・ドキュメント・Copilot・Defender にまたがり、営業日一日を超えた劣化です。注視すべき観測点は復旧のボトルネック——メールバックログの排水です。「修正完了」でもキューが流れきるまで見た目はパッチ済みで、実際の配信にはさらに一日かかりえます。
+
+[`🔗 BBC: Microsoft outage live updates`](https://www.bbc.com/news/live/cq5y10ge3dp3t) · [`🔗 HN: Microsoft Outlook/365 still down after 12 hours`](https://news.ycombinator.com/item?id=50478609)
+
+---
+
+## 34. TSMC が従業員データ流出に関する 6-K を提出——クラウドベンダーのシステムであり「no evidence that TSMC's systems have been compromised」
+
+- **Velocity:** ▮▮ rising
+- **Source:** sec.gov (Form 6-K) · 103+ pts on HN · 4.5h ago (~15:39 UTC+8)
+- **Tags:** `tsmc` `data-leak` `third-party-breach`
+
+HN のタイトルは「TSMC Hacked」(103ポイント);一次資料はもっと狭い。TSMC の SEC **Form 6-K**(11月12日、CFO Wendell Huang 署名)は「some of our current and former employee data was made available on an external website without authorization」(現職・元従業員の一部データが許可なく外部サイトで入手可能になっていた)と述べ、さらに*主張していない*ことを2回明記しています:「Currently, we have found no evidence that TSMC's systems have been compromised」(現時点で TSMC のシステムが侵害された証拠はない)、データは「has been verified to match data stored in the system services of a cloud service provider, but is unrelated to the company's operations or customer-related data」(あるクラウドサービスプロバイダのシステムサービスに保存されたデータと一致することが確認されたが、会社の運営や顧客関連データとは無関係)。TSMC はクラウドベンダー、調査当局、第三者サイバーセキュリティ機関と協力し、影響を受けた職員への通知と支援を進めています。
+
+**Why it matters:** 見出しと提出書類の間の溝がこの項の本体です:これはファウンドリへの侵入ではなく、第三者クラウドシステムでの従業員データの露出と読めます——そして提出書類自身の限定語(システム侵害の証拠なし、顧客データなし)こそ、アグリゲーターが運ばなかった事実です。注視点はどのクラウドベンダーか、そして外部サイト上のコピーが削除されたかどうか。
+
+[`🔗 TSMC Form 6-K: Statement Regarding the Unauthorized Access of Employee Personal Data`](https://www.sec.gov/Archives/edgar/data/1046179/000104617926000800/a20261112statementregardin.htm) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50479721)
+
+---
+
+## 35. Brave Search API が x402 プロトコルでの agentic 支払いに対応——クエリ単位で USDC で支払い、API キー不要
+
+- **Velocity:** ▮ steady
+- **Source:** brave.com · 129+ pts on HN · 9.0h ago (~11:08 UTC+8)
+- **Tags:** `agentic-payments` `search-api` `x402`
+
+Brave のブログ(11月12日):Search API が「instant, pay-as-you-go, agentic payments enabled by the open x402 payment protocol」(オープンな x402 決済プロトコルによる、即時・従量課金の agentic 支払い)に対応し、エージェントが Brave の独立インデックスを照会し「リアルタイムでリクエストを決済でき、従来の API キー管理が不要になる」ように。仕組みはプロトコルそのものです:「A request sent without payment receives an HTTP 402 Payment Required response that states the price of that search and the payment details needed to pay it. The agent signs a USDC payment for that amount and retries the request with the signed payment attached.」(支払いなしのリクエストには HTTP 402 Payment Required が返り、その検索の価格と支払いに必要な詳細が示される。エージェントは同額の USDC 支払いに署名し、署名付きでリトライする。)Brave は独自の facilitator を運営し、**Base** ブロックチェーン上の USDC を受け付け、他のネットワークとステーブルコインも「incoming soon」(まもなく)。事前のアカウント登録やプラン選択は不要です。
+
+**Why it matters:** 検索はエージェントスタックで最も呼び出し頻度の高い有料プリミティブで、主要検索インデックスが HTTP ネイティブでリクエスト単位の決済を公開したのはこれが初の例です——402 フローはプロビジョニングとキー管理をまるごと取り除き、資金入りウォレットと交換します。同時に x402 に検索分野での初のスケール参考顧客を与え、プロトコルに欠けていた受容のシグナルになります。
+
+[`🔗 Brave: Search API agentic payments via x402`](https://brave.com/blog/search-api-agentic-payments/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50477649)
+
+---
+
+## 36. Google が A2UI 1.0 をリリース——エージェント向け生成 UI プロトコルの初の安定版
+
+- **Velocity:** ▮ steady
+- **Source:** developers.googleblog.com · 42+ pts on HN · 34.5h ago (~09:42 UTC+8 Nov 12)
+- **Tags:** `generative-ui` `agents` `protocol`
+
+Google の A2UI チーム(PM Vishal Motwani、11月11日):「Today, we're releasing A2UI 1.0, the first stable version of our open protocol for generative UI.」(本日、私たちのオープンな生成 UI プロトコルの最初の安定版 A2UI 1.0 をリリースします。)エージェントはインタラクティブな画面——確認フォームやチャート——で答え、何を表示するかを記述するだけ、**各アプリが自分のネイティブコンポーネントで描画**します:web・Android・iOS のレンダラ SDK、Python・TypeScript・Dart のエージェント SDK。セキュリティモデルは許可リストとサーバ側バインディング——エージェントは「登録したコンポーネントだけを配置・設定でき」、A2UI は「サーバ上でデータと子コンポーネントに確実にバインドするため、機密性の値は決してモデルに届かない」。構成は「A2UI Express」か「system one」の決定モデル——「テキストを書く代わりにコンポーネントを選ぶ」——で行われ、プロトコルは MCP アプリをホストするサードパーティアシスタント、「such as Gemini or Claude」(Gemini や Claude など)の内部でも動きます。「Atlassian、Alation、Bloomberg、ByteDance などの企業がすでにこれを使って構築しています。」
+
+**Why it matters:** 生成 UI は一つの方式へ収束しつつあります:エージェントが制約付きの spec を出し、アプリがネイティブに描画する。A2UI 1.0 はその賭けの最も広い業界版で、名指された採用企業と SDK マトリクス(3レンダラ×3エージェント言語)は、評価すべき候補標準になります。コンポーネント許可リスト+サーババインディングこそ、モデル駆動 UI をデモの外へ出せるものです。
+
+[`🔗 Google: A2UI 1.0`](https://developers.googleblog.com/a2ui-10-build-delightful-fast-reliable-agentic-experiences/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50461919)
+
+---
+
+## 37. Microsoft Defender がある開発者の未リリースビルドを3ヶ月で217回アップロードしていた——「safe samples」のデフォルトの下で
+
+- **Velocity:** ▮ steady
+- **Source:** garrettstimpson.ca · 64+ pts on HN · 34.7h ago (~09:27 UTC+8 Nov 12)
+- **Tags:** `defender` `telemetry` `windows`
+
+Garrett Stimpson の投稿(11月11日):接続の遅さを調査するために Hodometer(自身が書いたプロセス別トラフィック追跡トレイツール)を使ったところ、Defender のイベントログに「**217 sample submissions from my PC over three months. I hadn't seen a prompt for any of them**」(3ヶ月で私の PC から217件のサンプル提出。プロンプトは1度も見ていない)が記録されていたのを見つけました——その大半は彼自身の未リリースプログラムのビルドです。`MpCmdRun.exe` は「1日で 224 MB を Azure ストレージへ送信」、約28 MB/分のバーストで。Event 2050 は提出ごとにファイル名と SHA-256 を記録。217件のうち201件は同じ Go テストプログラムのビルドで、216の異なるハッシュ——再アップロードではなく新鮮なバイナリ——最も忙しい日は75件。Windows のアプリ別データ使用量では `MpCmdRun.exe` は30日で **2.8 GB のアップロード、その PC から Microsoft へのアップロード全体の約80%**。これを許すデフォルトは「Send safe samples automatically」で、ここでの「safe」とは「個人を特定できる情報を含む可能性が低い」の意味です。そして投稿の最も鋭い部分:10月28日に彼は `Set-MpPreference -SubmitSamplesConsent 2` を実行。Event 5007 が「never send」への変更を記録——その日の 19:53、今度は**1に戻った**別の記録が現れます(「I don't know what changed it back」——何が戻したのか分からない)。再有効化後にさらに25件のアップロード。
+
+**Why it matters:** 信頼の問題は PII ではありません——未リリースの専用バイナリが、プロンプトなしで、ほとんどのユーザーが存在を知らない設定の下で、デフォルトでマシンから出ていくことです。Windows でクローズドソースのソフトウェアを作る人にとって、サンプル提出は監査すべきデータ出口です。投稿は最後に自分の Defender Operational ログの調べ方を付け加えています。
+
+> "Microsoft Defender Antivirus has uploaded a file for further analysis" —— Event 2050、同投稿より
+
+[`🔗 Garrett Stimpson: I caught Microsoft red-handed with Hodometer`](https://garrettstimpson.ca/posts/2026/11/11/caught-microsoft-red-handed-with-hodometer/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50461786)
+
+---
+
+## 38. FrankenPHP に一挙 14 件の CVE 記録——ワーカーモードの状態リーク、ドット形式ヘッダの認証バイパス、古い Docker ベースイメージへの 9.8
+
+- **Velocity:** ▮ steady
+- **Source:** NVD records (CNA: VulnCheck) · published 10:18 UTC Nov 13 (~1.9h ago)
+- **Tags:** `frankenphp` `php` `security`
+
+VulnCheck の CNA が本日朝、`php/frankenphp`(PHP を Go バイナリに埋め込むプロジェクト)について **14 件の記録**(CVE-2026-128014 から -128027)を公開しました。最高スコアの **CVE-2026-128027(9.8)** はコードの欠陥ではなくビルドプロセスのギャップです:「FrankenPHP Docker images before 1.1.11 were rebuilt only when new base image tags were created, so security fixes that Alpine, PHP, and Go applied under existing tags were not propagated.」(1.1.11 未満の Docker イメージは新しいベースイメージタグが作られたときだけ再ビルドされ、Alpine・PHP・Go が既存タグの下で適用したセキュリティ修正は伝播しなかった。)**CVE-2026-128014(8.1)** はスタンドアロンの静的バイナリに hits——Brotli 1.2.0 にリンクされた PHP brotli 拡張をバンドルしており、そのデコーダには out-of-bounds write(根底は CVE-2026-111497)があります。**CVE-2026-128023(7.4)** はドット形式ヘッダによる認証バイパス:クライアントが `X.Authenticated.User` 形式の名前を送ると、PHP はそれをアンダースコアの `$_SERVER` キーに書き換え、ユーザー ID・クライアント IP・スキームを偽装できます。残りはワーカーモードのファミリー——`putenv()` がプロセス全体の OS 環境に書き込み、データベースパスワードのような秘密が同時リクエスト間でリーク(6.4)、スレッド上に残るリクエスト毎環境変数(4.8)、クライアント間で漏れる libxml エラー状態(3.7)、SplTempFileObject ストリームの use-after-free(6.5)——と DoS のセット。すべてのスコアは **VulnCheck 自身の CVSS 3.1**(Primary、CNA による)で、NVD の全記録は `Deferred` にあります。修正は 1.13.0–1.13.4(10月4日〜10月26日)に分散し、11月5日には 1.13.5——記録はパッチより1ヶ月遅れて届きました。
+
+**Why it matters:** ワーカーモードは FrankenPHP の売りで、このファミリーの形——リクエスト状態が共有スレッド上でリクエストをまたいで存続する——はテナント境界の失敗であり、本番ではクロスユーザーリークになる種類です。**≥ 1.13.4**(現行 1.13.5)を実行し、9.8 の件があるので、デプロイ済み Docker イメージが実際に再ビルドされたことを確認してください——ベースタグを引けば修正を吸収したと仮定しないこと。
+
+[`🔗 NVD: CVE-2026-128023 (dot-header auth bypass)`](https://nvd.nist.gov/vuln/detail/CVE-2026-128023) · [`🔗 GHSA-x9p2-77v6-6vhf (stale Docker base images)`](https://github.com/php/frankenphp/security/advisories/GHSA-x9p2-77v6-6vhf)
+
+---
+
+## 39. HermesEnabler:任意の Apple Watch で Apple の Hermès 文字盤を解放するサイドロード watch アプリ——本日 218★、watchOS 27 beta に合わせて再ピン留め
+
+- **Velocity:** ▮ steady
+- **Source:** pookjw/HermesEnabler · 1,699★, +218 today on GitHub Trending
+- **Tags:** `watchos` `sideloading` `apple`
+
+`pookjw/HermesEnabler` は本日の GitHub Trending 4位。きっかけは Apple 自身のリリース列車です:**1.5.2**(11月12日)が watchOS 27.0 beta 3 に対応、**1.5.3**(11月13日 01:34 UTC)が「support for watchOS 27.0 RC (24R363) and 27.2 beta 1 (24S5086l)」を追加、**1.5.4**(11月13日 04:21 UTC)がベトナム語ローカライズを追加——2日で3リリース。README による仕組み:Sideloadly か Xcode で IPA(iPhone ホストアプリ+`HermesEnabler2` watch アプリ)をサイドロード——Windows では WatchBridge——両デバイスで開発者モードを有効にし、Watch 上でアプリを実行。対応範囲は「watchOS 27.0 through 27.3 beta 1」。README は摩擦を正直に記録します:署名中に埋め込み watch アプリを剥がす Sideloadly 0.72 の既知バグ、開発者証明書の信頼手順、未署名の Windows ヘルパー。
+
+**Why it matters:** サイドロード・オール・パターンの watchOS の顔であり、そのリリース履歴はそのまま保守コストの見積りです:Apple のベータのたびに壊れ、リリースのたびに正確なビルド番号(24R363、24S5086l)を張り直す。未署名の開発者モードツールが現在 watchOS でどこまで行けるか、そして未リリースの Apple OS 向け開発が実際いくらかかるかの現地報告として読んでください。
+
+[`🔗 pookjw/HermesEnabler`](https://github.com/pookjw/HermesEnabler) · [`🔗 Releases (1.5.2–1.5.4)`](https://github.com/pookjw/HermesEnabler/releases)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-13T04:29:26Z |
-| Items | 29 |
-| Sources tracked | 26 (Hacker News, GitHub Trending, NVD, cveawg, vendor advisories, vendor blogs, research pages) |
+| Generated | 2026-11-13T12:28:15Z |
+| Items | 39 |
+| Sources tracked | 29 (Hacker News, GitHub Trending, NVD, status pages, SEC filings, vendor advisories, vendor blogs, research pages) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
