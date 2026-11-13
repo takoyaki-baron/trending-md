@@ -52,3 +52,15 @@ agent は、すべてのツールとインフラが正常に動いていても�
 
 Sources: [ZhuLinsen/daily_stock_analysis](https://github.com/ZhuLinsen/daily_stock_analysis) ·
 [v3.34.0 リリースノート](https://github.com/ZhuLinsen/daily_stock_analysis/releases/tag/v3.34.0)
+
+## 2026-11-13 — フリート一貫性クラスにベンダー側の事例：Claude 認証障害で 2 時間、Microsoft 365 は 20 時間超
+
+- **Claude の認証レイヤーが 2 時間落ちた**（インシデント `nn11wk485zfn`：09:58 UTC 発行、11:05 UTC 修正デプロイ、11:58 UTC Resolved）——claude.ai・Console・Claude Code・Cowork がことごとくログイン拒否、HN には同時に 3 スレッド（ステータスリンクだけで 230+ pts）。最も痛いのはエージェントフリート：2 時間の認証障害とは失われたチャット履歴ではなく、次の API 呼び出しで止まった数千の進行中コーディングエージェントセッション。
+- **比較できる半分は復旧のリズム：**2 時間で 3 回のステータス更新と当日朝の解決——対する Microsoft 365 の EX1550543 は 20 時間を超えて修正は「not going as expected」、優先は「メールキューとバックログの排出」、**4.3 億**ユーザー、英 GP・学校・議会は代替チャネルへ。
+- **両インシデントが名指す観測項目：**復旧は二値ではない。Microsoft の修正が「完了」してもメールキューが排出され続けるうちは、パッチは見えても届きはまだ一日かかる。Claude のデプロイ済み→Monitoring→Resolved の列は同じギャップの正直な版。フリート運用者は「インシデント解決」を復帰の合図ではなく、試探の合図として扱うべき。
+
+→ [[agent-ops]] [[security]]
+
+Sources: [Claude ステータス：インシデント nn11wk485zfn](https://status.claude.com/incidents/nn11wk485zfn) ·
+[BBC：Microsoft 障害ライブ更新](https://www.bbc.com/news/live/cq5y10ge3dp3t) ·
+[HN ディスカッション](https://news.ycombinator.com/item?id=50481187)

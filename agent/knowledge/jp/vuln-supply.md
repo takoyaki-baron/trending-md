@@ -1557,3 +1557,16 @@ Sources: [ledger.json](https://red.anthropic.com/2026/cvd/data/ledger.json) ·
 Sources: [cveawg: CVE-2026-6460](https://cveawg.mitre.org/api/cve/CVE-2026-6460) ·
 [cveawg: CVE-2026-107408](https://cveawg.mitre.org/api/cve/CVE-2026-107408) ·
 [VulnCheck advisory](https://www.vulncheck.com/advisories/dixell-copeland-xweb-evo-pre-authentication-os-command-injection-via-username)
+
+## 2026-11-13 — VulnCheck の CNA 波が FrankenPHP に届き、最高スコアはビルドパイプライン
+
+- **一朝に 14 レコード**（`CVE-2026-128014`–`-128027`、VulnCheck CNA。同一波に二つの時計——NVD published 10:18:08Z、最高スコア記録の CNA `datePublished` は 09:34:03Z）：全件が NVD `Deferred`、スコアは VulnCheck 自身のもの——**一つの CNA、二つのバージョン**：`CVE-2026-128027` は CVSS 3.1 **9.8**（`Primary`）のそばに CVSS 4.0 **9.3**（`Secondary`）を載せ、どちらも `disclosure@vulncheck.com`——両方をバージョン付きで引用する（[[cvss-stopping-points]] の形が一つのレコードの内側に住む）。
+- **修正がレコードに一か月先行：**修正は 1.13.0–1.13.4（10-04〜10-26）と 11-05 の 1.13.5 で出荷済み、レコードは 11-13 着弾。「未だ未修正」ではない——修正済みで*記録が遅れた*、Hickory-DNS/Mongoose 方向。
+- **9.8 はコードではない：**`CVE-2026-128027`——「1.1.11 未満の FrankenPHP Docker イメージは新しいベースイメージタグが作られたときのみ再ビルドされ、Alpine・PHP・Go が既存タグの下で適用したセキュリティ修正は伝播しなかった」。主題が再ビルド方針である脆弱性：救済はアップグレードではなく、デプロイ済みアーティファクトが実際に再ビルドされたことの検証。センサスへの新しい単位——アーティファクト対コードの区別が CVE レコードの中に住む。
+- **バンドル依存の双子：**`CVE-2026-128014`（8.1）——スタンドアロン静的バイナリが Brotli 1.2.0 にリンクした PHP brotli 拡張をバンドル（OOB write、下層 `CVE-2026-111497`）——上流修正が伝播しない第二の場所（古いベースイメージ、静的バイナリ）。
+- **同じ波に：**ドットヘッダー認証バイパス（7.4）——`X.Authenticated.User` が PHP の `$_SERVER` キーへの下線書き換えで identity/IP/scheme を偽装可能に。worker モードのテナント境界ファミリー（プロセス全体の `putenv()` 6.4、スレッドに残るリクエスト毎 env 4.8、libxml 状態 3.7、SplTempFileObject UAF 6.5）。
+
+→ [[security]] [[disclosure-lag]]
+
+Sources: [NVD：CVE-2026-128023](https://nvd.nist.gov/vuln/detail/CVE-2026-128023) ·
+[GHSA-x9p2-77v6-6vhf（古い Docker ベースイメージ）](https://github.com/php/frankenphp/security/advisories/GHSA-x9p2-77v6-6vhf)

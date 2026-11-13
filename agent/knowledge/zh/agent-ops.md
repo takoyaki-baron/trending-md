@@ -72,3 +72,15 @@ agent 可以在每个工具和每一层基础设施都正常工作时做出错�
 
 来源：[ZhuLinsen/daily_stock_analysis](https://github.com/ZhuLinsen/daily_stock_analysis) ·
 [v3.34.0 发布说明](https://github.com/ZhuLinsen/daily_stock_analysis/releases/tag/v3.34.0)
+
+## 2026-11-13 — 机队一致性类迎来厂商侧实例：Claude 认证故障两小时，Microsoft 365 过了第 20 小时
+
+- **Claude 的认证层故障两小时**（事故 `nn11wk485zfn`：09:58 UTC 开立，11:05 UTC 部署修复，11:58 UTC Resolved）——claude.ai、Console、Claude Code 与 Cowork 全部拒绝登录，HN 同时挂着三条线程（仅状态页链接就有 230+ 分）。感受最深的是 agent 机队：两小时的认证故障不是丢聊天记录，而是数千个进行中的编码 agent 会话卡在下一次 API 调用上。
+- **可比较的一半是恢复节奏：**两小时内三次状态更新、当天上午解决——对照 Microsoft 365 的 EX1550543：过了 20 小时修复「not going as expected」、优先级是「减少邮件队列与积压」、**4.3 亿**用户，英国 GP、学校与议会启用备用渠道。
+- **两起事故共同指名的可观测项：**恢复不是二元的。Microsoft 的修复「完成」而邮件队列仍在排空时，可以看起来已修复、实际还要一天才送达；Claude 的已部署→Monitoring→Resolved 序列是同一差距的诚实版本。机队调度者应把「事故已解决」当作探测信号，而非恢复信号。
+
+→ [[agent-ops]] [[security]]
+
+来源：[Claude 状态页：事故 nn11wk485zfn](https://status.claude.com/incidents/nn11wk485zfn) ·
+[BBC：Microsoft 故障实时更新](https://www.bbc.com/news/live/cq5y10ge3dp3t) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50481187)

@@ -106,3 +106,15 @@ infrastructure is the Chinese open-source agent wave in miniature.
 
 Sources: [ZhuLinsen/daily_stock_analysis](https://github.com/ZhuLinsen/daily_stock_analysis) ·
 [v3.34.0 release notes](https://github.com/ZhuLinsen/daily_stock_analysis/releases/tag/v3.34.0)
+
+## 2026-11-13 — the fleet-consistency class gets its vendor-side instance: Claude down two hours on authentication, Microsoft 365 past hour twenty
+
+- **Claude's authentication layer failed for two hours** (incident `nn11wk485zfn`: opened 09:58 UTC, fix deployed 11:05 UTC, Resolved 11:58 UTC) — claude.ai, the Console, Claude Code and Cowork all refused logins while three HN threads ran at once (230+ pts on the status link alone). The audience that feels it hardest is agent fleets: a two-hour auth failure is thousands of mid-task coding-agent sessions stalled at their next API call, not lost chat history.
+- **The comparable half is the recovery cadence:** three status updates in two hours and a same-morning resolve — against Microsoft 365's EX1550543, which passed hour 20 with fixes "not going as expected", priority "reducing email queues and backlogs", **430 million** users, and UK GPs, schools and Parliament on fallback channels.
+- **The observable both incidents name:** recovery is not binary. Microsoft's fix "completing" while mail queues drain can look patched and still take another day to deliver; Claude's fix-deployed → Monitoring → Resolved sequence is the honest version of the same gap. A fleet runner should treat "incident resolved" as a signal to probe, not a signal to resume.
+
+→ [[agent-ops]] [[security]]
+
+Sources: [Claude status: incident nn11wk485zfn](https://status.claude.com/incidents/nn11wk485zfn) ·
+[BBC: Microsoft outage live updates](https://www.bbc.com/news/live/cq5y10ge3dp3t) ·
+[HN discussion](https://news.ycombinator.com/item?id=50481187)

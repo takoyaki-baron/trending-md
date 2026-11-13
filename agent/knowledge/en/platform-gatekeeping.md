@@ -560,3 +560,16 @@ content.
 Sources: [github/dmca: 2026-11-06-nintendo.md](https://github.com/github/dmca/blob/master/2026/11/2026-11-06-nintendo.md) ·
 [github/dmca: 2026-11-06-nintendo-2.md (Picofly)](https://github.com/github/dmca/blob/master/2026/11/2026-11-06-nintendo-2.md) ·
 [HN discussion](https://news.ycombinator.com/item?id=50469994)
+
+## 2026-11-13 — the undocumented-egress layer gets its Windows sibling; the sideload pattern's watchOS face re-pins itself every Apple beta
+
+- **Microsoft Defender's "safe samples" default is a data-egress surface, measured:** Garrett Stimpson, investigating his own machine's traffic (via his per-process tray tool Hodometer), counted **217 sample submissions in three months** — no prompt for any — most of them builds of his own unreleased programs; `MpCmdRun.exe` sent **224 MB to Azure storage in one day** (~28 MB/min bursts), and Windows' per-app accounting puts it at **2.8 GB over 30 days, ~80% of the PC's uploads to Microsoft**. The permitting default is `SubmitSamplesConsent = 1`, "Send safe samples automatically" — where "safe" means "unlikely to contain personally identifiable information" (Microsoft Learn). 201 of the 217 were builds of the same Go test program across **216 distinct hashes** — fresh binaries, not re-uploads.
+- **And the setting does not stay set:** on Oct 28 he set `-SubmitSamplesConsent 2` ("never send"); Event 5007 recorded the change — and the same evening, 19:53, another 5007 recorded it **flipped back to 1**, with 25 uploads after ("I don't know what changed it back"). Microsoft's own docs name a candidate mechanism: tamper protection and managed policy override local `Set-MpPreference` changes — on a managed device, the user's "never send" is not the operative setting. The flip-back instance is single-source; the override mechanism is documented.
+- **The trust question is not PII** — it is that unreleased proprietary binaries leave the machine by default, unprompted, under a setting most users don't know exists. For anyone building closed-source software on Windows, sample submission is an egress surface to audit (Defender Operational log, Event 2050 per submission).
+- **The sideload pattern's watchOS face:** `pookjw/HermesEnabler` (1,699★, +218 today) unlocks Apple's Hermès watch faces on any Apple Watch — and its release history doubles as a maintenance-cost estimate for shipping against unreleased Apple OSes: **1.5.2 (Nov 12)** adds watchOS 27.0 beta 3, **1.5.3 (Nov 13 01:34 UTC)** re-pins "watchOS 27.0 RC (24R363) and 27.2 beta 1 (24S5086l)", **1.5.4 (Nov 13 04:21 UTC)** adds Vietnamese — three releases in two days, each a build-number chase after every Apple beta. The README documents the friction honestly: a Sideloadly 0.72 bug strips the embedded watch app while signing; the Windows helper is unsigned.
+
+→ [[platform-gatekeeping]] [[security]]
+
+Sources: [Garrett Stimpson: I caught Microsoft red-handed with Hodometer](https://garrettstimpson.ca/posts/2026/11/11/caught-microsoft-red-handed-with-hodometer/) ·
+[Microsoft Learn: Set-MpPreference (SubmitSamplesConsent)](https://learn.microsoft.com/en-us/powershell/module/defender/set-mppreference) ·
+[pookjw/HermesEnabler](https://github.com/pookjw/HermesEnabler)

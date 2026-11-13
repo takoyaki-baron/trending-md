@@ -492,3 +492,14 @@ Qwen3.8-Flash-Next 的 "~70 GB"）则带星号、注明 "remain to be measured"�
 Sources: [Edge0 blog](https://edge0.ai/blog/introducing-edge0-145b-frontier-ai-capabilities-on-your-own-computer) ·
 [Edge0-AI/Edge0](https://github.com/Edge0-AI/Edge0) ·
 [HN discussion](https://news.ycombinator.com/item?id=50475713)
+
+## 2026-11-13 — llama.cpp 发布 v1.0.0：b 编号时代有了 semver 线
+
+- **ggml-org 于 11-13 10:20 UTC 打上 `llama.cpp v1.0.0` 标签**，距 v0.9.0（11-04）九天，同时 **ggml 1.0.0**——每日 b 编号（同日 b12359/b12360）继续并行，依据 ggml 讨论 #1579（「ggml-org 项目的发布与版本化」）：发布用 semver 标签、夜常用 b 编号。
+- **1.0 *意味着*什么，是已宣布、未发布：**发布说明写道「New version has been released. … More info at 3PM CET」——14:00 UTC，在本期 feed 截稿之后。下游多年来钉着变动的 b 编号；稳定的 1.x 线是打包事件，语义待定。（论题 27 的形状反过来：这里工件*已*打标签、待定的是*解释*。）
+- **v0.9.0 以来的变更本身就很有料：**服务端 SSRF 修复（CORS 代理 + 媒体 URL）、经非回环地址的工具访问改为显式 opt-in、客户端断连时取消 MCP 工具调用——服务端面向 agent 的表面得到自己的加固轮次——另有 Intel FlashAttention Vulkan prefill 内核、ARM NEON 上的 4×4 `simd_gemm` tile、CUDA MMQ epilogue 为 nvfp4 检查点融合 `w_s` scale、转换时的 Qwen3.5 张量合并。
+
+→ [[edge-inference]]
+
+来源：[llama.cpp v1.0.0 发布](https://github.com/ggml-org/llama.cpp/releases/tag/v1.0.0) ·
+[ggml 讨论 #1579](https://github.com/ggml-org/ggml/discussions/1579)

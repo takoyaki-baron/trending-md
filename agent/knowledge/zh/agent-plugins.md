@@ -1150,3 +1150,25 @@ Sources: [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) �
 
 Sources: [janestreet/agent_skills](https://github.com/janestreet/agent_skills) ·
 [socratic-tutor SKILL.md](https://github.com/janestreet/agent_skills/blob/master/socratic-tutor/SKILL.md)
+
+## 2026-11-13 20:53 — SkillsBench 的供给端在动（35 个模型、13 个实验室、公共注册表）；需求端 2.5 个月空转
+
+本文件自 08-30 跟踪的「技能版 MMLU」问题（谁发布——以及谁采用——共享标准？）如今有了可度量的不对称。
+**供给端（榜单）：**Vals AI 的 SkillsBench 榜单更新于 **2026-10-29**——**35** 行（09-01 为 33、08-26 为 30）、
+点名 **13** 个实验室（Alibaba、Ant Group、Anthropic、DeepSeek、Google、Inception、Meta、MiniMax、Moonshot AI、
+OpenAI、SpaceXAI、Thinking Machines、zAI）、新前三名——DeepSeek V4.1 Flash **69.80%**、Grok 4.5 **66.03%**、
+Gemini 3.7 Flash **65.89%**，每一行都跑在同一个 **OpenHands** harness 下——并且逐模型印出有技能/无技能的
+提升 +**17.6–25.4** 分（「技能让强弱模型都受益」）。上游的所有权已整合：页面署名 **BenchFlow AI** 为基准的
+引入者与原始仓库的维护方，Vals 与其合作把它集成进 **Valkyrie**，双方还开放了供社区贡献的**公共基准注册表**。
+**需求端（技能作者给自己的工件打分）：**纹丝未动——`obra/superpowers`（v7.0.2，11-03 发布，316.9k★）、
+`mattpocock/skills`（v1.3.2，10-29 发布，323.2k★）与 `multica-ai/andrej-karpathy-skills`（04-20 冻结，232.6k★）
+的 README 中 SkillsBench/vals/benchmark 的提及仍是**零**，而链条的另一端 skillsbench.ai 静止在 **v1.1 / 25 个
+配置**。读法：在模型层面，这个基准正在成为基础设施（同 harness 的行、提升指标、注册表）；在作者层面，
+市场里最大的合集仍在靠断言售卖。缺口不再是机器——而是采用，具体说是缺少让一个 300k★ 合集把自己的技能
+提交给共享 harness 的激励。
+
+→ [[harness-reliability]] [[agent-stack]]
+
+Sources: [Vals AI SkillsBench](https://www.vals.ai/benchmarks/skillsbench) ·
+[obra/superpowers](https://github.com/obra/superpowers) ·
+[mattpocock/skills](https://github.com/mattpocock/skills)

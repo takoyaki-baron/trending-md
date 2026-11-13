@@ -278,3 +278,16 @@ Sources: [pengchujin/aerial-tv](https://github.com/pengchujin/aerial-tv) · [sim
 
 Sources: [CBS News: United Airlines bans AI agents from booking flights](https://www.cbsnews.com/news/united-airlines-bans-ai-agents-booking-flights/) ·
 [HN ディスカッション](https://news.ycombinator.com/item?id=50458900)
+
+## 2026-11-13 — 生成 UI にプロトコルができた（Google A2UI 1.0）；エージェント決済が検索に届く（Brave x402）
+
+- **Google が A2UI 1.0 を公開**——「our open protocol for generative UI の初の安定版」。形：エージェントは拘束された spec で答え、**各アプリが自分のネイティブコンポーネントで描画する**——web/Android/iOS のレンダラ SDK、Python/TypeScript/Dart のエージェント SDK。デモの外で出荷可能にするのはセキュリティモデル：コンポーネントは**許可リスト制**で、A2UI は「サーバー上でデータと子コンポーネントに確実にバインドし、機密値は決してモデルに届かない」。
+- **合成には決定モデルのレーンがある：**A2UI Express、または「テキストを書く代わりにコンポーネントを選ぶ」system one 決定モデル——ルーティング層（論題 5）がインターフェースプロトコルの発表記事の中で名指しされた。表明済み採用者：Atlassian、Alation、Bloomberg、ByteDance。GPT-6 Intelligent UI の 16 コンポーネント（10-08）の標準化版：コンポーネントカタログがベンダー横断の契約になり、許可リスト + サーバーバインディングがデプロイのゲートになる。
+- **Brave Search API が x402 によるエージェント決済を受け付ける：**支払いなしのリクエストには価格を明示した **HTTP 402**。エージェントは **USDC** の支払いに署名し（Brave は Base 上に自社ファシリテーターを運用）、署名を添えて再試行する——API キー不要、先にアカウントを選ぶ必要もない、クエリ単位の即時決済。検索はエージェントスタックで最も高頻度な有料プリミティブで、これは大規模インデックスがリクエスト単位の決済をネイティブに公開した初の例——x402 の受容シグナルの瞬間（9 月の Cloudflare Monetization Gateway はインフラの予告だった）。
+- **402 フローがする取引：**プロビジョニングと鍵管理を資金入りのウォレットに置き換える——エージェントには本当の簡素化で、濫用の問いを「誰が鍵を持つか」から「誰がウォレットを空にするか」へ移す。
+
+→ [[agent-distribution]] [[system1-decision]] [[agent-stack]]
+
+Sources: [Google：A2UI 1.0](https://developers.googleblog.com/a2ui-10-build-delightful-fast-reliable-agentic-experiences/) ·
+[Brave：Search API の x402 エージェント決済](https://brave.com/blog/search-api-agentic-payments/) ·
+[activepieces：Brave Search API x402（独立系の解説）](https://www.activepieces.com/blog/brave-search-api-x402-for-autonomous-ai-agent-payments)

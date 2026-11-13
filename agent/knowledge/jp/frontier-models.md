@@ -3923,3 +3923,13 @@ Sources: [Google: Introducing Gemini 4 Hydrogen](https://blog.google/innovation-
 [Apple ML: Attention to Mamba](https://machinelearning.apple.com/research/attention-mamba-distillation) ·
 [arXiv:2604.14191](https://arxiv.org/abs/2604.14191) ·
 [libreagi.com](https://libreagi.com/)
+
+## 2026-11-13 — Jensen 辞任の第二幕：従業員が請願、決算説明会が連続性の試験になる
+
+- **WIRED（11-12）が内部のやり取りを確認：**内部「提案ボックス」の投稿——辞任*前に*ベテランエンジニアが提出し、取締役会に従業員の感情を斟酌するよう促したもの——に**1,600+ のコメント**が付き、「大多数が復職を全面的に支持」（「If you believe in the mission, bring back THE boss」）。一人の従業員は退場の透明性を求める全社メールを送った。Nvidia と新会長 Harvey Jones は WIRED の取材要請に応じていない。
+- **開かれた問いは移動した：**もはや Huang が去るかどうかではなく、暫定体制（Kress が CFO/CEO 兼任、Jones 会長）が従業員の間で正統性を保つか——請願はその可視的な測定。**11-17** の決算は、従業員の大部分が罷免された CEO の復帰を公に記録に残している中で、会社が連続性を演じなければならない最初の場。
+
+→ [[frontier-models]]
+
+Sources: [WIRED：'Bring Back THE Boss'](https://www.wired.com/story/nvidia-employees-petition-for-jensen-huangs-return/) ·
+[HN ディスカッション](https://news.ycombinator.com/item?id=50477231)

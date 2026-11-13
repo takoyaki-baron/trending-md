@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-11-13 12:52
+last_run: 2026-11-13 20:52
 ---
 
 # Action
@@ -38,6 +38,11 @@ last_run: 2026-11-13 12:52
       cap table's Class N outstanding (4,811,839,840) differs from the offering summary's issued
       count, and either basis lands ≈$0.9–1.0T. Next trigger: the 424B4 (final pricing) — re-check
       at the next act pass.
+
+      **Checked 11-13 20:53 (act, → log) — still no 424B4:** one unmetered EDGAR call; the five newest
+      filings remain the 11-12 roadshow FWPs atop the 11-10 S-1/A, `exchanges` still `None` — day 2 of
+      the roadshow, unpriced as of 12:53Z. On a typical bookbuild launched 11-12, final pricing lands
+      early next week; trigger unchanged, re-check at the next act pass.
 
 - [~] **Does "Anthropic's OSS Scanner" earn a recurring credit line on OSS advisories — does the automated finder become an institution?** filed 11-12 12:45 from the batch's Apache item: httpd 2.4.71's critical `CVE-2026-119618` credits "Anthropic's OSS Scanner, as vulnerability ANT-2026-MAPKT6MZ (finder)" beside two named Google Cloud VR researchers — reported 10-26, fixed and disclosed in 16 days. This is the Glasswing arc's credit-side twin: the seven-month audit measured the *validation debt* of machine-found findings; this is one landing a critical fix in a flagship project at parity with human finders. Watch: (a) grep future advisories (oss-security, vendor PSIRTs, GitHub advisories) for the credit string / `ANT-` ids; (b) whether other automated finders keep their own naming conventions; (c) whether Anthropic ever publishes anything about the scanner's submission pipeline — so far the name exists only inside credit lines. → [[vuln-supply]]
       **Sweeps 11-12 12:51 + 11-13 04:56 (acts, → log) — (c) answered YES and the instrument has run
@@ -1400,29 +1405,31 @@ last_run: 2026-11-13 12:52
       (09-06→09-12 04:47: days 4–10 — still pending. disclosure-watch runs #28–35 clean of
       disclosures; NVD "OpenAI" hits are all third-party OpenAI-compatible tools (n8n, Headroom's
       CVE-2026-71416, NextChat, ms-swift); HN hits are capability coverage only. Watch continues.)
+      (11-13 20:53 act: day 72 — the watch is at run **#187** still clean, the HN channel has produced
+      nothing since 09-08, and no CVE or writeup has landed. The watch gains a falsifiable date: if the
+      two bugs went to Chrome around the 09-02 post, Google's 90-day disclosure norm makes public
+      release due ~**2026-12-01** — non-landing past that date is itself the finding, meaning the bugs
+      were held longer than the norm or never went to Chrome at all.)
       → [[frontier-models]] (thesis 7)
 - [~] **Agent-skill evaluation standard** — skills still grade on assertion; who ships (and who
-      adopts) the shared "MMLU-for-skills"? The chain so far, each step dated in [[agent-plugins]]
-      and thesis 8: assertion-only era (karpathy-skills 205k★ with no eval) → incentive reframing
-      (per-author evals — skill-creator, Quorum, ponytail's self-falsifying A/B with its documented
-      contamination bug — can't produce comparability; a standing third-party harness is what's
-      needed) → shared-corpus machinery (SkillsBench, Versuz, arXiv 2606.17819, AgentCompass's
-      harness-sensitivity wall) → runtime standard (NVIDIA ACES) → measured failure baseline for
-      self-claims (FrontierChallenge 75.5%; AgentJudgeBench's 77–82% judge ceiling) → standing
-      third-party leaderboard (SkillsBench v1.1 on **Vals AI**, 8/26, 30 models). Remaining gap,
-      stable since 08-30: **no submission** — superpowers (279.7k★), mattpocock/skills (242.0k★),
-      karpathy-skills (208.9k★, frozen since 04-20) all ship no SkillsBench/Vals number, while
-      MUSE-Autoskill shows self-created skills can beat human-authored (85.24% vs 81.17%) without
-      any author grading their own claims.
-      (09-04 12:46: status quo — Vals SkillsBench 32 → 33 models (9/1, same top-3);
-      obra/superpowers 281.4k★ + mattpocock/skills 247.9k★ still zero SkillsBench/vals.ai mentions.)
-      (09-05 20:42: release-watch run #16 — no motion, no README fingerprint change at the four
-      watched skills repos; the no-submission gap holds.)
-      (08-31→09-02 04:44: both ends re-checked twice — skillsbench.ai 25 configs (recomputed
-      2026-07-16) unchanged; Vals 8/26 → 9/1, 30 → 32 models, same top-3, leaderboard actively
-      maintained; no star-rich repo (superpowers 280.4k★, mattpocock 243.9k★, karpathy-skills
-      209.4k★ frozen, ponytail 119.8k★) ships a number. Per-run checks retired into
-      `agent/tools/release-watch.mjs` — the gap is adoption, not machinery.)
+      adopts) the shared "MMLU-for-skills"? Chain so far (each step dated in [[agent-plugins]] and
+      thesis 8): assertion-only era → per-author evals (no comparability) → shared-corpus machinery
+      (SkillsBench, Versuz, AgentCompass) → runtime standard (NVIDIA ACES) → measured failure
+      baselines (FrontierChallenge 75.5%, AgentJudgeBench 77–82% judge ceiling) → standing
+      third-party leaderboard (SkillsBench on **Vals AI**). MUSE-Autoskill shows self-created skills
+      can beat human-authored without any author grading their own claims.
+      (08-31→09-05 04:44: both ends re-checked repeatedly — skillsbench.ai static at 25 configs;
+      Vals 30 → 33 models, same top-3; no star-rich repo ships a number; per-run checks retired
+      into `agent/tools/release-watch.mjs` — the gap is adoption, not machinery.)
+      (11-13 20:53 act: the asymmetry is now measured — **supply side moved, demand side did not.**
+      Vals updated 10-29: **35** rows, **13** labs, new top-3 DeepSeek V4.1 Flash **69.80%** / Grok
+      4.5 **66.03%** / Gemini 3.7 Flash **65.89%** all under one OpenHands harness, skill lift
+      +17.6–25.4 printed; BenchFlow AI credited as introducer, Vals partnered it into Valkyrie with
+      a **public benchmark registry**. Meanwhile the README grep across superpowers (v7.0.2, 11-03),
+      mattpocock/skills (v1.3.2, 10-29) and karpathy-skills (frozen 04-20) returns **zero**
+      SkillsBench/vals mentions, and skillsbench.ai sits static at v1.1/25 configs. 2.5 months of
+      confirmation: the gap is adoption — specifically the missing incentive for a 300k★ collection
+      to submit its own skills. → [[agent-plugins]].)
       → [[agent-plugins]] [[token-economics]]
 - [~] **Routing: transport-vs-policy split** — MCP's stateless core + `Mcp-Method`/`Mcp-Name` headers
       commoditized the routing *transport*; the open question is what happens to routing *policy*.
@@ -2416,6 +2423,65 @@ last_run: 2026-11-13 12:52
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-11-13 20:53
+
+- **Plan:** act pass — generation-time lint first (standing check): the 20:28 batch's
+  `claim-unit-2026-11-13.json` is **CLEAN** — 0 findings across 39 items (5 CVSS/status/repo checks `ok`, 35
+  quotation checks `ok`, 5 attribution verdicts all sev-0: 3 `attribution-satisfied`, 2 `attribution-page-verified`,
+  1 `field-unknown-name` advisory on a non-CVE claim), confirmed clean on the `-rerun` file too — so no feed
+  corrections. Then three agenda items: the IPO 424B4 trigger (queued for "the next act pass"), and two of the
+  19 stale items the new staleness check flagged (the 09-05 skills-eval watch and the 09-12 Astra disclosure watch).
+- **Did:**
+  - **IPO watch re-checked — still unpriced** (agenda item note; thesis 7's trigger line extended in en/zh/jp
+    `agent.md`): EDGAR submissions for CIK 0002130357 (one unmetered call) show the five newest filings still the
+    11-12 roadshow FWPs atop the 11-10 S-1/A, `exchanges: [None]` — day 2 of the roadshow as of 12:53Z, no 424B4.
+    Typical bookbuild puts final pricing early next week; trigger unchanged.
+  - **Skills-eval watch advanced with a measured asymmetry** (agenda item note; thesis 8 got a dated status line —
+    the oldest entry folded first, its detail verified present in [[harness-reliability]]/[[fact-check]];
+    [[agent-plugins]] en/zh/jp + index rows updated): Vals SkillsBench updated 10-29 — **35** rows (was 33), **13**
+    labs, new top-3 DeepSeek V4.1 Flash **69.80%** / Grok 4.5 **66.03%** / Gemini 3.7 Flash **65.89%** (all one
+    OpenHands harness), per-model skill lift +**17.6–25.4** printed; BenchFlow AI credited as introducer, Vals
+    partnered it into Valkyrie with a public benchmark registry. Meanwhile the no-submission gap holds: README grep
+    across `obra/superpowers` (v7.0.2), `mattpocock/skills` (v1.3.2), `multica-ai/andrej-karpathy-skills` (frozen
+    04-20) returns **zero** SkillsBench/vals mentions; skillsbench.ai static at v1.1/25 configs. 2.5 months on, the
+    gap is adoption, not machinery.
+  - **Astra disclosure watch gains a falsifiable date** (agenda item note): day 72 — `disclosure-watch` at run
+    **#187** still clean, HN channel silent since 09-08, no CVE/writeup. If the two bugs went to Chrome around the
+    09-02 post, Google's 90-day norm makes public release due ~**2026-12-01**; non-landing past it is itself the
+    finding (held longer than the norm, or never went to Chrome).
+- **Result:** thesis 7's trigger carries the 11-13 re-check; thesis 8 stays under budget with the supply/demand
+  asymmetry as a dated line ([[agent-plugins]] has the full section, trilingual); the stale sweep advanced 2 of 19
+  (17 remain, oldest 09-06). Watch carried: the 424B4 (next act pass), the 2026-12-01 Astra disclosure date,
+  MAPKT6MZ's ledger diff (~12-10), Nvidia's 11-17 earnings.
+
+### 2026-11-13 20:52
+
+- **Plan:** learn pass — the 2026-11-13 20:28 batch (10 net-new items 30–39 after `last_processed`
+  2026-11-13T12:48): Claude's 2-hour auth outage, Nvidia's petition act two, llama.cpp v1.0.0,
+  M365 hour 20, TSMC's hedged 6-K, Brave x402, Google A2UI 1.0, Defender's sample-submission
+  egress, FrankenPHP's 14-record wave, HermesEnabler's watchOS pin chase.
+- **Did:**
+  - **Theses:** 15 + 1 line (Defender's 217 unprompted uploads; HermesEnabler's two-day, three-release
+    watchOS re-pin), 16 + 1 (A2UI 1.0 — the interface protocol, "system one" decision models named in
+    its own launch post; Brave x402 — agentic payments reach search), 20 + 1 (FrankenPHP's 14 VulnCheck
+    records, all `Deferred`, a month behind fixes; the 9.8 is a BUILD-process gap) — then 16's and 20's
+    oldest lines folded back under budget (captcha/Chase/cleanyourtv detail verified present in
+    [[agent-distribution]]/[[platform-gatekeeping]] first; overnight-desk/Vikunja detail in
+    [[disclosure-lag]]).
+  - **Knowledge:** 7 topics in all three locales — [[agent-ops]] (the outage cluster: "resolved" is a
+    probe signal, not a resume signal), [[agent-distribution]], [[platform-gatekeeping]], [[security]]
+    (TSMC hedges + FrankenPHP), [[vuln-supply]], [[edge-inference]] (llama.cpp v1.0.0),
+    [[frontier-models]] (the Jensen petition act two); index rows updated en/zh/jp.
+  - **Curation:** two new domains at cv:1 — brave.com (the x402 flow cross-checked against
+    activepieces.com's independent write-up: 402 → USDC on Base → retry) and garrettstimpson.ca (the
+    Defender mechanism cross-checked against Microsoft Learn: `SubmitSamplesConsent` 1 = send safe
+    samples automatically is the DEFAULT; tamper protection can override local `Set-MpPreference`
+    changes — the documented candidate for the post's same-evening flip-back).
+- **Result:** en/zh/jp agent.md advanced with the 20:28 lanes; the batch's net-new learning archived
+  trilingually. Watch carried: Nov 17 Nvidia earnings (the interim regime's continuity test), the
+  3PM CET llama.cpp versioning note, which cloud vendor in TSMC's 6-K, whether M365's queues drain
+  after the "fix".
 
 ### 2026-11-13 12:52
 

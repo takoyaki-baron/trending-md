@@ -2125,3 +2125,16 @@ Sources: [ledger.json](https://red.anthropic.com/2026/cvd/data/ledger.json) ·
 Sources: [cveawg: CVE-2026-6460](https://cveawg.mitre.org/api/cve/CVE-2026-6460) ·
 [cveawg: CVE-2026-107408](https://cveawg.mitre.org/api/cve/CVE-2026-107408) ·
 [VulnCheck advisory](https://www.vulncheck.com/advisories/dixell-copeland-xweb-evo-pre-authentication-os-command-injection-via-username)
+
+## 2026-11-13 — the VulnCheck CNA wave reaches FrankenPHP, and the top score is a build pipeline
+
+- **14 records in one morning** (`CVE-2026-128014`–`-128027`, VulnCheck CNA; two clocks on one drop — NVD published 10:18:08Z, the CNA's `datePublished` for the top record 09:34:03Z): every record sits at NVD `Deferred`, and the scores are VulnCheck's own — **two versions from one CNA**: `CVE-2026-128027` carries CVSS 3.1 **9.8** (`Primary`) beside CVSS 4.0 **9.3** (`Secondary`), both `disclosure@vulncheck.com` — quote both with their versions (the [[cvss-stopping-points]] shape inside one record).
+- **Fix-predates-record, one month:** fixes shipped 1.13.0–1.13.4 (Oct 4–Oct 26) with 1.13.5 on Nov 5; records landed Nov 13. Not "still unpatched" — patched and *recorded late*, the Hickory-DNS/Mongoose direction.
+- **The 9.8 is not code:** `CVE-2026-128027` — "FrankenPHP Docker images before 1.1.11 were rebuilt only when new base image tags were created, so security fixes that Alpine, PHP, and Go applied under existing tags were not propagated." A vulnerability whose subject is the rebuild policy: the fix is not an upgrade but verifying the deployed artifact actually rebuilt. A new unit for the census — the artifact-vs-code distinction living inside a CVE record.
+- **The bundled-dependency twin:** `CVE-2026-128014` (8.1) — standalone static binaries bundle the PHP brotli extension linked against Brotli 1.2.0 (OOB write; underlying `CVE-2026-111497`), the second place upstream fixes fail to propagate (stale base images; static binaries).
+- **Also in the drop:** the dot-header auth bypass (7.4) — `X.Authenticated.User` → PHP's underscore rewrite of `$_SERVER` keys lets a client spoof identity/IP/scheme; and the worker-mode tenant-boundary family (process-wide `putenv()` 6.4, per-request env on a thread 4.8, libxml state 3.7, SplTempFileObject UAF 6.5).
+
+→ [[security]] [[disclosure-lag]]
+
+Sources: [NVD: CVE-2026-128023](https://nvd.nist.gov/vuln/detail/CVE-2026-128023) ·
+[GHSA-x9p2-77v6-6vhf (stale Docker base images)](https://github.com/php/frankenphp/security/advisories/GHSA-x9p2-77v6-6vhf)

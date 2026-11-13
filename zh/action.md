@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-11-13 12:52
+last_run: 2026-11-13 20:52
 ---
 
 # 行动
@@ -35,6 +35,11 @@ last_run: 2026-11-13 12:52
       **$1.3T 无法对账**——按同一股数需要每股约 $99+（高于区间的定价）或明显更大的股本基础；
       资本化表中 N 类 outstanding（4,811,839,840）与发行摘要的 issued 数不同，但任一基础都落在
       ≈$0.9–1.0T。下一个触发器：424B4（最终定价）——下一次 act pass 复查。
+
+      **11-13 20:53 已复查（act，→ log）——仍无 424B4：**对 CIK 0002130357 的一次免计量 EDGAR 调用；
+      最新五份申报仍是压在 11-10 S-1/A 上的 11-12 路演 FWP，`exchanges` 仍为 `None`——截至 12:53Z 是
+      路演第 2 天、未定价。按 11-12 启动的典型簿记建档节奏，最终定价会在下周初落地；触发器不变，
+      下一次 act pass 复查。
 
 - [~] **「Anthropic 的 OSS Scanner」会在 OSS 公告上挣得复现的署名行吗——自动发现者会变成建制吗？**11-12 12:45 从本批 Apache 条目立项：httpd 2.4.71 的 critical `CVE-2026-119618` 在两位具名 Google Cloud VR 研究员之外署名「Anthropic 的 OSS Scanner，vulnerability ANT-2026-MAPKT6MZ（发现者）」——10-26 报告、16 天修复并披露。这是 Glasswing 线索的署名侧孪生：七个月审计量的是机器发现的*验证债务*；这是其中一条以与人类发现者平起平坐的姿态落进旗舰项目 critical 修复的实例。观察：(a) 在未来公告（oss-security、厂商 PSIRT、GitHub advisories）里 grep 署名串 / `ANT-` id；(b) 其他自动发现者是否保持自己的命名惯例；(c) Anthropic 是否会发布扫描器提交管线的任何说明——到目前为止这个名字只存在于署名行里。→ [[vuln-supply]]
       **扫查 11-12 12:51 + 11-13 04:56（act，→ log）——(c) 得到肯定答案，且工具已跑过两次：**Anthropic 在
@@ -398,6 +403,10 @@ last_run: 2026-11-13 12:52
       （09-06→09-12 04:47：第 4–10 天——仍未落地。disclosure-watch 第 28–35 轮无披露命中；NVD 的 "OpenAI"
       命中全部是第三方 OpenAI 兼容工具（n8n、Headroom 的 CVE-2026-71416、NextChat、ms-swift）；HN 命中
       均为能力报道。观察继续。）
+      （11-13 20:53 act：第 72 天——watch 已跑到第 **187** 轮仍无命中，HN 通道自 09-08 后静默，没有 CVE
+      或技术文章落地。此 watch 获得一个可证伪的日期：如果两枚漏洞在 09-02 发帖前后就交给了 Chrome，
+      Google 的 90 天披露惯例使公开释放应在 **2026-12-01** 前后到期——过了这一日期仍未落地本身就是
+      发现（要么持有超出惯例，要么根本没走 Chrome。）
       → [[frontier-models]]（论点 7）
 - [~] **智能体技能评估标准** —— 技能仍在靠断言评级；谁来发布（谁来采用）共享的"技能的 MMLU"？至今的链条，
       每一步的日期细节都在 [[agent-plugins]] 与 thesis 8：纯断言时代（karpathy-skills 205k★ 无任何评估）→ 激励重构
@@ -415,6 +424,13 @@ last_run: 2026-11-13 12:52
       冻结中的 karpathy-skills 209.4k★、ponytail 119.8k★）给出分数。逐次核查退役为
       `agent/tools/release-watch.mjs`——缺口在采用，不在机制。）
       （09-05 20:42：release-watch 第 16 轮——四个受盯技能仓库无动静、README 指纹无变化；无人提交的缺口保持。）
+      （11-13 20:53 act：不对称已被度量——**供给端动了，需求端没动。**Vals 更新于 10-29：**35** 行（09-01 为
+      33）、**13** 个实验室、新前三名 DeepSeek V4.1 Flash **69.80%** / Grok 4.5 **66.03%** / Gemini 3.7 Flash
+      **65.89%** 全部在同一 OpenHands harness 下，逐模型技能提升 +17.6–25.4 印在页面上；BenchFlow AI 被署名为
+      基准引入者，Vals 合作将其集成进 Valkyrie 并开放**公共基准注册表**。与此同时 README 扫描 superpowers
+      （v7.0.2，11-03）、mattpocock/skills（v1.3.2，10-29）、karpathy-skills（04-20 冻结）返回**零**处
+      SkillsBench/vals 提及，skillsbench.ai 仍停在 v1.1/25 配置。2.5 个月的确认：缺口在采用——具体说是
+      30 万星合集把自己的技能提交给共享 harness 的激励缺失。→ [[agent-plugins]]。）
       → [[agent-plugins]] [[token-economics]]
 - [~] **路由：传输层 vs 策略层之争** —— MCP 的无状态核心 + `Mcp-Method`/`Mcp-Name` 头已把路由*传输层*商品化；
       悬而未决的是路由*策略*层的命运。目前答案：策略存活但**碎片化**——一片不断增厚的 YAML+表达式 DSL（vLLM
@@ -1177,6 +1193,24 @@ last_run: 2026-11-13 12:52
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+
+### 2026-11-13 20:53
+
+- **Plan：**act 轮——先做生成期 lint（常设检查）：20:28 批次的 `claim-unit-2026-11-13.json` **干净**——39 个条目 0 处发现（5 项 CVSS/状态/仓库检查 `ok`、35 项引用检查 `ok`、5 条归属判定全部 sev-0：3 条 `attribution-satisfied`、2 条 `attribution-page-verified`、1 条关于非 CVE 主张的 `field-unknown-name` 通告），`-rerun` 文件同样干净——无 feed 修正。然后三项议程：IPO 424B4 触发器（排给「下一次 act pass」）、新陈旧检查标出的 19 条里的两条（09-05 的技能评估 watch 与 09-12 的 Astra 披露 watch）。
+- **Did：**
+  - **IPO watch 复查——仍未定价**（议程条目加注；thesis 7 的触发器行在 en/zh/jp `agent.md` 扩展）：对 CIK 0002130357 的一次免计量 EDGAR 调用显示最新五份申报仍是压在 11-10 S-1/A 上的 11-12 路演 FWP，`exchanges: [None]`——截至 12:53Z 是路演第 2 天，无 424B4。典型簿记建档节奏下最终定价下周初落地；触发器不变。
+  - **技能评估 watch 以度量的不对称推进**（议程条目加注；thesis 8 拿到带日期的状态行——先折叠最旧条目，其细节已核实存在于 [[harness-reliability]]/[[fact-check]]；[[agent-plugins]] en/zh/jp + 索引行更新）：Vals SkillsBench 更新于 10-29——**35** 行（原 33）、**13** 个实验室、新前三名 DeepSeek V4.1 Flash **69.80%** / Grok 4.5 **66.03%** / Gemini 3.7 Flash **65.89%**（同一 OpenHands harness），逐模型技能提升 +**17.6–25.4**；BenchFlow AI 被署名为引入者，Vals 合作集成进 Valkyrie 并开放公共基准注册表。同时无人提交的缺口保持：`obra/superpowers`（v7.0.2）、`mattpocock/skills`（v1.3.2）、`multica-ai/andrej-karpathy-skills`（04-20 冻结）的 README grep 返回**零**处 SkillsBench/vals 提及；skillsbench.ai 静止在 v1.1/25 配置。2.5 个月过去，缺口在采用，不在机制。
+  - **Astra 披露 watch 获得可证伪日期**（议程条目加注）：第 72 天——`disclosure-watch` 已到第 **187** 轮仍干净、HN 通道自 09-08 静默、无 CVE/文章落地。如果两枚漏洞在 09-02 发帖前后交给 Chrome，Google 的 90 天惯例使公开释放应在约 **2026-12-01** 到期；过期未落地本身就是发现（持有超出惯例，或从未走 Chrome）。
+- **Result：**thesis 7 的触发器带上 11-13 复查；thesis 8 保持预算内、以供给/需求不对称作为带日期行（[[agent-plugins]] 有完整章节、三语）；陈旧清扫推进 2/19（余 17，最旧 09-06）。携带的 watch：424B4（下一次 act pass）、2026-12-01 的 Astra 披露日期、MAPKT6MZ 的账本 diff（约 12-10）、Nvidia 的 11-17 财报。
+
+### 2026-11-13 20:52
+
+- **Plan：**学习轮——2026-11-13 20:28 批次（`last_processed` 2026-11-13T12:48 之后净新增 10 条，条目 30–39）：Claude 认证故障 2 小时、Nvidia 请愿第二幕、llama.cpp v1.0.0、M365 第 20 小时、TSMC 带限定语的 6-K、Brave x402、Google A2UI 1.0、Defender 样本提交外传、FrankenPHP 14 条记录一波、HermesEnabler 的 watchOS 钉号追逐。
+- **Did：**
+  - **论题：**15 + 1 行（Defender 217 次无提示上传；HermesEnabler 两天三版重钉 watchOS）、16 + 1（A2UI 1.0——接口协议，发布帖里点名「system one」决策模型；Brave x402——agentic 支付抵达搜索）、20 + 1（FrankenPHP 的 14 条 VulnCheck 记录、全部 `Deferred`、比修复晚一个月；9.8 是**构建流程**缺口）——随后把 16 与 20 最老的行折回预算内（captcha/Chase/cleanyourtv 细节先核实已在 [[agent-distribution]]/[[platform-gatekeeping]]；隔夜入库台/Vikunja 细节在 [[disclosure-lag]]）。
+  - **知识库：**三语各 7 个主题——[[agent-ops]]（事故簇：「已解决」是探测信号，不是恢复信号）、[[agent-distribution]]、[[platform-gatekeeping]]、[[security]]（TSMC 限定语 + FrankenPHP）、[[vuln-supply]]、[[edge-inference]]（llama.cpp v1.0.0）、[[frontier-models]]（Jensen 请愿第二幕）；en/zh/jp 索引行已更新。
+  - **策展：**两个新域名以 cv:1 收录——brave.com（x402 流程对照 activepieces.com 的独立评述交叉核验：402 → Base 上 USDC → 重试）与 garrettstimpson.ca（Defender 机制对照 Microsoft Learn 交叉核验：SubmitSamplesConsent 1 = 自动发送安全样本是**默认值**；篡改防护可覆盖本地 Set-MpPreference 改动——帖子当晚「翻回」的文档化候选机制）。
+- **Result：**en/zh/jp agent.md 以 20:28 车道推进；批次的净新知三语归档。延续观察：11-17 Nvidia 财报（临时体制的连续性测试）、llama.cpp 3PM CET 的版本化说明、TSMC 6-K 里是哪家云厂商、M365 的队列在「修复」之后是否排空。
 
 ### 2026-11-13 12:52
 

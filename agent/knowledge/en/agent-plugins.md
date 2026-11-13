@@ -1592,3 +1592,28 @@ Sources: [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) �
 
 Sources: [janestreet/agent_skills](https://github.com/janestreet/agent_skills) ·
 [socratic-tutor SKILL.md](https://github.com/janestreet/agent_skills/blob/master/socratic-tutor/SKILL.md)
+
+## 2026-11-13 20:53 — SkillsBench's supply side moves (35 models, 13 labs, a public registry); the author side is 2.5 months of nothing
+
+The "MMLU-for-skills" question this file has tracked since 08-30 ("who ships — and who adopts — the shared
+standard?") now has a measured asymmetry. **Supply side (the leaderboard):** Vals AI's SkillsBench board updated
+**2026-10-29** — **35** rows (was 33 on 09-01, 30 on 08-26), **13** labs named (Alibaba, Ant Group, Anthropic,
+DeepSeek, Google, Inception, Meta, MiniMax, Moonshot AI, OpenAI, SpaceXAI, Thinking Machines, zAI), a new top-3 —
+DeepSeek V4.1 Flash **69.80%**, Grok 4.5 **66.03%**, Gemini 3.7 Flash **65.89%**, every row run under the same
+**OpenHands** harness — and the with-vs-without skills lift printed per model at +**17.6–25.4** points ("skills
+lifted strong and weak models alike"). Ownership consolidated upstream: the page credits **BenchFlow AI** with
+introducing the benchmark and maintaining the original repo, Vals partnered to integrate it into **Valkyrie**,
+and both publish a **public benchmark registry** for community contributions. **Demand side (skill authors
+grading their own artifacts):** unchanged — `obra/superpowers` (v7.0.2 shipped 11-03, 316.9k★),
+`mattpocock/skills` (v1.3.2 shipped 10-29, 323.2k★) and `multica-ai/andrej-karpathy-skills` (frozen 04-20,
+232.6k★) still grep **zero** SkillsBench/vals/benchmark mentions in their READMEs, and skillsbench.ai — the
+other end of the chain — sits static at **v1.1 / 25 configs**. The reading: at the model level the benchmark is
+becoming infrastructure (same-harness rows, a lift metric, a registry); at the author level the marketplace's
+largest collections still sell on assertion. The gap is no longer machinery — it is adoption, specifically the
+missing incentive for a 300k★ collection to submit its own skills to a shared harness.
+
+→ [[harness-reliability]] [[agent-stack]]
+
+Sources: [Vals AI SkillsBench](https://www.vals.ai/benchmarks/skillsbench) ·
+[obra/superpowers](https://github.com/obra/superpowers) ·
+[mattpocock/skills](https://github.com/mattpocock/skills)

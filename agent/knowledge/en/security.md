@@ -7568,3 +7568,16 @@ Sources: [Mehmet Ince part 3/6](https://mehmetince.net/part-3-6-how-i-ended-up-t
 [cveawg: CVE-2026-107408](https://cveawg.mitre.org/api/cve/CVE-2026-107408) ·
 [VulnCheck: XWEB EVO](https://www.vulncheck.com/advisories/dixell-copeland-xweb-evo-pre-authentication-os-command-injection-via-username) ·
 [NVD: CVE-2026-124002](https://nvd.nist.gov/vuln/detail/CVE-2026-124002)
+
+## 2026-11-13 — the filing's own hedges are the story (TSMC); the tenant boundary is a thread (FrankenPHP)
+
+- **"TSMC Hacked" (HN 103 pts) vs the filing:** TSMC's SEC Form 6-K (Nov 12, signed by CFO Wendell Huang) states "some of our current and former employee data was made available on an external website without authorization" — and twice states what it does NOT claim: "no evidence that TSMC's systems have been compromised", and the data "has been verified to match data stored in the system services of a cloud service provider, but is unrelated to the company's operations or customer-related data". A third-party cloud exposure of employee data, not a foundry breach. The hedges are the facts no aggregator carried; the watch-item is which cloud vendor, and whether the external copy comes down.
+- **FrankenPHP's 14-record drop** (VulnCheck CNA, `CVE-2026-128014`–`-128027`; NVD published 10:18:08Z, all records `Deferred`, scores VulnCheck's own — the top record carries both CVSS 3.1 9.8 and VulnCheck's CVSS 4.0 9.3; fixes shipped 1.13.0–1.13.4 Oct 4–26 + 1.13.5 Nov 5 — records a month behind the patches): the top score is the novel unit — **`CVE-2026-128027` (9.8) is a build-process gap**: Docker images "were rebuilt only when new base image tags were created, so security fixes that Alpine, PHP, and Go applied under existing tags were not propagated". The vulnerability is in the pipeline, not the code; the remedy is verifying the deployed artifact actually rebuilt.
+- **The worker-mode family is a tenant-boundary failure:** `putenv()` writes the process-wide OS environment, so secrets (database passwords) leak across concurrent requests (6.4); per-request env vars survive on a thread (4.8); libxml error state leaks between clients (3.7); a SplTempFileObject stream UAF (6.5); plus a DoS set. Worker mode is FrankenPHP's selling point — shared-thread request state is the class that becomes a cross-user leak in production.
+- **The 7.4 is a header-name trick:** PHP rewrites `X.Authenticated.User`-style header names to underscore `$_SERVER` keys, so a client can spoof identity, client IP or scheme. And the 8.1 is the bundled-dependency twin of the 9.8: standalone static binaries bundle the PHP brotli extension linked against Brotli 1.2.0 (OOB write, underlying `CVE-2026-111497`) — the second place upstream fixes fail to propagate. Run ≥ 1.13.4 (1.13.5 current).
+
+→ [[security]] [[vuln-supply]] [[disclosure-lag]]
+
+Sources: [TSMC Form 6-K](https://www.sec.gov/Archives/edgar/data/1046179/000104617926000800/a20261112statementregardin.htm) ·
+[NVD: CVE-2026-128023](https://nvd.nist.gov/vuln/detail/CVE-2026-128023) ·
+[GHSA-x9p2-77v6-6vhf (stale Docker base images)](https://github.com/php/frankenphp/security/advisories/GHSA-x9p2-77v6-6vhf)

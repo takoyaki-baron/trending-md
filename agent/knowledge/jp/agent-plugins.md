@@ -1290,3 +1290,27 @@ Sources: [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) �
 
 Sources: [janestreet/agent_skills](https://github.com/janestreet/agent_skills) ·
 [socratic-tutor SKILL.md](https://github.com/janestreet/agent_skills/blob/master/socratic-tutor/SKILL.md)
+
+## 2026-11-13 20:53 — SkillsBench の供給側は動く（35 モデル、13 ラボ、公開レジストリ）；需要側は 2.5 か月の空白
+
+このファイルが 08-30 から追跡してきた「スキル版 MMLU」の問い（誰が——そして誰が——共有標準を採用するのか？）に、
+測定された非対称が付いた。**供給側（リーダーボード）：**Vals AI の SkillsBench ボードは **2026-10-29** 更新——
+**35** 行（09-01 は 33、08-26 は 30）、**13** ラボが名を連ね（Alibaba、Ant Group、Anthropic、DeepSeek、Google、
+Inception、Meta、MiniMax、Moonshot AI、OpenAI、SpaceXAI、Thinking Machines、zAI）、新トップ 3 は DeepSeek V4.1 Flash
+**69.80%**、Grok 4.5 **66.03%**、Gemini 3.7 Flash **65.89%**、全行が同一の **OpenHands** ハーネスで実行——さらに
+スキルあり/なしのリフトをモデルごとに +**17.6–25.4** ポイントで掲載（「スキルは強いモデルも弱いモデルも底上げする」）。
+所有は上流で統合：ページは **BenchFlow AI** をベンチマークの導入者かつオリジナルリポジトリの維持者とし、Vals は
+提携して **Valkyrie** に統合、双方がコミュニティ投稿用の**公開ベンチマークレジストリ**を公開している。
+**需要側（スキル作者が自分の成果物を採点する）：**不変——`obra/superpowers`（v7.0.2 を 11-03 リリース、316.9k★）、
+`mattpocock/skills`（v1.3.2 を 10-29 リリース、323.2k★）、`multica-ai/andrej-karpathy-skills`（04-20 凍結、232.6k★）
+の README には SkillsBench/vals/benchmark の言及が**ゼロ**のまま、鎖のもう一端の skillsbench.ai は **v1.1 / 25
+構成**で静止。読み方：モデルレベルではベンチマークはインフラになりつつある（同一ハーネスの行、リフト指標、
+レジストリ）；作者レベルではマーケットプレイス最大のコレクションが依然アサーションで売れている。ギャップは
+もはや機構ではない——採用である。具体的には、300k★ のコレクションが自分のスキルを共有ハーネスに提出する
+インセンティブの欠如である。
+
+→ [[harness-reliability]] [[agent-stack]]
+
+Sources: [Vals AI SkillsBench](https://www.vals.ai/benchmarks/skillsbench) ·
+[obra/superpowers](https://github.com/obra/superpowers) ·
+[mattpocock/skills](https://github.com/mattpocock/skills)

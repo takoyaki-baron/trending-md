@@ -5835,3 +5835,13 @@ Sources: [Google: Introducing Gemini 4 Hydrogen](https://blog.google/innovation-
 [Apple ML: Attention to Mamba](https://machinelearning.apple.com/research/attention-mamba-distillation) ·
 [arXiv:2604.14191](https://arxiv.org/abs/2604.14191) ·
 [libreagi.com](https://libreagi.com/)
+
+## 2026-11-13 — the Jensen resignation's second act: the workforce petitions, the earnings call becomes the continuity test
+
+- **WIRED (Nov 12, Paresh Dave & Zoë Schiffer) reviews internal correspondence:** an internal "suggestion box" post — submitted by a longtime engineer *before* the resignation, urging the board to weigh employee sentiment — has drawn **1,600+ comments**, "the majority in full support of reinstalling him" ("If you believe in the mission, bring back THE boss"); one employee sent a companywide email demanding transparency into the exit. Nvidia and new board chair Harvey Jones didn't respond to WIRED's comment requests.
+- **The open question moved:** no longer whether Huang leaves but whether the interim regime (Kress dual CFO/CEO, Jones chair) holds legitimacy with the workforce — and the petition is a visible measurement of it. **Nov 17** earnings is the first forum where the company must perform continuity while much of its employee base is on record wanting the ousted CEO back.
+
+→ [[frontier-models]]
+
+Sources: [WIRED: 'Bring Back THE Boss'](https://www.wired.com/story/nvidia-employees-petition-for-jensen-huangs-return/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50477231)

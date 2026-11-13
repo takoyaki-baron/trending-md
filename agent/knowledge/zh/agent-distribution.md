@@ -270,3 +270,16 @@ Sources: [pengchujin/aerial-tv](https://github.com/pengchujin/aerial-tv) · [sim
 
 Sources: [CBS News：United Airlines 禁止 AI agent 订票](https://www.cbsnews.com/news/united-airlines-bans-ai-agents-booking-flights/) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50458900)
+
+## 2026-11-13 — 生成式 UI 有了协议（Google A2UI 1.0）；agentic 支付抵达搜索（Brave x402）
+
+- **Google 发布 A2UI 1.0**——「我们的生成式 UI 开放协议的首个稳定版本」。形态：agent 以受约束的 spec 应答，**每个 app 用自己的原生组件渲染**——web/Android/iOS 渲染 SDK，Python/TypeScript/Dart agent SDK。让它在 demo 之外可上线的是安全模型：组件**白名单化**，且 A2UI「在服务端可靠绑定你的数据与子组件，敏感值永不抵达模型」。
+- **组合有一条决策模型通道：**A2UI Express，或「system one」决策模型「挑组件而非写文本」——路由层（论题 5）在接口协议的发布帖里被点名。具名采用者：Atlassian、Alation、Bloomberg、ByteDance。这是 GPT-6 Intelligent UI 16 组件（10-08）的标准化版本：组件目录成为跨厂商契约，白名单 + 服务端绑定是部署闸门。
+- **Brave Search API 现在接受 x402 agentic 支付：**不带付款的请求收到 **HTTP 402**、写明价格；agent 签一笔 **USDC**（Brave 自营 facilitator，走 **Base**）并附签名重试——无需 API key、无需先选账户、按次结算。搜索是 agent 栈里最高频的付费原语，这是首个以原生方式暴露按请求结算的大规模索引——x402 的接受度信号时刻（Cloudflare 的 Monetization Gateway 是九月的基建预览）。
+- **402 流程做的交换：**开通与密钥管理换成一只注资钱包——对 agent 是真正的简化，同时把滥用问题从「谁持有密钥」变成「谁在掏空钱包」。
+
+→ [[agent-distribution]] [[system1-decision]] [[agent-stack]]
+
+来源：[Google：A2UI 1.0](https://developers.googleblog.com/a2ui-10-build-delightful-fast-reliable-agentic-experiences/) ·
+[Brave：Search API 经 x402 的 agentic 支付](https://brave.com/blog/search-api-agentic-payments/) ·
+[activepieces：Brave Search API x402（独立评述）](https://www.activepieces.com/blog/brave-search-api-x402-for-autonomous-ai-agent-payments)

@@ -2973,6 +2973,21 @@
    "id": "CVE-2026-124014",
    "why": "2026-11-13 — Dixell/Copeland XWEB EVO gets 14 CVE records in one wave — pre-auth root command injection plus a hardcoded backdoor on supermarket-refriger",
    "seeded": "2026-11-13 [Deferred] 3.1 Primary/disclosure@vulncheck.com 9.1, 4.0 Secondary/disclosure@vulncheck.com 8.8, CWE-306, published 11-12"
+  },
+  {
+   "id": "CVE-2026-128014",
+   "why": "2026-11-13 — FrankenPHP gets 14 CVE records in one drop — worker-mode state leaks, a dot-header auth bypass, and a 9.8 for stale Docker base images",
+   "seeded": "2026-11-13 [Deferred] 3.1 Primary/disclosure@vulncheck.com 8.1, 4.0 Secondary/disclosure@vulncheck.com 9.2, CWE-787, published 11-13"
+  },
+  {
+   "id": "CVE-2026-128027",
+   "why": "2026-11-13 — FrankenPHP gets 14 CVE records in one drop — worker-mode state leaks, a dot-header auth bypass, and a 9.8 for stale Docker base images",
+   "seeded": "2026-11-13 [Deferred] 3.1 Primary/disclosure@vulncheck.com 9.8, 4.0 Secondary/disclosure@vulncheck.com 9.3, published 11-13"
+  },
+  {
+   "id": "CVE-2026-128023",
+   "why": "2026-11-13 — FrankenPHP gets 14 CVE records in one drop — worker-mode state leaks, a dot-header auth bypass, and a 9.8 for stale Docker base images",
+   "seeded": "2026-11-13 [Deferred] 3.1 Primary/disclosure@vulncheck.com 7.4, 4.0 Secondary/disclosure@vulncheck.com 9.1, CWE-290, published 11-13"
   }
  ]
 }

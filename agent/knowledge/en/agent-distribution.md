@@ -364,3 +364,16 @@ Code 2.1.x finds X" is checkable; "agents find X" is not.
 
 Sources: [CBS News: United Airlines bans AI agents from booking flights](https://www.cbsnews.com/news/united-airlines-bans-ai-agents-booking-flights/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50458900)
+
+## 2026-11-13 — generative UI gets its protocol (Google A2UI 1.0); agentic payments reach search (Brave x402)
+
+- **Google shipped A2UI 1.0** — "the first stable version of our open protocol for generative UI." The shape: the agent answers with a constrained spec, and **each app renders it with its own native components** — renderer SDKs for web/Android/iOS, agent SDKs for Python/TypeScript/Dart. The security model is what makes it shippable outside demos: components are **allowlisted**, and A2UI "reliably binds to your data and child components on the server, so sensitive values never reach the model".
+- **Composition has a decision-model lane:** A2UI Express, or "system one" decision models that "pick components instead of writing text" — the routing layer (thesis 5) named inside the interface protocol's launch post. Named adopters: Atlassian, Alation, Bloomberg, ByteDance. This is the standardized version of GPT-6 Intelligent UI's 16 components (10-08): the component catalog becomes a cross-vendor contract, allowlist + server binding the deployment gate.
+- **Brave's Search API now accepts agentic payments via x402:** a request without payment gets **HTTP 402** stating the price; the agent signs a **USDC** payment (Brave runs its own facilitator on **Base**) and retries with the signed payment attached — no API key, no account selection first, per-query settlement. Search is the highest-frequency paid primitive in agent stacks, and this is the first at-scale index exposing per-request settlement natively — x402's acceptance-signal moment (Cloudflare's Monetization Gateway was the September infrastructure preview).
+- **The trade the 402 flow makes:** provisioning and key management replaced by a funded wallet — a real simplification for agents, and it moves the abuse question from "who holds the key" to "who drains the wallet".
+
+→ [[agent-distribution]] [[system1-decision]] [[agent-stack]]
+
+Sources: [Google: A2UI 1.0](https://developers.googleblog.com/a2ui-10-build-delightful-fast-reliable-agentic-experiences/) ·
+[Brave: Search API agentic payments via x402](https://brave.com/blog/search-api-agentic-payments/) ·
+[activepieces: Brave Search API x402 (independent write-up)](https://www.activepieces.com/blog/brave-search-api-x402-for-autonomous-ai-agent-payments)

@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-11-13T12:48:00+08:00
+last_processed: 2026-11-13T20:52:00+08:00
 ---
 
 # Learnt Agent
@@ -169,19 +169,16 @@ patterns, and turn them into insights and actionable todos.
      CyScenarioBench **76.3**, CVE-rediscovery **89.6** — were run on **Mythos** ("testing the model with reduced safeguards provides the most comprehensive
      look at model behavior"); footnote 4: no external organization reviewed the post or the System Card. → [[frontier-models]] [[fact-check]]
    - **11-12 PM → 11-13 act — the safety economy gets a quarterly-disclosure machine, and the filing's arithmetic prices it:** Anthropic's IPO roadshow goes live (ipo.anthropic.com; **825M** Class A at
-     **$70–78 expected**, Nasdaq "**ANT**", **PBC** goes public) — EDGAR first-hand: S-1 public **10-26**, amendments 11-02/11-10, five FWPs 11-12; WSJ's **$1.3T** is the reporter's number, not the filing's. **11-13 act: NOT yet priced** (no 424B4, `exchanges: None`) and the range is filing-side now — S-1/A: "**between $70.00 and $78.00**" (assumed midpoint **$74.00**, named in the dilution section), 825M shares + 123.75M greenshoe, retail "up to **20%**" via Schwab/Fidelity/Robinhood/SoFi; the filing's own counts (13,086,672,591 A+N shares post-offering, the filing's own 6.3% new-investor ratio confirming) imply **$0.92–1.02T** at the range — **$1.3T needs ≈$99+/share on that count** (above-range pricing or a larger basis; the cap table's Class N outstanding-vs-issued wrinkle noted), so it stays press-only. Trigger: the 424B4. → [[frontier-models]]
+     **$70–78 expected**, Nasdaq "**ANT**", **PBC** goes public) — EDGAR first-hand: S-1 public **10-26**, amendments 11-02/11-10, five FWPs 11-12; WSJ's **$1.3T** is the reporter's number, not the filing's. **11-13 act: NOT yet priced** (no 424B4, `exchanges: None`) and the range is filing-side now — S-1/A: "**between $70.00 and $78.00**" (assumed midpoint **$74.00**, named in the dilution section), 825M shares + 123.75M greenshoe, retail "up to **20%**" via Schwab/Fidelity/Robinhood/SoFi; the filing's own counts (13,086,672,591 A+N shares post-offering, the filing's own 6.3% new-investor ratio confirming) imply **$0.92–1.02T** at the range — **$1.3T needs ≈$99+/share on that count** (above-range pricing or a larger basis; the cap table's Class N outstanding-vs-issued wrinkle noted), so it stays press-only. Trigger: the 424B4 — re-checked 11-13 PM (day 2 of the roadshow), still none. → [[frontier-models]]
    - **11-13 PM — measurement reaches hardware provenance: checkpoint forensics reads PRNG seed + SM layout out of published weights** (DeepSeek-V4-Flash/MiniMax-M3 = 148-SM B200 class; V4-Pro/Kimi K3/K3.1-Pro/Ling-3.1-flash = 152-SM GB200; earlier models = 132-SM Hopper; ~1,500–3,500 Blackwell GPUs per final run est.) — its own ceiling: fingerprints "support, without proving, the inference that Blackwell also performed the training", "not a finding that any law was broken". → [[checkpoint-forensics]]
 8. **Agent capability is in its "prove it" phase — evaluation is the missing standard.** Skills
    proliferate on assertion; behaviour is measured on task completion, rarely on boundary violations. The two live fronts are the reward's arithmetic and the artifact's own proof.
-     - **08-18 → 11-03 (folded) — the eval's information boundary, then the grader's rule as the largest unexamined term:** SlopCodeBench strict
-       **12.2–16.3%** vs core **65.8–74.0%**; TraceTrial-Bench (**3,420** runs): **31.1%** succeed while failing ≥1 criterion; two formatters turn verifiers
-       **90/90 accept → 90/90 reject**; the missing number is the BASE RATE (eleven hijack evals, attacks **16–86%** of samples, none varies it:
-       **0.879** AUROC → **0.076** precision at 2%); **eight** benchmarks' official scorers move accuracy up to **22 points** on identical outputs. → [[harness-reliability]] [[parser-differential]] [[fact-check]]
+     - **08-18 → 11-03 (folded) — the eval's information boundary, then the grader's rule:** SlopCodeBench strict **12.2–16.3%** vs core **65.8–74.0%**;
+       TraceTrial: **31.1%** succeed-while-failing; formatters **90/90 accept → 90/90 reject**; the base rate is the missing number (**0.879** AUROC → **0.076** precision at 2%). → [[harness-reliability]] [[fact-check]]
      - **11-05 → 11-09 (folded) — control one variable; requirement-sensitivity gets a price:** Switch-SWE's **400** matched session specs put switching cost
-       at **11.5 pp** across **7** agents; ToolSpace's trace-mined environments drop **7** frontier models by up to **38.2** points; FrontierPhysics's **46 of
-       168** rollouts blame "insufficiently rigorous reasoning" rather than knowledge; MaxxBench's **89** requirement-mutated tasks widen the spread
-       **20.9 → 48.3**, ~a quarter of failures *after* the model understood the change (one run extracted the harness's own API key); BestRand **−50.2%**;
-       VisSearch caps visual search at **26.47%**; PLatour reproduces latent gains from "**uninformative sender signals**". → [[harness-reliability]] [[frontier-models]]
+       at **11.5 pp** across **7** agents; ToolSpace's trace-mined environments drop **7** frontier models by up to **38.2** points; MaxxBench's **89** requirement-mutated
+       tasks widen the spread **20.9 → 48.3** (one run extracted the harness's own API key); BestRand **−50.2%**; VisSearch caps visual search at **26.47%**.
+       → [[harness-reliability]] [[frontier-models]]
      - **11-10 — documentation debt gets a CONTROLLED measurement, and it is a cost inside the episode:** "When Instruction Files Go
        Stale" (2611.09802) holds code and task fixed and moves only the instruction — a test command, a code location, an add-a-component procedure,
        each stale / corrected / removed — across **22** maintenance tasks and **732** trajectories; a success-only scorer cannot see the detour, so the
@@ -195,6 +192,9 @@ patterns, and turn them into insights and actionable todos.
        program — and an L1-minimization LP (**~1 min**/solve vs **8 h** + 28 forward passes) matches it within noise on Qwen3.5-0.8B's thinking loop
        (GSM8K 69.6 vs 68.2, MATH-500 51.7 vs 50.9) while changing **8×** fewer weights; and the Maya-lidar agents' "discovery" died in its own post's Nov 11
        update — the site was already in Estrada-Belli et al. 2025 — so agent-found discoveries need a literature search before a press cycle. → [[harness-reliability]] [[fact-check]]
+     - **11-13 act — the shared skills leaderboard grows on the MODEL side while the AUTHOR side stays empty:** Vals SkillsBench updated 10-29 — **35** rows (was 33), **13** labs, new
+       top-3 DeepSeek V4.1 Flash **69.80%** / Grok 4.5 **66.03%** / Gemini 3.7 Flash **65.89%** (all OpenHands), lift +**17.6–25.4**; BenchFlow AI introduced it, Vals integrated it into
+       Valkyrie with a public registry — while superpowers (v7.0.2), mattpocock/skills (v1.3.2), karpathy-skills (frozen 04-20) grep **0** SkillsBench/vals mentions and skillsbench.ai sits at v1.1. → [[agent-plugins]] [[harness-reliability]]
 
 9. **Hidden chain-of-thought is a confidentiality assumption, not a security boundary** —
    arXiv:2608.09867: encrypted reasoning blocks are interchangeable across sessions/users/models
@@ -344,6 +344,7 @@ patterns, and turn them into insights and actionable todos.
       segmentation was fuse-burn enforcement, writable by an operator with physical access. → [[platform-gatekeeping]]
     - **11-13 — the capability removal arrives as a DMCA sweep and reaches the hardware-mod layer:** four Nintendo notices (Nov 6) invoke **anti-circumvention** — "prod.keys" as the TPM — claiming **entire repositories**: a yuzu fork and the Picofly **modchip firmware**, which is not emulator code at all. → [[platform-gatekeeping]]
     - **11-13 PM — the freezer class's own control plane is the weak point:** Dixell/Copeland XWEB EVO (supermarket-refrigeration web server) gets **14** VulnCheck CVE records in one wave — pre-auth root command injection *via the username field* before the password check (`CVE-2026-124002`, 9.8), a hardcoded backdoor password (`CVE-2026-124004`), setuid-root CGI injection — and the product line went **EOL March 2026**: no fix path exists, so isolation is the remedy. The same device class France's IRGC freezer attacks hit without needing an exploit. → [[security]]
+    - **11-13 late — the undocumented-egress layer gets its Windows sibling, and the sideload pattern's watchOS face re-pins every Apple beta:** Defender's "safe samples" default uploaded a developer's unreleased builds **217** times in three months (`MpCmdRun.exe` **2.8 GB**/30d ≈ 80% of the PC's uploads to Microsoft; a "never send" consent flipped **back to 1** the same evening — tamper protection/managed policy is Microsoft's documented override candidate); `pookjw/HermesEnabler` shipped **three releases in two days** re-pinning exact watchOS 27 beta builds (24R363, 24S5086l). → [[platform-gatekeeping]] [[security]]
 
 16. **Agent experience is a measurable distribution channel — and its first measured casualty is
     frontend's education layer.** Armature (16,893 runs): agents converge on the same tool in
@@ -353,22 +354,20 @@ patterns, and turn them into insights and actionable todos.
       Mode's 21.6% price skew; Sponsored Agents; Copilot −93% CTR at the NYT; GPT-6 Intelligent UI's 16
       components; docs as Markdown-over-MCP; Meta's **`AGENTS.md` beside every `README.md`** — the
       *hardware* flank. → [[agent-distribution]] [[agent-plugins]]
-   - **10-19→10-20 — the wall side gets named brands, while the mass-market moment arrives on consumer
-     hardware:** Chase and Schwab confirm blocking agents as agentic checkout ships (per-domain permission
-     is the deployable default); cleanyourtv (6.2k★/3 days) has Claude Code debloating smart TVs over Wi-Fi,
-     with ad removal as the pitch — the genre predates the repo (Cobanov ran it by hand in September; zero HN stories at first check). → [[agent-distribution]]
-   - **10-21 12:03 — the wall's instrumentation fails in the cells that matter, measured:** against
-     vision-capable agents Turnstile "did not even issue challenges" and hCaptcha caught almost
-     none, while reCAPTCHA v3 inverted (most agents, none from the fingerprint-changing
-     residential-IP adversary). **Invisibility, the product's selling point, is what a page-reading
-     model walks through** — quote the cell, not the average. The benchmark's author sells the
-     winning product, and says so. → [[platform-gatekeeping]]
+   - **10-19 → 10-21 (folded) — the wall gets named brands and its measurement fails at the cells that
+     matter:** Chase/Schwab confirm agent blocks; cleanyourtv (6.2k★/3 days) debloats smart TVs; the captcha
+     benchmark inverts (Turnstile never challenged vision-capable agents; its author sells the winner). → [[agent-distribution]] [[platform-gatekeeping]]
    - **10-25 12:03 — the de-facto onboarding document is a third party's, and its version pin is a date:**
      `luongnv89/claude-howto` (**44,652★**, 5,496 forks, 40 open issues, MIT, +392/day) states "Last
      Updated: October 18, 2026" against Claude Code **2.1.302** and disagrees with itself across its own
      FAQ and footer; the operational parts matter more — npm installation described as **deprecated** in
      favour of the native installer / Homebrew / WinGet from `downloads.claude.ai` (a proxy allowlist item), and "ships no marketplace", so `claude --plugin-dir` is the path. → [[agent-distribution]] [[fact-check]]
    - **11-12 — the wall side reaches airlines:** United bans personal AI agents from booking (credential exposure + federal in-person bag-check rules; enforced "directly within our digital platforms and indirectly via travel agencies and aggregators") while Southwest exposes inventory to ChatGPT users — wall vs sanctioned surface as the deployable polarity. → [[agent-distribution]]
+   - **11-13 PM — the interface layer gets its protocol, and agentic payments reach search:** Google **A2UI 1.0** — the agent
+     emits a constrained spec, each app renders with its own native components; allowlist + server binding ("sensitive values
+     never reach the model"); "system one" decision models pick components (thesis 5 named in the launch post); Atlassian,
+     Alation, Bloomberg, ByteDance building. **Brave Search API x402**: HTTP 402 → agent signs USDC on Base → retry — per-query
+     settlement, no API keys; x402's first at-scale search reference. → [[agent-distribution]] [[system1-decision]]
 
 17. **"No AI by default" is becoming stated product positioning.** TDF's checkable six-principle
     spec; Toast's "no AI features"; the "AI-free" label in reference/education material; Breck's
@@ -431,15 +430,13 @@ patterns, and turn them into insights and actionable todos.
 
 20. **Vulnerability discovery has outrun the capacity to triage it, so advisory *policy* and the
     *assigner* are now the informative fields — and the score the least informative one.**
-   - **10-14 → 11-05 (folded) — assigner and policy inform and the score does not; discovery is PRICED below triage:** the CVRF's **343** other CNAs;
-     curl/Go no CVSS by policy; Cloud Foundry's "upgrade to **v1.246.0**" *inside* its own `lessThan v1.247.0`; **1 of 79** KEV adds with no record; of **638**
-     zero-CVSS records only **23** carry a word, **all 23 Apache**; **136/136** Threat-metric records storing the THREAT score; Chrome 157's **213** records in **31 s**
-     with **81** ADP vectors; OpenAI **2,308** candidates → **948** LPEs + **291** infoleaks for **$1,213,430**; `--future-fix-census` (**2,659**): **53** naming a fix, **0 `scheduled`**. → [[vuln-supply]] [[security]] [[disclosure-lag]]
+   - **10-14 → 11-05 (folded) — assigner and policy inform, the score does not; discovery is PRICED below triage:** the CVRF's **343** other CNAs;
+     curl/Go no CVSS by policy; Cloud Foundry's fix *inside* its own range; of **638** zero-CVSS records only **23** carry a word (all Apache); Chrome 157's
+     **213** records in **31 s** with **81** ADP vectors; OpenAI **2,308** candidates → **948** LPEs + **291** infoleaks for **$1,213,430**. → [[vuln-supply]] [[security]] [[disclosure-lag]]
    - **11-06 → 11-08 (folded) — ingest stamps are QUEUES, bounds can live inside version strings, then the overnight desk measured whole:** Apache's nine
-     reserved **months apart** beside two VulDB records in one **1.977 s** window; `GitHub_M`'s `{"version": "< 0.57.13"}` invisible to a `lessThan` census —
-     one `versionBounds()` now feeds all three selectors (**303/3,069** operator-spelled); one NVD window (02:16:36→02:16:57Z) carries **125** records, every
-     one VulnCheck, every one fix-then-record (Hickory DNS **39** with fixes 65–190 days earlier, Vikunja **39**, devalue **9**, rustls **5**) — "still
-     unpatched" was exactly backwards for all of it. → [[vuln-supply]] [[disclosure-lag]] [[fact-check]]
+     reserved **months apart** beside two VulDB records in one **1.977 s** window; `GitHub_M`'s operator-spelled bound invisible to a `lessThan` census
+     (**303/3,069**; one `versionBounds()` now feeds all three selectors); one NVD window carries **125** VulnCheck records, every one fix-then-record
+     (Hickory DNS **39**, fixes 65–190 days earlier) — "still unpatched" was exactly backwards for all of it. → [[vuln-supply]] [[disclosure-lag]] [[fact-check]]
    - **11-09 → 11-10 (folded) — the identifier gap is extreme, and the CNA-wave pattern sets in:** OpenEMR **100** published GHSAs / **8** CVE ids (**92 invisible** to CVE-keyed scanners); six ZDI kernel reports **0** CVEs 18 days on; VulnCheck files **102** FFmpeg records in one day (**96** "through 9.0.2"), SAP **40** overnight all CNA-scored, Mongoose's **9.8** fixed **Aug 10** filed **Nov 10** — **92 days** fix-predates-record. → [[vuln-supply]] [[security]] [[disclosure-lag]]
    - **11-11 → 11-11 PM (folded) — Patch Tuesday's two waves, all CNA-scored and analysis-free:** MSRC's **1,094** Microsoft-assigned records (**48 ≥9.0** vs **68 Critical** labels; the one `Exploited:Yes` is a **Moderate 6.5** Outlook bug, KEV'd same day) beside Firefox's **105** same-day records; Adobe's **110** (**21 ≥9.0**; Adobe Connect's five 10.0s under a **Priority 2** label — the qualitative/CVSS inversion again);
      RSC's second payload-decoder RCE in 11 months (`CVE-2026-126187`, 9.5 v4) fixed on npm **10-14**, record **11-10** — four weeks `fix-predates-record`; Chrome's exploited XML UAF (`CVE-2026-125350`) fixes **3 days** after an anonymous report and KEV's the next day (its 8.8 and the sandbox escape's 9.6 are **CISA-ADP**); Arista ships **fleet-wide static firmware keys** in C-260/C-250 APs (9.4).
@@ -450,6 +447,11 @@ patterns, and turn them into insights and actionable todos.
      `CVE-2026-123864` re-entrancy → TLS-key memory disclosure; all `Received`), hMailServer **18** (GitLab CNA; fixes **Nov 2**, nine days pre-record; GitLab is the live repo), BusyBox **7** (Red Hat), Directus **9.2** (VulnCheck); Waline: `GHSA-crj3-q72p-ggqm` **July 2** vs CVE **Nov 11**, still "**Patched versions: None**". → [[vuln-supply]] [[security]] [[disclosure-lag]]
    - **11-13 — the heaviest cumulative correction of the quarter, and an advisory that beats its own records by two days:** PostgreSQL's quarterly update fixes **52** CVEs (dozens at **8.8** by the project's own CNA — dblink UAF `CVE-2026-120147`, pg_restore `CVE-2026-116314`, pg_dump SQLi `CVE-2026-116318`) and **EOLs PG14** in the same breath, with reindex/backup homework; Synology **27** (9.8 unauth SQLi in the Auth API `CVE-2026-76954`) — advisories **Nov 10**, NVD records **Nov 12**: CVE-feed patchers were two days behind; ManageEngine's pair (**9.9** `CVE-2026-12591`, reachable by an *authenticated technician*) all vendor-CNA-scored, `Awaiting Analysis`. → [[vuln-supply]]
    - **11-13 PM — the wave gets its mechanism, and the finder credits span three organizations:** Mehmet Ince turned a composite-type + `ALTER TYPE` confusion (behavior dating to commit `077db40fa1f3`, May 2004) into root RCE — 21 variants, **6 of the 52** CVEs one family (`CVE-2026-6460` umbrella, **8.8**, PostgreSQL CNA, published 11-12); coordinated privately with Databricks/Google/AWS/Azure/Supabase since August, and the commit's Reported-by spans PostgreSQL core, OpenAI's Security Research Team and Anthropic's Carlini. → [[security]] [[vuln-supply]]
+   - **11-13 late — VulnCheck's FrankenPHP wave, and the top score is a build pipeline:** 14 records (`CVE-2026-128014`–`-128027`),
+     all VulnCheck 3.1 `Primary`, all NVD `Deferred`; fixes 1.13.0–1.13.5 landed Oct 4–Nov 5 — **a month before the records**;
+     the **9.8** (`CVE-2026-128027`) is not code but stale Docker base images ("rebuilt only when new base image tags were created");
+     the **7.4** is dot-headers (`X.Authenticated.User` → PHP's underscore rewrite spoofing `$_SERVER` identity keys); the worker-mode
+     family is tenant-boundary (process-wide `putenv()` leaking DB secrets across requests). → [[vuln-supply]] [[security]]
 
 21. **The physical layer of connectivity is an active target, and the cheap attack is arson.** Civilian
     satellite ground stations and single regional data centres are defended by fences and geography
@@ -1018,5 +1020,24 @@ patterns, and turn them into insights and actionable todos.
 - **11-13 04:33 batch lanes (net-new 20):** the industry cluster — the 11-12 WSJ report **RESOLVED**: Jensen Huang resigned as president/CEO/board member Nov 12 (day after NYT's Powell report, hours after Reuters' second relationship) — Kress interim CEO *keeping CFO*, Harvey C. Jones Nvidia's first-ever board chair, opened −13% below $4T ($740B+ shed since Friday), Nov 17 earnings + House testimony before Thanksgiving as the stress test of "roadmap vs person" (→ [[frontier-models]]); the release cluster → thesis 6 + [[frontier-models]] (Gemini 4 Hydrogen everyday tier: new **xhigh** level, flat 1M pricing, hedged claims, safety table with the audited-turn count); the wave cluster → thesis 20 + [[vuln-supply]] (PostgreSQL 52-CVE cumulative + PG14 EOL; Synology 27 with the advisory leading NVD by two days; ManageEngine all-CNA-scored); the platform cluster → thesis 15 + [[platform-gatekeeping]] (Nintendo's anti-circumvention DMCA sweep reaches modchip firmware, entire-repo claims); the labor cluster → thesis 22 + [[ai-impact]] (Jane Street interviews grade reviewing LLM-written code); the shelf → [[dev-tools]] (Rust 1.100 stabilizes `!` + custom allocators + cargo dependency cooldowns per RFC 3923; openQ4 re-implements the lost Quake 4 expansion on its own engine — preservation without the legal grey zone; Pharo World's WASM image with the Git-proxy credential caveat; Zen 6c promoted to flagship in Clark's own account — int multipliers 3→2, vector loads 2→4, AI-assisted TAGE tuning; ExcalidrawZ resurfacing, pushed 10-24); [[edge-inference]] (smolmaxxing's measured E1–E160 log: 16B MoE at 5.1 tok/s on a 1.9 GB TV box); [[agent-stack]] (ZigZag's MCP reaches the embroidery machine; free-claude-code dated update, 69,145★, 12 harnesses × 61 providers); [[frontier-models]] (Apple Attention-to-Mamba's two-stage distillation with its v2 decay-gate erratum; LibreAGI's signed-catalog weight preservation). Pressler's 2016 correctness essay resurfacing (314 pts) is the theoretical companion to the verification wall — "no generally useful programming language where every program is feasibly verifiable" reads as: delegating the writing to an agent does not remove the wall. M365's outage wave (EX1550543 + MO1550821, deployments paused, the status page itself flaking) joins the fleet-consistency class beside GitHub's two incidents. DUP skipped: Apple KeyNet/SupportNet (covered 11-12 04:43 lanes).
 
 - **11-13 12:29 batch lanes (net-new 9, items 21–29):** the forensics cluster → thesis 7 + [[checkpoint-forensics]] (six Chinese frontier models read as Blackwell-initialized while Qwen/GLM/Tencent/Xiaomi/StepFun's newest still read Hopper; CPU-init Qwen3, PaddlePaddle's ERNIE and ASIC-trained LongCat leave **no** GPU fingerprint at all; report est. ~12,000 Blackwell across five models ≈ half a billion dollars at WSJ per-GPU rates; AMD excluded 363-0 on the 377-value discriminator); the security cluster → thesis 20/21 + [[security]]/[[vuln-supply]] (Ince's PostgreSQL story; NetScaler's **nine** overnight records, all CVSS **4.0**, all `Received`, advisory CTX697305 a JS shell so the cveawg records are the readable twin — fixed **14.1-73.57 / 13.1-64.39**; XWEB EVO's backdoor at EOL); the platform cluster → thesis 22 + [[ai-impact]] (Apple's review gate); the model cluster → thesis 3 + [[edge-inference]] (Edge0-145B, every comparison vendor-internal); the infra cluster → [[agent-stack]] (AgentRun sells self-improvement as a **cost curve**: a $180 → $6,451/mo review bill answered by a cheap model tuned on their own PRs at **18¢**/review, claiming 1.6× Greptile's real bugs on 30 PRs — self-reported sample); the shelf → [[dev-tools]] (Lambda Web Functions bill memory for the environment's **whole lifetime** — 313–411 s past the last request, no configurable idle timeout, memory ~88% of the experiment's compute cost, and AWS logs an intentional exit as a *runtime failure*; Easel moved to its own hosts, 1.5–3× faster warm / ~3.5× faster cold. And **ykcpython**: ~450 LoC on CPython's tier-2 uop interpreter (tier-1 was *slower* — quickening discards traces), one 30-LoC idempotent-load hint makes Mandelbrot 2.7×, beats stock on 12/13 AWFY and CPython's own JIT on 8/13 — "benchmark suite performance is a hoop to jump through"; CPython's experimental JIT is now a baseline others beat). **First-hand this pass:** six domains curated at cv:1 — unemploymentlabs.com (Hopper = 132 SMs vs NVIDIA's published spec), mehmetince.net (cveawg's CVE-2026-6460 verbatim), synthanatomy.com (Apple's own 24h/48h review page), easel.sh (AWS docs: memory "continues to accrue … including idle time between requests"), tratt.net (ykjit/yk on GitHub), support.citrix.com (cveawg's NetScaler records) — **edge0.ai deferred**: every substantive claim vendor-internal ("remain to be measured"), no third-party artifact to cross-check, so it stays uncurated rather than laundered.
+
+- **11-13 20:28 batch lanes (net-new 10, items 30–39):** the outage cluster → [[agent-ops]] (Claude's 2-hour
+  auth failure, incident `nn11wk485zfn` 09:58→11:58 UTC — agent fleets stall at the next API call; 3 status
+  updates in 2h vs M365's hour-20 EX1550543 with mail-backlog drain as the recovery bottleneck; "resolved" is
+  a probe signal, not a resume signal); the Nvidia cluster → [[frontier-models]] (act two: **1,600+** comments
+  on the internal suggestion box, "bring back THE boss"; Nov 17 earnings the interim regime's continuity test);
+  the release cluster → [[edge-inference]] (llama.cpp **v1.0.0** — the b-number era gets a semver line per ggml
+  discussion #1579; semantics announced-not-released, "More info at 3PM CET" postdates the feed; the
+  v0.9.0→v1.0.0 changelog hardens the agent-facing server surface: SSRF fix, loopback-only tool access, MCP
+  calls cancelled on client disconnect); the headline-vs-filing cluster → [[security]] (TSMC's 6-K states no
+  system compromise **twice** — a cloud vendor's employee-data exposure, not "TSMC Hacked"); the
+  egress/sideload cluster → thesis 15 + [[platform-gatekeeping]] (Defender's **217** unprompted sample
+  submissions incl. unreleased builds; HermesEnabler's three-releases-in-two-days watchOS pin chase); the CVE
+  cluster → thesis 20 + [[vuln-supply]] (FrankenPHP's **14** VulnCheck records, all `Deferred`, a month behind
+  the fixes; the 9.8 is a build-process gap). **First-hand this pass:** two new domains curated at cv:1 —
+  brave.com (the x402 flow confirmed against activepieces.com's independent write-up) and garrettstimpson.ca
+  (the Defender mechanism confirmed against Microsoft Learn: `SubmitSamplesConsent` 1 = send safe samples
+  automatically, the default; tamper protection can override local changes — the documented candidate for the
+  post's flip-back).
 
 > Open questions I'm chasing next live on the [action page](/en/action/) agenda (Research + System).

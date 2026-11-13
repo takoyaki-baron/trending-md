@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-13T05:24:30.150Z",
+ "updated": "2026-11-13T13:26:57.036Z",
  "cves": {
   "CVE-2026-64671": {
    "vulnStatus": "Deferred",
@@ -266,7 +266,7 @@
   "CVE-2026-126263": {
    "vulnStatus": "Awaiting Analysis",
    "published": "2026-11-11",
-   "lastModified": "2026-11-12T19:14",
+   "lastModified": "2026-11-13T05:18",
    "metrics": [
     {
      "version": "3.1",
@@ -287,7 +287,7 @@
   "CVE-2026-126262": {
    "vulnStatus": "Awaiting Analysis",
    "published": "2026-11-11",
-   "lastModified": "2026-11-12T19:14",
+   "lastModified": "2026-11-13T05:18",
    "metrics": [
     {
      "version": "3.1",
@@ -308,7 +308,7 @@
   "CVE-2026-126259": {
    "vulnStatus": "Awaiting Analysis",
    "published": "2026-11-11",
-   "lastModified": "2026-11-12T19:14",
+   "lastModified": "2026-11-13T05:18",
    "metrics": [
     {
      "version": "3.1",
@@ -413,7 +413,7 @@
   "CVE-2026-110697": {
    "vulnStatus": "Awaiting Analysis",
    "published": "2026-11-11",
-   "lastModified": "2026-11-12T16:17",
+   "lastModified": "2026-11-13T09:17",
    "metrics": [
     {
      "version": "3.1",
@@ -434,7 +434,7 @@
   "CVE-2026-123710": {
    "vulnStatus": "Awaiting Analysis",
    "published": "2026-11-11",
-   "lastModified": "2026-11-12T14:17",
+   "lastModified": "2026-11-13T02:18",
    "metrics": [
     {
      "version": "3.1",
@@ -12186,11 +12186,11 @@
   "CVE-2026-125250": {
    "vulnStatus": "Undergoing Analysis",
    "published": "2026-11-09",
-   "lastModified": "2026-11-10T21:46",
+   "lastModified": "2026-11-13T13:18",
    "metrics": [
     {
      "version": "3.1",
-     "type": "Primary",
+     "type": "Secondary",
      "source": "disclosure@vulncheck.com",
      "baseScore": 7.8,
      "severity": "HIGH",
@@ -14095,6 +14095,91 @@
    ],
    "cwe": [
     "CWE-306"
+   ],
+   "kev": null,
+   "kevDue": null,
+   "nvdAnalyzed": false
+  },
+  "CVE-2026-128014": {
+   "vulnStatus": "Deferred",
+   "published": "2026-11-13",
+   "lastModified": "2026-11-13T10:18",
+   "metrics": [
+    {
+     "version": "3.1",
+     "type": "Primary",
+     "source": "disclosure@vulncheck.com",
+     "baseScore": 8.1,
+     "severity": "HIGH",
+     "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H"
+    },
+    {
+     "version": "4.0",
+     "type": "Secondary",
+     "source": "disclosure@vulncheck.com",
+     "baseScore": 9.2,
+     "severity": "CRITICAL",
+     "vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+    }
+   ],
+   "cwe": [
+    "CWE-787"
+   ],
+   "kev": null,
+   "kevDue": null,
+   "nvdAnalyzed": false
+  },
+  "CVE-2026-128027": {
+   "vulnStatus": "Deferred",
+   "published": "2026-11-13",
+   "lastModified": "2026-11-13T10:18",
+   "metrics": [
+    {
+     "version": "3.1",
+     "type": "Primary",
+     "source": "disclosure@vulncheck.com",
+     "baseScore": 9.8,
+     "severity": "CRITICAL",
+     "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+    },
+    {
+     "version": "4.0",
+     "type": "Secondary",
+     "source": "disclosure@vulncheck.com",
+     "baseScore": 9.3,
+     "severity": "CRITICAL",
+     "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+    }
+   ],
+   "cwe": [],
+   "kev": null,
+   "kevDue": null,
+   "nvdAnalyzed": false
+  },
+  "CVE-2026-128023": {
+   "vulnStatus": "Deferred",
+   "published": "2026-11-13",
+   "lastModified": "2026-11-13T10:18",
+   "metrics": [
+    {
+     "version": "3.1",
+     "type": "Primary",
+     "source": "disclosure@vulncheck.com",
+     "baseScore": 7.4,
+     "severity": "HIGH",
+     "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N"
+    },
+    {
+     "version": "4.0",
+     "type": "Secondary",
+     "source": "disclosure@vulncheck.com",
+     "baseScore": 9.1,
+     "severity": "CRITICAL",
+     "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:N/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+    }
+   ],
+   "cwe": [
+    "CWE-290"
    ],
    "kev": null,
    "kevDue": null,

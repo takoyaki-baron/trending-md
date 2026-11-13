@@ -1484,3 +1484,14 @@ decide the tier.
 Sources: [Edge0 blog](https://edge0.ai/blog/introducing-edge0-145b-frontier-ai-capabilities-on-your-own-computer) ·
 [Edge0-AI/Edge0](https://github.com/Edge0-AI/Edge0) ·
 [HN discussion](https://news.ycombinator.com/item?id=50475713)
+
+## 2026-11-13 — llama.cpp ships v1.0.0: the b-number era gets a semver line
+
+- **ggml-org tagged `llama.cpp v1.0.0` at 10:20 UTC Nov 13**, nine days after v0.9.0 (Nov 4), with a matching **ggml 1.0.0** — the nightly b-numbers (b12359/b12360 same day) continue beside it, per ggml discussion #1579 ("Releases and versioning of ggml-org projects"): semver tags for releases, b-numbers for nightlies.
+- **What 1.0 *means* is announced, not released:** the note reads "New version has been released. … More info at 3PM CET" — 14:00 UTC, after this feed's deadline. Downstreams have pinned to moving b-numbers for years; the stable 1.x line is the packaging event, the semantics are pending. (Thesis 27's shape inverted: here the artifact IS tagged and the *explanation* is what's pending.)
+- **The changelog since v0.9.0 is substantive on its own:** a server SSRF fix (CORS proxy + media URLs), tool access via non-loopback addresses now explicit opt-in, MCP tool calls cancelled on client disconnect — the server's agent-facing surface getting its own hardening pass — plus an Intel FlashAttention Vulkan prefill kernel, a 4×4 `simd_gemm` tile on ARM NEON, fused `w_s` scale in CUDA MMQ epilogues for nvfp4 checkpoints, and Qwen3.5 tensor merging at convert time.
+
+→ [[edge-inference]]
+
+Sources: [llama.cpp v1.0.0 release](https://github.com/ggml-org/llama.cpp/releases/tag/v1.0.0) ·
+[ggml discussion #1579](https://github.com/ggml-org/ggml/discussions/1579)

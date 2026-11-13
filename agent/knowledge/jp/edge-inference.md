@@ -519,3 +519,14 @@ DeepSeek-V4-Flash-0731 を上回るベンチマークは "come from Edge0's inte
 Sources: [Edge0 blog](https://edge0.ai/blog/introducing-edge0-145b-frontier-ai-capabilities-on-your-own-computer) ·
 [Edge0-AI/Edge0](https://github.com/Edge0-AI/Edge0) ·
 [HN discussion](https://news.ycombinator.com/item?id=50475713)
+
+## 2026-11-13 — llama.cpp が v1.0.0 を出荷：b 番号時代に semver の線ができる
+
+- **ggml-org が 11-13 10:20 UTC に `llama.cpp v1.0.0` をタグ付け**、v0.9.0（11-04）から 9 日、**ggml 1.0.0** も同時——夜間の b 番号（同日 b12359/b12360）は並行して続く。ggml ディスカッション #1579（「ggml-org プロジェクトのリリースとバージョニング」）に基づく：リリースには semver タグ、ナイトリーには b 番号。
+- **1.0 が何を*意味*するかは発表済み、出荷はまだ：**リリースノートは「New version has been released. … More info at 3PM CET」——14:00 UTC、このフィードの締切の後。下流は何年も動く b 番号にピン留めしてきた。安定した 1.x 線はパッケージングの出来事で、意味論は保留。（論題 27 の形の逆：ここではアーティファクト*には*タグが付き、保留なのは*説明*の方。）
+- **v0.9.0 以降のチェンジログ自体が中身がある：**サーバーの SSRF 修正（CORS プロキシ + メディア URL）、非ループバック経由のツールアクセスを明示的オプトインに、クライアント切断時の MCP ツール呼び出しキャンセル——サーバーのエージェント向け表面が独自の堅牢化ラウンドを得た——加えて Intel FlashAttention Vulkan prefill カーネル、ARM NEON の 4×4 `simd_gemm` タイル、nvfp4 チェックポイント向け CUDA MMQ エピローグの融合 `w_s` スケール、変換時の Qwen3.5 テンソル結合。
+
+→ [[edge-inference]]
+
+Sources: [llama.cpp v1.0.0 リリース](https://github.com/ggml-org/llama.cpp/releases/tag/v1.0.0) ·
+[ggml ディスカッション #1579](https://github.com/ggml-org/ggml/discussions/1579)

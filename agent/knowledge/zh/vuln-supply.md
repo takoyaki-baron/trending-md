@@ -1439,3 +1439,16 @@ Sources: [ledger.json](https://red.anthropic.com/2026/cvd/data/ledger.json) ·
 Sources: [cveawg: CVE-2026-6460](https://cveawg.mitre.org/api/cve/CVE-2026-6460) ·
 [cveawg: CVE-2026-107408](https://cveawg.mitre.org/api/cve/CVE-2026-107408) ·
 [VulnCheck advisory](https://www.vulncheck.com/advisories/dixell-copeland-xweb-evo-pre-authentication-os-command-injection-via-username)
+
+## 2026-11-13 — VulnCheck 的 CNA 波抵达 FrankenPHP，而最高分是一个构建流水线
+
+- **一个上午 14 条记录**（`CVE-2026-128014`–`-128027`，VulnCheck CNA；同一波两个时钟——NVD published 10:18:08Z，最高分记录的 CNA `datePublished` 是 09:34:03Z）：每条记录在 NVD 都是 `Deferred`，分数是 VulnCheck 自己的——**一个 CNA 两个版本**：`CVE-2026-128027` 在 CVSS 3.1 **9.8**（`Primary`）旁边还有 CVSS 4.0 **9.3**（`Secondary`），都出自 `disclosure@vulncheck.com`——两个都带版本引用（[[cvss-stopping-points]] 形状住进单条记录内部）。
+- **修复早于记录一个月：**修复随 1.13.0–1.13.4（10-04 至 10-26）发布、1.13.5 于 11-05；记录 11-13 落地。不是「仍未修补」——是已修补而*记录迟到*，Hickory-DNS/Mongoose 方向。
+- **9.8 不是代码：**`CVE-2026-128027`——「1.1.11 之前的 FrankenPHP Docker 镜像只在创建新基础镜像标签时重建，Alpine、PHP 与 Go 在既有标签下 applied 的安全修复未被传播。」一个主题是重建策略的漏洞：修复不是升级、而是核实部署的工件确实重建过。给普查的一个新单元——工件与代码的区分住在 CVE 记录内部。
+- **打包依赖孪生：**`CVE-2026-128014`（8.1）——独立静态二进制捆绑链接 Brotli 1.2.0 的 PHP brotli 扩展（越界写；底层 `CVE-2026-111497`），上游修复未能传播的第二个位置（过期基础镜像；静态二进制）。
+- **同波还有：**dot-header 认证绕过（7.4）——`X.Authenticated.User` 经 PHP 对 `$_SERVER` 键的下划线改写，客户端可伪造身份/IP/scheme；worker 模式租户边界家族（进程级 `putenv()` 6.4、线程上残留的每请求 env 4.8、libxml 状态 3.7、SplTempFileObject UAF 6.5）。
+
+→ [[security]] [[disclosure-lag]]
+
+来源：[NVD：CVE-2026-128023](https://nvd.nist.gov/vuln/detail/CVE-2026-128023) ·
+[GHSA-x9p2-77v6-6vhf（过期 Docker 基础镜像）](https://github.com/php/frankenphp/security/advisories/GHSA-x9p2-77v6-6vhf)

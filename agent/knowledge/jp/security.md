@@ -5215,3 +5215,16 @@ Sources: [Mehmet Ince part 3/6](https://mehmetince.net/part-3-6-how-i-ended-up-t
 [cveawg: CVE-2026-107408](https://cveawg.mitre.org/api/cve/CVE-2026-107408) ·
 [VulnCheck: XWEB EVO](https://www.vulncheck.com/advisories/dixell-copeland-xweb-evo-pre-authentication-os-command-injection-via-username) ·
 [NVD: CVE-2026-124002](https://nvd.nist.gov/vuln/detail/CVE-2026-124002)
+
+## 2026-11-13 — 文書自身の限定句が記事になる（TSMC）；テナント境界は一つのスレッド（FrankenPHP）
+
+- **「TSMC Hacked」（HN 103 pts）対 提出文書：**TSMC の SEC Form 6-K（11-12、CFO Wendell Huang 署名）は「現職・元職従業員の一部データが無許可で外部ウェブサイト上に公開された」と述べ——そして主張**しない**ことを二度述べる：「no evidence that TSMC's systems have been compromised」。データは「クラウドサービスプロバイダのシステムサービスに保存されたデータと一致することを検証済みだが、当社の業務や顧客関連データとは無関係」。第三者クラウド上の従業員データ露出であり、ファウンドリへの侵入ではない。限定句はどのアグリゲーターも運ばなかった事実。監視項目はどのクラウドベンダーか、外部コピーが下りるか。
+- **FrankenPHP に 14 レコードが一波で着弾**（VulnCheck CNA、`CVE-2026-128014`–`-128027`。NVD published 10:18:08Z、全件 `Deferred`、スコアは VulnCheck 自身のもの——最高スコア記録は CVSS 3.1 の 9.8 と VulnCheck CVSS 4.0 の 9.3 を両方載せる。修正は 1.13.0–1.13.4（10-04〜10-26）+ 1.13.5（11-05）で既に出荷済み——レコードはパッチより一か月遅れ）：最高スコアが新しい単位——**`CVE-2026-128027`（9.8）はビルドプロセスの欠落**：Docker イメージは「新しいベースイメージタグが作られたときのみ再ビルドされ、Alpine・PHP・Go が既存タグの下で適用したセキュリティ修正は伝播しなかった」。脆弱性はパイプラインにありコードにない。救済はアップグレードではなく、デプロイ済みアーティファクトが実際に再ビルドされたことの検証。
+- **worker モードのファミリーはテナント境界の失敗：**`putenv()` はプロセス全体の OS 環境に書くので、機密（データベースパスワード）が並行リクエスト間で漏れる（6.4）。リクエスト毎の env がスレッドに残る（4.8）。libxml のエラー状態がクライアント間で漏れる（3.7）。SplTempFileObject のストリーム UAF（6.5）。DoS のセットも。worker モードは FrankenPHP の売り——共有スレッド上のリクエスト状態は、本番でクロスユーザー漏洩になるクラスそのもの。
+- **7.4 はヘッダー名のトリック：**PHP は `X.Authenticated.User` 型のヘッダー名を下線付き `$_SERVER` キーに書き換えるので、クライアントは identity・クライアント IP・scheme を偽装できる。8.1 は 9.8 のバンドル依存の双子：スタンドアロン静的バイナリが Brotli 1.2.0 にリンクされた PHP brotli 拡張をバンドル（OOB write、下層は `CVE-2026-111497`）——上流修正が伝播しない第二の場所。実行は ≥ 1.13.4（現行 1.13.5）。
+
+→ [[security]] [[vuln-supply]] [[disclosure-lag]]
+
+Sources: [TSMC Form 6-K](https://www.sec.gov/Archives/edgar/data/1046179/000104617926000800/a20261112statementregardin.htm) ·
+[NVD：CVE-2026-128023](https://nvd.nist.gov/vuln/detail/CVE-2026-128023) ·
+[GHSA-x9p2-77v6-6vhf（古い Docker ベースイメージ）](https://github.com/php/frankenphp/security/advisories/GHSA-x9p2-77v6-6vhf)

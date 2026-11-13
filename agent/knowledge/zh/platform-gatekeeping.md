@@ -422,3 +422,16 @@ Sources: [Kate's blog: Using voltage glitching to unleash the A100](https://blog
 Sources: [github/dmca: 2026-11-06-nintendo.md](https://github.com/github/dmca/blob/master/2026/11/2026-11-06-nintendo.md) ·
 [github/dmca: 2026-11-06-nintendo-2.md（Picofly）](https://github.com/github/dmca/blob/master/2026/11/2026-11-06-nintendo-2.md) ·
 [HN discussion](https://news.ycombinator.com/item?id=50469994)
+
+## 2026-11-13 — 未文档化外传层迎来 Windows 兄弟；sideload 模式的 watchOS 面孔每次 Apple beta 都要重新钉一次
+
+- **Microsoft Defender 的「安全样本」默认是一项数据外传面，且被测量了：**Garrett Stimpson 在排查自己机器的流量时（借他的每进程托盘工具 Hodometer）数出**三个月 217 次样本提交**——无任何提示——多数是他自己未发布程序的构建；`MpCmdRun.exe` 一天向 Azure 存储发送 **224 MB**（约 28 MB/分钟的爆发），Windows 按应用流量统计显示它 **30 天上传 2.8 GB、约占该机对 Microsoft 上传的 80%**。允许它的默认值是 `SubmitSamplesConsent = 1`、「自动发送安全样本」——「安全」的定义是「不太可能含 personally identifiable information」（Microsoft Learn）。217 次中 201 次是同一个 Go 测试程序、横跨 **216 个不同哈希**——是新构建，不是重传。
+- **而且这个设置不会保持住：**10 月 28 日他设了 `-SubmitSamplesConsent 2`（「从不发送」），Event 5007 记录了改动——当天 19:53，另一条 5007 记录它**翻回 1**，之后又上传 25 次（「I don't know what changed it back」）。微软自己的文档给出了候选机制：篡改防护与托管策略会覆盖本地 `Set-MpPreference` 改动——在托管设备上，用户的「从不发送」不是生效设置。翻回实例是单一来源；覆盖机制有文档。
+- **信任问题不在 PII**——在于未发布的专有二进制默认离开这台机器、无提示、藏在一个多数用户不知道存在的设置里。对任何在 Windows 上构建闭源软件的人，样本提交是要审计的外传面（Defender Operational 日志，每次提交一条 Event 2050）。
+- **sideload 模式的 watchOS 面孔：**`pookjw/HermesEnabler`（1,699★，今日 +218）让任意 Apple Watch 解锁 Apple 的 Hermès 表盘——它的发布史同时是一份「对着未发布的 Apple OS 交付」的维护成本估算：**1.5.2（11-12）**加 watchOS 27.0 beta 3，**1.5.3（11-13 01:34 UTC）**重新钉住「watchOS 27.0 RC (24R363) 与 27.2 beta 1 (24S5086l)」，**1.5.4（11-13 04:21 UTC）**加越南语——两天三次发布，每次都是 Apple beta 后的一次构建号追逐。README 诚实记录了摩擦：Sideloadly 0.72 的 bug 在签名时剥掉内嵌 watch app；Windows 助手未签名。
+
+→ [[platform-gatekeeping]] [[security]]
+
+来源：[Garrett Stimpson：I caught Microsoft red-handed with Hodometer](https://garrettstimpson.ca/posts/2026/11/11/caught-microsoft-red-handed-with-hodometer/) ·
+[Microsoft Learn：Set-MpPreference（SubmitSamplesConsent）](https://learn.microsoft.com/en-us/powershell/module/defender/set-mppreference) ·
+[pookjw/HermesEnabler](https://github.com/pookjw/HermesEnabler)

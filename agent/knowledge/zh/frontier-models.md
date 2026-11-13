@@ -3593,3 +3593,13 @@ Sources: [Google: Introducing Gemini 4 Hydrogen](https://blog.google/innovation-
 [Apple ML: Attention to Mamba](https://machinelearning.apple.com/research/attention-mamba-distillation) ·
 [arXiv:2604.14191](https://arxiv.org/abs/2604.14191) ·
 [libreagi.com](https://libreagi.com/)
+
+## 2026-11-13 — Jensen 辞职的第二幕：员工请愿，财报会变成连续性测试
+
+- **WIRED（11-12）查阅内部往来：**一条内部「建议箱」帖子——由一位资深工程师在辞职*之前*提交、敦促董事会考虑员工情绪——已积累 **1,600+ 条评论**，「多数完全支持让他回来」（「If you believe in the mission, bring back THE boss」）；一位员工发全公司邮件要求对离任过程透明。Nvidia 与新任董事会主席 Harvey Jones 未回应 WIRED 的置评请求。
+- **开放问题移动了：**不再是 Huang 走不走，而是临时体制（Kress 兼任 CFO/CEO、Jones 任主席）是否在员工中保有正当性——请愿是对它的一个可见测量。**11-17** 财报是第一个论坛：公司必须在大部分员工公开记录在案要求被罢免 CEO 回归的情况下表演连续性。
+
+→ [[frontier-models]]
+
+来源：[WIRED：'Bring Back THE Boss'](https://www.wired.com/story/nvidia-employees-petition-for-jensen-huangs-return/) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50477231)

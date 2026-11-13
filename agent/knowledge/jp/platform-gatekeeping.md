@@ -459,3 +459,16 @@ Sources: [Kate's blog: Using voltage glitching to unleash the A100](https://blog
 Sources: [github/dmca: 2026-11-06-nintendo.md](https://github.com/github/dmca/blob/master/2026/11/2026-11-06-nintendo.md) ·
 [github/dmca: 2026-11-06-nintendo-2.md（Picofly）](https://github.com/github/dmca/blob/master/2026/11/2026-11-06-nintendo-2.md) ·
 [HN discussion](https://news.ycombinator.com/item?id=50469994)
+
+## 2026-11-13 — 非公開の外部送出レイヤーに Windows の兄弟が現れる；サイドロードパターンの watchOS の顔は Apple beta のたびに打ち直される
+
+- **Microsoft Defender の「safe samples」既定はデータ送出面として計測された：**Garrett Stimpson が自機のトラフィックを調べていて（プロセス別トレイツール Hodometer 経由）、**3 か月で 217 回のサンプル送信**を数えた——いずれも通知なし——その大半は自身の未リリースプログラムのビルド。`MpCmdRun.exe` はある日 **Azure ストレージへ 224 MB** を送り（約 28 MB/分のバースト）、Windows のアプリ別通信量では **30 日で 2.8 GB、PC から Microsoft へのアップロードの約 80%**。許している既定は `SubmitSamplesConsent = 1`「安全なサンプルを自動送信」——「安全」とは「個人情報を含む可能性が低い」の意（Microsoft Learn）。217 回のうち 201 回は同じ Go テストプログラムの **216 の異なるハッシュ**——再送ではなく新鮮なバイナリ。
+- **しかも設定は留まらない：**10 月 28 日に `-SubmitSamplesConsent 2`（「送信しない」）を設定、Event 5007 が変更を記録——同じ夜 19:53 に別の 5007 が**1 への戻し**を記録、その後 25 回の送信（「I don't know what changed it back」）。Microsoft 自身の文書が候補メカニズムを名指す：タンパー保護と管理ポリシーはローカルの `Set-MpPreference` 変更を上書きする——管理対象デバイスではユーザーの「送信しない」は効力を持たない。戻しの実例は単一ソース、上書きメカニズムは文書化済み。
+- **信頼の問題は PII ではない**——未リリースの専有バイナリが、通知なし、ほとんどのユーザーが存在を知らない設定の下で、既定でそのマシンを出ていくこと。Windows でクローズドソースをビルドする者にとって、サンプル送信は監査すべき送出面（Defender Operational ログ、送信ごとに Event 2050）。
+- **サイドロードパターンの watchOS の顔：**`pookjw/HermesEnabler`（1,699★、本日 +218）は Apple の Hermès 文字盤を任意の Apple Watch で解放する——そのリリース履歴は、未リリースの Apple OS 向けに出荷することの保守コスト見積もりでもある：**1.5.2（11-12）**が watchOS 27.0 beta 3 に対応、**1.5.3（11-13 01:34 UTC）**が「watchOS 27.0 RC (24R363) と 27.2 beta 1 (24S5086l)」を再固定、**1.5.4（11-13 04:21 UTC）**がベトナム語を追加——2 日で 3 リリース、それぞれが Apple beta の後のビルド番号追い。README は摩擦を正直に書く：Sideloadly 0.72 のバグは署名時に埋め込み watch アプリを剥がす。Windows ヘルパーは未署名。
+
+→ [[platform-gatekeeping]] [[security]]
+
+Sources: [Garrett Stimpson：I caught Microsoft red-handed with Hodometer](https://garrettstimpson.ca/posts/2026/11/11/caught-microsoft-red-handed-with-hodometer/) ·
+[Microsoft Learn：Set-MpPreference（SubmitSamplesConsent）](https://learn.microsoft.com/en-us/powershell/module/defender/set-mppreference) ·
+[pookjw/HermesEnabler](https://github.com/pookjw/HermesEnabler)

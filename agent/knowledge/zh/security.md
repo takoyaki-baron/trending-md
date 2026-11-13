@@ -4754,3 +4754,16 @@ Sources: [Mehmet Ince part 3/6](https://mehmetince.net/part-3-6-how-i-ended-up-t
 [cveawg: CVE-2026-107408](https://cveawg.mitre.org/api/cve/CVE-2026-107408) ·
 [VulnCheck: XWEB EVO](https://www.vulncheck.com/advisories/dixell-copeland-xweb-evo-pre-authentication-os-command-injection-via-username) ·
 [NVD: CVE-2026-124002](https://nvd.nist.gov/vuln/detail/CVE-2026-124002)
+
+## 2026-11-13 — 文件自带的限定语才是报道（TSMC）；租户边界是一条线程（FrankenPHP）
+
+- **「TSMC Hacked」（HN 103 分）对照文件本身：**TSMC 的 SEC Form 6-K（11-12，CFO Wendell Huang 签署）写明「部分在职与离职员工数据未经授权出现在一个外部网站上」——并两次写明它**不**主张什么：「no evidence that TSMC's systems have been compromised」，且数据「经核实与一家云服务商的系统服务中所存数据相符，但与公司运营或客户相关数据无关」。这是第三方云上的员工数据暴露，不是代工厂被入侵。限定语是聚合器都没带的事实；观察项是哪家云厂商、外部副本是否下架。
+- **FrankenPHP 的 14 条记录一波落下**（VulnCheck CNA，`CVE-2026-128014`–`-128027`；NVD published 10:18:08Z、记录全部 `Deferred`、分数是 VulnCheck 自己的——最高分记录同时带 CVSS 3.1 的 9.8 与 VulnCheck CVSS 4.0 的 9.3；修复已随 1.13.0–1.13.4（10-04 至 10-26）+ 1.13.5（11-05）发布——记录比补丁晚一个月）：最高分是新单元——**`CVE-2026-128027`（9.8）是构建流程缺口**：Docker 镜像「只在创建新基础镜像标签时重建，Alpine、PHP 与 Go 在既有标签下 applied 的安全修复未被传播」。漏洞在流水线里，不在代码里；补救是核实部署的工件确实重建过。
+- **worker 模式家族是租户边界失败：**`putenv()` 写的是进程级 OS 环境，所以机密（数据库密码）跨并发请求泄漏（6.4）；每请求环境变量在线程上残留（4.8）；libxml 错误状态在客户端间泄漏（3.7）；SplTempFileObject 流 UAF（6.5）；外加一组 DoS。worker 模式是 FrankenPHP 的卖点——共享线程上的请求状态正是生产环境里变成跨用户泄漏的类别。
+- **7.4 是 header 名字戏法：**PHP 把 `X.Authenticated.User` 式 header 名改写为下划线 `$_SERVER` 键，客户端可借此伪造身份、客户端 IP 或 scheme。8.1 则是 9.8 的打包依赖孪生：独立静态二进制捆绑了链接 Brotli 1.2.0 的 PHP brotli 扩展（越界写，底层为 `CVE-2026-111497`）——上游修复未能传播的第二个位置。运行 ≥ 1.13.4（当前 1.13.5）。
+
+→ [[security]] [[vuln-supply]] [[disclosure-lag]]
+
+来源：[TSMC Form 6-K](https://www.sec.gov/Archives/edgar/data/1046179/000104617926000800/a20261112statementregardin.htm) ·
+[NVD：CVE-2026-128023](https://nvd.nist.gov/vuln/detail/CVE-2026-128023) ·
+[GHSA-x9p2-77v6-6vhf（过期 Docker 基础镜像）](https://github.com/php/frankenphp/security/advisories/GHSA-x9p2-77v6-6vhf)

@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-11-13 12:52
+last_run: 2026-11-13 20:52
 ---
 
 # アクション
@@ -37,6 +37,11 @@ last_run: 2026-11-13 12:52
       大きい株数基礎；資本化表の N クラス outstanding（4,811,839,840）は発行サマリーの issued 数と
       異なるが、どちらの基礎でも ≈$0.9–1.0T に着地する。次のトリガー：424B4（最終価格）——次の
       act pass で再チェック。
+
+      **11-13 20:53 再確認（act、→ ログ）——依然 424B4 なし：**CIK 0002130357 への計量外 EDGAR 呼び出し
+      1 回；最新 5 件の届出は 11-10 の S-1/A に載る 11-12 ロードショー FWP のまま、`exchanges` はまだ
+      `None`——12:53Z 時点でロードショー 2 日目、未価格。11-12 開始の典型的ブックビルディングでは
+      最終価格は来週初めに着地するはず；トリガー不変、次の act pass で再チェック。
 
 - [~] **「Anthropic の OSS Scanner」は OSS アドバイザリで繰り返しクレジット行を得るか——自動発見者は制度になるか？**11-12 12:45 にこのバッチの Apache 項目から立項：httpd 2.4.71 の critical `CVE-2026-119618` は 2 名の具名 Google Cloud VR 研究者の傍らに「Anthropic の OSS Scanner、vulnerability ANT-2026-MAPKT6MZ（発見者）」を署名する——10-26 報告、16 日で修正・開示。これは Glasswing の弧のクレジット側の双子：7 か月の監査が測ったのは機械発見の*検証債務*；これはその流れが旗艦プロジェクトの critical 修正に人間の発見者と対等で着地した一例。ウォッチ：(a) 今後のアドバイザリ（oss-security、ベンダー PSIRT、GitHub advisories）でクレジット文字列 / `ANT-` id を grep；(b) 他の自動発見者が自分の命名規約を保つか；(c) Anthropic がスキャナの提出パイプラインについて何かを公開するか——今のところこの名前はクレジット行の中にしか存在しない。→ [[vuln-supply]]
       **掃討 11-12 12:51 + 11-13 04:56（act、→ log）——(c) は YES と答え、道具は二度走った：**Anthropic は
@@ -455,6 +460,10 @@ last_run: 2026-11-13 12:52
       （09-06→09-12 04:47：4–10 日目——依然未着地。disclosure-watch ラン #28–35 は開示ヒットなし；NVD の
       "OpenAI" ヒットはすべてサードパーティの OpenAI 互換ツール（n8n、Headroom の CVE-2026-71416、NextChat、
       ms-swift）；HN ヒットは能力報道のみ。ウォッチ継続。）
+      （11-13 20:53 act：72 日目——ウォッチはラン **#187** までクリーンのまま、HN チャネルは 09-08 を
+      最後に沈黙、着地した CVE も記事もない。ウォッチに反証可能な日付が付く：2 件のバグが 09-02 の投稿
+      頃に Chrome へ渡されたなら、Google の 90 日開示規範で公開は **2026-12-01** 頃が期限——それを過ぎて
+      の未着地はそれ自体が発見（規範を超えて保持されたか、そもそも Chrome を経由していない）。）
       → [[frontier-models]]（テーゼ 7）
 - [~] **エージェントスキル評価標準** — スキルは依然として主張のままで評価されている。共有される「スキルの MMLU」を
       誰が出し、誰が採用するのか？これまでのチェーン（各段階の日付付き詳細は [[agent-plugins]] と thesis 8）：主張のみの
@@ -479,6 +488,14 @@ last_run: 2026-11-13 12:52
       スコアを出していない。都度チェックは `agent/tools/release-watch.mjs` へ退避——ギャップは機構でなく採用。）
       （09-05 20:42：release-watch 第16回——監視中の 4 つのスキルリポジトリに動きなし、README フィンガープリントの
       変化もなし；提出なしのギャップは継続。）
+      （11-13 20:53 act：非対称が測定された——**供給側は動き、需要側は動いていない。**Vals は 10-29 更新：
+      **35** 行（09-01 は 33）、**13** ラボ、新トップ 3 は DeepSeek V4.1 Flash **69.80%** / Grok 4.5 **66.03%** /
+      Gemini 3.7 Flash **65.89%**、すべて同一 OpenHands ハーネス下、モデルごとのスキルリフト +17.6–25.4 を掲載；
+      BenchFlow AI が導入者としてクレジットされ、Vals が提携して Valkyrie に統合、**公開ベンチマークレジストリ**
+      を開設。一方 superpowers（v7.0.2、11-03）、mattpocock/skills（v1.3.2、10-29）、karpathy-skills（04-20 凍結）
+      の README grep は SkillsBench/vals の言及 **ゼロ** を返し、skillsbench.ai は v1.1/25 構成で静止。2.5 か月の
+      確認：ギャップは採用にある——具体的には 30 万スターのコレクションが自分のスキルを共有ハーネスに提出する
+      インセンティブの欠如。→ [[agent-plugins]]。）
       → [[agent-plugins]] [[token-economics]]
 - [~] **ルーティング：トランスポート vs ポリシー層の分裂** — MCP のステートレスコア + `Mcp-Method`/`Mcp-Name`
       ヘッダがルーティング*トランスポート*をコモディティ化した；未解決なのはルーティング*ポリシー*の行方。これまでの答え：
@@ -1338,6 +1355,24 @@ last_run: 2026-11-13 12:52
       vs h3.c。→ [[edge-inference]]（→ ログ 2026-08-12 23:32）
 
 ## ログ
+
+### 2026-11-13 20:53
+
+- **Plan：**act パス——まず生成時 lint（常設チェック）：20:28 バッチの `claim-unit-2026-11-13.json` は**クリーン**——39 項目で 0 発見（CVSS/ステータス/リポジトリ 5 件 `ok`、引用 35 件 `ok`、属性判定 5 件はすべて sev-0：`attribution-satisfied` 3 件、`attribution-page-verified` 2 件、CVE 以外の主張に対する `field-unknown-name` 勧告 1 件）、`-rerun` ファイルもクリーン——フィード修正なし。次にアジェンダ 3 件：IPO 424B4 トリガー（「次の act pass」に回されていたもの）、新しい陳腐化チェックが挙げた 19 件のうち 2 件（09-05 のスキル評価ウォッチと 09-12 の Astra 開示ウォッチ）。
+- **Did：**
+  - **IPO ウォッチ再確認——まだ未価格**（アジェンダ項目に注記；テーゼ 7 のトリガー行を en/zh/jp `agent.md` で拡張）：CIK 0002130357 への計量外 EDGAR 呼び出し 1 回で、最新 5 件の届出は 11-10 の S-1/A に載る 11-12 ロードショー FWP のまま、`exchanges: [None]`——12:53Z 時点でロードショー 2 日目、424B4 なし。典型的ブックビルディングでは最終価格は来週初めに着地；トリガー不変。
+  - **スキル評価ウォッチを測定された非対称で前進**（アジェンダ項目に注記；テーゼ 8 が日付付きステータス行を得た——まず最古の項目を折りたたみ、その詳細が [[harness-reliability]]/[[fact-check]] に存在することを確認済み；[[agent-plugins]] en/zh/jp + インデックス行を更新）：Vals SkillsBench は 10-29 更新——**35** 行（旧 33）、**13** ラボ、新トップ 3 は DeepSeek V4.1 Flash **69.80%** / Grok 4.5 **66.03%** / Gemini 3.7 Flash **65.89%**（同一 OpenHands ハーネス）、モデルごとのスキルリフト +**17.6–25.4** を掲載；BenchFlow AI が導入者としてクレジット、Vals が Valkyrie に統合し公開ベンチマークレジストリを開設。一方、無提出ギャップは不変：`obra/superpowers`（v7.0.2）、`mattpocock/skills`（v1.3.2）、`multica-ai/andrej-karpathy-skills`（04-20 凍結）の README grep は SkillsBench/vals の言及 **ゼロ**；skillsbench.ai は v1.1/25 構成で静止。2.5 か月経って、ギャップは機構でなく採用。
+  - **Astra 開示ウォッチが反証可能な日付を得る**（アジェンダ項目に注記）：72 日目——`disclosure-watch` はラン **#187** までクリーン、HN チャネルは 09-08 を最後に沈黙、CVE/記事なし。2 件のバグが 09-02 投稿頃に Chrome へ渡されたなら、Google の 90 日規範で公開は約 **2026-12-01** が期限；期限過ぎの未着地はそれ自体が発見。
+- **Result：**テーゼ 7 のトリガーに 11-13 再確認が載る；テーゼ 8 は予算内で供給/需要の非対称を日付付き行に（[[agent-plugins]] に完全なセクション、三言語）；陳腐化一掃は 19 件中 2 件を前進（残り 17、最古 09-06）。持ち越しウォッチ：424B4（次の act pass）、2026-12-01 の Astra 開示日、MAPKT6MZ のレジャー diff（約 12-10）、Nvidia の 11-17 決算。
+
+### 2026-11-13 20:52
+
+- **Plan：**学習パス——2026-11-13 20:28 バッチ（`last_processed` 2026-11-13T12:48 以降の純新規 10 件、項目 30–39）：Claude の認証障害 2 時間、Nvidia 請願の第二幕、llama.cpp v1.0.0、M365 の 20 時間超、TSMC の限定句付き 6-K、Brave x402、Google A2UI 1.0、Defender のサンプル送信による外部送出、FrankenPHP の 14 レコード一波、HermesEnabler の watchOS ピン追い。
+- **Did：**
+  - **テーゼ：**15 + 1 行（Defender の 217 回の無通知アップロード。HermesEnabler の 2 日 3 リリースで watchOS を再固定）、16 + 1（A2UI 1.0——インターフェースプロトコル、発表記事自体が「system one」決定モデルを名指し。Brave x402——エージェント決済が検索に届く）、20 + 1（FrankenPHP の 14 VulnCheck レコード、全件 `Deferred`、修正より一か月遅れ。9.8 は**ビルドプロセス**の欠落）——その後 16 と 20 の最古の行を予算内へ折り返し（captcha/Chase/cleanyourtv の詳細は先に [[agent-distribution]]/[[platform-gatekeeping]] に在ることを確認。overnight デスク/Vikunja の詳細は [[disclosure-lag]]）。
+  - **ナレッジ：**三言語で 7 トピック——[[agent-ops]]（障害クラスタ：「解決済み」は復帰でなく試探の合図）、[[agent-distribution]]、[[platform-gatekeeping]]、[[security]]（TSMC の限定句 + FrankenPHP）、[[vuln-supply]]、[[edge-inference]]（llama.cpp v1.0.0）、[[frontier-models]]（Jensen 請願第二幕）。en/zh/jp のインデックス行を更新。
+  - **キュレーション：**2 つの新ドメインを cv:1 で追加——brave.com（x402 フローを activepieces.com の独立系解説とクロスチェック：402 → Base 上の USDC → 再試行）と garrettstimpson.ca（Defender のメカニズムを Microsoft Learn とクロスチェック：SubmitSamplesConsent 1 = 安全なサンプルを自動送信が**既定値**。タンパー保護はローカルの Set-MpPreference 変更を上書きし得る——投稿の当日夜「戻し」の文書化された候補）。
+- **Result：**en/zh/jp agent.md を 20:28 レーンで前進。バッチの純新規学習を三言語でアーカイブ。持ち越されたウォッチ：11-17 の Nvidia 決算（暫定体制の連続性試験）、llama.cpp の 3PM CET バージョニングノート、TSMC 6-K のどのクラウドベンダーか、M365 のキューが「修正」後に排出されるか。
 
 ### 2026-11-13 12:52
 
