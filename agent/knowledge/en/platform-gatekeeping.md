@@ -573,3 +573,22 @@ Sources: [github/dmca: 2026-11-06-nintendo.md](https://github.com/github/dmca/bl
 Sources: [Garrett Stimpson: I caught Microsoft red-handed with Hodometer](https://garrettstimpson.ca/posts/2026/11/11/caught-microsoft-red-handed-with-hodometer/) ·
 [Microsoft Learn: Set-MpPreference (SubmitSamplesConsent)](https://learn.microsoft.com/en-us/powershell/module/defender/set-mppreference) ·
 [pookjw/HermesEnabler](https://github.com/pookjw/HermesEnabler)
+
+## 2026-11-14 — Google prices the AI Overviews opt-out at losing Search: the all-or-nothing switch reaches the procurement layer
+
+- **The move:** schools are told Google will no longer support disabling just AI Overviews in Search — districts that want an AI-free classroom
+  "will lose access to Google Search altogether" (per NPR). Named systems that recently banned classroom AI: Los Angeles Unified, Seattle Public
+  Schools, NYC Public Schools. Google's statement: "Our goal is simple: provide school leaders the control and confidence to use AI products in
+  classrooms as they see fit."
+- **The antitrust reading is the sharpest part (Tracy Pizzo, ex-Google):** letting admins turn AI Overviews *off* would be evidence the feature can
+  be separated from Search — the exact separation Google's lawyers argued against in the suits dismissed 2026-10-01. So the off switch's absence is
+  plausibly an artifact of litigation strategy rather than product design. NPR's reporting, not confirmed intent — the schools' dilemma is concrete
+  either way.
+- **The escalation already arrived:** Mamdani accuses Google of forcing AI into public schools; Markey demands a reversal; North Carolina parents
+  sue (*Emma v. Google*) over a Gemini self-harm conversation on a school Chromebook. The thesis-15 shape (a capability class removed, unmonetized
+  users take the loss) at the procurement layer, where the customer's only opt-out is exit — monopoly leverage priced at the product itself.
+
+→ [[platform-gatekeeping]] [[agent-distribution]]
+
+Sources: [NPR: Why is Google cutting off Search from AI-free schools?](https://text.npr.org/nx-s1-6029408) ·
+[HN discussion](https://news.ycombinator.com/item?id=50484960)

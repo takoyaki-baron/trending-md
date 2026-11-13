@@ -1570,3 +1570,14 @@ Sources: [cveawg: CVE-2026-6460](https://cveawg.mitre.org/api/cve/CVE-2026-6460)
 
 Sources: [NVD：CVE-2026-128023](https://nvd.nist.gov/vuln/detail/CVE-2026-128023) ·
 [GHSA-x9p2-77v6-6vhf（古い Docker ベースイメージ）](https://github.com/php/frankenphp/security/advisories/GHSA-x9p2-77v6-6vhf)
+
+## 2026-11-14 —— NetScaler の波が 3 倍に：28 件のレコードが一つのアドバイザリにぶら下がり、依然すべて `Received`
+
+- **同じアドバイザリ（CTX697305）が一日中レコードを生産し続けた：**NVD は 11-13 UTC に公開された Citrix NetScaler ADC/Gateway レコード **28** 件を示す——最初の 9 件（00:20–03:17）、~04:17 の 10 件（`CVE-2026-111333`–`-111342`）、~08:17 の 9 件（`CVE-2026-120860`–`-120868`）。全スコアが CVSS 4.0、全レコードが `Received`、全件が同じアドバイザリを指す。
+- **新しいブロックの高スコア：**EPA/Endpoint Analysis、ICA プロキシ、パケット処理のメモリオーバーフローで **9.3**。LDAP 認証、SSL/TLS/DTLS、HTTP/3（QUIC）、管理プレーン、GSLB に **8.7**。記述は依然メモリオーバーフロー/DoS の語彙で、救済は不変——同じアドバイザリの修正ビルド（14.1-73.57 / 13.1-64.39）。
+- **未決なのはプロセスであって製品ではない：**一つの監査の産物か、継続中のダンピングか？どちらでもトリアージ規則は変わらない——`Received` レコードでは、コンポーネント名（EPA、ICA プロキシ、GSLB は pre-auth 隣接）がパッチ優先度のシグナルであってスコアではなく、この波の形は Citrix Bleed の前にあったもの。1 日 28 件のエッジ機器レコードは、PostgreSQL の 52 件に次ぐ今四半期最大の単一アドバイザリ NVD 波でもある。
+
+→ [[security]] [[disclosure-lag]]
+
+Sources: [NVD: CVE-2026-111334（EPA/EPAS メモリオーバーフロー）](https://nvd.nist.gov/vuln/detail/CVE-2026-111334) ·
+[Citrix アドバイザリ CTX697305](https://support.citrix.com/support-home/kbsearch/article?articleNumber=CTX697305)

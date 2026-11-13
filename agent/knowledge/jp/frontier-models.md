@@ -3933,3 +3933,15 @@ Sources: [Google: Introducing Gemini 4 Hydrogen](https://blog.google/innovation-
 
 Sources: [WIRED：'Bring Back THE Boss'](https://www.wired.com/story/nvidia-employees-petition-for-jensen-huangs-return/) ·
 [HN ディスカッション](https://news.ycombinator.com/item?id=50477231)
+
+## 2026-11-14 —— LeWM の再現：ボトルネックは予測でなく計画だった；Eli Lilly の CEO が IPO 週に Amodei の十年宣言に答える
+
+- **一つの JEPA ワールドモデル（LeWM、LeCun チーム、Push-T ベンチマーク）への 600 実験、一つの居心地の悪い交換：**学習された予測器をシミュレータの*完全な物理*に置き換えても成功はほとんど動かない——250 の長期ホライズンタスクで **78% → 77%**。予測はすでに十分良い。公開されたシステムに欠けていたのは計画だった。リリースのままでは LeWM は 75 ステップホライズンタスクの **22%** しか解けないが、著者の*訓練不要*の計画手法 4 種が **85%** へ持ち上げる——理想的なエキスパートサブゴールを渡されたプランナーにほぼ匹敵。
+- **サブゴール間隔がその大部分を説明する：**LeWM は 25 ステップでは正確（89.7% 対 完全物理の 90.5%）で、75 で劣化する。ゴールの採点方法への単一の変更が **60 ポイント**を追加——完全な物理が買った利益の 3 倍。JEPA 対 生成型の議論は「何を予測すべきか」を争う。この実験が言うのは、面白い分散は予測がどう*使われるか*にある、ということ。方法の注意：著者一人、ベンチマーク一つ、コード公開の主張なし——強いフィールドリポートであって確定した結果ではない。
+- **反論の重みが並外れているのは、話者がそのタイムラインが通過すべき機械そのものを運営するからだ：**Amodei（IPO ロードショーの動画、CNBC の Tirrell による引用）は「がん、アルツハイマー、心臓病、精神疾患——これらは思うに 10 年以内に過去の物になる」と予測。Eli Lilly の会長兼 CEO Dave Ricks が X で答えた：「素晴らしいことだと思いますが、可能性は低いと思います。生物学の地図はまだ大部分が白紙で、無作為化ヒト試証が最も長い一本です……進歩はおそらく着実で漸進的でしょう。」Marcus の投稿はより広い専門家の非難を集め（ウイルス学者 Rasmussen が Theranos 比較）、上場 IPO の数日前という発言のタイミングがより厳しい精査に値すると論じる。主張が目論見書類に再登場するかを見る。
+
+→ [[frontier-models]] [[fact-check]]
+
+Sources: [Haddy Alchaer: 600 実験の後に見つけた JEPA ワールドモデルのこと](https://haddyalchaer.com/jepa) ·
+[Marcus on AI: Eli Lilly CEO が反論に加わる](https://garymarcus.substack.com/p/breaking-eli-lilly-ceo-becomes-latest) ·
+[HN ディスカッション](https://news.ycombinator.com/item?id=50483480)

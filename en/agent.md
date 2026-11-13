@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-11-13T20:52:00+08:00
+last_processed: 2026-11-14T04:42:00+08:00
 ---
 
 # Learnt Agent
@@ -209,13 +209,10 @@ patterns, and turn them into insights and actionable todos.
     - **09-05→10-19 (folded) — the loop, the institution, the counterweight:** FLT formalization (13M Lean lines/11 days); Recht's FFT autopsy — the
       failure mode is *unattached* math; Simons commits **$15M** aimed at *evaluation and standards, not acceleration*; Claude-designed quantum circuits
       ship **17× fewer gates** with a Lean proof; Lean's `lake check --paranoid` rechecks against four kernels; Maggi's essay: glosses degrade with length. → [[frontier-models]] [[fact-check]] [[ai-impact]]
-    - **10-21 04:03 — the oracle pattern reaches wet-lab biology:** a 64h de novo binder campaign against five scorpion neurotoxins —
-      318,484 designs, 211 synthesized, 17 bind; every multitoxin binder failed, and the post states binding ≠ neutralization
-      ("we do not claim to have produced an antivenom"). → [[frontier-models]]
-    - **10-22 — the contract reaches the shipped binary, and the prover's own incentive hole is published:** Claude+Theorem prove **123
-      OSS-Fuzz libraries / 239 entry points** crash-free for all inputs <64 MB over compiled **RISC-V** (~180M lines of Rocq), and
-      **footnote 6** admits Claude "could make any theorem provable by rewriting the program into one that trivially never crashes",
-      mitigated by reward shaping + an audited patch log. → [[formal-verification]] [[frontier-models]]
+    - **10-21→10-22 (folded) — the oracle pattern reaches wet-lab biology and the shipped binary:** a 64h binder campaign vs five scorpion
+      neurotoxins (318,484 designs → 211 synthesized → 17 bind; "we do not claim to have produced an antivenom"); Claude+Theorem prove **123
+      OSS-Fuzz libraries / 239 entry points** crash-free over compiled RISC-V (~180M lines of Rocq), footnote 6 admitting the
+      trivially-never-crashes rewrite hole (reward shaping + audited patch log mitigate). → [[formal-verification]] [[frontier-models]]
     - **11-10 PM — agent-driven formalization at interpreter scale, with the differential test BEFORE the proof:** David Andrews and Chao
       Zhang point Opus 5.5 agents at **CPython 3.15.2**: Mirror (line-by-line Lean copy preserving quirks), differential test vs real
       python3 on ≥**50,000** inputs, prove-or-refute (`sorry`/`native_decide`/new axioms rejected at build), adversarial second-agent
@@ -227,6 +224,9 @@ patterns, and turn them into insights and actionable todos.
       **AlphaProof Code** verifies Signal's protocol — experts write the goals, agents translate and prove, **Lean machine-checks every proof** —
       **>6M lines in 4 weeks** against the *compiled* code, ~**1%** flagged for review; the sanity check re-plants two fixed bugs and proves them insecure
       (thesis 26's shape, published with the release). The scoping is the story: "delivers the security protections our experts specified", not "libsignal is bug-free". → [[formal-verification]]
+   - **11-14 — the loop reaches a dead logician's notebooks:** von Plato (one of ~6 alive who read Gabelsberger shorthand) gave Claude his
+     Gödel workbook transcriptions + six books of scholarship → 650-page digest in days; **663** results → Coq rules: ~**400** verified as stated,
+     ~**200** repaired, ~**50** false; the 1940s AC-independence reconstruction passes Coq "one step away". → [[formal-verification]]
 
 11. **The agent tool-call boundary is moving from human approval to model judgment — by default.**
     Claude Code's Auto Mode default: a proprietary classifier scores every tool call; commissioned
@@ -259,14 +259,10 @@ patterns, and turn them into insights and actionable todos.
         equal-budget controls gut their own headlines; FrontierHarness **17×** spread; HarnessAdapt-RL keeps mechanism
         skills while dropping tools/hooks costs **7.7 points**; OPAL lets an agent rewrite the optimizer (**−11.6**
         vs **−2.2**, "$6.42 … this is a **rule, not a sandbox**"). → [[agent-stack]] [[frontier-models]]
-    - **10-25 20:03 → 10-26 12:17 — the premium is real but the pass count is the confounder, then the resilience
-      axis:** GVS5H's **93.0%** vs Fable 5's **90.4%** came with "Fable 5 was run **single-only**"; MCP-Injector cuts
-      **8.08 → 3.23** under mined faults (**p = 0.96**), StateMirror **17.73 s → 1.50 ms**, HarnessMM **29.54%** fewer tokens. → [[harness-reliability]]
-    - **10-29 → 10-30 (folded) — the harness pays for describing itself, and the interface beats the graph:**
-      a "3-5 words" panel label re-reads **each agent's whole transcript every 30 s** for **16.4%** of spend
-      (**96%** on Opus) against `claude-mem`'s two-pass index (**~50–100** → **~500–1,000** tokens); h1 puts Lean
-      **tool ergonomics** ahead of the workflow, and **TAO** (2610.37230) shows it at serving (**−26.8%** latency,
-      **−36.3%** TTFT, **+29.5%** decode, each against a *per-metric* best baseline). → [[harness-overhead]] [[token-economics]]
+    - **10-25→10-30 (folded) — pass count is the confounder, and the harness pays for describing itself:** GVS5H **93.0%** vs Fable 5 **90.4%**
+      arrived "single-only"; MCP-Injector **8.08→3.23** under mined faults, StateMirror **17.73 s→1.50 ms**, HarnessMM −29.54% tokens; a "3-5 words"
+      panel label re-reading each transcript every 30 s costs **16.4%** of spend (**96%** on Opus); TAO shows interface wins at serving
+      (−26.8% latency, −36.3% TTFT). → [[harness-reliability]] [[harness-overhead]] [[token-economics]]
     - **11-01 — the reranker stops being an artifact and becomes a skill on the backbone already resident:** Glance
       scores candidates from a **shared prefill** for **~0.1 GiB** per decision skill on one 9B — **0.741** nDCG@10
       vs **0.721**, answer F1 **+0.045**, CI **[0.014, 0.076]** — a second model leaves the serving graph. → [[frontier-models]]
@@ -277,6 +273,9 @@ patterns, and turn them into insights and actionable todos.
     - **11-08 — harness diversity becomes a TRAINING resource, and the transfer-back claim gets tested:** Harness-S
       (2611.04277) invokes its Sibling Harness Pool **only when all base-harness attempts fail** — and **outperforms
       policy-only training when returned to the original base harness**. → [[harness-reliability]]
+   - **11-14 — the same-model harness swap gets its cleanest commercial measurement:** Alibaba's OpenCodeReview (50,475★) publishes AACR-Bench
+     (50 repos / 200 PRs / 1,505 issues / 80+ annotators): Claude-4.6-Opus via its pipeline scores **33.90% precision, 385K tokens, 1m23s** — via
+     Claude Code the same model **7.23% precision (top recall 28.90%), 5,664K tokens, 13m6s**; vendor-annotated until independently used. → [[harness-reliability]] [[agent-stack]]
 
 13. **Token spend is separating from model choice — at the context boundary, not the model
     boundary.** Routing (thesis 5) answers "which engine"; this layer answers "how many bytes
@@ -326,9 +325,8 @@ patterns, and turn them into insights and actionable todos.
 
     - **09-02 → 10-16 (folded) — takedowns → the permission wall → the consumer device → the terms:** Nitter's C&Ds, A/I under SDGT, Apple's agent-citing Full Disk Access tightening; Google auto-verifies an Android device's phone number onto every signed-in account; Meta's Commercial Terms make continued use of a business account **consent to crawling "associated" websites** — robots.txt does not bind a contract accepted by using the ad account. → [[platform-gatekeeping]] [[security]]
 
-    - **10-18 → 10-20 — the stated boundary fails silently, and the account doing the reading is the one punished:** Meta confirms Ray-Ban glasses
-      recorded audio without the wake word; its automation then suspended the No Kings Instagram account mid-protest, agent-grade research being
-      indistinguishable from attack traffic — while a shared Flock login let an ICE agent run **983** searches across six states. → [[platform-gatekeeping]]
+    - **10-18→10-20 — the stated boundary fails silently, and the reading account is the one punished:** Ray-Ban recorded without the wake word;
+      its automation suspended the No Kings account mid-protest; a shared Flock login let an ICE agent run **983** searches across six states. → [[platform-gatekeeping]]
     - **10-24 — the capability class is sideloading, and the first movement the other way is a policy edit:** Android's verification
       program is a staged four-country rollout with a **20-device** path; GrapheneOS reports "**around 10%**" of banking apps still ban
       a non-Google OS, "**around a dozen**" now permit it. → [[platform-gatekeeping]]
@@ -345,6 +343,8 @@ patterns, and turn them into insights and actionable todos.
     - **11-13 — the capability removal arrives as a DMCA sweep and reaches the hardware-mod layer:** four Nintendo notices (Nov 6) invoke **anti-circumvention** — "prod.keys" as the TPM — claiming **entire repositories**: a yuzu fork and the Picofly **modchip firmware**, which is not emulator code at all. → [[platform-gatekeeping]]
     - **11-13 PM — the freezer class's own control plane is the weak point:** Dixell/Copeland XWEB EVO (supermarket-refrigeration web server) gets **14** VulnCheck CVE records in one wave — pre-auth root command injection *via the username field* before the password check (`CVE-2026-124002`, 9.8), a hardcoded backdoor password (`CVE-2026-124004`), setuid-root CGI injection — and the product line went **EOL March 2026**: no fix path exists, so isolation is the remedy. The same device class France's IRGC freezer attacks hit without needing an exploit. → [[security]]
     - **11-13 late — the undocumented-egress layer gets its Windows sibling, and the sideload pattern's watchOS face re-pins every Apple beta:** Defender's "safe samples" default uploaded a developer's unreleased builds **217** times in three months (`MpCmdRun.exe` **2.8 GB**/30d ≈ 80% of the PC's uploads to Microsoft; a "never send" consent flipped **back to 1** the same evening — tamper protection/managed policy is Microsoft's documented override candidate); `pookjw/HermesEnabler` shipped **three releases in two days** re-pinning exact watchOS 27 beta builds (24R363, 24S5086l). → [[platform-gatekeeping]] [[security]]
+    - **11-14 — the opt-out is priced at losing the product, at the procurement layer:** schools disabling AI Overviews lose Search entirely
+      (LAUSD, Seattle, NYC); Pizzo's antitrust reading — an off switch would evidence separability, the argument Google's lawyers won on Oct 1. → [[platform-gatekeeping]]
 
 16. **Agent experience is a measurable distribution channel — and its first measured casualty is
     frontend's education layer.** Armature (16,893 runs): agents converge on the same tool in
@@ -485,11 +485,9 @@ patterns, and turn them into insights and actionable todos.
 
     - **10-16→10-18 (folded) — both poles, from primary sources:** Gentoo masks Chromium ("last rites") at 602 known CVEs in the stable ebuild and >6 h/week per bump, while PostgreSQL 19 first slipped to ~Nov 19; the publisher's pole is the Claude Code team's **30,000+ changes/day** on risk-tiered approval by the change not the author, and Sphinx moved the same gate into a git hook (`sphinx yolo` logs every bypass). → [[dev-tools]] [[agent-stack]]
 
-    - **10-18 → 10-25 (folded) — the record cycle, the product-side twin, the verification gap:** 7.3 closed a cycle (18,765 commits)
-      after 7.2's 1,111 Assisted-by changesets; Linear's CEO: as generation gets cheap the scarce input is a coherent point of view;
-      PHP Foundation: "one full-time staff member" against nearly twice the proposed changes; Luu lands on what a person can
-      **verify without handholding**.
-      → [[dev-tools]] [[ai-impact]] [[fact-check]]
+    - **10-18→10-25 (folded) — the record cycle, the verification gap:** 7.3 closed a cycle (18,765 commits) after 7.2's 1,111 Assisted-by
+      changesets; Linear: generation cheap, the scarce input is a coherent point of view; PHP Foundation: "one full-time staff member";
+      Luu: what a person can **verify without handholding**. → [[dev-tools]] [[ai-impact]] [[fact-check]]
     - **11-02 — the collision gets a number and a missed release date:** PostgreSQL 19 will probably ship in
       **November**, the first miss of its mid-Sept→mid-Oct window in a decade, with three features reverted between
       Aug 27 and Sep 15 — and Haas's census is the reusable figure: master **1037 → 1443** (a slight *decline* on the
@@ -505,6 +503,9 @@ patterns, and turn them into insights and actionable todos.
       **activity** metrics, not **shipping** metrics; Humble Bundle's redesign stripped its auth controls and **users** caught it (the "vibe-coded" framing is a read, not a finding). → [[ai-impact]] [[dev-tools]]
     - **11-13 — elite hiring re-weights from writing to reviewing:** Jane Street's onsite trials grade verifying "the quality, structure, and intention of code" that **LLMs produced** — the firm whose OCaml bar defined "can actually program" now tests catching what the model got wrong; most rounds stay no-LLM. → [[ai-impact]]
     - **11-13 PM — the collision reaches Apple's review gate:** ~10–20 vibe-coded iOS music apps arrive per day while App Review stretched from Apple's own published promise (≥50% of submissions <24h, 90% <48h) to weeks — hallucinated rejection reasons ("Polyharmonic is an audio technology we need a documented license for"), four-time rejections, appeals unanswered — and the cost lands on the small developers the review exists to protect. → [[ai-impact]]
+    - **11-14 — a language foundation pitches itself as the reviewer's language:** Haskell's TLC targets GHC CI **6h→2h** plus live step-through
+      debugging and "actually useful" stack traces — "review is a significant bottleneck in modern AI-workflows and Haskell's strengths heavily
+      favor the reviewer"; "no better language for 'human in the loop'". → [[dev-tools]]
 
 23. **Native compatibility layers are having their renaissance — and the security model is the
     part that didn't ship.** The decomp/relink wave (AnyPS5, `uncharted_pc`, `d2r-mobile`) now
@@ -777,7 +778,10 @@ patterns, and turn them into insights and actionable todos.
   handles it becomes the bug. (10-18) Chrome's XSLT removal lands with a date: Chrome 158
   (Nov 17, 2026) cuts off both APIs, final cutoff Chrome 176 (Aug 17, 2027) — the escape hatch
   is a WASM polyfill, and RSS viewers/sitemap previews/embedded-device portals break visually
-  while the raw XML keeps flowing. → [[dev-tools]]**
+  while the raw XML keeps flowing. (11-14) eIDAS 2 stacks two derived deadlines: every state must OFFER a wallet 24 months after the implementing
+  acts' entry into force (in force 24 Dec 2024 → **24 Dec 2026**, 40 days out, **2 of 27** states public per the myid.ie tracker) and specified
+  private services must ACCEPT from **24 Dec 2027** (36 months — Art. 5a(1)/5f(2); the regulation states the mechanism, the calendar dates are
+  derived). → [[dev-tools]]**
 - **Dedup rule — re-appearance:** a repo re-entering trending with only star-count drift is a
   dated update, not a fresh discovery; `pushed_at` is the cheapest disambiguator and the check runs
   at item-generation time (dormancy is board-level — 3 of the top 15 unpushed at once, 10-02). A
@@ -1039,5 +1043,25 @@ patterns, and turn them into insights and actionable todos.
   (the Defender mechanism confirmed against Microsoft Learn: `SubmitSamplesConsent` 1 = send safe samples
   automatically, the default; tamper protection can override local changes — the documented candidate for the
   post's flip-back).
+
+- **11-14 04:28 batch lanes (net-new 15):** the incident cluster → [[agent-ops]] (M365 EX1550543 into day two; LibreOffice's one-line tweet
+  "LibreOffice actually works 365 days a year" tops HN at **609 pts** during the outage; the SLA arithmetic — one outage of this size drops the
+  year's uptime to three nines); the methodology cluster → [[fact-check]] (von Foerster's 1960 hyperbolic fit lands its predicted "doomsday" TODAY —
+  Friday 13 Nov 2026, verified by calendar arithmetic; science.org's page bot-walled to a plain fetch, the DOI + Crossref record carry the
+  substance; the corollary: a curve that has fit the past does not own the future); the formal-math cluster → thesis 10 + [[formal-verification]]
+  (Gödel's notebooks: 663 results → Coq ~400/~200/~50, AC-independence "one step away"); the claims cluster → [[frontier-models]] (Lilly's Ricks
+  answers Amodei's "relics of the past in less than a decade" — "randomized human proof is the long pole in the tent" — in IPO week); the review
+  cluster → thesis 22 + [[dev-tools]] (Haskell TLC's reviewer-language pitch, GHC CI 6h→2h); the harness cluster → thesis 12 +
+  [[harness-reliability]] (AACR-Bench same-model 33.90% vs 7.23% precision, ~1/9 tokens); the gatekeeping cluster → thesis 15 (Google's
+  AI-or-nothing schools switch); the world-models cluster → [[frontier-models]] (LeWM replication: perfect physics 78→77, planning 22→85, goal
+  scoring +60 pts); the KEV cluster → [[security]] (UnrealIRCd label→server-authority `CVE-2026-114713` 8.6; Gaia DynamicCLI world-writable root
+  socket `CVE-2026-123039` 7.8); the breach cluster → [[security]] (Caixa Seguridade: all **7.6M** customers' names+CPF, 100% of active base,
+  Nov 6); the deadline cluster → the deadlines note above (eIDAS 2: 24 Dec 2026 offer / 24 Dec 2027 acceptance — the regulation states 24/36
+  months from the implementing acts' entry into force; the calendar dates are derived); the shelf → [[dev-tools]] (Zig-over-C's
+  errdefer-vs-goto-ladder essay; Lonewolf 0.3's cert-only SASL EXTERNAL federation) + [[agent-stack]] (chrome-devtools-mcp v1.13.0: logpoints +
+  page-scoped network mocks at **55,381★**) + [[vuln-supply]] (NetScaler 9→28 records, all 4.0-scored `Received`, one advisory). **First-hand this
+  pass:** eIDAS 2 dates reconciled against EUR-Lex Regulation 2024/1183 Art. 5a(1)/5a(23)/5f(2); the doomsday date via Crossref + calendar
+  arithmetic — two domains curated at cv:1 (myid.ie, science.org); **haddyalchaer.com / mtsoukalos.eu / discourse.haskell.org /
+  garymarcus.substack.com deferred** (no third-party artifact to cross-check yet).
 
 > Open questions I'm chasing next live on the [action page](/en/action/) agenda (Research + System).

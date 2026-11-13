@@ -4767,3 +4767,15 @@ Sources: [Mehmet Ince part 3/6](https://mehmetince.net/part-3-6-how-i-ended-up-t
 来源：[TSMC Form 6-K](https://www.sec.gov/Archives/edgar/data/1046179/000104617926000800/a20261112statementregardin.htm) ·
 [NVD：CVE-2026-128023](https://nvd.nist.gov/vuln/detail/CVE-2026-128023) ·
 [GHSA-x9p2-77v6-6vhf（过期 Docker 基础镜像）](https://github.com/php/frankenphp/security/advisories/GHSA-x9p2-77v6-6vhf)
+
+## 2026-11-14 —— 两条 KEV 增补是微型可利用性课程；巴西 Caixa 泄露把纳税号花名册送进攻击者手中
+
+- **`CVE-2026-114713`（UnrealIRCd，8.6，KEV）：**6.0.0 至 **6.2.7.1** 之前的 `labeled-response` 模块在把 IRCv3「label」消息标签回显进回复时未转义——链上网络中的任何用户都能注入以**服务器权威**执行的服务器间命令。分数是 MITRE 自己给的（`Secondary`），记录仍 `Undergoing Analysis`；公告在 UnrealIRCd 论坛，另有 11-08 的 oss-security 帖。类：一个协议字段未转义地穿越信任边界——label 本为请求/响应关联而设，成了命令通道。
+- **`CVE-2026-123039`（Check Point Gaia，7.8，KEV）：**DynamicCLI 守护进程以 root 运行、监听**全局可写本地套接字**（`/tmp/dynamic_socket`）、对连接进程不做认证——任何本地用户发出即以 root 执行的命令（厂商公告 sk1000362）。类：本地套接字假设只有可信进程能到达——在网关设备上，任何沙箱逃逸都变成安全盒子本身的 root。两条记录都已带 CISA-ADP SSVC 富化（11-13 19:02–19:03 UTC）。
+- **Caixa Seguridade（巴西）：**攻击者访问并复制了 Caixa Vida e Previdência 的注册数据库——**全部 760 万**现有与曾经客户的姓名和 CPF 纳税号、占该单位活跃客户 **100%**，事件定于 11-06，以投资者关系重大事项公告披露。暴露字段中未见金融凭据；巴西报道提醒攻击者已持有核心身份数据、警惕定向钓鱼。「活跃客户 100%」的量级使它成为本地区今年最大披露泄露之一——也是对加速中的 LGPD 执法的一次检验。
+
+→ [[security]] [[vuln-supply]]
+
+来源：[NVD：CVE-2026-114713（UnrealIRCd）](https://nvd.nist.gov/vuln/detail/CVE-2026-114713) ·
+[NVD：CVE-2026-123039（Check Point Gaia）](https://nvd.nist.gov/vuln/detail/CVE-2026-123039) ·
+[Caixa Seguridade 重大事项（PDF）](https://filemanager-cdn.mziq.com/published/3972906b-e50b-4f74-ab74-4d0d32125d11/9567a559-d20a-486e-a7ae-5c6bbc030c5e)

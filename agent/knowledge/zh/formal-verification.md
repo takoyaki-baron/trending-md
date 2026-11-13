@@ -250,3 +250,14 @@ python-formalization 的 15.7%、us-tax-model 的拒绝门。（4）假设——
 Sources: [陶哲轩：Lean Grimoire](https://terrytao.wordpress.com/2026/11/11/lean-grimoire/) ·
 [Lean Grimoire 应用](https://teorth.github.io/tao-web/apps/grimoire.html) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50462375)
+
+## 2026-11-14 —— Gödel 的笔记本进入循环：663 条结果由模型提出，证明助手裁决
+
+- **瓶颈从来不是阅读速度——是速记法与验证。**Jan von Plato 花了数年转写 Gödel 1940 年代早期的工作簿（1,009 页 Gabelsberger 速记；他是在世约六位能读它的人之一），速度约每周一页。9 月，他把自己的转写加六本 Gödel 研究专著交给 Claude，数日内收到 650 页摘要：**663** 条带有证明、证明梗概或证明思路的结果。
+- **Coq 是裁判，裁判的计数就是故事：**约 **400** 条按原样验证，约 **200** 条经修补（加强命题或补充前提——对 Gödel 本人梗概约 30% 的修补率），约 **50** 条为假——其中一些 Gödel 自己已标 *falsch!*。头条发现：Gödel 1940 年代声称的选择公理独立性证明之重构，von Plato 报告其通过 Coq、「离完成一步」（一个定义写错——Gödel 两年前就有正确的那个）。
+- **警示是结构性的，不是客套：**每条主张都依赖 von Plato 本人的验证，而 Hamkins（未见过重构稿）给出了该文体的诚实框架：「Claude 占多少、Gödel 占多少是历史学家的工作。」清单新增数学史问题：模型提出、证明助手裁决——归属由历史学家裁定。
+
+→ [[formal-verification]] [[frontier-models]]
+
+来源：[卫报：AI 帮助解锁 Gödel 笔记本中的发现](https://www.theguardian.com/science/2026/nov/13/kurt-godel-notebooks-ai-helps-unlock-hidden-discoveries-man-who-transformed-maths) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50486748)

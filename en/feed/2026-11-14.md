@@ -214,15 +214,15 @@ Chrome DevTools' official MCP server — the bridge that lets coding agents driv
 
 ---
 
-## 15. NetScaler's record wave triples: 28 CVEs now hang off one Citrix advisory, all still `Received`
+## 15. NetScaler's record wave triples: 28 CVEs now hang off one Citrix advisory, arriving on an hourly cadence, all still `Received`
 
 - **Velocity:** ▮ steady
-- **Source:** NVD records · published 00:20–08:17 UTC Nov 13 in three tranches
+- **Source:** NVD records · published 00:20–09:17 UTC Nov 13 in six tranches, each ~:17 past the hour
 - **Tags:** `citrix` `netscaler` `cve-wave`
 
-Since we covered the first nine NetScaler records in yesterday's feed: the same advisory (**CTX697305**) kept producing them. NVD now shows **28** Citrix NetScaler ADC/Gateway records published Nov 13 UTC — the original nine (00:20–03:17), ten more at ~04:17 (CVE-2026-111333–111342) and nine at ~08:17 (CVE-2026-120860–120868), all CVSS 4.0, all `Received`, every one pointing at CTX697305. The new blocks' highs: **9.3** for memory overflows in EPA/Endpoint Analysis, ICA proxy and packet processing, with **8.7** grades across LDAP authentication, SSL/TLS/DTLS, HTTP/3 (QUIC), the management plane and GSLB — the descriptions remain memory-overflow/DoS-worded, and yesterday's item's fixed builds (14.1-73.57, 13.1-64.39) are the same advisory's remedy.
+Since we covered the first nine NetScaler records in yesterday's feed: the same advisory (**CTX697305**) kept producing them, on a metronome. NVD now shows **28** Citrix NetScaler ADC/Gateway records published Nov 13 UTC — six tranches at 00:20, 02:18, 03:17 (yesterday's nine), 04:17, 08:17 and 09:17 — all CVSS 4.0, all `Received`, every one pointing at CTX697305. The ID ranges straddle the tranches rather than matching them: of `CVE-2026-111333–111342`, three arrived at ~04:17 and seven at ~08:17; of `CVE-2026-120860–120868`, four at ~08:17 and four at ~09:17 — with 120868 itself in yesterday's nine, the day's first record at 00:20. The new records' highs hold at **9.3** for memory overflows in EPA/Endpoint Analysis, ICA proxy and Email OTP authentication (the wave's one **9.5** was in yesterday's nine), with **8.7** grades across LDAP authentication, SSL/TLS/DTLS, HTTP/3 (QUIC), the management plane and GSLB — the descriptions remain memory-overflow/DoS-worded, and yesterday's item's fixed builds (14.1-73.57, 13.1-64.39) are the same advisory's remedy. (An earlier version of this item bound both ID ranges to single tranches; the records' own `published` timestamps split them.)
 
-**Why it matters:** Whether this is one audit's output or an ongoing dumping process matters for triage: a 28-record wave against edge load-balancers with pre-auth-adjacent components (EPA, ICA proxy, GSLB) is exactly the shape that preceded Citrix Bleed. The records' own arithmetic is still pending — `Received` means NVD hasn't touched them — so treat component names, not scores, as the patch-priority signal until the advisory's text is readable.
+**Why it matters:** The cadence is now the story's strongest signal: every tranche lands at ~:17 past the hour, the same pattern as sibling advisory CTX697320's single NetScaler Console record the day before (14:17 UTC Nov 12) — the signature of an automated publishing pipeline rather than one audit's output, and one that had produced nothing further by end of day UTC. A 28-record wave against edge load-balancers with pre-auth-adjacent components (EPA, ICA proxy, GSLB) is exactly the shape that preceded Citrix Bleed. The records' own arithmetic is still pending — `Received` means NVD hasn't touched them — so treat component names, not scores, as the patch-priority signal until the advisory's text is readable.
 
 [`🔗 NVD: CVE-2026-111334 (EPA/EPAS memory overflow)`](https://nvd.nist.gov/vuln/detail/CVE-2026-111334) · [`🔗 Citrix advisory CTX697305`](https://support.citrix.com/support-home/kbsearch/article?articleNumber=CTX697305)
 

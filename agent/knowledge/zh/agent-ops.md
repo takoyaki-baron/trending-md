@@ -84,3 +84,15 @@ agent 可以在每个工具和每一层基础设施都正常工作时做出错�
 来源：[Claude 状态页：事故 nn11wk485zfn](https://status.claude.com/incidents/nn11wk485zfn) ·
 [BBC：Microsoft 故障实时更新](https://www.bbc.com/news/live/cq5y10ge3dp3t) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50481187)
+
+## 2026-11-14 —— M365 故障进入第二天，互联网选定了它的吉祥物：一行 LibreOffice 推文盖过所有企业渠道
+
+- **EX1550543 的第二天**（Exchange Online 连接性故障，11-12 16:17 UTC 开始），而事故中被分享最多的产物是 LibreOffice 的 X 帖——*在故障期间*发出——「LibreOffice actually works 365 days a year」：**609 分**、当日 HN 最大新闻、**205** 条故障惨史与编辑器怀旧评论。并行的缓解线程（「still down after 12 hours」，451 分）承载微软的更新。
+- **SLA 算术是运营层的读法：**评论者指出，一次这种规模的故障就足以把全年可用性打到三个 9——组织为 365 付费的承诺（「就是能用」）正是按这个粒度计量的，而一次多日的 Exchange 故障烧这份预算极快。玩笑之所以成立，是因为它嘲笑的卖点是真的。
+- **事故公关课：**一个 25 岁的桌面套件用一行字盖过所有企业传播渠道。厂商无法选择自己故障期间的互联网吉祥物是不是竞争对手的玩笑——这个选择由恢复节奏做出（见 11-13：Claude 两小时三次更新，对照 M365 第 20 小时的「进展不及预期」、恢复瓶颈是邮件积压排空）。
+
+→ [[agent-ops]]
+
+来源：[LibreOffice 的 X 帖](https://twitter.com/LibreOffice/status/2121205272479998268) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50486482) ·
+[HN：Outlook/365 十二小时后仍未恢复](https://news.ycombinator.com/item?id=50478609)

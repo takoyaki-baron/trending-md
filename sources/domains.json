@@ -14527,5 +14527,23 @@
   "en": "Personal blog of a Windows developer — first-hand instrumentation of Defender's sample-submission egress (217 uploads incl. unreleased builds; MpCmdRun 2.8 GB/30d; a 'never send' consent change flipped back the same evening). The mechanism is documented independently on Microsoft Learn (SubmitSamplesConsent 1 = send safe samples automatically, the default; tamper protection can override local changes), so the behavior class is confirmed even where the counts are single-source.",
   "zh": "一位 Windows 开发者的个人博客——对 Defender 样本提交外传的第一手仪器化测量（217 次上传、含未发布构建；MpCmdRun 30 天传 2.8 GB；一次「从不发送」的同意改动当晚被翻回）。机制在 Microsoft Learn 上有独立文档（SubmitSamplesConsent 1 = 自动发送安全样本、即默认值；篡改防护可覆盖本地改动），行为类别即使计数为单一来源也已获确认。",
   "jp": "Windows 開発者の個人ブログ——Defender のサンプル送信による外部送出を自機で計測（未リリースビルドを含む 217 回の送信、MpCmdRun の 30 日で 2.8 GB、「送信しない」への変更が同じ夜に元へ戻る事例）。メカニズム自体は Microsoft Learn に独立した文書がある（SubmitSamplesConsent 1 = 安全なサンプルを自動送信、これが既定値。タンパー保護がローカル変更を上書きし得る），挙動クラスは確認済み。"
+ },
+ "myid.ie": {
+  "cat": "data",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "Irish digital-identity vendor's eIDAS 2 EU Wallet Tracker: scores all 27 member states against primary sources with stated evidence dates and grade methodology ('grades describe published evidence, not legal compliance'). Cross-checked: its two statutory dates reconcile with Regulation (EU) 2024/1183 itself — wallet offer at 24 months from the implementing acts' entry into force (Art. 5a(1)/5a(23), acts in force 24 Dec 2024 → 24 Dec 2026) and private relying-party acceptance at 36 months (Art. 5f(2) → 24 Dec 2027); the regulation states the mechanism, the tracker prints the derived calendar dates.",
+  "zh": "爱尔兰数字身份厂商的 eIDAS 2 欧盟钱包追踪器：按一手来源为全部 27 个成员国评分，标注证据日期与评级方法（“评级描述的是已公布证据，而非法律合规性”）。已交叉核验：其两个法定日期与欧盟条例 (EU) 2024/1183 本身吻合——成员国须在实施法案生效后 24 个月内提供钱包（Art. 5a(1)/5a(23)，法案 2024-12-24 生效 → 2026-12-24），特定私人服务须在 36 个月内接受钱包（Art. 5f(2) → 2027-12-24）；条例写的是机制，追踪器给出的是推导出的日历日期。",
+  "jp": "アイルランドのデジタル識別ベンダーによる eIDAS 2 EUウォレットトラッカー：一次資料に基づき全27加盟国を採点し、証拠の日付と評価手法を明示（「評価は公表された証拠を記述するものであり法的コンプライアンスではない」）。クロスチェック済み：2つの法定期日は規則 (EU) 2024/1183 本体と整合——実施法案の発効から24か月以内にウォレット提供（Art. 5a(1)/5a(23)、2024-12-24発効 → 2026-12-24）、特定の民間サービスは36か月以内に受容（Art. 5f(2) → 2027-12-24）。規則は仕組みを定め、トラッカーは導出暦日を掲げる。"
+ },
+ "science.org": {
+  "cat": "research",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "Science (AAAS) — flagship research journal; article pages are bot-walled to plain fetches, so cite the DOI and let a bibliographic twin carry the substance. Cross-checked: the 1960 von Foerster/Mora/Amiot hyperbolic-population paper's record on Crossref (title 'Doomsday: Friday, 13 November, A.D. 2026', Science 132.3436, issued 1960-11-04) matches the claim, and the predicted date's weekday verified by calendar arithmetic.",
+  "zh": "Science（AAAS）——旗舰研究期刊；文章页对普通抓取有反爬墙，引用时给出 DOI，让书目孪生记录承载内容。已交叉核验：1960 年 von Foerster/Mora/Amiot 双曲人口模型的 Crossref 记录（标题 “Doomsday: Friday, 13 November, A.D. 2026”，Science 132.3436，1960-11-04 刊出）与所述一致，且预言日期的星期已用日历算术核验。",
+  "jp": "Science（AAAS）——旗艦研究ジャーナル。論文ページはプレーンな取得に対しボット壁があるため、DOI を引用し書誌ツインに内容を担わせる。クロスチェック済み：1960年の von Foerster/Mora/Amiot の双曲的人口モデル論文の Crossref レコード（タイトル「Doomsday: Friday, 13 November, A.D. 2026」、Science 132.3436、1960-11-04 刊行）は主張と一致し、予言日の曜日は暦計算で検証済み。"
  }
 }

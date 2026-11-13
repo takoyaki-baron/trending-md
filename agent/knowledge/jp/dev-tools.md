@@ -1434,3 +1434,15 @@ Sources: [Adapting CPython for yk](https://tratt.net/laurie/blog/2026/adapting_c
 [ykjit/yk](https://github.com/ykjit/yk) ·
 [easel.sh blog](https://www.easel.sh/blog/lambda-web-functions-idle-memory) ·
 [AWS: Lambda Web Functions](https://docs.aws.amazon.com/lambda/latest/dg/web-functions.html)
+
+## 2026-11-14 —— Haskell は「レビュアーの言語」を売り込む。Zig は C への対抗を一つの痛みずつ論じる。Rust 製 XMPP サーバがフェデレーションを学ぶ
+
+- **Haskell Foundation の技術リーダーシップ委員会（TLC）が「完全に稼働」し、そのビジョンはエージェント時代のために構築された最初の成熟言語ピッチである：**Haskell は「人間の職人芸と機械自動化の興味深い交点」にあり——「レビューは現代の AI ワークフローの重大なボトルネックで、Haskell の強みはレビュアーに大きく有利」。測定可能な公約数：GHC 自身の CI ターンアラウンド **6 時間 → 2 時間**に加え、ライブのステップ実行デバッグ、「実際に有用な」スタックトレース、エディタ統合プロファイリング。軽量なコミュニティ提案プロセスと公開の対案で進める（「公平性と参加が不可欠、資金が絡むときは特に」）。「形式検証や vibecoding にはより良い言語があるかもしれないが、『human in the loop』にこれより良い言語はない。」
+- **C から Zig への移行がより大きな実務オーディエンスであり、Tsoukalos は一つの軸だけで論じる：**カーネル流の `goto fail; fail_name: …` 後片付けラダー（解放が取得から遠く、ラベル順は手で維持）対 Zig の `errdefer`（解放が取得の隣に置かれ、自動で巻き戻る）。全例は Zig 0.17 + clang でコンパイル。枠組みは C を先に讃え、改宗の檄文ではないと明言する：「C は私の大好きなプログラミング言語です！これを書いているのは、新規コードを C で書きたくないからです。」
+- **Lonewolf 0.3.0**（Rust 製 XMPP サーバ、18:06 UTC リリース）が、オモチャと自己ホスト可能なメッセンジャーを分ける機能を出荷する：**フェデレーション**（メッセージ、presence、IQ、ロスター購読の交換）。ホストに証明書と公開 DNS があればデフォルトで有効——サーバー間認証は意図的に SASL EXTERNAL の証明書限定で、XMPP の歴史的に弱いサーバー間信頼への設計上の賭け。プロジェクト自身が段階を明言：pre-1.0、単一ノード、クラスタリングはロードマップ。
+
+→ [[dev-tools]]
+
+Sources: [Discourse: Haskell エコシステムの技術ビジョン](https://discourse.haskell.org/t/a-technical-vision-for-the-haskell-ecosystem/15078) ·
+[mtsoukalos.eu: なぜシステムプログラミングで C ではなく Zig なのか](https://www.mtsoukalos.eu/2026/11/why-zig-over-c-for-systems-programming/) ·
+[Lonewolf v0.3.0 リリースノート](https://github.com/lonewolf-im/lonewolf/releases/tag/v0.3.0)

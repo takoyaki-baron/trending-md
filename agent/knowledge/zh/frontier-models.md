@@ -3603,3 +3603,15 @@ Sources: [Google: Introducing Gemini 4 Hydrogen](https://blog.google/innovation-
 
 来源：[WIRED：'Bring Back THE Boss'](https://www.wired.com/story/nvidia-employees-petition-for-jensen-huangs-return/) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50477231)
+
+## 2026-11-14 —— LeWM 复现：瓶颈是规划而非预测；Eli Lilly 的 CEO 在 IPO 周回应 Amodei 的十年宣言
+
+- **对一个 JEPA 世界模型（LeWM，LeCun 团队，Push-T 基准）的 600 次实验，一次令人不适的替换：**把学到的预测器换成模拟器的*完美物理*，成功率几乎不动——250 个长时程任务上 **78% → 77%**。预测早就足够好；已发布系统缺的是规划。按原样使用，LeWM 只解出 75 步时程任务的 **22%**；作者四种*免训练*规划方法把它提到 **85%**——约等于拿到理想专家子目标的规划器。
+- **子目标间距解释了大部分：**LeWM 在 25 步内精确（89.7% 对完美物理的 90.5%）、75 步时退化；对目标打分方式的单一改动加 **60 分**——完美物理所买到收益的三倍。JEPA 对生成式的辩论在争「该预测什么」；这个实验说有趣的方差在「预测被如何*使用*」。方法警示：一位作者、一个基准、无代码发布声明——强现场报告、非定论。
+- **反驳的分量不同寻常，因为说话者运营着该时间线必须穿过的机器：**Amodei（IPO 路演视频，CNBC 的 Tirrell 引述）预言「癌症、阿尔茨海默、心脏病、精神疾病——这些将在不到十年内成为历史」；Eli Lilly 董事长兼 CEO Dave Ricks 在 X 上回应：「那会很了不起，但我认为不太可能。生物学的地图仍大半空白，随机化人体验证才是最长的一杆……进展大概率是稳健而渐进的。」Marcus 的帖子收集了更广的专家声讨（病毒学家 Rasmussen 作 Theranos 类比），并主张该声明发布于上市 IPO 前几天、理应受到更严审视。观察它是否重现于上市文件。
+
+→ [[frontier-models]] [[fact-check]]
+
+来源：[Haddy Alchaer：600 次实验后，我对 JEPA 世界模型的发现](https://haddyalchaer.com/jepa) ·
+[Marcus on AI：Eli Lilly CEO 加入反驳](https://garymarcus.substack.com/p/breaking-eli-lilly-ceo-becomes-latest) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50483480)

@@ -118,3 +118,21 @@ Sources: [ZhuLinsen/daily_stock_analysis](https://github.com/ZhuLinsen/daily_sto
 Sources: [Claude status: incident nn11wk485zfn](https://status.claude.com/incidents/nn11wk485zfn) ·
 [BBC: Microsoft outage live updates](https://www.bbc.com/news/live/cq5y10ge3dp3t) ·
 [HN discussion](https://news.ycombinator.com/item?id=50481187)
+
+## 2026-11-14 — M365's outage enters day two, and the internet picks its mascot: a one-line LibreOffice tweet out-points every corporate channel
+
+- **Day two of EX1550543** (Exchange Online connectivity, opened 16:17 UTC Nov 12), and the incident's most-shared artifact is LibreOffice's X post
+  — made *during* the outage — "LibreOffice actually works 365 days a year": **609 points**, the day's biggest HN story, **205** comments of outage
+  horror stories and editor nostalgia. The parallel mitigation thread ("still down after 12 hours", 451 pts) carried Microsoft's updates.
+- **The SLA arithmetic is the operational reading:** commenters note one outage of this size is enough to drop the year's uptime to three nines —
+  the promise organizations pay 365 for ("it just works") is measured at exactly this granularity, and a multi-day Exchange failure spends that
+  budget fast. The pitch the joke mocks is real, which is why it lands.
+- **The incident-PR lesson:** a 25-year-old desktop suite out-pointing every corporate comms channel in one line. Vendors do not get to choose
+  whether the internet's mascot during their outage is a competitor's joke — the choice is made by the recovery cadence (see 11-13: Claude's three
+  updates in two hours vs M365's hour-20 "not going as expected" with mail-backlog drain as the bottleneck).
+
+→ [[agent-ops]]
+
+Sources: [LibreOffice on X](https://twitter.com/LibreOffice/status/2121205272479998268) ·
+[HN discussion](https://news.ycombinator.com/item?id=50486482) ·
+[HN: Outlook/365 still down after 12 hours](https://news.ycombinator.com/item?id=50478609)

@@ -1,0 +1,166 @@
+{
+ "generated": "2026-11-13T21:13:18.370Z",
+ "files": [
+  {
+   "file": "2026-11-14.md",
+   "items": 15,
+   "findings": [
+    {
+     "check": "status",
+     "item": 11,
+     "verdict": "ok",
+     "claim": "CVE-2026-123039 `Undergoing Analysis`",
+     "detail": "Undergoing Analysis (lastModified 2026-11-13T20:18:14.257)"
+    },
+    {
+     "check": "status",
+     "item": 15,
+     "verdict": "ok",
+     "claim": "CVE-2026-111333 `Received`",
+     "detail": "Received (lastModified 2026-11-13T08:17:15.380)"
+    },
+    {
+     "check": "status",
+     "item": 15,
+     "verdict": "ok",
+     "claim": "CVE-2026-111333 `Received`",
+     "detail": "Received (lastModified 2026-11-13T08:17:15.380)"
+    },
+    {
+     "check": "status",
+     "item": 15,
+     "verdict": "ok",
+     "claim": "CVE-2026-111334 `Received`",
+     "detail": "Received (lastModified 2026-11-13T08:17:15.557)"
+    },
+    {
+     "check": "repo",
+     "item": 9,
+     "verdict": "ok",
+     "claim": "alibaba/open-code-review",
+     "detail": "50487★, last push 2026-11-13"
+    },
+    {
+     "check": "repo",
+     "item": 14,
+     "verdict": "ok",
+     "claim": "ChromeDevTools/chrome-devtools-mcp",
+     "detail": "55385★, last push 2026-11-13"
+    },
+    {
+     "check": "idrange",
+     "item": 15,
+     "verdict": "range-ambiguous",
+     "claim": "CVE-2026-111333–111342",
+     "detail": "the item states 28 / 1 / 9 records near CVE-2026-111333–111342 (span 10) — it does not pin one count to one range"
+    },
+    {
+     "check": "idrange",
+     "item": 15,
+     "verdict": "range-ambiguous",
+     "claim": "CVE-2026-120860–120868",
+     "detail": "the item states 28 / 1 / 9 records near CVE-2026-120860–120868 (span 9) — it does not pin one count to one range"
+    },
+    {
+     "check": "tranche",
+     "item": 15,
+     "verdict": "tranche-distribution-ok",
+     "claim": "CVE-2026-111333–111342",
+     "detail": "CVE-2026-111333–111342: 3 at ~04:17 → observed 3, 7 at ~08:17 → observed 7 over a 10-id span"
+    },
+    {
+     "check": "tranche",
+     "item": 15,
+     "verdict": "tranche-distribution-ok",
+     "claim": "CVE-2026-120860–120868",
+     "detail": "CVE-2026-120860–120868: 4 at ~08:17 → observed 4, 4 at ~09:17 → observed 4, ~00:20 ×1 (unstated) over a 9-id span; the remaining 1 are named in the text"
+    },
+    {
+     "check": "quotation",
+     "item": 1,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 2,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 3,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 4,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 5,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 6,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 8,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 9,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 12,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "attribution",
+     "item": 8,
+     "verdict": "attribution-page-verified",
+     "claim": "Google",
+     "detail": "a quotation is attributed to Google (“Our goal is simple: provide school leaders the control and c…”) and the party's token appears in the fetched text of a cited page — the quotation arm's page set carries the party's statement even though no cited URL string names the party (the party lives in the prose, not the domain); the second-hand-copy risk the URL arm carries applies here too, so a load-bearing quotation still wants the party's own artifact"
+    },
+    {
+     "check": "attribution",
+     "item": 9,
+     "verdict": "attribution-satisfied",
+     "claim": "Alibaba",
+     "detail": "a quotation is attributed to Alibaba (“tens of thousands of developers”) and a cited URL carries the party's token — the quotation arm's page set reaches the party's own artifact"
+    }
+   ]
+  }
+ ],
+ "status_watch": [],
+ "api_calls": 0,
+ "readme_calls": 0,
+ "cited_page_calls": 0,
+ "repo_page_calls": 0,
+ "nvd_calls": 1,
+ "nvd_failed_chunks": 0,
+ "cna_calls": 0
+}

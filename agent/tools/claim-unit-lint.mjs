@@ -289,13 +289,13 @@ const CACHE_PATH = arg('cache') ?? 'agent/data/claim-unit-cache.json';
 // 5 MB of TEXT is ~7 MB on disk (JSON escapes newlines); 8 MB was an 11 MB file, bigger than the 9.9 MB
 // it was meant to bound.
 const CACHE_BYTES = Number(arg('cache-bytes') ?? 5_000_000);
-const CHECKS = new Set((arg('check') ?? 'issues,cvss,status,date,temporal,cwe,field,range,rangeabsent,affected,referent,idrange,repo,count,ratio,batch,bundle,quotation,attribution,paper').split(',').map((s) => s.trim()));
+const CHECKS = new Set((arg('check') ?? 'issues,cvss,status,date,temporal,cwe,field,range,rangeabsent,affected,referent,idrange,tranche,repo,count,ratio,batch,bundle,quotation,attribution,paper').split(',').map((s) => s.trim()));
 
 const SELFTEST = has('selftest');
 const STATUS_WATCH = has('status-watch');
 const EXTRA_IDS = (arg('ids') ?? '').split(',').map((s) => s.trim()).filter(Boolean);
 if (!FILE && !FILES && !SELFTEST && !has('ghsa-census') && !has('quotation-census') && !has('commit-quote-census') && !STATUS_WATCH) {
-  console.error('usage: claim-unit-lint.mjs --file <feed.md> [--no-net] [--check issues,cvss,status,date,temporal,cwe,field,range,rangeabsent,referent,repo,count,ratio,bundle,quotation,attribution] [--strict] [--json] [--census] [--selftest] [--status-watch [--ids CVE-…]] | --ghsa-census [--pages N]');
+  console.error('usage: claim-unit-lint.mjs --file <feed.md> [--no-net] [--check issues,cvss,status,date,temporal,cwe,field,range,rangeabsent,referent,idrange,tranche,repo,count,ratio,bundle,quotation,attribution] [--strict] [--json] [--census] [--selftest] [--status-watch [--ids CVE-…]] | --ghsa-census [--pages N]');
   process.exit(2);
 }
 
@@ -3197,6 +3197,204 @@ function checkIdRange(it) {
   return out;
 }
 
+/* 2026-11-14 04:53 — **a time-bound range is a claim about EVERY id's `published` instant, and the
+ * range's arithmetic told the 11-14 04:28 batch nothing.** Item 15 bound two dashed ranges to
+ * publication tranches — "ten more at ~04:17 (CVE-2026-111333–111342) and nine at ~08:17
+ * (CVE-2026-120860–120868)" — and `idrange` filed the only thing its arithmetic can say
+ * (`range-ambiguous`, sev 0: the stated counts 28/1/9 pin to neither span). The records' own
+ * timestamps split BOTH ranges: three of the first range's ten ids arrived at ~04:17 and seven at
+ * ~08:17; of the second range's nine, four at ~08:17, four at ~09:17 — and 120868 itself was in
+ * YESTERDAY's nine (00:20). Internal consistency (9+10+9 = 28, span == stated count) had blessed
+ * every number; the binding was still wrong — the stopping-point lesson again: the arithmetic says
+ * which number, the registry says whether the sentence is true.
+ *
+ * The arm: a sentence that puts a time cue (`at`/`around`/`~` + HH:MM) within 60 chars of a dashed
+ * range binds that range's ids to a tranche. The ids join the run's NVD pull (derivable from the
+ * text, so the pull stays one budget); the check compares each id's `published` time-of-day against
+ * the cue at ±30 min — measured tranches are seconds wide and adjacent tranches ≥ 59 min apart, so
+ * the tolerance cannot merge them. An optional stated count immediately before the cue ("ten more
+ * at ~04:17") is read with word numbers; when all ids arrive together and the stated count
+ * contradicts the span, the count is named as the wrong half.
+ * Verdicts: `tranche-binding-ok` (0) · `tranche-binding-mismatch` (3 — the histogram names the
+ * tranche each stray actually landed in) · `tranche-unread` (0 — a chunk never answered; unread is
+ * never absent). An id whose chunk WAS answered and whose record does not exist is named in the
+ * detail — the Kyverno lesson extended to ranges the item itself enumerates. Two guards: a BARE
+ * HH:MM is not a cue ("(00:20–03:17)" sits one clause from a range it must never bind), and spans
+ * over 64 ids are skipped (idrange's domain; also the ceiling on how much one tranche claim may
+ * cost the pull). */
+const TRANCHE_CUE_RE = /(?:\b(?:at|around)\s*~?\s*|~\s*)(\d{1,2}):(\d{2})\b/g;
+/* Built at CALL time, like `countBeforeNoun()`: `NUM_WORD_ALT` is declared further down the file,
+ * and a module-level regex that reads it would be a TDZ error rather than a check. */
+const trancheStatedRe = () => new RegExp(String.raw`(${NUM_WORD_ALT}|\d[\d,]*)\s+(?:more\s+|records?\s+|published\s+|arrived\s+|landed\s+|came\s+)*$`, 'i');
+const TRANCHE_MAX_SPAN = 64;
+const TRANCHE_TOL_MIN = 30;
+
+/* The (stated?, cue) pairs the text binds to one range. `from` is the index just after the range
+ * token; the segment runs to the next dashed range or the sentence's end, capped at 140 chars.
+ * "three arrived at ~04:17 and seven at ~08:17" parses as two pairs — the shape the CORRECTED
+ * filing sentence uses, which a single-cue reader mis-verifies against the whole span. */
+function tranchePairs(plain, from, end) {
+  const seg = plain.slice(from, Math.min(end, from + 140));
+  const pairs = [];
+  for (const c of seg.matchAll(TRANCHE_CUE_RE)) {
+    const sm = trancheStatedRe().exec(seg.slice(Math.max(0, c.index - 40), c.index));
+    pairs.push({ hh: Number(c[1]), mm: Number(c[2]), stated: sm ? numToken(sm[1]) : null });
+  }
+  return pairs;
+}
+
+function trancheClaims(plain) {
+  const out = [];
+  const sents = sentences(plain);
+  /* collect ONCE and index — `String.match` with a /g regex returns bare strings with no `.index`,
+   * and reading `.index` off it made every range-with-a-successor's segment NaN/empty (the
+   * selftest's single-range cases could not see it; the live file's two-range sentence caught it) */
+  const rangeMatches = [...plain.matchAll(ID_RANGE_RE)];
+  for (let ri = 0; ri < rangeMatches.length; ri++) {
+    const m = rangeMatches[ri];
+    const nextRange = rangeMatches[ri + 1];
+    const y1 = m[1], y2 = m[3] ?? m[1];
+    const a = Number(m[2]), b = Number(m[4]);
+    const sameYear = y1 === y2;
+    const span = sameYear && b >= a ? b - a + 1 : null;
+    const sent = sents.find((s) => m.index >= s.start && m.index < s.end);
+    const sentEnd = sent ? sent.end : Math.min(plain.length, m.index + 400);
+    // distribution pairs live AFTER the range ("of CVE-…–…, three arrived at ~04:17 and seven at
+    // ~08:17"); a single binding cue may also sit BEFORE it ("ten more at ~04:17 (CVE-…–…)")
+    const segEnd = nextRange ? nextRange.index : sentEnd;
+    const pairs = tranchePairs(plain, m.index + m[0].length, segEnd);
+    let cue = null, cueAt = -1;
+    if (pairs.length < 2) {
+      const beforeFrom = Math.max(0, m.index - 60);
+      const before = plain.slice(beforeFrom, m.index);
+      for (const c of before.matchAll(TRANCHE_CUE_RE)) {
+        if (sent && (beforeFrom + c.index < sent.start || beforeFrom + c.index >= sent.end)) continue;
+        cue = c; cueAt = beforeFrom + c.index;
+      }
+      if (!cue && pairs.length === 1) { cue = { 1: String(pairs[0].hh), 2: String(pairs[0].mm), length: 2 }; cueAt = null; }
+    }
+    if (pairs.length < 2 && !cue) continue;
+    const hh = cue ? Number(cue[1]) : null, mm = cue ? Number(cue[2]) : null;
+    if (cue && !(hh >= 0 && hh < 24 && mm >= 0 && mm < 60)) continue;
+    let stated = null;
+    if (cue && cueAt != null) {
+      const win = plain.slice(Math.max(0, cueAt - 40), cueAt);
+      const sm = trancheStatedRe().exec(win);
+      stated = sm ? numToken(sm[1]) : null;
+    } else if (pairs.length === 1) {
+      stated = pairs[0].stated;
+    }
+    const width = Math.max(4, m[2].length);
+    const ids = span && span <= TRANCHE_MAX_SPAN
+      ? Array.from({ length: span }, (_, i) => `CVE-${y1}-${String(a + i).padStart(width, '0')}`)
+      : [];
+    out.push({ from: m[0], y1, a, b, sameYear, span, hh, mm, stated, pairs: pairs.length >= 2 ? pairs : null, ids, at: m.index });
+  }
+  return out;
+}
+
+function checkTranche(it, nvd, pull) {
+  const plain = it.plain ?? strip(it.text);
+  const claims = trancheClaims(plain);
+  if (!claims.length) return [];
+  const out = [];
+  const pad2 = (x) => String(x).padStart(2, '0');
+  const todOf = (rec) => {
+    const m = /^(\d{4}-\d{2}-\d{2})T(\d{2}):(\d{2})/.exec(rec?.published ?? '');
+    return m ? { date: m[1], hh: Number(m[2]), mm: Number(m[3]) } : null;
+  };
+  const nearCount = (rows, hh, mm) => {
+    const target = hh * 60 + mm;
+    return rows.filter((r) => {
+      const t = todOf(r.rec);
+      if (!t) return false;
+      const d = Math.abs((t.hh * 60 + t.mm) - target);
+      return Math.min(d, 1440 - d) <= TRANCHE_TOL_MIN;
+    }).length;
+  };
+  for (const c of claims) {
+    if (!c.sameYear || c.span == null || !c.ids.length) continue; // idrange's domain
+    const rows = c.ids.map((id) => ({ id, rec: nvd.get(id) }));
+    // read = record served; absent = requested AND its chunk answered; unread = never requested or
+    // the chunk failed — the 2026-11-06 rule with ids: a failed request is not a registry statement
+    const unread = rows.filter((r) => !r.rec && (!pull.chunkOf.has(r.id) || !pull.okChunks.has(pull.chunkOf.get(r.id))));
+    if (unread.length === rows.length) {
+      out.push({ check: 'tranche', item: it.n, verdict: 'tranche-unread', claim: c.from,
+        detail: `${c.ids.length} id(s) in the tranche-bound range were never read (no answered chunk) — unread is not absent` });
+      continue;
+    }
+    const absent = rows.filter((r) => !r.rec).map((r) => r.id);
+    const absentTxt = absent.length ? `; ${absent.join(', ')} ${absent.length === 1 ? 'has' : 'have'} no record at all` : '';
+    /* DISTRIBUTION claims (added with the corrected filing sentence): "of CVE-…–…, three arrived at
+     * ~04:17 and seven at ~08:17" states where EVERY id went. Verify each (stated?, time) pair's
+     * count against the ids' own timestamps; the stated counts must cover the span unless the text
+     * names what is left over (the range's own tail id, or the hole vocabulary). */
+    if (c.pairs) {
+      const parts = [], fails = [];
+      let sumStated = 0, anyStated = false;
+      for (const p of c.pairs) {
+        const obs = nearCount(rows, p.hh, p.mm);
+        const cueTxt = `~${pad2(p.hh)}:${pad2(p.mm)}`;
+        if (p.stated == null) {
+          parts.push(`${cueTxt} ×${obs} (unstated)`);
+          if (obs < 1) fails.push(`${cueTxt} names no arriving record`);
+        } else {
+          anyStated = true;
+          sumStated += p.stated;
+          parts.push(`${p.stated} at ${cueTxt} → observed ${obs}`);
+          if (obs !== p.stated) fails.push(`states ${p.stated} at ${cueTxt}, observed ${obs}`);
+        }
+      }
+      let remainder = '';
+      if (anyStated && sumStated !== rows.length) {
+        // the tail id must be named OUTSIDE the range token itself — "CVE-2026-…–120868" contains
+        // its own tail, and the selftest caught the guard blessing every range on day one
+        const outsideRanges = plain.replace(ID_RANGE_RE, ' ');
+        const disclosed = RANGE_DISCLOSED.test(plain) || new RegExp(String.raw`\b${c.b}\b`).test(outsideRanges);
+        if (sumStated > rows.length || !disclosed) {
+          fails.push(`the pairs account for ${sumStated} of the ${rows.length}-id span${disclosed ? '' : ' and the text names no remainder'}`);
+        } else {
+          remainder = `; the remaining ${rows.length - sumStated} are named in the text`;
+        }
+      }
+      if (fails.length) {
+        out.push({ check: 'tranche', item: it.n, verdict: 'tranche-binding-mismatch', claim: c.from,
+          detail: `${c.from}: ${fails.join('; ')} — ${parts.join(', ')}${absentTxt} — a distribution claim is checkable per pair, and each pair must match the ids' own timestamps` });
+      } else {
+        out.push({ check: 'tranche', item: it.n, verdict: 'tranche-distribution-ok', claim: c.from,
+          detail: `${c.from}: ${parts.join(', ')} over a ${rows.length}-id span${remainder}${absentTxt}` });
+      }
+      continue;
+    }
+    const target = c.hh * 60 + c.mm;
+    const near = [], strays = [];
+    for (const r of rows) {
+      const t = todOf(r.rec);
+      if (!t) continue;
+      const diff = Math.abs((t.hh * 60 + t.mm) - target);
+      (Math.min(diff, 1440 - diff) <= TRANCHE_TOL_MIN ? near : strays).push(`${t.date} ${pad2(t.hh)}:${pad2(t.mm)}`);
+    }
+    const statedTxt = c.stated != null ? ` (stated: ${c.stated} at ~${pad2(c.hh)}:${pad2(c.mm)})` : '';
+    const cueTxt = `~${pad2(c.hh)}:${pad2(c.mm)}`;
+    if (!strays.length && !absent.length && c.stated != null && c.stated !== rows.length) {
+      out.push({ check: 'tranche', item: it.n, verdict: 'tranche-binding-mismatch', claim: c.from,
+        detail: `all ${rows.length} ids in ${c.from} published within ±30 min of ${cueTxt}, but the item states ${c.stated}${statedTxt} — the count, not the binding, is wrong (a dashed range asserts every id between its ends arrived)` });
+      continue;
+    }
+    if (!strays.length && !absent.length) {
+      const times = rows.map((r) => (todOf(r.rec) ? `${pad2(todOf(r.rec).hh)}:${pad2(todOf(r.rec).mm)}` : '')).filter(Boolean).sort();
+      out.push({ check: 'tranche', item: it.n, verdict: 'tranche-binding-ok', claim: c.from,
+        detail: `${rows.length}/${rows.length} ids published ${times[0]}–${times[times.length - 1]} UTC, within ±30 min of the stated ${cueTxt}${statedTxt}` });
+      continue;
+    }
+    const tally = [...strays.reduce((acc, s) => { acc.set(s, (acc.get(s) ?? 0) + 1); return acc; }, new Map())]
+      .map(([k, n]) => `${k} ×${n}`).join(', ');
+    out.push({ check: 'tranche', item: it.n, verdict: 'tranche-binding-mismatch', claim: c.from,
+      detail: `${near.length} of the ${rows.length} ids in ${c.from} published within ±30 min of the stated ${cueTxt} — the rest: ${tally}${statedTxt}${absentTxt} — a dashed range bound to one tranche asserts every id arrived then` });
+  }
+  return out;
+}
+
 function checkRepo(it, budget, ageBudget) {
   const out = [];
   /* ── path claims first: `contrib/e_means` verified against the repo the item links. The default
@@ -5379,6 +5577,100 @@ if (SELFTEST) {
     ir('CVE-2026-122302 – CVE-2026-122323: 21 records in the block but 22 records expected later.'),
     ['range-ambiguous']);
 
+  /* 2026-11-14 04:53 — the tranche arm, filed by item 15 of the 11-14 04:28 batch: two dashed
+     ranges bound to publication times whose records actually arrived in OTHER tranches. The
+     fixtures are the live records' own timestamps; the pull shape is nvdPull's. */
+  const trNvd = (rows) => new Map(Object.entries(rows).map(([k, v]) => [k, { published: v }]));
+  const trPull = (ids, ok = true) => {
+    const p = { chunkOf: new Map(), okChunks: new Set(), failed: [] };
+    for (const id of ids) { p.chunkOf.set(id, 0); if (ok) p.okChunks.add(0); }
+    return p;
+  };
+  const tr = (text, rows, pullIds, ok = true) =>
+    checkTranche(mk('t', text), trNvd(rows), trPull(pullIds ?? Object.keys(rows), ok)).map((x) => x.verdict);
+  const R1 = {
+    'CVE-2026-111333': '2026-11-13T08:17:15.380', 'CVE-2026-111334': '2026-11-13T08:17:15.557',
+    'CVE-2026-111335': '2026-11-13T08:17:15.683', 'CVE-2026-111336': '2026-11-13T08:17:15.817',
+    'CVE-2026-111337': '2026-11-13T08:17:15.950', 'CVE-2026-111338': '2026-11-13T08:17:16.077',
+    'CVE-2026-111339': '2026-11-13T08:17:16.220', 'CVE-2026-111340': '2026-11-13T04:17:36.537',
+    'CVE-2026-111341': '2026-11-13T04:17:36.653', 'CVE-2026-111342': '2026-11-13T04:17:36.777',
+  };
+  const R2 = {
+    'CVE-2026-120860': '2026-11-13T08:17:16.633', 'CVE-2026-120861': '2026-11-13T08:17:16.760',
+    'CVE-2026-120862': '2026-11-13T08:17:16.890', 'CVE-2026-120863': '2026-11-13T08:17:17.013',
+    'CVE-2026-120864': '2026-11-13T09:17:34.057', 'CVE-2026-120865': '2026-11-13T09:17:34.190',
+    'CVE-2026-120866': '2026-11-13T09:17:34.313', 'CVE-2026-120867': '2026-11-13T09:17:34.437',
+    'CVE-2026-120868': '2026-11-13T00:20:09.977',
+  };
+  t('tranche: the filing case — three of ten ids at the stated tranche, seven at another',
+    tr('ten more at ~04:17 (CVE-2026-111333–111342) and nine at ~08:17.', R1),
+    ['tranche-binding-mismatch']);
+  t('tranche: a range that really arrived together is verified',
+    tr('four at ~04:17 (CVE-2026-111340–111343).', {
+      'CVE-2026-111340': '2026-11-13T04:17:36.537', 'CVE-2026-111341': '2026-11-13T04:17:36.653',
+      'CVE-2026-111342': '2026-11-13T04:17:36.777', 'CVE-2026-111343': '2026-11-13T04:17:36.901',
+    }), ['tranche-binding-ok']);
+  t('tranche: a range split three ways is one mismatch with a histogram',
+    tr('nine at ~08:17 (CVE-2026-120860–120868).', {
+      'CVE-2026-120860': '2026-11-13T08:17:16.633', 'CVE-2026-120861': '2026-11-13T08:17:16.760',
+      'CVE-2026-120862': '2026-11-13T08:17:16.890', 'CVE-2026-120863': '2026-11-13T08:17:17.013',
+      'CVE-2026-120864': '2026-11-13T09:17:34.057', 'CVE-2026-120865': '2026-11-13T09:17:34.190',
+      'CVE-2026-120866': '2026-11-13T09:17:34.313', 'CVE-2026-120867': '2026-11-13T09:17:34.437',
+      'CVE-2026-120868': '2026-11-13T00:20:09.977',
+    }), ['tranche-binding-mismatch']);
+  t('tranche: the histogram names where the strays landed',
+    checkTranche(mk('t', 'nine at ~08:17 (CVE-2026-120860–120868).'), trNvd({
+      'CVE-2026-120860': '2026-11-13T08:17:16.633', 'CVE-2026-120868': '2026-11-13T00:20:09.977',
+    }), trPull(['CVE-2026-120860', 'CVE-2026-120861', 'CVE-2026-120862', 'CVE-2026-120863', 'CVE-2026-120864', 'CVE-2026-120865', 'CVE-2026-120866', 'CVE-2026-120867', 'CVE-2026-120868']))
+      .some((x) => x.detail.includes('00:20') && x.detail.includes('stated: 9')),
+    true);
+  t('tranche: a bare span with no at/around/~ is not a cue',
+    tr('the original nine (00:20–03:17) precede CVE-2026-120860–120868.', {}),
+    []);
+  t('tranche: a count contradicting a fully-arrived span names the count as the wrong half',
+    tr('three at ~04:17 (CVE-2026-111340–111343).', {
+      'CVE-2026-111340': '2026-11-13T04:17:36.537', 'CVE-2026-111341': '2026-11-13T04:17:36.653',
+      'CVE-2026-111342': '2026-11-13T04:17:36.777', 'CVE-2026-111343': '2026-11-13T04:17:36.901',
+    }), ['tranche-binding-mismatch']);
+  t('tranche: an answered chunk with no record is named, not excused',
+    tr('four at ~04:17 (CVE-2026-111340–111343).', {
+      'CVE-2026-111340': '2026-11-13T04:17:36.537', 'CVE-2026-111341': '2026-11-13T04:17:36.653',
+      'CVE-2026-111342': '2026-11-13T04:17:36.777',
+    }, ['CVE-2026-111340', 'CVE-2026-111341', 'CVE-2026-111342', 'CVE-2026-111343']),
+    ['tranche-binding-mismatch']);
+  t('tranche: an unanswered chunk is unread, never absent',
+    tr('four at ~04:17 (CVE-2026-111340–111343).', {},
+      ['CVE-2026-111340', 'CVE-2026-111341', 'CVE-2026-111342', 'CVE-2026-111343'], false),
+    ['tranche-unread']);
+  t('tranche: a word-number stated count binds like digits',
+    tr('ten at ~04:17 (CVE-2026-111340–111349).', {
+      ...R1,
+      'CVE-2026-111344': '2026-11-13T08:17:16.357', 'CVE-2026-111345': '2026-11-13T08:17:16.481',
+      'CVE-2026-111346': '2026-11-13T08:17:16.609', 'CVE-2026-111347': '2026-11-13T08:17:16.733',
+      'CVE-2026-111348': '2026-11-13T08:17:16.861', 'CVE-2026-111349': '2026-11-13T08:17:16.985',
+    }),
+    ['tranche-binding-mismatch']);
+  t('tranche: a cue before an earlier sentence\'s range does not reach across records',
+    tr('records at ~04:17 today. A different thing: CVE-2026-122302–122310 published later.', {}),
+    []);
+  t('tranche: the CORRECTED filing shape — a two-pair distribution over one range verifies',
+    tr('of CVE-2026-111333–111342, three arrived at ~04:17 and seven at ~08:17.', R1),
+    ['tranche-distribution-ok']);
+  t('tranche: a distribution whose pairs fall short of the span verifies only when the remainder is named',
+    tr('of CVE-2026-120860–120868, four at ~08:17 and four at ~09:17 — with 120868 itself in yesterday\'s nine.',
+       R2), ['tranche-distribution-ok']);
+  t('tranche: an undisclosed remainder is a finding',
+    tr('of CVE-2026-120860–120868, four at ~08:17 and four at ~09:17.', R2),
+    ['tranche-binding-mismatch']);
+  t('tranche: a distribution with one wrong pair count names the failing pair',
+    checkTranche(mk('t', 'of CVE-2026-111333–111342, five arrived at ~04:17 and five at ~08:17.'), trNvd(R1),
+      trPull(Object.keys(R1)))[0].detail.includes('states 5 at ~04:17, observed 3'),
+    true);
+  t('tranche: two consecutive ranges each get their own distribution verdict (the /g-match `.index` trap)',
+    tr('of CVE-2026-111333–111342, three arrived at ~04:17 and seven at ~08:17; of CVE-2026-120860–120868, four at ~08:17 and four at ~09:17 — with 120868 itself in yesterday\'s nine.',
+       { ...R1, ...R2 }),
+    ['tranche-distribution-ok', 'tranche-distribution-ok']);
+
   /* 2026-11-02 04:43 — the 33-feed census found **10 of 11 `date` findings were the checker's**, and
      all ten were a publish cue about an ARTIFACT. Each suppressor below is one of them. */
   t('date: an ISO instant is a date — the `\\b` after the day made it invisible',
@@ -6599,8 +6891,11 @@ function pullCovers(pull, id) {
  * alone without it, the check said "NVD re-serves no metric" about a record NVD re-serves four of.
  * The statement was about the pull, not the registry, which is the "unread is not absent" defect
  * wearing a different hat (fixed 2026-11-02 12:34, while calibrating the stopping-point check). */
-if (!NO_NET && (CHECKS.has('cvss') || CHECKS.has('temporal') || CHECKS.has('status') || CHECKS.has('cwe') || CHECKS.has('field') || CHECKS.has('range') || CHECKS.has('rangeabsent') || CHECKS.has('referent') || CHECKS.has('batch') || STATUS_WATCH || CHECKS.has('quotation'))) {
-  const cves = [...new Set([...parsed.flatMap((f) => f.items.flatMap((it) => it.cvesAll ?? it.cves)), ...EXTRA_IDS])];
+if (!NO_NET && (CHECKS.has('cvss') || CHECKS.has('temporal') || CHECKS.has('status') || CHECKS.has('cwe') || CHECKS.has('field') || CHECKS.has('range') || CHECKS.has('rangeabsent') || CHECKS.has('referent') || CHECKS.has('batch') || CHECKS.has('tranche') || STATUS_WATCH || CHECKS.has('quotation'))) {
+  /* tranche-bound ranges: a range bound to a time cue claims EVERY id's `published` instant, so its
+   * ids are derivable from the text and join the same pull (added 2026-11-14 04:53, item 15). */
+  const cves = [...new Set([...parsed.flatMap((f) => f.items.flatMap((it) => it.cvesAll ?? it.cves)), ...EXTRA_IDS,
+    ...parsed.flatMap((f) => f.items.flatMap((it) => trancheClaims(it.plain ?? strip(it.text)).flatMap((c) => c.ids)))])];
   const CHUNK = 25;
   for (let i = 0; i < cves.length; i += CHUNK) {
     if (i) await new Promise((r) => setTimeout(r, 6_500));
@@ -6697,6 +6992,8 @@ for (const { path: p, items } of parsed) {
   if (!NO_NET && CHECKS.has('batch')) for (const it of items) findings.push(...await checkBatch(it, nvd));
   // a dashed CVE range is arithmetic on identifiers, so it needs no network and runs under --no-net
   if (CHECKS.has('idrange')) for (const it of items) findings.push(...checkIdRange(it));
+  // a time-bound range claims every id's `published` instant — reads the pull, so it needs the net
+  if (!NO_NET && CHECKS.has('tranche')) for (const it of items) findings.push(...checkTranche(it, nvd, nvdPull));
   // the bundle check is local-only (it reads the path the item names), so it runs even under --no-net
   if (CHECKS.has('bundle')) for (const it of items) findings.push(...checkBundle(it));
   // a quotation is a claim about bytes — the page text is already cached by the count check
@@ -6746,7 +7043,7 @@ try {
   writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 1));
 } catch { /* cache is best-effort */ }
 
-const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'temporal-disclosed': 0, 'score-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'star-surge': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, 'stale-disclosed': 0, 'archived-disclosed': 0, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'date-local-shift': 2, 'date-mismatch': 2, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'field-present': 3, 'field-present-empty': 2, 'field-empty-contradicted': 2, 'field-empty-since-moved': 1, 'field-absent-not-empty': 1, 'field-dated': 0, 'field-unknown-name': 0, 'field-unreadable': 0, 'span-empty': 2, 'cve-range-span-mismatch': 2, 'cve-range-disclosed': 0, 'ok-range': 0, 'range-ambiguous': 0, 'range-cross-year': 0, 'range-inverted': 2, 'span-inverted': 3, 'span-unverifiable': 0, 'ok-span': 0, 'range-absent-but-served': 3, 'range-only-in-cna': 1, 'range-absent-confirmed': 0, 'range-absent-products-only': 0, 'ghsa-absent-confirmed': 0, 'ghsa-range-served': 3, 'ghsa-not-in-db': 0, 'unreadable-subject': 0, 'advisory-subject-ambiguous': 0, 'repo-advisory-cells': 0, 'affected-count-ok': 0, 'affected-count-mismatch': 3, 'affected-package-ok': 0, 'affected-package-absent': 3, 'affected-ambiguous': 0, 'range-unread': 0, 'range-in-references': 1, 'boundary-named-no-artifact': 0, 'vector-product-mismatch': 1, 'product-mismatch-disclosed': 0, 'schema-absent': 0, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'ratio-row-count': 3, 'ok-ratio': 0, 'ok-delimited': 0, 'not-a-repo': 0, 'repo-absent-asserted': 0, 'ok-table-rows': 0, 'table-columns-unresolved': 0, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-paraphrase': 2, 'quote-short': 1, 'quote-not-read': 0, 'paper-date-imprecise': 1, 'paper-date-mismatch': 2, 'paper-date-revision': 1, 'paper-date-unread': 0, 'batch-count-ok': 0, 'batch-count-mismatch': 3, 'batch-subcount-ok': 0, 'batch-subcount-mismatch': 3, 'batch-unread': 0, 'path-in-repo': 0, 'path-absent': 2, 'path-repo-ambiguous': 0, 'attribution-satisfied': 0, 'attribution-uncited': 1 };
+const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'temporal-disclosed': 0, 'score-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'star-surge': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, 'stale-disclosed': 0, 'archived-disclosed': 0, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'date-local-shift': 2, 'date-mismatch': 2, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'field-present': 3, 'field-present-empty': 2, 'field-empty-contradicted': 2, 'field-empty-since-moved': 1, 'field-absent-not-empty': 1, 'field-dated': 0, 'field-unknown-name': 0, 'field-unreadable': 0, 'span-empty': 2, 'cve-range-span-mismatch': 2, 'cve-range-disclosed': 0, 'ok-range': 0, 'range-ambiguous': 0, 'range-cross-year': 0, 'range-inverted': 2, 'tranche-binding-ok': 0, 'tranche-binding-mismatch': 3, 'tranche-unread': 0, 'tranche-distribution-ok': 0, 'span-inverted': 3, 'span-unverifiable': 0, 'ok-span': 0, 'range-absent-but-served': 3, 'range-only-in-cna': 1, 'range-absent-confirmed': 0, 'range-absent-products-only': 0, 'ghsa-absent-confirmed': 0, 'ghsa-range-served': 3, 'ghsa-not-in-db': 0, 'unreadable-subject': 0, 'advisory-subject-ambiguous': 0, 'repo-advisory-cells': 0, 'affected-count-ok': 0, 'affected-count-mismatch': 3, 'affected-package-ok': 0, 'affected-package-absent': 3, 'affected-ambiguous': 0, 'range-unread': 0, 'range-in-references': 1, 'boundary-named-no-artifact': 0, 'vector-product-mismatch': 1, 'product-mismatch-disclosed': 0, 'schema-absent': 0, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'ratio-row-count': 3, 'ok-ratio': 0, 'ok-delimited': 0, 'not-a-repo': 0, 'repo-absent-asserted': 0, 'ok-table-rows': 0, 'table-columns-unresolved': 0, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-paraphrase': 2, 'quote-short': 1, 'quote-not-read': 0, 'paper-date-imprecise': 1, 'paper-date-mismatch': 2, 'paper-date-revision': 1, 'paper-date-unread': 0, 'batch-count-ok': 0, 'batch-count-mismatch': 3, 'batch-subcount-ok': 0, 'batch-subcount-mismatch': 3, 'batch-unread': 0, 'path-in-repo': 0, 'path-absent': 2, 'path-repo-ambiguous': 0, 'attribution-satisfied': 0, 'attribution-uncited': 1 };
 const REAL = (f) => (SEVERITY[f.verdict] ?? 1) >= 2;
 
 /* `status_watch` rides the findings file so the act pass sees a backwards move without re-reading

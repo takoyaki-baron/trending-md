@@ -5228,3 +5228,15 @@ Sources: [Mehmet Ince part 3/6](https://mehmetince.net/part-3-6-how-i-ended-up-t
 Sources: [TSMC Form 6-K](https://www.sec.gov/Archives/edgar/data/1046179/000104617926000800/a20261112statementregardin.htm) ·
 [NVD：CVE-2026-128023](https://nvd.nist.gov/vuln/detail/CVE-2026-128023) ·
 [GHSA-x9p2-77v6-6vhf（古い Docker ベースイメージ）](https://github.com/php/frankenphp/security/advisories/GHSA-x9p2-77v6-6vhf)
+
+## 2026-11-14 —— KEV の 2 件の追加は豆知識サイズの悪用可能性講義；ブラジル Caixa の漏えいが納税者番号名簿を攻撃者の手に渡す
+
+- **`CVE-2026-114713`（UnrealIRCd、8.6、KEV）：**6.0.0 から **6.2.7.1** までの `labeled-response` モジュールが、IRCv3 の「label」メッセージタグを返信へエコーする際にエスケープしない——リンクされたネットワーク上の任意ユーザーが、**サーバー権限**で実行されるサーバー間コマンドを注入できる。スコアは MITRE 自身（`Secondary`）、レコードはいまだ `Undergoing Analysis`。アドバイザリは UnrealIRCd フォーラムにあり、11-08 の oss-security 投稿が添う。クラス：信頼境界をエスケープなしで渡るプロトコルフィールド——label は要求/応答の相関のために設計され、コマンド経路になった。
+- **`CVE-2026-123039`（Check Point Gaia、7.8、KEV）：**DynamicCLI デーモンが root で走り、**ワールド書き込み可のローカルソケット**（`/tmp/dynamic_socket`）を監視し、接続プロセスを認証しない——任意のローカルユーザーが root として実行されるコマンドを送れる（ベンダー公告 sk1000362）。クラス：信頼されたプロセスだけが到達できると仮定するローカルソケット——ゲートウェイ機器では、どんなサンドボックス脱出もセキュリティボックス自身の root になる。両レコードともすでに CISA-ADP SSVC エンリッチメントを搭載（11-13 19:02–19:03 UTC）。
+- **Caixa Seguridade（ブラジル）：**攻撃者が Caixa Vida e Previdência の登録データベースへアクセスし複製——現行・元顧客**全 760 万**件の氏名と CPF 納税者番号、同ユニットのアクティブ顧客の **100%**。インシデントは 11-06 日付で、投資家向け重要事項として開示。露出フィールドに金融認証情報の報告はなく、ブラジル報道は攻撃者が中核的な身元データを握った今、標的型フィッシングを警告。「アクティブの 100%」という量級は今年の地域最大級の開示漏えいの一つであり——加速する LGPD 執行の試金石。
+
+→ [[security]] [[vuln-supply]]
+
+Sources: [NVD: CVE-2026-114713（UnrealIRCd）](https://nvd.nist.gov/vuln/detail/CVE-2026-114713) ·
+[NVD: CVE-2026-123039（Check Point Gaia）](https://nvd.nist.gov/vuln/detail/CVE-2026-123039) ·
+[Caixa Seguridade 重要事項（PDF）](https://filemanager-cdn.mziq.com/published/3972906b-e50b-4f74-ab74-4d0d32125d11/9567a559-d20a-486e-a7ae-5c6bbc030c5e)

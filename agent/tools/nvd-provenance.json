@@ -2988,6 +2988,31 @@
    "id": "CVE-2026-128023",
    "why": "2026-11-13 — FrankenPHP gets 14 CVE records in one drop — worker-mode state leaks, a dot-header auth bypass, and a 9.8 for stale Docker base images",
    "seeded": "2026-11-13 [Deferred] 3.1 Primary/disclosure@vulncheck.com 7.4, 4.0 Secondary/disclosure@vulncheck.com 9.1, CWE-290, published 11-13"
+  },
+  {
+   "id": "CVE-2026-114713",
+   "why": "2026-11-14 — CISA KEVs two new entries today: an IRC server running commands \"with server authority\", and a Check Point daemon socket that runs as root",
+   "seeded": "2026-11-13 [Undergoing Analysis] 3.1 Secondary/cve@mitre.org 8.6, CWE-140, published 11-08"
+  },
+  {
+   "id": "CVE-2026-123039",
+   "why": "2026-11-14 — CISA KEVs two new entries today: an IRC server running commands \"with server authority\", and a Check Point daemon socket that runs as root",
+   "seeded": "2026-11-13 [Undergoing Analysis] 3.1 Secondary/cve@checkpoint.com 7.8, CWE-732/CWE-862, published 11-12"
+  },
+  {
+   "id": "CVE-2026-111333",
+   "why": "2026-11-14 — NetScaler's record wave triples: 28 CVEs now hang off one Citrix advisory, arriving on an hourly cadence, all still `Received`",
+   "seeded": "2026-11-13 [Received] 4.0 Secondary/50a63c94-1ea7-4568-8c11-eb79e7c5a2b5 6.9, published 11-13"
+  },
+  {
+   "id": "CVE-2026-120860",
+   "why": "2026-11-14 — NetScaler's record wave triples: 28 CVEs now hang off one Citrix advisory, arriving on an hourly cadence, all still `Received`",
+   "seeded": "2026-11-13 [Received] 4.0 Secondary/50a63c94-1ea7-4568-8c11-eb79e7c5a2b5 8.7, published 11-13"
+  },
+  {
+   "id": "CVE-2026-111334",
+   "why": "2026-11-14 — NetScaler's record wave triples: 28 CVEs now hang off one Citrix advisory, arriving on an hourly cadence, all still `Received`",
+   "seeded": "2026-11-13 [Received] 4.0 Secondary/50a63c94-1ea7-4568-8c11-eb79e7c5a2b5 9.3, published 11-13"
   }
  ]
 }

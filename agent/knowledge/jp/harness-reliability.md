@@ -546,3 +546,14 @@ Astra に一致——GSM8K **69.6 vs 68.2**、MATH-500 **51.7 vs 50.9**——変
 
 Sources: [線形計画は weight-space programming をできるか？](https://nathan.rs/posts/weight-space-lp/) ·
 [HN ディスカッション](https://news.ycombinator.com/item?id=50452655)
+
+## 2026-11-14 —— AACR-Bench：同じ重みで変数を一つ変えると、適合率が 4.7 倍動く
+
+- **ベンダーが公開した最もクリーンな同一モデルハーネス交換：**Alibaba の OpenCodeReview（Go CLI。README：2 年間「内部公式 AI コードレビューアシスタント」、「数万の開発者」、「数百万のコード欠陥」。**50,475★** トレンド +206★、v1.13.9）は、決定論的パイプライン（ファイル選択・バンドル・ルールマッチングはエンジニアリングロジックで、LLM は勝てる箇所だけ）を **AACR-Bench** と対にする——OSS 50 リポジトリ、実 PR 200、10 言語、**80+** のシニアエンジニアがアノテーションした **1,505** issue、データセットは Hugging Face。
+- **同一モデルのペア：**Claude-4.6-Opus は OpenCodeReview 経由で **適合率 33.90%（301/889）、F1 25.10%、385K トークン、1m23s**——Claude Code v2.1.169 経由では同じモデルが **適合率 7.23%（435/5,980）、F1 11.57%、5,664K トークン、13m6s**、しかも表内*最高*の再現率（**28.90%**）。トークン約 **1/9**、実時間約 16 倍、適合率約 4.7 倍——変数は一つ、ハーネス。README は再現率が意図的に低いと明記する。
+- **独立利用までは絶対値をマーケティングとして読む：**Alibaba がアノテートし、Alibaba のパイプラインが勝つ——ベンダー内部ベンチマークの型（Edge0 の「internal evaluations」、e-means のグループ基線）。ただしこの*構造*は、FrontierHarness（同一モデルで 17 倍の開き）と Zoom の 176 実行アブレーションが測ったものを再現する：ハーネスのコスト/適合率/再現率のトレードオフが同一モデル比較を支配し、オープンエンドなタスクに最適化された汎用エージェントハーネスは適合率型ベンチマークでその代償を払う。
+
+→ [[harness-reliability]] [[agent-stack]]
+
+Sources: [alibaba/open-code-review](https://github.com/alibaba/open-code-review) ·
+[Hugging Face の AACR-Bench](https://huggingface.co/datasets/Alibaba-Aone/aacr-bench)

@@ -1452,3 +1452,14 @@ Sources: [cveawg: CVE-2026-6460](https://cveawg.mitre.org/api/cve/CVE-2026-6460)
 
 来源：[NVD：CVE-2026-128023](https://nvd.nist.gov/vuln/detail/CVE-2026-128023) ·
 [GHSA-x9p2-77v6-6vhf（过期 Docker 基础镜像）](https://github.com/php/frankenphp/security/advisories/GHSA-x9p2-77v6-6vhf)
+
+## 2026-11-14 —— NetScaler 波增至三倍：28 条记录挂在同一份公告下，仍全部 `Received`
+
+- **同一份公告（CTX697305）全天都在产出记录：**NVD 现显示 **28** 条 Citrix NetScaler ADC/Gateway 记录、全部发布于 11-13 UTC——最初的九条（00:20–03:17）、~04:17 的十条（`CVE-2026-111333`–`-111342`）、~08:17 的九条（`CVE-2026-120860`–`-120868`）。每条分数都是 CVSS 4.0、每条都 `Received`、每条都指向同一公告。
+- **新批次的高分：**EPA/Endpoint Analysis、ICA 代理与包处理的内存溢出 **9.3**；LDAP 认证、SSL/TLS/DTLS、HTTP/3（QUIC）、管理面与 GSLB 各 **8.7**。描述仍是内存溢出/DoS 措辞；补救未变——同一公告的修复版本（14.1-73.57 / 13.1-64.39）。
+- **悬而未决的是流程，不是产品：**一次审计的产出，还是持续倾倒的过程？无论哪种，分流规则不变——`Received` 记录上，组件名（EPA、ICA 代理、GSLB 都邻近预认证）才是修补优先级信号、而非分数，且这个波形状正是 Citrix Bleed 之前的那种。一天 28 条边缘设备记录也是 PostgreSQL 52 条之后本季度最大的单公告 NVD 波。
+
+→ [[security]] [[disclosure-lag]]
+
+来源：[NVD：CVE-2026-111334（EPA/EPAS 内存溢出）](https://nvd.nist.gov/vuln/detail/CVE-2026-111334) ·
+[Citrix 公告 CTX697305](https://support.citrix.com/support-home/kbsearch/article?articleNumber=CTX697305)

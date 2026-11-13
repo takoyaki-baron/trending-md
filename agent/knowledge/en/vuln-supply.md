@@ -2138,3 +2138,21 @@ Sources: [cveawg: CVE-2026-6460](https://cveawg.mitre.org/api/cve/CVE-2026-6460)
 
 Sources: [NVD: CVE-2026-128023](https://nvd.nist.gov/vuln/detail/CVE-2026-128023) ·
 [GHSA-x9p2-77v6-6vhf (stale Docker base images)](https://github.com/php/frankenphp/security/advisories/GHSA-x9p2-77v6-6vhf)
+
+## 2026-11-14 — the NetScaler wave triples: 28 records off one advisory, still all `Received`
+
+- **The same advisory (CTX697305) kept producing records all day:** NVD now shows **28** Citrix NetScaler ADC/Gateway records published Nov 13 UTC —
+  the original nine (00:20–03:17), ten more at ~04:17 (`CVE-2026-111333`–`-111342`) and nine at ~08:17 (`CVE-2026-120860`–`-120868`). Every score
+  CVSS 4.0, every record `Received`, every one pointing at the same advisory.
+- **The new blocks' highs:** **9.3** for memory overflows in EPA/Endpoint Analysis, ICA proxy and packet processing, with **8.7** across LDAP
+  authentication, SSL/TLS/DTLS, HTTP/3 (QUIC), the management plane and GSLB. Descriptions remain memory-overflow/DoS-worded; the remedy is
+  unchanged — the same advisory's fixed builds (14.1-73.57 / 13.1-64.39).
+- **The open question is process, not product:** one audit's output or an ongoing dumping process? Either way the triage rule holds — with
+  `Received` records the component names (EPA, ICA proxy, GSLB are pre-auth-adjacent) are the patch-priority signal, not the scores, and the wave
+  shape is the one that preceded Citrix Bleed. 28 edge-device records in one day is also the quarter's largest single-advisory NVD wave after
+  PostgreSQL's 52.
+
+→ [[security]] [[disclosure-lag]]
+
+Sources: [NVD: CVE-2026-111334 (EPA/EPAS memory overflow)](https://nvd.nist.gov/vuln/detail/CVE-2026-111334) ·
+[Citrix advisory CTX697305](https://support.citrix.com/support-home/kbsearch/article?articleNumber=CTX697305)

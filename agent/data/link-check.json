@@ -5752,9 +5752,63 @@
       "feeds": [
         "2026-11-13.md"
       ]
+    },
+    "https://news.ycombinator.com/item?id=50486482": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-13T21:21:47.208Z",
+      "last_seen": "2026-11-13T21:21:47.208Z",
+      "feeds": [
+        "2026-11-14.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50478609": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-13T21:21:47.208Z",
+      "last_seen": "2026-11-13T21:21:47.208Z",
+      "feeds": [
+        "2026-11-14.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50483611": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-13T21:21:47.208Z",
+      "last_seen": "2026-11-13T21:21:47.208Z",
+      "feeds": [
+        "2026-11-14.md"
+      ]
+    },
+    "https://www.science.org/doi/10.1126/science.132.3436.1291": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-13T21:21:47.208Z",
+      "last_seen": "2026-11-13T21:21:47.208Z",
+      "feeds": [
+        "2026-11-14.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50484960": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-13T21:21:47.208Z",
+      "last_seen": "2026-11-13T21:21:47.208Z",
+      "feeds": [
+        "2026-11-14.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50484496": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-13T21:21:47.208Z",
+      "last_seen": "2026-11-13T21:21:47.208Z",
+      "feeds": [
+        "2026-11-14.md"
+      ]
     }
   },
-  "runs": 175,
+  "runs": 176,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-11-13T13:13:55.462Z"
+  "last_run": "2026-11-13T21:21:47.208Z"
 }

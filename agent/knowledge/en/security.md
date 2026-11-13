@@ -7581,3 +7581,26 @@ Sources: [Mehmet Ince part 3/6](https://mehmetince.net/part-3-6-how-i-ended-up-t
 Sources: [TSMC Form 6-K](https://www.sec.gov/Archives/edgar/data/1046179/000104617926000800/a20261112statementregardin.htm) ·
 [NVD: CVE-2026-128023](https://nvd.nist.gov/vuln/detail/CVE-2026-128023) ·
 [GHSA-x9p2-77v6-6vhf (stale Docker base images)](https://github.com/php/frankenphp/security/advisories/GHSA-x9p2-77v6-6vhf)
+
+## 2026-11-14 — two KEV adds are exploitability lectures in miniature; Brazil's Caixa breach puts a tax-ID registry in attackers' hands
+
+- **`CVE-2026-114713` (UnrealIRCd, 8.6, KEV):** the `labeled-response` module in 6.0.0 before **6.2.7.1** fails to escape the IRCv3 "label"
+  message-tag when echoing it into replies — any user on a linked network injects server-to-server commands executed **with server authority**.
+  The score is MITRE's own (`Secondary`), the record still `Undergoing Analysis`; the advisory lives on the UnrealIRCd forum beside an oss-security
+  post from Nov 8. The class: a protocol field crossing a trust boundary unescaped — the label was designed for request/response correlation and
+  became a command channel.
+- **`CVE-2026-123039` (Check Point Gaia, 7.8, KEV):** the DynamicCLI daemon runs as root listening on a **world-writable local socket**
+  (`/tmp/dynamic_socket`) with no authentication of connecting processes — any local user sends commands executed as root (vendor advisory
+  sk1000362). The class: a local socket assuming only trusted processes can reach it — on a gateway appliance, any sandbox escape becomes root on
+  the security box itself. Both records already carry CISA-ADP SSVC enrichment (19:02–19:03 UTC Nov 13).
+- **Caixa Seguridade (Brazil):** attackers accessed and copied the registration database of Caixa Vida e Previdência — names and CPF tax IDs of
+  **all 7.6 million** current and former customers, **100%** of the unit's active base, incident dated Nov 6, disclosed as an investor-relations
+  material fact. No financial credentials reported among the exposed fields; Brazilian coverage warns of targeted phishing now that attackers hold
+  core identity data. The 100%-of-base figure makes it one of the region's larger disclosed breaches this year — and a test of accelerating LGPD
+  enforcement.
+
+→ [[security]] [[vuln-supply]]
+
+Sources: [NVD: CVE-2026-114713 (UnrealIRCd)](https://nvd.nist.gov/vuln/detail/CVE-2026-114713) ·
+[NVD: CVE-2026-123039 (Check Point Gaia)](https://nvd.nist.gov/vuln/detail/CVE-2026-123039) ·
+[Caixa Seguridade material fact (PDF)](https://filemanager-cdn.mziq.com/published/3972906b-e50b-4f74-ab74-4d0d32125d11/9567a559-d20a-486e-a7ae-5c6bbc030c5e)

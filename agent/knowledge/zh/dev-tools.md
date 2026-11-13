@@ -1329,3 +1329,15 @@ Sources: [Adapting CPython for yk](https://tratt.net/laurie/blog/2026/adapting_c
 [ykjit/yk](https://github.com/ykjit/yk) ·
 [easel.sh blog](https://www.easel.sh/blog/lambda-web-functions-idle-memory) ·
 [AWS: Lambda Web Functions](https://docs.aws.amazon.com/lambda/latest/dg/web-functions.html)
+
+## 2026-11-14 —— Haskell 把自己推介成评审者的语言；Zig 一次一个痛点地论证替代 C；Rust XMPP 服务器学会联邦
+
+- **Haskell 基金会的技术领导委员会（TLC）「全面运转」，其愿景是第一个为 agent 时代构建的成熟语言推介：**Haskell 处于「人类工匠精神与机器自动化的有趣交点」——「评审是现代 AI 工作流的重大瓶颈，而 Haskell 的优势恰好偏向评审者」。可测量的承诺：GHC 自身 CI 周转 **6 小时 → 2 小时**，外加实时单步调试、「真正有用」的栈追踪与编辑器集成的剖析，经轻量社区提案流程推进、允许公开反提案（「公平与参与至关重要，涉款时尤甚」）。「形式验证或 vibecoding 或许有更好的语言，但『人在环中』没有比它更好的语言。」
+- **C 到 Zig 的迁移是更大的实际受众，Tsoukalos 只在一个轴上论证：**内核式 `goto fail; fail_name: …` 清理阶梯（释放远离获取、标签顺序靠人维护）对 Zig 的 `errdefer`（释放紧贴获取、自动回退）。全部示例以 Zig 0.17 + clang 编译。框架预先肯定 C，刻意不做皈依檄文：「C 是我最爱的编程语言！我写它是因为我不想再用 C 写新代码。」
+- **Lonewolf 0.3.0**（Rust XMPP 服务器，18:06 UTC 发布）补上把玩具变成可自托管信使的那块拼图：**联邦**（消息、presence、IQ 与花名册订阅交换），在主机有证书与公网 DNS 时默认开启——节点间认证刻意只用证书（SASL EXTERNAL），是对 XMPP 历史上薄弱的服务器间信任的一次设计下注。项目如实标注自身阶段：pre-1.0、单节点、集群在路线图上。
+
+→ [[dev-tools]]
+
+来源：[Discourse：Haskell 生态的技术愿景](https://discourse.haskell.org/t/a-technical-vision-for-the-haskell-ecosystem/15078) ·
+[mtsoukalos.eu：为什么系统编程选 Zig 而非 C](https://www.mtsoukalos.eu/2026/11/why-zig-over-c-for-systems-programming/) ·
+[Lonewolf v0.3.0 发布说明](https://github.com/lonewolf-im/lonewolf/releases/tag/v0.3.0)

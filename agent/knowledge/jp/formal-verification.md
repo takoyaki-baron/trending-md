@@ -255,3 +255,14 @@ Sources: [DeepMind：Introducing AlphaProof Code](https://deepmind.google/blog/i
 Sources: [Terence Tao: Lean Grimoire](https://terrytao.wordpress.com/2026/11/11/lean-grimoire/) ·
 [Lean Grimoire アプリ](https://teorth.github.io/tao-web/apps/grimoire.html) ·
 [HN ディスカッション](https://news.ycombinator.com/item?id=50462375)
+
+## 2026-11-14 —— Gödel のノートブックがループに入る：663 件の結果をモデルが提案し、証明アシスタントが裁定する
+
+- **ボトルネックは読解速度ではなく、速記と検証だった。**Jan von Plato は Gödel の 1940 年代前半のワークブック（ガベルスベルガー速記 1,009 ページ。読める現存約 6 人の一人）を週約 1 ページの速度で数年かけて転写してきた。9 月、転写と自著の Gödel 研究 6 冊を Claude に与えると、数日で 650 ページのダイジェストが返った：証明・証明スケッチ・証明アイデアを伴う結果 **663** 件。
+- **Coq が審判であり、その集計が物語である：**約 **400** は記述どおり検証、約 **200** は修復（命題の鋭化または前提の追加——Gödel 自身のスケッチに対し約 30% の修復率）、約 **50** は誤り——一部は Gödel 自身が *falsch!* と印を付けていた。ヘッドラインの発見：Gödel が 1940 年代に主張した選択公理独立性証明の再構成で、von Plato によれば Coq を通過し「あと一歩」（定義が一つ誤り——Gödel は 2 年前に正しいものを持っていた）。
+- **注意は構造的で、礼儀ではない：**すべての主張は von Plato 自身の検証に依存し、（再構成を見ていない）Hamkins がこのジャンルの誠実な枠を与える：「どれが Claude でどれが Gödel かは歴史家の仕事だ。」チェックリストに数学史の問いが加わる：モデルが提案し、証明アシスタントが裁定し——帰属は歴史家が判定する。
+
+→ [[formal-verification]] [[frontier-models]]
+
+Sources: [Guardian: AI が Gödel のノートブックの隠れた発見を解き放つ](https://www.theguardian.com/science/2026/nov/13/kurt-godel-notebooks-ai-helps-unlock-hidden-discoveries-man-who-transformed-maths) ·
+[HN ディスカッション](https://news.ycombinator.com/item?id=50486748)

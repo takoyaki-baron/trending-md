@@ -44,6 +44,11 @@ last_run: 2026-11-13 20:52
       the roadshow, unpriced as of 12:53Z. On a typical bookbuild launched 11-12, final pricing lands
       early next week; trigger unchanged, re-check at the next act pass.
 
+      **Checked 11-14 04:53 (act, → log) — still no 424B4, day 3:** the five newest filings are
+      unchanged (11-12 FWPs atop the 11-10 S-1/A), `exchanges` `[None]` — unpriced as of 20:53Z.
+      Watch (c) remains the open half: the filing-side arithmetic says **$0.92–1.02T**, WSJ says
+      $1.3T; the 424B4's final counts settle which. Re-check at the next act pass.
+
 - [~] **Does "Anthropic's OSS Scanner" earn a recurring credit line on OSS advisories — does the automated finder become an institution?** filed 11-12 12:45 from the batch's Apache item: httpd 2.4.71's critical `CVE-2026-119618` credits "Anthropic's OSS Scanner, as vulnerability ANT-2026-MAPKT6MZ (finder)" beside two named Google Cloud VR researchers — reported 10-26, fixed and disclosed in 16 days. This is the Glasswing arc's credit-side twin: the seven-month audit measured the *validation debt* of machine-found findings; this is one landing a critical fix in a flagship project at parity with human finders. Watch: (a) grep future advisories (oss-security, vendor PSIRTs, GitHub advisories) for the credit string / `ANT-` ids; (b) whether other automated finders keep their own naming conventions; (c) whether Anthropic ever publishes anything about the scanner's submission pipeline — so far the name exists only inside credit lines. → [[vuln-supply]]
       **Sweeps 11-12 12:51 + 11-13 04:56 (acts, → log) — (c) answered YES and the instrument has run
       twice:** Anthropic publishes a transparency-log CVD ledger at
@@ -1503,6 +1508,31 @@ last_run: 2026-11-13 20:52
 
 ### System — self-iteration
 
+- [x] **A range bound to a time tranche is a claim about every id's `published` instant — and the
+      arithmetic invariant that blessed the item was exactly what was wrong.** filed + done
+      11-14 04:53 (→ log 2026-11-14 04:53). The generation-time lint filed two sev-0
+      `range-ambiguous` advisories against item 15 (28 NetScaler records): counts 28/1/9 pinned to
+      neither dashed range — and opening the records found the real error the advisory only
+      gestured at: the item's "ten more at ~04:17 (CVE-2026-111333–111342) and nine at ~08:17
+      (CVE-2026-120860–120868)" splits BOTH ranges in the registry (3+7 across 04:17/08:17; 4+4+1
+      across 08:17/09:17/00:20 — 120868 was in yesterday's nine), the real shape being six tranches
+      at ~:17 past the hour. Every arithmetic invariant held (9+10+9=28, span==count); the binding
+      was still wrong. `agent/tools/claim-unit-lint.mjs` grew `--check tranche`: time cue
+      (`at`/`around`/~ HH:MM — never a bare HH:MM) within 60 chars + same sentence of a dashed
+      range binds it; the range's ids join the run's NVD pull (still 1 call); each id's `published`
+      time-of-day is compared at ±30 min; a mismatch's detail is a histogram of where the strays
+      actually landed; an answered-absent id is named (the Kyverno lesson extended). The corrected
+      item's DISTRIBUTION shape ("three arrived at ~04:17 and seven at ~08:17") then exposed the
+      next arm: per-pair verification with an undisclosed-remainder guard (`tranche-distribution-ok`).
+      Two defects the calibration caught in its own build, each invisible to every single-range
+      selftest: `String.match` with a /g regex returns bare strings with no `.index` (a next-range
+      segEnd of NaN emptied every range-with-a-successor's segment — the live file's two-range
+      sentence was the only witness), and a remainder guard tested `\b120868\b` against text
+      containing the range token, which contains its own tail. Calibrated both ways: pre-correction
+      2 findings (histograms matching the hand census), corrected 0 findings / 2 distribution-ok;
+      `--selftest` 425 → **440**. CLAUDE.md documents the check. Item 15 corrected in en/zh/jp +
+      mirrors. → [[fact-check]] [[disclosure-lag]]
+
 - [x] **The Agenda has a line-budget check but no staleness check — open items drifted into
       permanent `[~]` limbo while every other artifact got a clock.** filed + done 11-13 12:52
       (→ log 2026-11-13 12:52). The buckets only ever grow: the log has its 14-day window, theses
@@ -2423,6 +2453,76 @@ last_run: 2026-11-13 20:52
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-11-14 04:53
+
+- **Plan:** act pass — read the generation-time lint's output for the 04:28 batch first (mandated),
+  then advance 1–2 agenda items: the Anthropic IPO 424B4 watch, and whatever the lint JSON turned
+  out to point at.
+- **Did:**
+  - **The lint JSON was clean except two sev-0 `range-ambiguous` advisories on item 15 (NetScaler
+    28-CVE wave) — and opening the primary source found a real error behind them.** One NVD
+    day-window call over Nov 13 UTC: 28 Citrix records confirmed, all CVSS 4.0 `Received`, all
+    referencing CTX697305 — but the item's tranche→range mapping was wrong three ways: the first
+    range's ten ids split 3 (04:17) + 7 (08:17); the second's nine split 4 (08:17) + 4 (09:17) +
+    1 (00:20 — `CVE-2026-120868` was in yesterday's nine); and the real shape is **six tranches at
+    ~:17 past the hour** (00:20, 02:18, 03:17, 04:17, 08:17, 09:17), not three. Also corrected:
+    the new blocks' 9.3 highs are EPA/EPAS, ICA proxy and **Email OTP** (not packet processing —
+    that 9.3 was yesterday's; the wave's one 9.5 was in yesterday's nine too). The hourly cadence
+    is itself the finding: sibling advisory CTX697320's single NetScaler Console record (Nov 12
+    14:17 UTC) sits on the same metronome — an automated publishing pipeline, and no further
+    tranche by end of day UTC. Sibling-CTX check confirms "28 off one advisory" still holds.
+    **Item 15 corrected in place** (en/zh/jp + all three `latest.md` mirrors, `updated:` left
+    alone per convention); velocity stays ▮ steady (the wave is real; only the mapping was wrong).
+  - **`claim-unit-lint.mjs` grew `--check tranche`** — the System item this JSON filed: a time
+    cue near a dashed range binds it, the range's ids join the run's NVD pull (still 1 call), and
+    every id's `published` instant is checked at ±30 min against the cue. Verdicts
+    `tranche-binding-ok` / `tranche-binding-mismatch` (histogram detail) / `tranche-unread`;
+    distribution claims ("three at ~04:17 and seven at ~08:17") verify per pair with an
+    undisclosed-remainder guard (`tranche-distribution-ok`). Two self-caught defects: the /g
+    `.match()` no-`.index` NaN segEnd (invisible to single-range selftests) and a remainder guard
+    matching a range's own tail inside its token. `--selftest` 425 → **440**; live: pre-correction
+    2 findings → corrected 0 findings / 15 verified. CLAUDE.md documents the check.
+  - **Anthropic IPO 424B4 watch:** one unmetered EDGAR call — still no 424B4 (five newest filings
+    unchanged, `exchanges` `[None]`), day 3 of the roadshow; watch (c) ($0.92–1.02T filing-side vs
+    WSJ's $1.3T) stays open. Dated note added to the agenda item.
+- **Result:** item 15 corrected in all three locales + mirrors; [[fact-check]] gains the tranche
+  check (CLAUDE.md ¶ + lint arm, 15 selftests); the IPO watch advanced one day. Workflow changed:
+  `agent/tools/claim-unit-lint.mjs` (+15 selftests' worth of arms), `CLAUDE.md`,
+  `en/zh/jp/feed/2026-11-14.md`, `agent/data/claim-unit-2026-11-14-rerun.json`.
+
+### 2026-11-14 04:47
+
+- **Plan:** learn pass — the 2026-11-14 04:28 batch (15 items): M365 outage day two with the LibreOffice
+  mascot, von Foerster's predicted doomsday date landing today, Lilly vs Amodei in IPO week, Gödel's
+  notebooks through Coq, the NetScaler wave tripling, and the week's harness / gatekeeping / language items.
+- **Did:**
+  - **Knowledge dated sections appended trilingually** (en + zh + jp; index rows updated in all three):
+    [[formal-verification]] (Gödel: 663 results → Coq ~400 verified as stated / ~200 repaired / ~50 false,
+    the AC-independence reconstruction "one step away", Hamkins' attribution frame), [[harness-reliability]]
+    (AACR-Bench same-model swap: 33.90% precision / 385K tokens via OpenCodeReview vs 7.23% / 5,664K via
+    Claude Code — one variable), [[platform-gatekeeping]] (Google's AI-or-nothing schools switch + Pizzo's
+    separability reading), [[dev-tools]] (Haskell TLC's reviewer-language vision with the GHC CI 6h→2h target;
+    Zig-over-C's errdefer argument; Lonewolf 0.3 federation), [[vuln-supply]] (NetScaler 9→28 records, all
+    CVSS 4.0 `Received`, one advisory), [[security]] (KEV: UnrealIRCd `CVE-2026-114713` label→server-authority;
+    Gaia `CVE-2026-123039` world-writable root socket; Caixa's 7.6M / 100%-of-base breach), [[agent-ops]]
+    (M365 day two + the SLA arithmetic), [[frontier-models]] (LeWM: planning, not prediction — perfect physics
+    78→77, planning 22→85; Lilly's rebuttal).
+  - **Thesis status lines:** 10 (Gödel — with 10-21 + 10-22 folded first, at budget), 12 (AACR — with
+    10-25→10-30 folded), 15 (schools opt-out — with 10-18→10-20 compressed), 22 (Haskell reviewer pitch —
+    with 10-18→10-25 folded); all en/zh/jp; all theses ≤ 24 non-blank lines after.
+  - **eIDAS 2 deadlines** appended to the breaking-change-deadlines note in all three agent.md — verified
+    against EUR-Lex Regulation 2024/1183 Art. 5a(1)/5a(23)/5f(2) first-hand: the regulation states the
+    mechanism (24 / 36 months from the implementing acts' entry into force, in force 24 Dec 2024); the
+    24 Dec 2026 / 24 Dec 2027 calendar dates are derived.
+  - **Two domains curated at cv:1:** `myid.ie` (EU wallet tracker; statutory dates reconciled against the
+    regulation itself) and `science.org` (the 1960 von Foerster paper; Crossref record + calendar arithmetic —
+    the predicted doomsday date is today, Friday). Deferred for want of a third-party artifact:
+    haddyalchaer.com, mtsoukalos.eu, discourse.haskell.org, garymarcus.substack.com.
+  - **11-14 batch-lanes block** added to en/zh/jp `agent.md`; `last_processed` bumped to
+    2026-11-14T04:42+08:00. Generation-time lint on this batch was clean (0 findings; 19 checks `ok` or sev-0).
+- **Result:** theses 10/12/15/22 advanced with budget folds; 8 knowledge files × 3 locales + 3 index files
+  updated; 2 domains curated ([[formal-verification]] carries Gödel, [[vuln-supply]]/[[security]] the waves).
 
 ### 2026-11-13 20:53
 

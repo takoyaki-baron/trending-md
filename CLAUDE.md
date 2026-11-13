@@ -508,6 +508,37 @@ underlying pages — this produced a two-layer false signal in a single item.
    working file **0 findings / 2 disclosed**; census over **36** October–November feeds / **1,484** items → **5**
    dashed ranges, **1** finding, **3** `ok-range`, **1** cross-year silence — so the class is 0.34% of items and the
    check has no false positive on the corpus. `--selftest` **243 → 252**.
+   **A range bound to a TIME tranche is a claim about every id's `published` instant — and
+   internal consistency is not verification** (added 2026-11-14 04:53, the NetScaler item's own
+   two advisories turning into a check). Item 15 of the 11-14 batch bound two dashed ranges to
+   publication tranches — "ten more at ~04:17 (`CVE-2026-111333–111342`) and nine at ~08:17
+   (`CVE-2026-120860–120868`)" — and every arithmetic invariant held (9+10+9 = 28, span ==
+   stated count) while the registry split BOTH ranges: three of the first range's ids arrived
+   at ~04:17 and seven at ~08:17; of the second, four at ~08:17, four at ~09:17, and `-120868`
+   itself was in yesterday's nine (00:20). The real shape was **six tranches at ~:17 past the
+   hour** (00:20, 02:18, 03:17, 04:17, 08:17, 09:17 — the signature of an automated publishing
+   pipeline; sibling advisory CTX697320's single Console record the day before, 14:17, sits on
+   the same metronome). `claim-unit-lint.mjs --check tranche` (default set; the ids join the
+   run's NVD pull, so it stays 1 call) parses each time cue (`at`/`around`/`~` + HH:MM, never a
+   BARE HH:MM — a tranche span "(00:20–03:17)" must not bind a range one clause away) within 60
+   chars of a dashed range, same sentence, and compares each id's `published` time-of-day at
+   ±30 min (observed tranches are seconds wide; adjacent tranches ≥ 59 min apart, so the
+   tolerance cannot merge them). Verdicts: `tranche-binding-ok` / **`tranche-binding-mismatch`**
+   (sev 3 — the detail is a HISTOGRAM naming the tranche each stray actually landed in) /
+   `tranche-unread` (0, an unanswered chunk) — and an id whose chunk WAS answered but whose
+   record does not exist is named in the detail, the Kyverno lesson extended to ranges the item
+   itself enumerates. **A corrected item that DISTRIBUTES a range across tranches** ("three
+   arrived at ~04:17 and seven at ~08:17") is the disclosure shape, so the check verifies pairs:
+   each (count, time) pair must match the ids' own timestamps, the counts must cover the span,
+   and a shortfall verifies only when the text names the remainder (`tranche-distribution-ok`).
+   Two defects the calibration caught in its own build: `String.match` with a /g regex returns
+   bare strings with **no `.index`** — a next-range segEnd read from it was NaN, which emptied
+   the segment for every range-with-a-successor while every single-range selftest passed (the
+   live file's two-range sentence was the only witness); and a remainder guard tested
+   `\b120868\b` against text CONTAINING the range token, which contains its own tail — strip
+   the ranges before testing the mention. Calibrated both ways on the filing file:
+   pre-correction **2 findings** (histograms matching the hand census exactly), corrected
+   **0 findings / 2 distribution-ok**; still **1** NVD call. `--selftest` 425 → **440**.
    **An identifier list is a SET, a range is an assumption, and "CVE-X to CVE-Y" is not a citation**
    (added 2026-10-25 20:30, the HPE ArubaOS eighth row). Coverage printed a "maximum severity" table of
    eight consecutive IDs, `CVE-2026-79844`…`-79851`; one of them, `-79845`, is `VulDB`'s SQL injection in

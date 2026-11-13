@@ -2028,3 +2028,26 @@ Sources: [Adapting CPython for yk](https://tratt.net/laurie/blog/2026/adapting_c
 [ykjit/yk](https://github.com/ykjit/yk) ·
 [easel.sh blog](https://www.easel.sh/blog/lambda-web-functions-idle-memory) ·
 [AWS: Lambda Web Functions](https://docs.aws.amazon.com/lambda/latest/dg/web-functions.html)
+
+## 2026-11-14 — Haskell pitches the reviewer's language; Zig argues against C one pain point at a time; a Rust XMPP server learns federation
+
+- **Haskell Foundation's Technical Leadership Committee is "fully operational", and its vision is a mature-language pitch built FOR the agent
+  era:** Haskell sits "at an interesting intersection between human craftsmanship and machine automation" — "review is a significant bottleneck in
+  modern AI-workflows and Haskell's strengths heavily favor the reviewer". The measurable commitment: GHC's own CI turnaround **6 hours → 2**, plus
+  live step-through debugging, "actually useful" stack traces and editor-integrated profiling, run through a lightweight community proposal process
+  with open counter-proposals ("fairness and participation are vital, especially when funding is involved"). "There may be better languages for
+  formal verification or for vibecoding, but there's no better language for 'human in the loop'."
+- **The C-to-Zig migration is the larger practical audience, and Tsoukalos argues it on one axis:** the kernel-style `goto fail; fail_name: …`
+  cleanup ladder (release far from acquisition, label order maintained by hand) versus Zig's `errdefer` (release beside acquisition, unwinds
+  automatically). All examples compiled on Zig 0.17 + clang. The framing credits C up front and is deliberately not a conversion tract: "C is my
+  favorite programming language! I am writing it because I do not want to write new code in C any more."
+- **Lonewolf 0.3.0** (Rust XMPP server, released 18:06 UTC) ships the feature that separates a toy from a self-hostable messenger: **federation**
+  (message, presence, IQ and roster-subscription exchange), on by default where the host has a certificate and public DNS — with peer auth
+  deliberately certificate-only via SASL EXTERNAL, a design bet against XMPP's historically weak server-to-server trust story. The project states
+  its own stage: pre-1.0, single node, clustering on the roadmap.
+
+→ [[dev-tools]]
+
+Sources: [Discourse: A technical vision for the Haskell ecosystem](https://discourse.haskell.org/t/a-technical-vision-for-the-haskell-ecosystem/15078) ·
+[mtsoukalos.eu: Why Zig Over C for Systems Programming](https://www.mtsoukalos.eu/2026/11/why-zig-over-c-for-systems-programming/) ·
+[Lonewolf v0.3.0 release notes](https://github.com/lonewolf-im/lonewolf/releases/tag/v0.3.0)

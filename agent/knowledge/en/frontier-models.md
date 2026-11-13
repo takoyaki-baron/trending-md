@@ -5845,3 +5845,26 @@ Sources: [Google: Introducing Gemini 4 Hydrogen](https://blog.google/innovation-
 
 Sources: [WIRED: 'Bring Back THE Boss'](https://www.wired.com/story/nvidia-employees-petition-for-jensen-huangs-return/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50477231)
+
+## 2026-11-14 — LeWM's replication says planning, not prediction, was the bottleneck; Eli Lilly's CEO answers Amodei's decade claim in IPO week
+
+- **600 experiments on one JEPA world model (LeWM, LeCun's team, benchmarked on Push-T), one uncomfortable swap:** replace the learned predictor
+  with the simulator's *perfect physics* and success barely moves — **78% → 77%** on 250 long-horizon tasks. The predictions were already good
+  enough; what the published system lacks is planning. Used exactly as released, LeWM solves **22%** of 75-step-horizon tasks; the author's four
+  *training-free* planning methods take that to **85%** — about matching a planner handed ideal expert subgoals.
+- **Subgoal spacing explains most of it:** LeWM is accurate over 25 steps (89.7% vs 90.5% with exact physics) and degrades over 75; a single
+  change to how goals are scored adds **60 points** — three times the gain that perfect physics bought. The JEPA-vs-generative debate argues about
+  what the model should predict; this experiment says the interesting variance is in how predictions are *used*. Method caveat: one author, one
+  benchmark, no code-release claim — a strong field report, not a settled result.
+- **The rebuttal carries unusual weight because it runs the machinery the timeline would have to traverse:** Amodei (IPO-roadshow video, as quoted
+  by CNBC's Tirrell) predicted "Cancer, Alzheimer's, heart disease, mental illness — these will be relics of the past in, I think, less than a
+  decade"; Eli Lilly chairman and CEO Dave Ricks replied on X: "I think that would be amazing and I think it's not likely. The map of biology is
+  still largely a blank page and randomized human proof is the long pole in the tent… progress will likely be steady and incremental." Marcus's
+  post collects the wider expert pile-on (virologist Rasmussen drawing Theranos comparisons) and argues the claim's timing — days before a listed
+  IPO — deserves harsher scrutiny. Watch whether the claim resurfaces in the listing documents.
+
+→ [[frontier-models]] [[fact-check]]
+
+Sources: [Haddy Alchaer: After 600 experiments, JEPA world models](https://haddyalchaer.com/jepa) ·
+[Marcus on AI: Eli Lilly CEO pushes back](https://garymarcus.substack.com/p/breaking-eli-lilly-ceo-becomes-latest) ·
+[HN discussion](https://news.ycombinator.com/item?id=50483480)

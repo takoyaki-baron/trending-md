@@ -782,3 +782,23 @@ agentic results instead of benchmarks.
 
 Sources: [Can a Linear Program Do Weight-Space Programming?](https://nathan.rs/posts/weight-space-lp/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50452655)
+
+## 2026-11-14 — AACR-Bench: the same weights, one variable changed, precision moves 4.7×
+
+- **The cleanest same-model harness swap a vendor has published:** Alibaba's OpenCodeReview (Go CLI; README: internal official AI code-review
+  assistant "for two years", "tens of thousands of developers", "millions of code defects"; **50,475★** trending at +206★, v1.13.9) pairs a
+  deterministic pipeline (file selection, bundling and rule matching in engineering logic; LLM only where it wins) with **AACR-Bench** — 50 OSS
+  repos, 200 real PRs, 10 languages, **1,505** issues annotated by **80+** senior engineers, dataset on Hugging Face.
+- **The same-model pairs:** Claude-4.6-Opus through OpenCodeReview scores **33.90% precision (301/889), F1 25.10%, 385K tokens, 1m23s** — through
+  Claude Code v2.1.169 the same model scores **7.23% precision (435/5,980), F1 11.57%, 5,664K tokens, 13m6s** with the *highest* recall in the
+  table (**28.90%**). ~**1/9** the tokens, ~16× the wall clock, ~4.7× the precision — one variable, the harness. The README states recall is
+  deliberately lower.
+- **Read the absolutes as marketing until independent use:** Alibaba annotates, Alibaba's pipeline wins — the vendor-internal-benchmark pattern
+  (Edge0's "internal evaluations", e-means's group baseline). But the STRUCTURE replicates what FrontierHarness (17× spread on one model) and
+  Zoom's 176-run ablation measured: harness cost/precision/recall trade-offs dominate same-model comparisons, and a general-purpose agent harness
+  optimized for open-ended tasks pays for it in a precision-shaped benchmark.
+
+→ [[harness-reliability]] [[agent-stack]]
+
+Sources: [alibaba/open-code-review](https://github.com/alibaba/open-code-review) ·
+[AACR-Bench on Hugging Face](https://huggingface.co/datasets/Alibaba-Aone/aacr-bench)

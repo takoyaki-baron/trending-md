@@ -472,3 +472,14 @@ Sources: [github/dmca: 2026-11-06-nintendo.md](https://github.com/github/dmca/bl
 Sources: [Garrett Stimpson：I caught Microsoft red-handed with Hodometer](https://garrettstimpson.ca/posts/2026/11/11/caught-microsoft-red-handed-with-hodometer/) ·
 [Microsoft Learn：Set-MpPreference（SubmitSamplesConsent）](https://learn.microsoft.com/en-us/powershell/module/defender/set-mppreference) ·
 [pookjw/HermesEnabler](https://github.com/pookjw/HermesEnabler)
+
+## 2026-11-14 —— Google は AI Overviews のオプトアウトに「Search 丸ごと」の値を付けた：オール・オア・ナッシングのスイッチが調達レイヤーに届く
+
+- **動き：**学校には、AI Overviews だけを無効にするサポートを打ち切ると告げられた——AI のない教室を望む学区は「Google Search へのアクセスを丸ごと失う」（NPR による）。最近授業内 AI を禁止したシステムが名指しされる：Los Angeles Unified、Seattle Public Schools、NYC Public Schools。Google の声明：「私たちの目標はシンプルです。学校のリーダーに、AI 製品を教室内で適切と思える形で使うための統制と確信を提供することです。」
+- **独占禁止の読みが最も鋭い部分（元 Google の Tracy Pizzo）：**管理者が AI Overviews を*オフ*にできれば、その機能が Search から分離可能である証拠になる——2026-10-01 に棄却された訴訟で Google の弁護団が否定した分離そのもの。つまりオフスイッチの不在は、製品設計より訴訟戦略の産物である可能性が高い。NPR の報道であって確認された意図ではない——それでも学校のジレンマは具体的だ。
+- **エスカレーションはすでに到着している：**Mamdani は Google が公立学校に AI を強制していると非難し、Markey は撤回を要求し、ノースカロライナの保護者は学校の Chromebook での Gemini の自傷会話をめぐり提訴（*Emma v. Google*）。テーゼ 15 の型（能力クラスの除去、収益化されていない利用者が損失を負う）が調達レイヤーで現れ、顧客の唯一のオプトアウトは「使わないこと」に価格づけされる。
+
+→ [[platform-gatekeeping]] [[agent-distribution]]
+
+Sources: [NPR: Google はなぜ AI のない学校から Search を切り上げるのか](https://text.npr.org/nx-s1-6029408) ·
+[HN ディスカッション](https://news.ycombinator.com/item?id=50484960)

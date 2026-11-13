@@ -148,7 +148,7 @@ OpenCodeReview 是一个 Go 写的 CLI，阿里称其为内部官方 AI 代码�
 
 - **Velocity:** ▮▮ rising
 - **Source:** haddyalchaer.com · 119+ pts on HN · 2.8h ago (~01:55 UTC+8)
-- **Tags:** `jepa` `world-models` `research**
+- **Tags:** `jepa` `world-models` `research`
 
 一项对 **LeWM**（Yann LeCun 团队的 JEPA 世界模型，基准为 Push-T）长达数月的独立复现研究公布了 600 次实验，头条结果令人不适：把 LeWM 学到的预测器换成模拟器的**完美物理**，成功率几乎不动——250 个长程任务上 **78% → 77%**。预测早就够用了；已发布系统缺的是规划。按发布原样使用时，LeWM 在 75 步视界任务上只解出 **22%**；作者四种免训练的规划方法把它推到 **85%**，接近拿到理想专家子目标的规划器。子目标间距解释了大半（LeWM 在 25 步内很准——89.7%，对完美物理的 90.5%——75 步才衰减），而只改一处目标评分方式就加上 **60 分**，是完美物理带来收益的三倍。
 
@@ -214,15 +214,15 @@ Chrome DevTools 官方 MCP 服务器——让编码 agent 以 DevTools 级仪表
 
 ---
 
-## 15. NetScaler 记录潮翻了三倍：28 条 CVE 全部挂在一个 Citrix 公告下，状态仍为 `Received`
+## 15. NetScaler 记录潮翻了三倍：28 条 CVE 全部挂在一个 Citrix 公告下，按小时节奏抵达，状态仍为 `Received`
 
 - **Velocity:** ▮ steady
-- **Source:** NVD records · published 00:20–08:17 UTC Nov 13（三批）
+- **Source:** NVD records · published 00:20–09:17 UTC Nov 13（六批，每批都在每小时的 ~17 分）
 - **Tags:** `citrix` `netscaler` `cve-wave`
 
-昨天我们报道了第一批九条 NetScaler 记录：同一个公告（**CTX697305**）还在继续产出。NVD 现显示 11 月 13 日 UTC 共发布 **28** 条 Citrix NetScaler ADC/Gateway 记录——最早的九条（00:20–03:17）、约 04:17 的十条（CVE-2026-111333–111342）与约 08:17 的九条（CVE-2026-120860–120868），全部 CVSS 4.0、全部 `Received`、每一条都指向 CTX697305。新区块的高分：EPA/Endpoint Analysis、ICA 代理与包处理的内存溢出 **9.3**，**8.7** 一档横跨 LDAP 认证、SSL/TLS/DTLS、HTTP/3（QUIC）、管理面与 GSLB——描述仍以内存溢出/DoS 措辞为主，昨天那条提到的修复版本（14.1-73.57、13.1-64.39）就是同一公告的补救。
+昨天我们报道了第一批九条 NetScaler 记录：同一个公告（**CTX697305**）还在按节拍器继续产出。NVD 现显示 11 月 13 日 UTC 共发布 **28** 条 Citrix NetScaler ADC/Gateway 记录——六批分别落在 00:20、02:18、03:17（即昨天的九条）、04:17、08:17 与 09:17——全部 CVSS 4.0、全部 `Received`、每一条都指向 CTX697305。ID 区段是跨批次的，与批次并不一一对应：`CVE-2026-111333–111342` 中三条在 ~04:17 抵达、七条在 ~08:17；`CVE-2026-120860–120868` 中四条在 ~08:17、四条在 ~09:17——而 120868 本身就在昨天的九条里，是当天 00:20 的第一条记录。新增记录的高分仍是 **9.3**：EPA/Endpoint Analysis、ICA 代理与 Email OTP 认证的内存溢出（全潮唯一的 **9.5** 在昨天的九条里），**8.7** 一档横跨 LDAP 认证、SSL/TLS/DTLS、HTTP/3（QUIC）、管理面与 GSLB——描述仍以内存溢出/DoS 措辞为主，昨天那条提到的修复版本（14.1-73.57、13.1-64.39）就是同一公告的补救。（本条早前一版把两个 ID 区段各绑到了单一批次；记录自身的 `published` 时间戳把它们拆开了。）
 
-**Why it matters:** 这究竟是一次审计的产出还是仍在进行的倾倒，直接影响分诊：对边缘负载均衡器、且集中在 EPA、ICA 代理、GSLB 这类近认证前组件的 28 条记录潮，正是 Citrix Bleed 之前的形状。记录自身的算术尚未落地——`Received` 意味着 NVD 还没碰过——所以在公告文本可读之前，请把组件名而非分数当作补丁优先级信号。
+**Why it matters:** 节奏现在是这个故事最强的信号：每一批都落在每小时的 ~17 分，与姊妹公告 CTX697320 前一天唯一的 NetScaler Console 记录（11 月 12 日 14:17 UTC）同构——这是自动化发布管线的签名，而非一次审计的产出，且截至 UTC 当日结束没有再产出新批次。对边缘负载均衡器、且集中在 EPA、ICA 代理、GSLB 这类近认证前组件的 28 条记录潮，正是 Citrix Bleed 之前的形状。记录自身的算术尚未落地——`Received` 意味着 NVD 还没碰过——所以在公告文本可读之前，请把组件名而非分数当作补丁优先级信号。
 
 [`🔗 NVD：CVE-2026-111334（EPA/EPAS 内存溢出）`](https://nvd.nist.gov/vuln/detail/CVE-2026-111334) · [`🔗 Citrix 公告 CTX697305`](https://support.citrix.com/support-home/kbsearch/article?articleNumber=CTX697305)
 

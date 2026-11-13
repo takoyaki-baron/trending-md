@@ -64,3 +64,15 @@ Sources: [ZhuLinsen/daily_stock_analysis](https://github.com/ZhuLinsen/daily_sto
 Sources: [Claude ステータス：インシデント nn11wk485zfn](https://status.claude.com/incidents/nn11wk485zfn) ·
 [BBC：Microsoft 障害ライブ更新](https://www.bbc.com/news/live/cq5y10ge3dp3t) ·
 [HN ディスカッション](https://news.ycombinator.com/item?id=50481187)
+
+## 2026-11-14 —— M365 の障害が 2 日目へ、そしてインターネットはマスコットを選んだ：LibreOffice の一行が全コーポレートチャネルを上回る
+
+- **EX1550543 の 2 日目**（Exchange Online の接続性、11-12 16:17 UTC 開始）で、障害で最も共有された成果物は LibreOffice の X 投稿——*障害の最中*に発せられた——「LibreOffice actually works 365 days a year」：**609 ポイント**、この日の HN 最大の話題、障害惨話とエディタ郷愁のコメント **205** 件。並行する緩和スレッド（「still down after 12 hours」、451 pts）が Microsoft の更新を運んだ。
+- **SLA 算術が運用側の読みである：**コメント指摘によれば、この規模の障害一件で年間稼働率はスリーナインまで落ちる——組織が 365 に払う約束（「そのまま動く」）はまさにこの粒度で測られ、複数日に及ぶ Exchange 障害はその予算を速く使う。冗談が刺さるのは、それが嘲笑する売り込みが実在するからだ。
+- **インシデント PR の教訓：**25 歳のデスクトップスイートが一行で全コーポレート広報チャネルを上回った。ベンダーは、障害の最中のインターネットのマスコットが競合の冗談になるかを選べない——選択は回復の歩幅が下す（11-13 参照：Claude の 2 時間で 3 回の更新 対 M365 の 20 時間時点「予定どおりに進まず」、回復のボトルネックはメールバックログの排出）。
+
+→ [[agent-ops]]
+
+Sources: [LibreOffice on X](https://twitter.com/LibreOffice/status/2121205272479998268) ·
+[HN ディスカッション](https://news.ycombinator.com/item?id=50486482) ·
+[HN: Outlook/365 は 12 時間経っても落ちたまま](https://news.ycombinator.com/item?id=50478609)

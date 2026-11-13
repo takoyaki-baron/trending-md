@@ -506,3 +506,14 @@ GSM8K **69.6 vs 68.2**、MATH-500 **51.7 vs 50.9**——同时只改 **16,291** 
 
 Sources: [线性规划能做权重空间编程吗？](https://nathan.rs/posts/weight-space-lp/) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50452655)
+
+## 2026-11-14 —— AACR-Bench：同一组权重，只换一个变量，精确率移动 4.7 倍
+
+- **厂商发布的最干净的同模型 harness 交换：**Alibaba 的 OpenCodeReview（Go CLI；README：内部官方 AI 代码评审助手「运行两年」「数万开发者」「百万级代码缺陷」；**50,475★** 热榜 +206★，v1.13.9）把确定性流水线（文件选择、打包、规则匹配交由工程逻辑，LLM 只用在它赢的地方）与 **AACR-Bench** 配对——50 个 OSS 仓库、200 个真实 PR、10 种语言、**1,505** 个由 **80+** 资深工程师标注的 issue，数据集在 Hugging Face。
+- **同模型对照：**Claude-4.6-Opus 经 OpenCodeReview 得 **33.90% 精确率（301/889）、F1 25.10%、385K token、1m23s**——经 Claude Code v2.1.169 同一模型得 **7.23% 精确率（435/5,980）、F1 11.57%、5,664K token、13m6s**，且是表中*最高*召回（**28.90%**）。约 **1/9** 的 token、约 16 倍墙钟、约 4.7 倍精确率——一个变量：harness。README 明言召回刻意更低。
+- **独立使用前，把绝对值当营销读：**Alibaba 标注、Alibaba 的流水线赢——厂商内部基准模式（Edge0 的「internal evaluations」、e-means 的组内基线）。但这个*结构*复现了 FrontierHarness（单模型 17 倍离散）与 Zoom 的 176 次运行消融所测得的东西：harness 的成本/精确率/召回取舍主导同模型比较，而为开放式任务优化的通用 agent harness 在精确率型基准上为之付出代价。
+
+→ [[harness-reliability]] [[agent-stack]]
+
+来源：[alibaba/open-code-review](https://github.com/alibaba/open-code-review) ·
+[Hugging Face 上的 AACR-Bench](https://huggingface.co/datasets/Alibaba-Aone/aacr-bench)

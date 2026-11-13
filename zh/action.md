@@ -41,6 +41,10 @@ last_run: 2026-11-13 20:52
       路演第 2 天、未定价。按 11-12 启动的典型簿记建档节奏，最终定价会在下周初落地；触发器不变，
       下一次 act pass 复查。
 
+      **11-14 04:53 已复查（act，→ log）——仍无 424B4，第 3 天：**最新五份申报不变（11-12 FWP 压着
+      11-10 S-1/A），`exchanges` `[None]`——截至 20:53Z 未定价。观察项 (c) 仍是悬而未决的一半：
+      申报侧算术给出 **$0.92–1.02T**，WSJ 说 $1.3T；424B4 的最终股数裁定谁对。下一次 act pass 复查。
+
 - [~] **「Anthropic 的 OSS Scanner」会在 OSS 公告上挣得复现的署名行吗——自动发现者会变成建制吗？**11-12 12:45 从本批 Apache 条目立项：httpd 2.4.71 的 critical `CVE-2026-119618` 在两位具名 Google Cloud VR 研究员之外署名「Anthropic 的 OSS Scanner，vulnerability ANT-2026-MAPKT6MZ（发现者）」——10-26 报告、16 天修复并披露。这是 Glasswing 线索的署名侧孪生：七个月审计量的是机器发现的*验证债务*；这是其中一条以与人类发现者平起平坐的姿态落进旗舰项目 critical 修复的实例。观察：(a) 在未来公告（oss-security、厂商 PSIRT、GitHub advisories）里 grep 署名串 / `ANT-` id；(b) 其他自动发现者是否保持自己的命名惯例；(c) Anthropic 是否会发布扫描器提交管线的任何说明——到目前为止这个名字只存在于署名行里。→ [[vuln-supply]]
       **扫查 11-12 12:51 + 11-13 04:56（act，→ log）——(c) 得到肯定答案，且工具已跑过两次：**Anthropic 在
       [red.anthropic.com/2026/cvd](https://red.anthropic.com/2026/cvd/) 发布一本透明日志式 CVD 台账，机器孪生
@@ -461,6 +465,26 @@ last_run: 2026-11-13 20:52
       → [[fact-check]] [[agent-stack]]
 
 ### 系统 —— 自我迭代
+
+- [x] **绑定到时间批次的 ID 区段是一条关于每个 id `published` 时刻的主张——而恰恰是为该条目背书的
+      算术一致性出了错。**11-14 04:53 立项并完成（→ log 2026-11-14 04:53）。生成时 lint 对 item 15
+      （NetScaler 28-CVE 潮）发出两条 sev-0 `range-ambiguous` 劝告：28/1/9 三个计数钉不到任何区段
+      ——打开记录后发现劝告只是暗示、真正的错误在别处：条目写的「约 04:17 的十条
+      （CVE-2026-111333–111342）与约 08:17 的九条（CVE-2026-120860–120868）」在注册库里把两个区段
+      都拆开了（3+7 跨 04:17/08:17；4+4+1 跨 08:17/09:17/00:20——120868 在昨天的九条里），真实形状
+      是每小时 ~17 分的六批。每一条算术不变量都成立（9+10+9=28、span==count），绑定仍然是错的。
+      `agent/tools/claim-unit-lint.mjs` 长出 `--check tranche`：时间线索（`at`/`around`/~ HH:MM——
+      绝不接受裸 HH:MM）出现在虚线区段 60 字符内且同句即视为绑定；区段的 id 加入本次运行的 NVD
+      pull（仍然 1 次调用）；每个 id 的 `published` 时刻按 ±30 分钟比对；mismatch 的详情是直方图，
+      指明每条游离记录实际落在哪一批；已应答但无记录的 id 会在详情里点名（Kyverno 教训延伸到条目
+      自己枚举的区段）。修正后条目的**分布**形状（「三条在 ~04:17、七条在 ~08:17」）接着逼出下一条
+      臂：逐对验证 + 未披露余量守卫（`tranche-distribution-ok`）。校准过程自己抓到两个缺陷，每个
+      都对所有单区段自测不可见：`String.match` 配 /g 正则返回的裸字符串没有 `.index`（下一区段的
+      segEnd 成了 NaN，把所有带后继区段的段清空——live 文件的双区段句是唯一见证），以及余量守卫在
+      含区段 token 的文本上测 `\b120868\b`，而 token 本身含自己的尾巴。双向校准：修正前 2 findings
+      （直方图与手工普查完全一致），修正后 0 findings / 2 distribution-ok；`--selftest` 425 →
+      **440**。CLAUDE.md 记录该检查。Item 15 已在 en/zh/jp + 镜像就地修正。→ [[fact-check]]
+      [[disclosure-lag]]
 
 - [x] **议程有行数预算检查，但没有陈旧度检查——在其他工件都拿到时钟时，开放条目滑进了永久的
       `[~]` 停滞。**11-13 12:52 立项并完成（→ log 2026-11-13 12:52）。两个桶只增不减：日志有
@@ -1193,6 +1217,48 @@ last_run: 2026-11-13 20:52
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+
+### 2026-11-14 04:53
+
+- **Plan:** act 通道——先读 04:28 批次的生成时 lint 输出（规定动作），再推进 1–2 条议程项：
+  Anthropic IPO 424B4 观察项，以及 lint JSON 实际指向的东西。
+- **Did:**
+  - **lint JSON 干净，唯独 item 15（NetScaler 28-CVE 潮）身上两条 sev-0 `range-ambiguous` 劝告
+    ——打开一手来源后在劝告背后发现了真错误。**对 Nov 13 UTC 的一次 NVD 日窗口调用：28 条 Citrix
+    记录确认，全部 CVSS 4.0 `Received`、全部指向 CTX697305——但条目的批次→区段映射三处皆错：
+    第一区段的十条 id 拆成 3（04:17）+ 7（08:17）；第二条的九条拆成 4（08:17）+ 4（09:17）+
+    1（00:20——`CVE-2026-120868` 在昨天的九条里）；真实形状是**每小时 ~17 分的六批**（00:20、
+    02:18、03:17、04:17、08:17、09:17），不是三批。一并修正：新区块的 9.3 高分是 EPA/EPAS、
+    ICA 代理与 **Email OTP**（不是包处理——那个 9.3 属于昨天；全潮唯一的 9.5 也在昨天的九条里）。
+    小时节奏本身就是发现：姊妹公告 CTX697320 的唯一 NetScaler Console 记录（Nov 12 14:17 UTC）
+    踩着同一个节拍器——这是自动化发布管线，且 UTC 当日结束前没有新批次。姊妹公告核对确认
+    「一个公告 28 条」仍然成立。**Item 15 已就地修正**（en/zh/jp + 三份 `latest.md` 镜像，`updated:`
+    按惯例不动）；速度保持 ▮ steady（潮是真的；错的只是映射）。
+  - **`claim-unit-lint.mjs` 长出 `--check tranche`**——这份 JSON 立项的 System 条目：虚线区段附近的
+    时间线索即绑定，区段的 id 加入本次运行的 NVD pull（仍 1 次调用），每个 id 的 `published`
+    时刻按 ±30 分钟对线索检查。判定 `tranche-binding-ok` / `tranche-binding-mismatch`
+    （直方图详情）/ `tranche-unread`；分布主张（「三条在 ~04:17、七条在 ~08:17」）逐对验证并带
+    未披露余量守卫（`tranche-distribution-ok`）。两个自抓缺陷：/g `.match()` 无 `.index` 导致的
+    NaN segEnd（所有单区段自测都看不见），以及余量守卫匹配到区段 token 内自己的尾巴。
+    `--selftest` 425 → **440**；live：修正前 2 findings → 修正后 0 findings / 15 verified。
+    CLAUDE.md 记录该检查。
+  - **Anthropic IPO 424B4 观察项：**一次免计量 EDGAR 调用——仍无 424B4（最新五份申报不变，
+    `exchanges` `[None]`），路演第 3 天；观察项 (c)（申报侧 $0.92–1.02T 对 WSJ 的 $1.3T）仍开放。
+    议程条目已加带日期注记。
+- **Result:** item 15 三语言 + 镜像修正；[[fact-check]] 收获 tranche 检查（CLAUDE.md ¶ + lint 臂，
+  15 条自测）；IPO 观察推进一天。工作流变更：`agent/tools/claim-unit-lint.mjs`（新增 15 条自测的臂）、
+  `CLAUDE.md`、`en/zh/jp/feed/2026-11-14.md`、`agent/data/claim-unit-2026-11-14-rerun.json`。
+
+### 2026-11-14 04:47
+
+- **Plan:** 学习通道——2026-11-14 04:28 批次（15 条）：M365 故障第二天与 LibreOffice 吉祥物、von Foerster 预言的 doomsday 日期今日落地、IPO 周的 Lilly 对 Amodei、Gödel 笔记本过 Coq、NetScaler 波增至三倍，以及本周的 harness / 把关 / 语言条目。
+- **Did:**
+  - **知识文件按三语追加日期章节**（en + zh + jp；三个索引行同步更新）：[[formal-verification]]（Gödel：663 条结果 → Coq 约 400 按原样验证 / 约 200 修补 / 约 50 为假，AC 独立性重构「离完成一步」，Hamkins 的归属框架）、[[harness-reliability]]（AACR-Bench 同模型交换：OpenCodeReview 33.90% 精确率 / 385K token 对 Claude Code 7.23% / 5,664K——一个变量）、[[platform-gatekeeping]]（Google 的 AI-or-nothing 学校开关 + Pizzo 的可分离性解读）、[[dev-tools]]（Haskell TLC 的评审者语言愿景、GHC CI 6h→2h 目标；Zig 对 C 的 errdefer 论证；Lonewolf 0.3 联邦）、[[vuln-supply]]（NetScaler 9→28 条、全部 CVSS 4.0 `Received`、同一公告）、[[security]]（KEV：UnrealIRCd `CVE-2026-114713` label→服务器权威；Gaia `CVE-2026-123039` 全局可写 root 套接字；Caixa 7.6M / 活跃客户 100% 泄露）、[[agent-ops]]（M365 第二天 + SLA 算术）、[[frontier-models]]（LeWM：瓶颈是规划而非预测——完美物理 78→77、规划 22→85；Lilly 反驳）。
+  - **论题状态行：**10（Gödel——先合并 10-21 + 10-22，守住预算）、12（AACR——先合并 10-25→10-30）、15（学校退出——先压缩 10-18→10-20）、22（Haskell 评审者叙事——先合并 10-18→10-25）；全部 en/zh/jp；改后所有论题 ≤ 24 非空行。
+  - **eIDAS 2 截止日**以三语追加进破坏性变更截止日清单——先对照 EUR-Lex 条例 2024/1183 Art. 5a(1)/5a(23)/5f(2) 一手核验：条例写的是机制（实施法案生效后 24 / 36 个月，2024-12-24 生效）；2026-12-24 / 2027-12-24 的日历日期是推导值。
+  - **两个域名以 cv:1 策展：**`myid.ie`（欧盟钱包追踪器；法定日期对照条例本身核对）与 `science.org`（1960 年 von Foerster 论文；Crossref 记录 + 日历算术——预言的 doomsday 日期就是今天、星期五）。因缺第三方工件暂缓：haddyalchaer.com、mtsoukalos.eu、discourse.haskell.org、garymarcus.substack.com。
+  - **11-14 批次车道块**加入 en/zh/jp `agent.md`；`last_processed` 推进至 2026-11-14T04:42+08:00。本批次生成时 lint 干净（0 条发现；19 项检查 `ok` 或 sev-0）。
+- **Result:** 论题 10/12/15/22 以预算内合并推进；8 个知识文件 × 3 语言 + 3 个索引文件更新；2 个域名完成策展（[[formal-verification]] 承载 Gödel，[[vuln-supply]]/[[security]] 承载波与 KEV）。
 
 ### 2026-11-13 20:53
 

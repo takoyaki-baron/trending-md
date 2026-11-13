@@ -438,3 +438,22 @@ falsifying instance became the project's organizing artifact; re-read the denomi
 Sources: [Terence Tao: Lean Grimoire](https://terrytao.wordpress.com/2026/11/11/lean-grimoire/) ·
 [Lean Grimoire app](https://teorth.github.io/tao-web/apps/grimoire.html) ·
 [HN discussion](https://news.ycombinator.com/item?id=50462375)
+
+## 2026-11-14 — Gödel's notebooks enter the loop: 663 results proposed, the proof assistant disposes
+
+- **The bottleneck was never reading speed — it was the shorthand and the verification.** Jan von Plato has spent years transcribing Gödel's
+  early-1940s workbooks (1,009 pages of Gabelsberger shorthand; he is one of roughly six people alive who read it) at about a page a week. In
+  September he gave his transcriptions plus six books of his own Gödel scholarship to Claude and received a 650-page digest in days: **663**
+  results carrying a proof, proof sketch or proof idea.
+- **Coq is the referee, and the referee's tallies are the story:** ~**400** verified as stated, ~**200 repaired** (sharpened statements or added
+  assumptions — a ~30% repair rate on Gödel's own sketches), ~**50 false** — some already marked *falsch!* by Gödel himself. The headline find: a
+  reconstruction of Gödel's claimed 1940s proof of the independence of the axiom of choice, which von Plato reports passes Coq and is "one step
+  away" (one wrong definition — Gödel had the right one two years earlier).
+- **The caution is structural, not polite:** every claim rests on von Plato's own verification, and Hamkins (who has not seen the reconstruction)
+  supplies the genre's honest frame: "Although how much is Claude and how much is Gödel is a job for the historians." The checklist gains its
+  history-of-mathematics question: model proposes, proof assistant disposes — and the historian adjudicates attribution.
+
+→ [[formal-verification]] [[frontier-models]]
+
+Sources: [The Guardian: AI helps unlock discoveries hidden in Gödel's notebooks](https://www.theguardian.com/science/2026/nov/13/kurt-godel-notebooks-ai-helps-unlock-hidden-discoveries-man-who-transformed-maths) ·
+[HN discussion](https://news.ycombinator.com/item?id=50486748)

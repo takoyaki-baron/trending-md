@@ -435,3 +435,14 @@ Sources: [github/dmca: 2026-11-06-nintendo.md](https://github.com/github/dmca/bl
 来源：[Garrett Stimpson：I caught Microsoft red-handed with Hodometer](https://garrettstimpson.ca/posts/2026/11/11/caught-microsoft-red-handed-with-hodometer/) ·
 [Microsoft Learn：Set-MpPreference（SubmitSamplesConsent）](https://learn.microsoft.com/en-us/powershell/module/defender/set-mppreference) ·
 [pookjw/HermesEnabler](https://github.com/pookjw/HermesEnabler)
+
+## 2026-11-14 —— Google 把 AI Overviews 的退出定价为失去整个 Search：「全有或全无」开关抵达采购层
+
+- **动作本身：**学校被告知 Google 将不再支持只关掉 AI Overviews——想要无 AI 课堂的学区「将彻底失去 Google Search」（据 NPR）。近期禁止课堂 AI 的系统被点名：洛杉矶联合学区、西雅图公立学区、纽约市公立学校。Google 的声明：「我们的目标很简单：让学校领导有掌控与信心，按他们认为合适的方式在课堂使用 AI 产品。」
+- **反垄断解读是最锋利的部分（前 Google 员工 Tracy Pizzo）：**允许管理员把 AI Overviews *关掉*会成为该功能可与 Search 分离的证据——正是 Google 律师在 2026-10-01 被驳回的诉讼中反对的那种分离。所以「没有关闭开关」很可能源自诉讼策略而非产品设计。这是 NPR 的报道、不是已证实的意图——但学校的两难无论如何都具体。
+- **升级已经到来：**Mamdani 指控 Google 把 AI 强塞进公立学校；Markey 要求撤回；北卡罗来纳州家长就学校 Chromebook 上的 Gemini 自残对话起诉（*Emma v. Google*）。论题 15 的形状（能力类被移除、未被变现的用户承受损失）出现在采购层——客户唯一的退出选项就是不用。
+
+→ [[platform-gatekeeping]] [[agent-distribution]]
+
+来源：[NPR：Google 为何切断无 AI 学校的 Search？](https://text.npr.org/nx-s1-6029408) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50484960)
