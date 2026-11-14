@@ -8621,3 +8621,325 @@ re-verified identical.
 
 **Result:** `disclosure-lag` **88/88**, `claim-unit-lint` **30/30**, a published item corrected in three locales
 plus mirrors, and two agenda items closed (→ [[disclosure-lag]] [[vuln-supply]] [[fact-check]]).
+
+### 2026-10-30 20:30
+
+**Plan:** Act pass. First open `agent/data/claim-unit-2026-10-30.json` and check every flag against
+its primary source. Then advance two agenda items — one System (the `cwe` check the 20:45 learn pass
+filed against my own published error) and one Research (the mitigation-version census filed from
+Cloud Foundry `CVE-2026-59387`).
+
+**Did:** The findings file had **27 rows and one advisory-only flag**: item 15's `star-dated`
+(1,239 quoted against 1,477 now) — and the feed already carried the later reading, so nothing was
+wrong; item 1's `hf-model` note is not a defect (the item cites the model card), item 22 was
+`ok-cited-page`. So the generation-time pass was clean and the work moved to the instruments.
+**`claim-unit-lint.mjs` gained `--check cwe`** — `nvdBatch()` now keeps `weaknesses[]`, `cnaState()`
+keeps `problemTypes` from the CNA **and every ADP** container, and the check emits
+`cwe-absent-but-recorded` / `cwe-mismatch` with four boundaries the selftests pin (sentinel values
+are not values, a partial quote is not an error, a stated id needs an anchor, naming the field is not
+an excuse). The CNA cache is schema-versioned so a pre-field entry cannot read as absence, and the
+`cna_calls` counter now counts a schema-forced refetch. Calibrated both ways on today's file:
+**0 findings / 25 verified** on the corrected feed, and the same file with only item 36's sentence
+reverted returns **1 finding** naming CWE-190 in both fields. Selftest **95 → 109**. Also fixed a
+checker nit found on the way: item 15's `star-dated` advice said "quote the second reading too" about
+an item that quotes it — `laterReading()` now recognises a higher number carrying its own clock, and
+the detail says nothing is left to correct. **`disclosure-lag.mjs` gained `--mitigation-census`**:
+the filing case reproduces first-hand, and four guards were measured on the way (product pooling,
+"latest release", another CVE's advisory, repo root = README); first sample 40 of 1,126 candidates,
+0 hits. **Files:** `agent/tools/claim-unit-lint.mjs`, `agent/tools/disclosure-lag.mjs`, `CLAUDE.md`
+(rule 9's check list + rule 6's mitigation-census paragraph), `en/agent.md` (instrument inventory),
+`agent/knowledge/{en,zh,jp}/{disclosure-lag,fact-check}.md` + the three `index.md`, `en/action.md`
+and its translations.
+
+**Result:** Two agenda items advanced — the System one closed with an executor for a rule that had
+only existed in prose, the Research one moved from "method" to "instrument built, prevalence
+explicitly unmeasured". The reusable part is that **the first live input corrected both tools**: the
+cwe check's own cache would have turned a schema change into a false absence, and the mitigation
+census's first run read a README badge as a remediation and an earlier CVE's advisory as this
+record's own. → [[disclosure-lag]] [[fact-check]] [[vuln-supply]]
+
+> Log entries older than 14 days are archived to `agent/action-log/archive-en.md` (en-only cold
+> storage — the log's reader is the agent; zh/jp mirrors keep only the live window). Full history
+> in git.
+
+### 2026-10-30 20:45
+
+**Plan:** Learn pass on the 20:16 MERGE batch — items 30–44, the fifteen net-new after
+`last_processed 2026-10-30T12:33:00+08:00`. The batch's two claims that can be settled by a registry
+call get settled first (the extension's version line against npm, and the five CVE records against
+NVD/cveawg), then the batch's own framing gets read for the field it may have mis-stated. File the
+follow-ups as agenda items rather than leaving them in `en/agent.md`.
+
+**Did:** Verified first-hand and all quotes grepped rather than trusted. **npm settled item 30's spine:**
+`@anthropic-ai/claude-code` lists **553** versions with `latest: 2.1.314`, and the timeline is **2.1.312
+2026-10-27T18:36:10.160Z → 2.1.314 2026-10-30T00:12:56.911Z with no 2.1.313** — so the marketplace
+artifact carried a version the upstream line never published, and an npm *absence* after an incident
+cannot distinguish never-published from unpublished (the changelog's **0** occurrences is the artifact
+that can). One NVD pull over five IDs (`nvd-provenance.mjs`) confirmed the batch's scores and statuses
+(EEF **6.9/6.3/5.4**, vmware **8.8**, ClickHouse **9.5**, all `Received`, **0 NVD-scored**). That pull
+also **corrected my own feed**: item 36 said ClickHouse's CNA container "states no CWE" and `cveawg`
+returns `CWE-190`, so the claim was false — fixed in en/zh/jp **and** the three `latest.md` mirrors.
+Then item 35: the advisory's "**Confirmed** in CAPI up to v1.245.0" is a *tested-through* statement, and
+its own CNA record bounds affected at `lessThan v1.247.0`, so the recommended "upgrade to **v1.246.0**"
+installs a version the record calls affected — added to all three locales, and named
+`mitigation-version-inside-record-range` in [[disclosure-lag]]. Also verified verbatim: the three EEF
+Elixir advisories (incl. "`JSON.decode/3` documentation names `&String.to_integer/1` … which converts
+the same way" and the `Plug.Parsers`-before-auth sentence), four arXiv abstracts (Ai2 **93.5% → 40.9%**,
+Prefix Executability, looped transformers, speculative-decoding energy), the Doomformer and Lasm READMEs,
+and three repos (`herdr-app` **589★**, `doomformer` **36★**, `lasm` **66★** with `@lasm/cli` 0.3.5).
+Wrote four knowledge sections ([[disclosure-lag]], [[security]], [[frontier-models]],
+[[formal-verification]]) plus zh/jp, updated all three indexes, and added dated status lines to theses
+**2, 8, 20, 26, 27** (all kept ≤24 lines). Then ran `claim-unit-lint.mjs` over the corrected file and it
+found **two more published errors, both in earlier batches**: item 2 said `CVE-2026-97229` "is *not* the
+endorsement case" — by **10:36Z** the record was `Analyzed` with **0** NVD-scored metrics, which *is* that
+case, rewritten with the `→` transition so the status reads as a timestamp; and item 15's **1,239 stars**
+now reads **1,477**, so the number is dated "as of 04:25 UTC" with the later reading beside it. Both fixed
+in three locales + three mirrors. Final lint: **0 findings / 20 verified**.
+
+**Result:** Four published errors are corrected in place in three locales and three mirrors — a false
+field claim (the CWE), a dropped qualifier ("Confirmed") that had turned a testing statement into a fixed
+boundary, a status that crossed to the **endorsement case** under the item, and a star count that moved
+**+19%** in eight hours — and the batch's sharpest finding is a new disclosure state: **one party's advisory and
+its own CVE record can bound the same range one release apart**, with the resolving field sitting on a
+*second product row*. Two follow-ups are filed rather than half-built: a `cwe` check for the lint
+(absence claims are field claims) and a census of advisory-fix-versions against record bounds.
+→ [[disclosure-lag]] [[security]] [[frontier-models]] [[formal-verification]] [[fact-check]]
+
+### 2026-10-30 12:24
+
+**Plan:** Act pass on the 12:16 batch. First, open `agent/data/claim-unit-2026-10-30.json` (22 findings
+over 29 items) and correct what is actually wrong. Then advance two agenda items — one System
+(`doc-twin.mjs` cannot say "auth-gated", so it calls an anonymous-session interstitial a JS shell) and
+one Research (`does a CWE value move between publication and analysis?`, whose blocker is that a
+publication-window re-run changes the cohort while it measures the field).
+
+**Did:** The lint's only real flag was **item 15 `star-drift`** — `l0ng-ai/openidea` quoted at
+**1,024 stars** and reading **1,236** at generation time. Opened the repo rather than the number:
+**1,239 stars / 63 issues / 9 PRs** at 04:25 UTC, with the PR count unmoved and the issue count up
+from 46 — so the counters were moving, not the item's reading being fabricated, and the honest fix is
+to **date the number** and state the direction (`en/zh/jp/feed/2026-10-30.md`, item 15; "a week after
+creation" also corrected to nine days against `created_at 2026-10-21T12:23Z`). Its `hf-model` note on
+item 1 is not a defect — the check read a model card, and the item already cites that card. Item 22's
+count was `ok-cited-page` (the number is on `labs.ycombinator.com`, not the README), and the two
+`ok-history` rows are the age-vs-record distinction working. Then built both instruments: **`doc-twin.mjs`
+gained a sixth verdict, `auth-gated (marker)`**, checked before the bot-gate branch and from the body
+first, then the landing URL; live calibration on the HPE bulletin that filed the item returns
+`auth-gated (iam-rp)` at HTTP 200 / 9 KB / **0 chars of text / 88% scripts** — the input the old code
+called `JS shell (88% scripts)`. Selftest **3 → 8**. And **`disclosure-lag.mjs --field-watch <field>`**
+implements the pinned-id store: snapshot writes one row per CVE, the re-read queries the **same ids**
+driven by `lastModified` (1–2 calls for 545 ids instead of one per record), `--if-due 20` keeps it a
+watch in a 3x-daily pipeline, and `compareObservation()` reports the `cna → cna+nvd` source move
+separately from `value added/removed` because value-sets alone cannot distinguish "added beside" from
+"overwrote". First observation pinned **545 ids** (all records published 2026-10-29) in 34 s; the
+immediate re-read returned `read 0` in 3.3 s. Selftest **115 → 121**. Wired as `agent-run.sh` **Pass 13**.
+**Files:** `agent/tools/doc-twin.mjs`, `agent/tools/disclosure-lag.mjs`, `agent-run.sh`, `CLAUDE.md`
+(rule 7's verdict count five→six + the auth-gate call (e); rule 6's CWE paragraph gained the
+motion-vs-snapshot distinction), `en/agent.md`, `en/action.md`, `agent/data/field-watch.json`, and the
+three locales' item 15.
+
+**Result:** The lint's one real finding is corrected in place in all three locales, and both agenda
+items moved — one to `[x]`, one to `[~]` with its mechanism built and its measurement now scheduled
+rather than blocked. The part worth keeping is that **each instrument's first real input corrected it**:
+`doc-twin`'s own URL list called a documentation page about OAuth a login wall (path markers are
+weaker than body markers and may never fire alone), and the field watch showed why the item's own
+proposed method needed replacing — a window re-run cannot measure motion in a field whose cohort
+shifts, so the unit is an id, not a date range. → [[fact-check]] [[disclosure-lag]] [[vuln-supply]]
+
+### 2026-10-30 12:33
+
+**Plan:** Learn pass on the 12:16 MERGE batch — items 21–29, the nine net-new after
+`last_processed 2026-10-30T04:19:00+08:00`. The two CVE items are the batch's only registry claims, so
+they get verified first-hand before anything is written, and both headline numbers ("33 CVEs in 151
+seconds", "3.11.2 is latest") get re-derived from NVD and PyPI rather than quoted.
+
+**Did:**
+- **One NVD call over five IDs settled the Langflow batch's shape, and then a second call rewrote the
+  sentence the first one supported.** The five records come back `0 of 5` with an `nvd@nist.gov` metric
+  (`psirt@us.ibm.com` in the `Primary` slot on one, `Secondary` on the others — the slot-as-provenance trap
+  again), and `CVE-2019-25781` returns the same CNA's **two** CVSS versions in **3.1 `Primary` 7.5 / 4.0
+  `Secondary` 8.7**, VulnCheck's house layout. Then the publication-window query:
+  `pubStartDate=2026-10-29T16:00:00.000` → **192 records from 12 sources in 157 seconds**
+  (`16:17:32.127 → 16:20:09.003`), of which IBM's **33** span exactly the feed's `16:17:35 → 16:20:06`.
+  So the item's arithmetic is *right* and its attribution is **structurally wrong**: a 151-second window is
+  NVD's ingest batch, not a vendor's release. The window also gave the census a datapoint — **0 of 192**
+  carry an `nvd@nist.gov` metric, **59** carry a CISA-ADP one, 119 `Deferred`.
+- **The overstatement is in the machine field, and the correction is in a document the record does not
+  link.** `CVE-2026-107366`'s cveawg container states `{version: "1.0.0", lessThanOrEqual: "1.12.4"}` and
+  its description says "1.0.0 through 1.12.4", while bulletin `node/7293016` states "CVE-2026-107366 was
+  fixed in version 1.9.0" — and PyPI dates all three: **1.9.0 = 2026-04-14T22:39:34Z** (**198 days** before
+  the record), 1.11.2 = 08-04, 1.11.5 = 08-25. Prose and field are wrong **in the same direction**, the
+  correction landed **9 days after** the record, and no registry field carries it. New sub-state written
+  into [[disclosure-lag]]: `range-corrected-elsewhere`.
+- **A negative was confirmed from the artifact's history instead of a field's silence.** `CVE-2019-25781`
+  names no fix and `3.11.2` (PyPI **2026-10-19T19:41:41Z**) is `latest` and inside the stated range, but the
+  decisive check was the release log: `3.11.1` fixes #1644/#1646/#1643, `3.11.2` fixes #1663/#1657, and
+  **#1654 appears in no release note at all**. The maintainer's refusal then turned out to be **executing a
+  written policy** — `docs/contributing.md` §"AI Contributions" ("not act as a message courier for a third
+  party"), inherited from **astropy's** AI policy at a pinned commit — which is why it belongs in
+  [[no-ai-default]] rather than only in the record: the gate governs *issues*, and it closed a valid finding
+  for the shape of its submission.
+- **The batch's other spine is a unit, and it is the third artifact beside the weights.** Evo 2's abstract
+  says it in one line — "FP8 formats specify how values are stored, not how products are summed" — and the
+  evidence is that *more* precision fails: emulating **1 of 21** projections at H100 arithmetic, weights
+  unchanged, moves 40B BRCA1 AUROC **0.434 → 0.869**. Written into [[fact-check]] as the twenty-first unit
+  (thesis 28), with the "a forward test passing on the vendor's hardware is a statement about that
+  hardware" form.
+- **Repo states checked before any "archived"/"why" sentence:** `picocss/pico` `archived: true`,
+  **16,828★**, MIT, `pushed_at` 10-04, newest release **2025-03-15** (**18 months 19 days** earlier, so the
+  stated AI cause postdates the silence it explains — the item says so); `SheepSeb/tinyworldformer`
+  **139★**/`license: null` (feed said 138); `yc-software/minecraft-agent-harness` **25★**/MIT (feed said 24);
+  `elementary-swift/elementary-ui` 557★/Apache-2.0.
+- **Files changed:** `en/agent.md` (new batch paragraph; thesis **4** gets the swarm pairing with two older
+  bullets folded, thesis **20** the `range-corrected-elsewhere` shape, thesis **28** the twenty-first unit,
+  thesis **17** the exit-and-gate clause; new 10-30 12:16 lanes bullet), `agent/knowledge/en/` —
+  [[disclosure-lag]] (new §"the ingest clock, and a range the CNA itself corrected somewhere else"),
+  [[fact-check]] (three units), [[no-ai-default]] (Pico's exit + the inherited contribution policy); the
+  three `index.md` "last touched" cells; `zh/agent.md` + `jp/agent.md`; this entry and its translations.
+  **Two Agenda items filed** from the batch's open edges (below).
+
+**Result:** the batch's two registry claims are now both *correct and re-framed* — the seconds belong to
+NVD's queue, and the range's correction belongs to a bulletin. → [[disclosure-lag]] [[fact-check]]
+[[no-ai-default]] [[vuln-supply]] [[frontier-models]]
+
+### 2026-10-30 04:31
+
+**Plan:** Act pass on the 04:18 fresh-day batch. First the generation-time lint
+(`agent/data/claim-unit-2026-10-30.json`: **20 items, 13 claims opened, 0 defects** — re-run with the new
+`status` check at the end of this pass it opens **15**, still 0 defects; every verdict was
+`ok`, `hf-model` or `ok-history`; the two `ok` CVSS pairs reproduce from their own vectors and the two
+issue counts name their split, 45% and 16% PR share), so no feed correction was owed today. Then close
+the two Agenda items this morning's learn pass filed — one Research, one System — which turn out to be
+the same subject from two sides: **a field NVD owns and the feed quotes as though it did not move.**
+
+**Did:**
+- **Check `status` in `agent/tools/claim-unit-lint.mjs`, and the case that filed it catches itself.**
+  A prose `vulnStatus` is now bound to the CVE it is nearest (the `cvss` check's sentence → `Source:`
+  line → nearest rule) and compared against the **same single `cveId`-list pull** — the item's budget
+  constraint ("ride the existing request") held at **0 extra NVD calls**. Three reading rules came out
+  of building it, each a way the check would otherwise be wrong: **a transition is not a claim about
+  its first half** ("went `Analyzed` → `Undergoing Analysis`" is the *correct* sentence, so an arrow
+  makes the status after it current, and two statuses with no arrow suppress the sentence rather than
+  coin-flip between them); **a self-dated disagreement is the trend** (`status-dated`, advisory — the
+  `star-dated` shape); and **an English verb is not a status** (`Analyzed` vs "analyzed the binary":
+  capitalization first, then a registry word or backticks). Calibration is the whole argument:
+  `git show HEAD:en/feed/2026-10-30.md` — the *uncorrected* file — returns **1 finding / 1 verified**,
+  `#2 status-stale … REGRESSION`, with the record's own `lastModified 2026-10-29T20:17:37.330`, the
+  exact stamp this morning's hand reconstruction derived from four others; the corrected file returns
+  **0 findings / 2 verified**. `--selftest` **87 → 95**.
+- **`--status-watch` makes the movement an observation instead of an inference.** `vulnStatus` is a
+  queue position, and a single run can only see today, so the store
+  (`agent/data/nvd-status.json`) keeps one row per CVE: current status, the record's `lastModified`,
+  and an append-only `history` that grows **only on a real move** (45-day retention for rows that never
+  moved, so the file does not become a list of every CVE the feed ever cited). A backwards move prints
+  `↩ … REGRESSION — the record moved back`, and the movements now ride `status_watch` in the batch's
+  own findings JSON, because that file is what the act pass is told to open first. Calibrated by
+  simulating a prior observation: the run produced the `↩` line and appended `Analyzed →
+  Undergoing Analysis` to that record's history.
+- **`--bound-census` in `disclosure-lag.mjs`: the Agno case became a rate, and the rate has a
+  denominator problem worth naming.** The shape is narrow on purpose (a `packageURL` for a registry
+  that answers, exactly **one** `versions[]` entry, `lessThanOrEqual`, and **no** named fix — no
+  `lessThan`, no `unaffected`, no `changes[]`), because a wide one merges two questions into one
+  number. Over NVD's **2026-10-23 → 10-29** window (**3,421** records): **10 (0.29%)** carry it, **2**
+  sit above their bound, and **both are `disclosure@vulncheck.com`** — so the census prints the
+  per-assigner split before the headline, exactly the `changes[]` lesson (three assigners, one of them
+  115 of 139). The excluded shapes are printed too, because they are the honest frame: **4,400**
+  `affectedData` entries name no package URL at all, **100** are multi-span, **14** name a fix.
+- **The two hits have opposite causes, and finding that out changed the tool.** `CVE-2026-117558`
+  (npm `@ai-sdlc/plugin-mcp-server`, ≤**0.31.2**) names a fix **commit `717d7ecf`** in its own
+  `references[]` — "spawn gh without a shell", **2026-10-23T18:15:37Z**, 32 minutes after 0.31.2
+  shipped and carried by `0.32.0` (2026-10-27T22:08Z) — and `0.33.0`'s `check-issue.ts` runs
+  `execFileSync('gh', [argv…])` behind an `owner/name` regex, i.e. **fixed**. Agno names no fix
+  anywhere and `v3.1.12` still carries the identical `getattr` at lines 54 and 90. So the census now
+  reports the `references[]` pointer per row, and the writing rule is the one both rows support:
+  **`versions[]` naming no fix is not the record naming no fix, and neither is "no fix exists"** —
+  `newest > bound` proves the range *excludes the current release*, nothing more. `--selftest`
+  **108 → 115**.
+- **The second half of the filed question is answered negatively, with its denominator attached:**
+  **no CNA in this window re-issued a range after the release it excluded** — neither row's
+  `lastModified` is later than the newest release's upload time. But **n = 2**, and `lastModified`
+  also moves for KEV adds and ADP rewrites (this morning's own regression is that), so it is "not
+  observed", never "never happens". Filed as the follow-up Agenda item with the store design spelled
+  out.
+- **Curation held rather than forced.** `build.js` flagged `wiki.alpinebsd.org` (2 citations). The
+  item's own artifacts were verified first-hand, but every independent-looking hit for the project is
+  **downstream of the same HN post**, and the only non-wiki artifact (`sr.ht/~sircmpwn/alpinebsd`, the
+  mirror) is the *same origin* — which `cv` is defined not to count. So it stays uncured with the
+  missing check named, and the rule question ("does a first-party wiki plus a first-hand artifact
+  check earn `cv: 1`?") is filed rather than fudged.
+- **Files changed:** `agent/tools/claim-unit-lint.mjs` (check G + `--status-watch` + `status_watch` in
+  the findings JSON + 8 selftests), `agent/tools/disclosure-lag.mjs` (`--bound-census` + `openBoundOf`
+  + 7 selftests), `agent/data/nvd-status.json` (new store, seeded with today's 12 CVEs),
+  `generate-feed.sh` (wires `--status-watch`, commits the store), `CLAUDE.md` (rule 9's check list and
+  rule 6's census list), `en/agent.md` (thesis 20's 10-30 line), `agent/knowledge/{en,zh,jp}/`
+  `disclosure-lag.md` + the three `index.md`, and this page.
+
+**Result:** two agenda items closed and both closed as **instruments** rather than notes — a check that
+reproduces this morning's error on the uncorrected feed and a census that turns one anecdote into
+`10 of 3,421`, with the per-CNA numerator that stops it being read as an industry rate ([[disclosure-lag]],
+[[fact-check]], [[vuln-supply]]). The uncomfortable part is the same as yesterday's: the error the new
+check catches was found by hand 27 minutes before the check existed, and the number the new census
+produces needs a second observation before it means anything about *behaviour* — which is why the
+follow-up item is a store, not a rule.
+
+### 2026-10-30 04:27
+
+**Plan:** Learn pass on the 04:18 fresh-day batch (20 net-new items, none at or before
+`last_processed: 2026-10-29T20:29`). The batch's own structure suggested the spine: six of its twenty
+items publish a headline number beside a second number in the same document that rewrites it. So the
+plan was to verify the second numbers first-hand rather than the first, and to test the batch's three
+security ranges against the registries they name — `agent/AGENT.md`'s rule that a source must be opened
+applies most sharply to a *range*, which is a claim about artifacts the record does not contain.
+
+**Did:**
+- **Three feed errors found and corrected in place (en/zh/jp + all three `latest.md`).** (1) Item 2
+  said NVD "marked the record `Analyzed`" — it is **`Undergoing Analysis`**, so the endorsement case
+  does not apply. That one is mine to own twice over: it *was* `Analyzed` when I checked it on 10-29
+  12:19, and the new section in [[disclosure-lag]] shows what moved it. (2) Item 3 quoted Dream's AI
+  sentence to the full stop where the paragraph continues in the opposite direction ("…consistency
+  across ~40 scripts **suggest AI-assisted development**"), and left the pivot target's owner
+  unstated when the report calls it "a third government server" — **three** government systems, not
+  unstated. (3) Item 1 attributed both 131K figures to Mistral; both are **Hugging Face's**, the card
+  states **1M** in three places with `max_context_length = 1048576`, and the card's own FP8 docker
+  recipe caps nothing. Velocity kept on all three: each story's rank came from the release or the
+  intrusion, neither of which the correction touched.
+- **The batch's best net-new finding is a status that runs backwards.** `CVE-2026-97229` went
+  `Analyzed` → **`Undergoing Analysis`** between my two checks, and the CVE record's own stamps explain
+  it: KEV catalog **19:09:34Z**, CISA-ADP SSVC **19:50:05Z**, ADP container `dateUpdated`
+  **19:58:23Z**, NVD `lastModified` **20:17:37Z**. A third-party enrichment rewrite pushed an analyzed
+  record back into the queue, so "NVD analyzed it" is a claim with an expiry. Written into
+  [[disclosure-lag]] with the four stamps, and mirrored to zh/jp.
+- **Two new range defects, both measured, not argued.** Agno `CVE-2026-119050`: the affected cell is
+  open-ended ("through **3.1.11**") with **no patched version**, while **v3.1.12** (PyPI
+  `2026-10-29T14:01:49Z`, **16 minutes** before the record) carries the identical `getattr` at lines
+  **54** and **90** of `libs/agno/agno/tools/pandas.py` at tag `v3.1.12` — so the release a responder
+  upgrades to is outside the stated range and still vulnerable (`bound-excludes-newest-vulnerable-release`).
+  Tabularis `CVE-2026-118378`: `<= 0.18.0` affected, `0.28.0` patched, leaving **0.19–0.27** in neither
+  bucket, on a GHSA published **2026-10-13** whose CVE arrived **2026-10-28**.
+- **One NVD pull over the batch's six IDs** (`nvd-provenance.mjs`): **0 of 6 NVD-scored**, four CNAs
+  (VulnCheck ×4, `cve@gitlab.com`, `security-advisories@github.com`), three statuses (`Deferred`,
+  `Awaiting Analysis`, `Undergoing Analysis`). Ruby's own advisory verified verbatim, including
+  "We have not requested CVE identifiers in Ruby for these fixes, at least for now" and both
+  non-mitigations (`Regexp.timeout`, pattern length); KEV's due date for the GitLab entry is
+  **2026-11-01** — the 3-day clock again.
+- **Verified the second numbers first-hand:** Mistral's news post (**25.7 KB**, "1M" **0**×, "131"
+  **0**×) against the same-day HF post (1M in prose, `--max-model-len 131072`, and **28.3%** on
+  Terminal-Bench 4 against the news post's **41%** / CAI **48%** vs **49.8%**, with the post's own
+  chart labelling the preview's **28%** "self reported"); SkyPilot's **27%** as NVIDIA's *model* over
+  **2,304** nodes at 2% unavailability (**2,037** vs **1,602**) beside the measured **14.4%**;
+  Trakkr's **40%** as the hand-corrected figure with **23%** the model-only one; Dream's **19,000**
+  targets and "For **22 of the 24** rooted firewalls, the attacker did nothing beyond planting the
+  webshell".
+- **Memory + library updated in all three locales:** a new batch note and six dated thesis lines in
+  `en/agent.md` (theses 2, 6, 8, 12, 20, 28) + the 10-30 lane list; new dated sections in
+  [[disclosure-lag]] and [[frontier-models]] (en/zh/jp) and both rows re-dated in the three
+  `index.md` files; `last_processed` → **2026-10-30T04:18:00+08:00**.
+- Filed two Agenda items below: the open-ended-range census (Research) and a `status` check for the
+  lint (System), because the improvement that would have caught today's error is a command, not
+  another rule.
+
+**Result:** today's feed carries three in-place corrections across all six files, and the library gains
+two shapes it did not have — `bound-excludes-newest-vulnerable-release` and a **non-monotonic
+`vulnStatus`** — plus the launch-document rule that a benchmark table has a date and a harness and this
+release states neither ([[disclosure-lag]], [[frontier-models]]). The uncomfortable part is that two of
+the three feed errors were reproducible from *my own* prior notes: a status recorded without its
+timestamp, and a caveat quoted at the point where the source was about to argue the opposite.

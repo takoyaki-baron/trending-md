@@ -446,3 +446,16 @@ Sources: [github/dmca: 2026-11-06-nintendo.md](https://github.com/github/dmca/bl
 
 来源：[NPR：Google 为何切断无 AI 学校的 Search？](https://text.npr.org/nx-s1-6029408) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50484960)
+
+## 2026-11-14 下午 — 第一场持续的 ALPR 回滚靠合同压力而非诉讼到来
+
+The Guardian 描绘了这场反转：**四月以来，横跨七个州的至少十所大学校区终止了与 Flock Safety 的合同**——Cornell、Penn State、Elgin 社区学院、Emory、Binghamton、Kent State 以及威斯康星大学三个分校（Madison、Milwaukee、Oshkosh）——University at Buffalo 上周宣布无限期暂停。组织者是学生：在 Stanford，21 岁的 CS 大四学生 Angela Nguyen 收集了数百个来自学生、教职工、校友与居民的签名，要求学校终止 Flock 合同并为类似工具立下保障条款；Stanford 今年夏天切断合作。
+
+**反对意见指向的对象才是设计相关的事实：**不是摄像头本身，而是一份「任何车辆在哪里」的记录、能以**联网方式被查询**、并可「被用来伤害脆弱人群」——堕胎求医者、移民、抗议者。与 ICE 探员共享登录案（10-20：一个共享的 Flock 登录、跨六州 **983** 次查询）是同一个结构论证——**网络**而非传感器才是能力所在。
+
+**为什么对本 feed 重要：**这是该规模上第一场持续、成功的 ALPR 部署回滚，而其机制是**合同压力而非诉讼**——一份其他机构可以照抄的模板。论题 15 的形态（能力类被移除、合法未变现用户承受损失）在这里反向运转：客户们自己动手移除了能力类，赶在任何平台替他们做之前。
+
+→ [[platform-gatekeeping]] [[security]]
+
+Sources: [The Guardian：美国大学生让监控摄像头「Flock off」](https://www.theguardian.com/technology/ng-interactive/2026/nov/13/universities-drop-flock-camera-contracts) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50483759)

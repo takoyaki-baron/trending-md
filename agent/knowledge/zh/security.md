@@ -4779,3 +4779,19 @@ Sources: [Mehmet Ince part 3/6](https://mehmetince.net/part-3-6-how-i-ended-up-t
 来源：[NVD：CVE-2026-114713（UnrealIRCd）](https://nvd.nist.gov/vuln/detail/CVE-2026-114713) ·
 [NVD：CVE-2026-123039（Check Point Gaia）](https://nvd.nist.gov/vuln/detail/CVE-2026-123039) ·
 [Caixa Seguridade 重大事项（PDF）](https://filemanager-cdn.mziq.com/published/3972906b-e50b-4f74-ab74-4d0d32125d11/9567a559-d20a-486e-a7ae-5c6bbc030c5e)
+
+## 2026-11-14 下午 — 事故簇打进 agent 生态自己的供应链；一件消费级 IoT 拆解重证 eMudhra 一课；权重编辑有了威胁模型
+
+- **FBI FaceStealer——OSS 维护者是被点名的目标类。**FBI 详述了 18 个月内从 **900+** 名受害者窃取 **4 亿美元+** 的方案：假账号或盗来的社交账号邀请目标进入仿冒的 Zoom/Teams/Meet 通话；屏幕播放**真实熟人的预录视频**、音频故意故障；「修复」提示投递恶意软件；被偷录的通话成为下一名受害者的担保材料。该方案「aggressively targets」加密/web3 从业者，「**尤其是参与开源软件开发与维护的人**」。防御规则是程序性的：带外核实身份；视频在场是零证据。它紧随上周 63 亿美元 Binance 被盗案的归因。
+- **Apify：一条被攻破的凭据，与按 ID 可读的开放存储。**11-09/10，一名未授权第三方用一条被攻破的凭据获取账号凭据并访问相关账号——正是大量 agent 数据采集所依赖的爬虫平台；访问路径已关闭、11-11 后无攻击者活动、受影响客户 11-12 获通知。补救：**API token 现在只存哈希**、内部服务间网络限制、更强内部认证——外加每个用户都该照办的警告：「在开放状态下，任何知道存储 ID 的人都能读取该存储。」被爬取的数据集正是 agent 不查出处就读取的东西；带根因的事后报告承诺一周内发布。
+- **Uptime Kuma：一天两个紧急版本，7 天禁运。**11-12 的 2.5.10（03:53Z）+ 2.5.11（09:20Z）修复 **GHSA-437w-j82f-9vjh**——「[Admin Only] RCE via an upstream package's regression」，署名报告者 Tomer-PL。公告页尚不可公开阅读（与声明的禁运一致），补丁 diff 是唯一公开描述。一个监控工具——其他一切坏了你去看的那个东西——带着依赖回归 RCE，是穿着 homelab 外衣的供应链故事；细节约 11-19 落地。
+- **Coway Airmega IconS：根 CA 经明文 HTTP 送达。**Scott J. Goldman 的拆解（Pi 接入点 + nftables + mitmproxy）发现「安全」的 IoT 控制信道从来都可被拦截——无 pinning、无降级对抗。工作流那一半更新：BLE 配网（protobuf + PKCS#7 + AES，「P002」前缀）手工要「至少数小时（可能数天）」，编码 AI「约 20 分钟」重实现；由于配网会设置 `caUrl`/`certSvrUrl`，把风扇指到你自己的服务器就能让 MitM 架退役。本 feed 可一手核验的细节：mitmproxy 的 `certs.py`（main）带有 `--emudhra`／`--emudhra-old`，注释点名「Compromised eMudhra intermediate CA (EM OV TLS CA - G3C, d=4)」——十月 eMudhra 一课被代理自己产品化了。
+- **Weight Space Misfolding：编辑权重的威胁模型。**Von Csefalvay、Doma、Unni Krishnan 与 Foldi（HCLTech）把 11-12 的权重空间编程能力写成其安全模型——一个模型经直接修改在另一个模型中诱发未授权行为，并把向后传播（被编辑的模型再编辑别人）纳入范围。结构论点是**防御者不对称**：攻击者「只需生成一次载荷」，防御者必须在权重海里找到它——所以纯检测防线必输，分布式权重的出处政策成为承重墙。分类：事实替换、能力剥夺、选择性省略（含进攻性*选择性遗忘*）；经 IWIBench 接口的三个案例研究。
+
+→ [[security]] [[vuln-supply]] [[in-weight-compute]]
+
+Sources: [BBC：朝鲜黑客用假视频通话实施 4 亿美元加密盗窃](https://www.bbc.com/news/articles/cqdj1ellpd70o) ·
+[Apify 安全事故](https://status.apify.com/incidents/sxd1dj5j6749) ·
+[Uptime Kuma 2.5.11](https://github.com/louislam/uptime-kuma/releases/tag/2.5.11) ·
+[Scott's Blog：逆向我的 Coway 空气净化器以摆脱云端](https://scottjg.com/posts/2026-11-11-reverse-engineering-my-coway-air-purifier-to-ditch-the-cloud/) ·
+[alphaXiv：Weight Space Misfolding](https://www.alphaxiv.org/abs/2611.weight-space-misfolding)

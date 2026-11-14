@@ -3615,3 +3615,16 @@ Sources: [Google: Introducing Gemini 4 Hydrogen](https://blog.google/innovation-
 来源：[Haddy Alchaer：600 次实验后，我对 JEPA 世界模型的发现](https://haddyalchaer.com/jepa) ·
 [Marcus on AI：Eli Lilly CEO 加入反驳](https://garymarcus.substack.com/p/breaking-eli-lilly-ceo-becomes-latest) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50483480)
+
+## 2026-11-14 下午 — OpenAI 解散独立机器人团队：「机器人需要自己的技术栈吗」的组织架构答案
+
+Fortune（Wen Shao）报道 OpenAI 已解散其独立机器人团队并重新分配研究者：机器人研究并入 Chief Research Officer **Mark Chen** 领导的主力研究组织；应用机器人与硬件并入 President **Greg Brockman** 领导的 Applied 组织。发言人的框架是加速而非撤退——「robotics remains a core part of OpenAI's long-term vision」——押注是通用模型应该控制机器人（包括人形），而不是一支专门团队造机器人专用的模型。
+
+**最说明问题的细节：**OpenAI 早已注册了本周 Austin CoRL 的 #208 展位；会务应用里列着它；Fortune 到场时展位「空着，OpenAI 的标识无处可见」。历史押韵：2020 年的收摊（Zaremba 引用机器人数据有限）、2024 年的重建、2025 年 2 月终止的 Figure 合作，以及 Altman 宣称的 2027 年首次人形机器人公开演示目标。
+
+**为什么重要：**这是具身 AI 最大未解问题的组织架构表达——机器人大脑究竟出自那个什么都会的同一个模型，还是机器人需要自己的栈。OpenAI 刚刚在结构上回答了「同一个模型」，这让 2027 演示承诺与空着的 CoRL 展位成为按住它的两件东西。
+
+→ [[frontier-models]]
+
+Sources: [Fortune：OpenAI 解散独立机器人团队](https://fortune.com/2026/11/13/openai-disbands-robotics-team-as-its-general-models-start-running-robots/) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50487184)

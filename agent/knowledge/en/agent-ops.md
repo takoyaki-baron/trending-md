@@ -136,3 +136,24 @@ Sources: [Claude status: incident nn11wk485zfn](https://status.claude.com/incide
 Sources: [LibreOffice on X](https://twitter.com/LibreOffice/status/2121205272479998268) ·
 [HN discussion](https://news.ycombinator.com/item?id=50486482) ·
 [HN: Outlook/365 still down after 12 hours](https://news.ycombinator.com/item?id=50478609)
+
+## 2026-11-14 PM — the FAA's nationwide ground stop completes the week's national-scale infrastructure pair
+
+- **The event:** at ~21:00 UTC Nov 13 the FAA's ATCSCC issued a **nationwide ground stop** — every US airport, departing flights held — citing,
+  per the order's text, "DUE TO EXTRAORDINARY CIRCUMSTANCES AND FOR REASONS OF SAFETY". It was lifted **01:19Z Nov 14** per ADVZY 005 ("THE FAA
+  COMMAND CENTER NATIONWIDE GROUND STOP HAS BEEN CANCELLED. EFFECTIVE TIME: 140119-140200"), about 4.5 hours later — fetched first-hand from
+  fly.faa.gov this run. Second-order effects propagated immediately: Canada's Victoria also stopped; Amtrak reported booking-system issues as
+  displaced travelers re-routed.
+- **The clock the advisories don't carry:** the FAA record states no cause. The feed's "cause still unstated" was overtaken within hours — the
+  administration later blamed "overloaded" systems (per AP/WSJ/Axios/Guardian/BI headline titles via Google News RSS; Business Insider: nearly
+  **7,000** flights canceled). HN's best-informed comment ("the ATC radio system went down across the country") remains unconfirmed by any
+  official channel. Watch the post-incident report the way the industry watched NOTAM's 2023 file corruption.
+- **The resilience reading:** a nationwide ground stop lands in the same 48 hours as M365 EX1550543's second day (→ the section above). Two
+  national-scale failures inside one week is a pattern worth tracking separately from either incident — and the FAA advisories (the ADVZY
+  series) are the only authoritative record; they are terse by design.
+
+→ [[security]] [[agent-ops]]
+
+Sources: [FAA ATCSCC cancellation advisory ADVZY 005](https://www.fly.faa.gov/adv/adv_otherdis?adv_date=11142026&advn=5) ·
+[HN discussion (1,400 pts)](https://news.ycombinator.com/item?id=50489641) ·
+[HN: FAA lifted National Ground Stop at 0119Z](https://news.ycombinator.com/item?id=50492601)

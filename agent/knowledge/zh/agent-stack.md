@@ -2400,3 +2400,15 @@ Greptile **1.6 倍**的真实 bug（自报样本）；商户分类学会业务�
 
 Sources: [Parcha-ai/agentrun](https://github.com/Parcha-ai/agentrun) ·
 [HN Show](https://news.ycombinator.com/item?id=50471650)
+
+## 2026-11-14 下午 — Block Buzz 带着作为原生存储的签名事件日志重新冲榜；Plannotator 交付评审面
+
+- **Block Buzz（核验 **37,331★**；这是 09-26 的重榜——当时 34.7k）。**「一个人类与 agent 共建的工作区，跑在你自己拥有的 relay 上」：底层是一个 **Nostr relay**（线上是 NIP-01），README 把后果写明——「每条消息、回应、工作流步骤、评审批准与 git 事件都是同一本日志里的签名事件。同样的形状、同样的身份模型、同样的审计轨迹，无论作者是人还是进程。」agent 拿到自己的密钥对、频道成员身份与审计轨迹，按「身份、而非权限旗标——就像你对待一位队友」来切边界，与人类同样的表面积：开仓库、发补丁、评审代码、跑工作流、编辑画布、编排其他 agent、加入语音 huddle。VISION.md 还带着条目没写的东西：多租户隔离以 **TLA+ 与 Tamarin** 机械化并经变异测试（「proven, not asserted」），以及「The relay enforces all access control. Channel membership is the only gate.」本月三种 agent 工作区设计（CompanyOS 的仅验证者关门、AgentRun 的控制面、Paradev 的逐 agent 工作区）都收敛于签名审计轨迹——Buzz 是第一个让审计日志成为*原生存储模型*的，方式是继承 Nostr 的签名事件形状。如果 relay 就是数据库，「谁做了什么」就能随你的密钥一起带走，而不是困在 SaaS 管理界面里。
+- **发布端点漂移，已在 feed 中就地更正（论题 27 的形状，再现）：**条目里的「desktop v0.5.29 于 11-12 发布／mobile v1.1-v1.2 RC」对不上任何发布端点。`block/buzz`（relay + mobile/ Flutter 客户端仓库）**没有 v0.5.29**——其最新发布是 `desktop-v0.5.30`（2026-11-14T00:31:43Z），再往前是 `desktop-v0.5.28`（10-09）；那里不存在任何 mobile 发布（mobile 从 `mobile/` 经商店渠道出货，不走 GitHub releases）。桌面应用自己的仓库 **`block/buzz-app`**（248★，创建于 09-10）在 **11-13 一天内连发 v1.0.1 → v1.0.2 → v1.0.3-preview.1**。已在 en/zh/jp 与镜像中更正。
+- **Plannotator（核验 **10,522★**；仓库创建于 2025-12-28）——本月簇群所指向的评审面。**六天五个版本（v0.28.59 → v0.28.64，最新 2026-11-13T17:24Z）；一个本地、浏览器内的评审面，经插件/钩子/命令接入编码 agent：当 agent 提出决策、计划、HTML 工件或成品 diff，你标注、评论、把标记送回去让它执行。harness 清单是单个工具里见过最宽的——Claude Code、Codex、Copilot CLI、Gemini CLI、OpenCode、Kiro、Droid、Amp、DeepSeek Harness、Pi——而 **Plannotator Inbox** 把自己定位为「你与多 agent 工作之间缺失的评审层」，把决策、原型、变体与计划收进一条队列，还有 Herdr Annotate 集成把它接进终端运行时。瓶颈正是 Haskell 基金会今早点名、No-AI-Slop 宣言下午形式化的那个：生产便宜、评审不便宜——而一个与 harness 无关的评审 UI 能活过你的下一次切换。
+
+→ [[agent-stack]] [[harness-reliability]]
+
+Sources: [block/buzz](https://github.com/block/buzz) ·
+[block/buzz-app releases](https://github.com/block/buzz-app/releases) ·
+[backnotprop/plannotator](https://github.com/backnotprop/plannotator)

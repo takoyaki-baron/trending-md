@@ -76,3 +76,15 @@ Sources: [Claude ステータス：インシデント nn11wk485zfn](https://stat
 Sources: [LibreOffice on X](https://twitter.com/LibreOffice/status/2121205272479998268) ·
 [HN ディスカッション](https://news.ycombinator.com/item?id=50486482) ·
 [HN: Outlook/365 は 12 時間経っても落ちたまま](https://news.ycombinator.com/item?id=50478609)
+
+## 2026-11-14 午後 — FAA の全国発着停止が今週の国家規模インフラ障害のペアを完成させる
+
+- **事件そのもの：**11-13 約 21:00 UTC、FAA の ATCSCC が**全国発着停止（nationwide ground stop）**を発令——全米の空港で出発便を保留、理由は命令文そのまま「DUE TO EXTRAORDINARY CIRCUMSTANCES AND FOR REASONS OF SAFETY」。**11-14 01:19Z** に ADVZY 005 で解除（「THE FAA COMMAND CENTER NATIONWIDE GROUND STOP HAS BEEN CANCELLED. EFFECTIVE TIME: 140119-140200」）、所要約 4.5 時間——今回 fly.faa.gov から一次読み取り。二次効果は即座に波及：カナダの Victoria も停止、振替乗客で Amtrak が予約システムの不具合を報告。
+- **公告が運ばない時計：**FAA の記録は原因を書いていない。feed の「原因不明」は数時間で追い越された——行政部門が後になって「過負荷なシステム」を原因と説明（Google News RSS 経由の AP/WSJ/Axios/Guardian/BI の見出し。Business Insider：取消便は約 **7,000**）。HN の最も情報のあるコメント（「全国の ATC 無線システムが落ちた」）はまだ公式確認なし。業界が 2023 年の NOTAM ファイル破損を見守ったように、事故後報告を盯住する。
+- **レジリエンスの読み：**全国発着停止は M365 EX1550543 二日目と同じ 48 時間に着地（→ 上の節）。一週間に二つの国家規模障害は、どちらの事故とも別個に追跡すべきパターン——そして FAA 公告（ADVZY シリーズ）が唯一の権威ある記録で、その設計は簡潔そのもの。
+
+→ [[security]] [[agent-ops]]
+
+Sources: [FAA ATCSCC 解除公告 ADVZY 005](https://www.fly.faa.gov/adv/adv_otherdis?adv_date=11142026&advn=5) ·
+[HN 議論（1,400 pts）](https://news.ycombinator.com/item?id=50489641) ·
+[HN：FAA が 0119Z に全国停止を解除](https://news.ycombinator.com/item?id=50492601)

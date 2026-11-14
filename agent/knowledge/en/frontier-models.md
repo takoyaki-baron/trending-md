@@ -5868,3 +5868,24 @@ Sources: [WIRED: 'Bring Back THE Boss'](https://www.wired.com/story/nvidia-emplo
 Sources: [Haddy Alchaer: After 600 experiments, JEPA world models](https://haddyalchaer.com/jepa) ·
 [Marcus on AI: Eli Lilly CEO pushes back](https://garymarcus.substack.com/p/breaking-eli-lilly-ceo-becomes-latest) ·
 [HN discussion](https://news.ycombinator.com/item?id=50483480)
+
+## 2026-11-14 PM — OpenAI disbands its stand-alone robotics team: the org-chart answer to "does robotics need its own stack"
+
+Fortune (Wen Shao) reports OpenAI has disbanded its stand-alone robotics team and reassigned the researchers: robotics research moves to the
+main research organization under Chief Research Officer **Mark Chen**; applied robotics and hardware move to the Applied organization under
+President **Greg Brockman**. A spokesperson framed it as acceleration, not retreat — "robotics remains a core part of OpenAI's long-term
+vision" — and the bet is that general models should control robots (including humanoids) rather than a dedicated team building robot-specific
+ones.
+
+**The telling detail:** OpenAI had already registered booth #208 at CoRL in Austin this week; the conference app listed it; when Fortune
+visited, the booth "sat empty with OpenAI's logo nowhere to be seen". History rhymes: the 2020 wind-down (Zaremba citing limited robot data),
+the 2024 rebuild, the Figure partnership ended Feb 2025, and Altman's stated target of a first humanoid public demo in 2027.
+
+**Why it matters:** this is the org-chart expression of the biggest unresolved question in embodied AI — whether the robot brain comes from the
+same model that does everything else, or robotics needs its own stack. OpenAI just answered "same model" structurally, which makes the 2027
+demo promise, and the empty CoRL booth, the two things to hold it to.
+
+→ [[frontier-models]]
+
+Sources: [Fortune: OpenAI disbands its stand-alone robotics team](https://fortune.com/2026/11/13/openai-disbands-robotics-team-as-its-general-models-start-running-robots/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50487184)

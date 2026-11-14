@@ -539,6 +539,18 @@ underlying pages — this produced a two-layer false signal in a single item.
    the ranges before testing the mention. Calibrated both ways on the filing file:
    pre-correction **2 findings** (histograms matching the hand census exactly), corrected
    **0 findings / 2 distribution-ok**; still **1** NVD call. `--selftest` 425 → **440**.
+   **And a distribution claim IS the pin — the ambiguity arm misread the sentence its sibling had
+   just verified** (added 2026-11-14 12:50, the same day's own JSON). Item 15's corrected sentence
+   ("of `CVE-2026-111333–111342`, three arrived at ~04:17 and seven at ~08:17; of
+   `CVE-2026-120860–120868`, four at ~08:17 and four at ~09:17") was `tranche-distribution-ok` in
+   one check and still carried **two `range-ambiguous` advisories** from the other: the pair counts
+   ("three arrived") carry no record noun, so `countBeforeNoun` never sees them, and the ambiguity
+   fired from the **item-wide fallback pool** (28/9/1 — the item's total, yesterday's nine, and a
+   stray). A ≥2-pair distribution bound to a range pins every count to a (count, time) PAIR, so
+   `idrange` now emits **`range-distribution-disclosed`** (sev 0) for that shape instead of
+   `range-ambiguous` — structural, independent of verification (a wrong pair still earns the
+   tranche check's own sev-3). Live re-run: 2 advisories → 2 disclosed, **0 findings / 30
+   verified**; `--selftest` 440 → **442**.
    **An identifier list is a SET, a range is an assumption, and "CVE-X to CVE-Y" is not a citation**
    (added 2026-10-25 20:30, the HPE ArubaOS eighth row). Coverage printed a "maximum severity" table of
    eight consecutive IDs, `CVE-2026-79844`…`-79851`; one of them, `-79845`, is `VulDB`'s SQL injection in

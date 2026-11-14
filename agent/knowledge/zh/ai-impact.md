@@ -237,3 +237,16 @@ a documented license for"，接着要求一段带"所需的专有硬件"的视�
 Sources: [Synth Anatomy](https://synthanatomy.com/2026/11/ai-is-turning-apples-app-review-process-into-a-nightmare-for-developers.html) ·
 [Apple: App Review](https://developer.apple.com/distribute/app-review/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50474311)
+
+## 2026-11-14 下午 — 「No AI Slop: A Manifesto」给评审债问题下了定义
+
+由「AIE Code Summit 2026 的讲者与与会者」撰写、明确以 2001 年 Snowbird 聚会为模板（「In 2001, 17 software engineers and leaders got together at a ski lodge…」），宣言提出五个价值：**Outcomes over output · Understanding over speed · Our own thinking over a model's first draft · Better work over easier work · Improving the system over patching the output**。
+
+**正在被反复引用的定义：**「Slop is when we put less effort into producing something than we ask the consumer to spend understanding it.」信念小节点名了不对称与复利——「一群 agent 一天能产出一个人一辈子都评审不完的工作」；「产出一千行 PR 或十页文档的成本正趋近于零，而评审它的成本保持不变」；「用 AI 不必然产出 slop。把 AI 输出不加责任地传递下去，才是 slop。」
+
+**为什么在这里重要：**一份峰会集体署名的文件能不能像 Agile 改造流程债那样改造评审债，事先无从知晓——但「给 slop 下定义」这一步（生产者成本 对 消费者成本）是这场讨论迄今最锋利的表述，而且它落在 Haskell 基金会的评审者语言 pitch（论题 22）与 Plannotator 的 10k★ 评审面同一周。本 feed 自己的工具持续证实这个前提：AACR-Bench 同一模型跨 harness 约 1/9 的 token 差距（11-14）就是被测量出来的评审经济学。
+
+→ [[dev-tools]] [[agent-stack]]
+
+Sources: [No AI Slop: A Manifesto](https://www.slopmanifesto.com/) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50488769)

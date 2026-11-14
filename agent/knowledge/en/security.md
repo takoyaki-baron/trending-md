@@ -7604,3 +7604,42 @@ Sources: [TSMC Form 6-K](https://www.sec.gov/Archives/edgar/data/1046179/0001046
 Sources: [NVD: CVE-2026-114713 (UnrealIRCd)](https://nvd.nist.gov/vuln/detail/CVE-2026-114713) ·
 [NVD: CVE-2026-123039 (Check Point Gaia)](https://nvd.nist.gov/vuln/detail/CVE-2026-123039) ·
 [Caixa Seguridade material fact (PDF)](https://filemanager-cdn.mziq.com/published/3972906b-e50b-4f74-ab74-4d0d32125d11/9567a559-d20a-486e-a7ae-5c6bbc030c5e)
+
+## 2026-11-14 PM — the incident cluster hits the agent ecosystem's own supply chain; a consumer IoT teardown re-proves the eMudhra lesson; weight editing gets its threat model
+
+- **FBI FaceStealer — OSS maintainers are a named target class.** The FBI detailed the scheme behind **$400M+** stolen from **900+** victims
+  over 18 months: fake or hijacked social accounts invite the target to an imposter Zoom/Teams/Meet call; the screen plays **pre-recorded video
+  of a real acquaintance** with deliberately broken audio; the "fix" prompt delivers malware; the secretly-recorded call becomes vouching
+  material for the next victim. The scheme "aggressively targets" crypto/web3 workers, "**particularly those who are involved in the
+  development and maintenance of open-source software**". The defensive rule is procedural: verify identities out-of-band; video presence is
+  zero evidence. It follows last week's $6.3bn Binance-hack attribution.
+- **Apify: a compromised credential, and open storages readable by ID.** Nov 9–10 an unauthorized third party used a compromised credential to
+  obtain account credentials and access related accounts on the scraping platform underneath a lot of agent data collection; the access path is
+  closed, no attacker activity since Nov 11, affected customers notified Nov 12. Remediations: **API tokens now stored only as hashes**,
+  network restrictions between internal services, stronger internal authentication — plus the warning every user should act on: "While it's
+  open, anyone who knows a storage ID can read that storage." Scraped datasets are exactly what agents read without checking provenance; a
+  post-mortem with root cause is promised within a week.
+- **Uptime Kuma: two emergency releases, 7-day embargo.** 2.5.10 (03:53Z) + 2.5.11 (09:20Z) on Nov 12 fix **GHSA-437w-j82f-9vjh** — "[Admin
+  Only] RCE via an upstream package's regression", credited to reporter Tomer-PL. The advisory page isn't publicly readable yet (consistent
+  with the stated embargo), so the patch diff is the only public description. A monitoring tool — the thing you look at when everything else
+  breaks — carrying a dependency-regression RCE is a supply-chain story wearing a homelab badge; details land ~Nov 19.
+- **Coway Airmega IconS: the root CA arrives over plain HTTP.** Scott J. Goldman's teardown (Pi access-point + nftables + mitmproxy) finds the
+  "secure" IoT control channel was always interceptable — no pinning, no downgrade fight. The workflow half is newer: BLE provisioning
+  (protobuf + PKCS#7 + AES, "P002"-prefixed) reimplemented by a coding AI in "about 20 minutes" after "at least hours of work (likely days)"
+  by hand; because provisioning sets `caUrl`/`certSvrUrl`, pointing the fan at your own server retires the MitM rig entirely. The detail this
+  feed can verify first-hand: mitmproxy's `certs.py` (main) ships `--emudhra` / `--emudhra-old`, its comment naming "Compromised eMudhra
+  intermediate CA (EM OV TLS CA - G3C, d=4)" — the October eMudhra lesson, productized by the proxy itself.
+- **Weight Space Misfolding: the threat model for edited weights.** Von Csefalvay, Doma, Unni Krishnan & Foldi (HCLTech) take Nov 12's
+  weight-space-programming capability and write its security model — one model inducing unauthorized behaviour in another through direct
+  modification, with onward propagation (an edited model re-editing others) in scope. The structural claim is **defender asymmetry**: the
+  attacker "merely needs to generate the payload attack once", the defender must find it in the haystack of weights — so pure-detection
+  defenses lose and provenance policy for distributed weights becomes load-bearing. Taxonomy: factual substitution, capability denial,
+  selective omission (incl. offensive *selective unlearning*); three case studies via the IWIBench interface.
+
+→ [[security]] [[vuln-supply]] [[in-weight-compute]]
+
+Sources: [BBC: North Korean hackers used fake video calls in $400m crypto hack](https://www.bbc.com/news/articles/cqdj1ellpd70o) ·
+[Apify Security Incident](https://status.apify.com/incidents/sxd1dj5j6749) ·
+[Uptime Kuma 2.5.11](https://github.com/louislam/uptime-kuma/releases/tag/2.5.11) ·
+[Scott's Blog: Reverse Engineering My Coway Air Purifier](https://scottjg.com/posts/2026-11-11-reverse-engineering-my-coway-air-purifier-to-ditch-the-cloud/) ·
+[alphaXiv: Weight Space Misfolding](https://www.alphaxiv.org/abs/2611.weight-space-misfolding)

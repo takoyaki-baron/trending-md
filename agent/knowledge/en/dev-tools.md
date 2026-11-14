@@ -2051,3 +2051,24 @@ Sources: [Adapting CPython for yk](https://tratt.net/laurie/blog/2026/adapting_c
 Sources: [Discourse: A technical vision for the Haskell ecosystem](https://discourse.haskell.org/t/a-technical-vision-for-the-haskell-ecosystem/15078) ·
 [mtsoukalos.eu: Why Zig Over C for Systems Programming](https://www.mtsoukalos.eu/2026/11/why-zig-over-c-for-systems-programming/) ·
 [Lonewolf v0.3.0 release notes](https://github.com/lonewolf-im/lonewolf/releases/tag/v0.3.0)
+
+## 2026-11-14 PM — terminal borders that don't cost a cell: a Ratatui maintainer's protocol proposal, patched into Ghostty
+
+Josh — a maintainer of **Ratatui**, the Rust TUI library (verified this run against ratatui's `MAINTAINERS.md`: `joshka` is listed current) —
+proposes a terminal protocol extension that draws thin lines on the **edges** of cells instead of occupying cells with box-drawing characters:
+"Every line in that screenshot is a cell border. None of them use up a row or column." The motivation: the Unicode Box Drawing block's 128
+characters are structurally insufficient for real layouts, so TUI authors either burn rows/columns on borders or drop them for color.
+
+He's implemented it as **a patch to Ghostty** (an earlier version in Rio), with demo apps built on Ratatui, and is explicitly soliciting
+feedback from terminal and TUI authors — a protocol proposal, not a shipped feature. The post discloses itself up front: "This post (and the
+code behind it) was written with a lot of help from AI. I'm not going to apologize for that."
+
+**Why it matters:** terminal capability advances have historically spread exactly this way — one emulator ships a protocol, TUI libraries grow
+support, the rest follow (the kitty graphics protocol path). Ghostty keeps volunteering as the experimental substrate; if Ratatui adopts it,
+the emulation layer becomes the bottleneck.
+
+→ [[dev-tools]]
+
+Sources: [joshka.net: Terminal borders that don't cost a cell](https://www.joshka.net/cell-borders/) ·
+[ratatui MAINTAINERS.md](https://github.com/ratatui/ratatui/blob/main/MAINTAINERS.md) ·
+[HN discussion](https://news.ycombinator.com/item?id=50491423)

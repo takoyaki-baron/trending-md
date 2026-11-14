@@ -5240,3 +5240,19 @@ Sources: [TSMC Form 6-K](https://www.sec.gov/Archives/edgar/data/1046179/0001046
 Sources: [NVD: CVE-2026-114713（UnrealIRCd）](https://nvd.nist.gov/vuln/detail/CVE-2026-114713) ·
 [NVD: CVE-2026-123039（Check Point Gaia）](https://nvd.nist.gov/vuln/detail/CVE-2026-123039) ·
 [Caixa Seguridade 重要事項（PDF）](https://filemanager-cdn.mziq.com/published/3972906b-e50b-4f74-ab74-4d0d32125d11/9567a559-d20a-486e-a7ae-5c6bbc030c5e)
+
+## 2026-11-14 午後 — インシデントクラスタが agent エコシステム自身のサプライチェーンを直撃；消費者 IoT の分解が eMudhra の教訓を再証明；重み編集に脅威モデルが付く
+
+- **FBI FaceStealer——OSS メンテナは名指しされた標的クラス。**FBI が 18 か月で **900+** 人の被害者から **4 億ドル+** を奪った手口を詳述：偽アカウントまたは乗っ取ったアカウントが標的を偽物の Zoom/Teams/Meet 通話に誘い、画面には**実在の知人の事前録画**を故障した音声つきで再生、「直す」プロンプトがマルウェアを届け、密録された通話が次の被害者の信用材料になる。手口は暗号/Web3 従事者、中でも「**オープンソースソフトウェアの開発と保守に携わる人々**」を「aggressively targets」。防御規則は手続き的：帯域外で身元確認、ビデオの在席はゼロの証拠。先週の 63 億ドル Binance ハッキング帰属に続くもの。
+- **Apify：漏洩した認証情報と、ID を知る者なら読めるオープンストレージ。**11-09/10、未許可の第三者が漏洩した認証情報でアカウント情報を取得し関連アカウントへアクセス——多くの agent データ収集の下敷きにあるスクレイピング基盤である。アクセス経路は閉鎖、11-11 以降攻撃者の活動なし、影響顧客は 11-12 に通知。対応策：**API トークンはハッシュのみ保存**、内部サービス間のネットワーク制限、強化された内部認証——そして全ユーザーが従うべき警告：「オープンの間は、ストレージ ID を知る誰もがそのストレージを読める。」スクレイプ済みデータセットは、agent が出自確認なしに読むものそのもの；根本原因付きの事後報告は 1 週間以内に約束されている。
+- **Uptime Kuma：緊急リリース二本、7 日間の embargo。**11-12 の 2.5.10（03:53Z）＋ 2.5.11（09:20Z）が **GHSA-437w-j82f-9vjh** を修正——「[Admin Only] RCE via an upstream package's regression」、報告者 Tomer-PL の名付き。アドバイザリページはまだ公開可読でない（声明された embargo と整合）、パッチ diff だけが公開記述。他がすべて壊れたときに見る監視ツールが依存回帰の RCE を抱えるのは、homelab の外衣を着たサプライチェーン物語；詳細は約 11-19 に。
+- **Coway Airmega IconS：ルート CA が平文 HTTP で届く。**Scott J. Goldman の分解（Pi アクセスポイント＋nftables＋mitmproxy）が見つけたのは、「安全」なはずの IoT 制御チャネルが最初から傍受可能だったこと——ピンニングなし、ダウングレード攻防なし。工作流の側が新しい：BLE プロビジョニング（protobuf＋PKCS#7＋AES、「P002」接頭辞）は手作業で「少なくとも数時間（おそらく数日）」、コーディング AI は「約 20 分」で再実装；プロビジョニングが `caUrl`/`certSvrUrl` を設定するので、ファンを自分のサーバーに向ければ MitM の小屋は退役する。本 feed が一次検証できる細部：mitmproxy の `certs.py`（main）は `--emudhra`／`--emudhra-old` を搭載し、コメントが「Compromised eMudhra intermediate CA (EM OV TLS CA - G3C, d=4)」と名指し——10 月の eMudhra の教訓が、プロキシ自身によって製品化された。
+- **Weight Space Misfolding：編集された重みの脅威モデル。**Von Csefalvay、Doma、Unni Krishnan、Foldi（HCLTech）が 11-12 の重み空間プログラミング能力のセキュリティモデルを書く——あるモデルが別のモデルに直接改変で不正な振る舞いを誘導し、以降の伝播（編集されたモデルがさらに他を編集する）も範囲内。構造主張は**防御者の非対称**：攻撃者は「ペイロードを一度生成すればよい」、防御者は重みの干し草の山からそれを見つけねばならない——だから純検知の防御は負け、配布重みの出所（プロビナンス）ポリシーが耐力壁になる。分類：事実置換、能力剥奪、選択的省略（攻撃的な*選択的忘却*を含む）；IWIBench インターフェースによる三つのケーススタディ。
+
+→ [[security]] [[vuln-supply]] [[in-weight-compute]]
+
+Sources: [BBC：北朝鮮ハッカー、偽ビデオ通話で 4 億ドルの暗号資産窃盗](https://www.bbc.com/news/articles/cqdj1ellpd70o) ·
+[Apify セキュリティインシデント](https://status.apify.com/incidents/sxd1dj5j6749) ·
+[Uptime Kuma 2.5.11](https://github.com/louislam/uptime-kuma/releases/tag/2.5.11) ·
+[Scott's Blog：クラウドから独立させるため Coway 空気清浄機をリバースエンジニアリング](https://scottjg.com/posts/2026-11-11-reverse-engineering-my-coway-air-purifier-to-ditch-the-cloud/) ·
+[alphaXiv：Weight Space Misfolding](https://www.alphaxiv.org/abs/2611.weight-space-misfolding)

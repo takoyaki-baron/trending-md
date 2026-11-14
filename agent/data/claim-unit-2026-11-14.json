@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-14T04:25:37.706Z",
+ "generated": "2026-11-14T05:00:41.778Z",
  "files": [
   {
    "file": "2026-11-14.md",
@@ -8,30 +8,30 @@
     {
      "check": "status",
      "item": 11,
-     "verdict": "nvd-unavailable",
+     "verdict": "ok",
      "claim": "CVE-2026-123039 `Undergoing Analysis`",
-     "detail": "the NVD request that would have carried CVE-2026-123039 failed, so its `vulnStatus` was never read — \"I could not read it\" is not \"it says something else\""
+     "detail": "Undergoing Analysis (lastModified 2026-11-13T20:18:14.257)"
     },
     {
      "check": "status",
      "item": 15,
-     "verdict": "nvd-unavailable",
+     "verdict": "ok",
      "claim": "CVE-2026-111333 `Received`",
-     "detail": "the NVD request that would have carried CVE-2026-111333 failed, so its `vulnStatus` was never read — \"I could not read it\" is not \"it says something else\""
+     "detail": "Received (lastModified 2026-11-13T08:17:15.380)"
     },
     {
      "check": "status",
      "item": 15,
-     "verdict": "nvd-unavailable",
+     "verdict": "ok",
      "claim": "CVE-2026-111333 `Received`",
-     "detail": "the NVD request that would have carried CVE-2026-111333 failed, so its `vulnStatus` was never read — \"I could not read it\" is not \"it says something else\""
+     "detail": "Received (lastModified 2026-11-13T08:17:15.380)"
     },
     {
      "check": "status",
      "item": 15,
-     "verdict": "nvd-unavailable",
+     "verdict": "ok",
      "claim": "CVE-2026-111334 `Received`",
-     "detail": "the NVD request that would have carried CVE-2026-111334 failed, so its `vulnStatus` was never read — \"I could not read it\" is not \"it says something else\""
+     "detail": "Received (lastModified 2026-11-13T08:17:15.557)"
     },
     {
      "check": "repo",
@@ -64,30 +64,30 @@
     {
      "check": "idrange",
      "item": 15,
-     "verdict": "range-ambiguous",
+     "verdict": "range-distribution-disclosed",
      "claim": "CVE-2026-111333–111342",
-     "detail": "the item states 28 / 1 / 9 records near CVE-2026-111333–111342 (span 10) — it does not pin one count to one range"
+     "detail": "2 (count, time) pairs pin this range per tranche — a distribution claim states where every id went, so the item-wide count pool is not a failed pin; each pair is verified against the records' own timestamps by the tranche check"
     },
     {
      "check": "idrange",
      "item": 15,
-     "verdict": "range-ambiguous",
+     "verdict": "range-distribution-disclosed",
      "claim": "CVE-2026-120860–120868",
-     "detail": "the item states 28 / 1 / 9 records near CVE-2026-120860–120868 (span 9) — it does not pin one count to one range"
+     "detail": "3 (count, time) pairs pin this range per tranche — a distribution claim states where every id went, so the item-wide count pool is not a failed pin; each pair is verified against the records' own timestamps by the tranche check"
     },
     {
      "check": "tranche",
      "item": 15,
-     "verdict": "tranche-unread",
+     "verdict": "tranche-distribution-ok",
      "claim": "CVE-2026-111333–111342",
-     "detail": "10 id(s) in the tranche-bound range were never read (no answered chunk) — unread is not absent"
+     "detail": "CVE-2026-111333–111342: 3 at ~04:17 → observed 3, 7 at ~08:17 → observed 7 over a 10-id span"
     },
     {
      "check": "tranche",
      "item": 15,
-     "verdict": "tranche-unread",
+     "verdict": "tranche-distribution-ok",
      "claim": "CVE-2026-120860–120868",
-     "detail": "9 id(s) in the tranche-bound range were never read (no answered chunk) — unread is not absent"
+     "detail": "CVE-2026-120860–120868: 4 at ~08:17 → observed 4, 4 at ~09:17 → observed 4, ~00:20 ×1 (unstated) over a 9-id span; the remaining 1 are named in the text"
     },
     {
      "check": "quotation",
@@ -220,7 +220,7 @@
      "item": 25,
      "verdict": "ok",
      "claim": "5 quotation(s)",
-     "detail": "verbatim in 2 readable source(s)"
+     "detail": "verbatim in 3 readable source(s)"
     },
     {
      "check": "quotation",
@@ -263,9 +263,9 @@
  "status_watch": [],
  "api_calls": 0,
  "readme_calls": 0,
- "cited_page_calls": 0,
+ "cited_page_calls": 14,
  "repo_page_calls": 0,
- "nvd_calls": 0,
- "nvd_failed_chunks": 1,
+ "nvd_calls": 1,
+ "nvd_failed_chunks": 0,
  "cna_calls": 0
 }

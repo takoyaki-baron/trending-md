@@ -458,3 +458,17 @@ Strands、そして今の Google をカバー）。謳われる用途はまさ�
 
 Sources: [Google: Gemini Decisions API](https://blog.google/innovation-and-ai/technology/developers-tools/gemini-decisions-api/) ·
 [HN ディスカッション](https://news.ycombinator.com/item?id=50456791)
+
+## 2026-11-14 — Perplexity が Decider v1.3 を公開重みで出荷：公開評価手法を持つクラス初の Apache 参戦者
+
+Perplexity が **Decider v1.3** と **Decider Flash v1.3** の完全な学習/評価レポートを公開——yes/no、多択、順序付きスコアの質問に確率分布を返す汎用分類器——**Hugging Face 上で Apache-2.0**（今回検証：`perplexity-ai/pplx-decider-v1.3`、作成 2026-11-09、license タグ `apache-2.0`；OpenRouter と Decisions API でも提供）。投稿は系譜を明記——「inspired by Jev, TypeSafe AI's System One Model」——さらに**双方向アテンション**、精選データ、ビジョンタスク対応、選択されたスパンをハイライトする新機能 **`locate`**（NER/PII/抽出 QA の形）を追加。学習衛生は具体的：ベンチマーク分割は汎用ステージから除外、対象ドメイン向けの第二 LoRA ステージ。
+
+**実質は内部利用の節：**200+ タスクのゼロショット評価スイート；実ボリュームの本番クエリ分類（情報抽出 **425,402** 問、ドメイン分類 **409,564**、感情 **344,158**）；そして「self-improving security rules」——agent の活動を記録し、Decider をループに置いてルールベースの検査を回す、本 feed が追う agent セキュリティ境界の上にちょうど乗る決定モデルのユースケース。
+
+**クラス内の位置：**小分類器がルーティング/判定/モデレーションを担い、難例を大きなモデルへエスカレートするパターンは一か月 vendor 証拠を積んできた——Amazon の本番トラフィックスワップ（11-10）、Hightouch の較正エスカレーション帯（11-07）、OpenAI と一セントも違わぬ価格の Google Decisions API（11-12）。Decider v1.3 は完全に公開重み・Apache ライセンス・**公開評価手法付き**の最初の参戦者——パターンを vendor 実演から独立再現可能へ変え、常設チェックリスト（Perplexity、Cloudflare `Clef`、Juspay、AutoTrust、Amazon Strands、Google）に誰もが実際に走らせられる初のエントリを与える。
+
+→ [[smart-routing]] [[token-economics]]
+
+Sources: [Perplexity：Decider v1.3 — Training, eval, and use cases](https://www.perplexity.ai/hub/blog/perplexity-decider) ·
+[HF：perplexity-ai/pplx-decider-v1.3](https://huggingface.co/perplexity-ai/pplx-decider-v1.3) ·
+[HN 議論](https://news.ycombinator.com/item?id=50488464)

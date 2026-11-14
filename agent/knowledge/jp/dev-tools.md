@@ -1446,3 +1446,17 @@ Sources: [Adapting CPython for yk](https://tratt.net/laurie/blog/2026/adapting_c
 Sources: [Discourse: Haskell エコシステムの技術ビジョン](https://discourse.haskell.org/t/a-technical-vision-for-the-haskell-ecosystem/15078) ·
 [mtsoukalos.eu: なぜシステムプログラミングで C ではなく Zig なのか](https://www.mtsoukalos.eu/2026/11/why-zig-over-c-for-systems-programming/) ·
 [Lonewolf v0.3.0 リリースノート](https://github.com/lonewolf-im/lonewolf/releases/tag/v0.3.0)
+
+## 2026-11-14 午後 — セルを消費しない端末ボーダー：Ratatui メンテナのプロトコル提案、Ghostty へのパッチ
+
+Josh——Rust の TUI ライブラリ **Ratatui** のメンテナ（今回 ratatui の `MAINTAINERS.md` で検証：`joshka` が現職リストに載る）——は、罫線文字でセルを占有する代わりにセルの**端**に細い線を描く端末プロトコル拡張を提案する：「Every line in that screenshot is a cell border. None of them use up a row or column.」動機：Unicode Box Drawing ブロックの 128 文字は実レイアウトに構造的に不足しており、TUI 作者はボーダーのために行/列を燃やすか、色のためにボーダーを諦めるかしかない。
+
+実装は**Ghostty へのパッチ**として（より早い版は Rio）、Ratatui ベースのデモアプリつきで、端末と TUI 作者に公開でフィードバックを募っている——出荷済み機能ではなくプロトコル提案。投稿は冒頭で自己開示する：「This post (and the code behind it) was written with a lot of help from AI. I'm not going to apologize for that.」
+
+**なぜ重要か：**端末能力の進歩は歴史的にまさにこう広がった——ひとつのエミュレータがプロトコルを出し、TUI ライブラリが対応を育て、残りが続く（kitty グラフィックスプロトコルの経路）。Ghostty は実験基盤に志願し続けている；Ratatui が採用すれば、ボトルネックはエミュレーション層に移る。
+
+→ [[dev-tools]]
+
+Sources: [joshka.net：セルを消費しない端末ボーダー](https://www.joshka.net/cell-borders/) ·
+[ratatui MAINTAINERS.md](https://github.com/ratatui/ratatui/blob/main/MAINTAINERS.md) ·
+[HN 議論](https://news.ycombinator.com/item?id=50491423)

@@ -483,3 +483,16 @@ Sources: [Garrett Stimpson：I caught Microsoft red-handed with Hodometer](https
 
 Sources: [NPR: Google はなぜ AI のない学校から Search を切り上げるのか](https://text.npr.org/nx-s1-6029408) ·
 [HN ディスカッション](https://news.ycombinator.com/item?id=50484960)
+
+## 2026-11-14 午後 — 初の持続的 ALPR ロールバックは訴訟でなく契約圧力で来る
+
+The Guardian が反転を描く：**4 月以降、7 州の少なくとも 10 の大学キャンパスが Flock Safety との契約を破棄**——Cornell、Penn State、Elgin Community College、Emory、Binghamton、Kent State、ウィスコンシン大学 3 キャンパス（Madison、Milwaukee、Oshkosh）——University at Buffalo は先週無期限停止を発表。組織するのは学生：Stanford では 21 歳の CS 学部 4 年 Angela Nguyen が学生・教職員・卒業生・住民から数百の署名を集め、Flock 契約の破棄と類似ツールへの保障条項化を求め；Stanford は今年夏に手を切った。
+
+**反対意見の鍵となっているのは、設計に関係ある事実：**カメラそのものではなく、「あらゆる車両がどこにいたか」の記録が**ネットワーク化された形で照会可能**で、「脆弱な人々を害するために悪用されうる」こと——中絶を求める人、移民、抗議者。ICE 審問官の共有ログイン事件（10-20：共有 Flock ログインひとつで 6 州 **983** 件の検索）と同じ構造論证——能力を持つのは**センサーではなくネットワーク**。
+
+**なぜ重要か：**この規模での初の持続的・成功的 ALPR 配備ロールバックであり、そのメカニズムは**訴訟ではなく契約圧力**——他の機関が写せるテンプレート。テーゼ 15 の形（能力クラスの削除、正当で収益化されていないユーザーが損失を負う）がここでは逆回転する：プラットフォームが代わりにやる前に、顧客自身が能力クラスを削除した。
+
+→ [[platform-gatekeeping]] [[security]]
+
+Sources: [The Guardian：米大学生、監視カメラに「Flock off」と](https://www.theguardian.com/technology/ng-interactive/2026/nov/13/universities-drop-flock-camera-contracts) ·
+[HN 議論](https://news.ycombinator.com/item?id=50483759)

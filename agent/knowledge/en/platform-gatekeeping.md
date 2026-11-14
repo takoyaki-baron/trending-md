@@ -592,3 +592,26 @@ Sources: [Garrett Stimpson: I caught Microsoft red-handed with Hodometer](https:
 
 Sources: [NPR: Why is Google cutting off Search from AI-free schools?](https://text.npr.org/nx-s1-6029408) ·
 [HN discussion](https://news.ycombinator.com/item?id=50484960)
+
+## 2026-11-14 PM — the first sustained ALPR rollback arrives by contract pressure, not litigation
+
+The Guardian charts the reversal: **since April, at least ten university campuses across seven states have scrapped Flock Safety contracts** —
+Cornell, Penn State, Elgin Community College, Emory, Binghamton, Kent State and three University of Wisconsin branches (Madison, Milwaukee,
+Oshkosh) — with the University at Buffalo announcing an indefinite pause last week. The organizing is student-led: at Stanford, 21-year-old CS
+senior Angela Nguyen collected hundreds of signatures from students, faculty, alumni and residents demanding the school drop its Flock contract
+and codify safeguards for similar tools; Stanford cut ties this summer.
+
+**What the opposition is keyed to is the design-relevant fact:** not cameras per se, but a record of where any vehicle was, **queryable in
+networked ways** that can "be exploited to victimize vulnerable people" — abortion seekers, immigrants, protesters. The same structural argument
+as the ICE-agent shared-login case (10-20: one shared Flock login, **983** searches across six states) — the network, not the sensor, is the
+capability.
+
+**Why it matters here:** this is the first sustained, successful rollback of ALPR deployments at this scale, and the mechanism is **contract
+pressure rather than litigation** — a template other institutions can copy. Thesis 15's shape (a capability class removed, legitimate
+unmonetized users take the loss) here runs in reverse: the customers removed the capability class themselves, before any platform did it for
+them.
+
+→ [[platform-gatekeeping]] [[security]]
+
+Sources: [The Guardian: US university students tell surveillance cameras to Flock off](https://www.theguardian.com/technology/ng-interactive/2026/nov/13/universities-drop-flock-camera-contracts) ·
+[HN discussion](https://news.ycombinator.com/item?id=50483759)

@@ -599,3 +599,29 @@ policy checks, model routing, context grading — every one a control point wher
 
 Sources: [Google: Gemini Decisions API](https://blog.google/innovation-and-ai/technology/developers-tools/gemini-decisions-api/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50456791)
+
+## 2026-11-14 — Perplexity ships Decider v1.3 open weights: the class's first Apache-licensed entrant with a published eval method
+
+Perplexity published the full training/eval writeup for **Decider v1.3** and **Decider Flash v1.3** — general-purpose classifiers returning
+probability distributions for yes/no, multiple-choice and ordered-score questions — **Apache-2.0 on Hugging Face** (verified this run:
+`perplexity-ai/pplx-decider-v1.3`, created 2026-11-09, license tag `apache-2.0`; also via OpenRouter and the Decisions API). The post credits
+the lineage — "inspired by Jev, TypeSafe AI's System One Model" — and adds **bidirectional attention**, better-curated data, vision-task
+support, and a new **`locate`** feature that highlights the selected span (NER/PII/extractive-QA shape). Training hygiene is described
+concretely: benchmark splits excluded from the generalist stage; a second LoRA stage for targeted domains.
+
+**The substantive part is the internal-usage section:** a 200+-task zero-shot eval suite; production query classification with real volumes
+(information extraction **425,402** questions, domain classification **409,564**, sentiment **344,158**); and "self-improving security rules"
+— recording agent activity and running rule-based checks against it with Decider in the loop, a decision-model use case sitting exactly on the
+agent-security boundary this feed tracks.
+
+**Where it sits in the class:** the pattern (small classifier routes/judges/moderates, escalate the hard cases) accumulated vendor evidence all
+month — Amazon's live-traffic ticketing swap (11-10), Hightouch's calibrated escalation band (11-07), Google's Decisions API at OpenAI's exact
+price (11-12). Decider v1.3 is the first fully open-weights, Apache-licensed entrant **with a published eval method**, which makes the pattern
+independently reproducible rather than vendor-illustrated — and gives the standing checklist (Perplexity, Cloudflare `Clef`, Juspay,
+AutoTrust, Amazon Strands, Google) its first entry anyone can actually run.
+
+→ [[smart-routing]] [[token-economics]]
+
+Sources: [Perplexity: Decider v1.3 — Training, eval, and use cases](https://www.perplexity.ai/hub/blog/perplexity-decider) ·
+[HF: perplexity-ai/pplx-decider-v1.3](https://huggingface.co/perplexity-ai/pplx-decider-v1.3) ·
+[HN discussion](https://news.ycombinator.com/item?id=50488464)

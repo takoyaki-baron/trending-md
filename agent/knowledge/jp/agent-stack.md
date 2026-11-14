@@ -2722,3 +2722,15 @@ $0.0077 に下がると主張。
 
 Sources: [Parcha-ai/agentrun](https://github.com/Parcha-ai/agentrun) ·
 [HN Show](https://news.ycombinator.com/item?id=50471650)
+
+## 2026-11-14 午後 — Block Buzz が署名イベントログをネイティブストレージとして再トレンド；Plannotator がレビュー面を出荷
+
+- **Block Buzz（検証 **37,331★**；09-26 の再登場——当時 34.7k でトレンド）.**「人間と agent が一緒に作るワークスペース、自分が所有する relay の上で」：中身は **Nostr relay**（ワイヤは NIP-01）、README は結果を明示する——「すべてのメッセージ、リアクション、ワークフローステップ、レビュー承認、git イベントがひとつのログの署名イベント。同じ形、同じアイデンティティモデル、同じ監査証跡、作者が人でもプロセスでも。」agent は独自の鍵ペア・チャネルメンバーシップ・監査証跡を持ち、「権限フラグではなく、アイデンティティで——チームメイトと同じように」スコープされる；人間と同じ表面積：リポジトリを開き、パッチを送り、コードをレビューし、ワークフローを走らせ、キャンバスを編集し、他の agent をオーケストレートし、音声ハドルに参加。VISION.md は投稿が運ばなかったものを追加：マルチテナント隔離を **TLA+ と Tamarin** で機械化しミューテーションテスト済み（「proven, not asserted」）、そして「The relay enforces all access control. Channel membership is the only gate.」今月の三つの agent ワークスペース設計（CompanyOS の検証者のみ完了、AgentRun のコントロールプレーン、Paradev の agent 別ワークスペース）は署名監査証跡に収束している——Buzz は監査ログを*ネイティブストレージモデル*にした最初のもの、Nostr の署名イベント形状を継ぐことで。relay がデータベースなら、「誰が何をしたか」は SaaS 管理画面に囚われず、鍵と共に持ち運べる。
+- **リリースエンドポイントのドリフト、feed でその場修正（テーゼ 27 の形、再演）：**投稿の「desktop v0.5.29 が 11-12 に出た／mobile v1.1-v1.2 RC」はどのリリースエンドポイントにも一致しない。`block/buzz`（relay＋mobile/ Flutter クライアントのリポジトリ）に **v0.5.29 は存在しない**——最新は `desktop-v0.5.30`（2026-11-14T00:31:43Z）、次いで `desktop-v0.5.28`（10-09）；mobile リリースはそこに存在しない（mobile は `mobile/` からストア経由で出荷、GitHub releases ではない）。デスクトップアプリ自身のリポジトリ **`block/buzz-app`**（248★、09-10 作成）が **11-13 の一日に v1.0.1 → v1.0.2 → v1.0.3-preview.1** を出した。en/zh/jp＋ミラーで修正済み。
+- **Plannotator（検証 **10,522★**；リポジトリ作成 2025-12-28）——今月のクラスタが意味するレビュー面.**6 日で 5 リリース（v0.28.59 → v0.28.64、最新 2026-11-13T17:24Z）；プラグイン・フック・コマンドでコーディング agent に接続するローカル・ブラウザベースのレビュー面：agent が決定・計画・HTML アーティファクト・完成 diff を提出したら、注釈しコメントしマークアップを送り返す。ハーネスのリストは一つのツールとして最広——Claude Code、Codex、Copilot CLI、Gemini CLI、OpenCode、Kiro、Droid、Amp、DeepSeek Harness、Pi——そして **Plannotator Inbox** は「あなたとマルチエージェント作業の間に欠けているレビュー層」を自任し、決定・プロトタイプ・バリエーション・計画をひとつのキューに浮上させ、端末ランタイムへ繋ぐ Herdr Annotate 統合もある。ボトルネックは Haskell 財団が今朝名指しし No-AI-Slop マニフェストが午後に形式化したそれ：生産は安く、レビューは違う——ハーネス非依存のレビュー UI は次のハーネス乗り換えを生き延びる。
+
+→ [[agent-stack]] [[harness-reliability]]
+
+Sources: [block/buzz](https://github.com/block/buzz) ·
+[block/buzz-app releases](https://github.com/block/buzz-app/releases) ·
+[backnotprop/plannotator](https://github.com/backnotprop/plannotator)

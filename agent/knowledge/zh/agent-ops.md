@@ -96,3 +96,15 @@ agent 可以在每个工具和每一层基础设施都正常工作时做出错�
 来源：[LibreOffice 的 X 帖](https://twitter.com/LibreOffice/status/2121205272479998268) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50486482) ·
 [HN：Outlook/365 十二小时后仍未恢复](https://news.ycombinator.com/item?id=50478609)
+
+## 2026-11-14 下午 — FAA 全国性地面停飞补全本周的国家级基础设施配对
+
+- **事件本身：**约 11-13 21:00 UTC，FAA 的 ATCSCC 发布**全国性地面停飞**——所有美国机场、出发航班全部扣留——理由按命令原文是「DUE TO EXTRAORDINARY CIRCUMSTANCES AND FOR REASONS OF SAFETY」。**11-14 01:19Z** 经 ADVZY 005 解除（「THE FAA COMMAND CENTER NATIONWIDE GROUND STOP HAS BEEN CANCELLED. EFFECTIVE TIME: 140119-140200」），前后约 4.5 小时——本轮从 fly.faa.gov 一手读取。二阶效应立即传导：加拿大的 Victoria 同步停飞；旅客改签令 Amtrak 报告订票系统故障。
+- **公告不携带的时钟：**FAA 记录未写原因。feed 的「原因仍未说明」在数小时内被超越——行政部门随后归咎于「过载」的系统（经 Google News RSS 的 AP/WSJ/Axios/Guardian/BI 标题；Business Insider：近 **7,000** 班航班取消）。HN 上信息量最大的评论（「全国的 ATC 无线电系统瘫痪了」）仍未获任何官方渠道确认。像行业当年盯 NOTAM 2023 年文件损坏那样盯住事后报告。
+- **韧性读法：**全国性地面停飞落在 M365 EX1550543 第二天的同一 48 小时内（→ 上文小节）。一周之内两起国家级故障是一个值得独立于任一事故追踪的模式——而 FAA 公告（ADVZY 系列）是唯一的权威记录，它们的设计就是简短。
+
+→ [[security]] [[agent-ops]]
+
+Sources: [FAA ATCSCC 解除公告 ADVZY 005](https://www.fly.faa.gov/adv/adv_otherdis?adv_date=11142026&advn=5) ·
+[HN 讨论（1,400 分）](https://news.ycombinator.com/item?id=50489641) ·
+[HN：FAA 于 0119Z 解除全国地面停飞](https://news.ycombinator.com/item?id=50492601)

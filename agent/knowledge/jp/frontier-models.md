@@ -3945,3 +3945,16 @@ Sources: [WIRED：'Bring Back THE Boss'](https://www.wired.com/story/nvidia-empl
 Sources: [Haddy Alchaer: 600 実験の後に見つけた JEPA ワールドモデルのこと](https://haddyalchaer.com/jepa) ·
 [Marcus on AI: Eli Lilly CEO が反論に加わる](https://garymarcus.substack.com/p/breaking-eli-lilly-ceo-becomes-latest) ·
 [HN ディスカッション](https://news.ycombinator.com/item?id=50483480)
+
+## 2026-11-14 午後 — OpenAI がスタンドアロンのロボティクスチームを解散：「ロボティクスに独自スタックが必要か」への組織図の回答
+
+Fortune（Wen Shao）の報道では、OpenAI はスタンドアロンのロボティクスチームを解散し研究者を再配置：ロボティクス研究は Chief Research Officer **Mark Chen** 配下の主力研究組織へ、応用ロボティクスとハードウェアは President **Greg Brockman** 配下の Applied 組織へ。報道官は後退でなく加速と枠づけ——「robotics remains a core part of OpenAI's long-term vision」——賭けは、ロボット専用モデルを作る専任チームではなく、汎用モデルがロボット（ヒューマノイド含む）を制御すべきというもの。
+
+**最も物語る細部：**OpenAI は今週の Austin CoRL にブース #208 を登録済みだった；カンファレンスアプリに載っていた；Fortune が訪れると、ブースは「空のまま、OpenAI のロゴはどこにも見当たらず」。歴史は韻を踏む：2020 年の縮小（Zaremba がロボットデータの不足を挙げた）、2024 年の再建、2025 年 2 月に終わった Figure パートナーシップ、そして Altman の「2027 年に初のヒューマノイド公開デモ」という目標。
+
+**なぜ重要か：**これは具身 AI 最大の未解決問題——ロボットの脳が何でもできる同じモデルから来るのか、ロボティクスに独自のスタックが必要なのか——の組織図での表現である。OpenAI は構造的に「同じモデル」と答えたばかりで、それが 2027 年のデモ公約と空の CoRL ブースという、押さえつけるべき二つのものになる。
+
+→ [[frontier-models]]
+
+Sources: [Fortune：OpenAI がスタンドアロン ロボティクスチームを解散](https://fortune.com/2026/11/13/openai-disbands-robotics-team-as-its-general-models-start-running-robots/) ·
+[HN 議論](https://news.ycombinator.com/item?id=50487184)

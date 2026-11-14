@@ -250,3 +250,16 @@ Unfiltered Audio の Michael Hetrick は **4 回**拒否された——編集者
 Sources: [Synth Anatomy](https://synthanatomy.com/2026/11/ai-is-turning-apples-app-review-process-into-a-nightmare-for-developers.html) ·
 [Apple: App Review](https://developer.apple.com/distribute/app-review/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50474311)
+
+## 2026-11-14 午後 — 「No AI Slop: A Manifesto」がレビュー負債の問題に定義を与える
+
+「AIE Code Summit 2026 の講者と参加者」の署名で、2001 年の Snowbird 集会を明示的に模範とし（「In 2001, 17 software engineers and leaders got together at a ski lodge…」）、マニフェストは五つの価値を提示する：**Outcomes over output · Understanding over speed · Our own thinking over a model's first draft · Better work over easier work · Improving the system over patching the output**。
+
+**引用され続けている定義：**「Slop is when we put less effort into producing something than we ask the consumer to spend understanding it.」信念の節は非対称と複利を名指す：「agent の群れは一日で、人が一生かけてもレビューしきれない量を生産できる」；「千行の PR や十ページの文書を生産するコストはゼロに近づき、レビューするコストは一定のままだ」；「AI を使うこと自体は slop を作らない。AI の出力を責任を持たずに先へ流すとき、slop が生まれる。」
+
+**ここで重要な理由：**サミット署名の文書がレビュー負債に対して Agile がプロセス負債にしたことができるかは、事前に知りようがない——だが slop を定義する動き（生産者の労力 vs 消費者のコスト）はこの議論が生んだ最も鋭い定式化で、Haskell 財団のレビュアー言語ピッチ（テーゼ 22）と Plannotator の 10k★ レビュー面と同じ週に着地する。本 feed 自身の計器は前提を確認し続けている：同じモデルでのハーネス間約 1/9 のトークン差（AACR-Bench、11-14）は、測定されたレビュー経済学そのもの。
+
+→ [[dev-tools]] [[agent-stack]]
+
+Sources: [No AI Slop: A Manifesto](https://www.slopmanifesto.com/) ·
+[HN 議論](https://news.ycombinator.com/item?id=50488769)

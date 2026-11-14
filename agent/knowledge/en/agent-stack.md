@@ -3614,3 +3614,36 @@ agent infra is converging.
 
 Sources: [Parcha-ai/agentrun](https://github.com/Parcha-ai/agentrun) ·
 [HN Show](https://news.ycombinator.com/item?id=50471650)
+
+## 2026-11-14 PM — Block Buzz re-trends with the signed-event log as native storage; Plannotator ships the review surface
+
+- **Block Buzz (37,331★ verified; a 09-26 re-appearance — it trended at 34.7k then).** "A workspace where humans and agents build together, on
+  a relay you own": under the hood a **Nostr relay** (NIP-01 on the wire), and the README makes the consequence explicit — "every message,
+  reaction, workflow step, review approval, and git event is a signed event in one log. Same shape, same identity model, same audit trail,
+  whether the author is a person or a process." Agents get their own keypairs, channel memberships and audit trail, scoped "by identity, not
+  by permission flags — the same way you'd scope a teammate", with the same surface area as humans: open repos, send patches, review code, run
+  workflows, edit canvases, orchestrate other agents, join voice huddles. VISION.md adds what the feed item didn't carry: multi-tenant
+  isolation mechanized in **TLA+ and Tamarin** with mutation testing ("proven, not asserted"), and "The relay enforces all access control.
+  Channel membership is the only gate." Three agent-workspace designs this month (CompanyOS's verifier-only goal closure, AgentRun's control
+  plane, Paradev's per-agent workspaces) converge on signed audit trails — Buzz is the first to make the audit log the *native storage model*
+  by inheriting Nostr's signed-event shape. If the relay is the database, "who did what" is portable with your keys, not trapped in a SaaS
+  admin UI.
+- **Release-endpoint drift, corrected in the feed (thesis 27's shape, again):** the item's "desktop v0.5.29 shipped Nov 12 / mobile v1.1-v1.2
+  RCs" matches no release endpoint. `block/buzz` (the relay + the mobile/ Flutter client repo) carries **no v0.5.29** — its newest release is
+  `desktop-v0.5.30` at 2026-11-14T00:31:43Z, then `desktop-v0.5.28` (10-09); no mobile releases exist there (mobile ships from `mobile/` via
+  store channels, not GitHub releases). The desktop app's own repo, **`block/buzz-app`** (248★, created 09-10), shipped **v1.0.1 → v1.0.2 →
+  v1.0.3-preview.1, all on Nov 13**. Corrected in en/zh/jp + mirrors.
+- **Plannotator (10,522★ verified; repo created 2025-12-28) — the review surface this month's cluster implies.** Five releases in six days
+  (v0.28.59 → v0.28.64, latest 2026-11-13T17:24Z); a local, browser-based review surface wired into coding agents through plugins, hooks and
+  commands: when the agent proposes a decision, plan, HTML artifact or finished diff, you annotate, comment, and send the markup back. The
+  harness list is the widest seen in one tool — Claude Code, Codex, Copilot CLI, Gemini CLI, OpenCode, Kiro, Droid, Amp, DeepSeek Harness and
+  Pi — and the **Plannotator Inbox** positions itself as "the missing review layer between you and multi-agent work", surfacing decisions,
+  prototypes, variations and plans in one queue, with a Herdr Annotate integration tying it to the terminal runtime. The bottleneck is the one
+  the Haskell Foundation named this morning and the No-AI-Slop manifesto formalized: production is cheap, review isn't — and a review UI that
+  is harness-agnostic survives whichever harness you switch to next.
+
+→ [[agent-stack]] [[harness-reliability]]
+
+Sources: [block/buzz](https://github.com/block/buzz) ·
+[block/buzz-app releases](https://github.com/block/buzz-app/releases) ·
+[backnotprop/plannotator](https://github.com/backnotprop/plannotator)

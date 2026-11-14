@@ -421,3 +421,17 @@ Strands，以及现在的 Google）。宣传的用途正是路由器的输入—
 
 Sources: [Google：Gemini Decisions API](https://blog.google/innovation-and-ai/technology/developers-tools/gemini-decisions-api/) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50456791)
+
+## 2026-11-14 — Perplexity 以开放权重发布 Decider v1.3：本类第一个带公开评估方法的 Apache 参赛者
+
+Perplexity 发布了 **Decider v1.3** 与 **Decider Flash v1.3** 的完整训练/评估报告——对是否、多选与有序打分问题返回概率分布的通用分类器——**Apache-2.0，在 Hugging Face 上**（本轮核验：`perplexity-ai/pplx-decider-v1.3`，创建于 2026-11-09，license 标签 `apache-2.0`；另经 OpenRouter 与 Decisions API 提供）。帖子把师承写明——「inspired by Jev, TypeSafe AI's System One Model」——并加入**双向注意力**、更精挑的数据、视觉任务支持，以及新的 **`locate`** 功能：高亮被选中的文本片段（NER/PII/抽取式问答形态）。训练卫生写得很具体：基准划分在通才阶段被排除；面向目标领域的第二段 LoRA。
+
+**实质部分是内部使用小节：**一套 200+ 任务零样本评估套件；带真实产量的生产查询分类（信息抽取 **425,402** 问、领域分类 **409,564**、情感 **344,158**）；以及「self-improving security rules」——记录 agent 活动并让 Decider 在环上跑基于规则的检查，一个恰好落在本 feed 追踪的 agent 安全边界上的决策模型用例。
+
+**它在类中的位置：**小分类器做路由/评审/审核、难例升级给大模型的模式整月都在积累厂商证据——Amazon 的生产流量切换（11-10）、Hightouch 的校准升级带（11-07）、Google 按分毫不差定价的 Decisions API（11-12）。Decider v1.3 是第一个完全开放权重、Apache 许可**且带公开评估方法**的参赛者——这让该模式可被独立复现而非厂商演示，也给常设清单（Perplexity、Cloudflare `Clef`、Juspay、AutoTrust、Amazon Strands、Google）添了第一个任何人都能真的跑起来的条目。
+
+→ [[smart-routing]] [[token-economics]]
+
+Sources: [Perplexity：Decider v1.3 — Training, eval, and use cases](https://www.perplexity.ai/hub/blog/perplexity-decider) ·
+[HF：perplexity-ai/pplx-decider-v1.3](https://huggingface.co/perplexity-ai/pplx-decider-v1.3) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50488464)

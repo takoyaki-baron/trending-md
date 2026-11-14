@@ -3162,6 +3162,17 @@ function checkIdRange(it) {
   const { ranges, counts } = idRangeClaims(plain);
   if (!ranges.length) return [];
   const out = [];
+  /* 2026-11-14 12:50 — a DISTRIBUTION claim is the disclosure the ambiguity arm kept missing. One
+   * day after the tranche check shipped, its own filing item STILL filed two `range-ambiguous`
+   * advisories: the corrected sentence ("of CVE-…–111342, three arrived at ~04:17 and seven at
+   * ~08:17; of CVE-…–120868, four at ~08:17 and four at ~09:17") pins every count to a
+   * (count, time) PAIR, so "does not pin one count to one range" misreads the sentence's shape —
+   * and the pair counts are invisible to `countBeforeNoun` ("three arrived" carries no record
+   * noun), so the ambiguity fired from the item-wide FALLBACK pool (28/9/1). A ≥2-pair
+   * distribution bound to this range is a structural disclosure regardless of whether the pairs
+   * verify — verification rides the tranche check (same ids, same pull), which files its own
+   * sev-3 on a wrong pair; this arm only decides what the sentence's shape IS. */
+  const distClaims = trancheClaims(plain);
   for (const r of ranges) {
     if (!r.sameYear) {
       out.push({ check: 'idrange', item: it.n, verdict: 'range-cross-year', claim: r.from, detail: `spans two years — identifier arithmetic has no meaning across a pool boundary` });
@@ -3169,6 +3180,12 @@ function checkIdRange(it) {
     }
     if (r.span == null) {
       out.push({ check: 'idrange', item: it.n, verdict: 'range-inverted', claim: r.from, detail: `ends below its start — the span is empty by construction` });
+      continue;
+    }
+    const dist = distClaims.find((c) => c.from === r.from && c.pairs);
+    if (dist) {
+      out.push({ check: 'idrange', item: it.n, verdict: 'range-distribution-disclosed', claim: r.from,
+        detail: `${dist.pairs.length} (count, time) pairs pin this range per tranche — a distribution claim states where every id went, so the item-wide count pool is not a failed pin; each pair is verified against the records' own timestamps by the tranche check` });
       continue;
     }
     // (a) counts near the range: same sentence first, then the item's only count
@@ -5577,6 +5594,16 @@ if (SELFTEST) {
     ir('CVE-2026-122302 – CVE-2026-122323: 21 records in the block but 22 records expected later.'),
     ['range-ambiguous']);
 
+  /* 2026-11-14 12:50 — the reconciliation, filed by the same day's own JSON: item 15's corrected
+     sentence was verified `tranche-distribution-ok` by one check while `idrange` still called it
+     ambiguous. The fixture is the filing sentence's own distribution shape. */
+  t('idrange: a distribution claim pins counts per pair — disclosed, not ambiguous',
+    ir('The ID ranges straddle the tranches rather than matching them: of CVE-2026-111333–111342, three arrived at ~04:17 and seven at ~08:17; of CVE-2026-120860–120868, four at ~08:17 and four at ~09:17. NVD shows 28 records published Nov 13 and the first nine came yesterday.'),
+    ['range-distribution-disclosed', 'range-distribution-disclosed']);
+  t('idrange: a single time cue is a binding, not a distribution — ambiguity stands',
+    ir('CVE-2026-122302 – CVE-2026-122323: 21 records arrived around 08:00 but 22 records expected later.'),
+    ['range-ambiguous']);
+
   /* 2026-11-14 04:53 — the tranche arm, filed by item 15 of the 11-14 04:28 batch: two dashed
      ranges bound to publication times whose records actually arrived in OTHER tranches. The
      fixtures are the live records' own timestamps; the pull shape is nvdPull's. */
@@ -7043,7 +7070,7 @@ try {
   writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 1));
 } catch { /* cache is best-effort */ }
 
-const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'temporal-disclosed': 0, 'score-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'star-surge': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, 'stale-disclosed': 0, 'archived-disclosed': 0, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'date-local-shift': 2, 'date-mismatch': 2, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'field-present': 3, 'field-present-empty': 2, 'field-empty-contradicted': 2, 'field-empty-since-moved': 1, 'field-absent-not-empty': 1, 'field-dated': 0, 'field-unknown-name': 0, 'field-unreadable': 0, 'span-empty': 2, 'cve-range-span-mismatch': 2, 'cve-range-disclosed': 0, 'ok-range': 0, 'range-ambiguous': 0, 'range-cross-year': 0, 'range-inverted': 2, 'tranche-binding-ok': 0, 'tranche-binding-mismatch': 3, 'tranche-unread': 0, 'tranche-distribution-ok': 0, 'span-inverted': 3, 'span-unverifiable': 0, 'ok-span': 0, 'range-absent-but-served': 3, 'range-only-in-cna': 1, 'range-absent-confirmed': 0, 'range-absent-products-only': 0, 'ghsa-absent-confirmed': 0, 'ghsa-range-served': 3, 'ghsa-not-in-db': 0, 'unreadable-subject': 0, 'advisory-subject-ambiguous': 0, 'repo-advisory-cells': 0, 'affected-count-ok': 0, 'affected-count-mismatch': 3, 'affected-package-ok': 0, 'affected-package-absent': 3, 'affected-ambiguous': 0, 'range-unread': 0, 'range-in-references': 1, 'boundary-named-no-artifact': 0, 'vector-product-mismatch': 1, 'product-mismatch-disclosed': 0, 'schema-absent': 0, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'ratio-row-count': 3, 'ok-ratio': 0, 'ok-delimited': 0, 'not-a-repo': 0, 'repo-absent-asserted': 0, 'ok-table-rows': 0, 'table-columns-unresolved': 0, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-paraphrase': 2, 'quote-short': 1, 'quote-not-read': 0, 'paper-date-imprecise': 1, 'paper-date-mismatch': 2, 'paper-date-revision': 1, 'paper-date-unread': 0, 'batch-count-ok': 0, 'batch-count-mismatch': 3, 'batch-subcount-ok': 0, 'batch-subcount-mismatch': 3, 'batch-unread': 0, 'path-in-repo': 0, 'path-absent': 2, 'path-repo-ambiguous': 0, 'attribution-satisfied': 0, 'attribution-uncited': 1 };
+const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'temporal-disclosed': 0, 'score-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'star-surge': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, 'stale-disclosed': 0, 'archived-disclosed': 0, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'date-local-shift': 2, 'date-mismatch': 2, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'field-present': 3, 'field-present-empty': 2, 'field-empty-contradicted': 2, 'field-empty-since-moved': 1, 'field-absent-not-empty': 1, 'field-dated': 0, 'field-unknown-name': 0, 'field-unreadable': 0, 'span-empty': 2, 'cve-range-span-mismatch': 2, 'cve-range-disclosed': 0, 'ok-range': 0, 'range-ambiguous': 0, 'range-distribution-disclosed': 0, 'range-cross-year': 0, 'range-inverted': 2, 'tranche-binding-ok': 0, 'tranche-binding-mismatch': 3, 'tranche-unread': 0, 'tranche-distribution-ok': 0, 'span-inverted': 3, 'span-unverifiable': 0, 'ok-span': 0, 'range-absent-but-served': 3, 'range-only-in-cna': 1, 'range-absent-confirmed': 0, 'range-absent-products-only': 0, 'ghsa-absent-confirmed': 0, 'ghsa-range-served': 3, 'ghsa-not-in-db': 0, 'unreadable-subject': 0, 'advisory-subject-ambiguous': 0, 'repo-advisory-cells': 0, 'affected-count-ok': 0, 'affected-count-mismatch': 3, 'affected-package-ok': 0, 'affected-package-absent': 3, 'affected-ambiguous': 0, 'range-unread': 0, 'range-in-references': 1, 'boundary-named-no-artifact': 0, 'vector-product-mismatch': 1, 'product-mismatch-disclosed': 0, 'schema-absent': 0, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'ratio-row-count': 3, 'ok-ratio': 0, 'ok-delimited': 0, 'not-a-repo': 0, 'repo-absent-asserted': 0, 'ok-table-rows': 0, 'table-columns-unresolved': 0, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-paraphrase': 2, 'quote-short': 1, 'quote-not-read': 0, 'paper-date-imprecise': 1, 'paper-date-mismatch': 2, 'paper-date-revision': 1, 'paper-date-unread': 0, 'batch-count-ok': 0, 'batch-count-mismatch': 3, 'batch-subcount-ok': 0, 'batch-subcount-mismatch': 3, 'batch-unread': 0, 'path-in-repo': 0, 'path-absent': 2, 'path-repo-ambiguous': 0, 'attribution-satisfied': 0, 'attribution-uncited': 1 };
 const REAL = (f) => (SEVERITY[f.verdict] ?? 1) >= 2;
 
 /* `status_watch` rides the findings file so the act pass sees a backwards move without re-reading

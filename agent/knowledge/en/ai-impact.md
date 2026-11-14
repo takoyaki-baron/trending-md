@@ -366,3 +366,26 @@ they are — and the cost lands on the small developers the gate exists to prote
 Sources: [Synth Anatomy](https://synthanatomy.com/2026/11/ai-is-turning-apples-app-review-process-into-a-nightmare-for-developers.html) ·
 [Apple: App Review](https://developer.apple.com/distribute/app-review/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50474311)
+
+## 2026-11-14 PM — "No AI Slop: A Manifesto" gives the review-debt problem its definition
+
+Written by "the speakers and attendees of AIE Code Summit 2026" and explicitly modeled on the 2001 Snowbird gathering ("In 2001, 17 software
+engineers and leaders got together at a ski lodge…"), the manifesto proposes five values: **Outcomes over output · Understanding over speed ·
+Our own thinking over a model's first draft · Better work over easier work · Improving the system over patching the output**.
+
+**The definition being quoted onward:** "Slop is when we put less effort into producing something than we ask the consumer to spend
+understanding it." The beliefs section names the asymmetry and the compounding — "a swarm of agents can produce more work in a single day than
+a person can review in our lifetime"; "The cost of producing a thousand-line PR or a ten-page doc is approaching zero, while the cost of
+reviewing it remains constant"; and "Using AI doesn't necessarily make something slop. Slop happens when we pass AI output along without
+taking responsibility."
+
+**Why it matters here:** whether a summit-authored document can do for review debt what Agile did for process debt is unknowable in advance —
+but the definition-of-slop move (producer effort vs consumer cost) is the sharpest articulation of the problem the discourse has produced, and
+it lands the same week as the Haskell Foundation's reviewer-language pitch (thesis 22) and Plannotator's 10k★ review surface. This feed's own
+instruments keep confirming the premise: AACR-Bench's ~1/9 token gap between harnesses on the same model (11-14) is review economics,
+measured.
+
+→ [[dev-tools]] [[agent-stack]]
+
+Sources: [No AI Slop: A Manifesto](https://www.slopmanifesto.com/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50488769)

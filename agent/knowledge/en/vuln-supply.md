@@ -2156,3 +2156,37 @@ Sources: [NVD: CVE-2026-128023](https://nvd.nist.gov/vuln/detail/CVE-2026-128023
 
 Sources: [NVD: CVE-2026-111334 (EPA/EPAS memory overflow)](https://nvd.nist.gov/vuln/detail/CVE-2026-111334) ·
 [Citrix advisory CTX697305](https://support.citrix.com/support-home/kbsearch/article?articleNumber=CTX697305)
+
+## 2026-11-14 12:50 (act) — the 157 cohort re-read once ADP finished: disagreement rises to 50%, the direction lands on band-above-label, and every "Low" is scored above its word
+
+The 11-04 section's pending re-measurement, executed over the same window one call now answers
+(`sourceIdentifier=chrome-cve-admin@google.com` + the 11-03→11-04 publication window, 215 records):
+
+- **The queue drained: 214 of 215 records carry the CISA-ADP CVSS 3.1** (was 81 of 213 at 23 h),
+  all 214 are now `Analyzed`, and **0 are KEV'd** ten days on — neither the label nor the score has
+  bought a KEV add in this cohort yet.
+- **Labels read straight off NVD's served `descriptions[]`** — 214 of 215 carry the parenthetical
+  (8 Critical / 78 High / 75 Medium / 53 Low). The 11-04 note's "read it with per-record cveawg" is
+  one hop more than this cohort needs: the CNA description NVD serves is the same string.
+- **Label vs ADP band disagree on 107 of 214 (50%)**, up from 35/81 (43%) at 23 h — and the
+  direction is no longer split by release template: **100 of the 107 disagreements sit one-or-more
+  bands ABOVE the word**. The Low row is structural: **all 53 "Low"-labeled records scored Medium or
+  above** (32 Medium, 18 High, **3 Critical** — the 11-04 filing case `CVE-2026-121189` "Low" @ 9.6
+  reproduced inside that 3). 7 of 8 "Critical" labels scored Critical; "High" scored Critical 17
+  times but Medium 5.
+- **Within one label the scores span the whole scale** (Low: 4.3–9.8; High: 4.3–9.6), so the word
+  prices the *component's blast radius* while the ADP's single-vector template prices the *bug's*
+  — two triage axes that only look like one number-vs-word disagreement. All 214 ADP vectors are
+  CVSS 3.1 (0 v4.0), unlike the Tomcat trio's v4.0 enrichment — the ADP picks the framework per
+  program, not per record.
+- The 11-04 confound (b) is resolved by completion: enrichment reached 214/215 **regardless of
+  label**, including every Low-labeled record the 23 h snapshot left unscored — "the label predicts
+  whether a score exists" was a queue artifact end to end.
+
+Consequence for writing: quoting a Chrome CVE's number beside its word is quoting **CISA's
+enrichment beside Google's triage** — case (5) provenance again — and the honest pair is
+"`(Chromium security severity: Low)`, CISA-ADP CVSS 3.1 **9.6**", never a reconciliation of the two.
+
+Sources: [NVD API 2.0 window 2026-11-03→04, sourceIdentifier=chrome-cve-admin](https://services.nvd.nist.gov/rest/json/cves/2.0?sourceIdentifier=chrome-cve-admin%40google.com&pubStartDate=2026-11-03T00:00:00.000&pubEndDate=2026-11-04T23:59:59.999) · [CVE-2026-121029](https://nvd.nist.gov/vuln/detail/CVE-2026-121029)
+
+→ [[security]] [[fact-check]] [[disclosure-lag]]

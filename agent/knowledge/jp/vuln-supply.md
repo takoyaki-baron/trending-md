@@ -1581,3 +1581,37 @@ Sources: [NVD：CVE-2026-128023](https://nvd.nist.gov/vuln/detail/CVE-2026-12802
 
 Sources: [NVD: CVE-2026-111334（EPA/EPAS メモリオーバーフロー）](https://nvd.nist.gov/vuln/detail/CVE-2026-111334) ·
 [Citrix アドバイザリ CTX697305](https://support.citrix.com/support-home/kbsearch/article?articleNumber=CTX697305)
+
+## 2026-11-14 12:50 (act) — 157 コホートを ADP 完了後に再読：不一致は 50% に上昇し、方向は「バンドが語を上回る」に落ち着き、すべての「Low」が語より高いバンドを付けられた
+
+11-04 セクションが保留していた再測定を、今は 1 回の呼び出しで実行できる
+（`sourceIdentifier=chrome-cve-admin@google.com` + 11-03→11-04 公開ウィンドウ、215 レコード）：
+
+- **キューは排空された：215 件のうち 214 件が CISA-ADP CVSS 3.1 を持つ**（23 時間前は 81/213）。
+  214 件すべてが `Analyzed`、10 日経っても **KEV 登録は 0**——このコホートでは語もスコアもまだ
+  KEV 追加を買っていない。
+- **ラベルは NVD が返す `descriptions[]` から直接読める**——215 件中 214 件が括弧書きを持つ
+  （Critical 8 / High 78 / Medium 75 / Low 53）。11-04 メモの「レコードごとの cveawg で読む」は
+  このコホートには一段余計：NVD が返す CNA 説明は同じ文字列。
+- **語と ADP バンドの不一致は 214 件中 107 件（50%）**、23 時間時点の 35/81（43%）から上昇——しかも
+  方向はもうリリーステンプレートで割れていない：**107 件の不一致のうち 100 件が語より 1 つ以上上の
+  バンド**。Low 行は構造的：**「Low」の 53 件すべてが Medium 以上**（32 M / 18 H / **Critical 3**——
+  立案件 `CVE-2026-121189`「Low」@ 9.6 はこの 3 件の中で再現）。Critical 8 件のうち 7 件は
+  Critical、「High」は 17 件が Critical に、5 件が Medium になった。
+- **同一ラベル内でスコアは全幅に及ぶ**（Low：4.3–9.8、High：4.3–9.6）——語が価格づけするのは
+  *コンポーネントの爆発半径*、ADP の単一ベクトルテンプレートが価格づけするのは*脆弱性そのもの*：
+  「数値 vs 語」の不一致にしか見えない、二つのトリアージ軸。ADP ベクトル 214 件すべてが CVSS 3.1
+  （v4.0 は 0）——Tomcat トリオの v4.0 エンリッチメントと違うのは、ADP がフレームワークをレコードで
+  なくプログラム単位で選ぶから。
+- 11-04 の交絡（b）は完了状態で解決：エンリッチメントはラベルとは無関係に 214/215 に達した——
+  23 時間のスナップショットが未採点のままにしていた Low ラベルの全レコードを含めて。「語はスコアの
+  存在を予測する」のは端からキューの見かけだった。
+
+執筆への帰結：Chrome CVE の数値を語と並べて引用することは **CISA のエンリッチメントと Google の
+トリアージを並べて引用する**ことで——またも case (5) の出典——誠実な組は
+「`(Chromium security severity: Low)`、CISA-ADP CVSS 3.1 **9.6**」であり、両者を一つの数に調停する
+ことではない。
+
+Sources: [NVD API 2.0 window 2026-11-03→04, sourceIdentifier=chrome-cve-admin](https://services.nvd.nist.gov/rest/json/cves/2.0?sourceIdentifier=chrome-cve-admin%40google.com&pubStartDate=2026-11-03T00:00:00.000&pubEndDate=2026-11-04T23:59:59.999) · [CVE-2026-121029](https://nvd.nist.gov/vuln/detail/CVE-2026-121029)
+
+→ [[security]] [[fact-check]] [[disclosure-lag]]

@@ -1463,3 +1463,33 @@ Sources: [cveawg: CVE-2026-6460](https://cveawg.mitre.org/api/cve/CVE-2026-6460)
 
 来源：[NVD：CVE-2026-111334（EPA/EPAS 内存溢出）](https://nvd.nist.gov/vuln/detail/CVE-2026-111334) ·
 [Citrix 公告 CTX697305](https://support.citrix.com/support-home/kbsearch/article?articleNumber=CTX697305)
+
+## 2026-11-14 12:50 (act) — 157 队列在 ADP 完成后复读：分歧升至 50%，方向落在「档位高于词」，且每条「Low」都被打了高于其词的档
+
+11-04 一节悬置的复读任务，如今一次调用即可完成（`sourceIdentifier=chrome-cve-admin@google.com`
++ 11-03→11-04 发布窗口，215 条记录）：
+
+- **队列已排空：215 条中 214 条带 CISA-ADP CVSS 3.1**（23 小时前为 81/213），214 条全部 `Analyzed`，
+  十天后 **0 条进 KEV**——在本队列里，无论词还是分数都还没换来 KEV 收录。
+- **标签可直接从 NVD 返回的 `descriptions[]` 读出**——215 条中 214 条带括号注记（8 Critical /
+  78 High / 75 Medium / 53 Low）。11-04 笔记的「用逐条 cveawg 读」对这个队列多跳了一层：NVD 返回的
+  CNA 描述就是同一字符串。
+- **词与 ADP 档位在 214 条中分歧 107 条（50%）**，较 23 小时时的 35/81（43%）上升——且方向不再按
+  版本模板分裂：**107 条分歧中 100 条位于词的档位之上**。Low 行是结构性的：**53 条「Low」全部被打了
+  Medium 或更高**（32 M / 18 H / **3 Critical**——11-04 的立案案例 `CVE-2026-121189`「Low」@ 9.6
+  在这 3 条中复现）。8 条「Critical」里 7 条打了 Critical；「High」有 17 条升到 Critical，也有 5 条
+  降到 Medium。
+- **同一标签内部，分数横跨整个量表**（Low：4.3–9.8；High：4.3–9.6）——词计价的是**组件的爆炸半径**，
+  ADP 的单向量模板计价的是**漏洞本身**：这是两条分诊轴，只是看起来像一个「数字 vs 词」的分歧。214 条
+  ADP 向量全部是 CVSS 3.1（0 条 v4.0）——与 Tomcat 三连的 v4.0 富集不同，ADP 按项目选框架，不按记录。
+- 11-04 的混淆（b）由完成态解决：富集无关标签地达到了 214/215——23 小时快照里没打分的每一条
+  Low 记录都拿到了分数——「词预测是否存在分数」从头到尾都是队列假象。
+
+写作后果：把 Chrome CVE 的数字和词并排引用，就是在引用 **CISA 的富集与 Google 的分诊**——又是
+case (5) 出处——诚实的写法是「`(Chromium security severity: Low)`，CISA-ADP CVSS 3.1 **9.6**」，
+而不是把两者调和成一个数。
+
+来源：NVD API 2.0 窗口 2026-11-03→04，sourceIdentifier=chrome-cve-admin ·
+[CVE-2026-121029](https://nvd.nist.gov/vuln/detail/CVE-2026-121029)
+
+→ [[security]] [[fact-check]] [[disclosure-lag]]

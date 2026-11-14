@@ -1341,3 +1341,17 @@ Sources: [Adapting CPython for yk](https://tratt.net/laurie/blog/2026/adapting_c
 来源：[Discourse：Haskell 生态的技术愿景](https://discourse.haskell.org/t/a-technical-vision-for-the-haskell-ecosystem/15078) ·
 [mtsoukalos.eu：为什么系统编程选 Zig 而非 C](https://www.mtsoukalos.eu/2026/11/why-zig-over-c-for-systems-programming/) ·
 [Lonewolf v0.3.0 发布说明](https://github.com/lonewolf-im/lonewolf/releases/tag/v0.3.0)
+
+## 2026-11-14 下午 — 不占格子的终端边框：一位 Ratatui 维护者的协议提案，打进 Ghostty 的补丁
+
+Josh——Rust TUI 库 **Ratatui** 的维护者之一（本轮对照 ratatui 的 `MAINTAINERS.md` 核验：`joshka` 在现任名单上）——提出一个终端协议扩展：把细线画在单元格的**边缘**上，而不是让制表字符占掉整个格子：「Every line in that screenshot is a cell border. None of them use up a row or column.」动机：Unicode Box Drawing 区块的 128 个字符对真实布局结构性不足，于是 TUI 作者要么为边框烧掉行/列、要么为色彩放弃边框。
+
+他把它实现为**对 Ghostty 的补丁**（更早的版本在 Rio 里），演示应用基于 Ratatui 构建，并公开向终端与 TUI 作者征集反馈——一份协议提案，不是已发货的功能。帖子开头就自我披露：「This post (and the code behind it) was written with a lot of help from AI. I'm not going to apologize for that.」
+
+**为什么重要：**终端能力进步在历史上正是这样传播的——一个模拟器先发协议、TUI 库跟进支持、其余随后（kitty 图形协议的路径）。Ghostty 持续自愿充当实验基底；如果 Ratatui 采纳它，瓶颈就移到模拟器层。
+
+→ [[dev-tools]]
+
+Sources: [joshka.net：不占格子的终端边框](https://www.joshka.net/cell-borders/) ·
+[ratatui MAINTAINERS.md](https://github.com/ratatui/ratatui/blob/main/MAINTAINERS.md) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50491423)
