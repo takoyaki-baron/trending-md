@@ -1,0 +1,103 @@
+{
+ "generated": "2026-11-14T20:25:32.014Z",
+ "files": [
+  {
+   "file": "2026-11-15.md",
+   "items": 20,
+   "findings": [
+    {
+     "check": "repo",
+     "item": 3,
+     "verdict": "ok",
+     "claim": "dream-num/univer",
+     "detail": "24401★, last push 2026-11-14"
+    },
+    {
+     "check": "repo",
+     "item": 9,
+     "verdict": "ok",
+     "claim": "JuliusBrussee/caveman",
+     "detail": "119978★, last push 2026-11-14"
+    },
+    {
+     "check": "repo",
+     "item": 13,
+     "verdict": "ok",
+     "claim": "paul-nameless/agweb",
+     "detail": "126★, last push 2026-11-13"
+    },
+    {
+     "check": "repo",
+     "item": 14,
+     "verdict": "ok",
+     "claim": "FURSOY/fursoy-cpu",
+     "detail": "18★, last push 2026-11-14"
+    },
+    {
+     "check": "repo",
+     "item": 15,
+     "verdict": "stale-disclosed",
+     "claim": "IRS-Public/direct-file",
+     "detail": "last push 2026-06-11 (156d) with 4652 stars — the item states the state itself (“archived”), so the staleness is the story rather than an unexamined number"
+    },
+    {
+     "check": "quotation",
+     "item": 3,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 7,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 9,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 15,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 17,
+     "verdict": "quote-not-read",
+     "claim": "“the languages that typically consume more energy also tend to have lower accuracy in the model o…”",
+     "detail": "17 words, 0 hits in 1 readable source(s), but 1 cited page(s) went unread — unread is not absent, so this is not called a fabrication; open those page(s) before publishing"
+    },
+    {
+     "check": "quotation",
+     "item": 18,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "attribution",
+     "item": 17,
+     "verdict": "attribution-uncited",
+     "claim": "Deng",
+     "detail": "a quotation is attributed to Deng (“The languages that typically consume more energy also tend t…”), but no cited URL names the party — a quotation ABOUT a party is a claim about THAT party's bytes, and the cited page can be a second-hand copy whose figures the party has since corrected (the 11-12 item-41 lesson: the essay quoted the earlier version of Aaronson's dump post). Open Deng's primary artifact before publishing, or drop the quotation marks"
+    }
+   ]
+  }
+ ],
+ "status_watch": [],
+ "api_calls": 0,
+ "readme_calls": 0,
+ "cited_page_calls": 0,
+ "repo_page_calls": 0,
+ "nvd_calls": 0,
+ "nvd_failed_chunks": 0,
+ "cna_calls": 0
+}

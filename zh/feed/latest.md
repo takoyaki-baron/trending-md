@@ -1,568 +1,292 @@
 ---
-date: 2026-11-14
-updated: 2026-11-14T12:26:51Z
+date: 2026-11-15
+updated: 2026-11-14T20:25:31Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 35
+sources: 17
 license: CC-BY-4.0
 ---
 
-# trending.md — 2026-11-14
+# trending.md — 2026-11-15
 
-## 1. LibreOffice 一条推文登顶 HN——微软 365 大宕机进入第二天
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** x.com/LibreOffice · 609+ pts on HN · 3.6h ago (~01:10 UTC+8)
-- **Tags:** `libreoffice` `microsoft-365` `outage`
-
-昨天我们报道了这次事故的前 20 个小时：它滚入了第二天，而互联网选出了自己的吉祥物。LibreOffice 的 X 账号在宕机期间发帖——"LibreOffice actually works 365 days a year"——截图与评论迅速把这一句话推上 **609 分**，成为当天 HN 最大新闻，205 条评论里全是宕机惨状与编辑器情怀。底层事故还是同一个 **EX1550543** Exchange Online 连接故障，于 **11 月 12 日 16:17 UTC** 开启；另一条并行的帖子（"宕机 12 小时仍未恢复"，451 分）记录了微软的缓解更新，有评论者算起了 SLA 账——这样规模的一次事故就足以把全年可用性打到三个 9。
-
-**Why it matters:** 这个玩笑之所以扎心，是因为它嘲讽的卖点是真的：机构付费购买 365 而不是用桌面套件，就是指望云端版本"开箱即用"——而这次事故是多年来对该承诺最大的一次检验。一个 25 岁的桌面套件用一句话盖过所有企业公关渠道，也是一堂事故公关课。
-
-> "LibreOffice actually works 365 days a year" ——推文原文，经由 HN 提交流传
-
-[`🔗 LibreOffice on X`](https://twitter.com/LibreOffice/status/2121205272479998268) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50486482) · [`🔗 HN：Outlook/365 宕机 12 小时仍未恢复`](https://news.ycombinator.com/item?id=50478609)
-
----
-
-## 2. 毁灭日：公元 2026 年 11 月 13 日，星期五——1960 年那篇论文预言的日期就是今天
+## 1. 安全研究人员扫描 159,041 个 Lovable 应用：24,664 个向匿名访客吐出数据库记录——其中包括护照信息、聊天记录与租户档案
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** science.org (1960) · 386+ pts on HN · 8.6h ago (~20:10 UTC+8)
-- **Tags:** `doomsday` `population` `forecasting`
+- **Source:** crissyfield.de · 277+ pts on HN · 2.5h ago (~01:43 UTC+8)
+- **Tags:** `lovable` `supabase` `data-exposure` `vibe-coding`
 
-Heinz von Foerster、Patricia Mora 与 Larry Amiot 1960 年发表于《Science》的著名论文把世界人口拟合到一条**双曲线**上——增长超指数到倍增时间本身不断缩短——其奇点"毁灭日"落在**公元 2026 年 11 月 13 日，星期五**：今天。这个数学从来不是人口预测（作者自己注明模型在到达无穷远之前必然崩溃），但这个日期成了"外推失灵"的传奇教材，每当有人给一条看似爆炸的趋势拟合曲线时就会被人翻出来——Scott Alexander 2019 年的系列文章《1960：奇点被取消的一年》正是把这座桥搭到了 AI 规模争论上，HN 评论者也在做同样的事。论文页面对外部抓取有反爬墙；DOI 与讨论帖承载了实质内容。
+Crissy Field GmbH 的研究人员与《商报》（Handelsblatt）合作，分析了来自 Common Crawl 的 **159,041 个 Lovable 项目**（2025 年 12 月–2026 年 9 月）：在接入 Supabase 集成的 **34,545** 个项目中，有 **24,664 个在页面加载时、无需任何登录就向外吐出数据库记录**。研究人员用同一个匿名访客 API Key 追加只读请求后发现，**7,403 个站点（占吐记录集合的 30%）**暴露了包含电子邮箱的数据表。案例具体得令人发指：一个德国生活论坛暴露 **80,000+ 用户资料和 200,000+ 聊天消息**；一家服务商暴露 **1,000+ 条含护照号码**与国籍的身份文件记录；一家物业管理公司的 AI 生成的租户内部邮件；还有一家服务商 **280,000 封客户邮件**可被任意读取。研究人员的措辞很谨慎——30% 并非确认的泄露率（邮箱可能是公开联系方式或测试数据），Common Crawl 样本也不具代表性——但模式是清楚的：Lovable 的卖点是零技术门槛，其服务条款却把数据处理责任压给客户，而 Supabase 的错误配置呈现重复模式，一个应用里能打开的洞，成千上万个应用同样打得开。
 
-**Why it matters:** 有用的读法不是玩笑而是形状：von Foerster 方程是"拟合了过去的曲线并不拥有未来"的经典提醒——同样的警告适用于当前 AI 建设潮里的每一张指数图表，从 token 产量到数据中心瓦数。正如一位评论者指出的显然推论：撞墙的模型，正是那些假设墙不存在的模型。
+**Why it matters:** 这是"氛围编程"平台风险的一次规模化量化：问题不是某一个 bug，而是一类非技术构建者根本看不见的重复性错误配置，且跑在载有真实个人数据的应用上。研究人员自己的结论——自动化检查替代不了专业安全评估——就是所有要用这些应用承载用户数据的人的操作守则。
 
-[`🔗 Science：Doomsday: Friday, 13 November, A.D. 2026 (1960)`](https://www.science.org/doi/10.1126/science.132.3436.1291) · [`🔗 Slate Star Codex：1960: The Year The Singularity Was Cancelled`](https://slatestarcodex.com/2019/04/22/1960-the-year-the-singularity-was-cancelled/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50482379)
+[`🔗 Crissy Field：Lovable 研究（英文）`](https://www.crissyfield.de/research/lovable-en/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50499017)
 
 ---
 
-## 3. 礼来 CEO 回应 Amodei 的"十年内成为历史"："我认为不太可能"
+## 2. 意大利对 Meta 开出 8.05 亿欧元（约 8.87 亿美元）罚单：未经同意访问安卓用户照片
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** garymarcus.substack.com · 254+ pts on HN · 6.9h ago (~21:50 UTC+8)
-- **Tags:** `anthropic` `ipo` `ai-claims`
+- **Source:** reuters.com · 226+ pts on HN · 6.4h ago (~21:48 UTC+8)
+- **Tags:** `meta` `gdpr` `privacy` `regulation`
 
-本周最诡异的交锋演变成了公开的制药界 vs AI 界论战。在与 Anthropic IPO 发行绑定的一段视频里，CEO Dario Amodei 预测"癌症、阿尔茨海默、心脏病、精神疾病——这些将成为历史，我认为用不了十年"（CNBC 的 Meg Tirrell 转述）。礼来董事长兼 CEO **Dave Ricks** 在 X 上回应："我认为那会很了不起，但我认为不太可能。生物学的地图在很大程度上仍是空白页，而随机人体验证是帐篷里最长的那根杆……我们领域的进展会是稳步和渐进的。"Gary Marcus 的文章（11 月 12 日）汇集了更大范围的专家围剿——病毒学家 Angela Rasmussen 等人直接类比 Theranos——并主张该说法出现在上市前夜，理应受到比目前更严苛的审视。Anthropic 的路演已经在进行；本 feed 昨天报道了招股文件本身。
+意大利数据保护局（Garante）于 11 月 14 日（周六）宣布对 Meta 处以 **8.05 亿欧元**罚款——约合 **8.87 亿美元**，按该机构的说法约为 Meta 全球营收的 0.47%——事由是 Facebook 应用的一项功能：在向用户推荐可发布的相册内容的同时，**未经同意且未告知**地访问安卓用户的照片和视频。处罚令要求 Meta 在 **60 天内**默认停用该功能并单独征求同意；监管机构还保留了对 2026 年一项将相册内容交云端处理的功能单独评估的权利。据路透社报道，Meta 暂未置评，且本次调查**未**涉及内容是否被用于训练 AI 模型——Meta 一贯否认这一用途。本文细节均来自路透社：截至发稿，Garante 的英文新闻页尚未刊登该处罚公告。
 
-**Why it matters:** 这段反驳分量不同寻常，因为它来自真正掌管 Amodei 时间线必须穿过的临床试验机器的人——而且落在 IPO 周，那里夸大其词是要标价的。值得盯的是这一说法会不会出现在上市文件里。
+**Why it matters:** 该案为"照片抓取类功能"在欧盟如何被监管立了模板——同意必须单独、明确，不能捆绑在分享建议里——而"云端处理"的后续评估才是值得盯的线：AI 训练问题将从那里重新入场。
 
-> "我认为那会很了不起，但我认为不太可能。生物学的地图在很大程度上仍是空白页，而随机人体验证是帐篷里最长的那根杆。" —— Dave Ricks，礼来
-
-[`🔗 Marcus on AI：礼来 CEO 回击`](https://garymarcus.substack.com/p/breaking-eli-lilly-ceo-becomes-latest) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50483480)
+[`🔗 路透社：Italy fines Meta $887 million over Android users' data access`](https://www.reuters.com/world/italy-fines-meta-887-million-over-android-users-data-access-2026-11-14/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50497009)
 
 ---
 
-## 4. AI 解读哥德尔笔记本——挖出 663 条定理，约 400 条在 Coq 中验证通过，选择公理独立性证明"只差一步"
+## 3. Univer 发布 v1.5.0：把 AI 办公作为目标的办源办公 SDK 越过 2.4 万星
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** theguardian.com · 191+ pts on HN · 3.3h ago (~01:30 UTC+8)
-- **Tags:** `godel` `formal-verification` `research`
+- **Source:** GitHub Trending · +495★ today · 24.4k total · v1.5.0 released 9.6h ago (~18:33 UTC+8)
+- **Tags:** `univer` `office-sdk` `spreadsheet` `typescript`
 
-芬兰逻辑学家 **Jan von Plato** 花了数年转录哥德尔 1940 年代初的"工作笔记本"——1009 页用早已过时的 Gabelsberger 速记写成（全世界能读的人约剩六个）——进度约每周一页。今年 9 月，他把自己的转录稿加上自己写的六本哥德尔著作一起交给 Claude，几天内得到一份 **650 页的通读摘要**。Claude 提取出 **663** 条有完整证明、证明梗概或证明思路的结果；过一遍 Coq 证明助手后，von Plato 报告**约 400 条按原样验证通过、约 200 条经修复通过**（收紧陈述或补充前提）、**约 50 条为假**——其中一些哥德尔本人就批过 *falsch!*（错误）。头条发现：对哥德尔 1940 年代选择公理独立性证明的重构，von Plato 称其在 Coq 中通过、离完整"只差一步"——一个定义弄错了，而他两年前写过正确的那个。未见过该重构的独立逻辑学家 Joel David Hamkins 给出了恰如其分的审慎。
+dream-num/univer——"Build your own AI office with Univer Office SDK"——发布了 **v1.5.0**（11 月 14 日 10:33 UTC），并在 GitHub Trending 上单日上涨 495 星。该项目把开源的**表格与文档**（编辑、计算、协作、文件处理）嵌入你自己的应用，并明确主打从开源的表格与文档起步、连接你自己的应用或智能体——也就是说，文档模型以编程接口暴露给 AI 工作流，而不只是被 UI 驱动。README 提供了独立表格编辑器的快速上手、8 种语言的文档，以及与它在嵌入场景中替代的商业套件的对比页。
 
-**Why it matters:** 这是"AI 提议、证明助手裁决"这一闭环迄今最强的公开案例。注意事项与成果同行——每个论断都落在 von Plato 的验证上，663 条里约 200 条需要修复，而 Hamkins 那句话是这一整个文类最诚实的框架。
+**Why it matters:** "智能体办公"模式（智能体在应用自己的数据模型里读写结构化文档，而不是操纵一个封闭套件）缺的正是这一层——一个可许可修改、带 API 面的表格/文档引擎。v1.5.0 的 trending 时刻，正好是把它与闭源套件插件放在一起、为你的智能体栈做一次评估的好时机。
 
-> "至于其中多少是 Claude 的、多少是哥德尔的，那是历史学家的活儿。" —— Joel David Hamkins，圣母大学
-
-[`🔗 卫报：AI helps unlock discoveries hidden in Gödel's notebooks`](https://www.theguardian.com/science/2026/nov/13/kurt-godel-notebooks-ai-helps-unlock-hidden-discoveries-man-who-transformed-maths) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50486748)
+[`🔗 dream-num/univer`](https://github.com/dream-num/univer) · [`🔗 Release v1.5.0`](https://github.com/dream-num/univer/releases/tag/v1.5.0)
 
 ---
 
-## 5. "为什么系统编程选 Zig 不选 C"——errdefer 取代 goto 阶梯，而对 C 留下的东西毫不回避
+## 4. Google Antigravity /teamwork：并行智能体加"证伪器"——2013 年猜想的 Lean 证明、Weil 猜想形式化与 Rust 版 Zircon
 
 - **Velocity:** ▮▮ rising
-- **Source:** mtsoukalos.eu · 196+ pts on HN · 6.7h ago (~22:00 UTC+8)
-- **Tags:** `zig` `c` `systems-programming`
+- **Source:** research.google · 109+ pts on HN · 6.9h ago (~21:20 UTC+8)
+- **Tags:** `antigravity` `multi-agent` `lean` `formal-verification`
 
-Mihalis Tsoukalos——继此前《为什么选 Zig 不选 Rust》之后——这次挑战更难的对比，因为 Zig 和 C 想要的东西一样：语言小、无 GC、贴近机器。文章的核心是资源清理阶梯：Linux 内核式的 `goto fail; fail_name: …` 瀑布——清理代码远离分配点、标签顺序要靠手工维护——对比 Zig 的 `errdefer`，把每次释放紧挨着它的分配、自动逆序回卷。所有示例在 Mac 上用 **Zig 0.17 与 clang** 编译。文章刻意不写成皈依檄文："C 是我最喜欢的编程语言！我写这篇文章，是因为我不想再用 C 写新代码"——同时把 C 的优势（一本书装得下、1990 年代的代码今天照样编译、几乎每种 CPU 都有编译器）摆在前面。
+Google 研究博客（11 月 13 日，Vahab Mirrokni）介绍了 Antigravity 内部的多智能体协作系统 **/teamwork**，构建于 Gemini 4 模型之上：并行的探索者智能体配以专用的**证伪器**——Lean 4 证明检查、未改动的测试套件、执行模拟器——候选结果由机器验证而非被信任；上下文按构造分区，每个智能体只看到自己那一步的文件与工具。声明的结果异常具体：**2013 年 Courtade–Kumar 猜想**的完整证明已在 Lean 4 中形式化（5000 万行）、**Weil 猜想的首次形式化**（约 180 万行 Lean，28,800 次子智能体调用）、希尔伯特第十问题在整数环上的形式化、1927 年以来悬而未决的 Birkhoff 猜想、一个八天内涨约 2600 Elo 的围棋引擎，以及 **Zircon 微内核移植（约 80 万行安全 Rust）**，其中 libgav1 用 Rust 重写后比原 C++ 快 20–30%。外部落地也是真的：/teamwork、/boost 和 Deep Review 已在 Antigravity 上线，另有面向 1 万名学术研究者的免费访问计划开放申请。
 
-**Why it matters:** Zig vs Rust 的争论抢走了所有注意力，但从 C 迁往 Zig 的受众其实大得多——而本文在"无仪式的清理"这一条轴上，把 Zig 最简洁的论据讲清楚了。《为什么选 Zig 不选 Rust》接着《为什么选 Zig 不选 C》，也是观察实际程序员如何选语言的一扇窗：一次解决一个痛点。
+**Why it matters:** 这里的每个数字都是 Google 自己测自己的系统，基准应视为厂商声明——但架构思想才是承重墙：生成器配自动证伪器，与本周 Gödel 笔记本、Lean 税法所用的"模型查模型"回路同构，正在成为"错误答案可被检验"类智能体工作的标准形态。
 
-> "C 是我最喜欢的编程语言！我写这篇文章，是因为我不想再用 C 写新代码。"
-
-[`🔗 mtsoukalos.eu：Why Zig Over C for Systems Programming`](https://www.mtsoukalos.eu/2026/11/why-zig-over-c-for-systems-programming/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50483611)
+[`🔗 Google Research：Advancing science and engineering with Antigravity's /teamwork`](https://research.google/blog/advancing-science-engineering-with-antigravitys-teamwork-feature/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50496811)
 
 ---
 
-## 6. Haskell 基金会新设的技术领导委员会发布愿景：GHC CI 从 6 小时压到 2 小时，以及"'human in the loop' 无出其右"
+## 5. claude-trading-skills 成为今日涨速之王：一套结构化交易决策的 Claude Skills 工具包——并且拒绝成为信号服务
 
 - **Velocity:** ▮▮ rising
-- **Source:** discourse.haskell.org · 137+ pts on HN · 6.0h ago (~22:40 UTC+8)
-- **Tags:** `haskell` `tooling` `language-ecosystem`
+- **Source:** GitHub Trending · +556★ today · 4.7k total · pushed 5.6h ago (~22:33 UTC+8)
+- **Tags:** `claude-skills` `trading` `workflow` `finance`
 
-Haskell 基金会的技术领导委员会（TLC）宣布"全面运转"，并发布了一份相当前沿的战略：Haskell 位于"人类手艺与机器自动化之间一个有趣的交汇点"——既利于手写代码，也利于"负责任的 AI 工作流"，因为"评审是现代 AI 工作流的重大瓶颈，而 Haskell 的优势恰恰偏向评审者"。具体目标：迭代速度优先——GHC 自身 CI 周转时间**6 小时**，委员会要压到 **2 小时**——外加实时单步调试、"真正有用的堆栈跟踪"、编辑器内性能剖析，面向初学者、专家与工业级稳定性。各项倡议走轻量级社区提案流程、允许公开的反提案，因为"公平与参与至关重要，尤其在涉及经费的时候"。
+tradermonty/claude-trading-skills 今日拿下 **+556 星**，是当日看板上涨幅最大的项目。这是一套面向时间紧张的散户投资者的 Claude Skills **工作流**工具包：五条命名工作流（`market-regime-daily`、`core-portfolio-weekly`、`swing-opportunity-daily`、`trade-memory-loop`、`monthly-performance-review`），每条都是机器可读的 YAML 清单，按序点名确切的技能、决策关卡与产物——市场宽度、回撤熔断、仓位管理、盘前纪律闸，以及盘后复盘回路。README 对"它不是什么"异常强调：不是投资建议、不是信号服务、不是自动化交易——目标是结构化复盘、风险管理与交易日志，每条工作流都备有无 API 的降级路径，示例输出也挂着醒目的"虚构数据"声明。
 
-**Why it matters:** 每个成熟语言基金会都在为 agent 时代重写说辞，而 Haskell 的版本——一个向作者征税、向评审者付酬的类型系统正合 AI 工作流——是其中最具体的一个。6h→2h 的 CI 目标，就是可以拿来验收的那根标尺。
+**Why it matters:** 有意思的信号是形态而非题材：智能体技能的采用正从完成任务转向用关卡与产物强制执行决策过程——金融、医疗、法律方向的智能体工具都在向这个形态收敛。其免责声明的自律程度，也值得所有要在受监管领域发布智能体工作流的人当作模板来读。
 
-> "在形式化验证或 vibe coding 上也许有更好的语言，但'human in the loop'没有比它更好的。"
-
-[`🔗 Discourse：A technical vision for the Haskell ecosystem`](https://discourse.haskell.org/t/a-technical-vision-for-the-haskell-ecosystem/15078) · [`🔗 haskellfoundation/technical-leadership-committee`](https://github.com/haskellfoundation/technical-leadership-committee) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50484235)
+[`🔗 tradermonty/claude-trading-skills`](https://github.com/tradermonty/claude-trading-skills) · [`🔗 文档站`](https://tradermonty.github.io/claude-trading-skills/)
 
 ---
 
-## 7. 巴西 Caixa Seguridade 数据泄露：全部 760 万保险客户的注册数据暴露
+## 6. NVIDIA 用两台 DGX Station 跑 GLM-5.3（753B）——峰值 607.8 tok/s，并发曲线如实奉上
 
 - **Velocity:** ▮▮ rising
-- **Source:** Caixa Seguridade 披露文件 (PDF) · 148+ pts on HN · 4.9h ago (~23:50 UTC+8)
-- **Tags:** `breach` `brazil` `pii`
+- **Source:** developer.nvidia.com · 108+ pts on HN · 6h ago (~22:09 UTC+8)
+- **Tags:** `glm-5` `vllm` `inference` `dgx`
 
-巴西国有银行 Caixa 旗下的保险与养老金子公司 Caixa Seguridade 披露：攻击者访问并复制了 **Caixa Vida e Previdência** 的客户注册数据库——**全部 760 万**现有及曾经客户的姓名与 CPF 税号，占该业务活跃客户基数的 100%，事故定于 **11 月 6 日**。这份以投资者关系文件形式披露、现登上 HN 首页的公告称，暴露的是注册类信息（目前报道未见金融凭证类字段），巴西媒体正在警告客户防范定向钓鱼——毕竟攻击者已握有核心身份数据。这是巴西金融机构近期连串攻击中的最新一起。
+NVIDIA 技术博客（11 月 13 日）演示了如何伺服 Z.ai 的 **GLM-5.3**——753B 参数 MoE（每 token 激活 40B），NVFP4 量化后检查点约 464 GB，超过单台 GB300 的 252 GB HBM3e——跨**两台以 ConnectX-8 RDMA 互联的 DGX Station**，由 vLLM v0.30.0 暴露单一 OpenAI 兼容端点。配方是张量并行（TP=2，非 disaggregation）、多 token 预测每步起草 4 个 token、FP8 KV cache 与前缀缓存；在 80 段 SPEED-Bench 编码对话上的实测曲线于并发 16 处冲上 **607.8 tok/s 峰值**——帖子里同时印出了全表：C32 跌至 **385 tok/s**、平均延迟 453.5 秒、单用户吞吐从 115.3 跌到 13.0 tok/s。注意事项也写在帖子里：端点默认**无鉴权**（扩大使用前先防火墙并加 TLS）、旧版 NCCL 在 RoCE 上跨节点 CUDA graph 重放会死锁、关闭前缀缓存会改变数字。
 
-**Why it matters:** 在以 CPF 为基础的巴西身份体系里，"税号 + 姓名"的注册库正是身份欺诈的原材料，而占活跃客户基数 100% 这一量级使它跻身该地区今年披露的最大泄露之列。这个规模将考验正在加速的巴西 LGPD 执法。
+**Why it matters:** 这里有两种现货：其一是一份可复现的配方，应对检查点长过单机内存的时刻（464 GB 这一档正在变得常见）；其二是一个"把劣化曲线和标题数字一起发布"的范例——C16 峰值是推文素材，C32 那一行才是真相。
 
-[`🔗 Caixa Seguridade 重大事项公告 (PDF)`](https://filemanager-cdn.mziq.com/published/3972906b-e50b-4f74-ab74-4d0d32125d11/9567a559-d20a-486e-a7ae-5c6bbc030c5e) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50485295)
+[`🔗 NVIDIA 技术博客：When one GPU isn't enough`](https://developer.nvidia.com/blog/when-one-gpu-isnt-enough-serving-glm-5-3-across-two-nvidia-dgx-stations-with-vllm/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50497155)
 
 ---
 
-## 8. 谷歌"要么 AI、要么没得用"：关掉 AI Overviews 的学校将失去整个搜索——反垄断理论解释了为什么
+## 7. PyPI 上线安全信号改版：Security 标签页展示来源证明、标记迟入文件、对"来源丢失"告警
 
 - **Velocity:** ▮▮ rising
-- **Source:** text.npr.org · 115+ pts on HN · 5.3h ago (~23:30 UTC+8)
-- **Tags:** `google` `education` `antitrust`
+- **Source:** blog.pypi.org · 148+ pts on HN · 4.5h ago (~23:40 UTC+8)
+- **Tags:** `pypi` `supply-chain` `provenance` `packaging`
 
-谷歌告诉学校，将不再支持单独关闭 Search 里的 AI Overviews：据 NPR，不想要课堂 AI 的学区"将彻底失去 Google Search"——一个全有或全无的选择，直击最近禁用课堂 AI 的系统，包括**洛杉矶联合学区、西雅图公立学区与纽约市公立学校**。谷歌的声明是："我们的目标很简单：让学校领导有掌控与信心，按自己认为合适的方式在课堂使用 AI 产品。"文中最锋利的解读来自前谷歌员工 Tracy Pizzo：如果允许管理员把 AI Overviews 关掉，就等于承认该功能可以从 Search 中分离——而这正是 10 月 1 日被驳回的反垄断诉讼里谷歌律师拼命否认的分离。纽约市长 Zohran Mamdani 指责谷歌强行把 AI 塞进公立学校，参议员 Ed Markey 要求撤回决定；公告次日，北卡罗来纳州的家长就学校 Chromebook 上的 Gemini 自残对话提起诉讼（*Emma v. Google*）。
+PyPI 项目页改版已全面上线（11 月 6 日宣布完成；HN 热度 11 月 14 日抵达）：新增专属 **Security 标签页**，展示每个发行版的**来源证明（provenance）状态**与逐文件证明详情——PyPI Publish 证明（Trusted Publisher 上传）与 SLSA Build Provenance（把文件关联到源码提交、平台与构建指令）。四类警告——**不完整、不一致、变更、丢失 provenance**——专为暴露可能的账号接管或构建管道失陷而设；**迟入文件警告**标记发行 14 天后才补入的文件（仅限 2026 年 7 月该政策落地前的发行版）；隔离横幅覆盖一切其他提示；侧栏元数据也被标注为"PyPI data"与"Data verified by PyPI"。项目由 OpenSSF 资助、Kabu Creative 实现、遵循 OpenSSF Attestations Style Guide。
 
-**Why it matters:** 这就是垄断杠杆在采购层的样子：客户的退出选项被定价为"失去整个产品"。反垄断解读——全有或全无的开关是为保住一个法律论点而存在——是 NPR 的报道而非已证实的意图，但无论哪种解释，学校的处境都是具体的。
+**Why it matters:** 证明体系已存在两年；这次改版是让它们在"安装决策时刻"变得**可读**的 UI——而那正是它们能改变行为的时刻。"provenance 丢失"警告最有意思：它是一条供应链绊线，触发模式恰好是账号接管真实产生的模式。
 
-[`🔗 NPR：Why is Google cutting off Search from AI-free schools?`](https://text.npr.org/nx-s1-6029408) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50484960)
+[`🔗 PyPI 博客：UI updates complete`](https://blog.pypi.org/posts/2026-11-06-ui-updates-complete/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50497892)
 
 ---
 
-## 9. 阿里巴巴内部 AI 代码评审工具突破 5 万星——其基准声称同一模型、不同框架，精确率四倍
+## 8. KDE：纪录片——社区故事被拍成电影，263 分登顶 HN
 
 - **Velocity:** ▮▮ rising
-- **Source:** alibaba/open-code-review · +206★ today · 50,475 total
-- **Tags:** `code-review` `agents` `benchmark`
+- **Source:** tube.kockatoo.org · 263+ pts on HN · 6.5h ago (~21:43 UTC+8)
+- **Tags:** `kde` `documentary` `open-source` `community`
 
-OpenCodeReview 是一个 Go 写的 CLI，阿里称其为内部官方 AI 代码评审助手运行了两年（"数万开发者"、"数百万缺陷"——均为 README 自述），今日以 **+206 星**登顶 GitHub 趋势榜，并在今天上午发布了 v1.13.9。它对通用 agent 的卖点是"确定性流水线 + agent"：文件选择、打包、规则匹配由工程逻辑保证，LLM 只用在它赢的地方。证据是 **AACR-Bench**——按 README 自己的统计：50 个开源仓库、200 个真实 PR、10 种编程语言、80+ 资深工程师标注的 1505 个缺陷，数据集在 Hugging Face——，同模型对照组相当扎眼：Claude-4.6-Opus 走 OpenCodeReview 得到 **33.90% 精确率（301/889）、F1 25.10%、38 万 token、1 分 23 秒**——同一个模型走 Claude Code v2.1.169 则是 **7.23% 精确率（435/5980）、F1 11.57%、566 万 token、13 分 06 秒**，不过召回率却是全表最高（28.90%）。README 把 token 差距概括为"约 1/9"，并明说召回率是刻意调低的取舍。
+一部关于 KDE——Plasma 背后那个 30 岁的桌面社区——的长篇纪录片正在 HN 上冲到 **263 分、123 条评论**，托管在社区的 Peertube 实例上。评论者纷纷指认出品方：它来自 **CultRepo**，此前出品过多部自由软件纪录片的频道；讨论帖顺势变成了一场"20 年 KDE 用户"的怀旧会（跨版本稳定、可配置性、C++ 桌面代码库）。这是当天头版上罕见的纯社区历史条目——既不是发布，也不是漏洞。
 
-**Why it matters:** 这是厂商自研基准——阿里标注、阿里的框架赢——所以在 AACR-Bench 得到独立使用之前，绝对值请当营销看。但结果的结构（同权重下，框架造成的成本/精确率/召回率取舍天差地别）与各处 agent 基建团队的发现一致，5 万星说明痛点是真的。
+**Why it matters:** 自由软件纪录片正在自成一派——CultRepo 的旧片目录一次次冲上 HN——而评论区是检视"最老牌大型桌面社区在 2026 年如何被一线工程师看待"的晴雨表。
 
-[`🔗 alibaba/open-code-review`](https://github.com/alibaba/open-code-review) · [`🔗 Hugging Face 上的 AACR-Bench 数据集`](https://huggingface.co/datasets/Alibaba-Aone/aacr-bench)
+[`🔗 KDE：纪录片（视频）`](https://tube.kockatoo.org/w/fFinNHfanLT7aBEb2B8y4c) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50496976)
 
 ---
 
-## 10. LeWM 上 600 次实验之后：JEPA 的预测从来不是瓶颈，规划才是
+## 9. Caveman Code 发布：12 万星的省 token 项目变成免费 Mac 编码智能体应用——自测基准正反两面都公布
 
 - **Velocity:** ▮▮ rising
-- **Source:** haddyalchaer.com · 119+ pts on HN · 2.8h ago (~01:55 UTC+8)
-- **Tags:** `jepa` `world-models` `research`
+- **Source:** GitHub Trending · +227★ today · 120.0k total
+- **Tags:** `caveman` `token-optimization` `coding-agents` `context`
 
-一项对 **LeWM**（Yann LeCun 团队的 JEPA 世界模型，基准为 Push-T）长达数月的独立复现研究公布了 600 次实验，头条结果令人不适：把 LeWM 学到的预测器换成模拟器的**完美物理**，成功率几乎不动——250 个长程任务上 **78% → 77%**。预测早就够用了；已发布系统缺的是规划。按发布原样使用时，LeWM 在 75 步视界任务上只解出 **22%**；作者四种免训练的规划方法把它推到 **85%**，接近拿到理想专家子目标的规划器。子目标间距解释了大半（LeWM 在 25 步内很准——89.7%，对完美物理的 90.5%——75 步才衰减），而只改一处目标评分方式就加上 **60 分**，是完美物理带来收益的三倍。
+JuliusBrussee/caveman——那个让智能体"少说少读"的爆款 skill + 代理——突破 **12 万星**，并发布了 **Caveman Code**：一个免费的 Mac/浏览器 harness，可在你现有订阅上并排运行 Claude Agent、Codex、Cursor 与其自家智能体。发布页的声明全部锁定同一模型：Terminal-Bench 4 上，**每个解题任务比 Codex 便宜 21%**（GPT-6.1 Sol 解出 90/192，与 Codex 打平）、**比 Claude Code 便宜 14%**（Opus 5.5 解出 97/180 对 83/177）；模拟的整天多应用会话**便宜 76%**；首请求体积 2.7k token 对 Claude Code 的 16.7k。底层技术的自有数字：54 次 Claude Code 运行**输入 token 减少 33.2%**、18/18 答案正确。披露也异常完整——所有测量都是他们自己按牌价跑的、对 Claude Code 的运行次数略有差异（180 对 177）、连失败的实验也照发（从历史中剥离先前推理使重读减少 68%，但**成本反升 19%**且解题率下降），因此他们主张"每个解题任务的成本"而非裸 token 数才是指标。
 
-**Why it matters:** JEPA 与生成式的论战大多在吵模型该预测什么；这个实验说，真正有方差的变量是预测如何被**使用**——子目标结构与目标评分的移动幅度远大于预测保真度。方法论上：一位作者、一个基准、没有代码发布声明——当作有力的田野报告读，别当定论。
+**Why it matters:** 上下文效率 harness 正从副业项目走向产品，而这里的诚实基准形态——锁定模型、按解题计成本、连失败一起发——正是面对任何同一模型更小账单式的宣传时你该要求的形状。
 
-[`🔗 Haddy Alchaer：After 600 experiments, here's what I discovered about JEPA world models`](https://haddyalchaer.com/jepa) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50487185)
-
----
-
-## 11. CISA KEV 今日新增两项：一个能"以服务器权限"执行命令的 IRC 服务器，一个以 root 运行的 Check Point 守护进程套接字
-
-- **Velocity:** ▮ rising
-- **Source:** CISA KEV catalog 2026.11.13 · added 2026-11-13
-- **Tags:** `kev` `unrealircd` `checkpoint`
-
-今日 KEV 批次新增两个在野利用漏洞。**CVE-2026-114713**（UnrealIRCd，8.6）：6.0.0 至 **6.2.7.1** 之前的 `labeled-response` 模块在把 IRCv3 "label" 消息标签回显进回复时未做转义，使链式网络上的任意用户可以注入**以服务器权限执行的服务器间命令**——评分出自 MITRE 本人（Secondary），记录仍为 `Undergoing Analysis`，公告在 UnrealIRCd 论坛、11 月 8 日另有 oss-security 帖。**CVE-2026-123039**（Check Point Gaia，7.8）：DynamicCLI 守护进程以 root 运行，监听**全局可写的本地套接字**（`/tmp/dynamic_socket`），且不认证连接进程，任何本地用户都能发命令以 root 执行——厂商公告为 sk1000362。两条记录均已带上今天下午（19:02–19:03 UTC）盖戳的 CISA-ADP SSVC 富化。
-
-**Why it matters:** 两者都是可利用性微型课：一个跨越信任边界的协议字段（label → 服务器命令），一个假设只有可信进程能碰的本地套接字。IRC 那个对仍在跑老版 UnrealIRCd 的众多小网络是互联网可达的；Check Point 那个需要立足点，但能把网关设备上的任何沙箱逃逸升级为安全设备本身的 root。
-
-[`🔗 NVD：CVE-2026-114713（UnrealIRCd）`](https://nvd.nist.gov/vuln/detail/CVE-2026-114713) · [`🔗 NVD：CVE-2026-123039（Check Point Gaia）`](https://nvd.nist.gov/vuln/detail/CVE-2026-123039) · [`🔗 CISA KEV 目录`](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)
+[`🔗 JuliusBrussee/caveman`](https://github.com/JuliusBrussee/caveman) · [`🔗 发布文：Introducing Caveman Code`](https://caveman.so/news/introducing-caveman-code)
 
 ---
 
-## 12. 欧盟数字身份钱包：距离 12 月 24 日大限还有 40 天，只有两个国家上线了公开钱包
+## 10. 美国税法进 Lean：138 处立法起草缺陷获机器验证证书，两个报税软件包被抓出 bug
+
+- **Velocity:** ▮▮ rising
+- **Source:** lexifina.com · 102+ pts on HN · 4.5h ago (~23:41 UTC+8)
+- **Tags:** `lean` `formal-methods` `tax` `research`
+
+Lexifina 的 Alan Yahya 项目（CC0 许可）把《美国法典》第 26 编——国内收入法典——翻译成 Lean，成为机器校验的结构化交叉引用（每部公法一个 git 提交，可回溯至 1994 年版），外加一个产出 1040 表数字的 **2025 年个人所得税模型**（约 2,159 个定义与定理，含 AMT）。已验证的产出：税法正文中 **138 处真实起草缺陷**，每处附 Lean 证书（死引用、拼写错误、编号重复、未闭合括号）；诸如"SALT 上限永不随收入增长""10 万美元以下税表与法定公式的偏差不超过 −5 至 +6 美元"的全称证明；以及在 5,000 户家庭上与三个独立工具（PolicyEngine-US、Tax-Calculator、UsTaxes）的交叉验证——从中抓出 **Tax-Calculator 与 UsTaxes 的 bug**，外加自己模型里的两个。在已被证明的模型上跑自动搜索（约 195,787 份单年申报），独立重新发现了 §199A 与 Roth 转换等已知策略，并报告了三条新结果，其中包括 Schedule 8812 的支付额超出法定允许。局限写得明白：法条翻译由 AI 完成、**未经律师或 CPA 核查**；覆盖范围仅 2025 年个人所得税；他们的结论是单个税年不存在 Roth 量级的未公开漏洞——大漏洞多半藏在合伙企业与 S 公司里。
+
+**Why it matters:** 本周出现了三次相互独立的同构演示（本条、Antigravity 的证明、Gödel 笔记本）——AI 翻译，证明助手裁决——尺度各不相同。税法版对非数学家最有分量：这里的 oracle 是 IRS 自己公布的数字与三个独立软件包，而其中两个与法律本身不一致。
+
+[`🔗 Lexifina：Formalizing the US Tax Code`](https://lexifina.com/blog/formalizing-the-us-tax-code) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50497900)
+
+---
+
+## 11. Project Zero 收紧披露政策：30 天缓冲取消，2028 年 1 月抵达"满 30 天"终点
+
+- **Velocity:** ▮▮ rising
+- **Source:** projectzero.google · 42+ pts on HN · 9h ago (~19:13 UTC+8)
+- **Tags:** `project-zero` `disclosure` `security-policy` `ai`
+
+Google Project Zero 发布新漏洞披露政策（11 月 13 日，Natalie Silvanovich），取代 2021 年起的"90+30"——90 天修复期外加 30 天缓冲——改为 **"Full X"时刻表：报告后 X 天即披露，无论是否已修复**。阶梯日期明确：**现在 Full 90 → 2027 年 2 月 2 日起 Full 60 → 2028 年 1 月 3 日起 Full 30**。宽限期与变体政策一并移除；仅存三类例外（在野漏洞按 Google 应用安全政策处理、已公开的漏洞、厂商主动要求）。给出的动机是 AI 出现在竞速两侧：LLM 压缩了漏洞发现、也缩短了补丁到利用的窗口，为"缓慢的漏洞开发"假设设计的缓冲期不再购买用户安全。值得注意的是，漏洞是否真正修复不再是政策的决策点——P0 仍会跟踪修复状态，但披露不再等它。
+
+**Why it matters:** 这是第一个明确以"AI 加速的利用时间线"论证的重大披露政策重写，给整个行业立下了可以对照规划的截止日期——厂商的补丁 SLA，以及一切建立在 90+30 之上的企业补丁节奏假设，从此有了已知的到期日。
+
+[`🔗 Project Zero：披露政策更新`](https://projectzero.google/2026/11/disclosure-policy.html) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50496051)
+
+---
+
+## 12. 190 行纯 JAX 写成 DeepSeek V3——MLA、MoE 均衡与 MTP，在 MacBook Air 上从头训练
 
 - **Velocity:** ▮ steady
-- **Source:** myid.ie EU Wallet Tracker · 111+ pts on HN · 5.8h ago (~23:00 UTC+8)
-- **Tags:** `eu` `digital-identity` `eidas`
+- **Source:** Show HN · 80+ pts · 5.1h ago (~23:04 UTC+8)
+- **Tags:** `jax` `deepseek` `education` `transformer`
 
-一份对照一手来源给全部 27 个成员国打分的追踪器（证据核查于 10 月 7–15 日）把 eIDAS 2 的落地进度摆得非常直白：每个国家都必须在 **2026 年 12 月 24 日**——距今 40 天——前向公民提供钱包，但目前只有**两个**（丹麦 AltID、意大利 EUDIW-IT）公开可用，算上爱尔兰共三个"到了真实用户手里"，十个在试点、十个在开发、四个在采购、一个（保加利亚）还在规划。评级分布为 A0、B2、C13、D11、E1，而**六个国家**（EE、FI、DE、NL、RO、SE）宣布的公开时间*晚于*法定日期——追踪器谨慎地称其为"已宣布目标"而非违规。下一堵法律墙更硬：指定的私营服务（银行、强认证提供商）必须从 **2027 年 12 月 24 日**起*接受*这些钱包。本周的带日期里程碑包括塞浦路斯招标今日截止、波兰 mObywatel 的 eIDAS 适配本月到期。
+Vaibhaav Tiwari 的教学级实现把整个 DeepSeek-V3 架构装进 **190 行纯 JAX**——不用 Flax、不用 Equinox，参数就是普通的字典数组——并在 MacBook Air M5（24 GB）上从头预训练：36.2M 参数模型（每 token 激活 13.6M），2100 万 token 的公版侦探小说，约 2.6 小时，验证损失 5.02 → 3.51。DeepSeek-V3 的每个想法都在场且在这个尺度上可测：MLA 的潜缓存（每 token 每层 480 → 144 个数）、解耦 RoPE、DeepSeekMoE（1 共享 + 16 路由取 4），以及最妙的部分——**无辅助损失均衡**：README 直接印出前后对比——加偏置后每个专家的负载摊到 5.7–6.9%，不加则是 0.09–18.6%，直测了这个均衡技巧买到的东西。
 
-**Why it matters:** 欧盟 2024 年定下的期限六周后到来，92% 的成员国还拿不出公开钱包——这让 2027 年的"接受义务"（触达每一家银行和电商平台的那部分）成为真正会咬人的合规事件。追踪器的方法论诚实（"评级描述的是已发布证据，而非法律合规性"）本身就值得抄。
+**Why it matters:** 大多数 N 行实现 X 式的仓库只是把形状重敲一遍；这一版让论文里的每个想法都能在玩具尺度上被证伪——这正是代码导读与可用实验室的差别。仅凭偏置均衡那组前后对比，就值得所有读过 DeepSeek-V3 报告却不信负载图的人一读。
 
-[`🔗 MyID：EU Wallet Tracker——全部 27 国`](https://myid.ie/business/eu-digital-wallet-tracker/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50484496)
+[`🔗 Vaibhaav-Tiwari/deepseek-v3-jax`](https://github.com/Vaibhaav-Tiwari/deepseek-v3-jax) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50497589)
 
 ---
 
-## 13. Lonewolf 0.3：Rust 写的 XMPP 服务器学会联邦——发布两小时后登上 HN
+## 13. agweb：为编码智能体打造的 macOS 浏览器——永不抢焦点，还自带 footprint 实测
 
 - **Velocity:** ▮ steady
-- **Source:** lonewolf-im/lonewolf · 104+ pts on HN · 6.3h ago (~22:30 UTC+8)
-- **Tags:** `xmpp` `rust` `self-hosted`
+- **Source:** Show HN · 66+ pts · 6.1h ago (~22:08 UTC+8)
+- **Tags:** `agweb` `agents` `browser` `macos`
 
-**Lonewolf**——一个 Rust 写的独立 XMPP 服务器——今天（18:06 UTC）发布 **v0.3.0**，补上了此前版本缺的那块：**联邦**——与其他 XMPP 服务器交换消息、在线状态、IQ 与花名册订阅，凡主机有证书与公网 DNS 即默认开启。服务器间认证刻意从严：仅凭证书走 SASL EXTERNAL，同时加入桌面客户端依赖的扩展与直连 TLS。项目对自己的阶段很诚实——pre-1.0、单节点、完整 XMPP 兼容与集群仍在路线图上——而 10 月 27 日的 v0.2.0 已加入服务发现、资料与本地客户端的消息同步。
+agweb（paul-nameless/agweb）是一款为智能体而非人类设计的 WebKit macOS 浏览器：智能体从 shell 用 playwright 风格的 CLI 驱动它，对话框与文件选择器在代码层应答，而核心性质是——**任何窗口都不抢焦点**，五个并行智能体同时浏览也不会爆发键盘大战。每个智能体的标签页都收在一块仪表盘（⌘D）里，附各自最后一条命令；原生 macOS 事件驱动点击与悬停，人审门槛站点照常工作；`fill --secret-cmd 'pass show site'` 输入凭据而智能体的转录文本里永远看不到它；空闲标签页挂起至 0% CPU。README 附上自测：五个空闲页面 **590 MB**，对比 headless Chrome 730 MB、Playwright Chrome 1.6 GB。11 月 11 日创建，122 星，需 macOS 26+。
 
-**Why it matters:** 一个能真正联邦的 XMPP 服务器，是玩具与自托管即时通讯之间的分界线——而"仅证书"的服务器间信任是对该协议历史上薄弱的 server-to-server 故事的一次显著设计下注。自托管消息复兴一直在为这类单二进制部署选 Rust。
+**Why it matters:** 智能体浏览器层正在收敛出一套明确的接口契约——引用稳定的 snapshot、可 diff 的 find、脱敏输入——而 agweb 的站位（真实窗口、不抢焦点、对人类保持可见）是 headless 浏览器与 Playwright 驱动 Chrome 之间设计空间里一个清晰的坐标点。
 
-[`🔗 Lonewolf v0.3.0 发布说明`](https://github.com/lonewolf-im/lonewolf/releases/tag/v0.3.0) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50484007)
+[`🔗 paul-nameless/agweb`](https://github.com/paul-nameless/agweb) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50497147)
 
 ---
 
-## 14. chrome-devtools-mcp v1.13：给会调试你应用的 agent 加上 logpoint 与页面级网络 mock
+## 14. Fursoy：从零手写的乱序 RV64 核心，SystemVerilog 实现，能启动主线 Linux 6.6
 
 - **Velocity:** ▮ steady
-- **Source:** ChromeDevTools/chrome-devtools-mcp · +145★ today · 55,381 total
-- **Tags:** `mcp` `devtools` `debugging`
+- **Source:** Show HN · 50+ pts · 6.1h ago (~22:06 UTC+8)
+- **Tags:** `riscv` `cpu` `systemverilog` `hardware`
 
-Chrome DevTools 官方 MCP 服务器——让编码 agent 以 DevTools 级仪表驱动真实浏览器的桥梁——再度登上趋势榜（今日 +145★），靠的是 **v1.13.0**（11 月 11 日）：基于 DevTools BreakpointManager 的 **logpoint**（不暂停 agent 正在检查的页面即可打日志）、**页面级网络 mock**、以及对上游 mock 响应的支持——补齐了已向 agent 客户端开放性能追踪、DOM 访问与仿真的工具集。55k 星的体量使它成为生态里装机量最高的 MCP 服务器之一，而且与本 feed 11 月 10 日报道过的 Chrome/Edge/Firefox/MDN Modern Web Guidance 技能天然成对——Chrome 团队现在同时在发 agent 的"建议"层与"仪表"层。
+Fursoy Slice-1 是一位独立开发者从零手写的**64 位乱序超标量 RISC-V 处理器**（RV64IMAFDV + Zba/Zbb），SystemVerilog 实现——2 宽取指/译码/重命名/退休，128 项 ROB，160 项物理寄存器堆，8 个分支检查点，带硬件页表遍历器的 8 bank 非阻塞 L1D，以及 Sv39 按需分页与 M/S/U 特权级分离。头条成果：它在虚拟内存下**启动了主线 Linux 6.6.50 与 BusyBox**，并在 Nangate 45nm 标准单元上跨 8 个核心功能块完成 **500 MHz** 时序收敛（完整综合报告已公开）。17 个星——这是工艺之作而非产品，README 的微架构细节密度也确实如此。
 
-**Why it matters:** 调试是浏览器驱动 agent 崩溃的地方——页面状态不可见、网络行为靠猜。Logpoint 与有范围的网络 mock 把人类调试者最常用的两个原语交给了 agent，这正是"猜 bug"与"复现 bug"之间的差别。
+**Why it matters:** 在自研乱序核心上启动 Linux 是硬件领域最困难的个人里程碑之一，而公开的综合/STA 报告让它成为一份可用参考：每个结构都有名字、有尺寸、有时序，想知道乱序到底贵在哪里的人可以直接读。
 
-[`🔗 chrome-devtools-mcp v1.13.0 发布说明`](https://github.com/ChromeDevTools/chrome-devtools-mcp/releases/tag/chrome-devtools-mcp-v1.13.0) · [`🔗 ChromeDevTools/chrome-devtools-mcp`](https://github.com/ChromeDevTools/chrome-devtools-mcp)
+[`🔗 FURSOY/fursoy-cpu`](https://github.com/FURSOY/fursoy-cpu) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50497137)
 
 ---
 
-## 15. NetScaler 记录潮翻了三倍：28 条 CVE 全部挂在一个 Citrix 公告下，按小时节奏抵达，状态仍为 `Received`
+## 15. IRS Direct File 的代码在 GitHub 上——而仓库自己声明：已归档、不再维护、勿用于生产
 
 - **Velocity:** ▮ steady
-- **Source:** NVD records · published 00:20–09:17 UTC Nov 13（六批，每批都在每小时的 ~17 分）
-- **Tags:** `citrix` `netscaler` `cve-wave`
+- **Source:** github.com/IRS-Public · 65+ pts on HN · 2.4h ago (~01:48 UTC+8)
+- **Tags:** `irs` `direct-file` `open-source` `government`
 
-昨天我们报道了第一批九条 NetScaler 记录：同一个公告（**CTX697305**）还在按节拍器继续产出。NVD 现显示 11 月 13 日 UTC 共发布 **28** 条 Citrix NetScaler ADC/Gateway 记录——六批分别落在 00:20、02:18、03:17（即昨天的九条）、04:17、08:17 与 09:17——全部 CVSS 4.0、全部 `Received`、每一条都指向 CTX697305。ID 区段是跨批次的，与批次并不一一对应：`CVE-2026-111333–111342` 中三条在 ~04:17 抵达、七条在 ~08:17；`CVE-2026-120860–120868` 中四条在 ~08:17、四条在 ~09:17——而 120868 本身就在昨天的九条里，是当天 00:20 的第一条记录。新增记录的高分仍是 **9.3**：EPA/Endpoint Analysis、ICA 代理与 Email OTP 认证的内存溢出（全潮唯一的 **9.5** 在昨天的九条里），**8.7** 一档横跨 LDAP 认证、SSL/TLS/DTLS、HTTP/3（QUIC）、管理面与 GSLB——描述仍以内存溢出/DoS 措辞为主，昨天那条提到的修复版本（14.1-73.57、13.1-64.39）就是同一公告的补救。（本条早前一版把两个 ID 区段各绑到了单一批次；记录自身的 `published` 时间戳把它们拆开了。）
+HN 重新翻出了 **IRS-Public/direct-file**——IRS 免费直接电子报税服务背后的仓库，4.6k 星，README 对自身状态毫不含糊：**"本仓库已归档且不再维护。代码仅供历史参考，可能包含未修补或未知的漏洞。不应在生产系统中使用。"** 代码本身仍是了不起的公共产物：一个把 Title 26 翻译成平实语言问题的问答式报税服务（与 IRS 首席法律顾问办公室共同开发），外加 **Fact Graph**——一个声明式 XML 知识图谱，JVM 上跑 Scala、经 Scala.js 转译进浏览器，专为"填了一半的报税表"这类不完整信息做推理，并明确提供其作为业务规则引擎的参考实现。最后一次 push 是 6 月 11 日；讨论帖里活着的问题是 Direct File 项目本身是否会回归并被永久化。
 
-**Why it matters:** 节奏现在是这个故事最强的信号：每一批都落在每小时的 ~17 分，与姊妹公告 CTX697320 前一天唯一的 NetScaler Console 记录（11 月 12 日 14:17 UTC）同构——这是自动化发布管线的签名，而非一次审计的产出，且截至 UTC 当日结束没有再产出新批次。对边缘负载均衡器、且集中在 EPA、ICA 代理、GSLB 这类近认证前组件的 28 条记录潮，正是 Citrix Bleed 之前的形状。记录自身的算术尚未落地——`Received` 意味着 NVD 还没碰过——所以在公告文本可读之前，请把组件名而非分数当作补丁优先级信号。
+**Why it matters:** 这里有两件事一起发生：一件真正可复用的公共部门产物（Fact Graph 与领域无关），以及一个为"归档政府代码"做出安全表态范本的仓库——README 拒绝让"历史参考"被读成"仍在维护的软件"。
 
-[`🔗 NVD：CVE-2026-111334（EPA/EPAS 内存溢出）`](https://nvd.nist.gov/vuln/detail/CVE-2026-111334) · [`🔗 Citrix 公告 CTX697305`](https://support.citrix.com/support-home/kbsearch/article?articleNumber=CTX697305)
+> "This repository has been archived and is no longer maintained. The code is provided for historical reference and may contain unpatched or unknown vulnerabilities. It should not be used in production systems." —— 仓库 README
 
----
-
-## 16. FAA 下达全国停飞令——多年来罕见——4.5 小时后解除，原因仍未说明
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** FAA ATCSCC advisory (fly.faa.gov) · 1,400+ pts on HN · 7h ago (~05:05 UTC+8)
-- **Tags:** `faa` `aviation` `infrastructure` `outage`
-
-今天体量最大的新闻，超出第二名一个数量级：11 月 13 日 ~21:00 UTC，FAA 下达**全国停飞令**——所有美国机场、所有离港航班扣留——按 HN 帖子里引用的命令原文，理由是 "DUE TO EXTRAORDINARY CIRCUMSTANCES AND FOR REASONS OF SAFETY"。FAA 自己的取消公告（ADVZY 005："THE FAA COMMAND CENTER NATIONWIDE GROUND STOP HAS BEEN CANCELLED. EFFECTIVE TIME: 140119-140200"）显示命令于 **01:19Z** 解除，距开始约 4.5 小时。官方记录除"特殊情况"外没有给出任何原因；帖子里最有信息量的评论称"全国的 ATC 无线电系统宕机了"——截至目前没有任何官方渠道证实。二阶效应立即扩散：加拿大的维多利亚也停飞（一条 230 分的空管录音实时帖全程追踪），被滞留旅客改走地面，Amtrak 报告订票系统出现重大故障（本身也是一条 134 分的帖子）。
-
-**Why it matters:** 全国范围的停飞令规模上近乎前所未有，而它落在微软 365 大宕机的同一周——48 小时内两次国家级基础设施失效，这是韧性问题，不是坏运气撞在一起。FAA 的公告是眼下唯一权威的记录，而且措辞极其简短；请像行业追踪 NOTAM 2023 年文件损坏事件那样等待事后报告。
-
-> "DUE TO EXTRAORDINARY CIRCUMSTANCES AND FOR REASONS OF SAFETY" ——停飞令给出的理由，经由 HN 提交引用
-
-[`🔗 FAA ATCSCC 取消公告 ADVZY 005`](https://www.fly.faa.gov/adv/adv_otherdis?adv_date=11142026&advn=5) · [`🔗 HN 讨论（1,400 分）`](https://news.ycombinator.com/item?id=50489641) · [`🔗 HN：FAA 于 0119Z 解除全国停飞`](https://news.ycombinator.com/item?id=50492601)
+[`🔗 IRS-Public/direct-file`](https://github.com/IRS-Public/direct-file) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50499083)
 
 ---
 
-## 17. 逆向 Coway 空气净化器、甩掉云端：根证书走的是明文 HTTP——"It was always MitM-able"
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** scottjg.com · 700+ pts on HN · 30h ago (11 月 12 日，~06:03 UTC+8)
-- **Tags:** `iot` `reverse-engineering` `home-assistant` `mqtt`
-
-Scott J. Goldman 对依赖云端的 Coway Airmega IconS 做的本地化改造，是本周最好的 IoT 拆解。现有的 Home Assistant 集成靠抓取 Coway 的 IoCare 云，而它经常坏——帖子自己列的清单：Coway 封禁该集成、把应用改名 IoCare→IoCare+、改 HTML 布局、服务器离线，还曾以"运行旧版本集成"为由封了他的账号。于是他搭了树莓派 AP + nftables + mitmproxy 的环境（有趣的细节：mitmproxy 自带 `--emudhra-old` 参数，会自动用本 feed 十月报道过的 eMudhra 被攻破根证书），然后立刻得到那句点睛之笔：风扇下载自己的根 CA 证书走的是**明文 HTTP**——没有固定、没有降级对抗。控制面是 AWS IoT 上的 MQTT over TLS；蓝牙配网载荷（protobuf + PKCS#7 + AES，"P002" 前缀）手工逆推"It'd be at least hours of work (likely days)"，他的编码 AI "大约 20 分钟"就重实现完了。因为配网响应里写死了 `caUrl` 和 `certSvrUrl`，只要让风扇指向你自己的服务器一次，MitM 环境就再也不需要了。成品：一个支持 Web Bluetooth 配网的 Home Assistant 自定义集成。
-
-**Why it matters:** 设备安全侧的结论很糟（走明文 HTTP 的根 CA 意味着这条"安全"的 IoT 控制信道从来都可以被拦截），而工作流侧是更新的那一半：从反编译应用和 BLE 日志里做协议考古，正在变成 AI 提速的任务。这篇帖子也是 AI 协作工作的诚实范本——包括那句"Claude will not oblige the request, not even for… uhh… testing purposes. Luckily, ChatGPT has no such compunctions."
-
-> "The fan downloads its root CA cert over plain HTTP. It was always MitM-able."
-
-[`🔗 Scott's Blog：逆向我的 Coway 空气净化器，甩掉云端`](https://scottjg.com/posts/2026-11-11-reverse-engineering-my-coway-air-purifier-to-ditch-the-cloud/) · [`🔗 HN 讨论（700 分）`](https://news.ycombinator.com/item?id=50474959)
-
----
-
-## 18. "No AI Slop: A Manifesto"——一场峰会讲者与听众写出针对 agent 产出的敏捷宣言
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** slopmanifesto.com · 189+ pts on HN · 8.2h ago (~03:50 UTC+8)
-- **Tags:** `ai-slop` `manifesto` `culture` `code-review`
-
-由"AIE Code Summit 2026 的讲者与与会者"署名、明确对标 2001 年 Snowbird 聚会（"In 2001, 17 software engineers and leaders got together at a ski lodge…"），这份宣言提出五条价值观：**结果优于产出 · 理解优于速度 · 自己的思考优于模型初稿 · 更好的工作优于更容易的工作 · 改进系统优于修补产出**。被广泛引用的是它的工作定义："Slop is when we put less effort into producing something than we ask the consumer to spend understanding it."（制造成本低于你要求读者付出的理解成本时，就是 slop。）信念部分点名了不对称与复利："a swarm of agents can produce more work in a single day than a person can review in our lifetime"；"The cost of producing a thousand-line PR or a ten-page doc is approaching zero, while the cost of reviewing it remains constant"；以及"Using AI doesn't necessarily make something slop. Slop happens when we pass AI output along without taking responsibility."
-
-**Why it matters:** 一份峰会署名文件能不能像敏捷对流程债那样处理审查债，是事先没法知道的事——但"给 slop 下定义"这个动作（生产者投入 vs 读者成本）是这场讨论里最锋利的一次表述，而且它与本周 Jonathan Blow 那场"如果 AI 解决了编程，为什么我的软件还是老样子"的演讲、The Atlantic 关于 AI 文学骗局的报道落在同一周。这套审查经济学也和本 feed 自己的发现不断互相印证：从早上 Haskell Foundation 的"审查是瓶颈"，到下午 Plannotator 的整个卖点。
-
-> "Slop is when we put less effort into producing something than we ask the consumer to spend understanding it."
-
-[`🔗 No AI Slop: A Manifesto`](https://www.slopmanifesto.com/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50488769) · [`🔗 Jonathan Blow：If AI Solved Coding, Why Is My Software Still the Same?`](https://www.youtube.com/watch?v=IRK8h67ol7Q)
-
----
-
-## 19. OpenAI 解散独立机器人团队——研究人员并入 Mark Chen 的研究部门，硬件并入 Brockman 的应用部门，CoRL 展位从未有人值守
-
-- **Velocity:** ▮▮ rising
-- **Source:** Fortune（独家） · 151+ pts on HN · 10h ago (~01:58 UTC+8)
-- **Tags:** `openai` `robotics` `industry`
-
-据 Fortune 的 Wen Shao 报道，OpenAI 已解散其独立机器人团队并重新分配研究人员：机器人研究并入首席研究官 **Mark Chen** 旗下的主研究组织，应用机器人与硬件并入总裁 **Greg Brockman** 旗下的应用组织。发言人的口径是加速而非撤退——"robotics remains a core part of OpenAI's long-term vision"——押注在于应该由通用模型来控制机器人（包括人形），而不是一支专门团队去造机器人专用模型。最说明问题的细节：OpenAI 本周已在奥斯汀 CoRL 大会登记了 208 号展位，大会应用里也列着它，而 Fortune 到场时展位"空着，OpenAI 的标志无处可寻"。历史在押韵：2020 年解散的团队（Wojciech Zaremba 归因于机器人数据有限）、2024 年重建、2025 年 2 月结束的 Figure 合作，以及 Sam Altman 定下的 2027 年人形机器人首次公开展示目标。
-
-**Why it matters:** 这是具身 AI 最大未解问题在组织架构上的表达：机器人大脑到底来自那个什么都会做的同一个模型，还是机器人需要自己的技术栈？OpenAI 刚刚用组织结构回答了"同一个模型"——这让 2027 年演示承诺和那个空着的 CoRL 展位，成了今后要盯着它兑现的两样东西。
-
-[`🔗 Fortune：OpenAI 解散其独立机器人团队`](https://fortune.com/2026/11/13/openai-disbands-robotics-team-as-its-general-models-start-running-robots/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50487184)
-
----
-
-## 20. Weight Space Misfolding：给被编辑的权重写威胁模型——"by analogy with protein misfolding in prion disease"
-
-- **Velocity:** ▮▮ rising
-- **Source:** alphaxiv.org · 136+ pts on HN · 9.5h ago (~02:33 UTC+8)
-- **Tags:** `weight-space` `model-editing` `security` `research`
-
-Chris von Csefalvay、Pranav Doma、Achyuthan Unni Krishnan 与 Tamas Foldi（HCLTech）接过了本 feed 11 月 12 日报道过的权重空间编程能力——模型直接编辑另一个模型的权重——并为它写出了安全威胁模型。论文的核心动作是朊病毒类比：**权重空间错误折叠**（weight space misfolding），一个模型通过直接修改在另一个模型中诱发未授权行为，范围同时覆盖"直接干预与假设性的继续传播"（被编辑的模型再去编辑别人）。结构性问题是不对称：攻击者"只需要把载荷攻击生成一次"，而防御者要在权重的草堆里找针——结果是防御者"要么完全禁止权重编辑、放弃其收益，要么背负全部成本"。分类学覆盖事实替换、能力剥夺与选择性遗漏（包括进攻性的*选择性遗忘*），并以 IWIBench 界面上的三个案例研究加以说明。
-
-**Why it matters:** 11 月 12 日的故事证明了权重空间编程可行、且可以用经典算法校验；这篇论文是旁边那个还没人形式化的问题——当*编辑*本身就是攻击时，"被编辑过的检查点"供应链长什么样。防御不对称是可复用的思想：它预言纯检测式防御会输，策略（已分发权重的来源证明）才是承重的防线。
-
-> "We call this weight space misfolding, by analogy with protein misfolding in prion disease."
-
-[`🔗 alphaXiv：Weight Space Misfolding`](https://www.alphaxiv.org/abs/2611.weight-space-misfolding) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50487762)
-
----
-
-## 21. 不占格子的终端边框：Ratatui 维护者提出 cell 边缘画线协议，已在 Ghostty 打出补丁
-
-- **Velocity:** ▮▮ rising
-- **Source:** joshka.net · 135+ pts on HN · 5h ago (~07:06 UTC+8)
-- **Tags:** `terminals` `tui` `ratatui` `ghostty`
-
-维护 **Ratatui**（Rust TUI 库）的 Josh 提出一种终端协议扩展：把细线画在 cell 的*边缘*上，而不是用制表符占掉整行整列："Every line in that screenshot is a cell border. None of them use up a row or column." 动机是 Unicode Box Drawing 区块的 128 个字符在结构上不够真实布局使用，于是 TUI 作者要么烧掉行列画边框，要么放弃边框改用颜色。他已将其实现为**Ghostty 的补丁**（更早的版本在 Rio 里），配上基于 Ratatui 的演示应用，并明确向终端与 TUI 作者征集反馈——这是一个协议提案，不是已发布特性。帖子开头还自带声明："This post (and the code behind it) was written with a lot of help from AI. I'm not going to apologize for that."
-
-**Why it matters:** 终端能力的进步历来就是这样传播的——一个模拟器先实现协议，TUI 库跟上支持，其余跟进（kitty 图形协议走过的路）。Ghostty 一直在自愿充当实验底座，而边框协议是同一根楔子的小而具体的案例。如果 Ratatui 采纳它，瓶颈就会转移到模拟器层。
-
-> "Every line in that screenshot is a cell border. None of them use up a row or column."
-
-[`🔗 joshka.net：Terminal borders that don't cost a cell`](https://www.joshka.net/cell-borders/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50491423)
-
----
-
-## 22. Perplexity 发布 Decider v1.3——开源权重的决策模型，新增 `locate` 特性，还公开了自己的 agent 安全用例
-
-- **Velocity:** ▮▮ rising
-- **Source:** perplexity.ai/hub/blog · 107+ pts on HN · 8.7h ago (~03:24 UTC+8)
-- **Tags:** `decision-models` `classifier` `routing` `perplexity`
-
-Perplexity 发布了 **Decider v1.3** 与 **Decider Flash v1.3**（更小的蒸馏版）的完整训练/评测报告：返回概率分布的通用分类器，支持是非题、多选题与有序打分。两个模型都已在 Hugging Face 上以 **Apache 许可证**开放，也可经 OpenRouter 与 Decisions API 使用。博文承认了技术源流——"inspired by Jev, TypeSafe AI's System One Model"——并加入**双向注意力**、更精心整理的数据、视觉任务支持，以及新的 **`locate`** 特性：为 NER/PII/抽取式问答类任务高亮被选中的片段。训练卫生写得具体（通用阶段排除基准测试集；面向特定领域的第二段 LoRA 阶段）。内部使用部分才是干货：200+ 任务的零样本评测集、生产中的查询分类真实流量（信息抽取 425,402 个问题、领域分类 409,564、情感分析 344,158），以及"自我改进的安全规则"——记录 agent 活动并让 Decider 参与规则检查。
-
-**Why it matters:** 决策模型模式——小分类器负责路由/评审/审核，难题升级给大模型——整个十一月都在积累证据（11 月 10 日 Amazon 内部工单系统的切换；11 月 7 日的校准升级结果）。这是第一个完全开源权重、Apache 许可、评测方法公开的入场者，让这个模式从厂商插画变成了可独立复现的东西。
-
-[`🔗 Perplexity：Decider v1.3 —— 训练、评测与用例`](https://www.perplexity.ai/hub/blog/perplexity-decider) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50488464)
-
----
-
-## 23. FBI：朝鲜"FaceStealer"借虚假视频通话窃取超 4 亿美元——并明确盯上开源维护者
-
-- **Velocity:** ▮ rising
-- **Source:** BBC · 94+ pts on HN · 11.2h ago (~00:50 UTC+8)
-- **Tags:** `north-korea` `social-engineering` `crypto` `fbi`
-
-FBI 点名并披露了一波加密货币盗窃背后的手法：**FaceStealer**——据 FBI 统计，18 个月内从 **900 多名受害者**处窃取**超过 4 亿美元**，全靠伪造的视频通话。机制：假冒或盗来的社交账号邀请目标参加"冒牌版"Zoom、Teams 或 Google Meet 通话；屏幕上播放**受害者熟人被预先录制的视频**，音频"故意故障"；弹窗提示"修复"音频，点击即中招；通话被秘密录制，录像又成为*下一位*受害者的信任背书材料。与本 feed 最相关的在目标选择上：该行动"aggressively targets"加密货币与 web3 从业者，**"particularly those who are involved in the development and maintenance of open-source software"**。FBI 网络主管 Brett Leatherman："朝鲜政权依赖大规模加密货币盗窃的收益为其非法武器计划提供资金。"此前一周，创纪录的 **63 亿美元 Binance 被盗案**刚被归因于与朝鲜相关的行为者。
-
-**Why it matters:** 国家级行为者把开源维护者点名为优先目标类别，而这套社会工程循环专门用来击穿"通话里这个人我认识"的直觉。防御规则从技术问题变成了流程问题：任何由通话发起的安装之前先做带外身份核验，把"视频里有人"当作零证据。
-
-> "A highly effective social engineering scheme capable of deceiving even the most experienced technical and security conscious computer user." —— FBI 谈 FaceStealer
-
-[`🔗 BBC：朝鲜黑客用虚假视频通话实施 4 亿美元加密盗窃`](https://www.bbc.com/news/articles/cqdj1ellpd70o) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50486178)
-
----
-
-## 24. Apify 披露安全事件：一个失陷凭据导致客户数据被访问——开放状态的存储可凭 ID 直接读取
-
-- **Velocity:** ▮ rising
-- **Source:** status.apify.com · 92+ pts on HN · 11.1h ago (~00:55 UTC+8)
-- **Tags:** `security` `breach` `apify` `scraping`
-
-Apify——其 actor 撑起了大量 agent 数据采集的网页抓取平台——正在滚动发布一份公开事件报告。状态页时间线：**11 月 9–10 日**，"一名未授权第三方利用一个失陷凭据获取了一批账号凭据并访问了相关 Apify 账户"；访问路径已关闭，且未检测到"11 月 11 日之后攻击者的进一步活动"；个人数据或存储数据被访问的客户已于 11 月 12 日获单独通知。11 月 13 日的更新列出补救措施——**API token 现在只存哈希**、内部服务间网络限制、更强的内部认证、全栈安全评估——以及一条对每个用户都重要的警告：把你的存储设为受限，因为"While it's open, anyone who knows a storage ID can read that storage."。带根因的事后报告承诺一周内发布，下次更新在 72 小时内。
-
-**Why it matters:** 这是 agent 生态供应链挨的一记闷棍：抓取来的数据集正是许多 agent 不查来源直接读取的东西，而"凭存储 ID 即可读"的形态意味着，数据可能从那些主人从未收到钓鱼邮件的账户里被读走。token 哈希化修复与 72 小时更新节奏是两件值得盯的事；HN 帖子已经在收集受影响用户的一手报告。
-
-[`🔗 Apify Security Incident（状态页）`](https://status.apify.com/incidents/sxd1dj5j6749) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50486258)
-
----
-
-## 25. Block 开源 Buzz：3.7 万星的人类与 agent 同室协作工作区——跑在你自己的 Nostr relay 上
-
-- **Velocity:** ▮ rising
-- **Source:** block/buzz · GitHub trending · 37,327 total
-- **Tags:** `nostr` `agents` `collaboration` `self-hosted`
-
-来自 Block（Jack Dorsey 的公司）`block` 组织的 **Buzz** 正在趋势榜上，**37,327 星**："A workspace where humans and agents build together, on a relay you own."（人类与 agent 共建的工作区，跑在一个你拥有的 relay 上。）底层是关键——内里是一个 **Nostr relay**，README 把后果说得很明白："every message, reaction, workflow step, review approval, and git event is a signed event in one log. Same shape, same identity model, same audit trail, whether the author is a person or a process."（无论作者是人还是进程，同一种形状、同一种身份模型、同一条审计轨迹。）agent 拥有自己的密钥对、自己的频道成员关系、自己的审计轨迹——按"身份而非权限标志"来划分，"the same way you'd scope a teammate"——并且拥有和人类一样的操作面：开仓库、发补丁、评审代码、跑工作流、编辑画布、编排其他 agent、加入语音讨论。README 的自知之明很可爱："Yes, it's another AI-adjacent developer tool. We're sorry." Apache 2.0；桌面应用在 11 月 13 日一天内发布三个版本（v1.0.1 → v1.0.2 → v1.0.3-preview.1，见 `block/buzz-app` 的发布页——relay 仓库自己的最新发布是 desktop-v0.5.30，11 月 14 日 00:31Z；本条目早先版本所写的发布版本不存在于任何发布端点）。
-
-**Why it matters:** 本月报道过的三种 agent 工作区设计（CompanyOS 的仅验证者可关闭目标、AgentRun 的控制平面、Paradev 的每 agent 工作区）全都收敛在签名审计轨迹上——但 Buzz 是第一个让审计日志成为*原生存储模型*的：直接继承 Nostr 的签名事件形态。如果 relay 就是数据库，"谁做了什么"就可以随你的密钥一起带走，而不是困在 SaaS 管理界面里。
-
-> "It's a Nostr relay: every message, reaction, workflow step, review approval, and git event is a signed event in one log."
-
-[`🔗 block/buzz`](https://github.com/block/buzz) · [`🔗 Buzz VISION.md`](https://github.com/block/buzz/blob/main/VISION.md)
-
----
-
-## 26. Plannotator 破 1 万星：给 agent 的计划、diff 与产物做批注的评审面板——并把批注送回给 agent
-
-- **Velocity:** ▮ rising
-- **Source:** backnotprop/plannotator · GitHub trending · 10,522 total
-- **Tags:** `agents` `code-review` `review-ui` `claude-code`
-
-Plannotator——"the workspace to stay in the loop and on top of agents"——正以 **10,522 星**登上趋势榜，发版节奏与之匹配：**六天五个版本**，最新 v0.28.64 于昨天发布。它是一个本地、基于浏览器的评审面板，通过插件、钩子与命令接入编码 agent：当 agent 提出决策、计划、HTML 产物或完成的 diff 时，应用会打开，你进行批注、评论，再把标记结果送回给 agent 去执行。它的 harness 列表是本 feed 见过最全的单工具——Claude Code、Codex、Copilot CLI、Gemini CLI、OpenCode、Kiro、Droid、Amp、DeepSeek Harness 与 Pi，外加个人助理——新的 **Plannotator Inbox** 则把自己定位为"the missing review layer between you and multi-agent work"，把决策、原型、变体与计划收进一个队列。甚至还有一个 Herdr Annotate 集成，把它与本 feed 11 月 12 日报道过的终端运行时连起来。
-
-**Why it matters:** 它攻击的瓶颈，正是今天早上 Haskell Foundation 点名的那一个——审查是现代 AI 工作流的主要约束——也是今天下午 No-AI-Slop 宣言形式化的那一个：产出便宜，审查不便宜。一个 harness 无关的评审面板——十一个 agent CLI 共用一套批注 UI——才是能规模化下来的形状，因为你下次换哪个 harness 它都还在。
-
-[`🔗 backnotprop/plannotator`](https://github.com/backnotprop/plannotator) · [`🔗 Plannotator Inbox`](https://plannotator.ai/inbox/)
-
----
-
-## 27. Uptime Kuma 连发两个紧急版本：仅管理员可触发的 RCE，"via an upstream package's regression"，细节保密 7 天
-
-- **Velocity:** ▮ rising
-- **Source:** louislam/uptime-kuma · GitHub trending · 93,919 total
-- **Tags:** `uptime-kuma` `self-hosted` `rce` `security-release`
-
-Uptime Kuma——几乎每个 homelab 都在跑的 93,919 星自托管状态监控——凭**一天内两个安全版本**登上趋势榜（11 月 12 日 03:53Z 的 2.5.10 与 09:20Z 的 2.5.11）。发布说明将漏洞写作 **GHSA-437w-j82f-9vjh**："fix: [Admin Only] RCE via an upstream package's regression (Details will be revealed after 7 days)"，致谢报告者 Tomer-PL，并附带依赖更新。公告页目前公开不可读——与所述的 7 天保密期一致——所以补丁 diff 是当前唯一公开的漏洞描述。相隔几小时的两次发布暗示第一个修复需要补一刀；两份说明都没有多说。
-
-**Why it matters:** 细节落地之前，披露形态本身就值得记录：一个监控工具——所有东西都挂了你才会去看的那个东西——背上了一个来自上游依赖回归的仅管理员 RCE，这是一个戴着 homelab 徽章的供应链故事。如果你的 Uptime Kuma 暴露在 localhost 之外的任何地方，2.5.11 是下限；7 天保密期意味着有意思的分析会在 11 月 19 日前后到来。
-
-[`🔗 Release 2.5.11`](https://github.com/louislam/uptime-kuma/releases/tag/2.5.11) · [`🔗 Release 2.5.10`](https://github.com/louislam/uptime-kuma/releases/tag/2.5.10)
-
----
-
-## 28. "Flock off"：十所以上美国大学的学生逼得自己的校园弃用 Flock 监控摄像头合同
+## 16. 腾讯开源 LoopForge：自托管的智能体交付流水线——编码智能体开 PR，人类守关卡
 
 - **Velocity:** ▮ steady
-- **Source:** theguardian.com · 107+ pts on HN · 13.9h ago (11 月 13 日，~22:11 UTC+8)
-- **Tags:** `surveillance` `privacy` `flock` `universities`
+- **Source:** GitHub Trending · +101★ today · 834 total · v0.3.9-rc.1 released ~24h ago
+- **Tags:** `loopforge` `tencent` `agent-orchestration` `self-hosted`
 
-The Guardian 的 Sanya Mansoor 记录了校园监控的一次回退浪潮：**自四月以来，七个州的至少十所大学校园终止了与 Flock Safety 的合同**——康奈尔、宾州州立、Elgin 社区学院、埃默里、宾汉姆顿、肯特州立，以及威斯康星大学三个分校（麦迪逊、密尔沃基、奥什科什）——上周，纽约州立大学布法罗分校宣布无限期暂停。组织者是学生：在斯坦福，21 岁的计算机科学大四学生 Angela Nguyen 收集了学生、教职工、校友与居民的数百个签名，要求学校终止 Flock 合同并为类似工具立下保障条款；斯坦福已于今夏切断合作。学生的核心论点是自动车牌识别网络在结构上开启了什么：一份"任何车辆在何时出现在何处"的记录，可以按"能被用来伤害弱势人群"的方式被查询——堕胎求助者、移民、抗议者。
+腾讯的 Tencent/LoopForge 是一个自托管（Docker、MIT）的团队交付工作区：**Main Bot** 打开沙箱工作区、检出仓库、分派给项目角色并开出 PR——可复用的工作方式则沉淀为 **SOP**：由 Agent、Script、Human-gate 与子 SOP 节点组成的有向图，带逐节点产物、重试与"退回某一步"语义。执行器名单的宽度值得一读：CodeBuddy（腾讯自家的）、Codex、Claude Code、OpenCode、Cursor CLI、Antigravity、Kimi Code、Pi、DeepSeek Harness 与 ZCode。聊天与 SOP 两条路径都追踪同一份需求，汇入交付与成本报表。发版节奏很快——三天内 v0.3.7、v0.3.8 与 v0.3.9-rc.1——今日再涨 101 星。
 
-**Why it matters:** Flock 在校园的收缩是第一次在这个规模上持续、成功的 ALPR 部署回退，而且机制是合同压力而非诉讼——一个其他机构可以照抄的模板。对开发者而言，关键事实是反对者真正盯住的东西：不是摄像头本身，而是位置历史的联网可查询性。
+**Why it matters:** 智能体交付平台层正是今年智能体工具收敛的方向，而 LoopForge 的差异点恰是多数竞品跳过的两件事：全部自托管在你自己的基础设施上，以及 human gate 是交付图里的一等节点，而不是侧边上挂一个审批按钮。
 
-[`🔗 The Guardian：美国大学生让监控摄像头 Flock off`](https://www.theguardian.com/technology/ng-interactive/2026/nov/13/universities-drop-flock-camera-contracts) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50483759)
-
----
-
-## 29. WSJ：英伟达被指通过投资 AI 初创公司回购自家 GPU 来制造稀缺——一位董事在丑闻爆发前的 9.46 亿美元减持也随之浮出水面
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** techpowerup.com（WSJ，经 Wccftech） · 661+ pts on HN · 9.2h ago (~10:50 UTC+8)
-- **Tags:** `nvidia` `gpu-market` `ai-bubble` `industry`
-
-自昨天报道辞职事件之后：余波正在产生自己的报道浪潮。**华尔街日报**的一份报道（由 TechPowerUp 转载，经 Wccftech）指称英伟达**人为夸大了 GPU 与内存短缺**——方法是投资那些回过头来采购英伟达 GPU 建数据中心的 AI 初创公司，以维持高需求表象，同时把英伟达绑在"雪崩"般的台积电产能上，而这些芯片本没有即时买家。报道聚焦黄仁勋与高管财务团队的一次**八月会议**：CFO、现任临时 CEO **Colette Kress** 主张削减循环融资协议——包括** 2500 亿美元的 OpenAI 交易**——据称被黄仁勋骂作"deer in the headlights"（车灯前的鹿）；报道还指出英伟达投资的小型云厂商根本买不起他们被期望采购的 GPU。与此同时，申报文件（经 Moneywise/雅虎财经）显示董事会董事 **Mark Stevens**——被称为英伟达第二大个人股东——在丑闻爆发前的数月内减持了约 **9.46 亿美元**（8 月 31 日至 9 月 18 日的三批交易共 420 万股，价格 220–234 美元），且**没有申报任何预定交易计划**；他仍持有约 2750 万股。NVDA 在 11 月 13 日约 163 美元成交——较辞职以来下跌约 15%，自十月初以来市值蒸发约 **1.7 万亿美元**。
-
-**Why it matters:** 循环融资问题一直是 AI 建设热潮的软肋——如果 GPU 的买家是由 GPU 的卖家资助的，需求信号就不再是证据。新的地方在于具体：一场点名的会议、一笔点名的交易、财务职能与创始人之间点名的紧张关系——而且是在公司没有正式 CEO 的间隙浮出。如果监管者或诉讼方采纳 WSJ 的框架，"制造稀缺"就不再是一条泄露的轶事，而是一套证券或反垄断理论。
-
-> "deer in the headlights" —— 据 WSJ 报道（TechPowerUp 转载），这是黄仁勋对 Colette Kress 主张削减循环融资的形容
-
-[`🔗 TechPowerUp：NVIDIA Allegedly Engineered Scarcity`](https://www.techpowerup.com/354814/nvidia-allegedly-engineered-scarcity-by-funding-ai-startups-to-buy-its-gpus) · [`🔗 Yahoo Finance：Nvidia 董事减持近 10 亿美元`](https://finance.yahoo.com/markets/stocks/articles/nvidia-director-sold-nearly-1b-160000846.html) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50493251)
+[`🔗 Tencent/LoopForge`](https://github.com/Tencent/LoopForge) · [`🔗 Releases`](https://github.com/Tencent/LoopForge/releases)
 
 ---
 
-## 30. ggml 发布自己的 v1.0.0——昨天承诺的细节落地了，而且是一份真正的变更日志
-
-- **Velocity:** ▮▮ rising
-- **Source:** ggml-org/ggml · 293+ pts on HN · 9.6h ago (~10:25 UTC+8)
-- **Tags:** `ggml` `local-llm` `release`
-
-自昨天报道 llama.cpp v1.0.0——细节承诺于欧洲中部时间下午 3 点——之后：实质内容以 **ggml v1.0.0** 的形式落地——llama.cpp 底下的张量库发布了它自己的首个稳定版本（11 月 13 日 08:34 UTC 发布，今日登上 HN）。按发布说明，ggml 1.0.0 "prunes the deprecated public API and the legacy `DIAG_MASK` ops, adds configurable YaRN truncation and FP8 support, and brings broad performance work across backends"。后端清单读起来就像一张"本地推理实际跑在哪"的地图：CUDA/Metal 上的少行量化矩阵乘（batch 2–24）与 MoE 融合、Vulkan prefill FlashAttention 路径、SYCL 上的设备端 MoE 调度器、OpenCL 中分解式 Adreno FlashAttention、新的 WebGPU kernel、扩展的 Hexagon 算子覆盖——外加一个不再上传计算图从不读取的输入的调度器。RPC 协议升至 v9 并拒绝不兼容对端，混合版本的部署会大声失败而不是悄悄出错。
-
-**Why it matters:** 昨天的条目把"1.0"当作"已宣布、未发布"处理，因为说明是占位符。这一份发布给了这个说法实质——而实质是一张支持矩阵快照：如果你在 Vulkan、SYCL、OpenCL 手机或 WebGPU 上部署本地模型，这次发布里有意思的增量是你的那份，不是 CUDA 的那份。
-
-[`🔗 ggml v1.0.0 发布说明`](https://github.com/ggml-org/ggml/releases/tag/v1.0.0) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50493062)
-
----
-
-## 31. M-Vave 的 FM-1 合成器迎来完整开放工作台——一个能在浏览器里演奏、编辑、甚至给硬件刷固件的编辑器
-
-- **Velocity:** ▮▮ rising
-- **Source:** open.m-vave.com · 240+ pts on HN · 16.8h ago (~03:15 UTC+8)
-- **Tags:** `synthesizer` `web-midi` `open-source` `hardware`
-
-M-Vave——以平价 MIDI 设备闻名的珠海公司——因其 **FM1 Workbench** 登上 HN：一个面向 FM-1 复调合成器的完整单页编辑器，**不接设备也能在浏览器里运行**（六个发声引擎全部可试奏：DX7 式 FM、303 酸性贝斯、808 鼓机、PSG 芯片、拨弦、采样器），然后通过 **Web MIDI/SysEx** 连接设备，带读回校验地保存工程、管理 128 音色 DX7 曲库、编辑 8 槽采样库（436 KiB ≈ 19.55 秒），甚至**直接从页面刷固件**——包括恢复与官方版/"Open"版之间的迁移。对一个平价厂商来说，许可异常严肃：应用是带 SDK 链接例外的 GPLv3，固件资源是 Apache-2.0，源码 + SDK 可下载，第三方引擎（Dexed 的 MSFA FM 模型、Open303、DaisySP、emu2149）逐一署名。
-
-**Why it matters:** 开放硬件的门槛悄悄移动了：一家以便宜设备为业的公司，现在交付了桌面音频项目都难以持续维护的文档、浏览器工具链、固件升级路径与许可链条——而"无设备预览"的设计意味着整台乐器在你拥有它之前就能演奏。Web MIDI 正在成为乐器 UX 的真正分发渠道。
-
-> "APP: GPLv3 with the FM1 SDK linking exception; no warranty."
-
-[`🔗 FM1 Workbench`](https://open.m-vave.com/fm1-workbench) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50488325)
-
----
-
-## 32. 《猴岛小英雄》全部 13 个版本并排对比——同样的十二个场景，于是"切换版本改变的是机器，不是时刻"
+## 17. 生成式 AI 处理非英文文本多烧 1.4–180 倍能量——印地语 7.9 倍、孟加拉语 15.3 倍——而且准确率还更低
 
 - **Velocity:** ▮ steady
-- **Source:** monkeyisland.pages.dev · 189+ pts on HN · 7.7h ago (~12:20 UTC+8)
-- **Tags:** `game-preservation` `scummvm` `retro`
+- **Source:** news.umich.edu · 135+ pts on HN · 4.2d ago (~23:07 UTC+8, Nov 10)
+- **Tags:** `energy` `multilingual` `research` `emnlp`
 
-一个游戏保存向的爱好项目把**《The Secret of Monkey Island》全部 13 个版本**并排对比——每个画面都在 ScummVM 中截取（Atari ST 单色版经由 Hatari 模拟器），以最近邻像素与 4:3 比例修正缩放至 1600×1200，"so every original pixel keeps the shape it had on a period monitor"。对比的纪律就是手艺本身：同样的十二个时刻，在每个版本里以同样的构图呈现，"so switching versions changes the machine, not the moment"——你比较的是硬件与移植，而不是场景选择。一个 CRT 着色器实验室把每张截图渲染进符合年代的显示模拟，版本元数据记录了从 16 色 PC 原版（取自西班牙语拷贝）到后期重制版的移植迷宫。
+密歇根大学的研究者（Naihao Deng、Rada Mihalcea 等，EMNLP 报告）用 ML.Energy 框架测量了三个开源模型——Qwen 3、Gemma 3、Llama 3.1——在 122 种语言的 Belebele 阅读理解题上的能耗：生成非英文文本比英文**多耗 1.4 至 180 倍能量**，印地语 **7.9 倍**、孟加拉语 **15.3 倍**，而多数西欧语言不超过 2 倍。机制是复合的：非拉丁文字被切成更多 token，更多 token 占内存、迫使更小批次，更小批次抬高每 token 能耗——且这一差距在更大模型与不同处理器上都成立。准确率损失同行："通常耗能更多的语言，模型输出的准确率也往往更低"，Deng 说。按他们的计算（结合 Ethnologue 数据），约 **52 亿人**用母语使用 AI 要付出两倍以上的能量。
 
-**Why it matters:** 这就是数字保存做出方法感时的样子——固定构图、有据可查的截取工具链、对特殊拷贝（西班牙语 PC 版、法语 Atari ST 版）诚实的来源说明。受控变量加声明截取管线，正是怀旧画廊与参考档案之间的分界线。
+**Why it matters:** "双重惩罚"——同一个问题，更高成本、更低质量——不是物理定律而是定价结构：作者给出的修法（按语言专模型、先译成英文的管道）都是工程选择。对任何服务多语言用户的人，这篇论文就是在给分语言定价之前该跑的那次测量。
 
-> "The twelve moments are the same in every version, with the same framing, so switching versions changes the machine, not the moment."
-
-[`🔗 The Secret of Monkey Island：13 个版本并排对比`](https://monkeyisland.pages.dev/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50493904)
+[`🔗 密歇根大学新闻：Generative AI uses more energy on non-English text`](https://news.umich.edu/generative-ai-uses-more-energy-on-non-english-text/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50441444)
 
 ---
 
-## 33. Unsloth 的 Dynamic V3.1 量化声称同体积下 5–10% 的精度提升——并公开质疑竞品的基准方法学
-
-- **Velocity:** ▮▮ rising
-- **Source:** unsloth.ai docs · 161+ pts on HN · 12h ago (~08:05 UTC+8)
-- **Tags:** `quantization` `gguf` `qwen` `local-llm`
-
-Unsloth 的 **Dynamic V3.1** 量化更新（11 月 11 日，今日登上 HN）重建了 Qwen3.8 家族的 GGUF 量化——包括八月发布的 Qwen3.8-27B 稠密模型（视觉 + 256K 上下文）与 2.4T 总参/95B 激活的 Qwen3.8-2.4T-A95B——声称在 Terminal Bench 2.1、DeepSWE v1.1、LiveCodeBench v6、GPQA Diamond 与 AIME25 上取得"comparable sizes 下 5-10% 的精度"，2-bit 至 6-bit 量化全部更新（3-bit UD3 保留，"on par"）。更劲爆的一半是一场公开的方法学之争：文档里名为 **"GSQ-RCO results are misleading"** 的章节质疑 ISTA-DASLab 的竞品量化——Unsloth 估计 ISTA 只跑了 **1 次试验**而自己跑了 **14 次**（平均恢复率 93–96%，而非 ISTA 报告的 100%），上下文预算也更小（估计 96K 对 128K），并且依赖贪心解码——那是 "not representative of real world use cases"。还有：NVFP4 量化声称在 Blackwell GPU 上达到约 1.5 倍 BF16 速度、92–97% 的 top-1 精度（目前仅 vLLM 可用）；以及新的 1.1875 bpw 数据类型（IQ1_XXXS），把 2.4T 模型压进 **397 GB** 的下载体积——比 4.9 TB 全精度小 91%——需要约 450 GB 内存，按 Unsloth 的说法在 B200 上约 20 tok/s。
-
-**Why it matters:** 本地模型量化已经成为一个精度攸关、且有商业利益相互竞争的学科——而这场论战本身就是一份案例研究：决定胜负的是基准方法学（试验次数、上下文预算、解码策略），而不只是每权重比特数。对任何量化表格，可复现的问题是：跑了几次试验、在什么上下文长度？
-
-> "Qwen3.8-27B GGUFs now use Unsloth Dynamic V3.1 which improves average accuracy by 5-10% accuracy at comparable sizes including Terminal Bench, DeepSWE and more benchmarks."
-
-[`🔗 Unsloth：Qwen3.8 文档（Dynamic V3.1 更新）`](https://unsloth.ai/docs/models/qwen3.8) · [`🔗 ISTA-DASLab Qwen3.8-Flash-Next GSQ-RCO GGUFs`](https://huggingface.co/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50491980)
-
----
-
-## 34. 《如何不建造一个音乐播放器》：一个在伊朗断网中打造的 Zig 应用，先被 vibecode，再被手写重写
+## 18. CBC 调查后，LinkedIn 与 Monster 下架 1,500+ 条假招聘——追到一家旅游 MLM
 
 - **Velocity:** ▮ steady
-- **Source:** alichraghi.github.io · 127+ pts on HN · 13h ago (~07:05 UTC+8)
-- **Tags:** `zig` `vibecoding` `music-player`
+- **Source:** cbc.ca · 54+ pts on HN · 1.3h ago (~02:56 UTC+8)
+- **Tags:** `linkedin` `job-scam` `mlm` `investigation`
 
-Ali Chraghi 对他的 Zig 音乐播放器 **AMP**（含模糊着色器）的复盘，也是迄今发表的最具体的 vibecoding 后悔叙事之一。起点是物质性的：在伊朗的互联网封锁之后——其中一次持续了**四个多月**，其间"a black market had formed for the freaking internet"，1 GB 要价 5 美元以上——他需要能离线使用、带逐行歌词的音乐播放器，嫌现有的不好用，于是开始自己写。然后，揣着一份获赠的 Claude Max 20x 订阅，他把 AMP 的"相当大一部分"交给了 vibecoding，随后发现自己"mentally incapable of reviewing tens of thousands lines of code"；在 Anthropic 判定他住在伊朗后账号被封；当 **Codeberg 宣布其 no-AI 政策**时，他面临选择：删掉 slop，或者搬走仓库。他选择逐行阅读、逐行重写——"Four months later, nearly half the codebase is gone, and somehow it's more robust with the same set of features (and more)." 他的结论落在两个阵营之间：与 LLM 保持健康关系是可能的，"as long as you look at them as a fancy IDE feature"；以及"Never rush your hobbies!"
+超过 **1,500 条误导性招聘帖**——"居家旅游规划师与虚拟客服"、远程、无需经验、年薪最高 7.5 万美元——已从 LinkedIn 与 Monster 下架：CBC News 的可视化调查把这片旅游主题页面网络追到了一家美国多层次传销公司 **Evolution Travel**。这些帖子把应聘者导入虚拟说明会，要求先付数百美元外加月费，换一个靠"订票课程"与"拉人"赚钱的项目——按调查的原话，**"没有工作，也没有薪水。"** 报道发布于 11 月 12 日，11 月 14 日登上 HN 头版。
 
-**Why it matters:** 这篇帖子与 No-AI-Slop 宣言（第 18 条）落在同一周，是它的田野数据：生产端成本趋近于零，消费端成本——这里是作者自己的——大得惊人。它也是账户政策、平台 AI 政策与一个开发者的爱好在国家级断网中交汇的罕见一手记录。
+**Why it matters:** 招聘诈骗量是 AI 时代较安静的一种伤害——生成式工具让Listing 农场便宜到可以量产，恰逢经济焦虑让求职者放宽警惕——而这次下架表明，只有当有人做CBC 那样的串联功课时，审核闭环才会合上：把数百个名义上互不相干的页面连到同一个收款结构。
 
-> "Little did I know I'm mentally incapable of reviewing tens of thousands lines of code."
-
-[`🔗 How Not to Build a Music Player`](https://alichraghi.github.io/blog/how-not-to-build-a-music-player/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50491400)
+[`🔗 CBC News：LinkedIn, Monster take down over 1,000 fake job postings`](https://www.cbc.ca/news/canada/linkedin-monster-take-down-over-1-000-fake-job-postings-after-cbc-investigation-9.7415379) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50499723)
 
 ---
 
-## 35. Bloomberg + Citizen Lab：Penlink 的广告式定位追踪系统 Webloc 已售予至少 12 个国家的安全机构
-
-- **Velocity:** ▮ rising
-- **Source:** citizenlab.ca + Bloomberg · 113+ pts on HN · 9.8h ago (~10:15 UTC+8)
-- **Tags:** `surveillance` `adtech` `location-tracking` `privacy`
-
-**Bloomberg** 对 **Penlink 的 Webloc**——一个经由数字广告生态获取位置数据的广告式监控系统——的调查，建立在 Citizen Lab 四月研究之上，并且不断加宽客户地图：该实验室确认了**美国、萨尔瓦多与匈牙利**的买家（通过开源调查、FOIA 申请与服务器基础设施测绘），奥地利内政部随后被证实，Bloomberg 又补充了**英国、荷兰、德国、墨西哥、新加坡、沙特、阿联酋与以色列**——至少 12 个国家。Citizen Lab 高级研究员 Wolfie Christl：Webloc "is a powerful mass surveillance tool that's trickling down from military and intelligence agencies to federal law enforcement and then to state and local police"。实验室指出，此类系统在欧洲与英国的合法性"高度争议"，而在被点名的威权国家的使用"尤其危险"。
-
-**Why it matters:** 本来为了给你看一双鞋而建的广告技术实时竞价管道，已经变成了政府可以整货架采购的位置情报供应链——而买家名单现在包含了位置隐私规则最严的欧盟成员国。对工程师来说，常设提醒是：RTB 竞价流会把精确位置泄露给任何付钱接入的人；每一份后续报告加宽的是已知买家名单，而不是机制本身。
-
-> "a powerful mass surveillance tool that's trickling down from military and intelligence agencies to federal law enforcement and then to state and local police" —— Wolfie Christl，Citizen Lab
-
-[`🔗 Citizen Lab：Security agencies worldwide found to use ad-based surveillance`](https://citizenlab.ca/security-agencies-worldwide-found-to-use-ad-based-surveillance-system/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50492950)
-
----
-
-## 36. FreeBSD bhyve 迈出首个可用的热迁移——pre-copy、脏页跟踪，以 WIP RFC 发布
+## 19. Watch a Brain Learn：Aatish Bhatia 的强化学习互动讲解，亲手给神经元接线
 
 - **Velocity:** ▮ steady
-- **Source:** gyptazy.com · 112+ pts on HN · 16.1h ago (~03:55 UTC+8)
-- **Tags:** `freebsd` `bhyve` `virtualization`
+- **Source:** aatishb.com · 73+ pts on HN · 6.7h ago (~21:31 UTC+8)
+- **Tags:** `reinforcement-learning` `visualization` `neuroscience` `education`
 
-bhyve——FreeBSD 的原生 hypervisor——在 FreeBSD 15.1 上有了**首个可用的热迁移状态**，由开发者 gyptazy 以 **WIP RFC** 加测试工具的形式发布：一个运行中的 amd64 客户机可以在继续运行的同时经由 TCP 在两台主机之间移动，只在最后的 stop-and-copy 阶段暂停。实现建立在 bhyve 的实验性快照支持之上，在 vmm 内核模块中加入**脏页跟踪**，并在 `bhyve`/`bhyvectl` 中加入迁移协议：迭代的 pre-copy 轮次发送变更页，直到脏页集合满足停机目标（或达到轮次上限），客户机暂停、最终状态传输、目的地校验并恢复——只有源端最后发出的 **`GO`** 消息才会提交迁移；在 `GO` 之前，失败的迁移可以恢复源端客户机。还附带一个 warm stop-and-copy 模式，作为回退与对照基线。动机是具体的：**Sylve**（一个面向 FreeBSD 的类 Proxmox 虚拟化平台）与免费 VPS 服务 BoxyBSD 都需要热迁移，才能让日常主机维护不造成停机。
+Aatish Bhatia 与神经科学家 Arkarup Banerjee 发布了 Myriad 系列的又一篇互动讲解：**"Watch a Brain Learn"**，一篇强化学习的可视化解释。你先亲手给一个四神经元的数字生物（"spark"）接线、让它朝光飞——复现上一篇里的恐惧/攻击/趋光回路——然后把控制权交给试错：这只生物靠奖励自己学会同样的行为，学习规则的每一步都可交互、可见。其教学法与此前多篇头版常客一脉相承：机制是你去操作的，不是你去看的图。
 
-**Why it matters:** 十年来，热迁移一直是 bhyve 与 Linux/KVM 世界之间最大的缺口——它是让集群化虚拟化真正可用的那个特性。以公开 RFC、协议白纸黑字的方式落地，意味着评审发生在行为定型之前——这正是这类基础设施改动应有的到来方式。
+**Why it matters:** RL 入门讲解通常从表格和 Q 值开始；这一篇从一个你自己可以接错的脑子开始，这是真正不同的入门坡道——也是递给团队里每个"在接触带奖励的智能体之前，需要先理解奖励如何塑造行为"的人的好链接。
 
-> "The goal is deliberately practical: make it possible to test, discuss, and improve a real implementation rather than discuss live migration only in the abstract."
-
-[`🔗 gyptazy：FreeBSD bhyve Live Migration（WIP RFC）`](https://gyptazy.com/blog/freebsd-bhyve-live-migration-support-rfc/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50488835)
+[`🔗 Watch a Brain Learn（互动）`](https://aatishb.com/myriad/how-brains-learn/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50496885)
 
 ---
 
-## 37. Google 将安卓剪贴板隐私绕过标记为"Won't Fix"：快速双 toast 掩盖剪贴板读取提示
+## 20. Let's Write a PostScript Interpreter：一门能印在一两页纸上的栈语言，用单行 JavaScript 函数写成
 
 - **Velocity:** ▮ steady
-- **Source:** toninoble.com · 90+ pts on HN · 17.7h ago (~02:20 UTC+8)
-- **Tags:** `android` `clipboard` `security`
+- **Source:** beyondloom.com · 88+ pts on HN · 39h ago (~13:12 UTC+8, Nov 13)
+- **Tags:** `postscript` `interpreters` `forth` `programming-languages`
 
-工程师 Toni Noble 发表了自 **7 月**起被搁置的研究：一种压制安卓剪贴板访问通知的技术——Android 12 及以上系统在应用读取你复制的内容时显示的那个 toast。通过快速触发两个应用自控的 toast 通知，恶意前台应用可以显示自己的消息"instead of the message alerting the user that their clipboard was read"，让剪贴板窃取在发生的当下不可见。Google 将该问题评为 **Moderate**，并已将对应的 CVE 标记为 **Won't Fix**——这也是披露得以公开的原因。帖子谨慎地界定了缺口：Android 10 已禁止后台剪贴板访问，`EXTRA_IS_SENSITIVE` 标志隐藏预览缩略图（Google Authenticator 在用）——但读取本身对前台应用依然被允许，唯一的制约只是一个会自动消失的 toast。作者已就"像位置或通知那样的按应用剪贴板权限"提交了功能请求，并征集 +1。
+Devin Weaver 的文章（beyondloom）用刻意精简的 JavaScript 构建了一个极简 PostScript 解释器——正则分词、双全局栈（操作数栈 + 字典栈）、运算符即按元数弹参的普通函数——小到能印在一两页纸上，且每个示例在 Ghostscript 中运行结果一致。文章最漂亮的技术点是 PostScript 的古怪角落：`[` 与 `]` 不是语法而是 **mark** 协议（`[` 压入标记，`]` 收集其上所有元素，让括号数组成为可组合的列表推导）；字典栈带来的是**动态作用域而非词法作用域**——这正是高阶函数别扭、真实 `bind` 运算符存在的原因。全文的框架是"人类尺度的语言"：一个人能构建并完全理解的工具。
 
-**Why it matters:** toast 是剪贴板读取**唯一**的知情同意 UX，而它输给了一场任何应用都能发起的竞态。从密码管理器复制出的密码、MFA 验证码、经由聊天应用中转的机密，都是窃取目标——而 Won't Fix 的裁定意味着缓解只能停留在流程层面：立即粘贴进目标应用、避免经由不信任的应用复制机密，并且把"什么都没弹出来"当作零证据。
+**Why it matters:** PostScript 是部署最广却几乎没人主动书写的栈语言，而这是理解其后代（PDF 的成像模型、Forth 风格的嵌入式工具）为何长成那样的最干净的入口——外加一个一晚可完成、每行都有真材实料的解释器项目。
 
-> "Since I have received update that this CVE of Moderate severity is now a Won't Fix I am disclosing the details publicly."
-
-[`🔗 Ctrl+C, Ctrl+v, Ctrl+cve（Toni Noble）`](https://toninoble.com/post/ctrlc-ctrlv-ctrlcve) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50487605)
+[`🔗 Let's Write a PostScript Interpreter`](https://beyondloom.com/blog/postscript.html) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50478632)
 
 ---
 
@@ -570,11 +294,11 @@ bhyve——FreeBSD 的原生 hypervisor——在 FreeBSD 15.1 上有了**首个�
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-14T12:26:51Z |
-| Items | 37 |
-| Sources tracked | 35 (Hacker News, GitHub Trending, CISA KEV, NVD, FAA advisories, vendor blogs, major tech press) |
+| Generated | 2026-11-14T20:25:31Z |
+| Items | 20 |
+| Sources tracked | 17 (Hacker News, GitHub Trending, Google Research, NVIDIA, PyPI, Project Zero, CBC, Reuters, U-Mich, vendor blogs and project repos) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
 
-[← 前一日](2026-11-13.md) · [Raw .md](latest.md) · [归档](../archive/index.md)
+[Previous day](2026-11-14.md) · [Raw .md](latest.md) · [Archive](../archive/index.md)
