@@ -1,51 +1,65 @@
 {
- "generated": "2026-11-13T20:27:57.460Z",
+ "generated": "2026-11-14T04:25:37.706Z",
  "files": [
   {
    "file": "2026-11-14.md",
-   "items": 15,
+   "items": 28,
    "findings": [
     {
      "check": "status",
      "item": 11,
-     "verdict": "ok",
+     "verdict": "nvd-unavailable",
      "claim": "CVE-2026-123039 `Undergoing Analysis`",
-     "detail": "Undergoing Analysis (lastModified 2026-11-13T20:18:14.257)"
+     "detail": "the NVD request that would have carried CVE-2026-123039 failed, so its `vulnStatus` was never read — \"I could not read it\" is not \"it says something else\""
     },
     {
      "check": "status",
      "item": 15,
-     "verdict": "ok",
+     "verdict": "nvd-unavailable",
      "claim": "CVE-2026-111333 `Received`",
-     "detail": "Received (lastModified 2026-11-13T08:17:15.380)"
+     "detail": "the NVD request that would have carried CVE-2026-111333 failed, so its `vulnStatus` was never read — \"I could not read it\" is not \"it says something else\""
     },
     {
      "check": "status",
      "item": 15,
-     "verdict": "ok",
-     "claim": "CVE-2026-120860 `Received`",
-     "detail": "Received (lastModified 2026-11-13T08:17:16.633)"
+     "verdict": "nvd-unavailable",
+     "claim": "CVE-2026-111333 `Received`",
+     "detail": "the NVD request that would have carried CVE-2026-111333 failed, so its `vulnStatus` was never read — \"I could not read it\" is not \"it says something else\""
     },
     {
      "check": "status",
      "item": 15,
-     "verdict": "ok",
+     "verdict": "nvd-unavailable",
      "claim": "CVE-2026-111334 `Received`",
-     "detail": "Received (lastModified 2026-11-13T08:17:15.557)"
+     "detail": "the NVD request that would have carried CVE-2026-111334 failed, so its `vulnStatus` was never read — \"I could not read it\" is not \"it says something else\""
     },
     {
      "check": "repo",
      "item": 9,
      "verdict": "ok",
      "claim": "alibaba/open-code-review",
-     "detail": "50487★, last push 2026-11-13"
+     "detail": "50762★, last push 2026-11-14"
     },
     {
      "check": "repo",
      "item": 14,
      "verdict": "ok",
      "claim": "ChromeDevTools/chrome-devtools-mcp",
-     "detail": "55385★, last push 2026-11-13"
+     "detail": "55572★, last push 2026-11-13"
+    },
+    {
+     "check": "repo",
+     "item": 25,
+     "verdict": "ok",
+     "claim": "block/buzz",
+     "detail": "37329★, last push 2026-11-14"
+    },
+    {
+     "check": "repo",
+     "item": 26,
+     "verdict": "ok",
+     "claim": "backnotprop/plannotator",
+     "detail": "10523★, last push 2026-11-14"
     },
     {
      "check": "idrange",
@@ -60,6 +74,20 @@
      "verdict": "range-ambiguous",
      "claim": "CVE-2026-120860–120868",
      "detail": "the item states 28 / 1 / 9 records near CVE-2026-120860–120868 (span 9) — it does not pin one count to one range"
+    },
+    {
+     "check": "tranche",
+     "item": 15,
+     "verdict": "tranche-unread",
+     "claim": "CVE-2026-111333–111342",
+     "detail": "10 id(s) in the tranche-bound range were never read (no answered chunk) — unread is not absent"
+    },
+    {
+     "check": "tranche",
+     "item": 15,
+     "verdict": "tranche-unread",
+     "claim": "CVE-2026-120860–120868",
+     "detail": "9 id(s) in the tranche-bound range were never read (no answered chunk) — unread is not absent"
     },
     {
      "check": "quotation",
@@ -125,6 +153,97 @@
      "detail": "verbatim in 2 readable source(s)"
     },
     {
+     "check": "quotation",
+     "item": 16,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 17,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 18,
+     "verdict": "ok",
+     "claim": "8 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 19,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 20,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 21,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 22,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 23,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 24,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 25,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 26,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 27,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 28,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
      "check": "attribution",
      "item": 8,
      "verdict": "attribution-page-verified",
@@ -146,7 +265,7 @@
  "readme_calls": 0,
  "cited_page_calls": 0,
  "repo_page_calls": 0,
- "nvd_calls": 1,
- "nvd_failed_chunks": 0,
+ "nvd_calls": 0,
+ "nvd_failed_chunks": 1,
  "cna_calls": 0
 }

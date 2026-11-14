@@ -1,8 +1,8 @@
 ---
 date: 2026-11-14
-updated: 2026-11-13T20:27:33Z
+updated: 2026-11-14T04:25:24Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 18
+sources: 26
 license: CC-BY-4.0
 ---
 
@@ -228,13 +228,209 @@ Since we covered the first nine NetScaler records in yesterday's feed: the same 
 
 ---
 
+## 16. FAA orders a nationwide ground stop — the first in years — then lifts it 4.5 hours later, cause still unstated
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** FAA ATCSCC advisory (fly.faa.gov) · 1,400+ pts on HN · 7h ago (~05:05 UTC+8)
+- **Tags:** `faa` `aviation` `infrastructure` `outage`
+
+The day's biggest story by an order of magnitude: at ~21:00 UTC Nov 13 the FAA issued a **nationwide ground stop** — every US airport, departing flights held — citing, per the order's text as quoted in the HN thread, "DUE TO EXTRAORDINARY CIRCUMSTANCES AND FOR REASONS OF SAFETY". It was lifted at **01:19Z** per the FAA's own cancellation advisory (ADVZY 005: "THE FAA COMMAND CENTER NATIONWIDE GROUND STOP HAS BEEN CANCELLED. EFFECTIVE TIME: 140119-140200"), about 4.5 hours after it began. The official record states no cause beyond "extraordinary circumstances"; the thread's most-informed comment reports "the ATC radio system went down across the country" — unconfirmed by any official channel so far. Second-order effects propagated immediately: Canada's Victoria also stopped (tracked live on a 230-point airband thread), and Amtrak reported major booking-system issues as displaced travelers re-routed, itself a 134-point thread.
+
+**Why it matters:** A nationwide stop is close to unprecedented in scale, and it lands in the same week as the Microsoft 365 outage — two national-scale infrastructure failures in 48 hours is a resilience pattern, not a coincidence of bad luck. The FAA's own advisories are the only authoritative record right now, and they are terse; watch for the post-incident report the way the industry watched NOTAM's 2023 file corruption.
+
+> "DUE TO EXTRAORDINARY CIRCUMSTANCES AND FOR REASONS OF SAFETY" — the ground stop order's stated reason, as quoted in the HN submission
+
+[`🔗 FAA ATCSCC cancellation advisory ADVZY 005`](https://www.fly.faa.gov/adv/adv_otherdis?adv_date=11142026&advn=5) · [`🔗 HN discussion (1,400 pts)`](https://news.ycombinator.com/item?id=50489641) · [`🔗 HN: FAA lifted National Ground Stop at 0119Z`](https://news.ycombinator.com/item?id=50492601)
+
+---
+
+## 17. Reverse engineering a Coway air purifier to ditch the cloud: the root CA arrives over plain HTTP — "It was always MitM-able"
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** scottjg.com · 700+ pts on HN · 30h ago (Nov 12, ~06:03 UTC+8)
+- **Tags:** `iot` `reverse-engineering` `home-assistant` `mqtt`
+
+Scott J. Goldman's deep-dive on local-controlling a cloud-dependent Coway Airmega IconS is the week's best IoT teardown. The existing Home Assistant integration scrapes Coway's IoCare cloud, which breaks constantly — the post's own list: Coway banned the integration, rebranded the app IoCare→IoCare+, changed HTML layouts, went offline, and banned his account "for running an old version of the integration". So he built a Pi access-point + nftables + mitmproxy rig (fun detail: mitmproxy ships a built-in `--emudhra-old` flag that auto-uses the eMudhra compromised root CA this feed covered in October) and found the punchline immediately: the fan downloads its root CA certificate **over plain HTTP** — no pinning, no downgrade fight. Control turns out to be MQTT over TLS on AWS IoT, and the Bluetooth provisioning payload (protobuf + PKCS#7 + AES, "P002"-prefixed) — "It'd be at least hours of work (likely days)" by hand — took his coding AI "about 20 minutes" to reimplement. Because provisioning sets `caUrl` and `certSvrUrl`, you point the fan at your own server once and the MitM rig becomes unnecessary. Result: a Home Assistant custom integration with Web Bluetooth provisioning.
+
+**Why it matters:** The device-security reading is bleak (a root CA fetched over HTTP means the "secure" IoT control channel was always interceptable), and the workflow reading is the newer half: protocol archaeology from decompiled apps and BLE logs is becoming an AI-speed task. The post is also an honest model of AI-assisted work — including the bit where "Claude will not oblige the request, not even for… uhh… testing purposes. Luckily, ChatGPT has no such compunctions."
+
+> "The fan downloads its root CA cert over plain HTTP. It was always MitM-able."
+
+[`🔗 Scott's Blog: Reverse Engineering My Coway Air Purifier to Ditch the Cloud`](https://scottjg.com/posts/2026-11-11-reverse-engineering-my-coway-air-purifier-to-ditch-the-cloud/) · [`🔗 HN discussion (700 pts)`](https://news.ycombinator.com/item?id=50474959)
+
+---
+
+## 18. "No AI Slop: A Manifesto" — a summit of speakers and attendees writes the Agile-Manifesto answer to agent output
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** slopmanifesto.com · 189+ pts on HN · 8.2h ago (~03:50 UTC+8)
+- **Tags:** `ai-slop` `manifesto` `culture` `code-review`
+
+Written by "the speakers and attendees of AIE Code Summit 2026" and explicitly modeled on the 2001 Snowbird gathering ("In 2001, 17 software engineers and leaders got together at a ski lodge…"), the manifesto proposes five values: **Outcomes over output · Understanding over speed · Our own thinking over a model's first draft · Better work over easier work · Improving the system over patching the output**. Its working definition is the part being quoted onward: "Slop is when we put less effort into producing something than we ask the consumer to spend understanding it." The beliefs section names the asymmetry and the compounding — "a swarm of agents can produce more work in a single day than a person can review in our lifetime"; "The cost of producing a thousand-line PR or a ten-page doc is approaching zero, while the cost of reviewing it remains constant"; and "Using AI doesn't necessarily make something slop. Slop happens when we pass AI output along without taking responsibility."
+
+**Why it matters:** Whether a summit-authored document can do for review debt what Agile did for process debt is exactly the kind of thing you can't know in advance — but the definition-of-slop move (producer effort vs consumer cost) is the sharpest articulation of the problem the discourse has produced, and it lands the same week as Jonathan Blow's talk asking why software isn't better if AI solved coding, and The Atlantic's piece on AI literary scams. The review-economics framing also matches what this feed's own items keep finding, from the Haskell Foundation's morning item on review as the bottleneck to Plannotator's whole pitch.
+
+> "Slop is when we put less effort into producing something than we ask the consumer to spend understanding it."
+
+[`🔗 No AI Slop: A Manifesto`](https://www.slopmanifesto.com/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50488769) · [`🔗 Jonathan Blow: If AI Solved Coding, Why Is My Software Still the Same?`](https://www.youtube.com/watch?v=IRK8h67ol7Q)
+
+---
+
+## 19. OpenAI disbands its stand-alone robotics team — researchers to Mark Chen's org, hardware to Brockman's, CoRL booth never staffed
+
+- **Velocity:** ▮▮ rising
+- **Source:** Fortune (exclusive) · 151+ pts on HN · 10h ago (~01:58 UTC+8)
+- **Tags:** `openai` `robotics` `industry`
+
+Fortune's Wen Shao reports OpenAI has disbanded its stand-alone robotics team and reassigned the researchers: robotics research moves to the main research organization under Chief Research Officer **Mark Chen**, while applied robotics and hardware move to the Applied organization under President **Greg Brockman**. A spokesperson framed it as acceleration, not retreat — "robotics remains a core part of OpenAI's long-term vision" — and the bet is that general models should control robots (including humanoids) rather than a dedicated team building robot-specific ones. The telling detail: OpenAI had already registered booth #208 at CoRL in Austin this week, the conference app listed it, and when Fortune visited the booth "sat empty with OpenAI's logo nowhere to be seen". History rhymes: the 2020 wound-down team (Wojciech Zaremba citing limited robot data), the 2024 rebuild, the Figure partnership ended Feb 2025, and Sam Altman's stated target of a first humanoid public demo in 2027.
+
+**Why it matters:** This is the org-chart expression of the biggest unresolved question in embodied AI: does the robot brain come from the same model that does everything else, or does robotics need its own stack? OpenAI just answered "same model" structurally — which makes the 2027 demo promise, and the empty CoRL booth, the two things to hold it to.
+
+[`🔗 Fortune: OpenAI disbands its stand-alone robotics team`](https://fortune.com/2026/11/13/openai-disbands-robotics-team-as-its-general-models-start-running-robots/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50487184)
+
+---
+
+## 20. Weight Space Misfolding: a threat model for edited weights — "by analogy with protein misfolding in prion disease"
+
+- **Velocity:** ▮▮ rising
+- **Source:** alphaxiv.org · 136+ pts on HN · 9.5h ago (~02:33 UTC+8)
+- **Tags:** `weight-space` `model-editing` `security` `research`
+
+Chris von Csefalvay, Pranav Doma, Achyuthan Unni Krishnan and Tamas Foldi (HCLTech) take the weight-space-programming capability this feed covered on Nov 12 — models directly editing other models' weights — and write its security threat model. The paper's move is the prion analogy: **weight space misfolding**, where one model induces unauthorized behaviour in another through direct modification, with both "direct interference and hypothetical onward propagation" (an edited model re-editing others) in scope. The structural problem is asymmetry: an attacker "merely needs to generate the payload attack once", while a defender must find it in the haystack of weights — leaving defenders "either prohibit weight editing altogether, forfeiting its benefits, or be bound to cover the burden and cost". The taxonomy covers factual substitution, capability denial and selective omission (including offensive *selective unlearning*), illustrated on three case studies via the IWIBench interface.
+
+**Why it matters:** Nov 12's story showed weight-space programming works and can be checked by classical algorithms; this paper is the adjacent question nobody had formalized — what does a supply chain of *edited checkpoints* look like when the edit is the attack? The defender-asymmetry framing is the reusable idea: it predicts that pure-detection defenses lose, and policy (provenance for distributed weights) becomes the load-bearing defense.
+
+> "We call this weight space misfolding, by analogy with protein misfolding in prion disease."
+
+[`🔗 alphaXiv: Weight Space Misfolding`](https://www.alphaxiv.org/abs/2611.weight-space-misfolding) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50487762)
+
+---
+
+## 21. Terminal borders that don't cost a cell: the Ratatui maintainer proposes a cell-edge line protocol, patched into Ghostty
+
+- **Velocity:** ▮▮ rising
+- **Source:** joshka.net · 135+ pts on HN · 5h ago (~07:06 UTC+8)
+- **Tags:** `terminals` `tui` `ratatui` `ghostty`
+
+Josh — who maintains **Ratatui**, the Rust TUI library — proposes a terminal protocol extension that draws thin lines on the *edges* of cells instead of occupying cells with box-drawing characters: "Every line in that screenshot is a cell border. None of them use up a row or column." The motivation is that the Unicode Box Drawing block's 128 characters are structurally insufficient for real layouts, so TUI authors either burn rows/columns on borders or drop them for color. He's implemented it as **a patch to Ghostty** (an earlier version in Rio), with demo apps built on Ratatui, and is explicitly soliciting feedback from terminal and TUI authors — a protocol proposal, not a shipped feature. The post also carries its own disclosure up front: "This post (and the code behind it) was written with a lot of help from AI. I'm not going to apologize for that."
+
+**Why it matters:** Terminal capability advances have historically spread exactly this way — one emulator ships a protocol, TUI libraries grow support, the rest follow (the kitty graphics protocol path). Ghostty keeps volunteering as the experimental substrate, and a borders protocol is a small, concrete case of the same wedge. If Ratatui adopts it, the emulation layer becomes the bottleneck.
+
+> "Every line in that screenshot is a cell border. None of them use up a row or column."
+
+[`🔗 joshka.net: Terminal borders that don't cost a cell`](https://www.joshka.net/cell-borders/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50491423)
+
+---
+
+## 22. Perplexity ships Decider v1.3 — open-weights decision models with a new `locate` feature, and its own agent-security use case
+
+- **Velocity:** ▮▮ rising
+- **Source:** perplexity.ai/hub/blog · 107+ pts on HN · 8.7h ago (~03:24 UTC+8)
+- **Tags:** `decision-models` `classifier` `routing` `perplexity`
+
+Perplexity published the full training/eval writeup for **Decider v1.3** and **Decider Flash v1.3** (a smaller distilled sibling): general-purpose classifiers that return probability distributions for yes/no, multiple-choice and ordered-score questions. Both models are on Hugging Face **under Apache license**, via OpenRouter and the Decisions API. The post credits the lineage — "inspired by Jev, TypeSafe AI's System One Model" — and adds **bidirectional attention**, better-curated data, vision-task support, and a new **`locate`** feature that highlights the selected span for NER/PII/extractive-QA-style tasks. Training hygiene is described concretely (benchmark splits excluded from the generalist stage; a second LoRA stage for targeted domains). The internal-usage section is the substantive part: a 200+-task zero-shot eval suite, query classification in production with real volumes (information extraction 425,402 questions, domain classification 409,564, sentiment analysis 344,158), and "self-improving security rules" — recording agent activity and running rule-based checks against it with Decider in the loop.
+
+**Why it matters:** The decision-model pattern — small classifier for route/judge/moderate, escalate the hard cases to the big model — has been accumulating evidence all month (Amazon's internal ticketing swap on Nov 10; the calibrated-escalation result on Nov 7). This is the first fully open-weights, Apache-licensed entrant with a published eval method, which makes the pattern independently reproducible rather than vendor-illustrated.
+
+[`🔗 Perplexity: Decider v1.3 — Training, eval, and use cases`](https://www.perplexity.ai/hub/blog/perplexity-decider) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50488464)
+
+---
+
+## 23. FBI: North Korea's "FaceStealer" stole $400M+ via fake video calls — and it explicitly targets open-source maintainers
+
+- **Velocity:** ▮ rising
+- **Source:** BBC · 94+ pts on HN · 11.2h ago (~00:50 UTC+8)
+- **Tags:** `north-korea` `social-engineering` `crypto` `fbi`
+
+The FBI has named and detailed the scheme behind a wave of crypto thefts: **FaceStealer**, which per the FBI took **more than $400 million** from **more than 900 victims over 18 months** using fabricated video calls. The mechanism: fake or hijacked social accounts invite a target to a call on an "imposter version" of Zoom, Teams or Google Meet; the screen plays **pre-recorded video of a victim's real acquaintance** with deliberately malfunctioning audio; a prompt offers to "fix" it, delivering the malware; the call is secretly recorded and the recording becomes vouching material for the *next* victim. The targeting is the feed-relevant part: the scheme "aggressively targets" crypto and web3 workers, **"particularly those who are involved in the development and maintenance of open-source software"**. FBI cyber director Brett Leatherman: "The North Korean regime relies on proceeds from large-scale cryptocurrency theft to fund its illicit weapons program." It follows last week's attribution of the record **$6.3bn Binance hack** to North Korea-linked actors.
+
+**Why it matters:** Open-source maintainers are being named as a priority target class by a state actor, with a social-engineering loop specifically built to defeat the I-know-this-person-on-the-call heuristic. The defensive rule is now procedural, not technical: verify identities out-of-band before any call-initiated install, and treat video presence as zero evidence.
+
+> "A highly effective social engineering scheme capable of deceiving even the most experienced technical and security conscious computer user." — FBI on FaceStealer
+
+[`🔗 BBC: North Korean hackers used fake video calls in $400m crypto hack`](https://www.bbc.com/news/articles/cqdj1ellpd70o) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50486178)
+
+---
+
+## 24. Apify discloses a security incident: compromised credential led to customer data access — and open storages were readable by ID
+
+- **Velocity:** ▮ rising
+- **Source:** status.apify.com · 92+ pts on HN · 11.1h ago (~00:55 UTC+8)
+- **Tags:** `security` `breach` `apify` `scraping`
+
+Apify — the web-scraping platform whose actors sit underneath a lot of agent data-collection — is running a public incident report. Timeline from the status page: on **November 9–10** "an unauthorized third party used a compromised credential to obtain a number of account credentials and accessed related Apify accounts"; the access path is closed and "no further activity from the attacker since 11 November" was detected; customers whose personal information or stored data was accessed were notified on Nov 12. The Nov 13 update lists remediations — **API tokens are now stored only as hashes**, network restrictions between internal services, stronger internal authentication, a full-stack security review — and one warning that matters to every user: restrict your storages, because "While it's open, anyone who knows a storage ID can read that storage." A post-mortem with root cause is promised within a week, next update within 72 hours.
+
+**Why it matters:** This is the agent-ecosystem's supply chain taking a hit: scraped datasets are exactly what many agents read without checking provenance, and the storage-ID access shape means data may have been read from accounts whose owners never saw a phishing email. The token-hashing fix and the 72-hour update cadence are the two things to watch; the HN thread is already collecting first-hand affected-user reports.
+
+[`🔗 Apify Security Incident (status page)`](https://status.apify.com/incidents/sxd1dj5j6749) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50486258)
+
+---
+
+## 25. Block open-sources Buzz: a 37k-star workspace where humans and agents share rooms — over a Nostr relay you own
+
+- **Velocity:** ▮ rising
+- **Source:** block/buzz · GitHub trending · 37,327 total
+- **Tags:** `nostr` `agents` `collaboration` `self-hosted`
+
+**Buzz**, from Block (Jack Dorsey's company) under the `block` org, is trending at **37,327 stars**: "A workspace where humans and agents build together, on a relay you own." The substrate is the tell — under the hood it's a **Nostr relay**, and the README makes the consequence explicit: "every message, reaction, workflow step, review approval, and git event is a signed event in one log. Same shape, same identity model, same audit trail, whether the author is a person or a process." Agents get their own keypairs, their own channel memberships and their own audit trail — scoped "by identity, not by permission flags — the same way you'd scope a teammate" — with the same surface area as humans: open repos, send patches, review code, run workflows, edit canvases, orchestrate other agents, join voice huddles. The README's self-awareness is disarming: "Yes, it's another AI-adjacent developer tool. We're sorry." Apache 2.0; desktop v0.5.29 shipped Nov 12 and mobile v1.1/v1.2 RCs landed in the last two days.
+
+**Why it matters:** Three agent-workspace designs covered this month (CompanyOS's verifier-only goal closure, AgentRun's control plane, Paradev's per-agent workspaces) all converge on signed audit trails — but Buzz is the first to make the audit log the *native storage model* by inheriting Nostr's signed-event shape. If the relay is the database, "who did what" is portable with your keys, not trapped in a SaaS admin UI.
+
+> "It's a Nostr relay: every message, reaction, workflow step, review approval, and git event is a signed event in one log."
+
+[`🔗 block/buzz`](https://github.com/block/buzz) · [`🔗 Buzz VISION.md`](https://github.com/block/buzz/blob/main/VISION.md)
+
+---
+
+## 26. Plannotator crosses 10k stars: the review surface that annotates agent plans, diffs and artifacts — and sends the markup back
+
+- **Velocity:** ▮ rising
+- **Source:** backnotprop/plannotator · GitHub trending · 10,522 total
+- **Tags:** `agents` `code-review` `review-ui` `claude-code`
+
+Plannotator — "the workspace to stay in the loop and on top of agents" — is trending at **10,522 stars** with a shipping cadence to match: **five releases in six days**, latest v0.28.64 yesterday. It's a local, browser-based review surface that plugs into coding agents through plugins, hooks and commands: when the agent proposes a decision, plan, HTML artifact or finished diff, the app opens and you annotate, comment, and send the markup back for the agent to act on. The harness list is the widest this feed has seen in one tool — Claude Code, Codex, Copilot CLI, Gemini CLI, OpenCode, Kiro, Droid, Amp, DeepSeek Harness and Pi, plus personal assistants — and the new **Plannotator Inbox** positions itself as "the missing review layer between you and multi-agent work", surfacing decisions, prototypes, variations and plans in one queue. There's even a Herdr Annotate integration tying it into the terminal runtime this feed covered on Nov 12.
+
+**Why it matters:** The bottleneck being attacked is the same one the Haskell Foundation named this morning — review as the significant constraint in modern AI workflows — and the No-AI-Slop manifesto formalized this afternoon: producing output is cheap, reviewing it isn't. A review surface that is harness-agnostic — one annotation UI over eleven agent CLIs — is the shape that scales, because it survives whichever harness you switch to next.
+
+[`🔗 backnotprop/plannotator`](https://github.com/backnotprop/plannotator) · [`🔗 Plannotator Inbox`](https://plannotator.ai/inbox/)
+
+---
+
+## 27. Uptime Kuma ships two emergency releases: admin-only RCE "via an upstream package's regression", details embargoed 7 days
+
+- **Velocity:** ▮ rising
+- **Source:** louislam/uptime-kuma · GitHub trending · 93,919 total
+- **Tags:** `uptime-kuma` `self-hosted` `rce` `security-release`
+
+Uptime Kuma — the 93,919-star self-hosted status monitor practically every homelab runs — is trending on the strength of **two security releases in one day** (2.5.10 at 03:53Z and 2.5.11 at 09:20Z on Nov 12). The release notes state the vulnerability as **GHSA-437w-j82f-9vjh**: "fix: [Admin Only] RCE via an upstream package's regression (Details will be revealed after 7 days)", credited to reporter Tomer-PL alongside dependency updates. The advisory page isn't publicly readable yet — consistent with the stated 7-day embargo — so the patch diff is currently the only public description of the bug. Two releases hours apart suggests the first fix needed a follow-up; neither release note says more.
+
+**Why it matters:** The disclosure shape is worth noting even before details land: a monitoring tool — the thing you look at when everything else breaks — carrying an admin-only RCE from an upstream dependency regression is a supply-chain story wearing a homelab badge. If you run Uptime Kuma exposed to anything beyond localhost, 2.5.11 is the minimum; the 7-day embargo means the interesting writeup arrives around Nov 19.
+
+[`🔗 Release 2.5.11`](https://github.com/louislam/uptime-kuma/releases/tag/2.5.11) · [`🔗 Release 2.5.10`](https://github.com/louislam/uptime-kuma/releases/tag/2.5.10)
+
+---
+
+## 28. "Flock off": students at ten+ US universities force their campuses to drop Flock surveillance camera contracts
+
+- **Velocity:** ▮ steady
+- **Source:** theguardian.com · 107+ pts on HN · 13.9h ago (Nov 13, ~22:11 UTC+8)
+- **Tags:** `surveillance` `privacy` `flock` `universities`
+
+The Guardian's Sanya Mansoor charts a reversal wave in campus surveillance: **since April, at least ten university campuses across seven states have scrapped contracts with Flock Safety** — Cornell, Penn State, Elgin Community College, Emory, Binghamton, Kent State and three University of Wisconsin branches (Madison, Milwaukee, Oshkosh) — and last week the University at Buffalo announced an indefinite pause. The organizing is student-led: at Stanford, 21-year-old CS senior Angela Nguyen collected hundreds of signatures from students, faculty, alumni and residents demanding the school drop its Flock contract and codify safeguards for similar tools; Stanford cut ties this summer. The students' core argument is about what automated license plate reader networks structurally enable: a record of where any vehicle was, queryable in ways that can "be exploited to victimize vulnerable people" — abortion seekers, immigrants, protesters.
+
+**Why it matters:** Flock's campus contraction is the first sustained, successful rollback of ALPR deployments at this scale, and the mechanism is contract pressure rather than litigation — a template other institutions can copy. For developers the relevant fact is what the opposition is actually keyed to: not cameras per se, but networked queryability of location history.
+
+[`🔗 The Guardian: US university students tell surveillance cameras to Flock off`](https://www.theguardian.com/technology/ng-interactive/2026/nov/13/universities-drop-flock-camera-contracts) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50483759)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-13T20:27:33Z |
-| Items | 15 |
-| Sources tracked | 18 (Hacker News, GitHub Trending, CISA KEV, NVD, vendor blogs, major tech press) |
+| Generated | 2026-11-14T04:25:24Z |
+| Items | 28 |
+| Sources tracked | 26 (Hacker News, GitHub Trending, CISA KEV, NVD, FAA advisories, vendor blogs, major tech press) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

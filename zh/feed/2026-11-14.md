@@ -1,8 +1,8 @@
 ---
 date: 2026-11-14
-updated: 2026-11-13T20:27:33Z
+updated: 2026-11-14T04:25:24Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 18
+sources: 26
 license: CC-BY-4.0
 ---
 
@@ -228,13 +228,209 @@ Chrome DevTools 官方 MCP 服务器——让编码 agent 以 DevTools 级仪表
 
 ---
 
+## 16. FAA 下达全国停飞令——多年来罕见——4.5 小时后解除，原因仍未说明
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** FAA ATCSCC advisory (fly.faa.gov) · 1,400+ pts on HN · 7h ago (~05:05 UTC+8)
+- **Tags:** `faa` `aviation` `infrastructure` `outage`
+
+今天体量最大的新闻，超出第二名一个数量级：11 月 13 日 ~21:00 UTC，FAA 下达**全国停飞令**——所有美国机场、所有离港航班扣留——按 HN 帖子里引用的命令原文，理由是 "DUE TO EXTRAORDINARY CIRCUMSTANCES AND FOR REASONS OF SAFETY"。FAA 自己的取消公告（ADVZY 005："THE FAA COMMAND CENTER NATIONWIDE GROUND STOP HAS BEEN CANCELLED. EFFECTIVE TIME: 140119-140200"）显示命令于 **01:19Z** 解除，距开始约 4.5 小时。官方记录除"特殊情况"外没有给出任何原因；帖子里最有信息量的评论称"全国的 ATC 无线电系统宕机了"——截至目前没有任何官方渠道证实。二阶效应立即扩散：加拿大的维多利亚也停飞（一条 230 分的空管录音实时帖全程追踪），被滞留旅客改走地面，Amtrak 报告订票系统出现重大故障（本身也是一条 134 分的帖子）。
+
+**Why it matters:** 全国范围的停飞令规模上近乎前所未有，而它落在微软 365 大宕机的同一周——48 小时内两次国家级基础设施失效，这是韧性问题，不是坏运气撞在一起。FAA 的公告是眼下唯一权威的记录，而且措辞极其简短；请像行业追踪 NOTAM 2023 年文件损坏事件那样等待事后报告。
+
+> "DUE TO EXTRAORDINARY CIRCUMSTANCES AND FOR REASONS OF SAFETY" ——停飞令给出的理由，经由 HN 提交引用
+
+[`🔗 FAA ATCSCC 取消公告 ADVZY 005`](https://www.fly.faa.gov/adv/adv_otherdis?adv_date=11142026&advn=5) · [`🔗 HN 讨论（1,400 分）`](https://news.ycombinator.com/item?id=50489641) · [`🔗 HN：FAA 于 0119Z 解除全国停飞`](https://news.ycombinator.com/item?id=50492601)
+
+---
+
+## 17. 逆向 Coway 空气净化器、甩掉云端：根证书走的是明文 HTTP——"It was always MitM-able"
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** scottjg.com · 700+ pts on HN · 30h ago (11 月 12 日，~06:03 UTC+8)
+- **Tags:** `iot` `reverse-engineering` `home-assistant` `mqtt`
+
+Scott J. Goldman 对依赖云端的 Coway Airmega IconS 做的本地化改造，是本周最好的 IoT 拆解。现有的 Home Assistant 集成靠抓取 Coway 的 IoCare 云，而它经常坏——帖子自己列的清单：Coway 封禁该集成、把应用改名 IoCare→IoCare+、改 HTML 布局、服务器离线，还曾以"运行旧版本集成"为由封了他的账号。于是他搭了树莓派 AP + nftables + mitmproxy 的环境（有趣的细节：mitmproxy 自带 `--emudhra-old` 参数，会自动用本 feed 十月报道过的 eMudhra 被攻破根证书），然后立刻得到那句点睛之笔：风扇下载自己的根 CA 证书走的是**明文 HTTP**——没有固定、没有降级对抗。控制面是 AWS IoT 上的 MQTT over TLS；蓝牙配网载荷（protobuf + PKCS#7 + AES，"P002" 前缀）手工逆推"It'd be at least hours of work (likely days)"，他的编码 AI "大约 20 分钟"就重实现完了。因为配网响应里写死了 `caUrl` 和 `certSvrUrl`，只要让风扇指向你自己的服务器一次，MitM 环境就再也不需要了。成品：一个支持 Web Bluetooth 配网的 Home Assistant 自定义集成。
+
+**Why it matters:** 设备安全侧的结论很糟（走明文 HTTP 的根 CA 意味着这条"安全"的 IoT 控制信道从来都可以被拦截），而工作流侧是更新的那一半：从反编译应用和 BLE 日志里做协议考古，正在变成 AI 提速的任务。这篇帖子也是 AI 协作工作的诚实范本——包括那句"Claude will not oblige the request, not even for… uhh… testing purposes. Luckily, ChatGPT has no such compunctions."
+
+> "The fan downloads its root CA cert over plain HTTP. It was always MitM-able."
+
+[`🔗 Scott's Blog：逆向我的 Coway 空气净化器，甩掉云端`](https://scottjg.com/posts/2026-11-11-reverse-engineering-my-coway-air-purifier-to-ditch-the-cloud/) · [`🔗 HN 讨论（700 分）`](https://news.ycombinator.com/item?id=50474959)
+
+---
+
+## 18. "No AI Slop: A Manifesto"——一场峰会讲者与听众写出针对 agent 产出的敏捷宣言
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** slopmanifesto.com · 189+ pts on HN · 8.2h ago (~03:50 UTC+8)
+- **Tags:** `ai-slop` `manifesto` `culture` `code-review`
+
+由"AIE Code Summit 2026 的讲者与与会者"署名、明确对标 2001 年 Snowbird 聚会（"In 2001, 17 software engineers and leaders got together at a ski lodge…"），这份宣言提出五条价值观：**结果优于产出 · 理解优于速度 · 自己的思考优于模型初稿 · 更好的工作优于更容易的工作 · 改进系统优于修补产出**。被广泛引用的是它的工作定义："Slop is when we put less effort into producing something than we ask the consumer to spend understanding it."（制造成本低于你要求读者付出的理解成本时，就是 slop。）信念部分点名了不对称与复利："a swarm of agents can produce more work in a single day than a person can review in our lifetime"；"The cost of producing a thousand-line PR or a ten-page doc is approaching zero, while the cost of reviewing it remains constant"；以及"Using AI doesn't necessarily make something slop. Slop happens when we pass AI output along without taking responsibility."
+
+**Why it matters:** 一份峰会署名文件能不能像敏捷对流程债那样处理审查债，是事先没法知道的事——但"给 slop 下定义"这个动作（生产者投入 vs 读者成本）是这场讨论里最锋利的一次表述，而且它与本周 Jonathan Blow 那场"如果 AI 解决了编程，为什么我的软件还是老样子"的演讲、The Atlantic 关于 AI 文学骗局的报道落在同一周。这套审查经济学也和本 feed 自己的发现不断互相印证：从早上 Haskell Foundation 的"审查是瓶颈"，到下午 Plannotator 的整个卖点。
+
+> "Slop is when we put less effort into producing something than we ask the consumer to spend understanding it."
+
+[`🔗 No AI Slop: A Manifesto`](https://www.slopmanifesto.com/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50488769) · [`🔗 Jonathan Blow：If AI Solved Coding, Why Is My Software Still the Same?`](https://www.youtube.com/watch?v=IRK8h67ol7Q)
+
+---
+
+## 19. OpenAI 解散独立机器人团队——研究人员并入 Mark Chen 的研究部门，硬件并入 Brockman 的应用部门，CoRL 展位从未有人值守
+
+- **Velocity:** ▮▮ rising
+- **Source:** Fortune（独家） · 151+ pts on HN · 10h ago (~01:58 UTC+8)
+- **Tags:** `openai` `robotics` `industry`
+
+据 Fortune 的 Wen Shao 报道，OpenAI 已解散其独立机器人团队并重新分配研究人员：机器人研究并入首席研究官 **Mark Chen** 旗下的主研究组织，应用机器人与硬件并入总裁 **Greg Brockman** 旗下的应用组织。发言人的口径是加速而非撤退——"robotics remains a core part of OpenAI's long-term vision"——押注在于应该由通用模型来控制机器人（包括人形），而不是一支专门团队去造机器人专用模型。最说明问题的细节：OpenAI 本周已在奥斯汀 CoRL 大会登记了 208 号展位，大会应用里也列着它，而 Fortune 到场时展位"空着，OpenAI 的标志无处可寻"。历史在押韵：2020 年解散的团队（Wojciech Zaremba 归因于机器人数据有限）、2024 年重建、2025 年 2 月结束的 Figure 合作，以及 Sam Altman 定下的 2027 年人形机器人首次公开展示目标。
+
+**Why it matters:** 这是具身 AI 最大未解问题在组织架构上的表达：机器人大脑到底来自那个什么都会做的同一个模型，还是机器人需要自己的技术栈？OpenAI 刚刚用组织结构回答了"同一个模型"——这让 2027 年演示承诺和那个空着的 CoRL 展位，成了今后要盯着它兑现的两样东西。
+
+[`🔗 Fortune：OpenAI 解散其独立机器人团队`](https://fortune.com/2026/11/13/openai-disbands-robotics-team-as-its-general-models-start-running-robots/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50487184)
+
+---
+
+## 20. Weight Space Misfolding：给被编辑的权重写威胁模型——"by analogy with protein misfolding in prion disease"
+
+- **Velocity:** ▮▮ rising
+- **Source:** alphaxiv.org · 136+ pts on HN · 9.5h ago (~02:33 UTC+8)
+- **Tags:** `weight-space` `model-editing` `security` `research`
+
+Chris von Csefalvay、Pranav Doma、Achyuthan Unni Krishnan 与 Tamas Foldi（HCLTech）接过了本 feed 11 月 12 日报道过的权重空间编程能力——模型直接编辑另一个模型的权重——并为它写出了安全威胁模型。论文的核心动作是朊病毒类比：**权重空间错误折叠**（weight space misfolding），一个模型通过直接修改在另一个模型中诱发未授权行为，范围同时覆盖"直接干预与假设性的继续传播"（被编辑的模型再去编辑别人）。结构性问题是不对称：攻击者"只需要把载荷攻击生成一次"，而防御者要在权重的草堆里找针——结果是防御者"要么完全禁止权重编辑、放弃其收益，要么背负全部成本"。分类学覆盖事实替换、能力剥夺与选择性遗漏（包括进攻性的*选择性遗忘*），并以 IWIBench 界面上的三个案例研究加以说明。
+
+**Why it matters:** 11 月 12 日的故事证明了权重空间编程可行、且可以用经典算法校验；这篇论文是旁边那个还没人形式化的问题——当*编辑*本身就是攻击时，"被编辑过的检查点"供应链长什么样。防御不对称是可复用的思想：它预言纯检测式防御会输，策略（已分发权重的来源证明）才是承重的防线。
+
+> "We call this weight space misfolding, by analogy with protein misfolding in prion disease."
+
+[`🔗 alphaXiv：Weight Space Misfolding`](https://www.alphaxiv.org/abs/2611.weight-space-misfolding) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50487762)
+
+---
+
+## 21. 不占格子的终端边框：Ratatui 维护者提出 cell 边缘画线协议，已在 Ghostty 打出补丁
+
+- **Velocity:** ▮▮ rising
+- **Source:** joshka.net · 135+ pts on HN · 5h ago (~07:06 UTC+8)
+- **Tags:** `terminals` `tui` `ratatui` `ghostty`
+
+维护 **Ratatui**（Rust TUI 库）的 Josh 提出一种终端协议扩展：把细线画在 cell 的*边缘*上，而不是用制表符占掉整行整列："Every line in that screenshot is a cell border. None of them use up a row or column." 动机是 Unicode Box Drawing 区块的 128 个字符在结构上不够真实布局使用，于是 TUI 作者要么烧掉行列画边框，要么放弃边框改用颜色。他已将其实现为**Ghostty 的补丁**（更早的版本在 Rio 里），配上基于 Ratatui 的演示应用，并明确向终端与 TUI 作者征集反馈——这是一个协议提案，不是已发布特性。帖子开头还自带声明："This post (and the code behind it) was written with a lot of help from AI. I'm not going to apologize for that."
+
+**Why it matters:** 终端能力的进步历来就是这样传播的——一个模拟器先实现协议，TUI 库跟上支持，其余跟进（kitty 图形协议走过的路）。Ghostty 一直在自愿充当实验底座，而边框协议是同一根楔子的小而具体的案例。如果 Ratatui 采纳它，瓶颈就会转移到模拟器层。
+
+> "Every line in that screenshot is a cell border. None of them use up a row or column."
+
+[`🔗 joshka.net：Terminal borders that don't cost a cell`](https://www.joshka.net/cell-borders/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50491423)
+
+---
+
+## 22. Perplexity 发布 Decider v1.3——开源权重的决策模型，新增 `locate` 特性，还公开了自己的 agent 安全用例
+
+- **Velocity:** ▮▮ rising
+- **Source:** perplexity.ai/hub/blog · 107+ pts on HN · 8.7h ago (~03:24 UTC+8)
+- **Tags:** `decision-models` `classifier` `routing` `perplexity`
+
+Perplexity 发布了 **Decider v1.3** 与 **Decider Flash v1.3**（更小的蒸馏版）的完整训练/评测报告：返回概率分布的通用分类器，支持是非题、多选题与有序打分。两个模型都已在 Hugging Face 上以 **Apache 许可证**开放，也可经 OpenRouter 与 Decisions API 使用。博文承认了技术源流——"inspired by Jev, TypeSafe AI's System One Model"——并加入**双向注意力**、更精心整理的数据、视觉任务支持，以及新的 **`locate`** 特性：为 NER/PII/抽取式问答类任务高亮被选中的片段。训练卫生写得具体（通用阶段排除基准测试集；面向特定领域的第二段 LoRA 阶段）。内部使用部分才是干货：200+ 任务的零样本评测集、生产中的查询分类真实流量（信息抽取 425,402 个问题、领域分类 409,564、情感分析 344,158），以及"自我改进的安全规则"——记录 agent 活动并让 Decider 参与规则检查。
+
+**Why it matters:** 决策模型模式——小分类器负责路由/评审/审核，难题升级给大模型——整个十一月都在积累证据（11 月 10 日 Amazon 内部工单系统的切换；11 月 7 日的校准升级结果）。这是第一个完全开源权重、Apache 许可、评测方法公开的入场者，让这个模式从厂商插画变成了可独立复现的东西。
+
+[`🔗 Perplexity：Decider v1.3 —— 训练、评测与用例`](https://www.perplexity.ai/hub/blog/perplexity-decider) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50488464)
+
+---
+
+## 23. FBI：朝鲜"FaceStealer"借虚假视频通话窃取超 4 亿美元——并明确盯上开源维护者
+
+- **Velocity:** ▮ rising
+- **Source:** BBC · 94+ pts on HN · 11.2h ago (~00:50 UTC+8)
+- **Tags:** `north-korea` `social-engineering` `crypto` `fbi`
+
+FBI 点名并披露了一波加密货币盗窃背后的手法：**FaceStealer**——据 FBI 统计，18 个月内从 **900 多名受害者**处窃取**超过 4 亿美元**，全靠伪造的视频通话。机制：假冒或盗来的社交账号邀请目标参加"冒牌版"Zoom、Teams 或 Google Meet 通话；屏幕上播放**受害者熟人被预先录制的视频**，音频"故意故障"；弹窗提示"修复"音频，点击即中招；通话被秘密录制，录像又成为*下一位*受害者的信任背书材料。与本 feed 最相关的在目标选择上：该行动"aggressively targets"加密货币与 web3 从业者，**"particularly those who are involved in the development and maintenance of open-source software"**。FBI 网络主管 Brett Leatherman："朝鲜政权依赖大规模加密货币盗窃的收益为其非法武器计划提供资金。"此前一周，创纪录的 **63 亿美元 Binance 被盗案**刚被归因于与朝鲜相关的行为者。
+
+**Why it matters:** 国家级行为者把开源维护者点名为优先目标类别，而这套社会工程循环专门用来击穿"通话里这个人我认识"的直觉。防御规则从技术问题变成了流程问题：任何由通话发起的安装之前先做带外身份核验，把"视频里有人"当作零证据。
+
+> "A highly effective social engineering scheme capable of deceiving even the most experienced technical and security conscious computer user." —— FBI 谈 FaceStealer
+
+[`🔗 BBC：朝鲜黑客用虚假视频通话实施 4 亿美元加密盗窃`](https://www.bbc.com/news/articles/cqdj1ellpd70o) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50486178)
+
+---
+
+## 24. Apify 披露安全事件：一个失陷凭据导致客户数据被访问——开放状态的存储可凭 ID 直接读取
+
+- **Velocity:** ▮ rising
+- **Source:** status.apify.com · 92+ pts on HN · 11.1h ago (~00:55 UTC+8)
+- **Tags:** `security` `breach` `apify` `scraping`
+
+Apify——其 actor 撑起了大量 agent 数据采集的网页抓取平台——正在滚动发布一份公开事件报告。状态页时间线：**11 月 9–10 日**，"一名未授权第三方利用一个失陷凭据获取了一批账号凭据并访问了相关 Apify 账户"；访问路径已关闭，且未检测到"11 月 11 日之后攻击者的进一步活动"；个人数据或存储数据被访问的客户已于 11 月 12 日获单独通知。11 月 13 日的更新列出补救措施——**API token 现在只存哈希**、内部服务间网络限制、更强的内部认证、全栈安全评估——以及一条对每个用户都重要的警告：把你的存储设为受限，因为"While it's open, anyone who knows a storage ID can read that storage."。带根因的事后报告承诺一周内发布，下次更新在 72 小时内。
+
+**Why it matters:** 这是 agent 生态供应链挨的一记闷棍：抓取来的数据集正是许多 agent 不查来源直接读取的东西，而"凭存储 ID 即可读"的形态意味着，数据可能从那些主人从未收到钓鱼邮件的账户里被读走。token 哈希化修复与 72 小时更新节奏是两件值得盯的事；HN 帖子已经在收集受影响用户的一手报告。
+
+[`🔗 Apify Security Incident（状态页）`](https://status.apify.com/incidents/sxd1dj5j6749) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50486258)
+
+---
+
+## 25. Block 开源 Buzz：3.7 万星的人类与 agent 同室协作工作区——跑在你自己的 Nostr relay 上
+
+- **Velocity:** ▮ rising
+- **Source:** block/buzz · GitHub trending · 37,327 total
+- **Tags:** `nostr` `agents` `collaboration` `self-hosted`
+
+来自 Block（Jack Dorsey 的公司）`block` 组织的 **Buzz** 正在趋势榜上，**37,327 星**："A workspace where humans and agents build together, on a relay you own."（人类与 agent 共建的工作区，跑在一个你拥有的 relay 上。）底层是关键——内里是一个 **Nostr relay**，README 把后果说得很明白："every message, reaction, workflow step, review approval, and git event is a signed event in one log. Same shape, same identity model, same audit trail, whether the author is a person or a process."（无论作者是人还是进程，同一种形状、同一种身份模型、同一条审计轨迹。）agent 拥有自己的密钥对、自己的频道成员关系、自己的审计轨迹——按"身份而非权限标志"来划分，"the same way you'd scope a teammate"——并且拥有和人类一样的操作面：开仓库、发补丁、评审代码、跑工作流、编辑画布、编排其他 agent、加入语音讨论。README 的自知之明很可爱："Yes, it's another AI-adjacent developer tool. We're sorry." Apache 2.0；桌面版 v0.5.29 于 11 月 12 日发布，移动端 v1.1/v1.2 RC 在最近两天落地。
+
+**Why it matters:** 本月报道过的三种 agent 工作区设计（CompanyOS 的仅验证者可关闭目标、AgentRun 的控制平面、Paradev 的每 agent 工作区）全都收敛在签名审计轨迹上——但 Buzz 是第一个让审计日志成为*原生存储模型*的：直接继承 Nostr 的签名事件形态。如果 relay 就是数据库，"谁做了什么"就可以随你的密钥一起带走，而不是困在 SaaS 管理界面里。
+
+> "It's a Nostr relay: every message, reaction, workflow step, review approval, and git event is a signed event in one log."
+
+[`🔗 block/buzz`](https://github.com/block/buzz) · [`🔗 Buzz VISION.md`](https://github.com/block/buzz/blob/main/VISION.md)
+
+---
+
+## 26. Plannotator 破 1 万星：给 agent 的计划、diff 与产物做批注的评审面板——并把批注送回给 agent
+
+- **Velocity:** ▮ rising
+- **Source:** backnotprop/plannotator · GitHub trending · 10,522 total
+- **Tags:** `agents` `code-review` `review-ui` `claude-code`
+
+Plannotator——"the workspace to stay in the loop and on top of agents"——正以 **10,522 星**登上趋势榜，发版节奏与之匹配：**六天五个版本**，最新 v0.28.64 于昨天发布。它是一个本地、基于浏览器的评审面板，通过插件、钩子与命令接入编码 agent：当 agent 提出决策、计划、HTML 产物或完成的 diff 时，应用会打开，你进行批注、评论，再把标记结果送回给 agent 去执行。它的 harness 列表是本 feed 见过最全的单工具——Claude Code、Codex、Copilot CLI、Gemini CLI、OpenCode、Kiro、Droid、Amp、DeepSeek Harness 与 Pi，外加个人助理——新的 **Plannotator Inbox** 则把自己定位为"the missing review layer between you and multi-agent work"，把决策、原型、变体与计划收进一个队列。甚至还有一个 Herdr Annotate 集成，把它与本 feed 11 月 12 日报道过的终端运行时连起来。
+
+**Why it matters:** 它攻击的瓶颈，正是今天早上 Haskell Foundation 点名的那一个——审查是现代 AI 工作流的主要约束——也是今天下午 No-AI-Slop 宣言形式化的那一个：产出便宜，审查不便宜。一个 harness 无关的评审面板——十一个 agent CLI 共用一套批注 UI——才是能规模化下来的形状，因为你下次换哪个 harness 它都还在。
+
+[`🔗 backnotprop/plannotator`](https://github.com/backnotprop/plannotator) · [`🔗 Plannotator Inbox`](https://plannotator.ai/inbox/)
+
+---
+
+## 27. Uptime Kuma 连发两个紧急版本：仅管理员可触发的 RCE，"via an upstream package's regression"，细节保密 7 天
+
+- **Velocity:** ▮ rising
+- **Source:** louislam/uptime-kuma · GitHub trending · 93,919 total
+- **Tags:** `uptime-kuma` `self-hosted` `rce` `security-release`
+
+Uptime Kuma——几乎每个 homelab 都在跑的 93,919 星自托管状态监控——凭**一天内两个安全版本**登上趋势榜（11 月 12 日 03:53Z 的 2.5.10 与 09:20Z 的 2.5.11）。发布说明将漏洞写作 **GHSA-437w-j82f-9vjh**："fix: [Admin Only] RCE via an upstream package's regression (Details will be revealed after 7 days)"，致谢报告者 Tomer-PL，并附带依赖更新。公告页目前公开不可读——与所述的 7 天保密期一致——所以补丁 diff 是当前唯一公开的漏洞描述。相隔几小时的两次发布暗示第一个修复需要补一刀；两份说明都没有多说。
+
+**Why it matters:** 细节落地之前，披露形态本身就值得记录：一个监控工具——所有东西都挂了你才会去看的那个东西——背上了一个来自上游依赖回归的仅管理员 RCE，这是一个戴着 homelab 徽章的供应链故事。如果你的 Uptime Kuma 暴露在 localhost 之外的任何地方，2.5.11 是下限；7 天保密期意味着有意思的分析会在 11 月 19 日前后到来。
+
+[`🔗 Release 2.5.11`](https://github.com/louislam/uptime-kuma/releases/tag/2.5.11) · [`🔗 Release 2.5.10`](https://github.com/louislam/uptime-kuma/releases/tag/2.5.10)
+
+---
+
+## 28. "Flock off"：十所以上美国大学的学生逼得自己的校园弃用 Flock 监控摄像头合同
+
+- **Velocity:** ▮ steady
+- **Source:** theguardian.com · 107+ pts on HN · 13.9h ago (11 月 13 日，~22:11 UTC+8)
+- **Tags:** `surveillance` `privacy` `flock` `universities`
+
+The Guardian 的 Sanya Mansoor 记录了校园监控的一次回退浪潮：**自四月以来，七个州的至少十所大学校园终止了与 Flock Safety 的合同**——康奈尔、宾州州立、Elgin 社区学院、埃默里、宾汉姆顿、肯特州立，以及威斯康星大学三个分校（麦迪逊、密尔沃基、奥什科什）——上周，纽约州立大学布法罗分校宣布无限期暂停。组织者是学生：在斯坦福，21 岁的计算机科学大四学生 Angela Nguyen 收集了学生、教职工、校友与居民的数百个签名，要求学校终止 Flock 合同并为类似工具立下保障条款；斯坦福已于今夏切断合作。学生的核心论点是自动车牌识别网络在结构上开启了什么：一份"任何车辆在何时出现在何处"的记录，可以按"能被用来伤害弱势人群"的方式被查询——堕胎求助者、移民、抗议者。
+
+**Why it matters:** Flock 在校园的收缩是第一次在这个规模上持续、成功的 ALPR 部署回退，而且机制是合同压力而非诉讼——一个其他机构可以照抄的模板。对开发者而言，关键事实是反对者真正盯住的东西：不是摄像头本身，而是位置历史的联网可查询性。
+
+[`🔗 The Guardian：美国大学生让监控摄像头 Flock off`](https://www.theguardian.com/technology/ng-interactive/2026/nov/13/universities-drop-flock-camera-contracts) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50483759)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-13T20:27:33Z |
-| Items | 15 |
-| Sources tracked | 18 (Hacker News, GitHub Trending, CISA KEV, NVD, vendor blogs, major tech press) |
+| Generated | 2026-11-14T04:25:24Z |
+| Items | 28 |
+| Sources tracked | 26 (Hacker News, GitHub Trending, CISA KEV, NVD, FAA advisories, vendor blogs, major tech press) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
