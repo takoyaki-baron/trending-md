@@ -3628,3 +3628,26 @@ Fortune（Wen Shao）报道 OpenAI 已解散其独立机器人团队并重新分
 
 Sources: [Fortune：OpenAI 解散独立机器人团队](https://fortune.com/2026/11/13/openai-disbands-robotics-team-as-its-general-models-start-running-robots/) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50487184)
+
+## 2026-11-14 PM — Nvidia 风波第二幕:WSJ 指控其借循环融资制造 GPU 稀缺
+
+辞职弧线的下一幕是报道浪潮(HN 661 分):**WSJ 报道**(本轮经 TechPowerUp 转载阅读,其上游为 Wccftech)
+指控 Nvidia **人为放大 GPU 与内存短缺** —— 投资一批 AI 初创公司,再让它们回头购买 Nvidia GPU 建数据中心
+—— 在维持高需求表象的同时,把 Nvidia 拴在它没有直接买主的"TSMC 硅片雪崩"上。报道聚焦 **8 月的一场会议**
+(Huang 与其高级财务团队):CFO、现任代理 CEO **Colette Kress** 力主缩减循环融资协议 —— 包括 **2500 亿美元的
+OpenAI 交易** —— 却据称被形容为"deer in the headlights(车灯前的鹿)";报道还提到 Nvidia 投资的小型云厂商
+买不起它们被期待购买的 GPU。与此同时,申报文件曝光(经 Moneywise/Yahoo Finance):董事会董事 **Mark
+Stevens** —— 被描述为 Nvidia 第二大股东 —— 在丑闻爆发前的几个月减持约 **9.46 亿美元**(420 万股,分三批,
+8 月 31 日–9 月 18 日,价格 220–234 美元),未见预设交易计划;仍持有约 2750 万股。NVDA 11 月 13 日约 163
+美元,条目称自 10 月初以来市值蒸发约 **1.7 万亿美元**。
+
+**主张单元纪律:** 每一句指控都处于同一个付费墙源头(WSJ)的下游 —— 会议、引语与冲突从本 feed 所在的位置
+无法核验,条目自身的框架也承认这一点("据称"、"经 TechPowerUp 转载的 WSJ 报道")。可核验的单元是申报:
+EDGAR 全文检索(本轮已核验)在 NVIDIA 的 CIK 0001045810 下返回 **STEVENS MARK A(CIK 0001199039)的
+Form 4 申报**,日期 2026-09-02 与 2026-09-08 —— 该董事的减持是真实申报;具体金额与"无 10b5-1 计划"的主张
+仍需申报 XML,留给后续 act pass。若监管者或原告采纳 WSJ 框架,"制造稀缺"就从一段泄露轶事变成证券或反垄断
+理论 —— 而公司正处在两任正式 CEO 之间。
+
+Sources: [TechPowerUp 转载](https://www.techpowerup.com/354814/nvidia-allegedly-engineered-scarcity-by-funding-ai-startups-to-buy-its-gpus) ·
+[Yahoo Finance](https://finance.yahoo.com/markets/stocks/articles/nvidia-director-sold-nearly-1b-160000846.html) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50493251)

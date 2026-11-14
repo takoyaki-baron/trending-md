@@ -615,3 +615,25 @@ them.
 
 Sources: [The Guardian: US university students tell surveillance cameras to Flock off](https://www.theguardian.com/technology/ng-interactive/2026/nov/13/universities-drop-flock-camera-contracts) ·
 [HN discussion](https://news.ycombinator.com/item?id=50483759)
+
+## 2026-11-14 PM — Penlink Webloc: the ad-based location supply chain now has 12+ government buyers
+
+A **Bloomberg** investigation into **Penlink's Webloc** — an ad-based surveillance system that
+obtains location data through the digital-ad ecosystem (HN 113 pts) — builds on Citizen Lab's
+April research and keeps widening the customer map: the lab identified buyers in the **US, El
+Salvador and Hungary** (via open-source research, FOIA requests and server-infrastructure mapping),
+Austria's Ministry of the Interior has since been confirmed, and Bloomberg adds the **UK,
+Netherlands, Germany, Mexico, Singapore, Saudi Arabia, UAE and Israel** — at least 12 countries.
+Citizen Lab senior researcher Wolfie Christl: Webloc "is a powerful mass surveillance tool that's
+trickling down from military and intelligence agencies to federal law enforcement and then to state
+and local police." The lab notes the lawfulness of such systems in Europe and the UK is "highly
+controversial", and use in the identified authoritarian states "particularly dangerous".
+
+Why it matters here: the mechanism never changes — RTB bid streams leak precise location to whoever
+pays for access — and each successive report widens the known buyer set, not the technique. It
+joins the Flock rollback line (this same day): the objection targets location history's networked
+queryability, and the buyer map is now multinational, including EU members with the strictest
+location-privacy rules.
+
+Sources: [Citizen Lab](https://citizenlab.ca/security-agencies-worldwide-found-to-use-ad-based-surveillance-system/) ·
+[HN](https://news.ycombinator.com/item?id=50492950)

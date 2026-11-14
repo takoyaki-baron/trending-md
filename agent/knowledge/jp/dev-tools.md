@@ -1460,3 +1460,44 @@ Josh——Rust の TUI ライブラリ **Ratatui** のメンテナ（今回 rata
 Sources: [joshka.net：セルを消費しない端末ボーダー](https://www.joshka.net/cell-borders/) ·
 [ratatui MAINTAINERS.md](https://github.com/ratatui/ratatui/blob/main/MAINTAINERS.md) ·
 [HN 議論](https://news.ycombinator.com/item?id=50491423)
+
+## 2026-11-14 PM — bhyve ライブマイグレーションが WIP RFC として到達、M-Vave FM1 Workbench、Monkey Island の13バージョン同一構図
+
+**FreeBSD bhyve ライブマイグレーション(WIP RFC、HN 112 pts)。** gyptazy が FreeBSD 15.1 での最初の
+動作状態を公開:稼働中の amd64 ゲストが TCP 経由で 2 ホスト間を移動し、最終の停止&コピー段でのみ一時停止。
+実装は bhyve の実験的スナップショット支援の上に築かれ、vmm カーネルモジュールに**ダーティページ追跡**を、
+`bhyve`/`bhyvectl` にマイグレーションプロトコルを追加 — 反復プレコピーの各ラウンドで変更ページを送り、
+ダーティ集合がダウンタイム目標(またはラウンド上限)に収まるまで繰り返し、ゲストを一時停止、最終状態を
+転送、宛先が検証して復元 — そしてソースからの最後の **`GO`** メッセージでのみ確定。`GO` の前なら失敗した
+移行はソース側ゲストを再開できる。ウォームな停止&コピーモードもフォールバックと比較ベースラインとして
+同梱。動機は具体的:**Sylve**(Proxmox 的な FreeBSD 仮想化プラットフォーム)と無料 VPS 事業者の BoxyBSD が
+ルーチンのホスト保守を成立させるために移行を必要としている。今回検証済み:15.1-RELEASE の `bhyve(8)`
+マニュアルには移行オプションの記載が一切ない(man.freebsd.org、"migrat" 0 件)— ギャップは実在し、
+ライブマイグレーションは十年間で最も大きな bhyve 対 KVM の差だった。形こそが要点:プロトコルを書き下した
+RFC は、振る舞いが石に刻まれる前にレビューが起きることを意味する。
+
+**M-Vave FM1 Workbench**(open.m-vave.com、HN 240 pts)。珠海の低価格 MIDI メーカーが自社の FM-1 ポリ
+フォニックシンセ向けの完全なシングルページエディタを出した。**デバイスなしで**ブラウザで動作(6つの
+サウンドエンジン全部を試奏可能:DX7 風 FM、303 アシッド、808 ドラム、PSG チップ、プラックドストリング、
+サンプラー)— 次いで **Web MIDI/SysEx** で接続して、読み戻し検証つきのプロジェクト保存、128 音色の DX7
+ライブラリ管理、8 スロットのサンプルバンク編集(436 KiB ≈ 19.55 秒)、さらには**ページからファームウェア
+書き込み**まで — リカバリーや公式/"Open" ビルド間の移行を含む。低価格ベンダーとしては異例に真剣な
+ライセンス:アプリは GPLv3(FM1 SDK リンク例外つき)、ファームウェア資源は Apache-2.0、ソースと SDK は
+ダウンロード可能、サードパーティエンジンはコンポーネント単位でクレジット — 今回 pin された上流で検証
+(asb2m10/dexed の MSFA FM モデル、RobinSchmidt/Open303、daisyaudio/DaisySP、
+digital-sound-antiques/emu2149)。オープンハードウェアのバーは静かに上がった:デスクトップオーディオ
+プロジェクトが維持に苦労するドキュメント・ブラウザツーリング・ファーム更新経路・ライセンス連鎖を、
+安物機材が本業の会社が出してきた。Web MIDI が楽器 UX の現実の配信チャネルになりつつある。
+
+**『The Secret of Monkey Island』全13バージョンを並べて比較**(monkeyisland.pages.dev、HN 189 pts)。
+ゲーム保存の趣味プロジェクトが全13バージョンの全画面を ScummVM でキャプチャ(Atari ST モノクロ版は
+Hatari エミュレータ経由)、1600×1200 にニアレストネイバー拡大 + 4:3 補正 — 「元のピクセルが当時のモニタで
+持っていた形を保つように」。比較の規律こそが職人技:同じ12の場面を全バージョンで同一構図に — 「バージョンを
+切り替えると変わるのはマシンであって場面ではない」— 加えて各キャプチャを時代適合の表示エミュレーションで
+描く CRT シェーダーラボ、そして例外的なコピー(スペイン語 PC 版、フランス語 Atari ST 版)への誠実な来歴。
+制御変数と明示されたキャプチャパイプラインは、リファレンスアーカイブとノスタルジギャラリーを分けるもの。
+
+Sources: [gyptazy RFC](https://gyptazy.com/blog/freebsd-bhyve-live-migration-support-rfc/) ·
+[FM1 Workbench](https://open.m-vave.com/fm1-workbench) ·
+[13 versions](https://monkeyisland.pages.dev/) ·
+[bhyve HN 議論](https://news.ycombinator.com/item?id=50488835)

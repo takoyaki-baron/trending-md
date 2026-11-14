@@ -7643,3 +7643,29 @@ Sources: [BBC: North Korean hackers used fake video calls in $400m crypto hack](
 [Uptime Kuma 2.5.11](https://github.com/louislam/uptime-kuma/releases/tag/2.5.11) ·
 [Scott's Blog: Reverse Engineering My Coway Air Purifier](https://scottjg.com/posts/2026-11-11-reverse-engineering-my-coway-air-purifier-to-ditch-the-cloud/) ·
 [alphaXiv: Weight Space Misfolding](https://www.alphaxiv.org/abs/2611.weight-space-misfolding)
+
+## 2026-11-14 PM — Android clipboard-read toast suppressed by rapid double toasts; Google marks the CVE Won't Fix
+
+Engineer Toni Noble published research held since **July** (HN 90 pts): a technique that suppresses
+Android's clipboard-access notification — the toast Android 12+ shows whenever an app reads what
+you've copied. By rapidly triggering **two app-controlled toast notifications**, a malicious
+foreground app can display its own messages "instead of the message alerting the user that their
+clipboard was read" — clipboard exfiltration becomes invisible at the moment it happens. Google
+rated the issue **Moderate** and has now marked the CVE **Won't Fix**, which is why the disclosure
+is public (no CVE id is named in the item). The post situates the gap carefully: Android 10 blocked
+background clipboard access, and the `EXTRA_IS_SENSITIVE` flag hides preview thumbnails (Google
+Authenticator uses it) — but the read itself remains permitted for foreground apps, with only an
+auto-dismissing toast as the check. The author has filed a feature request for per-app clipboard
+permissions (like Location or Notifications) and is soliciting +1s. Verified this run:
+developer.android.com's copy-paste docs confirm `EXTRA_IS_SENSITIVE` and the clipboard-access
+notification — the consent mechanism the technique defeats; the post body itself is a JS shell to a
+plain fetch (1,077 bytes, no markdown twin — the feed read it rendered).
+
+Why it matters: the toast is the *only* consent UX for clipboard reads, and it loses to a race any
+app can run. Passwords copied out of managers, MFA codes, and secrets shuffled through chat apps
+are the exfiltration targets — and a Won't-Fix verdict means the mitigation stays procedural: paste
+into the target app immediately, avoid copying secrets through apps you don't trust, and treat
+"nothing popped up" as zero evidence.
+
+Sources: [Ctrl+C, Ctrl+v, Ctrl+cve](https://toninoble.com/post/ctrlc-ctrlv-ctrlcve) ·
+[HN](https://news.ycombinator.com/item?id=50487605)

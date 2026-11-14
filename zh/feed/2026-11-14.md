@@ -522,7 +522,7 @@ Ali Chraghi 对他的 Zig 音乐播放器 **AMP**（含模糊着色器）的复�
 
 - **Velocity:** ▮ rising
 - **Source:** citizenlab.ca + Bloomberg · 113+ pts on HN · 9.8h ago (~10:15 UTC+8)
-- **Tags:** `surveillance` `adtech` `location-tracking` `privacy**
+- **Tags:** `surveillance` `adtech` `location-tracking` `privacy`
 
 **Bloomberg** 对 **Penlink 的 Webloc**——一个经由数字广告生态获取位置数据的广告式监控系统——的调查，建立在 Citizen Lab 四月研究之上，并且不断加宽客户地图：该实验室确认了**美国、萨尔瓦多与匈牙利**的买家（通过开源调查、FOIA 申请与服务器基础设施测绘），奥地利内政部随后被证实，Bloomberg 又补充了**英国、荷兰、德国、墨西哥、新加坡、沙特、阿联酋与以色列**——至少 12 个国家。Citizen Lab 高级研究员 Wolfie Christl：Webloc "is a powerful mass surveillance tool that's trickling down from military and intelligence agencies to federal law enforcement and then to state and local police"。实验室指出，此类系统在欧洲与英国的合法性"高度争议"，而在被点名的威权国家的使用"尤其危险"。
 

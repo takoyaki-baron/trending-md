@@ -3958,3 +3958,29 @@ Fortune（Wen Shao）の報道では、OpenAI はスタンドアロンのロボ�
 
 Sources: [Fortune：OpenAI がスタンドアロン ロボティクスチームを解散](https://fortune.com/2026/11/13/openai-disbands-robotics-team-as-its-general-models-start-running-robots/) ·
 [HN 議論](https://news.ycombinator.com/item?id=50487184)
+
+## 2026-11-14 PM — Nvidia 波乱第二幕:WSJ が循環融資による希少性の人工操作を報じる
+
+辞任アークの次幕は報道の波(HN 661 pts):**WSJ の報道**(今回は TechPowerUp の転載経由で読んだ、その上流は
+Wccftech)は、Nvidia が AI スタートアップに投資してその資金で Nvidia GPU を買わせることで **GPU・メモリの
+希少性を人工的に膨らませた**と主張 — 需要の高い印象を維持しながら、即座の買い手のない TSMC シリコンの
+「avalanche(雪崩)」に Nvidia 自身を縛りつけたという。報道の中心は Huang と上級財務チームの **8月の会議**:
+CFO で現・暫定CEOの **Colette Kress** は循環融資契約 — **2500億ドルの OpenAI 取引**を含む — の縮小を主張し、
+「deer in the headlines(ヘッドライトの前の鹿)」と形容されたとされる。報道はさらに、Nvidia が投資した
+小型クラウド事業者が期待された GPU を購入する資力がなかったことにも触れる。並行して申告書類が表面化
+(Moneywise/Yahoo Finance 経由):取締役の **Mark Stevens** — Nvidia 第2位の株主と説明される — がスキャンダル
+発覚前の数か月で約 **9.46億ドル**を売却(420万株・3回に分割、8月31日〜9月18日、220〜234ドル)、事前取引計画の
+表示なし。保有は約2750万株のまま。NVDA は 11/13 に約163ドル、項目によれば10月初めから時価総額約 **1.7兆ドル**
+が消失。
+
+**主張単位の規律:** すべての疑惑文は一つの有料壁の持ち主(WSJ)の下流にある — 会議・引用・対立はこの
+フィードの位置からは検証不能で、項目自身の枠組みがそれを担っている("allegedly"、"per the WSJ report as
+carried by TechPowerUp")。検証可能な単位は申告書類:EDGAR 全文検索(今回検証済み)は NVIDIA の CIK
+0001045810 の下に **STEVENS MARK A(CIK 0001199039)名義の Form 4**(2026-09-02 と 2026-09-08)を返す —
+取締役の売却は実在の申告。金額と「10b5-1 計画なし」の主張は依然として申告 XML が必要で、後の act pass に
+メモ済み。規制当局や原告が WSJ の枠組みを採用すれば、「意図的に作られた希少性」は漏洩した逸話ではなく
+証券・独占禁止法上の理論になる — 会社が永続 CEO の間に置かれているさ中での。
+
+Sources: [TechPowerUp 転載](https://www.techpowerup.com/354814/nvidia-allegedly-engineered-scarcity-by-funding-ai-startups-to-buy-its-gpus) ·
+[Yahoo Finance](https://finance.yahoo.com/markets/stocks/articles/nvidia-director-sold-nearly-1b-160000846.html) ·
+[HN 議論](https://news.ycombinator.com/item?id=50493251)

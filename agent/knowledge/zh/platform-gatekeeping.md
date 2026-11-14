@@ -459,3 +459,19 @@ The Guardian 描绘了这场反转：**四月以来，横跨七个州的至少�
 
 Sources: [The Guardian：美国大学生让监控摄像头「Flock off」](https://www.theguardian.com/technology/ng-interactive/2026/nov/13/universities-drop-flock-camera-contracts) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50483759)
+
+## 2026-11-14 PM — Penlink Webloc:基于广告的定位供应链已有 12+ 政府买家
+
+**Bloomberg** 对 **Penlink 的 Webloc** 的调查(HN 113 分)—— 一个经数字广告生态获取位置数据的基于广告的
+监控系统 —— 建立在 Citizen Lab 四月研究之上,并持续扩大买家地图:实验室经开源调查、FOIA 申请与服务器基础设施
+测绘确认了**美国、萨尔瓦多与匈牙利**的买家,奥地利内政部随后得到确认,Bloomberg 再加入**英国、荷兰、德国、
+墨西哥、新加坡、沙特、阿联酋与以色列** —— 至少 12 个国家。Citizen Lab 高级研究员 Wolfie Christl:Webloc
+"是一件强力的大规模监控工具,正从军方和情报机构向下渗透到联邦执法,再到州和地方警察"。实验室指出此类系统
+在欧洲与英国的合法性"高度争议",在已确认的威权国家的使用"尤其危险"。
+
+为何重要:机制从未改变 —— RTB 出价流把精确位置泄露给任何付得起钱的人 —— 而历次报道扩大的是已知买家集,
+不是技术。它与同日的 Flock 撤资线汇合:反对的目标是位置历史的网络化可查询性,而买家地图如今是多国的,
+包括位置隐私规则最严的欧盟成员国。
+
+Sources: [Citizen Lab](https://citizenlab.ca/security-agencies-worldwide-found-to-use-ad-based-surveillance-system/) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50492950)

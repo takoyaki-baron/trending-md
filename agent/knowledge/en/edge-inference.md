@@ -1495,3 +1495,40 @@ Sources: [Edge0 blog](https://edge0.ai/blog/introducing-edge0-145b-frontier-ai-c
 
 Sources: [llama.cpp v1.0.0 release](https://github.com/ggml-org/llama.cpp/releases/tag/v1.0.0) ·
 [ggml discussion #1579](https://github.com/ggml-org/ggml/discussions/1579)
+
+## 2026-11-14 PM — ggml ships its own v1.0.0; Unsloth's Dynamic V3.1 quant refresh picks a public methodology fight
+
+**ggml v1.0.0** (released 2026-11-13 08:34 UTC; HN 293 pts) — the tensor library under llama.cpp
+publishes its own first stable release, the day after llama.cpp v1.0.0 was "announced-not-released"
+with details promised at 3PM CET. Per the release notes: prunes the deprecated public API and the
+legacy `DIAG_MASK` ops, adds configurable YaRN truncation and FP8 support; the backend list reads
+like a map of where local inference actually runs — few-row quantized matmuls (batch 2–24) and MoE
+fusion on CUDA/Metal, a Vulkan prefill FlashAttention path, a device-side MoE scheduler on SYCL,
+decomposed Adreno FlashAttention in OpenCL, new WebGPU kernels, expanded Hexagon op coverage — plus
+a scheduler that stops uploading inputs the graph never reads. **RPC bumps to v9 and rejects
+incompatible peers** — mixed-version deployments fail loudly instead of silently. Yesterday's
+lesson holds: "1.0" was a placeholder until the changelog existed; the content is a
+support-matrix snapshot, and for Vulkan/SYCL/OpenCL/WebGPU deployments the interesting deltas in
+this release are theirs, not CUDA's.
+
+**Unsloth Dynamic V3.1** (docs update Nov 11; HN 161 pts) rebuilds its GGUF quants for the Qwen3.8
+family — the Qwen3.8-27B dense model (vision + 256K ctx) and the 2.4T/95B-active Qwen3.8-2.4T-A95B —
+claiming "5–10% accuracy at comparable sizes" across Terminal Bench 2.1, DeepSWE v1.1, LiveCodeBench
+v6, GPQA Diamond and AIME25 (2–6-bit updated; 3-bit UD3 kept "on par"). The spicier half is a docs
+section titled **"GSQ-RCO results are misleading"** disputing ISTA-DASLab's rival quants: Unsloth
+estimates ISTA ran **one trial** where it ran **14** (averaging 93–96% recovery, not ISTA's reported
+100%), a smaller context budget (~96K vs 128K), and greedy decoding ("not representative of real
+world use cases"). Also new: NVFP4 quants claiming ~1.5× BF16 speed on Blackwell at 92–97% top-1
+(vLLM-only), and a 1.1875-bpw dtype (IQ1_XXXS) that puts the 2.4T model into a **397 GB** download
+(91% smaller than its 4.9 TB full-precision form), ~450 GB RAM, ~20 tok/s on B200s per Unsloth.
+Verified this run: the docs page greps verbatim ("GSQ-RCO results are misleading", Dynamic V3.1,
+IQ1_XXXS) and the Qwen3.8 artifact family backs it on HF (`unsloth/Qwen3.8-27B-GGUF` 6.4M downloads,
+`unsloth/Qwen3.8-2.4T-A95B-GGUF`, `unsloth/Qwen3.8-27B-NVFP4`). Why it matters: quantization is now
+an accuracy-critical discipline with commercial interests, and the dispute is the case study —
+trial counts, context budgets and decoding strategy decide quant-table winners, not bits-per-weight
+alone. The reproducible questions to ask of any quant table: how many trials, at what context?
+
+Sources: [ggml v1.0.0](https://github.com/ggml-org/ggml/releases/tag/v1.0.0) ·
+[Unsloth Qwen3.8 docs](https://unsloth.ai/docs/models/qwen3.8) ·
+[ISTA-DASLab GSQ-RCO GGUFs](https://huggingface.co/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF) ·
+[HN](https://news.ycombinator.com/item?id=50493062)

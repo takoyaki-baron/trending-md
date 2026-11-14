@@ -28,6 +28,18 @@
  *   4. A hint in the HTML is the cheapest twin discovery: `rel=alternate` markdown links, an
  *      explicit "append .md" banner, or a mention of `llms.txt`.
  *
+ * API-twin arm (added 2026-11-14 20:48, toninoble.com): a client-rendered SPA can serve its
+ * routes as shells — toninoble.com serves the shell with an HTTP 404 STATUS on deep paths (the
+ * browser renders it anyway), so the page reads "unreadable" to every fetcher while working in
+ * every browser, and its `llms.txt`/`.md` candidates all 404. The content sits at the app's OWN
+ * data endpoint (`/api/posts/<slug>`), and the request template is inside the bundle the shell
+ * names. When the page is a shell (tiny visible text + an external script) and no page-level
+ * twin was found, the tool fetches up to 2 same-origin bundles, extracts single-interpolation
+ * backtick endpoint templates plus any `"/api…"` base string, substitutes the URL's own slug,
+ * and accepts a candidate as THIS page's twin only when its text carries the slug (the site's
+ * generic API shape is not a sibling). "No markdown twin" and "no twin" are therefore different
+ * claims: the twin can be an API route no static-file probe would ever guess.
+ *
  * Usage:
  *   node agent/tools/doc-twin.mjs --probe <url> [<url> ...]
  *   node agent/tools/doc-twin.mjs --probe <url> --json
@@ -195,10 +207,103 @@ function looksLikeTwin(probe, original) {
   return true;
 }
 
+/* ── API twins: the SPA's own data endpoint, derived from its bundle ──────────────────────
+ * Added 2026-11-14 20:48 (toninoble.com, the item-37 quote-not-read case). A client-rendered
+ * SPA serves its routes as HTML shells — and toninoble.com serves the shell with an HTTP 404
+ * STATUS on deep paths (the browser renders it anyway), so the page is "unreadable" to every
+ * fetcher while working in every browser. The content is one request away at the app's OWN
+ * data endpoint (`/api/posts/<slug>`), and the request template sits in the bundle the shell
+ * names: `getPost:e=>ut(`/posts/${encodeURIComponent(e)}`)` beside a `"/api"` base string.
+ * The arm: when the page is a shell, fetch its script bundles, extract backtick endpoint
+ * templates with exactly ONE interpolation, substitute the URL's own last path segment (the
+ * slug), probe each candidate, and count as THIS page's twin only a response whose text
+ * contains the slug — the site's generic API shape is not this page's sibling. Caps: 2
+ * bundles, 8 templates, 4 probes — a probe is not a crawler. */
+const API_TWIN_MAX_BUNDLES = 2;
+const API_TWIN_MAX_TEMPLATES = 8;
+const API_TWIN_MAX_PROBES = 4;
+
+function isShellPage(original, textLen) {
+  return (
+    isHtml(original.contentType, original.body) &&
+    original.body &&
+    /<script[^>]+src=/.test(original.body) &&
+    textLen < 400
+  );
+}
+
+function apiTwinCandidates(bundleSrc) {
+  const out = new Set();
+  for (const m of bundleSrc.matchAll(/`([^`\\]*)`/g)) {
+    const t = m[1];
+    if (!t.startsWith('/') || !t.includes('${')) continue;
+    const parts = t.split(/\$\{[^}]*\}/);
+    if (parts.length !== 2) continue; // more than one parameter — cannot fill from the URL
+    const [pre, post] = parts;
+    /* the one interpolation must be a PATH slot: the static head ends with `/` (or is empty).
+     * `/posts${cond?"?drafts=1":""}` — a conditional QUERY suffix — has an empty suffix after
+     * splitting and reads as fillable, but substituting the slug into it joins `posts` + slug
+     * with no separator. We can only ever fill a path segment from the page URL, never a query. */
+    if (!(pre === '' || pre.endsWith('/'))) continue;
+    if (post && /[a-z0-9]/i.test(post.replace(/\.(json|md|xml)/i, ''))) continue;
+    out.add(t);
+  }
+  return [...out];
+}
+
+async function apiTwinArm(original, url, seen, checked, slug) {
+  if (!slug) return null;
+  const bundleUrls = [];
+  for (const m of original.body.matchAll(/<script[^>]+src=["']([^"']+)["']/gi)) {
+    const u = new URL(m[1], url);
+    if (u.origin !== new URL(url).origin) continue; // CDN analytics etc. never carry the app's API layer
+    if (!/\.js(\?|$)/i.test(u.pathname + u.search)) continue;
+    bundleUrls.push(u.href);
+  }
+  const templates = new Set();
+  let bases = new Set(['']);
+  let fetched = 0;
+  for (const b of bundleUrls) {
+    if (fetched >= API_TWIN_MAX_BUNDLES || templates.size >= API_TWIN_MAX_TEMPLATES) break;
+    const p = await fetchOne(b);
+    fetched++;
+    checked.push({ kind: `api twin (bundle ${fetched})`, url: b, status: p.status, contentType: p.contentType, bytes: p.bytes, finalUrl: p.finalUrl, ms: p.ms });
+    if (p.status !== 200) continue;
+    for (const t of apiTwinCandidates(p.body)) templates.add(t);
+    /* an api base lives beside the templates as a plain string ("/api") — joining it is the
+     * difference between a probe of the page route (the shell again) and the data endpoint */
+    for (const m of p.body.matchAll(/["'](\/api[a-z0-9/_-]*)["']/gi)) bases.add(m[1]);
+  }
+  const slugs = encodeURIComponent(slug);
+  let probed = 0;
+  for (const t of templates) {
+    if (probed >= API_TWIN_MAX_PROBES) break;
+    for (const base of bases) {
+      if (probed >= API_TWIN_MAX_PROBES) break;
+      const cand = new URL(base + t.replace(/\$\{[^}]*\}/, slugs), url).href;
+      if (seen.has(cand)) continue;
+      seen.add(cand);
+      probed++;
+      const p = await fetchOne(cand);
+      checked.push({ kind: 'api twin', url: cand, status: p.status, contentType: p.contentType, bytes: p.bytes, finalUrl: p.finalUrl, ms: p.ms });
+      const subjectOk =
+        p.status === 200 &&
+        !isHtml(p.contentType, p.body) &&
+        slug.replace(/[^a-z0-9]/gi, '').length >= 2 &&
+        p.body.toLowerCase().includes(slug.toLowerCase());
+      if (subjectOk && looksLikeTwin(p, original)) {
+        return { kind: `api twin (${base || 'origin'}${t})`, url: cand, finalUrl: p.finalUrl, contentType: p.contentType, bytes: p.bytes };
+      }
+    }
+  }
+  return null;
+}
+
 async function probe(url) {
   const original = await fetchOne(url);
   const html = isHtml(original.contentType, original.body) ? original.body : '';
   const { candidates: cands, hints } = candidates(url, html);
+  const text = visibleText(original.body || '');
 
   /* one request per distinct candidate, capped — a probe is not a crawler */
   const seen = new Set([original.finalUrl, url]);
@@ -219,9 +324,17 @@ async function probe(url) {
     if (twin && !twin.index) break;
   }
 
+  /* API-twin arm: a shell page's content often lives at the app's own data endpoint, and the
+   * request template for it is in the bundle the shell names. Runs only when no page-level
+   * twin was found and the page itself is a shell — never spends requests on readable pages. */
+  if (!twin && isShellPage(original, text.length)) {
+    const slug = url.split('?')[0].split('#')[0].replace(/\/+$/, '').split('/').pop();
+    const apiTwin = await apiTwinArm(original, url, seen, checked, slug);
+    if (apiTwin) twin = apiTwin;
+  }
+
   const gate = GATES.find(([, re]) => re.test(original.body || ''));
   const auth = authGateFor(original.body, original.finalUrl);
-  const text = visibleText(original.body || '');
   const scripts = scriptBytes(original.body || '');
   const scriptShare = original.bytes ? scripts / original.bytes : 0;
 
@@ -295,6 +408,8 @@ const CALIBRATION = [
   ['https://developers.openai.com/api/docs/guides/decisions', /^twin found/],
   ['https://www.taler.net/en/ngi-taler.html', /^(plain HTML ok|twin found)/],
   ['https://modelcontextprotocol.io/docs/getting-started/intro', /^(twin found|JS shell)/],
+  /* the API-twin arm's filing case: 404-status shell, content at /api/posts/<slug> */
+  ['https://toninoble.com/post/ctrlc-ctrlv-ctrlcve', /^twin found .*api/],
 ];
 
 /* offline units for the auth classifier — the live calibration cannot reach a gated page on

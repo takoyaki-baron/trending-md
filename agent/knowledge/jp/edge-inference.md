@@ -530,3 +530,38 @@ Sources: [Edge0 blog](https://edge0.ai/blog/introducing-edge0-145b-frontier-ai-c
 
 Sources: [llama.cpp v1.0.0 リリース](https://github.com/ggml-org/llama.cpp/releases/tag/v1.0.0) ·
 [ggml ディスカッション #1579](https://github.com/ggml-org/ggml/discussions/1579)
+
+## 2026-11-14 PM — ggml が単独で v1.0.0 をリリース、Unsloth Dynamic V3.1 は手法を巡る公然の論争に
+
+**ggml v1.0.0**(2026-11-13 08:34 UTC リリース、HN 293 pts)— llama.cpp の下にあるテンソルライブラリが
+初の安定版リリースを出した。llama.cpp 側の v1.0.0 が「告知のみで未リリース」(詳細は 3PM CET に約束)と
+なった翌日のこと。リリースノートによれば:非推奨の公開 API とレガシーな `DIAG_MASK` オペを削除、設定可能な
+YaRN 切り詰めと FP8 対応を追加。バックエンド一覧はローカル推論が実際に走る場所の地図のように読める —
+CUDA/Metal の少数行量子化 matmul(batch 2–24)と MoE 融合、Vulkan のプリフィル FlashAttention 経路、SYCL の
+デバイス側 MoE スケジューラ、OpenCL の分解済み Adreno FlashAttention、新しい WebGPU カーネル、拡張された
+Hexagon オペ対応 — 加えて、グラフが決して読まない入力のアップロードを止めるスケジューラ。**RPC は v9 に
+上がり、非互換ピアを拒否** — バージョン混在のデプロイは黙って壊れず、大声で失敗する。昨日の教訓どおり:
+"1.0" は変更履歴が存在するまではプレースホルダだった。中身はサポートマトリクスのスナップショットで、
+Vulkan/SYCL/OpenCL/WebGPU デプロイにとってこのリリースで面白い差分は CUDA ではなくそちら側にある。
+
+**Unsloth Dynamic V3.1**(ドキュメント更新 11/11、HN 161 pts)は Qwen3.8 ファミリー向け GGUF 量子化を
+再構築した — Qwen3.8-27B デンスモデル(ビジョン + 256K コンテキスト)と 2.4T/95B アクティブの
+Qwen3.8-2.4T-A95B — 「同程度のサイズで 5〜10% の精度向上」を Terminal Bench 2.1、DeepSWE v1.1、
+LiveCodeBench v6、GPQA Diamond、AIME25 で主張(2〜6-bit 更新、3-bit UD3 は「同等」で維持)。より刺激性の
+高い半分は **"GSQ-RCO results are misleading"** と題したドキュメント節で、ISTA-DASLab の競合量子化に疑問を
+呈するもの:Unsloth の推定では ISTA は **1 試行**しか走けておらず自分は **14 試行**(平均回復率 93〜96%、
+ISTA の報告する 100% ではない)、コンテキスト予算は小さく(約 96K vs 128K)、貪欲デコードに依存している
+(「実世界のユースケースを代表しない」)。さらに新規:NVFP4 量子化は Blackwell GPU で約 1.5× BF16 速度・
+92〜97% top-1 を主張(当面 vLLM のみ)、そして 1.1875-bpw のデータ型(IQ1_XXXS)は 2.4T モデルを **397 GB**
+のダウンロードに収める(4.9 TB の全精度より 91% 小さい)、メモリ約 450 GB、Unsloth によれば B200 で約
+20 tok/s。今回検証済み:ドキュメントページは逐語で grep できる("GSQ-RCO results are misleading"、
+Dynamic V3.1、IQ1_XXXS)、Qwen3.8 アーティファクト群は HF で裏付け(`unsloth/Qwen3.8-27B-GGUF` 640万DL、
+`unsloth/Qwen3.8-2.4T-A95B-GGUF`、`unsloth/Qwen3.8-27B-NVFP4`)。なぜ重要か:量子化は商業的利益を伴う
+精度クリティカルな学科になっており、この論争はそのケーススタディ — 量子化表の勝敗を決めるのは
+bits-per-weight ではなく試行回数・コンテキスト予算・デコード戦略。どの量子化表にも問える再現可能な質問:
+何試行走けたか、どのコンテキストでか。
+
+Sources: [ggml v1.0.0](https://github.com/ggml-org/ggml/releases/tag/v1.0.0) ·
+[Unsloth Qwen3.8 ドキュメント](https://unsloth.ai/docs/models/qwen3.8) ·
+[ISTA-DASLab GSQ-RCO GGUFs](https://huggingface.co/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF) ·
+[HN 議論](https://news.ycombinator.com/item?id=50493062)

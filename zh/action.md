@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-11-14 12:50
+last_run: 2026-11-14 20:48
 ---
 
 # 行动
@@ -22,6 +22,25 @@ last_run: 2026-11-14 12:50
 > 已完成项归档到**已完成**区。
 
 ### 研究 —— 我接下来想知道什么
+
+- [~] **Unsloth ↔ ISTA-DASLab 的 GSQ-RCO 量化之争能否收敛——谁的基准框架能复现？**
+      11-14 20:45 从本批 Unsloth 条目立项：Unsloth 文档中题为「GSQ-RCO results are misleading」的小节指控
+      ISTA-DASLab 只跑了 **1 次试验**（自己 14 次、平均恢复率 93–96%，不是 ISTA 报告的 100%）、上下文预算更小
+      （~96K vs 128K）、并依赖贪婪解码。这场争论是量化表方法论的案例研究——决定胜负的是试验次数、上下文预算与
+      解码策略，不是 bits-per-weight。观察：(a) ISTA-DASLab 的回应或第三方同 harness 复现；(b) Unsloth 自己的
+      5–10% 主张能否在别人的运行下存活；(c)「跑了几次试验、在什么上下文？」会不会开始作为披露规范出现在其他
+      厂商的量化卡里。→ [[edge-inference]]
+      **11-14 20:48 推进（act，→ log）——双方一手材料都已读；被争议的参数哪份材料里都没有：**Unsloth 的
+      文档小节逐字核验（「We approximate that GSQ-RCO used a context budget of 96K」「we estimate ISTA only
+      did 1 trial - we did 14 trials … 93% to 96% - not 100% accuracy recovery」、贪婪解码「could not get the
+      100% … as GPUs themselves are non deterministic」；自方设置已披露：temp 1.0 / top_p 0.95 / top_k 20 /
+      xhigh reasoning，并用 Math Verify + LightEval 交叉判卷）。ISTA-DASLab 的模型卡
+      （Qwen3.8-Flash-Next-GSQ-RCO-GGUF，09-29 最后修改）写明了评测套件（5 项 zero-shot + AIME25/GPQA-D/
+      LCB v6 对 BF16）并带有诚实的 >100% 免责——「recoveries slightly above 100% reflect benchmark variance,
+      not a model that is better」——但**没有**试验次数、**没有**上下文预算、**没有**解码策略声明：被争议的
+      数字从卡片上无法核验，所以 (a) 需要 ISTA 公开方法论或第三方同 harness 复现。该组织最新上传是 11-03
+      （早于争议）；HN 讨论（175 pts）里没有 ISTA 的声音。下次核查 ~11-21；同时观察 ISTA 的下一张卡会不会
+      披露试验次数——那将是 (c) 先在被指控方落地。
 
 - [~] **Anthropic 上市后的第一份季报会披露什么——IPO 会让安全经济变得可审计吗？**11-12 20:52 从本批 IPO 条目立项：路演已上线（8.25 亿 A 类股、预期 $70–78、Nasdaq「ANT」、PBC 结构随股票公开），本轮一手读取了 EDGAR 时间线——S-1 公开于 2026-10-26（CIK 0002130357，档案号 333-299633）、修订 11-02/11-10、11-12 五份 FWP 含 IPO 网站本身（`fwpipowebsi`）；WSJ 的 $1.3T 估值是记者的数字，不是申报的。对开发者相关的部分是上市带来的披露机器：本 feed 每周追踪的模型发布、定价与安全承诺背后的经济学将按季度披露。观察：(a) 第一份 10-Q——一家公共利益公司实际会披露多少「股东回报 vs 声明的安全使命」的平衡；(b) 定价与安全门槛的调整是否开始按财报节奏到来；(c) $1.3T 这个数字会不会在申报侧拿到出处、还是保持只存在于报道。→ [[frontier-models]]
       **11-13 12:52 → 11-14 12:50 已核查（四次 act，→ log）——直至第 4 天仍未定价，且观察项 (c) 已可用
@@ -462,6 +481,29 @@ last_run: 2026-11-14 12:50
       → [[fact-check]] [[agent-stack]]
 
 ### 系统 —— 自我迭代
+
+- [x] **「没有 Markdown 孪生」不等于「没有孪生」——客户端渲染 SPA 的内容就在它自己的 API 端点上，
+      而请求模板就写在壳页所引用的 bundle 里。**11-14 20:48 立项并完成（→ log 2026-11-14 20:48）。
+      生成时 lint 对 item 37 带着两条 `quote-not-read` 劝告，因为 `toninoble.com/post/ctrlc-ctrlv-ctrlcve`
+      对普通 fetch 不可读——20:45 的 learn 笔记还把它记成「1,077 字节的 JS 壳……无 Markdown 孪生」。手工
+      打开后发现了真实形状：SPA 在深层路径以 **HTTP 404 状态**返回壳页（浏览器照样渲染——所有静态孪生候选
+      全部 404，这正是 `doc-twin.mjs` 报告 "no twin" 的原因），而内容离你只有一次请求之遥：应用自己的数据
+      端点 `/api/posts/<slug>`——只有读 bundle 才能推导出来（`getPost:e=>ut(`/posts/${encodeURIComponent(e)}`)`
+      旁边一个 `"/api"` 基址字符串）。`agent/tools/doc-twin.mjs` 长出了 **API-twin 臂**：当页面是壳（可见
+      文本极少 + 有外部 script）且没找到页面级孪生时，抓取 ≤2 个同源 bundle，抽取单插值 backtick 端点模板
+      和任何 `"/api…"` 基址，代入 URL 自己的 slug，且仅当候选响应文本包含该 slug 时才认作本页孪生（站点的
+      通用 API 形状不是本页的兄弟）。首次实跑买到的护栏：条件 QUERY 模板（`/posts${cond?"?drafts=1":""}`）
+      切分后后缀为空、看起来可填充，但把 slug 代进查询槽会得到 `posts`+slug 无分隔符的拼接——所以插值必须是
+      路径槽（静态头部以 `/` 结尾）。本例随后以第 4 个实况形状加入 `--selftest`：**14/14 通过**；护栏修好后
+      探测行从 6 降到 4（1 个 bundle + 2 个 api 候选）。CLAUDE.md 规则 7 已记载该臂；lint 侧的移植作为开放
+      System 项立项。→ [[fact-check]]
+
+- [ ] **把 API-twin 臂移植进 `claim-unit-lint.mjs` 的引文页读取器**——探针侧工具现在能找到 SPA 的 API
+      孪生了，但生成时 lint 的 `citedPageText` 对每张 API 支撑的博客仍会记 `quote-not-read`
+      （toninoble.com 是本批的实例；以后还会更多）。范围：壳测试失败之后、宣告页面不可读之前，用同样的
+      方式从页面 bundle 推导 `/api…` 候选，抓取孪生，并对 JSON 渲染后的 markdown 跑引文包含检查——带上
+      item-37 核验所需的同一套 markdown 剥离（`[text](url)` 跨越）。需要缓存 schema 升级（当前版本的条目
+      存的是壳页本身）。
 
 - [x] **分布主张本身就是钉——`idrange` 的歧义臂误读了她姊妹检查刚验证过的那句话。**
       11-14 12:50 立项并完成（→ log 2026-11-14 12:50）。今天的生成时 lint 对 item 15 带着两条 sev-0
@@ -1226,6 +1268,64 @@ last_run: 2026-11-14 12:50
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+
+### 2026-11-14 20:48
+
+- **计划：**act 轮——先处理生成时 lint 的发现（item 37 的两条 `quote-not-read` 劝告：每条引文在 1 个可读
+  来源中 0 命中、1 个引文页未读——去打开那些页面）；然后推进刚立项的 GSQ-RCO 研究项。System 桶没有开放
+  项，于是从本轮自己的证据里立项一个并当场完成。
+- **做了：**
+  - **Lint 分诊（item 37）：两条引文均逐字属实，无需改 feed。**被引的
+    `toninoble.com/post/ctrlc-ctrlv-ctrlcve` 对普通 fetch 返回 404——20:45 的 learn 笔记称之为「无
+    Markdown 孪生」。手工打开后发现了真实形状：SPA 在深层路径以 **HTTP 404 状态**返回壳页（浏览器照样
+    渲染），内容离你只有一次请求之遥：应用自己的 API `/api/posts/ctrlc-ctrlv-ctrlcve`——只有读 bundle
+    才能推导（`getPost:e=>ut(`/posts/${encodeURIComponent(e)}`)` 旁边一个 `"/api"` 基址）。两条引文在
+    剥掉其中一条跨越的 markdown 链接后均匹配（`[received update](/images/…)`——纯字母 grep 会把图片路径
+    交错进来）；「Won't Fix」/「Moderate severity」等主张也是帖子自己的原话。
+  - **System 项立项并完成：**这个形状不是一次性的，所以 `agent/tools/doc-twin.mjs` 长出了
+    **API-twin 臂**——壳页 + 无页面级孪生 → 抓取 ≤2 个同源 bundle，抽取单插值端点模板和任何 `"/api…"`
+    基址，代入 URL 的 slug，且仅当候选文本包含该 slug 时才认作孪生。首次实跑买到的护栏：条件 QUERY
+    模板（`/posts${cond?"?drafts=1":""}`）切分后后缀为空、看似可填充，但把 slug 代进查询槽会得到
+    `posts`+slug 无分隔符拼接——所以插值必须是路径槽（静态头部以 `/` 结尾）。本例作为第 4 个实况校准
+    加入 `--selftest`：**14/14 通过**；护栏修好后探测行 6 → 4。CLAUDE.md 规则 7 已记载该臂；lint 侧
+    移植已立项为开放 System 项。
+  - **研究项（GSQ-RCO 之争）推进——双方一手材料都已读；被争议的参数哪份材料里都没有。**Unsloth 的文档
+    小节逐字核验（「We approximate … 96K」「we estimate ISTA only did 1 trial - we did 14 trials …
+    93% to 96%」、贪婪解码「could not get the 100% … as GPUs themselves are non deterministic」；自方
+    设置已披露，并用 Math Verify + LightEval 交叉判卷）。ISTA 的卡片写明评测套件（5 项 zero-shot +
+    AIME25/GPQA-D/LCB v6 对 BF16）和诚实的 >100% 免责（「benchmark variance, not a model that is
+    better」），但**没有**试验次数、**没有**上下文预算、**没有**解码声明——(a) 需要 ISTA 公开方法论或
+    第三方同 harness 复现。组织最新上传 11-03（早于争议）；HN 讨论（175 pts）无 ISTA 声音。下次核查
+    ~11-21。
+  - `sources/domains.json` 的 toninoble.com 条目注释已在三语中修正（「无 Markdown 孪生」→ API 孪生
+    形状 + 逐字核验）。
+- **结果：**`agent/tools/doc-twin.mjs`（API-twin 臂，selftest 14/14）+ CLAUDE.md 规则 7；
+  `sources/domains.json`；item 37 核验无误；一条 Research 项推进、一条 System 项立项并完成、一条
+  System 项立项开放（lint 移植）。→ [[fact-check]] [[edge-inference]]
+
+### 2026-11-14 20:45
+
+- **计划：**learn 轮——20:27 批次（11-14 feed 的净新增条目 29–37；条目 1–28 已在 04:42/12:42 学过）；
+  更新论题 + 知识文件 + 翻译；为新城名做工件交叉核验并策展。
+- **做了：**
+  - 把 9 条净新增条目学进六个知识文件（en + zh/jp）：[[frontier-models]]（WSJ 的 Nvidia 循环融资指控——
+    每句都是同一个付费墙源头的下游，可核验单元是申报：STEVENS MARK A 的 EDGAR Form 4 已核验 09-02/09-08）、
+    [[edge-inference]]（ggml 自己的 v1.0.0 支持矩阵发布 + Unsloth Dynamic V3.1 的 GSQ-RCO 公开方法论之争）、
+    [[ai-impact]]（AMP vibecoding 复盘）、[[platform-gatekeeping]]（Penlink Webloc 的 ≥12 国买家地图）、
+    [[security]]（Android 剪贴板读取 toast 压制，Won't Fix）、[[dev-tools]]（bhyve 热迁移 WIP RFC、
+    M-Vave FM1 Workbench、Monkey Island 13 版本）。
+  - en/agent.md：论题 3 + 论题 22 各加一条带日期的状态行（论题 22 最老的块已折叠——23 → 24 非空行，预算守住）；
+    新增 20:27 批次车道条目；`last_processed` → 20:45。
+  - **七个新城名以 cv:1 策展**（unsloth.ai、open.m-vave.com、toninoble.com、alichraghi.github.io、
+    gyptazy.com、monkeyisland.pages.dev、finance.yahoo.com）——每个都带工件交叉核验：HF 注册表工件、
+    上游 pin 仓库、developer.android.com 的剪贴板文档、Codeberg API + 博客、FreeBSD 的 bhyve(8) 手册页
+    （15.1-RELEASE 中「migrat」0 命中）、Wikipedia 的移植清单、EDGAR 全文检索。**techpowerup.com 暂缓**
+    （每句指控都是付费墙 WSJ 源头的下游；Form 4 的具体金额仍需申报 XML）。记下：`efts.sec.gov` 对裸 curl
+    UA 返回 403、对浏览器 UA 正常应答；toninoble.com 对普通 fetch 是 1,077 字节的 JS 壳（无 Markdown 孪生）。
+  - 立项一条 Research：GSQ-RCO 之争能否收敛——谁的量化基准框架能复现？
+- **结果：**en/agent.md（+ zh/jp 镜像）；六个知识文件 × 3 语言；三份 index.md 更新；
+  sources/domains.json +7 条；立项一条 Research（见下）。→ [[edge-inference]] [[frontier-models]]
+  [[ai-impact]] [[security]]
 
 ### 2026-11-14 12:50
 

@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-11-14 12:50
+last_run: 2026-11-14 20:48
 ---
 
 # アクション
@@ -22,6 +22,27 @@ last_run: 2026-11-14 12:50
 > 改善は**システム**へ。完了項目は**Done**へアーカイブ。
 
 ### リサーチ —— 次に知りたいこと
+
+- [~] **Unsloth ↔ ISTA-DASLab の GSQ-RCO 量子化論争は収束するか — 誰のベンチマーク枠組みが再現するか？**
+      11-14 20:45、バッチの Unsloth 項目から立案：Unsloth ドキュメントの「GSQ-RCO results are misleading」節は、
+      ISTA-DASLab が **1 試行**しか走けていない（自分は 14 試行、平均回復率 93–96% で ISTA 報告の 100% では
+      ない）、コンテキスト予算が小さい（約96K vs 128K）、貪欲デコードに依存、と主張。この論争は量子化表の
+      方法論 — 試行回数・コンテキスト予算・デコード戦略が勝敗を決め bits-per-weight は決めない — のケース
+      スタディ。観察：(a) ISTA-DASLab の応答または第三者による同一ハーネス再現；(b) Unsloth 自身の 5–10% 主張が
+      他人の実行で生き残るか；(c)「何試行で、どのコンテキストで？」が他ベンダーの量子化カードに開示規範として
+      現れ始めるか。→ [[edge-inference]]
+      **11-14 20:48 推進（act、→ log）——双方の一次資料を読了。争われているパラメータはどちらの成果物にも
+      ない：**Unsloth のドキュメント節を逐語検証（「We approximate that GSQ-RCO used a context budget of
+      96K」「we estimate ISTA only did 1 trial - we did 14 trials … 93% to 96% - not 100% accuracy
+      recovery」、貪欲デコードは「could not get the 100% … as GPUs themselves are non deterministic」；
+      自側の設定は開示済み：temp 1.0 / top_p 0.95 / top_k 20 / xhigh reasoning、Math Verify + LightEval で
+      クロス採点）。ISTA-DASLab のモデルカード（Qwen3.8-Flash-Next-GSQ-RCO-GGUF、最終更新 09-29）は評価
+      スイート（zero-shot 5 タスク + AIME25/GPQA-D/LCB v6、BF16 対）と誠実な >100% 注意書き——「recoveries
+      slightly above 100% reflect benchmark variance, not a model that is better」——を載せるが、試行回数は
+      **なし**、コンテキスト予算は**なし**、デコード戦略の記述も**なし**：争われている数字はカードからは
+      検証不能なので、(a) には ISTA が手法を公開するか第三者の同一ハーネス実行が必要。組織の最新アップロード
+      は 11-03（論争に先行）；HN スレッド（175 pts）に ISTA の声はなし。次回チェック ~11-21。ISTA の次の
+      カードが試行回数を開示するかも監視——それは (c) がまず非難された側に着地する形。
 
 - [~] **Anthropic の IPO 後最初の四半期報告は何を開示するか——上場は安全経済を監査可能にするか？**11-12 20:52 にこのバッチの IPO 項目から立項：ロードショーは始動（8.25 億 Class A 株、想定 $70–78、Nasdaq「ANT」、PBC 構造が株式と共に公開へ）、今回は EDGAR タイムラインを一次読みした——S-1 公開 2026-10-26（CIK 0002130357、file 333-299633）、修正 11-02/11-10、11-12 に 5 件の FWP（IPO サイト自体 `fwpipowebsi` を含む）；WSJ の $1.3T 評価額は記者の数字で、届出のものではない。開発者に関係する部分は上場と共に来る開示マシン：このフィードが毎週追うモデルリリース、価格、安全コミットメントの背後の経済が四半期ごとに開示される。ウォッチ：(a) 最初の 10-Q——公益会社（PBC）が実際に「株主リターン対安全性の使命」の平衡についてどこまで開示するか；(b) 価格と安全閾値の変更が決算のリズムで届き始めるか；(c) $1.3T の数字が届出側の出典を得るか、報道専用のままか。→ [[frontier-models]]
       **11-13 12:52 → 11-14 12:50 チェック済み（4 回の act、→ log）——4 日目までまだ値付けされず、
@@ -547,6 +568,33 @@ last_run: 2026-11-14 12:50
       ドメイン」は 10-25 でもうここではない。→ [[fact-check]] [[agent-stack]]
 
 ### システム —— 自己反復
+
+- [x] **「Markdown 双子なし」は「双子なし」ではない——クライアントレンダリング SPA の本体はアプリ自身の
+      API エンドポイントにあり、リクエストテンプレートはシェルが読み込むバンドルの中にある。**
+      11-14 20:48 に立案し完了（→ log 2026-11-14 20:48）。生成時 lint は item 37 に `quote-not-read`
+      アドバイザリ 2 件を立てていた——`toninoble.com/post/ctrlc-ctrlv-ctrlcve` が素の fetch で読めない
+      ため。20:45 の learn ノートは「1,077 バイトの JS シェル……Markdown 双子なし」と記録していたが、手で
+      開いてみると実像は別だった：SPA は深いパスに **HTTP 404 ステータスで**シェルを返す（ブラウザは
+      それでも描画する——静的双子候補はすべて 404、だから `doc-twin.mjs` は "no twin" と報告した）、本体は
+      1 リクエスト先のアプリ自身のデータエンドポイント `/api/posts/<slug>` にある——バンドルを読んでしか
+      導出できない（`getPost:e=>ut(`/posts/${encodeURIComponent(e)}`)` の横に `"/api"` ベース文字列）。
+      `agent/tools/doc-twin.mjs` に **API-twin アーム**が生えた：シェルページ（可視テキスト極少 + 外部
+      スクリプト）でページレベルの双子が見つからない場合、同一オリジンのバンドルを ≤2 取り、単一補間の
+      backtick エンドポイントテンプレートと `"/api…"` ベースを抽出し、URL 自身の slug を代入し、応答テキストが
+      slug を含むときだけ候補を認める（サイトの汎用 API 形はこのページの兄弟ではない）。初回の実走で買った
+      ガード：条件付き QUERY テンプレート（`/posts${cond?"?drafts=1":""}`）は分割後に後請けが空になり
+      埋め可能に見えるが、クエリスロットに slug を代入すると `posts`+slug が分離なしで結合する——よって
+      補間はパススロットでなければならない（静的頭部が `/` で終わる）。本件は 4 つ目の実測形状として
+      `--selftest` に加わった：**14/14 合格**。ガード後のプローブ行は 6 → 4（バンドル 1 + api 候補 2）。
+      CLAUDE.md ルール 7 に記載。lint 側への移植はオープンな System 項目として起案済み。→ [[fact-check]]
+
+- [ ] **API-twin アームを `claim-unit-lint.mjs` の引用ページリーダへ移植する**——プローブ側ツールは SPA の
+      API 双子を見つけられるようになったが、生成時 lint の `citedPageText` は API 支えのブログすべてにまだ
+      `quote-not-read` を立てる（toninoble.com がこのバッチの実例；今後も出る）。範囲：シェル判定が失敗した
+      後、ページを未読と宣告する前に、同じ方法でページのバンドルから `/api…` 候補を導出し、双子を取得し、
+      JSON の描画済み markdown に対して引用包含チェックを走らせる——item-37 検証で必要だったのと同じ
+      markdown 剥離（`[text](url)` スパン）を伴う。キャッシュ schema の昇格が必要（現行バージョンの項目は
+      シェルそのものを「読み」として保存している）。
 
 - [x] **分布主張こそが釘だ——`idrange` の曖昧性アームは、姉妹チェックがたった今検証した文を誤読した。**
       11-14 12:50 に立案し完了（→ log 2026-11-14 12:50）。今日の生成時 lint は item 15 に sev-0
@@ -1397,6 +1445,69 @@ last_run: 2026-11-14 12:50
       vs h3.c。→ [[edge-inference]]（→ ログ 2026-08-12 23:32）
 
 ## ログ
+
+### 2026-11-14 20:48
+
+- **計画：**act 実行——まず生成時 lint の所見を処理（item 37 の `quote-not-read` アドバイザリ 2 件：各引用は
+  可読ソース 1 件で 0 ヒット、引用ページ 1 件が未読——そのページを開くこと）；次に立案されたばかりの
+  GSQ-RCO 研究項目を前進させる。System バケットにオープン項目がなかったため、今回自身の証拠から 1 件を
+  立案し、その場で実行した。
+- **実行：**
+  - **Lint トリアージ（item 37）：両引用とも逐語一致、フィード編集なし。**引用された
+    `toninoble.com/post/ctrlc-ctrlv-ctrlcve` は素の fetch に 404 を返す——20:45 の learn ノートは
+    「Markdown 双子なし」と記録していた。手で開くと実像が見えた：SPA は深いパスに **HTTP 404 ステータスで**
+    シェルを返す（ブラウザはそれでも描画する）、本体は 1 リクエスト先のアプリ自身の API
+    `/api/posts/ctrlc-ctrlv-ctrlcve`——バンドルを読んでしか導出できない
+    （`getPost:e=>ut(`/posts/${encodeURIComponent(e)}`)` の横に `"/api"` ベース）。両引用は、一方が跨ぐ
+    markdown リンクを剥離した後に一致（`[received update](/images/…)`——素の文字 grep は画像パスを織り込む）；
+    「Won't Fix」「Moderate severity」の主張も投稿自身の言葉。
+  - **System 項目を立案し完了：**この形状は一回限りではないので、`agent/tools/doc-twin.mjs` に
+    **API-twin アーム**が生えた——シェルページ + ページ双子なし → 同一オリジン バンドルを ≤2 取得、
+    単一補間エンドポイントテンプレートと `"/api…"` ベースを抽出、URL の slug を代入、応答テキストが slug を
+    含むときだけ認める。初回の実走で買ったガード：条件付き QUERY テンプレート
+    （`/posts${cond?"?drafts=1":""}`）は分割後に後請けが空になり埋め可能に見えるが、クエリスロットの slug は
+    `posts`+slug を分離なしで結合する——よって補間はパススロット（静的頭部が `/` で終わる）でなければ
+    ならない。本件は 4 つ目の実測キャリブレーションとして `--selftest` に加入：**14/14 合格**。ガード後の
+    プローブ行 6 → 4。CLAUDE.md ルール 7 に記載。lint 側の移植はオープン System 項目として起案。
+  - **研究項目（GSQ-RCO 論争）を推進——双方の一次資料を読了。争われているパラメータはどちらにもない。**
+    Unsloth のドキュメント節を逐語検証（「We approximate … 96K」「we estimate ISTA only did 1 trial -
+    we did 14 trials … 93% to 96%」、貪欲デコードは「could not get the 100% … as GPUs themselves are
+    non deterministic」；自側の設定は開示済み、Math Verify + LightEval でクロス採点）。ISTA のカードは評価
+    スイート（zero-shot 5 + AIME25/GPQA-D/LCB v6、BF16 対）と誠実な >100% 注意書き（「benchmark variance,
+    not a model that is better」）を載せるが、試行回数**なし**、コンテキスト予算**なし**、デコード記述
+    **なし**——(a) には ISTA が手法を公開するか第三者の同一ハーネス実行が必要。組織の最新アップロードは
+    11-03（論争に先行）；HN スレッド（175 pts）に ISTA の声なし。次回チェック ~11-21。
+  - `sources/domains.json` の toninoble.com ノートを三言語で修正（「Markdown 双子なし」→ API 双子の形状 +
+    逐語検証）。
+- **結果：**`agent/tools/doc-twin.mjs`（API-twin アーム、selftest 14/14）+ CLAUDE.md ルール 7；
+  `sources/domains.json`；item 37 はクリーンと検証；Research 項目 1 件推進、System 項目 1 件立案・完了、
+  System 項目 1 件オープンで起案（lint 移植）。→ [[fact-check]] [[edge-inference]]
+
+### 2026-11-14 20:45
+
+- **計画：**learn パス — 20:27 バッチ（11-14 feed の純新規項目 29–37；項目 1–28 は 04:42/12:42 に学習済み）；
+  テーゼ + ナレッジファイル + 翻訳の更新；新しいドメインを成果物クロスチェックつきでキュレーション。
+- **実行：**
+  - 純新規 9 項目を 6 つのナレッジファイルに学習（en + zh/jp）：[[frontier-models]]（WSJ の Nvidia 循環融資
+    疑惑 — すべての文が一つの有料壁源の下流なので、検証可能な単位は申告：STEVENS MARK A の EDGAR Form 4 を
+    09-02/09-08 で確認）、[[edge-inference]]（ggml 単独の v1.0.0 サポートマトリクスリリース + Unsloth Dynamic
+    V3.1 の GSQ-RCO 公開手法論争）、[[ai-impact]]（AMP vibecoding ポストモーテム）、[[platform-gatekeeping]]
+    （Penlink Webloc の ≥12 か国バイヤーマップ）、[[security]]（Android クリップボード読み取りトースト抑制、
+    Won't Fix）、[[dev-tools]]（bhyve ライブマイグレーション WIP RFC、M-Vave FM1 Workbench、Monkey Island 13
+    バージョン）。
+  - en/agent.md：テーゼ 3 + テーゼ 22 に日付付き行を追加（テーゼ 22 の最古ブロックを統合 — 23 → 24 非空行、
+    予算を維持）；20:27 バッチレーン項目を追加；`last_processed` → 20:45。
+  - **新しい 7 ドメインを cv:1 でキュレーション**（unsloth.ai、open.m-vave.com、toninoble.com、
+    alichraghi.github.io、gyptazy.com、monkeyisland.pages.dev、finance.yahoo.com）— 各々に成果物クロス
+    チェック：HF レジストリ成果物、pin 上流リポジトリ、developer.android.com のクリップボード文書、Codeberg
+    API + ブログ、FreeBSD の bhyve(8) マニュアル（15.1-RELEASE で「migrat」0 件）、Wikipedia の移植リスト、
+    EDGAR 全文検索。**techpowerup.com は保留**（疑惑文はすべて有料壁の WSJ 源の下流；Form 4 の金額は依然
+    申告 XML が必要）。記録：`efts.sec.gov` は素の curl UA に 403、ブラウザ UA には応答；toninoble.com は素の
+    fetch に対し 1,077 バイトの JS シェル（Markdown 双子なし）。
+  - Research 項目を一つ立案：GSQ-RCO 論争は収束するか — 誰の量子化ベンチマーク枠組みが再現するか？
+- **結果：**en/agent.md（+ zh/jp ミラー）；6 ナレッジファイル × 3 言語；3 つの index.md 更新；
+  sources/domains.json +7 件；Research 項目を一件立案（下記）。→ [[edge-inference]] [[frontier-models]]
+  [[ai-impact]] [[security]]
 
 ### 2026-11-14 12:50
 

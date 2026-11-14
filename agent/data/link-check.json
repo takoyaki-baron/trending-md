@@ -5755,105 +5755,177 @@
     },
     "https://news.ycombinator.com/item?id=50486482": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-11-13T21:21:47.208Z",
-      "last_seen": "2026-11-14T05:15:12.320Z",
+      "last_seen": "2026-11-14T13:06:02.215Z",
       "feeds": [
         "2026-11-14.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50478609": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-11-13T21:21:47.208Z",
-      "last_seen": "2026-11-14T05:15:12.320Z",
+      "last_seen": "2026-11-14T13:06:02.215Z",
       "feeds": [
         "2026-11-14.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50483611": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-11-13T21:21:47.208Z",
-      "last_seen": "2026-11-14T05:15:12.320Z",
+      "last_seen": "2026-11-14T13:06:02.215Z",
       "feeds": [
         "2026-11-14.md"
       ]
     },
     "https://www.science.org/doi/10.1126/science.132.3436.1291": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-11-13T21:21:47.208Z",
-      "last_seen": "2026-11-14T05:15:12.320Z",
+      "last_seen": "2026-11-14T13:06:02.215Z",
       "feeds": [
         "2026-11-14.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50484496": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-11-13T21:21:47.208Z",
-      "last_seen": "2026-11-14T05:15:12.320Z",
+      "last_seen": "2026-11-14T13:06:02.215Z",
       "feeds": [
         "2026-11-14.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50487185": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-14T05:15:12.320Z",
-      "last_seen": "2026-11-14T05:15:12.320Z",
-      "feeds": [
-        "2026-11-14.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=50489641": {
-      "verdict": "blocked",
-      "streak": 1,
-      "first_seen": "2026-11-14T05:15:12.320Z",
-      "last_seen": "2026-11-14T05:15:12.320Z",
+      "last_seen": "2026-11-14T13:06:02.215Z",
       "feeds": [
         "2026-11-14.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50488769": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-14T05:15:12.320Z",
-      "last_seen": "2026-11-14T05:15:12.320Z",
-      "feeds": [
-        "2026-11-14.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=50488464": {
-      "verdict": "blocked",
-      "streak": 1,
-      "first_seen": "2026-11-14T05:15:12.320Z",
-      "last_seen": "2026-11-14T05:15:12.320Z",
+      "last_seen": "2026-11-14T13:06:02.215Z",
       "feeds": [
         "2026-11-14.md"
       ]
     },
     "https://www.alphaxiv.org/abs/2611.weight-space-misfolding": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-14T05:15:12.320Z",
-      "last_seen": "2026-11-14T05:15:12.320Z",
+      "last_seen": "2026-11-14T13:06:02.215Z",
       "feeds": [
         "2026-11-14.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50483759": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-14T05:15:12.320Z",
-      "last_seen": "2026-11-14T05:15:12.320Z",
+      "last_seen": "2026-11-14T13:06:02.215Z",
+      "feeds": [
+        "2026-11-14.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50492601": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-14T13:06:02.215Z",
+      "last_seen": "2026-11-14T13:06:02.215Z",
+      "feeds": [
+        "2026-11-14.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50486178": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-14T13:06:02.215Z",
+      "last_seen": "2026-11-14T13:06:02.215Z",
+      "feeds": [
+        "2026-11-14.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50493062": {
+      "verdict": "transient",
+      "streak": 1,
+      "first_seen": "2026-11-14T13:06:02.215Z",
+      "last_seen": "2026-11-14T13:06:02.215Z",
+      "feeds": [
+        "2026-11-14.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50488325": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-14T13:06:02.215Z",
+      "last_seen": "2026-11-14T13:06:02.215Z",
+      "feeds": [
+        "2026-11-14.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50491980": {
+      "verdict": "transient",
+      "streak": 1,
+      "first_seen": "2026-11-14T13:06:02.215Z",
+      "last_seen": "2026-11-14T13:06:02.215Z",
+      "feeds": [
+        "2026-11-14.md"
+      ]
+    },
+    "https://toninoble.com/post/ctrlc-ctrlv-ctrlcve": {
+      "verdict": "dead",
+      "streak": 1,
+      "first_seen": "2026-11-14T13:06:02.215Z",
+      "last_seen": "2026-11-14T13:06:02.215Z",
+      "feeds": [
+        "2026-11-14.md"
+      ]
+    },
+    "https://finance.yahoo.com/markets/stocks/articles/nvidia-director-sold-nearly-1b-160000846.html": {
+      "verdict": "transient",
+      "streak": 1,
+      "first_seen": "2026-11-14T13:06:02.215Z",
+      "last_seen": "2026-11-14T13:06:02.215Z",
+      "feeds": [
+        "2026-11-14.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50488835": {
+      "verdict": "transient",
+      "streak": 1,
+      "first_seen": "2026-11-14T13:06:02.215Z",
+      "last_seen": "2026-11-14T13:06:02.215Z",
+      "feeds": [
+        "2026-11-14.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50492950": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-14T13:06:02.215Z",
+      "last_seen": "2026-11-14T13:06:02.215Z",
+      "feeds": [
+        "2026-11-14.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50491400": {
+      "verdict": "transient",
+      "streak": 1,
+      "first_seen": "2026-11-14T13:06:02.215Z",
+      "last_seen": "2026-11-14T13:06:02.215Z",
       "feeds": [
         "2026-11-14.md"
       ]
     }
   },
-  "runs": 177,
+  "runs": 178,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-11-14T05:15:12.320Z"
+  "last_run": "2026-11-14T13:06:02.215Z"
 }

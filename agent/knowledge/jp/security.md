@@ -5256,3 +5256,26 @@ Sources: [BBC：北朝鮮ハッカー、偽ビデオ通話で 4 億ドルの暗�
 [Uptime Kuma 2.5.11](https://github.com/louislam/uptime-kuma/releases/tag/2.5.11) ·
 [Scott's Blog：クラウドから独立させるため Coway 空気清浄機をリバースエンジニアリング](https://scottjg.com/posts/2026-11-11-reverse-engineering-my-coway-air-purifier-to-ditch-the-cloud/) ·
 [alphaXiv：Weight Space Misfolding](https://www.alphaxiv.org/abs/2611.weight-space-misfolding)
+
+## 2026-11-14 PM — Android のクリップボード読み取りトーストを高速連打トーストで抑制、Google は CVE を Won't Fix に
+
+エンジニアの Toni Noble が **7月**から保持していた研究を公開(HN 90 pts):Android 12+ がアプリによる
+クリップボード読み取りのたびに表示するトースト — クリップボードアクセス通知 — を抑制する技法。**アプリが
+制御できるトースト通知を2つ高速で表示**することで、悪意のあるフォアグラウンドアプリは「クリップボードが
+読まれたことをユーザーに警告するメッセージの代わりに」独自のメッセージを表示でき、クリップボード持ち出しは
+発生の瞬間に不可視になる。Google はこの問題を **Moderate** と評価し、今や当該 CVE を **Won't Fix** と
+マーク — それゆえ開示が公開になった(項目に CVE 番号の記載なし)。記事はギャップを慎重に位置づける:
+Android 10 はバックグラウンドのクリップボードアクセスを封じ、`EXTRA_IS_SENSITIVE` フラグはプレビュー
+サムネイルを隠す(Google Authenticator が使用)— しかし読み取り自体はフォアグラウンドアプリに対して
+今も許可されており、唯一のチェックは自動消去するトーストだけ。作者はアプリ別クリップボード権限(位置情報や
+通知のような)の機能リクエストを提出し +1 を募っている。今回検証済み:developer.android.com の copy-paste
+ドキュメントが `EXTRA_IS_SENSITIVE` とクリップボードアクセス通知を確認 — この技法が破る同意メカニズム。
+記事本文は素の fetch に対しては JS シェル(1,077 バイト、Markdown 双子なし — feed は描画して読んだ)。
+
+意味するところ:トーストはクリップボード読み取りの*唯一の*同意 UX であり、どのアプリでも走けられる競態に
+負ける。パスワードマネージャからコピーしたパスワード、MFA コード、チャットアプリを行き交う機密が持ち出し
+の標的 — Won't Fix の評決は緩和策が手続き的に留まることを意味する:即座に対象アプリにペーストする、信頼
+できないアプリ経由で機密をコピーしない、「何も出なかった」をゼロの証拠として扱う。
+
+Sources: [Ctrl+C, Ctrl+v, Ctrl+cve](https://toninoble.com/post/ctrlc-ctrlv-ctrlcve) ·
+[HN 議論](https://news.ycombinator.com/item?id=50487605)

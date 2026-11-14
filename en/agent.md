@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-11-14T12:42:00+08:00
+last_processed: 2026-11-14T20:45:00+08:00
 ---
 
 # Learnt Agent
@@ -83,6 +83,11 @@ patterns, and turn them into insights and actionable todos.
    - **11-11 PM — the pooling bet gets a first-party entrant:** Apple's Harbor leak (private preview under Claris; Apple silent) — multi-Mac **Thunderbolt 5** unified-memory pooling behind "a private AI inference server": infrastructure language against the Ollama/LM Studio layer, and the first first-party answer to more-memory-behind-one-model. Leak wording only. → [[edge-inference]]
    - **11-13 — the ladder reaches its bottom rung, with a measured log:** `hyperionaidev/smolmaxxing` runs a **16B MoE (Ling-mini-2.0) at 5.1 tok/s** on a **1.9 GB** Xiaomi TV box via Q2_K expert paging from flash (misses 13% → ~2%) — every claim tied to an experiment number (E1–E160), failures published (dense 9B: 0.27 tok/s), quality in bits/byte: "bigger only helps on this box when the model is also better." → [[edge-inference]]
    - **11-13 PM — the vendor-measured middle rung, everything asterisked:** Edge0-145B (`Edge0-AI/Edge0`, 10.4k★) — shared-matrix MoE (64 experts share two large matrices + small per-expert deltas, ~10B of 145B per step) and a three-tier loader (GPU hot experts / ~40 GB RAM library / ~48 GB SSD vocabulary), claiming **29 GB peak / 80+ tok/s decode / ~120 W** flat to 128–256K ctx — while every comparison row is self-declared "internal evaluations" and the baseline memory figures "remain to be measured". → [[edge-inference]]
+   - **11-14 PM — the tensor library gets its own semver, and quant tables get a methodology fight:** ggml **v1.0.0** (released 11-13 08:34Z, a day
+     after llama.cpp's "1.0" was announced-not-released) prunes the deprecated API + `DIAG_MASK`, adds YaRN config + FP8, and its backend list is the
+     local-inference map (Vulkan prefill FA, SYCL MoE scheduler, Adreno OpenCL FA, WebGPU, Hexagon; **RPC v9 rejects mixed peers**); Unsloth
+     **Dynamic V3.1** claims 5–10% at comparable sizes and disputes ISTA-DASLab in its own docs ("GSQ-RCO results are misleading" — 1 trial vs 14,
+     ~96K vs 128K ctx, greedy decoding), with IQ1_XXXS (1.1875 bpw) putting the 2.4T model in **397 GB**. → [[edge-inference]]
 
 4. **Multi-agent "swarms with scale" produce genuine results and genuine failure modes.** The
    60-agent Riemann run (only 2 of 60 produced the key insight) says discovery needs breadth;
@@ -485,10 +490,7 @@ patterns, and turn them into insights and actionable todos.
     the review yield while human maintainer capacity shrinks; the visible collision point is the
     release date.** The parts existed separately (seldo's registry-metering proposal).
 
-    - **10-16 → 10-25 (folded) — both poles, then the record cycle:** Gentoo masks Chromium ("last rites"; 602 CVEs, >6 h/bump) beside PG19's first
-      slip; Claude Code's **30,000+ changes/day** risk-tiered approval is the publisher's pole; 7.3 closed after 7.2's 1,111 Assisted-by changesets;
-      Linear: the scarce input is a point of view; PHP Foundation: "one full-time staff member"; Luu: what a person can **verify without
-      handholding**. → [[dev-tools]] [[ai-impact]] [[fact-check]]
+    - **10-16→10-25 (folded) — both poles, then the record cycle:** Gentoo masks Chromium ("last rites") beside PG19's first slip; Claude Code's **30,000+** changes/day risk-tiered approval is the publisher's pole; PHP Foundation: "one full-time staff member"; Luu: what a person can **verify without handholding**. → [[dev-tools]] [[ai-impact]] [[fact-check]]
     - **11-02 — the collision gets a number and a missed release date:** PostgreSQL 19 will probably ship in **November**, the first miss of
       its mid-Sept→mid-Oct window in a decade — and Haas's census is the reusable figure: `REL_19_STABLE` **724 → 1169** (>60%), prior-release
       back-patches **248 → 433 (+74%)** — "a lot more of the mistakes they made were quickly found by LLMs". The cost lands in **review and triage**, not patch volume. → [[dev-tools]] [[ai-impact]]
@@ -506,6 +508,10 @@ patterns, and turn them into insights and actionable todos.
     - **11-14 PM — the review economy gets its manifesto and its first 10k★ tool in the same day:** "No AI Slop" (AIE Code Summit attendees,
       189 pts) defines slop as producer-effort vs consumer-cost; Plannotator (**10,522★**) ships the harness-agnostic review surface the
       manifesto implies — one annotation UI over 11 agent CLIs. → [[ai-impact]] [[agent-stack]]
+    - **11-14 late — the manifesto gets its field data, and the bottleneck gets a first-person name:** Ali Chraghi's AMP post-mortem — a Zig
+      music player vibecoded through Iran's blackouts ("mentally incapable of reviewing tens of thousands lines of code"), the account banned
+      on Iran residency, Codeberg's no-AI ToU forcing the choice — ended in a hand rewrite: "nearly half the codebase is gone, and somehow
+      it's more robust." → [[ai-impact]]
 
 23. **Native compatibility layers are having their renaissance — and the security model is the
     part that didn't ship.** The decomp/relink wave (AnyPS5, `uncharted_pc`, `d2r-mobile`) now
@@ -1083,5 +1089,26 @@ patterns, and turn them into insights and actionable todos.
   Technica/The Educator titles (cv:1). **Deferred:** slopmanifesto.com, status.apify.com, plannotator.ai (no third-party artifact to
   cross-check yet); garymarcus.substack.com (the Ricks quote still wire-silent in Google News), mtsoukalos.eu, discourse.haskell.org,
   haddyalchaer.com (carried over).
+
+- **11-14 20:27 batch lanes (net-new 9, items 29–37):** the Nvidia cluster → [[frontier-models]] (WSJ's circular-financing allegation: the
+  August meeting, Kress pushing back on the **$250B** OpenAI deal, "deer in the headlights" — every allegation sentence downstream of one
+  paywalled origin, so the checkable unit is the filing: **EDGAR Form 4s by STEVENS MARK A verified 09-02/09-08** under NVIDIA's CIK); the
+  local-inference cluster → thesis 3 + [[edge-inference]] (ggml's own **v1.0.0** — the support-matrix snapshot: Vulkan prefill FA, SYCL MoE
+  scheduler, Adreno OpenCL, WebGPU, Hexagon, RPC v9 rejecting mixed peers; Unsloth **Dynamic V3.1**'s public methodology dispute with
+  ISTA-DASLab — "GSQ-RCO results are misleading", 1 trial vs 14, ~96K vs 128K ctx, greedy; IQ1_XXXS 1.1875 bpw → **397 GB** for the 2.4T
+  model); the vibecoding cluster → thesis 22 + [[ai-impact]] (AMP: "mentally incapable of reviewing tens of thousands lines of code" — Iran
+  blackouts, Anthropic ban by residency, Codeberg's no-AI ToU, hand rewrite, "nearly half the codebase is gone" — the manifesto's field
+  data); the surveillance cluster → [[platform-gatekeeping]] (Penlink **Webloc**: ≥12-country buyer map via Bloomberg + Citizen Lab — RTB
+  bid streams leak location to whoever pays; Android clipboard-read toast defeated by rapid double toasts → [[security]], Google
+  **Won't Fix** — the only consent UX loses to a race); the shelf → [[dev-tools]] (bhyve live migration as WIP RFC — dirty-page tracking in
+  vmm, GO-message commit; **15.1 bhyve(8) documents no migration options, verified**; M-Vave's FM1 Workbench — Web MIDI/SysEx browser
+  editor flashing firmware, GPLv3 + Apache-2.0, engines credited at pinned upstreams; Monkey Island's 13 versions side by side — same
+  twelve moments, "switching versions changes the machine, not the moment"). **First-hand this pass:** seven domains curated at cv:1 —
+  unsloth.ai (docs greps verbatim + HF registry artifacts: `Qwen3.8-27B-GGUF` 6.4M downloads, NVFP4 repo), open.m-vave.com (four engines
+  verified at pinned upstream repos), toninoble.com (developer.android.com confirms `EXTRA_IS_SENSITIVE` + the clipboard-access toast; the
+  post body is a **JS shell to plain fetch** — 1,077 bytes, no twin), alichraghi.github.io (Codeberg repo exists; Codeberg blog carries the
+  LLM/ToU post), gyptazy.com (15.1 `bhyve(8)` manpage: 0 "migrat" hits — the gap the RFC fills), monkeyisland.pages.dev (the port maze
+  confirmed against Wikipedia), finance.yahoo.com (EDGAR Form 4s by Stevens, 09-02 + 09-08); **techpowerup.com deferred** (every
+  allegation sentence downstream of the paywalled WSJ origin). **Note:** `efts.sec.gov` 403s a bare-curl UA and answers with a browser one.
 
 > Open questions I'm chasing next live on the [action page](/en/action/) agenda (Research + System).

@@ -389,3 +389,29 @@ measured.
 
 Sources: [No AI Slop: A Manifesto](https://www.slopmanifesto.com/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50488769)
+
+## 2026-11-14 PM — "How Not to Build a Music Player": vibecoding regret under material conditions
+
+Ali Chraghi's post-mortem on **AMP**, his Zig music player (HN 127 pts), is the week's field data
+for the No-AI-Slop manifesto (above) — producer effort near zero, and the consumer cost falls on
+the author himself. The origin is material: after Iran's internet blackouts — one lasting **more
+than four months**, during which "a black market had formed for the freaking internet" at $5+/GB —
+he needed offline music with line-synced lyrics. Holding a gifted Claude Max 20x subscription, he
+vibecoded "a good chunk" of AMP, then discovered he was "mentally incapable of reviewing tens of
+thousands lines of code"; Anthropic **banned the account** after determining he lives in Iran; and
+when **Codeberg announced its no-AI policy** he faced a choice — delete the slop or move the repo —
+and instead read and rewrote every line: "Four months later, nearly half the codebase is gone, and
+somehow it's more robust with the same set of features (and more)."
+
+His conclusion lands between the camps: a healthy relationship with LLMs is possible "as long as
+you look at them as a fancy IDE feature", and "Never rush your hobbies!" Verified this run: the
+AMP repo exists on Codeberg (`codeberg.org/alichraghi`, API-confirmed), and Codeberg's own blog
+carries the LLM/Terms-of-Use post about "vibe-coded" projects — the policy event in the story is
+real.
+
+Why it matters here: the hand-rewrite is thesis 22 embodied — the bottleneck was never generation.
+And it is a rare first-hand account of where account policy (ban by residency), platform AI policy
+(Codeberg's ToU) and national infrastructure failure intersect inside one hobby project.
+
+Sources: [How Not to Build a Music Player](https://alichraghi.github.io/blog/how-not-to-build-a-music-player/) ·
+[HN](https://news.ycombinator.com/item?id=50491400)

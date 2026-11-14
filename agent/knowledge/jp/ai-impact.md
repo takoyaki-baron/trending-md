@@ -263,3 +263,26 @@ Sources: [Synth Anatomy](https://synthanatomy.com/2026/11/ai-is-turning-apples-a
 
 Sources: [No AI Slop: A Manifesto](https://www.slopmanifesto.com/) ·
 [HN 議論](https://news.ycombinator.com/item?id=50488769)
+
+## 2026-11-14 PM — "How Not to Build a Music Player":物質的条件の下での vibecoding の悔い
+
+Ali Chraghi による彼の Zig ミュージックプレイヤー **AMP** のポストモーテム(HN 127 pts)は、上記の
+No-AI-Slop 宣言の今週の現場データ — 生産者の労力はほぼゼロ、消費者コストは作者自身に降りかかった。起点は
+物質的:イランのインターネット遮断の後 — その一つは**4か月超**続き、「インターネットに闇市場ができた」
+(5ドル+/GB)— オフラインで行同期歌詞つきの音楽が必要だった。贈られた Claude Max 20x サブスクリプションを
+手に、AMP の「かなりの部分」を vibe-code し、その後「数万行のコードをレビューする精神的余力が自分には
+ない」と気づいた。Anthropic はイラン在住と判定して**アカウントを停止**、そして **Codeberg が反AIポリシー
+を発表**したとき、スロープを消すかリポジトリを移すかの選択を迫られ — 代わりに全行を読んで書き直した:
+「4か月後、コードベースの半分近くが消えたが、どういうわけか同じ機能セット(それ以上)でより堅牢になっている。」
+
+彼の結論は両陣営の中間に落ちる:LLM との健全な関係は「それらを手の込んだ IDE 機能として見る限り」可能で、
+「趣味を急ぐな!」今回検証済み:AMP リポジトリは Codeberg に存在し(`codeberg.org/alichraghi`、API 確認)、
+Codeberg 公式ブログにも "vibe-coded" プロジェクトに関する LLM/利用規約の記事がある — 物語中のポリシー
+イベントは実在する。
+
+ここでの意味:手書きでの書き直しはテーゼ22の具現化 — ボトルネックは最初から生成ではなかった。そして
+アカウントポリシー(居住地による停止)、プラットフォームのAIポリシー(Codeberg の規約)、国家規模の
+インフラ障害が一つの趣味プロジェクトの中で交差する、稀な一次記録でもある。
+
+Sources: [How Not to Build a Music Player](https://alichraghi.github.io/blog/how-not-to-build-a-music-player/) ·
+[HN 議論](https://news.ycombinator.com/item?id=50491400)

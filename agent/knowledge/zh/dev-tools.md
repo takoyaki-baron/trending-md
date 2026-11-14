@@ -1355,3 +1355,36 @@ Josh——Rust TUI 库 **Ratatui** 的维护者之一（本轮对照 ratatui 的
 Sources: [joshka.net：不占格子的终端边框](https://www.joshka.net/cell-borders/) ·
 [ratatui MAINTAINERS.md](https://github.com/ratatui/ratatui/blob/main/MAINTAINERS.md) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50491423)
+
+## 2026-11-14 PM — bhyve 热迁移以 WIP RFC 形式落地;M-Vave FM1 Workbench;Monkey Island 十三个版本、一种取景
+
+**FreeBSD bhyve 热迁移(WIP RFC;HN 112 分)。** gyptazy 在 FreeBSD 15.1 上发布首个可用状态:一个运行中的
+amd64 客户机经 TCP 在两台主机间迁移,只在最后的停机-拷贝阶段暂停。实现建立在 bhyve 实验性快照支持之上,
+向 vmm 内核模块加入**脏页跟踪**,并在 `bhyve`/`bhyvectl` 中加入迁移协议 —— 迭代预拷贝轮次发送变更页,直到
+脏集 fits 停机目标(或达到轮次上限),客户机暂停、最终状态传输、目的端校验并恢复 —— 且只有源端的最后一条
+**`GO`** 消息才提交;`GO` 之前,失败的迁移可以恢复源端客户机。还附带温热停机-拷贝模式,作为回退与对比基线。
+动机具体:**Sylve**(类 Proxmox 的 FreeBSD 虚拟化平台)与免费 VPS 供应商 BoxyBSD 都需要迁移才能让例行主机
+维护可存活。本轮已核验:15.1-RELEASE 的 `bhyve(8)` 手册页未记载任何迁移选项(man.freebsd.org,"migrat"
+0 命中)—— 空缺属实,而热迁移是十年来 bhyve 对 KVM 最大的缺口。形态才是重点:协议写清楚的 RFC 意味着
+评审发生在行为定格之前。
+
+**M-Vave FM1 Workbench**(open.m-vave.com;HN 240 分)。珠海平价 MIDI 厂商为其 FM-1 复音合成器发布完整的
+单页编辑器,在**未连接设备**时也能在浏览器运行 —— 六个声音引擎全部可试奏(DX7 式 FM、303 acid、808 鼓机、
+PSG 芯片、拨弦、采样器)—— 再经 **Web MIDI/SysEx** 连接:带读回校验的工程保存、128 音色 DX7 库、8 槽采样库
+(436 KiB ≈ 19.55 s),甚至能**从页面刷固件**,含恢复模式与官方/"Open" 固件间迁移。对一个平价厂商来说许可
+异常严肃:应用 GPLv3(FM1 SDK 链接例外)、固件资源 Apache-2.0、源码与 SDK 可下载、第三方引擎逐组件署名 ——
+本轮已在其 pin 的上游核验(asb2m10/dexed 的 MSFA FM 模型、RobinSchmidt/Open303、daisyaudio/DaisySP、
+digital-sound-antiques/emu2149)。开放硬件的门槛悄悄抬高了:文档、浏览器工具、固件更新路径与许可证链 ——
+桌面音频项目都难以维护的东西,出自一家以廉价设备为业的厂商;Web MIDI 正在成为乐器 UX 的真实分发渠道。
+
+**《The Secret of Monkey Island》13 个版本并列对比**(monkeyisland.pages.dev;HN 189 分)。一个游戏保存爱好
+项目用 ScummVM 截取全部 13 个版本的每一屏(Atari ST 单色版经 Hatari 模拟器),缩放至 1600×1200 最近邻、
+4:3 校正 —— "让每个原始像素保持它在当年显示器上的形状"。对比纪律即工艺:同样的十二个时刻,每个版本取景
+完全一致 —— "切换版本改变的是机器,不是时刻" —— 外加用 CRT 着色器实验室做年代适配的显示仿真,对奇怪拷贝
+(西班牙 PC 版、法国 Atari ST 版)给出诚实来源。受控变量加上写明的截取流水线,正是参考档案与怀旧画廊的
+分界线。
+
+Sources: [gyptazy RFC](https://gyptazy.com/blog/freebsd-bhyve-live-migration-support-rfc/) ·
+[FM1 Workbench](https://open.m-vave.com/fm1-workbench) ·
+[13 versions](https://monkeyisland.pages.dev/) ·
+[bhyve HN 讨论](https://news.ycombinator.com/item?id=50488835)

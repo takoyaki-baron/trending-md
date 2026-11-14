@@ -496,3 +496,22 @@ The Guardian が反転を描く：**4 月以降、7 州の少なくとも 10 の
 
 Sources: [The Guardian：米大学生、監視カメラに「Flock off」と](https://www.theguardian.com/technology/ng-interactive/2026/nov/13/universities-drop-flock-camera-contracts) ·
 [HN 議論](https://news.ycombinator.com/item?id=50483759)
+
+## 2026-11-14 PM — Penlink Webloc:広告ベースの位置情報サプライチェーンに 12+ か国の政府バイヤー
+
+**Penlink の Webloc** — デジタル広告エコシステム経由で位置データを取得する広告ベースの監視システム — に
+関する **Bloomberg** の調査(HN 113 pts)は Citizen Lab の4月の研究の上に組み上がり、顧客マップを広げ続けて
+いる:ラボはオープンソース調査・FOIA・サーバインフラのマッピングで**米国、エルサルバドル、ハンガリー**の
+バイヤーを特定し、オーストリア内務省がその後に確認され、Bloomberg が**英国、オランダ、ドイツ、メキシコ、
+シンガポール、サウジアラビア、UAE、イスラエル**を追加 — 最低 12 か国。Citizen Lab 上級研究員 Wolfie Christl:
+Webloc は「軍や情報機関から連邦法執行機関へ、さらに州・地方の警察へと浸透していく強力な大量監視ツール」。
+ラボは、欧州と英国でのこの種システムの合法性が「高度に議論のある」こと、特定された権威主義国家での利用が
+「特に危険」なことを指摘している。
+
+ここでの意味:メカニズムは決して変わらない — RTB 入札ストリームは、アクセスに対して支払う者全員に正確な
+位置を漏らす — そして報道が追うごとに広がるのは既知のバイヤー集合であって技法ではない。同じ日の Flock 解約
+ラインと合流する:異議の対象は位置履歴のネットワーク化されたクエリ可能性であり、バイヤーマップは今や
+多国籍 — 位置プライバシー規制が最も厳しい EU 加盟国を含む。
+
+Sources: [Citizen Lab](https://citizenlab.ca/security-agencies-worldwide-found-to-use-ad-based-surveillance-system/) ·
+[HN 議論](https://news.ycombinator.com/item?id=50492950)

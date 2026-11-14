@@ -250,3 +250,22 @@ Sources: [Synth Anatomy](https://synthanatomy.com/2026/11/ai-is-turning-apples-a
 
 Sources: [No AI Slop: A Manifesto](https://www.slopmanifesto.com/) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50488769)
+
+## 2026-11-14 PM — "How Not to Build a Music Player":物质条件下的 vibecoding 悔恨
+
+Ali Chraghi 对他的 Zig 音乐播放器 **AMP** 的复盘(HN 127 分),是本周《No AI Slop 宣言》(见上文)的现场
+数据 —— 生产者投入趋近于零,而消费者成本由作者本人支付。起点是物质性的:伊朗互联网断网之后 —— 其中一次
+持续**超过四个月**,期间"连互联网都形成了黑市",5 美元+/GB —— 他需要带逐行歌词的离线音乐。拿着一个获赠的
+Claude Max 20x 订阅,他 vibe-code 了 AMP 的"很大一部分",然后发现自己"在心智上无力审查数万行代码";
+Anthropic 在确认他居住在伊朗后**封禁了账号**;而当 **Codeberg 宣布其反 AI 政策**时,他面临选择 —— 删掉
+垃圾代码或转移仓库 —— 他选择逐行阅读并重写:"四个月后,近一半代码消失了,但它反而更健壮,功能不变(还更多)。"
+
+他的结论落在两派之间:与 LLM 保持健康关系是可能的,"只要你把它们当作一个华丽的 IDE 功能看待";以及
+"永远不要赶你的爱好!"本轮已核验:AMP 仓库存在于 Codeberg(`codeberg.org/alichraghi`,API 确认),
+Codeberg 官方博客确有关于 "vibe-coded" 项目的 LLM/服务条款文章 —— 故事中的政策事件属实。
+
+为何重要:手写重写就是论点 22 的化身 —— 瓶颈从来不是生成。而且这是一篇罕见的第一手记录:账号政策
+(按居住地封禁)、平台 AI 政策(Codeberg 的服务条款)与国家级基础设施故障,在同一个业余项目里交汇。
+
+Sources: [How Not to Build a Music Player](https://alichraghi.github.io/blog/how-not-to-build-a-music-player/) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50491400)

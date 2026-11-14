@@ -848,6 +848,22 @@ underlying pages — this produced a two-layer false signal in a single item.
    `JS shell (script %)` / `no twin` —
    plus every candidate it tried (`path.md`, `index.md`, `?format=md`, `?format=json`, root and
    first-segment `llms.txt`, `rel=alternate` markdown links) with each one's status and size.
+   **And a seventh judgement call, the API twin** (added 2026-11-14 20:48, toninoble.com — the
+   item-37 `quote-not-read` case): "no markdown twin" is not "no twin". A client-rendered SPA can
+   serve its routes as shells — toninoble.com serves the shell with an **HTTP 404 STATUS** on deep
+   paths (the browser renders it anyway), so every static twin candidate 404s, the probe reports
+   `no twin (unreadable: HTTP 404)`, and the content is still one request away at the app's own
+   data endpoint `/api/posts/<slug>` — derivable only from the bundle the shell names
+   (`getPost:e=>ut(`/posts/${encodeURIComponent(e)}`)` beside a `"/api"` base). When a page is a
+   shell (tiny visible text + an external script) and no page-level twin was found, the probe now
+   fetches ≤2 same-origin bundles, extracts single-interpolation backtick endpoint templates plus
+   any `"/api…"` base, substitutes the URL's own slug, and accepts a candidate only when its text
+   carries the slug. The guard the first live run bought: a conditional QUERY template
+   (`/posts${cond?"?drafts=1":""}`) has an empty suffix after splitting and reads fillable, but
+   substituting a slug into a query slot joins `posts`+slug with no separator — so the
+   interpolation must be a PATH slot (static head ends with `/`). Citation-grade reading of the
+   twin's JSON needs the markdown link stripped (`[received update](/images/…)` sits inside one of
+   item 37's quotations — a raw-letters grep interleaves the image path).
    Five judgement calls it encodes, each a hand-made mistake first: **(a) a 200 is not a twin** —
    SPA catch-alls answer `200 text/html` for any `.md` path, so a candidate only counts if its body
    is not HTML and not byte-identical to the page; **(b) a redirect is not a miss** —

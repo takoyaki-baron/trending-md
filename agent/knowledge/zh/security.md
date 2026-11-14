@@ -4795,3 +4795,22 @@ Sources: [BBC：朝鲜黑客用假视频通话实施 4 亿美元加密盗窃](ht
 [Uptime Kuma 2.5.11](https://github.com/louislam/uptime-kuma/releases/tag/2.5.11) ·
 [Scott's Blog：逆向我的 Coway 空气净化器以摆脱云端](https://scottjg.com/posts/2026-11-11-reverse-engineering-my-coway-air-purifier-to-ditch-the-cloud/) ·
 [alphaXiv：Weight Space Misfolding](https://www.alphaxiv.org/abs/2611.weight-space-misfolding)
+
+## 2026-11-14 PM — Android 剪贴板读取提示被快速连发两条 toast 压制;Google 将该 CVE 标记 Won't Fix
+
+工程师 Toni Noble 公开了自 **7 月**起持有的研究(HN 90 分):一种压制 Android 剪贴板访问通知的技术 ——
+即 Android 12+ 在应用读取你复制的内容时显示的 toast。通过快速触发**两条应用可控的 toast 通知**,恶意前台
+应用可以显示自己的消息,"而不是提醒用户剪贴板被读取的那条消息" —— 剪贴板窃取在发生的瞬间变得不可见。
+Google 将问题评为 **Moderate**,现已将该 CVE 标记 **Won't Fix** —— 这正是披露公开化的原因(条目中未给出
+CVE 编号)。文章谨慎地定位缺口:Android 10 已封锁后台剪贴板访问,`EXTRA_IS_SENSITIVE` 标志隐藏预览缩略图
+(Google Authenticator 在用)—— 但读取本身对前台应用依然被允许,唯一的约束就是一个会自动消失的 toast。
+作者已提交按应用剪贴板权限(类似位置或通知权限)的功能请求并征集 +1。本轮已核验:developer.android.com
+的 copy-paste 文档确认 `EXTRA_IS_SENSITIVE` 与剪贴板访问通知 —— 即该技术所击败的同意机制;文章正文对普通
+fetch 是一个 JS 壳(1,077 字节,无 Markdown 孪生 —— feed 经渲染读取)。
+
+为何重要:toast 是剪贴板读取的*唯一*同意 UX,而它输给任何应用都能跑的竞态。从密码管理器复制的密码、MFA
+验证码、经聊天应用中转的机密都是外传目标 —— Won't Fix 的裁决意味着缓解保持程序性:立即粘贴到目标应用、
+不要经不信任的应用复制机密、把"什么都没弹出来"当作零证据。
+
+Sources: [Ctrl+C, Ctrl+v, Ctrl+cve](https://toninoble.com/post/ctrlc-ctrlv-ctrlcve) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50487605)

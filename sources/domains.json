@@ -551,6 +551,15 @@
   "jp": "Alibaba Cloudの公式ブログ。クラウドモデル公開（Wan3.0等）の一次情報源——ベンダー発表で、限界は投稿内で自ら言及。",
   "zh": "阿里云官方博客；云模型发布（如 Wan3.0）的一手来源——厂商公告，其局限在文中自行说明。"
  },
+ "alichraghi.github.io": {
+  "cat": "community",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "Ali Chraghi's blog — Zig/systems posts. The 11-14 post-mortem on AMP (a Zig music player vibecoded through Iran's internet blackouts, then hand-rewritten line by line) is the No-AI-Slop manifesto's field data. Cross-checked (11-14): the AMP repo exists on Codeberg (api: codeberg.org/alichraghi) and Codeberg's own blog carries the LLM/Terms-of-Use post about \"vibe-coded\" projects — the policy event in the story.",
+  "zh": "Ali Chraghi 的博客 —— Zig/系统编程文章。11-14 关于 AMP(Zig 音乐播放器,在伊朗断网期间 vibe-code,后逐行手写重写)的复盘是《No AI Slop 宣言》的现场数据。交叉核验(11-14):AMP 仓库存在于 Codeberg(api: codeberg.org/alichraghi),Codeberg 官方博客确有关于 \"vibe-coded\" 项目的 LLM/服务条款文章 —— 故事中的政策事件属实。",
+  "jp": "Ali Chraghi のブログ — Zig/システム寄りの記事。11-14 の AMP(Zig ミュージックプレイヤー、イランのネット遮断下で vibe-code され、後に全行手書きで書き直された)検証記事は No-AI-Slop 宣言の現場データ。クロスチェック(11-14):AMP リポジトリは Codeberg に存在(api: codeberg.org/alichraghi)、Codeberg 公式ブログにも \"vibe-coded\" プロジェクトに関する LLM/利用規約の記事がある — 物語中のポリシーイベントは実在。"
+ },
  "alignment.openai.com": {
   "cat": "vendor",
   "cred": "high",
@@ -4897,6 +4906,15 @@
   "jp": "新浪財経 — 大量配信型の中国ビジネス／テック系ワイヤの集約。中国ベンダーの発表（iFlytek、Alibaba、DeepSeek）には速いが、ほぼ発表会の再報道であり、そこに載るベンチマークはベンダー報告として扱うべき。",
   "zh": "新浪财经 —— 高频中文财经科技聚合；对中国厂商发布（讯飞、阿里、DeepSeek）反应快，但几乎都是转述发布会，其重复的厂商跑分应视为厂商标称。"
  },
+ "finance.yahoo.com": {
+  "cat": "news",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "Yahoo Finance — wire/syndication host for market reporting (Moneywise's inside-Nvidia pieces run here). Cross-checked (11-14): its Mark Stevens director-sales report (~$946M across three batches Aug 31–Sep 18) reconciles with EDGAR full-text search — Form 4 filings by STEVENS MARK A (CIK 0001199039) dated 2026-09-02 and 2026-09-08 under NVIDIA's CIK. Amounts still need the filing XML.",
+  "zh": "Yahoo Finance —— 市场报道的转载/聚合主机(Moneywise 的 Nvidia 内幕报道在此发布)。交叉核验(11-14):其 Mark Stevens 董事减持报道(8月31日–9月18日三批共约 9.46 亿美元)与 EDGAR 全文检索对上 —— NVIDIA CIK 下有 STEVENS MARK A(CIK 0001199039)2026-09-02 与 2026-09-08 的 Form 4 申报;具体金额仍需申报 XML。",
+  "jp": "Yahoo Finance — 市場報道の転載/配信ホスト(Moneywise の Nvidia 内部報道はここに掲載)。クロスチェック(11-14):Mark Stevens 取締役売却の報道(8月31日–9月18日に3回・計約9.46億ドル)は EDGAR 全文検索と整合 — NVIDIA の CIK 下に STEVENS MARK A(CIK 0001199039)名義の Form 4(2026-09-02 と 2026-09-08)。金額は申告 XML での確認が残る。"
+ },
  "fingerprint.garden": {
   "cat": "data",
   "cred": "med",
@@ -5840,6 +5858,15 @@
   "en": "Academic homepage hosting peer-reviewed papers (GPUThor, CCS '26); PDF confirmed to exist and load, text-layer extraction failed in-tool — cite with THN/venue corroboration.",
   "jp": "査読論文を公開する研究者ホームページ(GPUThor、CCS '26)。PDF の存在と読み込みは確認済みだがツール内のテキスト抽出は失敗——THN/会議側の裏付けと併せて引用。",
   "zh": "托管同行评审论文的学者主页（GPUThor，CCS '26）；已确认 PDF 存在且可加载，但工具内文本层提取失败——引用时需 THN/会议方佐证。"
+ },
+ "gyptazy.com": {
+  "cat": "community",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "gyptazy's blog (FreeBSD developer, BoxyBSD founder) — virtualization infrastructure posts. The 11-14 WIP RFC publishes bhyve's first working live migration (dirty-page tracking in the vmm kernel module, pre-copy protocol, GO-message commit). Cross-checked (11-14): FreeBSD 15.1-RELEASE's bhyve(8) manpage documents no migration options (man.freebsd.org, 0 \"migrat\" hits) — the gap the RFC fills is real.",
+  "zh": "gyptazy 的博客(FreeBSD 开发者、BoxyBSD 创始人)—— 虚拟化基础设施文章。11-14 的 WIP RFC 发布 bhyve 首个可用的热迁移(vmm 内核模块脏页跟踪、预拷贝协议、GO 消息提交)。交叉核验(11-14):FreeBSD 15.1-RELEASE 的 bhyve(8) 手册页未记载任何迁移选项(man.freebsd.org,\"migrat\" 0 命中)—— RFC 填补的空缺属实。",
+  "jp": "gyptazy のブログ(FreeBSD 開発者、BoxyBSD 創設者)— 仮想化インフラの記事。11-14 の WIP RFC は bhyve 初の実用ライブマイグレーションを公開(vmm カーネルモジュールのダーティページ追跡、プレコピー方式、GO メッセージで確定)。クロスチェック(11-14):FreeBSD 15.1-RELEASE の bhyve(8) マニュアルには移行オプションの記載なし(man.freebsd.org、\"migrat\" 0 件)— RFC が埋めるギャップは実在。"
  },
  "hacchoomiso.github.io": {
   "cat": "research",
@@ -8417,6 +8444,15 @@
   "jp": "MongoDB ニュースルーム——公式製品発表（Atlas マネージド MCP）。直接読了：ホスト型 MCP エンドポイント + 対応エージェントを確認。OAuth 2.1 の詳細はドキュメント/中国語報道。",
   "zh": "MongoDB 新闻室——官方产品发布（Atlas 托管 MCP）。已一手核读：托管 MCP 端点 + 支持 agent 列表属实；OAuth 2.1 细节在文档/中文报道中。"
  },
+ "monkeyisland.pages.dev": {
+  "cat": "community",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "A game-preservation passion project comparing all 13 versions of The Secret of Monkey Island side by side (ScummVM captures, the same twelve moments identically framed, CRT-shader lab). Cross-checked (11-14): the multi-platform port maze the site documents (DOS/Amiga/Atari ST/FM Towns originals + the Special Edition line) is confirmed against Wikipedia's article; the 13-version enumeration itself is site-internal.",
+  "zh": "游戏保存爱好项目,将《The Secret of Monkey Island》全部 13 个版本并列对比(ScummVM 截图、十二个相同时刻统一取景、CRT 着色器实验室)。交叉核验(11-14):站点记录的多平台移植谱系(DOS/Amiga/Atari ST/FM Towns 原版 + Special Edition 系)已对 Wikipedia 词条确认;13 个版本的枚举本身是站点内部口径。",
+  "jp": "ゲーム保存の趣味プロジェクト、『The Secret of Monkey Island』全13バージョンを並べて比較(ScummVM キャプチャ、同じ12場面を同一構図で、CRTシェーダーラボ)。クロスチェック(11-14):サイトが記録するマルチプラットフォーム移植の系譜(DOS/Amiga/Atari ST/FM Towns 原版 + Special Edition 系)を Wikipedia 記事で確認;13バージョンの列挙自体はサイト内部の区分。"
+ },
  "mortoray.com": {
   "cat": "community",
   "cred": "med",
@@ -9242,6 +9278,15 @@
   "en": "Official marketing site for Orca by Stably AI; all attributed features confirmed on the page 09-21 (parallel agents in git worktrees, iOS/Android companion apps, Design Mode, GitHub/Linear, SSH, MIT, YC-backed). Cross-validated against github.com/stablyai/orca (73.5k stars, MIT) — a vendor site with self-serving framing; the verifiable claims all check out.",
   "jp": "Stably AI の Orca 公式マーケティングサイト。帰属された機能はすべて本文（09-21 確認）に存在（git worktree での並列エージェント、iOS/Android コンパニオンアプリ、Design Mode、GitHub/Linear、SSH、MIT、YC-backed）。github.com/stablyai/orca（73.5k スター、MIT）とクロス検証 — ベンダーサイトなので自己都合の枠組みはあるが、検証可能な主張はすべて確認。",
   "zh": "Stably AI 的 Orca 官方营销网站。所有被引用的功能均已在页面核实（09-21）：git worktree 并行 agent、iOS/Android 伴侣应用、Design Mode、GitHub/Linear 集成、SSH、MIT 开源、YC 投资。已与 github.com/stablyai/orca（73.5k 星、MIT）交叉验证——属厂商自述网站，营销口径在所难免，但可核查的主张全部属实。"
+ },
+ "open.m-vave.com": {
+  "cat": "vendor",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "M-Vave's open-hardware portal — the FM1 Workbench, a browser editor for the FM-1 synth (Web MIDI/SysEx, firmware flashing from the page, official↔Open build migration). Cross-checked (11-14): the four credited third-party engines resolve at their pinned upstream repos (asb2m10/dexed msfa, RobinSchmidt/Open303, daisyaudio/DaisySP, digital-sound-antiques/emu2149) and the license chain (GPLv3 app + Apache-2.0 firmware resources) greps from the page.",
+  "zh": "M-Vave 的开放硬件门户 —— FM1 Workbench,FM-1 合成器的浏览器编辑器(Web MIDI/SysEx、页面内刷固件、官方↔Open 固件迁移)。交叉核验(11-14):四个署名第三方引擎均在其 pin 的上游仓库解析成功(asb2m10/dexed msfa、RobinSchmidt/Open303、daisyaudio/DaisySP、digital-sound-antiques/emu2149),许可证链(GPLv3 应用 + Apache-2.0 固件资源)可从页面 grep 到。",
+  "jp": "M-Vave のオープンハードウェアポータル — FM1 Workbench、FM-1 シンセのブラウザエディタ(Web MIDI/SysEx、ページからのファーム書き込み、公式↔Open ビルド移行)。クロスチェック(11-14):クレジットされた4つのサードパーティエンジンはいずれも pin された上流リポジトリで解決(asb2m10/dexed msfa、RobinSchmidt/Open303、daisyaudio/DaisySP、digital-sound-antiques/emu2149)、ライセンス連鎖(GPLv3 アプリ + Apache-2.0 ファームウェア資源)はページから grep 可能。"
  },
  "open.maic.chat": {
   "cat": "vendor",
@@ -13250,6 +13295,15 @@
   "jp": "Tom Wojcik（AppSecエンジニア）の個人エッセイ。クロスチェック済み（10-06）：2026年9月 roundup のヘッドライン数値（上半期12万テック職削減、エントリーレベル求人に平均47応募/ジュニアフロントエンド146件、人型ロボット出荷の約90%が中国企業+ロボティクス連盟自身の「実証段階で量産ではない」警告）がすべてページ上にあり、上流ソース名付き——丁寧なアグリゲータだが数値は二次情報：引用前に一次ソースで確認すること。",
   "zh": "Tom Wojcik（AppSec 工程师）的个人随笔。已交叉核验（10-06）：其 2026 年 9 月综述的头条数字（上半年 12 万科技岗位被裁、初级岗位平均 47 份申请/初级前端 146 份、中国占人形机器人出货约 90% + 机器人联合会对\"演示而非量产\"的自我警告）均在页面上并注明上游来源——严谨的聚合者，但数字是二手的：引用前请对一手来源核实。"
  },
+ "toninoble.com": {
+  "cat": "research",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "Toni Noble's engineering blog (client-rendered SPA — the shell is served with an HTTP 404 status on deep paths, so plain fetch reads it as unreadable; the machine twin is the app's own API, /api/posts/<slug>, found by doc-twin.mjs's API-twin arm — both 11-14 quotations verified verbatim there). The 11-14 disclosure: Android's clipboard-read toast suppressed by rapid double toasts; Google rated the CVE Moderate then Won't Fix. Cross-checked (11-14): developer.android.com's copy-paste docs confirm EXTRA_IS_SENSITIVE and the clipboard-access notification — the consent mechanism the technique defeats.",
+  "zh": "Toni Noble 的工程博客(客户端渲染 SPA —— 深层路径以 HTTP 404 状态返回壳页,普通 fetch 读作不可读;机器可读孪生是应用自己的 API /api/posts/<slug>,由 doc-twin.mjs 的 API-twin 臂找到 —— 11-14 的两条引文均在该处逐字核验)。11-14 披露:Android 剪贴板读取提示被快速连发两条 toast 压制;Google 将该 CVE 评为 Moderate 后标记 Won't Fix。交叉核验(11-14):developer.android.com 的 copy-paste 文档确认 EXTRA_IS_SENSITIVE 与剪贴板访问通知 —— 即该技术所击败的同意机制。",
+  "jp": "Toni Noble のエンジニアリングブログ(クライアントレンダリング SPA — 深いパスは HTTP 404 ステータスでシェルを返すため、素の fetch では未読扱い。機械可読な双子はアプリ自身の API /api/posts/<slug> で、doc-twin.mjs の API-twin アームが発見 — 11-14 の両引用文もここで逐語検証済み)。11-14 の開示:Android のクリップボード読み取りトーストを高速連打トーストで抑制、Google は CVE を Moderate 評価後に Won't Fix。クロスチェック(11-14):developer.android.com の copy-paste ドキュメントが EXTRA_IS_SENSITIVE とクリップボードアクセス通知を確認 — この技法が破る同意メカニズム。"
+ },
  "topaiproduct.com": {
   "cat": "other",
   "cred": "low",
@@ -13590,6 +13644,15 @@
   "en": "Unreal Labs engineering blog (agent harness vendor). Cross-checked (09-24): its Unreal Agent cost claim (Terminal-Bench 4.0 57.9% at $1,428 vs Codex $2,350) matches the HN discussion; vendor self-reported, single model configuration, and it flags non-OpenAI providers rejecting its dual tool-result format.",
   "jp": "Unreal Labs のエンジニアリングブログ（エージェントハーネスベンダー）。突合済み（09-24）：Unreal Agent のコスト主張（Terminal-Bench 4.0 57.9%・$1,428 対 Codex $2,350）は HN 議論と一致。ベンダー自己申告・単一モデル構成で、非 OpenAI プロバイダが二重ツール結果フォーマットを拒否する点も自己言及。",
   "zh": "Unreal Labs 工程博客（agent harness 厂商）。已交叉核验（09-24）：其 Unreal Agent 成本主张（Terminal-Bench 4.0 57.9%/$1,428 对 Codex $2,350）与 HN 讨论一致；属厂商自报、单一模型配置，并自述部分非 OpenAI 供应商会拒绝其双份工具结果格式。"
+ },
+ "unsloth.ai": {
+  "cat": "vendor",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "Unsloth AI's docs/quantization site — Dynamic quants for open models with method disclosed. The 11-14 Dynamic V3.1 update rebuilds Qwen3.8 GGUFs and disputes a rival's benchmark in its own docs (\"GSQ-RCO results are misleading\": estimated 1 trial vs its 14, ~96K vs 128K context, greedy decoding). Cross-checked (11-14): the docs page greps verbatim (Dynamic V3.1, IQ1_XXXS, the GSQ-RCO section) and the Qwen3.8 artifact family backs it on HF (unsloth/Qwen3.8-27B-GGUF 6.4M downloads, unsloth/Qwen3.8-2.4T-A95B-GGUF, unsloth/Qwen3.8-27B-NVFP4).",
+  "zh": "Unsloth AI 的文档/量化站点 —— 面向开源模型的 Dynamic 量化,方法披露。11-14 的 Dynamic V3.1 更新重建 Qwen3.8 GGUF,并在自家文档中公开质疑竞品基准(\"GSQ-RCO results are misleading\":估计对方仅 1 次试验、自己 14 次,~96K vs 128K 上下文,贪婪解码)。交叉核验(11-14):文档页可逐字 grep(Dynamic V3.1、IQ1_XXXS、GSQ-RCO 小节),Qwen3.8 工件族在 HF 得到印证(unsloth/Qwen3.8-27B-GGUF 640 万下载、unsloth/Qwen3.8-2.4T-A95B-GGUF、unsloth/Qwen3.8-27B-NVFP4)。",
+  "jp": "Unsloth AI のドキュメント/量子化サイト — オープンモデル向け Dynamic 量子化、手法を公開。11-14 の Dynamic V3.1 アップデートは Qwen3.8 GGUF を再構築し、競合のベンチマークを自社ドキュメント内で疑問視(\"GSQ-RCO results are misleading\":推定 1 試行 vs 自分 14 試行、約96K vs 128K コンテキスト、貪欲デコード)。クロスチェック(11-14):ドキュメントページは逐語で grep 可能(Dynamic V3.1、IQ1_XXXS、GSQ-RCO 節)で、Qwen3.8 アーティファクト群は HF で裏付け(unsloth/Qwen3.8-27B-GGUF 640万DL、unsloth/Qwen3.8-2.4T-A95B-GGUF、unsloth/Qwen3.8-27B-NVFP4)。"
  },
  "unsung.aresluna.org": {
   "cat": "community",

@@ -503,3 +503,33 @@ Sources: [Edge0 blog](https://edge0.ai/blog/introducing-edge0-145b-frontier-ai-c
 
 来源：[llama.cpp v1.0.0 发布](https://github.com/ggml-org/llama.cpp/releases/tag/v1.0.0) ·
 [ggml 讨论 #1579](https://github.com/ggml-org/ggml/discussions/1579)
+
+## 2026-11-14 PM — ggml 发布自己的 v1.0.0;Unsloth Dynamic V3.1 量化更新公开质疑竞品方法论
+
+**ggml v1.0.0**(2026-11-13 08:34 UTC 发布;HN 293 分)—— llama.cpp 底层的张量库发布自己的首个稳定版,就在
+llama.cpp v1.0.0"宣布未发布"(细节承诺 3PM CET 给出)的第二天。按发布说明:裁剪废弃的公开 API 与旧
+`DIAG_MASK` 算子,新增可配置 YaRN 截断与 FP8 支持;后端清单读起来就是本地推理实际运行位置的地图 ——
+CUDA/Metal 上的少行量化矩阵乘(batch 2–24)与 MoE 融合、Vulkan 预填充 FlashAttention 路径、SYCL 设备侧
+MoE 调度器、OpenCL 分解式 Adreno FlashAttention、新 WebGPU kernel、扩展的 Hexagon 算子覆盖 —— 外加一个
+不再上传图中从未读取的输入的调度器。**RPC 升到 v9 并拒绝不兼容对端** —— 混版本部署会大声失败而不是静默。
+昨天的教训成立:"1.0" 在变更日志存在之前只是占位符;内容是一份支持矩阵快照,对 Vulkan/SYCL/OpenCL/WebGPU
+部署来说,这次发布里有趣的增量是它们的后端,不是 CUDA 的。
+
+**Unsloth Dynamic V3.1**(文档更新 11 月 11 日;HN 161 分)为 Qwen3.8 家族重建 GGUF 量化 ——
+Qwen3.8-27B 密集模型(视觉 + 256K 上下文)与 2.4T 总参/95B 激活的 Qwen3.8-2.4T-A95B —— 声称"同等体积下
+准确率提升 5–10%",覆盖 Terminal Bench 2.1、DeepSWE v1.1、LiveCodeBench v6、GPQA Diamond 与 AIME25
+(2–6-bit 已更新;3-bit UD3 保留,"持平")。更劲爆的一半是文档里题为 **"GSQ-RCO results are
+misleading"** 的小节,公开质疑 ISTA-DASLab 的竞品量化:Unsloth 估计 ISTA 只跑了 **1 次试验**而自己跑了
+**14 次**(平均 93–96% 恢复率,不是 ISTA 报告的 100%)、上下文预算更小(约 96K vs 128K)、并依赖贪婪解码
+("不能代表真实世界用例")。另外新增:NVFP4 量化声称在 Blackwell GPU 上约 1.5× BF16 速度、92–97% top-1
+(暂仅 vLLM),以及新的 1.1875-bpw 数据类型(IQ1_XXXS),把 2.4T 模型压进 **397 GB** 下载(比 4.9 TB 全精度
+小 91%),约 450 GB 内存,Unsloth 称 B200 上约 20 tok/s。本轮已核验:文档页可逐字 grep("GSQ-RCO results
+are misleading"、Dynamic V3.1、IQ1_XXXS),Qwen3.8 工件族在 HF 上得到印证(`unsloth/Qwen3.8-27B-GGUF`
+640 万下载、`unsloth/Qwen3.8-2.4T-A95B-GGUF`、`unsloth/Qwen3.8-27B-NVFP4`)。为何重要:量化已成为有商业
+利益的准确性敏感学科,这场争论就是案例研究 —— 决定量化表胜负的是试验次数、上下文预算与解码策略,不是
+bits-per-weight。对任何量化表可复现的两个问题:跑了几次试验、在什么上下文?
+
+Sources: [ggml v1.0.0](https://github.com/ggml-org/ggml/releases/tag/v1.0.0) ·
+[Unsloth Qwen3.8 文档](https://unsloth.ai/docs/models/qwen3.8) ·
+[ISTA-DASLab GSQ-RCO GGUFs](https://huggingface.co/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50493062)

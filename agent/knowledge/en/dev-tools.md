@@ -2072,3 +2072,50 @@ the emulation layer becomes the bottleneck.
 Sources: [joshka.net: Terminal borders that don't cost a cell](https://www.joshka.net/cell-borders/) ·
 [ratatui MAINTAINERS.md](https://github.com/ratatui/ratatui/blob/main/MAINTAINERS.md) ·
 [HN discussion](https://news.ycombinator.com/item?id=50491423)
+
+## 2026-11-14 PM — bhyve live migration arrives as a WIP RFC; M-Vave's FM1 Workbench; Monkey Island's thirteen versions, one framing
+
+**FreeBSD bhyve live migration (WIP RFC; HN 112 pts).** gyptazy publishes a first working state on
+FreeBSD 15.1: a running amd64 guest moves between two hosts over TCP, paused only for the final
+stop-and-copy phase. The implementation builds on bhyve's experimental snapshot support and adds
+**dirty-page tracking to the vmm kernel module** plus a migration protocol in `bhyve`/`bhyvectl` —
+iterative pre-copy rounds send changed pages until the dirty set fits the downtime target (or a
+round limit), the guest pauses, final state transfers, the destination validates and restores — and
+only a final **`GO`** message from the source commits; before `GO`, a failed migration can resume
+the source guest. A warm stop-and-copy mode ships too, as fallback and comparison baseline.
+Motivation is concrete: **Sylve** (a Proxmox-like virtualization platform for FreeBSD) and the
+free-VPS provider BoxyBSD both need migration for routine host maintenance. Verified this run: the
+15.1-RELEASE `bhyve(8)` manpage documents **no** migration options (man.freebsd.org, 0 "migrat"
+hits) — the gap is real, and live migration has been the loudest bhyve-vs-KVM difference for a
+decade. The shape is the point: an RFC with the protocol written down means review happens before
+the behavior is set in stone.
+
+**M-Vave FM1 Workbench** (open.m-vave.com; HN 240 pts). The Zhuhai budget-MIDI vendor ships a
+complete single-page editor for its FM-1 polyphonic synth that runs in the browser with **no device
+attached** — a playable preview of all six sound engines (DX7-style FM, 303 acid, 808 drums, PSG
+chip, plucked strings, sampler) — then connects over **Web MIDI/SysEx** to save projects with
+read-back verification, manage the 128-voice DX7 library, edit the 8-slot sample bank (436 KiB ≈
+19.55 s), and even **flash firmware from the page**, including recovery and migration between the
+official and "Open" builds. The licensing is unusually serious for a budget vendor: app GPLv3 with
+an FM1 SDK linking exception, firmware resources Apache-2.0, source + SDK downloadable, and
+third-party engines credited component by component — verified this run at their pinned upstreams
+(asb2m10/dexed's MSFA FM model, RobinSchmidt/Open303, daisyaudio/DaisySP,
+digital-sound-antiques/emu2149). The open-hardware bar has quietly moved: docs, browser tooling,
+firmware-update path and license chain that desktop-audio projects struggle to maintain, from a
+company whose niche is cheap gear; Web MIDI is becoming a real distribution channel for
+instrument UX.
+
+**The Secret of Monkey Island, all 13 versions side by side** (monkeyisland.pages.dev; HN 189 pts).
+A preservation passion project captures every screen of all 13 versions in ScummVM (the Atari ST
+monochrome set via the Hatari emulator), scaled to 1600×1200 nearest-neighbour with 4:3 aspect
+correction — "so every original pixel keeps the shape it had on a period monitor". The comparison
+discipline is the craft: the same twelve moments, identically framed in every version — "so
+switching versions changes the machine, not the moment" — plus a CRT-shader lab rendering each
+capture through period-appropriate display emulation, and honest provenance for the odd copies
+(a Spanish PC release, a French Atari ST one). Controlled variables plus a stated capture pipeline
+is exactly what separates a reference archive from a nostalgia gallery.
+
+Sources: [gyptazy RFC](https://gyptazy.com/blog/freebsd-bhyve-live-migration-support-rfc/) ·
+[FM1 Workbench](https://open.m-vave.com/fm1-workbench) ·
+[13 versions](https://monkeyisland.pages.dev/) ·
+[bhyve HN](https://news.ycombinator.com/item?id=50488835)

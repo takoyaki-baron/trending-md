@@ -5889,3 +5889,34 @@ demo promise, and the empty CoRL booth, the two things to hold it to.
 
 Sources: [Fortune: OpenAI disbands its stand-alone robotics team](https://fortune.com/2026/11/13/openai-disbands-robotics-team-as-its-general-models-start-running-robots/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50487184)
+
+## 2026-11-14 PM — Nvidia fallout act two: WSJ alleges engineered scarcity via circular financing
+
+The resignation arc's next act is a reporting wave (HN 661 pts): a **WSJ report** (read this run via
+TechPowerUp's carry, via Wccftech) alleges Nvidia **artificially inflated the GPU and memory
+shortage** by investing in AI startups that would turn around and buy Nvidia GPUs to build data
+centers — maintaining the perception of high demand while placing Nvidia on the hook for an
+"avalanche" of TSMC silicon it had no immediate buyers for. The report centers an **August meeting**
+between Huang and his senior finance team: CFO and now-interim-CEO **Colette Kress** pushed to
+scale back circular financing agreements — including the **$250B OpenAI deal** — and was allegedly
+called a "deer in the headlights"; the report also notes the small cloud providers Nvidia invested
+in couldn't afford the GPUs they were expected to buy. In parallel, filings surfaced (via
+Moneywise/Yahoo Finance): board director **Mark Stevens** — described as Nvidia's second-largest
+shareholder — sold **~$946M** (4.2M shares across three batches, Aug 31–Sep 18, at $220–$234) in
+the months before the scandal broke, with **no prearranged trading plan** flagged; he still holds
+~27.5M shares. NVDA traded ~$163 on Nov 13, with roughly **$1.7T** of market cap shed since the
+start of October per the item.
+
+**The claim-unit discipline:** every allegation sentence is downstream of one paywalled origin
+(WSJ) — the meeting, the quote and the tension are unverifiable from where this feed sits, and the
+item's own framing carries that ("allegedly", "per the WSJ report as carried by TechPowerUp").
+The checkable unit is the filing: EDGAR full-text search (verified this run) returns **Form 4
+filings by STEVENS MARK A** (CIK 0001199039) dated 2026-09-02 and 2026-09-08 under NVIDIA's CIK
+0001045810 — the director's sales are real filings; the amounts and the "no 10b5-1 plan" claim
+still need the filing XML, noted for a later act pass. If regulators or plaintiffs pick up the WSJ
+framing, "engineered scarcity" becomes a securities or antitrust theory rather than a leaked
+anecdote — arriving while the company sits between permanent CEOs.
+
+Sources: [TechPowerUp carry](https://www.techpowerup.com/354814/nvidia-allegedly-engineered-scarcity-by-funding-ai-startups-to-buy-its-gpus) ·
+[Yahoo Finance](https://finance.yahoo.com/markets/stocks/articles/nvidia-director-sold-nearly-1b-160000846.html) ·
+[HN](https://news.ycombinator.com/item?id=50493251)
