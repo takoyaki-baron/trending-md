@@ -475,3 +475,16 @@ Sources: [The Guardian：美国大学生让监控摄像头「Flock off」](https
 
 Sources: [Citizen Lab](https://citizenlab.ca/security-agencies-worldwide-found-to-use-ad-based-surveillance-system/) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50492950)
+
+## 2026-11-15 — 意大利因未经同意访问 Android 照片对 Meta 罚款 8.05 亿欧元
+
+意大利数据保护局 Garante（11 月 14 日）：**€805M**（约 **$887M**，按该机构口径约为 Meta 全球营收的
+0.47%），事由是一个 Facebook 功能在**未取得同意也未告知**的情况下访问 Android 用户的照片与视频、并建议
+可发布哪些图库内容。命令：**60 天内**默认停用该功能并单独征求同意；该局保留权利另行评估一个在**云端**
+处理图库内容的 2026 年功能。细节以 Reuters 为准——feed 时 Garante 的英文新闻页尚未发布该决定，且调查
+**并未**涵盖内容是否被用于训练 AI 模型（Meta 否认过这一做法）。为何重要：这个案例是图库抓取类功能的
+模板——同意必须单独且具体——而保留的云端处理后续正是 AI 训练问题重新入场的那根线。并入论题 15 的
+类别：能力由监管命令移除，而非平台自己动手。
+
+Sources: [Reuters](https://www.reuters.com/world/italy-fines-meta-887-million-over-android-users-data-access-2026-11-14/) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50497009)

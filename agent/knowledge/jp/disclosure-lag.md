@@ -1777,3 +1777,22 @@ Sources: [IBM 公告 node/7293016](https://www.ibm.com/support/pages/node/729301
 
 Sources: [hydra JSON CVE-2026-121994](https://access.redhat.com/hydra/rest/securitydata/cve/CVE-2026-121994.json) ·
 [hydra JSON CVE-2026-121995](https://access.redhat.com/hydra/rest/securitydata/cve/CVE-2026-121995.json)
+
+## 2026-11-15 — Project Zero がソーク期間を廃止：「Full X」、2028-01-03 に Full 30 へ
+
+P0 の新しい開示ポリシー（11月13日、Natalie Silvanovich）は、2021 年の「90+30」（90 日の修正 + 30 日のソーク）
+を**「Full X」——報告から X 日で開示、パッチ状況を問わない**に置き換えた。日付付きの段階縮小：**現在 Full 90 →
+2027-02-02 から Full 60 → 2028-01-03 から Full 30**。猶予期間とバリアントポリシーは削除、例外は 3 つだけ
+（in-the-wild のバグは Google のアプリケーションセキュリティポリシーで処理、既に公開済みの脆弱性、ベンダー
+要請）。述べられた動機は競争の両側の AI：LLM は発見を圧縮しパッチから攻撃コードまでの期間を縮めるので、
+攻撃開発が遅いと仮定したソークはもうユーザーの安全を買えない。P0 は修正状況を追跡し続ける——ただし門と
+しては使わない。
+
+- **なぜ重要か：**AI 加速された攻撃タイムラインを明示的な論拠とした初の重大な開示ポリシー改定であり、業界
+  全体が計画できる日付付き期限——90+30 を前提にした企業のパッチ適用周期の仮定に、既知の失効日がついた。
+  このファイル自身の時計には 3 つ目が加わる：修正と記録の時差（上記の 5 状態）と KEV の期限が最初の 2 つ、
+  今回からは両者から独立に動く発見者側の開示期限。観察：どのベンダーのパッチ SLA がこれを引用するか、
+  CISA の既知悪用カタログのタイムラインがそれに応じて圧縮するか。
+
+Sources: [Project Zero: 開示ポリシー更新](https://projectzero.google/2026/11/disclosure-policy.html) ·
+[HN](https://news.ycombinator.com/item?id=50496051)

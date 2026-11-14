@@ -740,3 +740,36 @@ conclusion, is the cheapest defence against the vendor-chart error.
 
 Sources: [109-gpu-pricing](https://github.com/datareceipts/data-receipts/tree/main/109-gpu-pricing) ·
 [HN discussion](https://news.ycombinator.com/item?id=50427085)
+
+## 2026-11-15 — cost-per-solved-task gets a product, and script → tokens → energy gets its measurement
+
+**JuliusBrussee/caveman** crosses **120k★** and launches **Caveman Code** (free Mac/browser
+harness running Claude Agent, Codex, Cursor and its own agent side by side on your existing
+subscriptions). Held to a constant model: Terminal-Bench 4 **21% cheaper per solved task than
+Codex** (90/192 on GPT-6.1 Sol, tied with Codex) and **14% cheaper than Claude Code** (97/180
+vs 83/177 on Opus 5.5); **76%** cheaper across simulated day-long multi-app sessions;
+first-request 2.7k tokens vs Claude Code's 16.7k. The technique's own numbers: **33.2% fewer
+input tokens** across 54 Claude Code runs, 18/18 answers correct. The disclosures are the
+product: every measurement is their own run at list prices, the Claude Code run counts differ
+(180 vs 177) and are printed, and the failed experiment ships — stripping prior reasoning from
+history cut re-reading 68% but **raised cost 19%** and hurt solve rates, hence their argument
+for cost-per-solved-task over raw tokens. Verified this run: the README carries
+21%/14%/76%/33.2% verbatim.
+
+**U-Mich (Deng, Mihalcea et al., EMNLP)**: across Qwen 3 / Gemma 3 / Llama 3.1 answering
+Belebele reading-comprehension questions in 122 languages (ML.Energy framework), generating
+non-English text costs **1.4–180×** the energy of English — Hindi **7.9×**, Bengali **15.3×**,
+most Western European languages ≤2×. The mechanism is compositional: non-Latin scripts
+tokenize into more tokens → more memory → smaller batches → more energy per token — persisting
+at larger model sizes and across processors, with accuracy lower on top ("the languages that
+typically consume more energy also tend to have lower accuracy"). By their arithmetic with
+Ethnologue data, ~**5.2 billion** people pay more than twice the energy for first-language use.
+Why it matters: the double penalty (cost + quality) is a pricing structure, not physics —
+tokenization → batching is an engineering choice — and this is the measurement to run before
+setting per-language pricing (this file's layer extended from dollars to joules, same
+mechanism: what crosses the tokenizer decides the bill).
+
+Sources: [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) ·
+[Caveman Code launch](https://caveman.so/news/introducing-caveman-code) ·
+[U-Mich News](https://news.umich.edu/generative-ai-uses-more-energy-on-non-english-text/) ·
+[HN](https://news.ycombinator.com/item?id=50441444)

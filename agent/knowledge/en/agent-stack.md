@@ -3647,3 +3647,46 @@ Sources: [Parcha-ai/agentrun](https://github.com/Parcha-ai/agentrun) ·
 Sources: [block/buzz](https://github.com/block/buzz) ·
 [block/buzz-app releases](https://github.com/block/buzz-app/releases) ·
 [backnotprop/plannotator](https://github.com/backnotprop/plannotator)
+
+## 2026-11-15 — human gates as graph nodes; a browser that never takes focus; skills that enforce a decision process
+
+**Tencent/LoopForge** (self-hosted, Docker, MIT; +101★, v0.3.7→v0.3.9-rc.1 in three days): a
+workspace where coding agents open the PRs and humans hold the gates — a Main Bot opens
+sandboxed workspaces, delegates to project roles, opens the PR; repeatable work is captured as
+**SOPs**: graphs of Agent/Script/**Human-gate**/sub-SOP nodes with per-node artifacts, retries
+and send-back-to-step semantics. The executor list is the broadest yet seen in one product:
+CodeBuddy, Codex, Claude Code, OpenCode, Cursor CLI, Antigravity, Kimi Code, Pi, DeepSeek
+Harness, ZCode. Differentiators: everything self-hosted on your own infrastructure, and human
+gates as first-class graph nodes rather than an approval button bolted on the side.
+
+**paul-nameless/agweb** (WebKit, macOS 26+, Show HN): a browser for agents rather than humans —
+playwright-style CLI, dialogs answered in code, and the core property: **no window ever takes
+focus**, so parallel agents browse without a keyboard war while every agent's tabs stay visible
+in one dashboard (⌘D). Native macOS events drive clicks and hovers (human-gated sites work);
+`fill --secret-cmd 'pass show site'` types credentials the agent never sees in its transcript;
+idle tabs suspend to 0% CPU. Own measurement: five idle pages **590 MB** vs 730 MB headless
+Chrome / 1.6 GB Playwright Chrome. A distinct point in the agent-browser design space between
+headless browsers and Playwright-driven Chrome: a real window, never focused, visible to the
+human.
+
+**tradermonty/claude-trading-skills** (+556★, the day's biggest gain): five named workflows
+(market-regime-daily, core-portfolio-weekly, swing-opportunity-daily, trade-memory-loop,
+monthly-performance-review), each a machine-readable YAML manifest naming the exact skills,
+decision gates and artifacts in order — market breadth, drawdown circuit-breakers, position
+sizing, a pre-trade discipline gate, a post-trade postmortem loop. Emphatically not advice,
+signals or auto-trading; no-API degraded paths for every workflow; fictional-data disclaimers
+on examples. The signal is the shape: agent-skill adoption moving from *doing* the task to
+*enforcing a decision process* with gates and artifacts — the disclaimer discipline doubles as
+a genre template for publishing agent workflows in regulated domains. Verified this run: the
+README carries all five workflow names and the "not financial advice" line.
+
+**dream-num/univer** v1.5.0 (+495★, 24.4k total; dated update to the 09-22 office-as-merge-
+surface entry): open-source Sheets/Docs SDK whose document model is exposed programmatically
+for AI workflows — agents read and write structured documents inside the app's own data model
+rather than puppeteering a closed suite. The agent-office layer keeps gaining an open candidate
+to evaluate against closed-suite plugins.
+
+Sources: [Tencent/LoopForge](https://github.com/Tencent/LoopForge) ·
+[paul-nameless/agweb](https://github.com/paul-nameless/agweb) ·
+[tradermonty/claude-trading-skills](https://github.com/tradermonty/claude-trading-skills) ·
+[dream-num/univer v1.5.0](https://github.com/dream-num/univer/releases/tag/v1.5.0)

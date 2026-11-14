@@ -14653,5 +14653,32 @@
   "en": "Vendor security advisories for its own products. The GS1900 CVE-2026-7273 advisory lists fixed firmware per model (corroborated by the CISA KEV entry) but itself shows no CVSS — the 8.8 exists only in the CNA-assigned CVE record (NVD Deferred). Cross-checked (09-22).",
   "jp": "自社製品のセキュリティ勧告。GS1900 CVE-2026-7273 勧告はモデル別修正ファームウェアを列挙（CISA KEV 掲載と一致）するが、ページ自体に CVSS なし——8.8 は CNA 採点の CVE レコードにのみ存在（NVD Deferred）。突合済み（09-22）。",
   "zh": "厂商自身产品的安全公告。GS1900 CVE-2026-7273 公告按型号列出修复固件（与 CISA KEV 条目互证），但页面本身无 CVSS——8.8 只存在于 CNA 评分的 CVE 记录（NVD Deferred）。已交叉核验（09-22）。"
+ },
+ "crissyfield.de": {
+  "cat": "security",
+  "cred": "high",
+  "density": "high",
+  "cv": 1,
+  "en": "Security research firm (Crissy Field GmbH) — first-party for its own scan methodology and numbers; the Lovable/Supabase exposure mechanism is anchored in a third-party artifact, Supabase discussion #4547.",
+  "zh": "安全研究公司（Crissy Field GmbH）——其扫描方法与数字的一手来源；Lovable/Supabase 暴露机制锚定在第三方工件 Supabase 讨论 #4547 上。",
+  "jp": "セキュリティ調査会社（Crissy Field GmbH）——走査手法と数値の一次情報源。Lovable/Supabase 露出のメカニズムは第三者アーティファクト（Supabase ディスカッション #4547）に锚定。"
+ },
+ "blog.pypi.org": {
+  "cat": "vendor",
+  "cred": "high",
+  "density": "high",
+  "cv": 1,
+  "en": "PyPI official blog — announcements about the package index itself; claims about shipped UI verified against the deployed site (the /project/<pkg>/security/ route serves the Security tab).",
+  "zh": "PyPI 官方博客——关于包索引自身的公告；已上线 UI 的主张对部署站点核验（/project/<pkg>/security/ 路由即 Security 标签页）。",
+  "jp": "PyPI 公式ブログ——パッケージインデックス自身に関する発表；出荷済み UI の主張はデプロイ済みサイトで検証（/project/<pkg>/security/ ルートが Security タブ）。"
+ },
+ "research.google": {
+  "cat": "research",
+  "cred": "high",
+  "density": "high",
+  "cv": 1,
+  "en": "Google's research blog — first-party for its own measured results by definition; publication facts anchor against third-party venues (the Sleep-framework post pairs with the team's arXiv 2606.03979), so existence checks out while performance numbers stay vendor-measured.",
+  "zh": "Google 研究博客——其自测结果天然是一手来源；发表事实可对第三方场所锚定（Sleep framework 博文对应团队自己的 arXiv 2606.03979），存在性可核验而性能数字仍是厂商自测。",
+  "jp": "Google の研究ブログ——自社測定の結果は定義上一次情報源。公表事実は第三者の場（Sleep framework 投稿 ↔ チーム自身の arXiv 2606.03979）で锚定でき、存在は検証できるが性能数値はベンダー測定のまま。"
  }
 }

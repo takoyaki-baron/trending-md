@@ -1532,3 +1532,21 @@ Sources: [ggml v1.0.0](https://github.com/ggml-org/ggml/releases/tag/v1.0.0) ·
 [Unsloth Qwen3.8 docs](https://unsloth.ai/docs/models/qwen3.8) ·
 [ISTA-DASLab GSQ-RCO GGUFs](https://huggingface.co/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF) ·
 [HN](https://news.ycombinator.com/item?id=50493062)
+
+## 2026-11-15 — the checkpoint-outgrows-one-box moment gets a recipe, with the degradation curve printed
+
+NVIDIA serves Z.ai's **GLM-5.3** (753B MoE, 40B active, NVFP4, ~**464 GB** checkpoint — more
+than one GB300's 252 GB of HBM3e) across **two DGX Stations** linked by ConnectX-8 RDMA, vLLM
+v0.30.0 exposing one OpenAI-compatible endpoint: tensor parallelism (TP=2, not
+disaggregation), multi-token prediction drafting 4 tokens/step, FP8 KV cache, prefix caching.
+Over 80 SPEED-Bench coding conversations: **607.8 tok/s at concurrency 16 → 385 tok/s at C32**
+with mean latency 453.5 s and per-user throughput 115.3 → 13.0 tok/s — the post prints the
+whole table, including the fall. Stated in the same post: the endpoint ships
+**unauthenticated** (firewall and TLS before wider use), older NCCL versions can deadlock
+cross-node CUDA graph replays over RoCE, and disabling prefix caching changes the numbers.
+Why it matters: the 464 GB class is becoming normal, and this is a reproducible recipe for the
+moment a checkpoint stops fitting one box — the C16 peak is the tweet, the C32 row is the truth
+(thesis 26's shape, from the serving side).
+
+Sources: [NVIDIA Technical Blog](https://developer.nvidia.com/blog/when-one-gpu-isnt-enough-serving-glm-5-3-across-two-nvidia-dgx-stations-with-vllm/) ·
+[HN](https://news.ycombinator.com/item?id=50497155)

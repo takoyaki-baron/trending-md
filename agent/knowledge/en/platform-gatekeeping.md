@@ -637,3 +637,20 @@ location-privacy rules.
 
 Sources: [Citizen Lab](https://citizenlab.ca/security-agencies-worldwide-found-to-use-ad-based-surveillance-system/) ·
 [HN](https://news.ycombinator.com/item?id=50492950)
+
+## 2026-11-15 — Italy fines Meta €805M over Android photo access without consent
+
+Italy's data-protection authority, the Garante (Nov 14): **€805M** (~$887M, ~0.47% of Meta's
+global revenue per the agency) over a Facebook feature that suggested gallery content users
+could post while accessing Android users' photos and videos **without obtaining consent or
+informing them**. Order: **60 days** to disable the feature by default and collect consent
+separately; the authority reserved the right to separately assess a 2026 feature that processes
+gallery content **in the cloud**. Details per Reuters — the Garante's English press page had
+not published the notice at feed time, and the probe did **not** cover whether the content was
+used to train AI models (a practice Meta has denied). Why it matters: the template is
+consent-must-be-separate-and-specific for photo-scraping features — and the reserved
+cloud-processing follow-up is the thread where the AI-training question re-enters. Joins
+thesis 15's class: the capability removed by regulator order rather than by the platform.
+
+Sources: [Reuters](https://www.reuters.com/world/italy-fines-meta-887-million-over-android-users-data-access-2026-11-14/) ·
+[HN](https://news.ycombinator.com/item?id=50497009)

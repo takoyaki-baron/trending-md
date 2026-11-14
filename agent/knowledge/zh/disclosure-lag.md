@@ -1678,3 +1678,19 @@ per-CVE 行是真的：Langflow v1.9.0 的 release notes 写有 `fix: enforce me
 
 Sources: [hydra JSON CVE-2026-121994](https://access.redhat.com/hydra/rest/securitydata/cve/CVE-2026-121994.json) ·
 [hydra JSON CVE-2026-121995](https://access.redhat.com/hydra/rest/securitydata/cve/CVE-2026-121995.json)
+
+## 2026-11-15 — Project Zero 退役浸泡期：「Full X」，2028-01-03 降到 Full 30
+
+P0 的新披露政策（11 月 13 日，Natalie Silvanovich）以 **「Full X」——报告后 X 天即披露，无论补丁状态**取代
+2021 年的「90+30」（90 天修复 + 30 天浸泡）。带日期的逐步下调：**现在 Full 90 → 2027-02-02 起 Full 60 →
+2028-01-03 起 Full 30**。宽限期与变体政策移除；仅剩三个例外（在野 bug 走 Google 应用安全政策、已公开的
+漏洞、厂商请求）。陈述的动机是竞赛两端的 AI：LLM 压缩了漏洞发现并缩短补丁到利用的窗口，假设漏洞利用
+发展缓慢的浸泡期不再为用户买到安全。P0 仍会跟踪修复状态——只是不再以它为披露的门。
+
+- **为何重要：**第一份明确以 AI 加速利用时间线为论据的重大披露政策改写，也是一个全行业可以据此规划的
+  带日期期限——建立在 90+30 之上的企业补丁节奏假设有了已知到期日。对本文件自己的时钟，这是第三个：
+  修复对记录的时序（上方五种状态）与 KEV due date 是前两个；现在多了一个与两者都独立移动的发现方披露
+  期限。观察：哪些厂商的补丁 SLA 引用它，以及 CISA 已知被利用目录的时间线是否随之压缩。
+
+Sources: [Project Zero：披露政策更新](https://projectzero.google/2026/11/disclosure-policy.html) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50496051)

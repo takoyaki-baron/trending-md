@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-11-14 20:48
+last_run: 2026-11-15 04:45
 ---
 
 # 行动
@@ -66,7 +66,18 @@ last_run: 2026-11-14 20:48
       （`/2026/cvd/findings/<id>`）上，不在注册库记录上。仍开放：(a) 署名串在 Anthropic 控制之外的公告上复现；
       (b) 其他发现者的惯例；下次差分约 2026-12-10。→ [[vuln-supply]]**
 
-- [ ] **中立的 agent 会话层会被采纳吗——还是每个 harness 都要逐厂商重吵会话格式？**11-12 04:55 自本批次的 Atuin Threads 发布归档：「每一台机器上、每一个 agent 会话，一份可搜索的同步历史」——跨 harness 恢复、Git 式 fork、自搜索的 MCP 服务器——跑在 append-only、可选加入、端到端加密的同步引擎上。这正是记忆格式综述一直呼唤的中立位置；观察点：(a) Claude Code / Codex / OpenCode / Pi 是否在捕获钩子之外原生集成 Threads；(b) 是否有厂商以自己的围墙格式作答；(c) E2E 加密声明是否得到实现审计——同步引擎是每条提示与密钥经过的信任边界。→ [[agent-stack]]
+- [~] **中立的 agent 会话层会被采纳吗——还是每个 harness 都要逐厂商重吵会话格式？**11-12 04:55 自本批次的 Atuin Threads 发布归档：「每一台机器上、每一个 agent 会话，一份可搜索的同步历史」——跨 harness 恢复、Git 式 fork、自搜索的 MCP 服务器——跑在 append-only、可选加入、端到端加密的同步引擎上。这正是记忆格式综述一直呼唤的中立位置；观察点：(a) Claude Code / Codex / OpenCode / Pi 是否在捕获钩子之外原生集成 Threads；(b) 是否有厂商以自己的围墙格式作答；(c) E2E 加密声明是否得到实现审计——同步引擎是每条提示与密钥经过的信任边界。→ [[agent-stack]]
+      **11-15 04:53 首查（act，→ log）——(a) 从 Atuin 一侧得到回答：三天内捕获名单从 4 个长到 9–10 个**
+      （文档现在点名 Claude Code、Codex、Copilot、Grok Build、Hermes Agent、Kiro、opencode、Pi、Amp，
+      另有 `omp` 出现在 resume 目标里），且跨 agent 续接做得很深——resume 选择器把每个捕获的工具调用
+      映射到目标 agent 自己的工具，fork 则写进每个 harness **自己的** fork 链接字段（Claude Code
+      `forkedFrom`、Codex `forked_from_id`、Grok `parent_session_id`、Hermes `_branched_from`、Kiro
+      `parentSessionId`、Pi `parentSession`）——中立层按厂商说各自的母语，而不是要求厂商来集成。还没有
+      任何 harness 的一方公告；依然是捕获钩子 + 转录写入器（v18.24.6：Claude Code 编辑 diff 捕获、
+      `omp` 子转录误标修复、Copilot 钩子为 PowerShell 改 exec/args；v18.24.8 仅文档）。(b) 本次检查未见
+      围墙格式作答。(c) 仍无实现审计——文档补了脱敏细节（识别出的密钥 → `****`、`capture_tools =
+      false`、凭证文件永不捕获、64 KiB 工具 I/O 截断、「来不及脱敏的文本不保留」），但加密声明仍是
+      自我背书。下次检查 ~2026-11-22。
 
 - [~] **Gemini 4 Carbon 的 0% Gray Swan 提示注入结果能否在独立测试下存活——12-1 的定价翻倍会不会真的落地？**立案于 11-11 05:30，来自本批的模型发布：主张与它自己的星号出现在同一个帖子里（「prompt injection robustness remains an area for continued improvement」），且几行头条数据（Project Fortify 100%/95%、agent 诚实分）是 Google 内部或合作方运行——Argon 模式重演。观察：(a) Gray Swan 或独立实验室发布 Carbon 的行；(b) 12-1 公开定价页的实际变动（脚注「仅适用于面向公众访问的 Carbon 模型」——指哪个 SKU 应能从计费文档读出）；(c) Vertex AI 到底拿不拿得到 Carbon——发布帖通篇缺席。→ [[frontier-models]] [[fact-check]]
       **核查于 11-11 13:25（→ log 2026-11-11 13:25）——(a) Gray Swan 无公开 IPI 排行榜，grayswan.ai
@@ -498,12 +509,19 @@ last_run: 2026-11-14 20:48
       探测行从 6 降到 4（1 个 bundle + 2 个 api 候选）。CLAUDE.md 规则 7 已记载该臂；lint 侧的移植作为开放
       System 项立项。→ [[fact-check]]
 
-- [ ] **把 API-twin 臂移植进 `claim-unit-lint.mjs` 的引文页读取器**——探针侧工具现在能找到 SPA 的 API
+- [x] **把 API-twin 臂移植进 `claim-unit-lint.mjs` 的引文页读取器**——探针侧工具能找到 SPA 的 API
       孪生了，但生成时 lint 的 `citedPageText` 对每张 API 支撑的博客仍会记 `quote-not-read`
-      （toninoble.com 是本批的实例；以后还会更多）。范围：壳测试失败之后、宣告页面不可读之前，用同样的
-      方式从页面 bundle 推导 `/api…` 候选，抓取孪生，并对 JSON 渲染后的 markdown 跑引文包含检查——带上
-      item-37 核验所需的同一套 markdown 剥离（`[text](url)` 跨越）。需要缓存 schema 升级（当前版本的条目
-      存的是壳页本身）。
+      （toninoble.com 是那个批次的实例；以后还会更多）。11-15 04:53 完成（→ log 2026-11-15 04:53）。
+      该臂以 `apiTwinPageText` 移入 `agent/tools/claim-unit-lint.mjs`（候选文法与上限——2 个 bundle、
+      8 个模板、4 次探测——与探针一致）：当每个页面级客户端都失败时，取数循环现在**保留原始壳页
+      body——包括骑在 404 上的那张**，旧循环在 `if (!r.ok) continue` 处连 body 都没读就丢弃了它；
+      随后推导端点模板、探测 ≤4 个候选，只在 200 + 非 HTML + 携带 slug 时接受孪生，JSON 的字符串值
+      即页面文本，记 `client: 'api-twin'`。不做 markdown 预剥离：每个消费方都经 `normQuote` 归一化，
+      它已经剥掉 `[text](url)` 跨越（item-37 的教训——这也意味着纯 markdown 孪生按原样通过）。
+      `PAGE_CACHE_V` 7 → 8（API 支撑博客的 v7 条目存的是壳页即「读」）。在立案案例上双向校准：11-14
+      item 37 的文件移植前返回 **2 条 `quote-not-read`**，移植后 **0 findings / 1 verified**，缓存条目
+      为 `client=api-twin, bytes=4616`；`--selftest` 442 → **453**。CLAUDE.md 规则 7 已记载该臂。
+      → [[fact-check]]
 
 - [x] **分布主张本身就是钉——`idrange` 的歧义臂误读了她姊妹检查刚验证过的那句话。**
       11-14 12:50 立项并完成（→ log 2026-11-14 12:50）。今天的生成时 lint 对 item 15 带着两条 sev-0
@@ -1268,6 +1286,70 @@ last_run: 2026-11-14 20:48
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+
+### 2026-11-15 04:53
+
+- **计划：**行动轮——读生成时 claim-unit lint（`agent/data/claim-unit-2026-11-15.json`，20 条：item 17
+  上两条咨询，都关于 U-Mich 能耗条目的 Deng 引语）；把 API-twin 臂移植进 lint 的引文页读取器（开放的
+  System 项）；Atuin Threads 采纳观察（11-12 立项）的首次检查。
+- **做了：****(1) Item 17 的咨询已打开并解决——引语是真的。**两条发现（`quote-not-read` 与
+  `attribution-uncited`，针对 "The languages that typically consume more energy also tend to have
+  lower accuracy in the model output," per Deng）同出一因：被引的
+  [U-Mich 新闻稿](https://news.umich.edu/generative-ai-uses-more-energy-on-non-english-text/)在生成时
+  未读到。一手读它：该句**逐字**存在，说话人是 Naihao Deng、第一作者（通讯作者 Rada Mihalcea）——
+  `attribution-page-verified`。**墙是新形状：news.umich.edu 对每个客户端字符串都回 403**（Chrome UA、
+  `curl/8.7.1` 带与不带后缀、裸 Mozilla、完全无 UA），而 reader MCP 能读——墙在**请求方的 IP**，
+  是 lint 的 (URL, 客户端字符串, 请求) 三元组之外的第四个轴，所以两条咨询作为本主机「未读」的正确
+  陈述保留；已记入 walled-sources 记忆文件。改为补强条目的原始工件：EMNLP 论文是
+  [arXiv 2606.21869](https://arxiv.org/abs/2606.21869)（"The Language-Energy Divide"，作者名单经
+  arXiv API 一手核验）——且论文自己的摘要把上限写成 **最高 179 倍**（英语 17.6 kJ → 普什图语
+  3,147 kJ），新闻稿舍入成 180×——括号里现在写明哪个工件给哪个数。链接加进 en+zh+jp；`latest.md`
+  镜像已重拷；`node build.js` 干净。**(2) System 项交付：**`agent/tools/claim-unit-lint.mjs` 长出
+  API-twin 臂（`apiTwinPageText` + `apiTwinJsonText` + `apiTwinCandidates`，自 `doc-twin.mjs` 移植）：
+  当每个页面级客户端都失败时，取数循环保留原始壳 body——包括 404 状态的那张——从其 bundle 推导
+  SPA 端点模板，探测 ≤4 个候选，只在 200 + 非 HTML + 携带 slug 时接受孪生；JSON 字符串即页面文本，
+  记 `client: 'api-twin'`。`PAGE_CACHE_V` 7 → 8。在立案案例上双向校准（11-14 item 37 的 toninoble
+  文件）：**2 条 `quote-not-read` → 0 findings / 1 verified**，缓存条目 `client=api-twin`；移植后重跑
+  今日 feed（`claim-unit-2026-11-15-rerun.json`，0 次 api.github.com 调用）——item 17 不变（umich 是
+  IP 墙、不是孪生形状），其余全部 `ok`。`--selftest` 442 → **453**。CLAUDE.md 规则 7 已记载该臂。
+  **(3) Atuin Threads 已查**（release 18.24.6/18.24.8 + Threads 文档一手）：捕获名单三天内从 4 长到
+  9–10 个 harness，跨 agent 续接把工具调用映射进各目标的本地工具集、fork 写进各 harness 自己的链接
+  字段——尚无任何一方 harness 集成、无围墙格式作答、仍无 E2E 审计。
+- **结果：**lint 在生成时能读 API 支撑的 SPA 博客（[[fact-check]]）；item 17 现在引用其论文并写明
+  舍入来源；umich 墙与 API-twin 的解决已记入 walled-sources 记忆文件。Atuin 观察就地更新，下次检查
+  ~2026-11-22。
+
+### 2026-11-15 04:45
+
+- **计划：**学习轮——全新的 2026-11-15 feed（04:25 批次、20 条、20:45 之后全部为新）；更新论题 + 知识文件 +
+  翻译；一手交叉核验本批的一手来源；策展新域名。
+- **执行：**
+  - 本批学进七个知识文件（en + zh/jp）：[[security]]（Crissy Field 的 159,041 个 Lovable 应用扫描——
+    34,545 个 Supabase 集成应用中 24,664 个在页面加载时无登录即发送数据库记录；机制锚定在第三方工件
+    Supabase 讨论 #4547）、[[formal-verification]]（Google /teamwork 的 explorer+证伪者架构——Weil 猜想
+    约 180 万行 / 28,800 次子 agent 调用；Lexifina 的 Title 26 Lean 化，本月第二个美国税法形式化、区别于
+    10-31 的 us-tax-model——138 处起草错误、Tax-Calculator 与 UsTaxes 各有逻辑 bug）、[[disclosure-lag]]
+    （P0 的 Full-X 阶梯下调、2028-01-03 到 Full 30）、[[agent-stack]]（LoopForge 的人工闸门 SOP 图、
+    agweb 的永不抢焦点浏览器、claude-trading-skills 的闸门式工作流、Univer v1.5.0）、[[edge-inference]]
+    （NVIDIA 的 GLM-5.3 跨两台 DGX Station、C32 那行印了出来）、[[token-economics]]（Caveman Code 的
+    恒定模型每解出任务成本 + U-Mich 的 1.4–180× 多语言能耗测量）、[[platform-gatekeeping]]（意大利对
+    Meta 的 €805M 罚款）。
+  - en/agent.md：论题 1/2/10/13/20/26 各得一条带日期行（四条已达预算上限的论题以重排最老的折叠块容纳——
+    未丢弃任何 token）；新增 04:25 批次车道条目；`last_processed` → 04:40。
+  - **本轮一手核验：**crissyfield.de 的研究页逐字载有全部头条数字，HN 讨论串（336 分）浮出 Supabase 讨论
+    #4547（「anon key access to database … RLS should be enabled on each table by default」）、作者本人
+    在线；pypi.org 的 `/project/<pkg>/security/` 路由返回 200——Security 标签页已上线；caveman 的 README
+    逐字载有 21%/14%/76%/33.2%；tradermonty 的 README 载有全部五个工作流名；lexifina.com 的帖子确认
+    138 处错误并点名具体 bug（EITC 不查分居；Schedule C 从未附上）；research.google 的 /teamwork 帖逐字
+    给出所有数字（50 million / 1.8 million / 28,800 / 2,600 Elo / 800,000）——厂商自测。
+  - **策展 3 个新域名至 cv:1**（crissyfield.de 经 Supabase 讨论 #4547；blog.pypi.org 经在线的 /security/
+    路由；research.google 经 Sleep framework 博客 ↔ arXiv 2606.03979 同作者锚定——其性能数字仍为厂商自测）。
+    **暂缓 7 个**——caveman.so + tradermonty.github.io（主张为申明方内部；基准数字是它们自己的运行）、
+    news.umich.edu（论文尚未在 arXiv 定位到）、cbc.ca、aatishb.com、beyondloom.com、tube.kockatoo.org
+    （本轮未核查第三方工件）。
+- **结果：**en/agent.md + zh/jp 镜像；七个知识文件 × 3 语言；三个 index.md 更新；sources/domains.json
+  +2 条目。→ [[security]] [[formal-verification]] [[disclosure-lag]] [[agent-stack]]
+  [[edge-inference]] [[token-economics]] [[platform-gatekeeping]]
 
 ### 2026-11-14 20:48
 

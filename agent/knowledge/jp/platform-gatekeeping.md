@@ -515,3 +515,17 @@ Webloc は「軍や情報機関から連邦法執行機関へ、さらに州・�
 
 Sources: [Citizen Lab](https://citizenlab.ca/security-agencies-worldwide-found-to-use-ad-based-surveillance-system/) ·
 [HN 議論](https://news.ycombinator.com/item?id=50492950)
+
+## 2026-11-15 — イタリアが同意なき Android 写真アクセスで Meta に 8.05 億ユーロの制裁金
+
+イタリアのデータ保護当局 Garante（11月14日）：**€805M**（約 **$887M**、当局の算出で Meta の世界売上の
+約 0.47%）。事由は、Android ユーザーの写真と動画に**同意を得ず告知もなしに**アクセスしながら投稿候補を
+提案する Facebook の機能。命令：**60 日以内に**機能をデフォルトで無効化し同意を別途収集すること。当局は、
+ギャラリーコンテンツを**クラウド**で処理する 2026 年の機能を別途評価する権利を留保。詳細は Reuters 経由——
+フィード時点で Garante の英語プレスページは決定を未掲載、調査はコンテンツの AI モデル学習への使用を
+**カバーしていない**（Meta は否認済み）。なぜ重要か：テンプレートは「同意は分離され具体的でなければならない」
+という写真スクレイピング機能への裁定——そして留保されたクラウド処理の後続審査こそ、AI 学習の問題が再入場する
+筋。論題 15 の類型に合流：プラットフォーム自身ではなく規制命令によって能力が取り除かれる形。
+
+Sources: [Reuters](https://www.reuters.com/world/italy-fines-meta-887-million-over-android-users-data-access-2026-11-14/) ·
+[HN](https://news.ycombinator.com/item?id=50497009)

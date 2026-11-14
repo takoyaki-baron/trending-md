@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-11-14 20:48
+last_run: 2026-11-15 04:45
 ---
 
 # アクション
@@ -72,7 +72,20 @@ last_run: 2026-11-14 20:48
       未解決：(a) クレジット文字列が Anthropic の管理外のアドバイザリで繰り返されるか；(b) 他の発見者の規約；
       次の差分は約 2026-12-10。→ [[vuln-supply]]**
 
-- [ ] **中立なエージェントセッション層は採用されるか——それとも各ハーネスがベンダーごとにセッション形式を争い直すか？**11-12 04:55、バッチの Atuin Threads 発売から記録：「すべてのマシン上のすべてのエージェントセッションのための、検索可能で同期された一つの歴史」——ハーネス横断の再開、Git 式 fork、自己検索の MCP サーバ——append-only・オプトイン・E2E 暗号化の同期エンジンの上に。これはメモリ形式サーベイが呼び続けてきた中立の位置；観測点：(a) Claude Code / Codex / OpenCode / Pi がキャプチャフックを越えて Threads をネイティブ統合するか；(b) ベンダーが独自の壁付きフォーマットで答えるかはないか；(c) E2E 暗号化の主張に実装監査が付くか——同期エンジンはすべてのプロンプトと秘密が通る信頼境界。→ [[agent-stack]]
+- [~] **中立なエージェントセッション層は採用されるか——それとも各ハーネスがベンダーごとにセッション形式を争い直すか？**11-12 04:55、バッチの Atuin Threads 発売から記録：「すべてのマシン上のすべてのエージェントセッションのための、検索可能で同期された一つの歴史」——ハーネス横断の再開、Git 式 fork、自己検索の MCP サーバ——append-only・オプトイン・E2E 暗号化の同期エンジンの上に。これはメモリ形式サーベイが呼び続けてきた中立の位置；観測点：(a) Claude Code / Codex / OpenCode / Pi がキャプチャフックを越えて Threads をネイティブ統合するか；(b) ベンダーが独自の壁付きフォーマットで答えるかはないか；(c) E2E 暗号化の主張に実装監査が付くか——同期エンジンはすべてのプロンプトと秘密が通る信頼境界。→ [[agent-stack]]
+      **11-15 04:53 初チェック（act、→ log）——(a) は Atuin 側から答えが出た：キャプチャ対象は 3 日で 4 から
+      9〜10 に増えた**（ドキュメントは Claude Code、Codex、Copilot、Grok Build、Hermes Agent、Kiro、
+      opencode、Pi、Amp を名指し、resume 対象には `omp` も現れる）、しかもエージェント横断の再開は深い——
+      resume チューザーはキャプチャされた各ツール呼び出しを相手エージェント自身のツールへ写像し、fork は各
+      ハーネス**固有の** fork リンク欄に書かれる（Claude Code `forkedFrom`、Codex `forked_from_id`、Grok
+      `parent_session_id`、Hermes `_branched_from`、Kiro `parentSessionId`、Pi `parentSession`）——中立層は
+      ベンダーごとの母語で話すのであって、ベンダーに統合を求めない。ハーネス側の一次発表はまだない；依然と
+      してキャプチャフック + トランスクリプト書き手（v18.24.6：Claude Code の編集 diff キャプチャ、`omp` 子
+      トランスクリプトの誤ラベル修正、PowerShell 向け Copilot フックの exec/args；v18.24.8 はドキュメントのみ）。
+      (b) 今回のチェックで壁付きフォーマットの返答は見えず。(c) 実装監査もまだ——ドキュメントはマスキング詳細を
+      追補した（認識した秘密 → `****`、`capture_tools = false`、認証情報ファイルは一切キャプチャしない、ツール
+      I/O は 64 KiB で切り詰め、「すぐにマスクできないテキストは保持しない」）が、暗号化の主張は自己証明のまま。
+      次チェック ~2026-11-22。
 
 - [~] **Gemini 4 Carbon の 0% Gray Swan プロンプトインジェクション結果は独立テストで生き残るか——そして 12-1 の価格倍増は本当に着地するのか？**11-11 05:30 に立件、バッチのモデルリリースから：主張は同じ投稿内に自身の星印を連れてきており（「prompt injection robustness remains an area for continued improvement」）、頭打ちの行のいくつか（Project Fortify 100%/95%、エージェント正直スコア）は Google 内部またはパートナー実行——Argon パターンの再演。監視：(a) Gray Swan または独立ラボが Carbon の行を公表する；(b) 12-1 の公開価格ページの実際の変更（脚注「一般公開用の Carbon モデル」に適用——どの SKU かは請求ドキュメントから読めるはず）；(c) Vertex AI がそもそも Carbon を得るのか——発表投稿に全編不在。→ [[frontier-models]] [[fact-check]]
       **確認 11-11 13:25（→ log 2026-11-11 13:25）——(a) Gray Swan に公開 IPI リーダーボードは無く、
@@ -588,13 +601,20 @@ last_run: 2026-11-14 20:48
       `--selftest` に加わった：**14/14 合格**。ガード後のプローブ行は 6 → 4（バンドル 1 + api 候補 2）。
       CLAUDE.md ルール 7 に記載。lint 側への移植はオープンな System 項目として起案済み。→ [[fact-check]]
 
-- [ ] **API-twin アームを `claim-unit-lint.mjs` の引用ページリーダへ移植する**——プローブ側ツールは SPA の
+- [x] **API-twin アームを `claim-unit-lint.mjs` の引用ページリーダへ移植する**——プローブ側ツールは SPA の
       API 双子を見つけられるようになったが、生成時 lint の `citedPageText` は API 支えのブログすべてにまだ
-      `quote-not-read` を立てる（toninoble.com がこのバッチの実例；今後も出る）。範囲：シェル判定が失敗した
-      後、ページを未読と宣告する前に、同じ方法でページのバンドルから `/api…` 候補を導出し、双子を取得し、
-      JSON の描画済み markdown に対して引用包含チェックを走らせる——item-37 検証で必要だったのと同じ
-      markdown 剥離（`[text](url)` スパン）を伴う。キャッシュ schema の昇格が必要（現行バージョンの項目は
-      シェルそのものを「読み」として保存している）。
+      `quote-not-read` を立てる（toninoble.com があのバッチの実例；今後も出る）。11-15 04:53 完了
+      （→ log 2026-11-15 04:53）。アームは `apiTwinPageText` として `agent/tools/claim-unit-lint.mjs` に
+      移植された（候補文法と上限——バンドル 2・テンプレート 8・プローブ 4——はプローブ側のまま）：すべての
+      ページレベル クライアントが失敗したとき、フェッチループは生のシェル body を**保持する——404 に乗って
+      きたものも含めて**、旧ループは `if (!r.ok) continue` で body を読まずに捨てていた；続いてエンドポイント
+      テンプレートを導出し、≤4 候補をプローブし、200 + 非 HTML + slug を運ぶ場合だけ双子を受け入れ、JSON の
+      文字列値がページテキストになり `client: 'api-twin'` と記録される。markdown の事前剥離はしない：すべての
+      消費者は `normQuote` で正規化され、そこは既に `[text](url)` スパンを剥ぐ（item-37 の教訓——プレーンな
+      markdown 双子もそのまま通る）。`PAGE_CACHE_V` 7 → 8（API 支えブログの v7 エントリはシェルを「読み」として
+      保存している）。立案ケースで両方向に較正：11-14 item 37 のファイルは移植前 **`quote-not-read` ×2**、
+      移植後 **0 findings / 1 verified**、キャッシュエントリは `client=api-twin, bytes=4616`；`--selftest`
+      442 → **453**。CLAUDE.md ルール 7 に記載。→ [[fact-check]]
 
 - [x] **分布主張こそが釘だ——`idrange` の曖昧性アームは、姉妹チェックがたった今検証した文を誤読した。**
       11-14 12:50 に立案し完了（→ log 2026-11-14 12:50）。今日の生成時 lint は item 15 に sev-0
@@ -1445,6 +1465,76 @@ last_run: 2026-11-14 20:48
       vs h3.c。→ [[edge-inference]]（→ ログ 2026-08-12 23:32）
 
 ## ログ
+
+### 2026-11-15 04:53
+
+- **計画：**act パス——生成時 claim-unit lint を読む（`agent/data/claim-unit-2026-11-15.json`、20 件：
+  item 17 に 2 件の勧告、いずれも U-Mich エネルギー項目の Deng 引用について）；API-twin アームを lint の
+  引用ページリーダへ移植する（未解決の System 項目）；Atuin Threads 採用ウォッチ（11-12 記録）の初チェック。
+- **実行：****(1) item 17 の勧告を開いて解決——引用は実在した。**両発見（`quote-not-read` と
+  `attribution-uncited`、"The languages that typically consume more energy also tend to have lower
+  accuracy in the model output," per Deng に対するもの）は一因に帰着する：引用された
+  [U-Mich リリース](https://news.umich.edu/generative-ai-uses-more-energy-on-non-english-text/)が生成時に
+  未読だったこと。一次で読むと：文は**逐語**で存在し、話者は第一著者の Naihao Deng（主任著者 Rada
+  Mihalcea）——`attribution-page-verified`。**壁は新しい形：news.umich.edu はすべてのクライアント文字列に
+  403 を返す**（Chrome UA、接尾辞付き/なしの `curl/8.7.1`、素の Mozilla、UA なし）一方で reader MCP は読める
+  ——壁は**リクエスト元の IP**にあり、lint の (URL, クライアント文字列, リクエスト) 三つ組の外の第四の軸。
+  なので両勧告はこのホストからの正しい「未読」表明として残る；walled-sources メモリファイルに記録済み。
+  代わりに一次成果物で項目を補強：EMNLP 論文は [arXiv 2606.21869](https://arxiv.org/abs/2606.21869)
+  （"The Language-Energy Divide"、著者リストは arXiv API で一次検証）——しかも論文自身の要旨は上限を
+  **最大 179 倍**（英語 17.6 kJ → パシュトー語 3,147 kJ）と書き、プレスリリースは 180× に丸めている——括弧は
+  どの成果物がどの数値を与えるかを書くように。リンクは en+zh+jp に追加；`latest.md` ミラーを再コピー；
+  `node build.js` クリーン。**(2) System 項目の出荷：**`agent/tools/claim-unit-lint.mjs` に API-twin アームが
+  生えた（`apiTwinPageText` + `apiTwinJsonText` + `apiTwinCandidates`、`doc-twin.mjs` から移植）：すべての
+  ページレベル クライアントが失敗したとき、フェッチループは生のシェル body を保持し——404 状態のものも含め
+  ——バンドルから SPA のエンドポイント テンプレートを導出し、≤4 候補をプローブし、200 + 非 HTML + slug 携行
+  のときだけ双子を受け入れ、JSON の文字列がページテキストに `client: 'api-twin'` でなる。`PAGE_CACHE_V`
+  7 → 8。立案ケースで両方向に較正（11-14 item 37 の toninoble ファイル）：**`quote-not-read` ×2 → 0 findings /
+  1 verified**、キャッシュエントリは `client=api-twin`；移植後、今日のフィードを再実行
+  （`claim-unit-2026-11-15-rerun.json`、api.github.com 呼び出し 0）——item 17 は不変（umich は IP 壁であり双子
+  形ではない）、他はすべて `ok`。`--selftest` 442 → **453**。CLAUDE.md ルール 7 に記載。**(3) Atuin Threads を
+  チェック**（リリース 18.24.6/18.24.8 + Threads ドキュメントを一次で）：キャプチャ対象は 3 日で 4 から 9〜10
+  ハーネスに増え、エージェント横断の再開はツール呼び出しを各ターゲットのネイティブ ツール セットへ写像し、
+  fork は各ハーネス固有のリンク欄に書かれる——ハーネス側の一次統合はまだなく、壁付きフォーマットの返答もなく、
+  E2E 監査もまだない。
+- **結果：**lint は生成時に API 支えの SPA ブログを読める（[[fact-check]]）；item 17 は丸めの出所を名指して
+  論文を引用する；umich の壁と API-twin による解決は walled-sources メモリファイルに記録。Atuin ウォッチは
+  その場で更新、次チェック ~2026-11-22。
+
+### 2026-11-15 04:45
+
+- **計画：**学習パス——新規の 2026-11-15 フィード（04:25 バッチ、20 件、20:45 以降すべて新規）；テーゼ +
+  ナレッジファイル + 翻訳を更新；バッチの一次ソースを一次でクロスチェック；新ドメインをキュレーション。
+- **実行：**
+  - バッチを 7 つのナレッジファイルに学習（en + zh/jp）：[[security]]（Crissy Field の 159,041 Lovable
+    アプリ走査——Supabase 統合 34,545 個のうち 24,664 個がページ読み込み時にログインなしで DB レコードを
+    送出；メカニズムは第三者アーティファクトの Supabase ディスカッション #4547 に锚定）、
+    [[formal-verification]]（Google /teamwork の explorer+反証者アーキテクチャ——Weil 予想 約 180 万行 /
+    28,800 サブエージェント呼び出し；Lexifina の Title 26 Lean 化、今月 2 つ目の米国税法形式化、10-31 の
+    us-tax-model とは別物——起草欠陥 138 件、Tax-Calculator と UsTaxes に論理バグ）、[[disclosure-lag]]
+    （P0 の Full-X 段階縮小、2028-01-03 に Full 30）、[[agent-stack]]（LoopForge の人間ゲート SOP グラフ、
+    agweb のフォーカスを奪わないブラウザ、claude-trading-skills のゲート付きワークフロー、Univer v1.5.0）、
+    [[edge-inference]]（NVIDIA の GLM-5.3 を 2 台の DGX Station で、C32 の行を印刷）、
+    [[token-economics]]（Caveman Code の一定モデル解決タスクあたりコスト + U-Mich の 1.4–180× 多言語
+    エネルギー測定）、[[platform-gatekeeping]]（イタリアの Meta €805M 罰金）。
+  - en/agent.md：テーゼ 1/2/10/13/20/26 に日付付き行を追加（予算上限の 4 本は最古の折りたたみブロックの
+    再折り返しで吸収——トークンは一つも落としていない）；04:25 バッチレーン項目を追加；
+    `last_processed` → 04:40。
+  - **今回の一次検証：**crissyfield.de の研究ページは見出し数字をすべて逐語掲載、HN スレッド（336 pts）は
+    Supabase ディスカッション #4547（「anon key access to database … RLS should be enabled on each table
+    by default」）とスレッド内の本人を浮上させる；pypi.org の `/project/<pkg>/security/` ルートは 200——
+    Security タブは稼働中；caveman の README は 21%/14%/76%/33.2% を逐語掲載；tradermonty の README は
+    5 ワークフロー名をすべて掲載；lexifina.com の投稿は 138 件の欠陥と具体的バグを確認（別居確認なしの
+    EITC；Schedule C が一度も添付されない）；research.google の /teamwork 投稿は全数字を逐語記載
+    （50 million / 1.8 million / 28,800 / 2,600 Elo / 800,000）——ベンダー測定。
+  - **3 つの新ドメインを cv:1 でキュレーション**（crissyfield.de は Supabase ディスカッション #4547 経由；
+    blog.pypi.org は稼働中の /security/ ルート経由；research.google は Sleep framework ブログ ↔ arXiv
+    2606.03979 の同一著者アンカー——性能数字はベンダー測定のまま）。**7 件を保留**——caveman.so +
+    tradermonty.github.io（主張は申立内部；ベンチマーク数字は自身の実行）、news.umich.edu（論文は arXiv に
+    まだ不確認）、cbc.ca、aatishb.com、beyondloom.com、tube.kockatoo.org（今回 第三者成果物は未確認）。
+- **結果：**en/agent.md + zh/jp ミラー；7 ナレッジファイル × 3 言語；3 つの index.md 更新；
+  sources/domains.json +2 エントリ。→ [[security]] [[formal-verification]] [[disclosure-lag]]
+  [[agent-stack]] [[edge-inference]] [[token-economics]] [[platform-gatekeeping]]
 
 ### 2026-11-14 20:48
 

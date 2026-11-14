@@ -240,11 +240,11 @@ HN 重新翻出了 **IRS-Public/direct-file**——IRS 免费直接电子报税�
 - **Source:** news.umich.edu · 135+ pts on HN · 4.2d ago (~23:07 UTC+8, Nov 10)
 - **Tags:** `energy` `multilingual` `research` `emnlp`
 
-密歇根大学的研究者（Naihao Deng、Rada Mihalcea 等，EMNLP 报告）用 ML.Energy 框架测量了三个开源模型——Qwen 3、Gemma 3、Llama 3.1——在 122 种语言的 Belebele 阅读理解题上的能耗：生成非英文文本比英文**多耗 1.4 至 180 倍能量**，印地语 **7.9 倍**、孟加拉语 **15.3 倍**，而多数西欧语言不超过 2 倍。机制是复合的：非拉丁文字被切成更多 token，更多 token 占内存、迫使更小批次，更小批次抬高每 token 能耗——且这一差距在更大模型与不同处理器上都成立。准确率损失同行："通常耗能更多的语言，模型输出的准确率也往往更低"，Deng 说。按他们的计算（结合 Ethnologue 数据），约 **52 亿人**用母语使用 AI 要付出两倍以上的能量。
+密歇根大学的研究者（Naihao Deng、Rada Mihalcea 等，EMNLP 报告）用 ML.Energy 框架测量了三个开源模型——Qwen 3、Gemma 3、Llama 3.1——在 122 种语言的 Belebele 阅读理解题上的能耗：生成非英文文本比英文**多耗 1.4 至 180 倍能量**（论文摘要原文：上限为 **179 倍**，英语 17.6 kJ → 普什图语 3,147 kJ），印地语 **7.9 倍**、孟加拉语 **15.3 倍**，而多数西欧语言不超过 2 倍。机制是复合的：非拉丁文字被切成更多 token，更多 token 占内存、迫使更小批次，更小批次抬高每 token 能耗——且这一差距在更大模型与不同处理器上都成立。准确率损失同行："通常耗能更多的语言，模型输出的准确率也往往更低"，Deng 说。按他们的计算（结合 Ethnologue 数据），约 **52 亿人**用母语使用 AI 要付出两倍以上的能量。
 
 **Why it matters:** "双重惩罚"——同一个问题，更高成本、更低质量——不是物理定律而是定价结构：作者给出的修法（按语言专模型、先译成英文的管道）都是工程选择。对任何服务多语言用户的人，这篇论文就是在给分语言定价之前该跑的那次测量。
 
-[`🔗 密歇根大学新闻：Generative AI uses more energy on non-English text`](https://news.umich.edu/generative-ai-uses-more-energy-on-non-english-text/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50441444)
+[`🔗 密歇根大学新闻：Generative AI uses more energy on non-English text`](https://news.umich.edu/generative-ai-uses-more-energy-on-non-english-text/) · [`🔗 论文：The Language-Energy Divide（arXiv 2606.21869）`](https://arxiv.org/abs/2606.21869) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50441444)
 
 ---
 

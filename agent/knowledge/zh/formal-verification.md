@@ -261,3 +261,34 @@ Sources: [陶哲轩：Lean Grimoire](https://terrytao.wordpress.com/2026/11/11/l
 
 来源：[卫报：AI 帮助解锁 Gödel 笔记本中的发现](https://www.theguardian.com/science/2026/nov/13/kurt-godel-notebooks-ai-helps-unlock-hidden-discoveries-man-who-transformed-maths) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50486748)
+
+## 2026-11-15 — 证伪者循环的两个尺度：Google 的 /teamwork 与美国税法
+
+**Google Antigravity /teamwork**（研究博客，11 月 13 日，Mirrokni）：并行 explorer agent 各自配对一个专门的
+**falsifier**——Lean 4 证明检查、未修改的测试套件、执行模拟器——候选结果经机器验证而非被信任；上下文被
+分区，每个 agent 只看到自己步骤的文件与工具。厂商自测结果：**2013 年 Courtade–Kumar 猜想**的完整 Lean 4
+证明（「in full generality」，约 5,000 万行）、**Weil 猜想的首次形式化**（约 **180 万**行 Lean、**28,800**
+次子 agent 调用）、整数环上的 Hilbert 第十问题、自 1927 年悬置的 Birkhoff 猜想、一个八天内 +约 **2,600
+Elo** 的围棋引擎，以及 **Zircon 微内核移植（约 80 万行安全 Rust）**、libgav1 重写后比其 C++ 快 20–30%。
+/teamwork、/boost 与 Deep Review 已在 Antigravity 上线；10,000 名研究者的免费访问计划开放申请。每个数字都
+是 Google 测自己的系统——架构才是承重主张。本轮已核验：博文逐字给出所有数字（50 million / 1.8 million /
+28,800 / 2,600 Elo / 800,000 全部可 grep）。
+
+**Lexifina 的 Title 26 Lean 化**（`lexifina/global-law`，CC0；Alan Yahya）：本月**第二个**美国税法形式化产物
+——与下方 10-31 的 `us-tax-model` 线索是不同项目。每个公法一个 git commit 追溯到 1994 年版，结构化交叉引用
+机械检查，外加一个 2025 个人所得税模型（约 **2,159** 个定义/定理，含 AMT）。产出：**138 处真实的起草错误**，
+每处附 Lean 证书（死引用、拼写错误、重复编号、未闭合括号）；普遍性质（SALT 上限永不随收入增长；Tax Table
+在 $100k 以下对法定公式的偏差至多 −$5/+6）。对 5,000 个家庭做三工具交叉验证——PolicyEngine-US 在 **4,993 /
+5,000** 个家庭上完全一致，而分歧是**逻辑性的，不是算术性的**：Tax-Calculator 给单独申报者发 EITC 而不检查
+配偶是否分居；UsTaxes 从不把 Schedule C 附到 2025 年申报表上，自雇收入凭空消失。对约 195,787 份单年度申报
+的自动搜索重新发现了 §199A 与 Roth 转换策略，并报告了三个新策略。明示的局限：法条翻译由 AI 完成、**未经
+律师或 CPA 检查**；覆盖面只有 2025 个人税法；其结论——个人税年度内没有 Roth 量级的未公开漏洞。
+
+- **为何重要：**本周同一条循环——模型提议、证明助手（或独立实现）裁决——跑通了三个尺度（哥德尔笔记本、
+  一部联邦法典、一个厂商 agent 平台）。税法版本对非数学家的后果最直接：oracle 是 IRS 自己公布的数字加上
+  三个独立实现，而三个中有两个与法律不一致。
+
+Sources: [Google Research：/teamwork](https://research.google/blog/advancing-science-engineering-with-antigravitys-teamwork-feature/) ·
+[Lexifina：Formalizing the US Tax Code](https://lexifina.com/blog/formalizing-the-us-tax-code) ·
+[HN /teamwork](https://news.ycombinator.com/item?id=50496811) ·
+[HN 税法](https://news.ycombinator.com/item?id=50497900)

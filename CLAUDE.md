@@ -864,6 +864,21 @@ underlying pages — this produced a two-layer false signal in a single item.
    interpolation must be a PATH slot (static head ends with `/`). Citation-grade reading of the
    twin's JSON needs the markdown link stripped (`[received update](/images/…)` sits inside one of
    item 37's quotations — a raw-letters grep interleaves the image path).
+   **And the generation-time lint reads the twin too** (added 2026-11-15 04:53, the port item): the
+   probe finds and names the twin, but the lint's `citedPageText` still filed `quote-not-read` on
+   every API-backed blog it cites — the exact advisory that filed the arm into existence now
+   recurred by construction. The arm is ported (candidate grammar, caps — 2 bundles, 8 templates,
+   4 probes — and the slug guard unchanged): when every page-level client fails (404-status shell,
+   wall, whitespace shell, stripper casualty), `claim-unit-lint.mjs` keeps the raw shell body —
+   including the one that rode the **404**, which the old loop discarded unread at `if (!r.ok)`
+   — derives the endpoint templates, probes, and accepts a twin only when it answers 200, is not
+   HTML, and carries the slug; the JSON's string values become the page text with `client:
+   'api-twin'`, and every consumer normalizes through `normQuote`, which already strips the
+   markdown spans. Same suppression-only direction as every client before it: a twin can only
+   turn `unread` into `read`, never invent text. Calibrated both ways on the filing case: the
+   11-14 item 37 returns **2 `quote-not-read`** before the port, **0 findings / 1 verified**
+   after, cache entry `client=api-twin`; `PAGE_CACHE_V` 7 → 8 (a v7 entry for an API-backed blog
+   holds the shell as its read); `--selftest` 442 → **453**.
    Five judgement calls it encodes, each a hand-made mistake first: **(a) a 200 is not a twin** —
    SPA catch-alls answer `200 text/html` for any `.md` path, so a candidate only counts if its body
    is not HTML and not byte-identical to the page; **(b) a redirect is not a miss** —

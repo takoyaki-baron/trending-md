@@ -266,3 +266,38 @@ Sources: [Terence Tao: Lean Grimoire](https://terrytao.wordpress.com/2026/11/11/
 
 Sources: [Guardian: AI が Gödel のノートブックの隠れた発見を解き放つ](https://www.theguardian.com/science/2026/nov/13/kurt-godel-notebooks-ai-helps-unlock-hidden-discoveries-man-who-transformed-maths) ·
 [HN ディスカッション](https://news.ycombinator.com/item?id=50486748)
+
+## 2026-11-15 — 反証者のループが2つのスケールで：Google の /teamwork と米国税法
+
+**Google Antigravity /teamwork**（研究ブログ、11月13日、Mirrokni）：並列の explorer エージェント各自に専任の
+**falsifier（反証者）**——Lean 4 証明チェック、無修正のテストスイート、実行シミュレータ——を対にし、候補は
+信頼ではなく機械検証される。コンテキストは分割され、各エージェントは自分のステップのファイルとツールだけを
+見る。ベンダー測定の結果：**2013 年の Courtade–Kumar 予想**の完全な Lean 4 証明（「in full generality」、
+約5,000万行）、**Weil 予想の初形式化**（約 **180 万**行の Lean、**28,800** 回のサブエージェント呼び出し）、
+整数環上の Hilbert の第十問題、1927年から未解決の Birkhoff 予想、8日以内で +約 **2,600 Elo** の囲碁エンジン、
+**Zircon マイクロカーネルの移植（約80万行の安全な Rust）**と C++ より 20〜30% 速く書き直した libgav1。
+/teamwork、/boost、Deep Review は Antigravity で公開済み、研究者 10,000 人への無料アクセスプログラムが
+受付中。どの数字も Google が自システムを測ったもの——アーキテクチャこそが荷重主張。今回検証：投稿は全数字を
+そのまま記載（50 million / 1.8 million / 28,800 / 2,600 Elo / 800,000 のすべてが grep できる）。
+
+**Lexifina による Title 26 の Lean 化**（`lexifina/global-law`、CC0、Alan Yahya）：今月**2つ目**の米国税法
+形式化アーティファクト——下の 10-31 の `us-tax-model` 系譜とは別物。公法ごとに 1 コミットで 1994 年版まで
+遡り、構造化された相互参照を機械的にチェック、加えて 2025 年個人所得税モデル（約 **2,159** 個の定義/定理、
+AMT を含む）。収穫：Lean 証明書つきの**実在する起草欠陥 138 件**（死んだ参照、誤字、番号重複、閉じ忘れた
+括弧）；普遍的性質（SALT 上限は所得とともに決して増えない；Tax Table の法定式からの逸脱は $100k 未満で
+−$5〜+$6 以内）。3つの独立ツールで 5,000 世帯を交差検証——PolicyEngine-US は **4,993 / 5,000** 世帯で完全一致、
+そして不一致は**論理的であって算術的ではない**：Tax-Calculator は配偶者が別居しているかの確認なしに別居申告者へ
+EITC を支給、UsTaxes は 2025 年の申告に Schedule C を一度も添付しないため自営業所得が消える。約 195,787 件の
+単年度申告への自動探索は §199A と Roth 変換の既知戦略を再発見し、新規 3 件を報告。明示された限界：法条翻訳は
+AI 実施で**弁護士にも CPA にも確認されていない**、対象は 2025 年個人税のみ、結論——個人税年度に Roth 級の
+未発見抜け穴はない。
+
+- **なぜ重要か：**今週、同じループ——モデルが提案し、証明アシスタント（または独立実装）が裁く——が 3 つの
+  スケール（ゲーデルのノート、連邦法典、ベンダーのエージェントプラットフォーム）で走った。税法版が
+  非数学者への影響が最も直接的：オラクルは IRS 自身の公表数値と 3 つの独立実装で、そのうち 2 つが法と
+  一致しなかった。
+
+Sources: [Google Research: /teamwork](https://research.google/blog/advancing-science-engineering-with-antigravitys-teamwork-feature/) ·
+[Lexifina: Formalizing the US Tax Code](https://lexifina.com/blog/formalizing-the-us-tax-code) ·
+[HN /teamwork](https://news.ycombinator.com/item?id=50496811) ·
+[HN 税法](https://news.ycombinator.com/item?id=50497900)

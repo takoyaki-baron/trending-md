@@ -2734,3 +2734,43 @@ Sources: [Parcha-ai/agentrun](https://github.com/Parcha-ai/agentrun) ·
 Sources: [block/buzz](https://github.com/block/buzz) ·
 [block/buzz-app releases](https://github.com/block/buzz-app/releases) ·
 [backnotprop/plannotator](https://github.com/backnotprop/plannotator)
+
+## 2026-11-15 — 人間のゲートがグラフノードになる；フォーカスを奪わないブラウザ；決定プロセスを強制するスキル
+
+**Tencent/LoopForge**（セルフホスト、Docker、MIT；+101★、3 日で v0.3.7→v0.3.9-rc.1）：コーディング
+エージェントが PR を出し、人間がゲートを握るワークスペース——Main Bot がサンドボックス化された
+ワークスペースを開き、リポジトリをチェックアウトし、プロジェクトロールに委譲し、PR を出す。繰り返し
+可能な作業は **SOP** として固定化：Agent/Script/**Human-gate**/サブ SOP ノードからなるグラフで、
+ノードごとの成果物・リトライ・前ステップへの差し戻しセマンティクスを持つ。executor リストは単一製品として
+最広：CodeBuddy、Codex、Claude Code、OpenCode、Cursor CLI、Antigravity、Kimi Code、Pi、DeepSeek Harness、
+ZCode。差別化は 2 点：すべて自社インフラ上のセルフホストであること、人間のゲートが横付けの承認ボタンでは
+なくファーストクラスのグラフノードであること。
+
+**paul-nameless/agweb**（WebKit、macOS 26+、Show HN）：人間ではなくエージェントのために作られた
+ブラウザ——playwright 風 CLI、ダイアログはコードで応答、そして核心性質：**どのウィンドウもフォーカスを
+奪わない**。並列エージェントがキーボード争奪戦なしでブラウジングでき、各エージェントのタブは 1 つの
+ダッシュボード（⌘D）に見えるまま。ネイティブ macOS イベントがクリックとホバーを駆動（人間ゲートの
+サイトも動く）；`fill --secret-cmd 'pass show site'` はエージェントのトランスクリプトに決して現れない
+認証情報を入力。アイドルタブは 0% CPU にサスペンド。自己測定：アイドル 5 ページで **590 MB**、headless
+Chrome 730 MB / Playwright Chrome 1.6 GB 対。headless と Playwright 駆動 Chrome の間のエージェント
+ブラウザ設計空間における際立った一点：本物のウィンドウ、フォーカスなし、人間には見える。
+
+**tradermonty/claude-trading-skills**（+556★、この日の最大獲得）：5 つの名前付きワークフロー
+（market-regime-daily、core-portfolio-weekly、swing-opportunity-daily、trade-memory-loop、
+monthly-performance-review）。各ワークフローは機械可読な YAML マニフェストで、正確なスキル・決定ゲート・
+成果物を順に指定する——市場の幅、ドローダウン サーキットブレーカ、ポジションサイズ、取引前の規律ゲート、
+取引後の検証ループ。アドバイスでもシグナルサービスでも自動売買でもないと強調。全ワークフローに API なしの
+縮退経路を用意、サンプル出力には架空データの免責を目立たせて掲載。信号は形状にある：エージェントスキルの
+採用が*タスクを遂行する*ことから*ゲートと成果物で決定プロセスを強制する*ことへ移っている——免責の規律自体が、
+規制領域でエージェントワークフローを公開する際のジャンルテンプレートになる。今回検証：README は 5 つの
+ワークフロー名と「not financial advice」の行を載せている。
+
+**dream-num/univer** v1.5.0（+495★、計 24.4k；09-22 の office-as-merge-surface エントリへの日付付き更新）：
+ドキュメントモデルをプログラム的に公開するオープンソース Sheets/Docs SDK——エージェントは閉じたスイートを
+操り人形のように動かすのではなく、アプリ自身のデータモデル内で構造化ドキュメントを読み書きする。
+エージェント・オフィス層に、クローズドスイートのプラグインと比較評価できるオープン候補がまた 1 つ加わる。
+
+Sources: [Tencent/LoopForge](https://github.com/Tencent/LoopForge) ·
+[paul-nameless/agweb](https://github.com/paul-nameless/agweb) ·
+[tradermonty/claude-trading-skills](https://github.com/tradermonty/claude-trading-skills) ·
+[dream-num/univer v1.5.0](https://github.com/dream-num/univer/releases/tag/v1.5.0)

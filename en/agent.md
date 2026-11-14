@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-11-14T20:45:00+08:00
+last_processed: 2026-11-15T04:53:00+08:00
 ---
 
 # Learnt Agent
@@ -43,16 +43,11 @@ patterns, and turn them into insights and actionable todos.
    - **11-11 — first-party semantic layer (`NVIDIA/auto-ontology` **11,396★**, no external contributions); browsers institutionalize the skill channel (`modern-web-guidance` v1.0.0); Scrapling **101,056★**; `worktrunk` **12,377★**.** → [[agent-stack]] [[agent-plugins]]
    - **11-14 — Block Buzz re-trends (**37,331★**; 09-26: 34.7k) with the signed-event log as NATIVE storage (Nostr NIP-01, keypair-scoped "by
      identity, not permission flags", TLA+/Tamarin isolation); Plannotator (**10,522★**, 5 releases in 6 days) is the review surface: 11 CLIs, one queue. → [[agent-stack]]
-   - **11-12 — AWS claims the local-emulation layer agent-first, and agent sessions get a neutral sync layer:** `aws/aws-emulator` (official
-     org, Rust, **CC0**, one crate per service on the same Smithy models as the wire protocols; embedded mode = one in-process instance per test;
-     fidelity scores per release; "**does not take PRs**"; agent hook `aws agent-toolkit add-skill` beside a Vogels essay on engineering "when
-     agents write the code") — LocalStack's decade-old category becomes the official default via the skill channel; Atuin **Threads** (18.24+):
-     cross-harness session sync — "start in Claude Code, resume in Codex on another machine", fork "like a Git branch", MCP self-search — over an
-     append-only, opt-in, E2E-encrypted engine; `herdr` (**50,277★**): every pane working/blocked/idle, agents prompt each other, and "the original
-     processes do not survive" a restart — terminal persistence ≠ session persistence; Threads is the latter. → [[agent-stack]] [[system1-decision]]
+   - **11-12 — AWS claims the local-emulation layer agent-first, and agent sessions get a neutral sync layer:** `aws/aws-emulator` (official org, Rust, **CC0**, one crate per service on the same Smithy models as the wire protocols; embedded mode = one in-process instance per test; fidelity scores per release; "**does not take PRs**"; agent hook `aws agent-toolkit add-skill` beside a Vogels essay on engineering "when agents write the code") — LocalStack's decade-old category becomes the official default via the skill channel; Atuin **Threads** (18.24+): cross-harness session sync — "start in Claude Code, resume in Codex on another machine", fork "like a Git branch", MCP self-search — over an append-only, opt-in, E2E-encrypted engine; `herdr` (**50,277★**): every pane working/blocked/idle, agents prompt each other, and "the original processes do not survive" a restart — terminal persistence ≠ session persistence; Threads is the latter. → [[agent-stack]] [[system1-decision]]
    - **11-12 PM — the workspace category gets an AG-UI-standard entrant, and an OSS project manages its agent contributors as a concurrency
      problem:** `CopilotKit/OpenBot` (11,235★ verified) — each bot its own sandboxed computer, approval before sends, audit trail; `ashhart/TensorFold`'s
      **Agent Traffic Control** — issue leasing with expiry for AI-agent contributors (TensorFold **not new**: created 06-19); Qwen Code 1.0.0-preview folds Qoder into the terminal CLI. → [[agent-stack]] [[agent-plugins]]
+   - **11-15 — human gates become delivery-graph nodes, the browser never takes focus, skills enforce a decision process:** `Tencent/LoopForge` (self-hosted MIT; SOP graphs of Agent/Script/**Human-gate**/sub-SOP nodes with send-back-to-step semantics; ten executors CodeBuddy→ZCode); `paul-nameless/agweb` (WebKit macOS, **no window ever takes focus**, `fill --secret-cmd`, five idle pages **590 MB**); `tradermonty/claude-trading-skills` (**+556★**, day's biggest gain — five YAML workflows with decision gates, emphatically not a signal service); `dream-num/univer` v1.5.0 dated update (+495★). → [[agent-stack]]
 2. **Agent security is the immediate attack surface — and every named class ends up enforced by
    nobody.** ~50+ CVSS≥9 entries since Aug 12 resolve into sixteen recurring shapes (full map in
    [[security]]); four cases show the class named, the mitigation converged, nobody enforcing it.
@@ -69,6 +64,11 @@ patterns, and turn them into insights and actionable todos.
      codex answers with an OS sandbox, kon's compound→prompt is the strongest sampled Python gate. → [[security]]
    - **11-12 — the permission-aware-RAG class gets its own vendor's CVEs, and confidential computing's migration path fails its rebind protocol:** Auth0's FGA retrievers (`CVE-2026-107372` `auth0-ai-js`, `CVE-2026-108167` `auth0-ai-python`) "do not distinguish between authorization checks under different users, relations, or conditions" — documents denied by FGA land in the model context; the filter checks *whether* access is allowed but not *whose* (plus a Node SDK path-parameter redirect `CVE-2026-126128` and an ASP.NET Back-Channel Logout bug `CVE-2026-126129`); Intel SA-01580 puts three 9.x on the TDX **MigTD** SPDM rebind/authentication path (`CVE-2026-61887` 9.4, `CVE-2026-44685` 9.3, `CVE-2026-61473` 9.2 — live-migration attestation is part of the TCB); OpenSSL ships five (`CVE-2026-95691` QUIC client UAF, `CVE-2026-107496` CMS loop, an AES-GCM-SIV pair). → [[security]] [[vuln-supply]]
    - **11-14 — the incident cluster lands on the agent ecosystem's own supply chain, and a consumer IoT teardown re-proves an October lesson:** FBI **FaceStealer** ($400M+ / 900+ victims / 18 months; fake video calls replaying a recorded acquaintance; OSS maintainers named a priority target class); Apify's compromised credential (API tokens now stored only as hashes; "While it's open, anyone who knows a storage ID can read that storage"); Uptime Kuma's admin-only RCE via an upstream package regression (`GHSA-437w-j82f-9vjh`, 7-day embargo, 2.5.10+2.5.11 in one day); Coway's air purifier downloads its root CA **over plain HTTP** — mitmproxy now ships `--emudhra-old`, the eMudhra lesson productized by the proxy; and weight-space misfolding, the first threat model for edited weights, defender-asymmetric by construction. → [[security]]
+   - **11-15 — the vibe-coding misconfiguration class at platform scale:** Crissy Field × Handelsblatt scanned **159,041** Lovable apps (Common Crawl): of
+     **34,545** with the Supabase integration, **24,664 serve database records on page load without login**, and follow-up read-only requests with the same
+     anonymous keys reached email tables on **7,403 (30%)** — passports, an 80k-profile/200k-message forum, 280k customer emails among the case files. The
+     mechanism is platform-shaped (browser-shipped anon key + forgotten RLS; Supabase discussion #4547 predates the scan), and the builder profile is the least
+     able to see it. → [[security]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
    Keep the shared core resident, stream routed experts from SSD — the trick now spans training,
@@ -213,13 +213,8 @@ patterns, and turn them into insights and actionable todos.
 10. **Specs are becoming the executable contract of agent coding** — spec-kit (spec-as-code) and
     Vero (machine-checked proof synthesis) are the same bet from opposite ends: make intent a
     machine-checkable artifact.
-    - **09-05→10-19 (folded) — the loop, the institution, the counterweight:** FLT formalization (13M Lean lines/11 days); Recht's FFT autopsy — the
-      failure mode is *unattached* math; Simons commits **$15M** aimed at *evaluation and standards, not acceleration*; Claude-designed quantum circuits
-      ship **17× fewer gates** with a Lean proof; Lean's `lake check --paranoid` rechecks against four kernels; Maggi's essay: glosses degrade with length. → [[frontier-models]] [[fact-check]] [[ai-impact]]
-    - **10-21→10-22 (folded) — the oracle pattern reaches wet-lab biology and the shipped binary:** a 64h binder campaign vs five scorpion
-      neurotoxins (318,484 designs → 211 synthesized → 17 bind; "we do not claim to have produced an antivenom"); Claude+Theorem prove **123
-      OSS-Fuzz libraries / 239 entry points** crash-free over compiled RISC-V (~180M lines of Rocq), footnote 6 admitting the
-      trivially-never-crashes rewrite hole (reward shaping + audited patch log mitigate). → [[formal-verification]] [[frontier-models]]
+    - **09-05→10-19 (folded) — the loop, the institution, the counterweight:** FLT formalization (13M Lean lines/11 days); Recht's FFT autopsy (the failure mode is *unattached* math); Simons commits **$15M** aimed at *evaluation and standards, not acceleration*; Claude-designed quantum circuits ship **17× fewer gates** with a Lean proof; Lean's `lake check --paranoid` rechecks against four kernels; Maggi: glosses degrade with length. → [[frontier-models]] [[fact-check]] [[ai-impact]]
+    - **10-21→10-22 (folded) — the oracle pattern reaches wet-lab biology and the shipped binary:** a 64h binder campaign vs five scorpion neurotoxins (318,484 designs → 211 synthesized → 17 bind; "we do not claim to have produced an antivenom"); Claude+Theorem prove **123 OSS-Fuzz libraries / 239 entry points** crash-free over compiled RISC-V (~180M lines of Rocq), footnote 6 admitting the trivially-never-crashes rewrite hole (reward shaping + audited patch log mitigate). → [[formal-verification]] [[frontier-models]]
     - **11-10 PM — agent-driven formalization at interpreter scale, with the differential test BEFORE the proof:** David Andrews and Chao
       Zhang point Opus 5.5 agents at **CPython 3.15.2**: Mirror (line-by-line Lean copy preserving quirks), differential test vs real
       python3 on ≥**50,000** inputs, prove-or-refute (`sorry`/`native_decide`/new axioms rejected at build), adversarial second-agent
@@ -235,6 +230,11 @@ patterns, and turn them into insights and actionable todos.
      Gödel workbook transcriptions + six books of scholarship → 650-page digest in days; **663** results → Coq rules: ~**400** verified as stated,
      ~**200** repaired, ~**50** false; the 1940s AC-independence reconstruction passes Coq "one step away". → [[formal-verification]]
 
+   - **11-15 — the loop reaches the statute book, and gets a vendor-scale falsifier architecture:** `lexifina/global-law` (CC0) puts Title 26 in Lean —
+     **138 drafting faults certified**; cross-validation against PolicyEngine-US/Tax-Calculator/UsTaxes on 5,000 households finds **logical bugs in two tools**
+     (EITC without the lived-apart check; Schedule C never attached) — AI-done, "not checked by a lawyer or CPA"; Google /teamwork pairs explorer agents with
+     dedicated **falsifiers** (Lean checking, unmodified tests, simulators): Weil conjectures **~1.8M lines / 28,800 subagent invocations**, Courtade–Kumar
+     2013 proved in full generality, Zircon port ~800k lines safe Rust — vendor-measured, the architecture is the claim. → [[formal-verification]]
 11. **The agent tool-call boundary is moving from human approval to model judgment — by default.**
     Claude Code's Auto Mode default: a proprietary classifier scores every tool call; commissioned
     evals answered the "who guards it" question (0/720 vs Codex 5.8–19%) but there is no standing
@@ -290,8 +290,7 @@ patterns, and turn them into insights and actionable todos.
     - **08-20 → 10-29 (folded) — measured levers, inverted ones, and the line item is the cache read:** RTK's "90%" inverted by Quesma; ColGrep cut Claude Code tokens **34%**; leviathan **436 median
       tokens/question** vs grep's **107,122**; CarryOn +5.8% OSWorld for 51.9% fewer tokens; rolling-drop +1.7 points at 27.7% lower cost; docling's formatting drop is F1 **0.690 → 0.150**; stripping
       **attribution tags** gains **13–24** across 480 CrossProfile tasks; "cache read costs are the vast majority (**96%–99%**) of the total token expenditure" — Fable 5.1's 75% cache-read cut is "**a
-      70–75% reduction in the cost of using the model**" — and the ~30 s panel label that re-sends the **whole transcript** is **16.4%** of `cost_usd` (**18–26%** across four
-      measurements). → [[token-economics]] [[harness-overhead]] [[agent-stack]]
+      70–75% reduction in the cost of using the model**" — and the ~30 s panel label that re-sends the **whole transcript** is **16.4%** of `cost_usd` (**18–26%** across four measurements). → [[token-economics]] [[harness-overhead]] [[agent-stack]]
     - **10-31 12:19 — prefill is superlinear:** decode compute/energy scale **linearly** with output length while prefill carries
       **linear and quadratic** terms with input length (arXiv 2610.39621), so doubling history costs more than twice as much in the phase
       treated as "just reading" — retrieval and compaction are about joules as well as latency. → [[token-economics]]
@@ -305,9 +304,10 @@ patterns, and turn them into insights and actionable todos.
       in its abstract) — while SumOne trains its summarizer on exactly that reconstruction (2611.06445: **−78%** / **−75%** est. cost).
       → [[token-economics]] [[fact-check]]
     - **11-07 → 11-08 (folded) — latent compression's three shapes, one week:** compress a corpus into **16 memory tokens** (Memorilla beats full context on FactKG
-      **84.33** vs **80.43**, **108×** fewer); compress conversation into reversible summaries mid-session (`billion-context`, **95–97%** prefix-cache hits claimed,
-      integration testing unfinished); compress each tool observation into **latent tokens in the embedding space** (Coca-Cola, arXiv 2611.06500 — **70.01–89.24%**
-      token cut, "**consistently improving task performance**"; action-sufficiency, not reconstruction). → [[token-economics]]
+      **84.33** vs **80.43**, **108×** fewer); compress conversation into reversible summaries mid-session (`billion-context`, **95–97%** prefix-cache hits claimed, integration testing unfinished); compress each tool observation into **latent tokens in the embedding space** (Coca-Cola, arXiv 2611.06500 — **70.01–89.24%** token cut, "**consistently improving task performance**"; action-sufficiency, not reconstruction). → [[token-economics]]
+   - **11-15 — cost-per-solved-task becomes a product pitch, and script → tokens → energy gets its measurement:** Caveman Code (120k★) claims Terminal-Bench 4 **21% cheaper per
+     solved task than Codex / 14% than Claude Code** at constant model — and publishes the failed experiment (stripping prior reasoning cut re-reading 68% but **raised cost 19%**); U-Mich
+     (EMNLP, ML.Energy): non-English generation costs **1.4–180×** the energy (Hindi 7.9×, Bengali 15.3×) via tokenizer → memory → batch size, accuracy lower on top — ~**5.2B** people pay 2×+. → [[token-economics]]
 
 14. **AI crawler load is a measured tax on open-source infrastructure — and the only working fix
     degrades anonymous access.** kernel.org: ~6M random-commit requests/day, 33% solve Anubis
@@ -437,9 +437,7 @@ patterns, and turn them into insights and actionable todos.
 
 20. **Vulnerability discovery has outrun the capacity to triage it, so advisory *policy* and the
     *assigner* are now the informative fields — and the score the least informative one.**
-   - **10-14 → 11-05 (folded) — assigner and policy inform, the score does not; discovery is PRICED below triage:** the CVRF's **343** other CNAs;
-     curl/Go no CVSS by policy; Cloud Foundry's fix *inside* its own range; of **638** zero-CVSS records only **23** carry a word (all Apache); Chrome 157's
-     **213** records in **31 s** with **81** ADP vectors; OpenAI **2,308** candidates → **948** LPEs + **291** infoleaks for **$1,213,430**. → [[vuln-supply]] [[security]] [[disclosure-lag]]
+   - **10-14 → 11-05 (folded) — assigner and policy inform, the score does not; discovery is PRICED below triage:** the CVRF's **343** other CNAs; curl/Go no CVSS by policy; Cloud Foundry's fix *inside* its own range; of **638** zero-CVSS records only **23** carry a word (all Apache); Chrome 157's **213** records in **31 s** with **81** ADP vectors; OpenAI **2,308** candidates → **948** LPEs + **291** infoleaks for **$1,213,430**. → [[vuln-supply]] [[security]] [[disclosure-lag]]
    - **11-06 → 11-08 (folded) — ingest stamps are QUEUES, bounds can live inside version strings, then the overnight desk measured whole:** Apache's nine
      reserved **months apart** beside two VulDB records in one **1.977 s** window; `GitHub_M`'s operator-spelled bound invisible to a `lessThan` census
      (**303/3,069**; one `versionBounds()` now feeds all three selectors); one NVD window carries **125** VulnCheck records, every one fix-then-record
@@ -460,6 +458,7 @@ patterns, and turn them into insights and actionable todos.
      the **7.4** is dot-headers (`X.Authenticated.User` → PHP's underscore rewrite spoofing `$_SERVER` identity keys); the worker-mode
      family is tenant-boundary (process-wide `putenv()` leaking DB secrets across requests). → [[vuln-supply]] [[security]]
 
+   - **11-15 — Project Zero retires the soak:** "**Full X**" — disclosure X days after report regardless of patch status: **Full 90 → Full 60 (2027-02-02) → Full 30 (2028-01-03)**; grace period + variant policy removed, fix status no longer a decision point — the first disclosure-policy rewrite argued from AI-accelerated exploitation, and a dated expiry for every patch-cadence assumption built on 90+30. → [[disclosure-lag]]
 21. **The physical layer of connectivity is an active target, and the cheap attack is arson.** Civilian
     satellite ground stations and single regional data centres are defended by fences and geography
     rather than by controls; attribution is asymmetric by design (someone usually has an interest in
@@ -603,16 +602,13 @@ patterns, and turn them into insights and actionable todos.
      "**Overview for agents**" while its benchmark line reads "10x faster than OpenCV on CUDA, but ofc, **4x slower on CPU**". → [[fact-check]] [[dev-tools]]
    - **11-05 — the caveat arrives WITH the capability rather than after it:** FlashProve ships a Lean verifier beside "**we do not guarantee that all three (Lean, paper, code) match each other**" and a **1,024**-token ceiling, and Dory1.0-4B prints GPQA **72.41** at two loops vs **72.16** at four in the same table as its **+11.5**-point SWE-bench Verified win. → [[formal-verification]] [[frontier-models]]
    - **11-06 — the caveat arrives as a percentiles column, a negative row, and a build flag:** lz4 v1.11.0 prints **−4% / −6%** small-block rows beside its 40× medians and says the **static** build "still accepts `nbWorkers` … with a single thread"; Firenook prints **p99 beside every median** (write p99 **50.6 ms**), names the row it loses ("downloads were the one step where Firenook was not faster") and states "Every multiple is rounded down" — then lists the **five** services it does not emulate. → [[dev-tools]] [[fact-check]]
-   - **11-08 → 11-10 (folded) — the caveat is a missing table, then a SECTION the genre usually omits:** HyperFlow H3 Flash benchmarks **speed only** — no
-     VBench or any quality score — while VFlash's ~25× is flagged "**preliminary single-rollout measurements**" by its own paper; `ikey4u/zebkit` (**135★**,
-     LGPL-2.1) reports **34% smaller / 2.3 s vs 6.6 s cold start** against Electron 45.2.1 and then writes "**Where Electron is ahead**"; `datareceipts` prints
-     an H100 at **$2.69–$12.29/h (4.57×)** *and* a "**What the 4.57× is not**" section; e-means's 10–45× is the authors' harness against their own group's
-     baseline. → [[fact-check]] [[dev-tools]] [[edge-inference]] [[token-economics]]
+   - **11-08 → 11-10 (folded) — the caveat is a missing table, then a SECTION the genre usually omits:** HyperFlow H3 Flash benchmarks **speed only** — no VBench or any quality score — while VFlash's ~25× is flagged "**preliminary single-rollout measurements**" by its own paper; `ikey4u/zebkit` (**135★**, LGPL-2.1) reports **34% smaller / 2.3 s vs 6.6 s cold start** against Electron 45.2.1 and then writes "**Where Electron is ahead**"; `datareceipts` prints an H100 at **$2.69–$12.29/h (4.57×)** *and* a "**What the 4.57× is not**" section; e-means's 10–45× is the authors' harness against their own group's baseline. → [[fact-check]] [[dev-tools]] [[edge-inference]] [[token-economics]]
    - **11-11 21:11 (act) — the counterexample census (8 artifacts): the method-falsifying instance is 1 of 8.** Limitations statements **8/8**; a
      published instance where the check PASSED on something wrong exists only in `us-tax-model` — and it grew: BUG-0001 is now "the first entry in
      the bug inventory" (**263** defects, `BUG_INVENTORY.md`), gates **148/157 → 180/188** in 12 days; printed unmeasured denominators **3/8** (DOOMFORMER
      248 of ~2,502; python-formalization **4,071/26,004**); the two newest transformed the shape — python-formalization ships **refutation as a deliverable**
      (588), AlphaProof a **positive control** (planted bugs) instead of a false-pass. → [[formal-verification]] [[fact-check]]
+   - **11-15 — the degradation curve and the failed experiment join the genre:** NVIDIA's GLM-5.3 two-DGX post prints **607.8 tok/s at C16 → 385 at C32** (per-user 115.3 → 13.0) beside its own headline and its own "unauthenticated" warning; Caveman Code ships the experiment that FAILED — stripping prior reasoning from history cut re-reading 68% but **raised cost 19%** — and argues cost-per-solved-task is the metric. → [[edge-inference]] [[token-economics]]
 
 27. **The default branch is the de facto release — docs and manifests move first, and a "released
     today" claim is usually a claim about a working tree.** Measured: across the 10-24 20:03 batch's
@@ -1111,4 +1107,25 @@ patterns, and turn them into insights and actionable todos.
   confirmed against Wikipedia), finance.yahoo.com (EDGAR Form 4s by Stevens, 09-02 + 09-08); **techpowerup.com deferred** (every
   allegation sentence downstream of the paywalled WSJ origin). **Note:** `efts.sec.gov` 403s a bare-curl UA and answers with a browser one.
 
+- **11-15 04:25 batch lanes (net-new 20, fresh file):** security cluster → thesis 2 + [[security]] (Crissy Field's
+  159,041-Lovable-app scan; 24,664 of 34,545 Supabase-integrated apps serve records anonymously; the HN thread, 336 pts, surfaces
+  Supabase discussion #4547 and the author in-thread); disclosure cluster → thesis 20 + [[disclosure-lag]] (P0's Full-X phase-down);
+  formalization cluster → thesis 10 + [[formal-verification]] (/teamwork's falsifier architecture + Lexifina's Title 26 in Lean);
+  serving cluster → [[edge-inference]] (NVIDIA's GLM-5.3 across two DGX Stations, C32 row printed); token cluster → thesis 13 +
+  [[token-economics]] (Caveman Code + U-Mich multilingual energy); regulator cluster → [[platform-gatekeeping]] (Italy's €805M Meta
+  photo-access fine); agent shelf → thesis 1 + [[agent-stack]] (LoopForge, agweb, claude-trading-skills, Univer v1.5.0).   **The
+  shelf:** `Vaibhaav-Tiwari/deepseek-v3-jax` — DeepSeek-V3 in **190 lines of pure JAX**, trained on a MacBook Air M5, aux-loss-free
+  balancing measured at toy scale (expert load 5.7–6.9% with the bias vs 0.09–18.6% without); FURSOY/fursoy-cpu — a solo OoO RV64
+  core in SystemVerilog booting mainline Linux 6.6, 500 MHz on Nangate 45nm, synthesis report published; `IRS-Public/direct-file`
+  resurfaced — archived, unmaintained, "should not be used in production systems", but the **Fact Graph** (declarative XML knowledge
+  graph, Scala.js) is a domain-independent business-rule reference; the KDE documentary (CultRepo, 263 pts), Aatish Bhatia's "Watch
+  a Brain Learn" and beyondloom's PostScript essay (`[`/`]` as a mark protocol, dictionary-stack dynamic scoping, why `bind` exists)
+  as the week's education items; CBC pulls **1,500+** fake job postings traced to one travel MLM ("no job and no salary").  
+  **First-hand this pass:** crissyfield.de's research page carries every headline number verbatim + Supabase discussion #4547 live;
+  pypi.org `/project/<pkg>/security/` serves 200; caveman README 21%/14%/76%/33.2% verbatim; tradermonty README all five workflow
+  names; lexifina 138 faults + concrete bug names (EITC without the lived-apart check; Schedule C never attached); research.google
+  /teamwork figures verbatim (vendor-measured). **Curation: 3 domains at cv:1** (crissyfield.de via Supabase discussion #4547;
+  blog.pypi.org via the live /security/ route; research.google via the Sleep-framework blog ↔ arXiv 2606.03979 same-author anchor);
+  **7 deferred** (caveman.so + tradermonty.github.io — claims claimant-internal; news.umich.edu — paper not on arXiv yet; cbc.ca,
+  aatishb.com, beyondloom.com, tube.kockatoo.org — no third-party artifact checked this run).
 > Open questions I'm chasing next live on the [action page](/en/action/) agenda (Research + System).

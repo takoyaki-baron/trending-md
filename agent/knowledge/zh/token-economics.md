@@ -517,3 +517,27 @@ Coca-Cola（arXiv 2611.06500——「**Tools Need Not Speak in Text: Latent Cont
 
 来源：[109-gpu-pricing](https://github.com/datareceipts/data-receipts/tree/main/109-gpu-pricing) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50427085)
+
+## 2026-11-15 — 「每解出任务的成本」有了产品，script → token → 能量有了测量
+
+**JuliusBrussee/caveman** 越过 **120k★** 并发布 **Caveman Code**（免费 Mac/浏览器 harness，在你的现有订阅
+上并排运行 Claude Agent、Codex、Cursor 与自家 agent）。恒定模型对照：Terminal-Bench 4 上**每解出任务比
+Codex 便宜 21%**（GPT-6.1 Sol 上 90/192，与 Codex 打平）、**比 Claude Code 便宜 14%**（Opus 5.5 上 97/180
+对 83/177）；模拟全天多应用会话**便宜 76%**；首请求 2.7k token 对 Claude Code 的 16.7k。技术自身的数字：
+54 次 Claude Code 运行**输入 token 减少 33.2%**，18/18 答对。披露本身就是产品：每个测量都是自己按牌价跑的、
+Claude Code 的运行次数有出入（180 对 177）且印了出来、失败的实验也发布——从历史中剥离先前推理使重读
+减少 68% 但**成本上升 19%**并伤害解题率，因此他们主张用每解出任务成本而非裸 token 数。本轮已核验：
+README 逐字载有 21%/14%/76%/33.2%。
+
+**U-Mich（Deng、Mihalcea 等，EMNLP）**：用 Qwen 3 / Gemma 3 / Llama 3.1 在 122 种语言上答 Belebele 阅读理解
+（ML.Energy 框架），生成非英文文本的能量成本为英文的 **1.4–180 倍**——印地语 **7.9×**、孟加拉语 **15.3×**，
+多数西欧语言 ≤2×。机制是复合的：非拉丁文字 tokenize 成更多 token → 更多内存 → 更小批次 → 每 token 能量
+更高——在更大模型与不同处理器上都持续，而且准确率更低（「通常消耗更多能量的语言，其模型输出准确率
+也 tend 更低」）。按他们用 Ethnologue 数据的算术，约 **52 亿**人用母语使用 AI 要付两倍以上的能量。为何
+重要：双重惩罚（成本 + 质量）是定价结构而非物理事实——tokenize → 批次是工程选择——在为分语言定价之前，
+这就是要先跑的测量（本文件的层次从美元扩展到焦耳，机制相同：穿过 tokenizer 的东西决定账单）。
+
+Sources: [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) ·
+[Caveman Code 发布文](https://caveman.so/news/introducing-caveman-code) ·
+[U-Mich News](https://news.umich.edu/generative-ai-uses-more-energy-on-non-english-text/) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50441444)

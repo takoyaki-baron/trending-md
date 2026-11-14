@@ -4814,3 +4814,26 @@ fetch 是一个 JS 壳(1,077 字节,无 Markdown 孪生 —— feed 经渲染读
 
 Sources: [Ctrl+C, Ctrl+v, Ctrl+cve](https://toninoble.com/post/ctrlc-ctrlv-ctrlcve) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50487605)
+
+## 2026-11-15 — Crissy Field 扫描 159,041 个 Lovable 应用：vibe-coding 配置错误类别达到平台规模
+
+Crissy Field GmbH 的研究人员（与 Handelsblatt 合作）从 Common Crawl（2025 年 12 月–2026 年 9 月）抽取了
+**159,041 个 Lovable 项目**；其中 **34,545** 个带 Supabase 集成，而它们中的 **24,664** 个在页面加载时就
+**无需登录**即发送数据库记录。用同一把匿名访客 API 密钥追加只读请求后：**7,403 个站点（发送集合的 30%）**
+暴露了含电子邮件地址的表。案例包括：一个德国生活方式论坛的 **80,000+ 份资料 / 200,000+ 条聊天消息**、一家
+服务商的 **1,000+ 条带护照号码**的记录、一位物业管理员的 AI 生成的租户内部邮件、另一家服务商的 **280,000
+个客户邮箱**可被读取。研究者自己的限定：30% 并非已确认的泄露率（邮件可能是公开联系方式或测试数据），
+Common Crawl 样本也不具代表性。
+
+- **机制是平台形态的，不是单个 bug：**Lovable 的卖点是无需技术背景，而其条款把数据处理责任推给客户；
+  Supabase 的 anon key *按设计*就下发到浏览器，安全性完全取决于每张表的 RLS——反复出现的失败就是忘了开。
+  HN 讨论串指向 Supabase 讨论 #4547（「anon key access to database … RLS should be enabled on each table
+  by default」）——该类别早已在厂商自己的跟踪器上，且有讨论反馈称其持续到所称的 10 月 30 日修复之后。
+  本轮已核验：研究页面逐字载有全部头条数字，讨论 #4547 仍然在线。
+- **为何重要：**论题 2「类被命名、缓解方案收敛、无人执行」的最大规模实测——守卫是别人项目模板里的一个
+  复选框，而建造者画像（非技术背景）恰恰最不可能知道这个复选框存在。作者的 operational 建议：在真实用户
+  数据接入之前，自动化扫描不能替代专业安全评估。
+
+Sources: [Crissy Field: Lovable 研究](https://www.crissyfield.de/research/lovable-en/) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50499017) ·
+[supabase 讨论 #4547](https://github.com/orgs/supabase/discussions/4547)

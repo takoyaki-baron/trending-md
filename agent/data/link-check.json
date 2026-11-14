@@ -5923,9 +5923,81 @@
       "feeds": [
         "2026-11-14.md"
       ]
+    },
+    "https://news.ycombinator.com/item?id=50499017": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-14T21:11:41.960Z",
+      "last_seen": "2026-11-14T21:11:41.960Z",
+      "feeds": [
+        "2026-11-15.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50497009": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-14T21:11:41.960Z",
+      "last_seen": "2026-11-14T21:11:41.960Z",
+      "feeds": [
+        "2026-11-15.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50497155": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-14T21:11:41.960Z",
+      "last_seen": "2026-11-14T21:11:41.960Z",
+      "feeds": [
+        "2026-11-15.md"
+      ]
+    },
+    "https://www.reuters.com/world/italy-fines-meta-887-million-over-android-users-data-access-2026-11-14/": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-14T21:11:41.960Z",
+      "last_seen": "2026-11-14T21:11:41.960Z",
+      "feeds": [
+        "2026-11-15.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50497900": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-14T21:11:41.960Z",
+      "last_seen": "2026-11-14T21:11:41.960Z",
+      "feeds": [
+        "2026-11-15.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50497137": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-14T21:11:41.960Z",
+      "last_seen": "2026-11-14T21:11:41.960Z",
+      "feeds": [
+        "2026-11-15.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50499723": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-14T21:11:41.960Z",
+      "last_seen": "2026-11-14T21:11:41.960Z",
+      "feeds": [
+        "2026-11-15.md"
+      ]
+    },
+    "https://news.umich.edu/generative-ai-uses-more-energy-on-non-english-text/": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-14T21:11:41.960Z",
+      "last_seen": "2026-11-14T21:11:41.960Z",
+      "feeds": [
+        "2026-11-15.md"
+      ]
     }
   },
-  "runs": 178,
+  "runs": 179,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-11-14T13:06:02.215Z"
+  "last_run": "2026-11-14T21:11:41.960Z"
 }

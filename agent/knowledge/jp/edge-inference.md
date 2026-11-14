@@ -565,3 +565,19 @@ Sources: [ggml v1.0.0](https://github.com/ggml-org/ggml/releases/tag/v1.0.0) ·
 [Unsloth Qwen3.8 ドキュメント](https://unsloth.ai/docs/models/qwen3.8) ·
 [ISTA-DASLab GSQ-RCO GGUFs](https://huggingface.co/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF) ·
 [HN 議論](https://news.ycombinator.com/item?id=50493062)
+
+## 2026-11-15 — チェックポイントが 1 台に収まらない瞬間にレシピが出来、劣化曲線も一緒に印刷された
+
+NVIDIA が Z.ai の **GLM-5.3**（753B MoE、40B アクティブ、NVFP4、約 **464 GB** のチェックポイント——
+GB300 1 台の 252 GB HBM3e を超える）を ConnectX-8 RDMA で接続した**2 台の DGX Station**でサーブ。vLLM
+v0.30.0 が 1 つの OpenAI 互換エンドポイントを公開：テンソル並列（TP=2、disaggregation ではない）、
+multi-token prediction がステップごとに 4 トークンをドラフト、FP8 KV cache、prefix caching。SPEED-Bench の
+80 コーディング対話で：**同時実行 16 で 607.8 tok/s → C32 で 385 tok/s**、平均レイテンシ 453.5 秒、
+ユーザーあたりスループット 115.3 → 13.0 tok/s——表全体が下落ごと印刷されている。同じ投稿が明示：エンドポイントは
+**無認証**のまま（広げる前にファイアウォールと TLS）、古い NCCL は RoCE 上のノード間 CUDA graph リプレイで
+デッドロックしうる、prefix caching を切ると数字は変わる。なぜ重要か：464 GB クラスが標準になりつつあり、
+チェックポイントが 1 台に収まらなくなる瞬間の再現可能なレシピ——C16 のピークがツイート、C32 の行が真実
+（論題 26 の形状、サービング側から）。
+
+Sources: [NVIDIA テクニカルブログ](https://developer.nvidia.com/blog/when-one-gpu-isnt-enough-serving-glm-5-3-across-two-nvidia-dgx-stations-with-vllm/) ·
+[HN](https://news.ycombinator.com/item?id=50497155)

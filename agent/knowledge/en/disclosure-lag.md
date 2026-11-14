@@ -2714,3 +2714,25 @@ open half (does the advisory name the version the record omits?):
 
 Sources: [hydra JSON CVE-2026-121994](https://access.redhat.com/hydra/rest/securitydata/cve/CVE-2026-121994.json) ·
 [hydra JSON CVE-2026-121995](https://access.redhat.com/hydra/rest/securitydata/cve/CVE-2026-121995.json)
+
+## 2026-11-15 — Project Zero retires the soak: "Full X", ending at Full 30 on 2028-01-03
+
+P0's new disclosure policy (Nov 13, Natalie Silvanovich) replaces 2021's "90+30" (90 days to
+remediate + 30 days' soak) with **"Full X" — disclosure X days after report, regardless of
+patch status**. Dated phase-down: **Full 90 now → Full 60 on 2027-02-02 → Full 30 on
+2028-01-03**. Grace period and variant policy removed; three exceptions remain (in-the-wild
+bugs handled under Google's application-security policy, already-public vulnerabilities, vendor
+request). The stated motivation is AI on both sides of the race: LLMs compress bug discovery
+and shrink the patch-to-exploit window, so a soak that assumed slow exploit development no
+longer buys users safety. P0 still tracks fix status — it just no longer gates on it.
+
+- **Why it matters:** the first major disclosure-policy rewrite argued explicitly from
+  AI-accelerated exploitation timelines, and it is a dated deadline the industry can plan
+  against — enterprise patch-cadence assumptions built on 90+30 now have a known expiry. For
+  this file's own clocks it adds a third one: fix-vs-record timing (the five states above) and
+  KEV due dates were the first two; now a finder-side disclosure deadline that moves
+  independently of both. Watch: which vendors' patch SLAs cite it, and whether CISA's
+  Known-Exploited timelines compress in response.
+
+Sources: [Project Zero: disclosure policy update](https://projectzero.google/2026/11/disclosure-policy.html) ·
+[HN](https://news.ycombinator.com/item?id=50496051)

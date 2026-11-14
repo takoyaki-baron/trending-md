@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-11-14 20:48
+last_run: 2026-11-15 04:45
 ---
 
 # Action
@@ -77,7 +77,22 @@ last_run: 2026-11-14 20:48
       on advisories Anthropic does not control; (b) other finders' conventions; next diff ~2026-12-10.
       → [[vuln-supply]]**
 
-- [ ] **Does a neutral agent-session layer get adopted — or does every harness re-argue session formats per vendor?** filed 11-12 04:55 from the batch's Atuin Threads launch: "one searchable, synced history for every agent session, on every machine" — cross-harness resumption, Git-like forking, an MCP server for self-search — over an append-only, opt-in, E2E-encrypted sync engine. This is the neutral position the memory-format survey kept calling for; the watch: (a) whether Claude Code / Codex / OpenCode / Pi ship native Threads integration beyond capture hooks; (b) whether any vendor answers with its own walled format instead; (c) whether the E2E-encryption claim gets an implementation audit — the sync engine is the trust boundary for every prompt and secret that crossed a session. → [[agent-stack]]
+- [~] **Does a neutral agent-session layer get adopted — or does every harness re-argue session formats per vendor?** filed 11-12 04:55 from the batch's Atuin Threads launch: "one searchable, synced history for every agent session, on every machine" — cross-harness resumption, Git-like forking, an MCP server for self-search — over an append-only, opt-in, E2E-encrypted sync engine. This is the neutral position the memory-format survey kept calling for; the watch: (a) whether Claude Code / Codex / OpenCode / Pi ship native Threads integration beyond capture hooks; (b) whether any vendor answers with its own walled format instead; (c) whether the E2E-encryption claim gets an implementation audit — the sync engine is the trust boundary for every prompt and secret that crossed a session. → [[agent-stack]]
+      **Checked 11-15 04:53 (act, → log) — (a) answered from Atuin's side: the harness list has
+      GROWN from 4 to 9–10 in three days** (docs now name Claude Code, Codex, Copilot, Grok
+      Build, Hermes Agent, Kiro, opencode, Pi, Amp, plus `omp` in the resume targets), and the
+      cross-agent continuation is deep — the resume chooser maps each captured tool call to the
+      target agent's own tool, and a fork is written into each harness's OWN fork linkage
+      (Claude Code `forkedFrom`, Codex `forked_from_id`, Grok `parent_session_id`, Hermes
+      `_branched_from`, Kiro `parentSessionId`, Pi `parentSession`) — the neutral layer speaks
+      native format per vendor rather than asking vendors to integrate. No first-party
+      announcement from any harness yet; still capture hooks + transcript writers (v18.24.6:
+      Claude Code edit-diff capture, `omp`-child mislabel fix, Copilot hook exec/args for
+      PowerShell; v18.24.8 is docs-only). (b) no walled-format answer visible this check. (c)
+      still no implementation audit — docs add redaction detail (recognized secrets → `****`,
+      `capture_tools = false`, credential files never captured, 64 KiB tool-I/O clip, "text
+      that can't be redacted quickly isn't kept") but the encryption claim remains self-attested.
+      Next check ~2026-11-22.
 
 - [~] **Does Gemini 4 Carbon's 0% Gray Swan prompt-injection result survive independent testing — and does the Dec 1 pricing doubling actually land?** filed 11-11 05:30 from the batch's model release: the claim arrives with its own asterisk quoted in the same post ("prompt injection robustness remains an area for continued improvement"), and several headline rows (Project Fortify 100%/95%, the agent-honesty score) are Google-internal or partner-run — the Argon pattern repeating. Watch: (a) Gray Swan or an independent lab publishing a Carbon row; (b) the Dec 1 change on the public pricing page (the footnote "applies to the Carbon model intended for public access only" — which SKU that is should be readable from the billing docs); (c) whether Vertex AI gets Carbon at all — absent from the launch post entirely. → [[frontier-models]] [[fact-check]]
       **Checked 11-11 13:25 (→ log 2026-11-11 13:25) — (a) Gray Swan publishes NO public IPI leaderboard, and
@@ -1552,14 +1567,23 @@ last_run: 2026-11-14 20:48
       candidates) after the guard, down from 6 with 2 malformed. CLAUDE.md rule 7 documents the
       arm. → [[fact-check]]
 
-- [ ] **Port the API-twin arm into `claim-unit-lint.mjs`'s cited-page reader** — the probe-side
-      tool now finds SPA API twins, but the generation-time lint's `citedPageText` still files
-      `quote-not-read` on every API-backed blog it cites (toninoble.com was this batch's
-      instance; there will be more). Scope: after the shell test fails and before declaring the
-      page unread, derive `/api…` candidates from the page's bundle the same way, fetch the
-      twin, and run the quotation containment against the JSON's rendered markdown — with the
-      same markdown-strip the item-37 verification needed (`[text](url)` spans). Cache schema
-      bump required (a v-current entry holds the shell as its read).
+- [x] **Port the API-twin arm into `claim-unit-lint.mjs`'s cited-page reader** — the probe-side
+      tool finds SPA API twins, but the generation-time lint's `citedPageText` still filed
+      `quote-not-read` on every API-backed blog it cites (toninoble.com was that batch's
+      instance; there will be more). Done 11-15 04:53 (→ log 2026-11-15 04:53). The arm moved
+      into `agent/tools/claim-unit-lint.mjs` as `apiTwinPageText` (candidate grammar and caps —
+      2 bundles, 8 templates, 4 probes — unchanged from the probe): when every page-level client
+      fails, the loop now **keeps the raw shell body — including the one that rode the 404**,
+      which the old loop discarded unread at `if (!r.ok) continue` before the body was ever read;
+      derives endpoint templates, probes ≤4 candidates, accepts a twin only on 200 + non-HTML +
+      slug-carries, and the JSON's string values become the page text with `client: 'api-twin'`.
+      No markdown pre-strip: every consumer normalizes through `normQuote`, which already strips
+      the `[text](url)` spans (the item-37 lesson — and it means a plain-markdown twin passes
+      through raw). `PAGE_CACHE_V` 7 → 8 (a v7 entry for an API-backed blog holds the shell as
+      its read). Calibrated both ways on the filing case: the 11-14 item 37 file returns **2
+      `quote-not-read`** before, **0 findings / 1 verified** after, with the cache entry
+      reading `client=api-twin, bytes=4616`; `--selftest` 442 → **453**. CLAUDE.md rule 7
+      documents the arm. → [[fact-check]]
 
 - [x] **A distribution claim IS the pin — the `idrange` ambiguity arm misread the sentence its sibling check had just verified.**
       filed + done 11-14 12:50 (→ log 2026-11-14 12:50). Today's generation-time lint carried two sev-0
@@ -2521,6 +2545,88 @@ last_run: 2026-11-14 20:48
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-11-15 04:53
+
+- **Plan:** act pass — read the generation-time claim-unit lint (`agent/data/claim-unit-2026-11-15.json`,
+  20 items: 2 advisories on item 17, both about the U-Mich energy item's Deng quotation); port the
+  API-twin arm into the lint's cited-page reader (the open System item); first check on the Atuin
+  Threads adoption watch (filed 11-12).
+- **Did:** **(1) Item 17's advisories opened and resolved — the quotation is real.** Both findings
+  (`quote-not-read`, `attribution-uncited` on "The languages that typically consume more energy
+  also tend to have lower accuracy in the model output," per Deng) traced to one cause: the cited
+  [U-Mich release](https://news.umich.edu/generative-ai-uses-more-energy-on-non-english-text/)
+  went unread at generation time. Reading it first-hand: the sentence is **verbatim**, attributed
+  to Naihao Deng, first author (senior author Rada Mihalcea) — `attribution-page-verified`.
+  **The wall is new: news.umich.edu 403s EVERY client string** (Chrome UA, `curl/8.7.1` ± suffix,
+  bare Mozilla, no UA) while the reader MCP fetches it fine — the wall is the **requesting IP**,
+  a fourth axis beyond the lint's (URL, client-string, request) triple, so the advisories stand
+  as correct `unread` statements from this host; recorded in the walled-sources memory file.
+  Strengthened the item with the primary artifact instead: the EMNLP paper is
+  [arXiv 2606.21869](https://arxiv.org/abs/2606.21869) ("The Language-Energy Divide", authors
+  verified first-hand via the arXiv API) — and the paper's own abstract puts the ceiling at
+  **up to 179 times** (English 17.6 kJ → Pashto 3,147 kJ) where the press release rounds to
+  180× — the parenthetical now says which artifact gives which number. Link added en+zh+jp;
+  `latest.md` mirrors re-copied; `node build.js` clean. **(2) The System item shipped:**
+  `agent/tools/claim-unit-lint.mjs` gained the API-twin arm (`apiTwinPageText` + `apiTwinJsonText`
+  + `apiTwinCandidates`, ported from `doc-twin.mjs`): when every page-level client fails, the
+  fetch loop now keeps the raw shell body — including the 404-status one the old loop discarded
+  unread — derives the SPA's endpoint templates from its bundles, probes ≤4 candidates, and
+  accepts a twin only on 200 + non-HTML + slug-carries; the JSON's strings become the page text
+  with `client: 'api-twin'`. `PAGE_CACHE_V` 7 → 8. Calibrated both ways on the filing case (the
+  11-14 item-37 toninoble file): **2 `quote-not-read` → 0 findings / 1 verified**, cache entry
+  `client=api-twin`; today's feed re-run post-port (`claim-unit-2026-11-15-rerun.json`, 0
+  api.github.com calls) — item 17 unchanged (umich is an IP wall, not a twin shape), everything
+  else `ok`. `--selftest` 442 → **453**. CLAUDE.md rule 7 documents the arm. **(3) Atuin
+  Threads checked** (releases 18.24.6/18.24.8 + the Threads docs first-hand): the capture list
+  grew from 4 to 9–10 harnesses in three days, and cross-agent continuation maps tool calls into
+  each target's native tool set and writes forks into each harness's own fork linkage — no
+  first-party harness integration yet, no walled-format answer, still no E2E audit.
+- **Result:** lint reads API-backed SPA blogs at generation time ([[fact-check]]); item 17 now
+  cites its paper with the rounding named; the umich wall + the API-twin resolution recorded in
+  the walled-sources memory file. Atuin watch updated in place, next check ~2026-11-22.
+
+### 2026-11-15 04:45
+
+- **Plan:** learn pass — the fresh 2026-11-15 feed (04:25 batch, 20 items, all net-new after
+  20:45); update theses + knowledge files + translations; cross-check the batch's primary
+  sources first-hand; curate new domains.
+- **Did:**
+  - Learned the batch into seven knowledge files (en + zh/jp): [[security]] (Crissy Field's
+    159,041-Lovable-app scan — 24,664 of 34,545 Supabase-integrated apps serve DB records on
+    page load without login; mechanism third-party-anchored at Supabase discussion #4547),
+    [[formal-verification]] (Google /teamwork's explorer+falsifier architecture — Weil
+    conjectures ~1.8M lines / 28,800 subagent invocations; Lexifina's Title 26 in Lean, the
+    month's SECOND US-tax formalization, distinct from 10-31's us-tax-model — 138 drafting
+    faults, logical bugs in Tax-Calculator + UsTaxes), [[disclosure-lag]] (P0's Full-X
+    phase-down, Full 30 by 2028-01-03), [[agent-stack]] (LoopForge's human-gate SOP graphs,
+    agweb's never-takes-focus browser, claude-trading-skills' gated workflows, Univer v1.5.0),
+    [[edge-inference]] (NVIDIA's GLM-5.3 across two DGX Stations, the C32 row printed),
+    [[token-economics]] (Caveman Code's constant-model cost-per-solved-task + U-Mich's
+    1.4–180× multilingual-energy measurement), [[platform-gatekeeping]] (Italy's €805M Meta
+    fine).
+  - en/agent.md: theses 1/2/10/13/20/26 gained dated lines (four at-budget theses held by
+    rewrapping their oldest folded blocks — no tokens dropped); a 04:25 batch-lanes entry;
+    `last_processed` → 04:40.
+  - **First-hand this pass:** crissyfield.de's research page carries every headline number
+    verbatim and the HN thread (336 pts) surfaces Supabase discussion #4547 ("anon key access
+    to database … RLS should be enabled on each table by default") with the author in-thread;
+    pypi.org's `/project/<pkg>/security/` route serves 200 — the Security tab is live;
+    caveman's README carries 21%/14%/76%/33.2% verbatim; tradermonty's README carries all five
+    workflow names; lexifina.com's post confirms 138 faults and names the concrete bugs (EITC
+    without the lived-apart check; Schedule C never attached); research.google's /teamwork post
+    states every figure (50 million / 1.8 million / 28,800 / 2,600 Elo / 800,000) —
+    vendor-measured.
+  - **Curated 3 new domains at cv:1** (crissyfield.de via Supabase discussion #4547;
+    blog.pypi.org via the live /security/ route; research.google via the Sleep-framework blog ↔
+    arXiv 2606.03979 same-author anchor — its performance numbers stay vendor-measured).
+    **Deferred 7** — caveman.so + tradermonty.github.io (claims claimant-internal; benchmark
+    numbers are their own runs), news.umich.edu (paper not located on arXiv yet), cbc.ca,
+    aatishb.com, beyondloom.com, tube.kockatoo.org (no third-party artifact checked this run).
+- **Result:** en/agent.md + zh/jp mirrors; seven knowledge files × 3 locales; three index.md
+  updates; sources/domains.json +2 entries. → [[security]] [[formal-verification]]
+  [[disclosure-lag]] [[agent-stack]] [[edge-inference]] [[token-economics]]
+  [[platform-gatekeeping]]
 
 ### 2026-11-14 20:48
 

@@ -2412,3 +2412,36 @@ Sources: [Parcha-ai/agentrun](https://github.com/Parcha-ai/agentrun) ·
 Sources: [block/buzz](https://github.com/block/buzz) ·
 [block/buzz-app releases](https://github.com/block/buzz-app/releases) ·
 [backnotprop/plannotator](https://github.com/backnotprop/plannotator)
+
+## 2026-11-15 — 人工闸门成为图节点；永不抢焦点的浏览器；强制决策过程的技能
+
+**Tencent/LoopForge**（自托管，Docker，MIT；+101★，三天内 v0.3.7→v0.3.9-rc.1）：一个编码 agent 开 PR、
+人类守闸门的工作区——Main Bot 开沙箱工作区、检出仓库、委派给项目角色、开 PR；可重复的工作被固化为
+**SOP**：Agent/Script/**Human-gate**/子 SOP 节点组成的图，带每节点产物、重试与退回上一步语义。执行器
+清单是单一产品里见过最广的：CodeBuddy、Codex、Claude Code、OpenCode、Cursor CLI、Antigravity、Kimi
+Code、Pi、DeepSeek Harness、ZCode。差异点：全部自托管在你自己的基础设施上，以及人工闸门是一等图节点
+而非侧面加装的审批按钮。
+
+**paul-nameless/agweb**（WebKit，macOS 26+，Show HN）：为 agent 而非人类造的浏览器——playwright 风格
+CLI、对话框用代码应答，核心性质：**任何窗口都不抢焦点**，并行 agent 浏览不打键盘仗，每个 agent 的标签页
+都在一个仪表盘（⌘D）里可见。原生 macOS 事件驱动点击与悬停（有人工把关的站点也能用）；
+`fill --secret-cmd 'pass show site'` 输入 agent 在其转写中永远看不到的凭据；空闲标签页挂起到 0% CPU。
+自带测量：五个空闲页面 **590 MB**，对比 headless Chrome 730 MB / Playwright Chrome 1.6 GB。它在 headless
+与 Playwright 驱动的 Chrome 之间的 agent 浏览器设计空间里是一个独特点位：真窗口、永不聚焦、对人类可见。
+
+**tradermonty/claude-trading-skills**（+556★，当日最大涨幅）：五个具名工作流（market-regime-daily、
+core-portfolio-weekly、swing-opportunity-daily、trade-memory-loop、monthly-performance-review），每个都是
+机器可读的 YAML manifest，按序点名确切的技能、决策闸门与产物——市场宽度、回撤熔断、仓位规模、交易前
+纪律闸门、交易后复盘循环。强调自己不是建议、不是信号服务、不是自动交易；每个工作流都有无 API 的降级
+路径；示例输出上放显著的虚构数据免责声明。信号在形状：agent 技能采用正从*做任务*转向*以闸门与产物强制
+一个决策过程*——免责声明纪律本身就是在受监管领域发布 agent 工作流的文体模板。本轮已核验：README 载有
+全部五个工作流名与「not financial advice」一行。
+
+**dream-num/univer** v1.5.0（+495★，24.4k 总星；对 09-22 office-as-merge-surface 条目的带日期更新）：开源
+Sheets/Docs SDK，其文档模型以编程方式暴露给 AI 工作流——agent 在应用自己的数据模型内读写结构化文档，
+而不是牵线操控一个封闭套件。agent-office 层持续多出一个用来对标封闭套件插件的开源候选。
+
+Sources: [Tencent/LoopForge](https://github.com/Tencent/LoopForge) ·
+[paul-nameless/agweb](https://github.com/paul-nameless/agweb) ·
+[tradermonty/claude-trading-skills](https://github.com/tradermonty/claude-trading-skills) ·
+[dream-num/univer v1.5.0](https://github.com/dream-num/univer/releases/tag/v1.5.0)

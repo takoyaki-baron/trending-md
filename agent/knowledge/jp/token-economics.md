@@ -565,3 +565,30 @@ H100 SXM 80GB のオンデマンド価格を GPU 時間あたりのドルに正�
 
 Sources: [109-gpu-pricing](https://github.com/datareceipts/data-receipts/tree/main/109-gpu-pricing) ·
 [HN ディスカッション](https://news.ycombinator.com/item?id=50427085)
+
+## 2026-11-15 — 解決タスクあたりコストが製品になり、スクリプト → トークン → エネルギーの測定が出た
+
+**JuliusBrussee/caveman** が **120k★** を越え、**Caveman Code**（既存のサブスクリプションで Claude Agent、
+Codex、Cursor、自社エージェントを並列実行する無料 Mac/ブラウザハーネス）をローンチ。一定モデルでの比較：
+Terminal-Bench 4 で**解決タスクあたり Codex より 21% 安い**（GPT-6.1 Sol で 90/192、Codex と同率）、
+**Claude Code より 14% 安い**（Opus 5.5 で 97/180 対 83/177）； 終日マルチアプリのシミュレーションセッションで **76%**
+安い；初回リクエストは 2.7k トークン対 Claude Code の 16.7k。技術自身の数字：54 回の Claude Code 実行で
+**入力トークン 33.2% 減**、18/18 正解。開示こそが製品：全測定はリスト価格での自己実行、Claude Code の実行回数に
+揺れがあり（180 対 177）それを印刷、そして失敗した実験も公開——履歴から先行推論を剥がすと再読は 68% 減だが
+**コストは 19% 増**して解決率も落ちた、ゆえに生トークン数ではなく解決タスクあたりコストを主張。今回検証：
+README は 21%/14%/76%/33.2% をそのまま掲載。
+
+**U-Mich（Deng、Mihalcea ら、EMNLP）**：Qwen 3 / Gemma 3 / Llama 3.1 が 122 言語の Belebele 読解に答える
+（ML.Energy フレームワーク）測定で、非英語テキストの生成は英語の **1.4〜180 倍**のエネルギーを消費——ヒンディー語
+**7.9×**、ベンガル語 **15.3×**、西欧諸語の多くは 2× 以下。メカニズムは複合的：非ラテン文字は多くのトークンに
+tokenize され → メモリが増え → バッチが小さくなり → トークンあたりエネルギーが上がる——より大きなモデルでも
+プロセッサを跨いでも持続し、精度も低い（「より多くのエネルギーを消費する言語ほど、出力の精度も低い傾向」）。
+Ethnologue データによる彼らの算術では、約 **52 億人**が母語での AI 利用に 2 倍超のエネルギーを払う。なぜ重要か：
+二重のペナルティ（コスト + 品質）は物理ではなく価格構造——tokenize → バッチはエンジニアリングの選択——であり、
+言語別の価格設定の前に走るべき測定がこれ（このファイルの層がドルからジュールへ拡張、メカニズムは同じ：
+tokenizer を通るものが請求書を決める）。
+
+Sources: [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) ·
+[Caveman Code ローンチ](https://caveman.so/news/introducing-caveman-code) ·
+[U-Mich News](https://news.umich.edu/generative-ai-uses-more-energy-on-non-english-text/) ·
+[HN](https://news.ycombinator.com/item?id=50441444)

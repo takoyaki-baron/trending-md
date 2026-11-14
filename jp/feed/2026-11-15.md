@@ -240,11 +240,11 @@ Tencent/LoopForge は、チームがコーディングエージェントでソ�
 - **Source:** news.umich.edu · 135+ pts on HN · 4.2d ago (~23:07 UTC+8, Nov 10)
 - **Tags:** `energy` `multilingual` `research` `emnlp`
 
-ミシガン大学の研究者（Naihao Deng、Rada Mihalcea ら、EMNLP 発表）は、ML.Energy フレームワークを使い、3 つのオープンソースモデル——Qwen 3、Gemma 3、Llama 3.1——が 122 言語の Belebele 読解問題に答えるエネルギーを測定しました。非英語テキストの生成は英語より**1.4〜180 倍のエネルギー**がかかり、ヒンディー語は **7.9 倍**、ベンガル語は **15.3 倍**、ほとんどの西欧言語は 2 倍以下にとどまります。メカニズムは複合的です。非ラテン文字はより多くのトークンに分割され、より多くのトークンがメモリを消費してバッチを小さくし、小さいバッチがトークンあたりのエネルギーを上げます——そしてこの格差はより大きなモデルでも、プロセッサを変えても持続します。精度の罰も同行します。「通常より多くのエネルギーを消費する言語は、モデル出力の精度も低くなりがちです」と Deng。彼らの計算（Ethnologue データと合わせ）では、約 **52 億人**が母語で AI を使うために 2 倍以上のエネルギーを払っています。
+ミシガン大学の研究者（Naihao Deng、Rada Mihalcea ら、EMNLP 発表）は、ML.Energy フレームワークを使い、3 つのオープンソースモデル——Qwen 3、Gemma 3、Llama 3.1——が 122 言語の Belebele 読解問題に答えるエネルギーを測定しました。非英語テキストの生成は英語より**1.4〜180 倍のエネルギー**がかかり（論文の要旨本文では上限は最大 **179 倍**——英語 17.6 kJ → パシュトー語 3,147 kJ）、ヒンディー語は **7.9 倍**、ベンガル語は **15.3 倍**、ほとんどの西欧言語は 2 倍以下にとどまります。メカニズムは複合的です。非ラテン文字はより多くのトークンに分割され、より多くのトークンがメモリを消費してバッチを小さくし、小さいバッチがトークンあたりのエネルギーを上げます——そしてこの格差はより大きなモデルでも、プロセッサを変えても持続します。精度の罰も同行します。「通常より多くのエネルギーを消費する言語は、モデル出力の精度も低くなりがちです」と Deng。彼らの計算（Ethnologue データと合わせ）では、約 **52 億人**が母語で AI を使うために 2 倍以上のエネルギーを払っています。
 
 **Why it matters:** 「二重の罰」——同じ質問に、より高いコストとより低い品質——は物理法則ではなく価格構造です。著者の修正策（言語別モデル、英語への翻訳パイプライン）はすべてエンジニアリングの選択です。多言語ユーザーにサービスするすべての人にとって、この論文は言語別の価格設定の前に走るべき測定です。
 
-[`🔗 ミシガン大学ニュース：Generative AI uses more energy on non-English text`](https://news.umich.edu/generative-ai-uses-more-energy-on-non-english-text/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50441444)
+[`🔗 ミシガン大学ニュース：Generative AI uses more energy on non-English text`](https://news.umich.edu/generative-ai-uses-more-energy-on-non-english-text/) · [`🔗 論文：The Language-Energy Divide（arXiv 2606.21869）`](https://arxiv.org/abs/2606.21869) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50441444)
 
 ---
 

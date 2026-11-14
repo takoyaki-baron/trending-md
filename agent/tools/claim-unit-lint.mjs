@@ -3919,6 +3919,118 @@ function pdfText(buf) {
   } catch { return ''; }
 }
 
+/* ── API twins for cited pages: the SPA's own data endpoint ────────────────────────────────
+ * Ported 2026-11-15 from doc-twin.mjs's probe-side arm (added there 2026-11-14 20:48 on
+ * toninoble.com, the item-37 `quote-not-read` case). The probe finds and NAMES the twin; the
+ * lint needs its TEXT — the page body a quotation must be verbatim in. A client-rendered SPA
+ * serves its routes as HTML shells, and toninoble.com serves the shell on deep paths with an
+ * HTTP 404 STATUS (the browser renders it anyway), so every page-level client records unread
+ * while the content is one request away at the app's data endpoint (`/api/posts/<slug>`) —
+ * derivable only from the bundle the shell names
+ * (`getPost:e=>ut(`/posts/${encodeURIComponent(e)}`)` beside a `"/api"` base). Only the
+ * extraction differs from the probe; the candidate grammar and the caps are the probe-side
+ * ones — 2 bundles, 8 templates, 4 probes. A probe is not a crawler. */
+const API_TWIN_MAX_BUNDLES = 2;
+const API_TWIN_MAX_TEMPLATES = 8;
+const API_TWIN_MAX_PROBES = 4;
+
+/* Single-interpolation backtick endpoint templates with a PATH slot: the static head ends with
+ * `/` (or is empty), and the tail carries no letters outside a file extension. The guard the
+ * probe's first live run bought: `/posts${cond?"?drafts=1":""}` — a conditional QUERY template
+ * — has an empty tail after splitting and reads fillable, but substituting the slug into it
+ * joins `posts` + slug with no separator, so the interpolation must be a path segment. */
+function apiTwinCandidates(bundleSrc) {
+  const out = new Set();
+  for (const m of String(bundleSrc || '').matchAll(/`([^`\\]*)`/g)) {
+    const t = m[1];
+    if (!t.startsWith('/') || !t.includes('${')) continue;
+    const parts = t.split(/\$\{[^}]*\}/);
+    if (parts.length !== 2) continue; // more than one parameter — cannot fill from the URL
+    const [pre, post] = parts;
+    if (!(pre === '' || pre.endsWith('/'))) continue;
+    if (post && /[a-z0-9]/i.test(post.replace(/\.(json|md|xml)/i, ''))) continue;
+    out.add(t);
+  }
+  return [...out];
+}
+
+/* An api twin is JSON whose fields carry the page's own markdown (or, rarely, the markdown
+ * itself). Collect every string value and join; do NOT pre-strip the markdown — every consumer
+ * of a page text normalizes through `normQuote`, which already strips link spans, and the
+ * filing quotation spanned `[received update](/images/…)`, whose URL a raw grep interleaves.
+ * An HTML body is another shell, never a read. */
+function apiTwinJsonText(body) {
+  const s = String(body || '');
+  try {
+    const strings = [];
+    const walk = (v) => {
+      if (typeof v === 'string') strings.push(v);
+      else if (Array.isArray(v)) { for (const x of v) walk(x); }
+      else if (v && typeof v === 'object') { for (const x of Object.values(v)) walk(x); }
+    };
+    walk(JSON.parse(s));
+    return strings.join('\n');
+  } catch {
+    return /<\/?[a-z][\w-]*(?:\s[^<>]{0,300})?\/?>/i.test(s) ? '' : s;
+  }
+}
+
+async function apiTwinPageText(shellBody, url) {
+  const slug = url.split('?')[0].split('#')[0].replace(/\/+$/, '').split('/').pop();
+  if (!slug || slug.replace(/[^a-z0-9]/gi, '').length < 2) return '';
+  const origin = new URL(url).origin;
+  const bundleUrls = [];
+  for (const m of shellBody.matchAll(/<script[^>]+src=["']([^"']+)["']/gi)) {
+    try {
+      const u = new URL(m[1], url);
+      if (u.origin !== origin) continue; // CDN analytics etc. never carry the app's API layer
+      if (!/\.js(\?|$)/i.test(u.pathname + u.search)) continue;
+      bundleUrls.push(u.href);
+    } catch { continue; }
+  }
+  const templates = new Set();
+  const bases = new Set(['']);
+  let fetched = 0;
+  for (const b of bundleUrls) {
+    if (fetched >= API_TWIN_MAX_BUNDLES || templates.size >= API_TWIN_MAX_TEMPLATES) break;
+    fetched++;
+    try {
+      const r = await fetch(b, { signal: AbortSignal.timeout(15_000), headers: { 'user-agent': UA } });
+      citedPages_requests += 1;
+      if (r.status !== 200) continue;
+      const body = Buffer.from(await r.arrayBuffer()).toString('utf8').slice(0, 2_000_000);
+      for (const t of apiTwinCandidates(body)) templates.add(t);
+      /* an api base lives beside the templates as a plain string ("/api") — joining it is the
+       * difference between probing the page route (the shell again) and the data endpoint */
+      for (const m of body.matchAll(/["'](\/api[a-z0-9/_-]*)["']/gi)) bases.add(m[1]);
+    } catch { continue; }
+  }
+  const slugs = encodeURIComponent(slug);
+  let probed = 0;
+  for (const t of templates) {
+    if (probed >= API_TWIN_MAX_PROBES) break;
+    for (const base of bases) {
+      if (probed >= API_TWIN_MAX_PROBES) break;
+      let cand;
+      try { cand = new URL(base + t.replace(/\$\{[^}]*\}/, slugs), url).href; } catch { continue; }
+      probed++;
+      try {
+        const r = await fetch(cand, { signal: AbortSignal.timeout(15_000), headers: { 'user-agent': UA, accept: 'application/json,text/*,*/*' } });
+        citedPages_requests += 1;
+        if (r.status !== 200) continue;
+        const body = Buffer.from(await r.arrayBuffer()).toString('utf8').slice(0, 2_000_000);
+        const ct = (r.headers?.get('content-type') || '').toLowerCase();
+        if (ct.includes('text/html')) continue; // the shell answering again is not a twin
+        /* the slug guard: the site's generic API shape is not THIS page's sibling */
+        if (!body.toLowerCase().includes(slug.toLowerCase())) continue;
+        const twin = apiTwinJsonText(body);
+        if (twin && !isBlockShell(twin) && !isWhitespaceShell(twin)) return twin;
+      } catch { continue; }
+    }
+  }
+  return '';
+}
+
 async function citedPageText(page) {
   const key = `page:${page.url}`;
   const hit = cache[key];
@@ -3953,12 +4065,21 @@ async function citedPageText(page) {
    * between "the page does not say that" and "I could not read it", which is the rule the whole
    * check rests on. Only paid when the first attempt came back a wall, and both are unmetered. */
   let client = CLIENT_STRINGS.length ? 'undici' : 'none';
+  let bigBody = ''; // raw HTML behind the latest response — the API-twin arm's shell input
   for (const ua of CLIENT_STRINGS) {
     try {
       const r = await fetch(page.url, { signal: AbortSignal.timeout(20_000), headers: { 'user-agent': ua, accept: 'text/html,application/xhtml+xml,*/*' } });
       citedPages_requests += 1;
-      if (!r.ok) continue;
       const buf = Buffer.from(await r.arrayBuffer());
+      if (!r.ok) {
+        /* A SPA shell can ride a NON-2xx STATUS — toninoble.com serves its shell on deep paths
+         * with HTTP 404 and the browser renders it anyway (measured 2026-11-14 20:48). The shell
+         * is never page text, but the script-src list the API-twin arm needs lives only in it,
+         * so keep the body; the arm below runs only when every page-level client failed. */
+        const b = buf.toString('utf8').slice(0, 2_000_000);
+        if (/<script[^>]+src=["'][^"']+["']/.test(b)) bigBody = b;
+        continue;
+      }
       /* **A binary response is not a page.** Measured 2026-11-09 13:52 on this run's own JSON: item
        * 21 quotes six sentences from `P4454R0.pdf` (isocpp.org), all six verbatim in the paper
        * (verified first-hand with `pdftotext`), and the check filed six `quote-not-found` (sev 3)
@@ -3974,6 +4095,7 @@ async function citedPageText(page) {
         continue; // no extractor or it refused the bytes: leave UNREAD, let the next client try
       }
       const body = buf.toString('utf8').slice(0, 3_000_000);
+      bigBody = body; // a readable read overwrites a shell — the arm only consumes it on failure
       // An abs page is HTML: keep its text, drop the tags, so a `<blockquote>` abstract reads as prose.
       // `<style>`/`<noscript>` go too — a stylesheet's tokens can spell a noun next to a number.
       // `htmlText()` keeps a template-typed `<script>` — see its comment: stripping that is what
@@ -4006,6 +4128,23 @@ async function citedPageText(page) {
       }
     } catch { /* unread this run — the short TTL re-fetches */ }
   }
+  /* THE FOURTH CLIENT IS THE PAGE'S OWN API (ported 2026-11-15 from doc-twin.mjs's API-twin
+   * arm, filed there 2026-11-14 20:48 on toninoble.com). After every page-level client failed,
+   * a client-rendered SPA's content is still one request away at its own data endpoint — the
+   * request template sits in the bundle the shell names, and the shell may ride the 404 that
+   * `bigBody` captured above. Probe ≤4 endpoint candidates; accept one only when it answers
+   * 200, is not HTML, and its text carries the slug. Same suppression-only direction as every
+   * client above: a twin can only turn `unread` into `read`, never invent text. */
+  if ((!text || isBlockShell(text) || isWhitespaceShell(text) || stripperAtePage(bigBodyLen, text.length)) &&
+      bigBody && /<script[^>]+src=["'][^"']+["']/.test(bigBody)) {
+    try {
+      const twinText = await apiTwinPageText(bigBody, page.url);
+      if (twinText && !isBlockShell(twinText) && !isWhitespaceShell(twinText) && twinText.length > text.length) {
+        text = twinText;
+        client = 'api-twin';
+      }
+    } catch { /* unread this run — the short TTL re-fetches */ }
+  }
   cache[key] = { v: PAGE_CACHE_V, fetched_at: new Date().toISOString(), bytes: text.length, text, client: needsThirdClient(text) ? 'none-read' : client };
   /* the short TTL above reads this entry's own contents, so a wall re-fetches after 10 minutes
      rather than being stored as fact for six hours */
@@ -4025,8 +4164,13 @@ async function citedPageText(page) {
    holds the 2026-11-12 shape: `discuss.python.org` answered undici **739 bytes** of title +
    whitespace one run, the entry stored it with `bytes: 739` and no wall marker, and two verbatim
    quotations from Guido van Rossum's memorial post were filed `quote-not-found` against it — a
-   failed request dressed as the read. Bumping costs one unmetered refetch per cited page. */
-const PAGE_CACHE_V = 7;
+   failed request dressed as the read. Bumping costs one unmetered refetch per cited page.
+   v8 adds the API-twin client (ported 2026-11-15 from doc-twin.mjs, filed 2026-11-14 20:48 on
+   toninoble.com): when every page-level client fails, the arm derives the SPA's own data
+   endpoint from the shell's bundle and reads the page there. A v7 entry for an API-backed blog
+   holds the 404-status shell as its "read" — unreadable, but stored — and must refetch under
+   the arm. Bumping costs one unmetered refetch per cited page. */
+const PAGE_CACHE_V = 8;
 let citedPages_requests = 0;
 
 /** Network-free page-text evidence: read ONLY pages already in the cache — fresh (the 6h TTL,
@@ -6375,6 +6519,43 @@ if (SELFTEST) {
     stripperAtePage(9_000, 739), false);
   t('quote: real prose from a big body has scale',
     stripperAtePage(67_000, 30_000), false);
+  /* 2026-11-15 — the API-twin port (from doc-twin.mjs, filed 2026-11-14 20:48 on toninoble.com).
+   * The page-level clients all fail on an API-backed SPA blog; the content lives at the app's
+   * own data endpoint, and the request template sits in the bundle the shell names. Pinned
+   * offline: the candidate grammar, the JSON string extraction, and the containment — the
+   * filing quotation spans a markdown link, `[received update](/images/…)`, and a raw-letters
+   * grep interleaves the image path. */
+  t('apitwin: a path-slot endpoint template is extracted',
+    JSON.stringify(apiTwinCandidates('getPost:e=>ut(`/posts/${encodeURIComponent(e)}`),x=`/api/q/${id}`')),
+    JSON.stringify(['/posts/${encodeURIComponent(e)}', '/api/q/${id}']));
+  t('apitwin: a conditional QUERY template is rejected (posts+slug joins with no separator)',
+    apiTwinCandidates('x=`/posts${cond?"?drafts=1":""}`').length, 0);
+  t('apitwin: two interpolations are rejected', apiTwinCandidates('x=`/a/${b}/c/${d}`').length, 0);
+  t('apitwin: a file-extension tail is kept', JSON.stringify(apiTwinCandidates('x=`/posts/${id}.json`')),
+    JSON.stringify(['/posts/${id}.json']));
+  t('apitwin: a letters-in-tail template is rejected', apiTwinCandidates('x=`/posts/${id}/edit`').length, 0);
+  const TWIN_MD = JSON.stringify({
+    title: 'Ctrl+C, Ctrl+v, Ctrl+cve',
+    meta: { slug: 'ctrlc-ctrlv-ctrlcve', date: '2026-11-13' },
+    content: 'By rapidly triggering two app-controlled toast notifications, a malicious foreground app can display its own messages "instead of the message alerting the user that their clipboard was read". Since I have [received update](/images/clipboard.png) that this CVE of Moderate severity is now a Won\'t Fix I am disclosing the details publicly.',
+    tags: ['android', 'security'],
+  });
+  const twinText = apiTwinJsonText(TWIN_MD);
+  t('apitwin: every string value is collected, arrays and nested objects included',
+    [twinText.includes('Ctrl+C, Ctrl+v, Ctrl+cve'), twinText.includes('android'), twinText.includes('2026-11-13')],
+    [true, true, true]);
+  const twinSrc = quoteSource('toninoble api twin', twinText);
+  t('apitwin: the filing quotation — spanning a markdown link — verifies in the twin text',
+    quoteFragFound({ key: quoteKey(normQuote("Since I have received update that this CVE of Moderate severity is now a Won't Fix I am disclosing")) }, twinSrc),
+    true);
+  t('apitwin: the other item-37 quotation verifies too',
+    quoteFragFound({ key: quoteKey(normQuote('instead of the message alerting the user that their clipboard was read')) }, twinSrc),
+    true);
+  t('apitwin: a plain-markdown twin passes through as text',
+    apiTwinJsonText('# title\n\nprose body'), '# title\n\nprose body');
+  t('apitwin: an HTML body is another shell, never a read',
+    apiTwinJsonText('<html><body>hi</body></html>'), '');
+  t('apitwin: empty bundle text yields no candidates', apiTwinCandidates('').length, 0);
   t('quote: an unread cited page demotes a 6-word miss from fabricated to unread',
     [checkQuotes(mk('t', 'it states "this vulnerability is being actively exploited in the wild"'), qsrc('Nothing of the kind here.'), { unread: 1 }).map((x) => x.verdict),
       checkQuotes(mk('t', 'it states "this vulnerability is being actively exploited in the wild"'), qsrc('Nothing of the kind here.'), { unread: 0 }).map((x) => x.verdict)],

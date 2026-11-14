@@ -533,3 +533,17 @@ Sources: [ggml v1.0.0](https://github.com/ggml-org/ggml/releases/tag/v1.0.0) ·
 [Unsloth Qwen3.8 文档](https://unsloth.ai/docs/models/qwen3.8) ·
 [ISTA-DASLab GSQ-RCO GGUFs](https://huggingface.co/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50493062)
+
+## 2026-11-15 — 「检查点装不进一台机器」的时刻有了配方，而且退化曲线一并印出
+
+NVIDIA 用**两台 DGX Station**（ConnectX-8 RDMA 互连）服务 Z.ai 的 **GLM-5.3**（753B MoE、40B 激活、
+NVFP4、约 **464 GB** 检查点——超过单台 GB300 的 252 GB HBM3e），vLLM v0.30.0 暴露一个 OpenAI 兼容端点：
+张量并行（TP=2，非 disaggregation）、multi-token prediction 每步起草 4 个 token、FP8 KV cache、prefix
+caching。在 80 个 SPEED-Bench 编码对话上：**并发 16 时 607.8 tok/s → 并发 32 时 385 tok/s**，平均延迟
+453.5 秒、单用户吞吐 115.3 → 13.0 tok/s——整张表连同下坠一起印出。同一博文里还写明：端点**无鉴权**上线
+（放宽使用前需加防火墙与 TLS）、旧版 NCCL 可能在 RoCE 上死锁跨节点 CUDA graph 重放、关闭 prefix caching
+会改变数字。为何重要：464 GB 这一档正在变成常态，这是检查点装不进单机那一刻的可复现配方——C16 峰值是
+推文，C32 那行才是真相（论题 26 的形状，出现在服务侧）。
+
+Sources: [NVIDIA 技术博客](https://developer.nvidia.com/blog/when-one-gpu-isnt-enough-serving-glm-5-3-across-two-nvidia-dgx-stations-with-vllm/) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50497155)

@@ -7669,3 +7669,33 @@ into the target app immediately, avoid copying secrets through apps you don't tr
 
 Sources: [Ctrl+C, Ctrl+v, Ctrl+cve](https://toninoble.com/post/ctrlc-ctrlv-ctrlcve) ·
 [HN](https://news.ycombinator.com/item?id=50487605)
+
+## 2026-11-15 — Crissy Field scans 159,041 Lovable apps: the vibe-coding misconfiguration class at platform scale
+
+Researchers at Crissy Field GmbH (working with Handelsblatt) pulled **159,041 Lovable projects**
+from Common Crawl (Dec 2025–Sep 2026); **34,545** carry the Supabase integration, and **24,664**
+of those sent database records on page load **without requiring login**. Following up with extra
+read-only requests using the same anonymous-visitor API keys: **7,403 (30% of the sending set)**
+exposed tables containing email addresses. The case files: a German lifestyle forum with
+**80,000+ profiles / 200,000+ chat messages**, a provider with **1,000+ records carrying
+passport numbers**, a property manager's AI-generated internal emails about tenants, one
+provider with **280,000 customer emails** left readable. The researchers' own hedges: the 30%
+is not a confirmed leak rate (emails may be public contacts or test data) and the Common Crawl
+sample is not representative.
+
+- **The mechanism is platform-shaped, not one bug:** Lovable's pitch is no-skill-required while
+  its terms place data-handling duty on the customer; Supabase's anon key ships to the browser
+  *by design*, so security rests entirely on per-table RLS — the recurring failure is forgetting
+  it. The HN thread points at Supabase discussion #4547 ("anon key access to database … RLS
+  should be enabled on each table by default") — the class was on the vendor's own tracker, with
+  thread reports it persisted past a claimed Oct 30 fix. Verified this run: the research page
+  carries every headline number verbatim, and discussion #4547 is live.
+- **Why it matters:** thesis 2's "named class, converged mitigation, nobody enforcing it" at its
+  largest measured scale — the guard is a checkbox in someone else's project template, and the
+  builder profile (non-technical) is the least able to know the checkbox exists. The authors'
+  operating advice: automated scans are no substitute for a professional security assessment
+  before real user data goes in.
+
+Sources: [Crissy Field: Lovable research](https://www.crissyfield.de/research/lovable-en/) ·
+[HN](https://news.ycombinator.com/item?id=50499017) ·
+[supabase discussion #4547](https://github.com/orgs/supabase/discussions/4547)

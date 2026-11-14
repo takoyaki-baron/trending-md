@@ -457,3 +457,46 @@ Sources: [Terence Tao: Lean Grimoire](https://terrytao.wordpress.com/2026/11/11/
 
 Sources: [The Guardian: AI helps unlock discoveries hidden in Gödel's notebooks](https://www.theguardian.com/science/2026/nov/13/kurt-godel-notebooks-ai-helps-unlock-hidden-discoveries-man-who-transformed-maths) ·
 [HN discussion](https://news.ycombinator.com/item?id=50486748)
+
+## 2026-11-15 — the falsifier loop at two scales: Google's /teamwork and the US tax code
+
+**Google Antigravity /teamwork** (research blog, Nov 13, Mirrokni): parallel explorer agents are
+each paired with a dedicated **falsifier** — Lean 4 proof checking, unmodified test suites,
+execution simulators — so candidates are machine-validated rather than trusted; context is
+partitioned so each agent sees only its step's files and tools. Vendor-measured results: a full
+Lean 4 proof of the **2013 Courtade–Kumar conjecture** ("in full generality", ~50M lines), the
+**first formalization of the Weil conjectures** (~**1.8M** lines across **28,800** subagent
+invocations), Hilbert's tenth problem over rings of integers, the Birkhoff conjecture (open
+since 1927), a Go engine +~**2,600 Elo** in under eight days, and a **Zircon microkernel port
+(~800k lines of safe Rust)** with libgav1 rewritten 20–30% faster than its C++. /teamwork,
+/boost and Deep Review are live in Antigravity; a 10,000-researcher free-access program is open.
+Every number is Google measuring its own system — the architecture is the load-bearing claim.
+Verified this run: the post states every figure verbatim (50 million / 1.8 million / 28,800 /
+2,600 Elo / 800,000 all grep).
+
+**Lexifina's Title 26 in Lean** (`lexifina/global-law`, CC0; Alan Yahya): the month's SECOND
+US-tax formalization artifact — distinct from the 10-31 `us-tax-model` thread below. One git
+commit per public law back to the 1994 edition, structured cross-references checked
+mechanically, plus a 2025 individual income tax model (~**2,159** definitions/theorems, AMT
+included). Yield: **138 real drafting faults**, each with a Lean certificate (dead references,
+typos, duplicate numbering, unclosed parentheses); universal properties (the SALT cap never
+grows with income; the Tax Table deviates from the statutory formula by at most −$5/+6 under
+$100k). Cross-validation against three independent tools on 5,000 households — PolicyEngine-US
+agreed on **4,993 of 5,000**, and the disagreements are **logical, not arithmetic**:
+Tax-Calculator grants EITC to separate filers without checking whether the spouses lived apart;
+UsTaxes never attaches Schedule C to the 2025 return, so self-employment income disappears.
+Automated search over ~195,787 single-year returns rediscovered the §199A and Roth-conversion
+strategies and reported three novel ones. Stated limits: the statute translation was AI-done
+and **not checked by a lawyer or CPA**; coverage is the 2025 individual code only; their
+conclusion — no Roth-sized unpublished loophole in the individual tax year.
+
+- **Why it matters:** the week ran the same loop — model proposes, proof assistant (or an
+  independent implementation) disposes — at three scales (Gödel's notebooks, a federal statute,
+  a vendor's agent platform). The tax version is the one with non-mathematician consequences:
+  the oracles are the IRS's own published figures plus three independent implementations, and
+  two of the three disagreed with the law.
+
+Sources: [Google Research: /teamwork](https://research.google/blog/advancing-science-engineering-with-antigravitys-teamwork-feature/) ·
+[Lexifina: Formalizing the US Tax Code](https://lexifina.com/blog/formalizing-the-us-tax-code) ·
+[HN /teamwork](https://news.ycombinator.com/item?id=50496811) ·
+[HN tax](https://news.ycombinator.com/item?id=50497900)
