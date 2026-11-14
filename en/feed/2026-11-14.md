@@ -1,8 +1,8 @@
 ---
 date: 2026-11-14
-updated: 2026-11-14T04:25:24Z
+updated: 2026-11-14T12:26:51Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 26
+sources: 35
 license: CC-BY-4.0
 ---
 
@@ -424,13 +424,155 @@ The Guardian's Sanya Mansoor charts a reversal wave in campus surveillance: **si
 
 ---
 
+## 29. WSJ: Nvidia allegedly engineered GPU scarcity by funding AI startups to buy its own chips — and a director's $946M in pre-scandal sales surface
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** techpowerup.com (WSJ via Wccftech) · 661+ pts on HN · 9.2h ago (~10:50 UTC+8)
+- **Tags:** `nvidia` `gpu-market` `ai-bubble` `industry`
+
+Since we covered the resignation yesterday: the fallout is now producing its own reporting wave. A **Wall Street Journal** report (carried by TechPowerUp, via Wccftech) alleges Nvidia **artificially inflated the GPU and memory shortage** by investing in AI startups that would turn around and buy Nvidia GPUs to build data centers — maintaining the perception of high demand while placing Nvidia on the hook for an "avalanche" of TSMC silicon it had no immediate buyers for. The report centers an **August meeting** between Huang and his senior finance team: CFO and now-interim-CEO **Colette Kress** pushed to scale back circular financing agreements — including the **$250B OpenAI deal** — and was allegedly called a "deer in the headlights"; the report also notes the small cloud providers Nvidia invested in couldn't afford the GPUs they were expected to buy. In parallel, filings surfaced (via Moneywise/Yahoo Finance) showing board director **Mark Stevens** — described as Nvidia's second-largest shareholder — sold **~$946M** (4.2M shares across three batches, Aug 31–Sep 18, at $220–$234) in the months before the scandal broke, with **no prearranged trading plan** flagged; he still holds ~27.5M shares. NVDA traded ~$163 on Nov 13 — down ~15% in the days since the resignation, with roughly **$1.7T** of market cap shed since the start of October.
+
+**Why it matters:** The circular-financing question has always been the AI-buildout's soft spot — if the buyers of GPUs are funded by the seller of GPUs, demand signals stop being evidence. What's new is the specificity: a named meeting, a named deal, and named tension between the finance function and the founder, arriving while the company sits between permanent CEOs. If regulators or plaintiffs pick up the WSJ framing, "engineered scarcity" becomes a securities or antitrust theory rather than a leaked anecdote.
+
+> "deer in the headlights" — Huang's alleged description of Colette Kress pushing to scale back circular financing, per the WSJ report as carried by TechPowerUp
+
+[`🔗 TechPowerUp: NVIDIA Allegedly Engineered Scarcity`](https://www.techpowerup.com/354814/nvidia-allegedly-engineered-scarcity-by-funding-ai-startups-to-buy-its-gpus) · [`🔗 Yahoo Finance: Nvidia director sold nearly $1B in stock`](https://finance.yahoo.com/markets/stocks/articles/nvidia-director-sold-nearly-1b-160000846.html) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50493251)
+
+---
+
+## 30. ggml ships its own v1.0.0 — yesterday's promised details land, and they're a real changelog
+
+- **Velocity:** ▮▮ rising
+- **Source:** ggml-org/ggml · 293+ pts on HN · 9.6h ago (~10:25 UTC+8)
+- **Tags:** `ggml` `local-llm` `release`
+
+Since we covered llama.cpp v1.0.0 yesterday — with details promised at 3PM CET — the substance has landed as **ggml v1.0.0** — the tensor library underneath llama.cpp publishing its own first stable release (published 08:34 UTC Nov 13, now fronting HN). Per the release notes, ggml 1.0.0 "prunes the deprecated public API and the legacy `DIAG_MASK` ops, adds configurable YaRN truncation and FP8 support, and brings broad performance work across backends". That backend list reads like a map of where local inference actually runs: few-row quantized matmuls (batch sizes 2–24) and MoE fusion on CUDA/Metal, a Vulkan prefill FlashAttention path, a device-side MoE scheduler on SYCL, decomposed Adreno FlashAttention in OpenCL, new WebGPU kernels, expanded Hexagon op coverage — plus a scheduler that stops uploading inputs the graph never reads. The RPC protocol bumps to v9 and rejects incompatible peers, so mixed-version deployments fail loudly instead of silently.
+
+**Why it matters:** Yesterday's item treated "1.0" as announced-not-released because the note was a placeholder. This is the release that gives the claim content — and the content is a support-matrix snapshot: if you deploy local models on Vulkan, SYCL, OpenCL phones or WebGPU, the interesting deltas in this release are yours, not CUDA's.
+
+[`🔗 ggml v1.0.0 release notes`](https://github.com/ggml-org/ggml/releases/tag/v1.0.0) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50493062)
+
+---
+
+## 31. M-Vave's FM-1 synth gets a full open workbench — a browser editor that plays, edits and even flashes the hardware
+
+- **Velocity:** ▮▮ rising
+- **Source:** open.m-vave.com · 240+ pts on HN · 16.8h ago (~03:15 UTC+8)
+- **Tags:** `synthesizer` `web-midi` `open-source` `hardware`
+
+M-Vave — the Zhuhai company known for budget MIDI gear — is surfacing on HN for its **FM1 Workbench**: a complete single-page editor for the FM-1 polyphonic synthesizer that runs in the browser with **no device attached** (a playable preview of all six sound engines: DX7-style FM, 303 acid, 808 drums, PSG chip, plucked strings, sampler), then connects over **Web MIDI/SysEx** to save projects with read-back verification, manage the 128-voice DX7 library, edit the 8-slot sample bank (436 KiB ≈ 19.55s), and even **flash firmware from the page** — including recovery and migration between the official and "Open" builds. The licensing is unusually serious for a budget vendor: the app is GPLv3 with an SDK linking exception, firmware resources are Apache-2.0, source + SDK are downloadable, and third-party engines (Dexed's MSFA FM model, Open303, DaisySP, emu2149) are credited component by component.
+
+**Why it matters:** The open-hardware bar has quietly moved: a company whose niche is cheap gear now ships the documentation, browser tooling, firmware-update path and license chain that desktop-audio projects struggle to maintain — and the preview-without-device design means the whole instrument is playable before you own it. Web MIDI is becoming a real distribution channel for instrument UX.
+
+> "APP: GPLv3 with the FM1 SDK linking exception; no warranty."
+
+[`🔗 FM1 Workbench`](https://open.m-vave.com/fm1-workbench) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50488325)
+
+---
+
+## 32. The Secret of Monkey Island, all 13 versions side by side — same twelve moments, so "switching versions changes the machine, not the moment"
+
+- **Velocity:** ▮ steady
+- **Source:** monkeyisland.pages.dev · 189+ pts on HN · 7.7h ago (~12:20 UTC+8)
+- **Tags:** `game-preservation` `scummvm` `retro`
+
+A game-preservation passion project compares **all 13 versions of The Secret of Monkey Island** side by side — every screen captured in ScummVM (the Atari ST monochrome set via the Hatari emulator), scaled to 1600×1200 with nearest-neighbour pixels and 4:3 aspect correction, "so every original pixel keeps the shape it had on a period monitor". The comparison discipline is the craft: the same twelve moments, identically framed in every version, "so switching versions changes the machine, not the moment" — you compare hardware and ports, not scene selection. A CRT-shader lab renders each capture through period-appropriate display emulation, and version metadata documents the port maze from the 16-color PC original (captured from a Spanish copy) through the later remasters.
+
+**Why it matters:** This is what digital preservation looks like when done with method — fixed framing, documented capture tooling, honest provenance for the odd copies (a Spanish PC release, a French Atari ST one). Controlled variables plus a stated capture pipeline is exactly what separates a nostalgia gallery from a reference archive.
+
+> "The twelve moments are the same in every version, with the same framing, so switching versions changes the machine, not the moment."
+
+[`🔗 The Secret of Monkey Island: 13 versions side by side`](https://monkeyisland.pages.dev/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50493904)
+
+---
+
+## 33. Unsloth's Dynamic V3.1 quants claim 5–10% accuracy at the same size — and publicly dispute a rival's benchmark methodology
+
+- **Velocity:** ▮▮ rising
+- **Source:** unsloth.ai docs · 161+ pts on HN · 12h ago (~08:05 UTC+8)
+- **Tags:** `quantization` `gguf` `qwen` `local-llm`
+
+Unsloth's **Dynamic V3.1** quantization update (Nov 11, fronting HN today) rebuilds its GGUF quants for the Qwen3.8 family — the August-released Qwen3.8-27B dense model (vision + 256K context) and the 2.4T-parameter/95B-active Qwen3.8-2.4T-A95B — claiming "5-10% accuracy at comparable sizes" across Terminal Bench 2.1, DeepSWE v1.1, LiveCodeBench v6, GPQA Diamond and AIME25, with 2-bit through 6-bit quants updated (3-bit UD3 kept, "on par"). The spicier half is a public methodology fight: a docs section titled **"GSQ-RCO results are misleading"** disputes ISTA-DASLab's rival quants — Unsloth estimates ISTA ran **one trial** where it ran **14** (averaging 93–96% recovery, not the 100% ISTA reported), used a smaller context budget (an estimated 96K vs 128K), and relied on greedy decoding, which is "not representative of real world use cases". Also new: NVFP4 quants claiming ~1.5× BF16 speed on Blackwell GPUs at 92–97% top-1 accuracy (vLLM-only for now), and a new 1.1875-bpw data type (IQ1_XXXS) that squeezes the 2.4T model into a **397 GB** download — 91% smaller than its 4.9 TB full-precision form — needing ~450 GB of RAM and running ~20 tok/s on B200s per Unsloth.
+
+**Why it matters:** Local-model quantization has become an accuracy-critical discipline with competing commercial interests — and this dispute is a case study in why benchmark methodology (trial counts, context budgets, decoding strategy) decides the winner, not bits-per-weight alone. The reproducible questions to ask of any quant table: how many trials, at what context?
+
+> "Qwen3.8-27B GGUFs now use Unsloth Dynamic V3.1 which improves average accuracy by 5-10% accuracy at comparable sizes including Terminal Bench, DeepSWE and more benchmarks."
+
+[`🔗 Unsloth: Qwen3.8 docs (Dynamic V3.1 update)`](https://unsloth.ai/docs/models/qwen3.8) · [`🔗 ISTA-DASLab Qwen3.8-Flash-Next GSQ-RCO GGUFs`](https://huggingface.co/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50491980)
+
+---
+
+## 34. How Not to Build a Music Player: a Zig app built through Iran's internet blackouts, vibecoded, then rewritten by hand
+
+- **Velocity:** ▮ steady
+- **Source:** alichraghi.github.io · 127+ pts on HN · 13h ago (~07:05 UTC+8)
+- **Tags:** `zig` `vibecoding` `music-player`
+
+Ali Chraghi's post-mortem on **AMP**, his Zig music player (blur shader included), doubles as one of the most concrete vibecoding-regret narratives published. The origin is material: after Iran's internet blackouts — one lasting **more than four months**, during which "a black market had formed for the freaking internet" at $5+/GB — he needed offline music with line-synced lyrics, found existing players lacking, and started building. Then, holding a gifted Claude Max 20x subscription, he vibecoded "a good chunk" of AMP, discovered he was "mentally incapable of reviewing tens of thousands lines of code", had his account banned after Anthropic determined he lives in Iran, and when **Codeberg announced its no-AI policy** faced a choice: delete the slop or move the repo. He chose to read and rewrite every line — "Four months later, nearly half the codebase is gone, and somehow it's more robust with the same set of features (and more)." His conclusion lands between the camps: a healthy relationship with LLMs is possible "as long as you look at them as a fancy IDE feature", and "Never rush your hobbies!"
+
+**Why it matters:** The post lands the same week as the No-AI-Slop manifesto (item 18) and is its field data: producer effort near zero, consumer cost — here the author's own — enormous. It's also a rare first-hand account of where account policy, platform AI policy and one developer's hobby intersect during a national blackout.
+
+> "Little did I know I'm mentally incapable of reviewing tens of thousands lines of code."
+
+[`🔗 How Not to Build a Music Player`](https://alichraghi.github.io/blog/how-not-to-build-a-music-player/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50491400)
+
+---
+
+## 35. Bloomberg + Citizen Lab: Penlink's ad-based location-tracking system Webloc has buyers across at least 12 countries
+
+- **Velocity:** ▮ rising
+- **Source:** citizenlab.ca + Bloomberg · 113+ pts on HN · 9.8h ago (~10:15 UTC+8)
+- **Tags:** `surveillance` `adtech` `location-tracking` `privacy`
+
+A **Bloomberg** investigation into **Penlink's Webloc** — an ad-based surveillance system that obtains location data through the digital-ad ecosystem — builds on Citizen Lab's April research and keeps widening the customer map: the lab identified buyers in the **US, El Salvador and Hungary** (via open-source research, FOIA requests and server-infrastructure mapping), Austria's Ministry of the Interior has since been confirmed, and Bloomberg adds the **UK, Netherlands, Germany, Mexico, Singapore, Saudi Arabia, UAE and Israel** — at least 12 countries. Citizen Lab senior researcher Wolfie Christl: Webloc "is a powerful mass surveillance tool that's trickling down from military and intelligence agencies to federal law enforcement and then to state and local police." The lab notes the lawfulness of such systems in Europe and the UK is "highly controversial", and that use in the identified authoritarian states is "particularly dangerous".
+
+**Why it matters:** The ad-tech real-time-bidding pipeline — built to show you a shoe — has become a location-intelligence supply chain that governments buy off the shelf, and the buyer list now includes EU members with the strictest location-privacy rules. For engineers the standing reminder is that RTB bid streams leak precise location to whoever pays for access; each successive report widens the known buyer set, not the mechanism.
+
+> "a powerful mass surveillance tool that's trickling down from military and intelligence agencies to federal law enforcement and then to state and local police" — Wolfie Christl, Citizen Lab
+
+[`🔗 Citizen Lab: Security agencies worldwide found to use ad-based surveillance`](https://citizenlab.ca/security-agencies-worldwide-found-to-use-ad-based-surveillance-system/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50492950)
+
+---
+
+## 36. FreeBSD bhyve reaches a first working live migration — pre-copy, dirty-page tracking, published as a WIP RFC
+
+- **Velocity:** ▮ steady
+- **Source:** gyptazy.com · 112+ pts on HN · 16.1h ago (~03:55 UTC+8)
+- **Tags:** `freebsd` `bhyve` `virtualization`
+
+bhyve — FreeBSD's native hypervisor — has a **first working state for live migration** on FreeBSD 15.1, published by developer gyptazy as a **WIP RFC** with test tooling: a running amd64 guest can move between two hosts over TCP while continuing to run, paused only for the final stop-and-copy phase. The implementation builds on bhyve's experimental snapshot support and adds **dirty-page tracking in the vmm kernel module** plus a migration protocol in `bhyve`/`bhyvectl`: iterative pre-copy rounds send changed pages until the dirty set fits the downtime target (or a round limit), the guest pauses, final state transfers, the destination validates and restores — and only a final **`GO`** message from the source commits; before `GO`, a failed migration can resume the source guest. A warm stop-and-copy mode ships too, as fallback and comparison baseline. The motivation is concrete: **Sylve** (a Proxmox-like virtualization platform for FreeBSD) and the free-VPS provider BoxyBSD both need migration to make routine host maintenance survivable.
+
+**Why it matters:** Live migration has been the loudest gap between bhyve and the Linux/KVM world for a decade — it's the feature that makes clustered virtualization practical. Landing it as a public RFC with the protocol written down means review happens before the behavior is set in stone, which is how this kind of infrastructure change should arrive.
+
+> "The goal is deliberately practical: make it possible to test, discuss, and improve a real implementation rather than discuss live migration only in the abstract."
+
+[`🔗 gyptazy: FreeBSD bhyve Live Migration (WIP RFC)`](https://gyptazy.com/blog/freebsd-bhyve-live-migration-support-rfc/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50488835)
+
+---
+
+## 37. Google marks an Android clipboard-privacy bypass "Won't Fix": rapid double toasts hide the clipboard-read alert
+
+- **Velocity:** ▮ steady
+- **Source:** toninoble.com · 90+ pts on HN · 17.7h ago (~02:20 UTC+8)
+- **Tags:** `android` `clipboard` `security`
+
+Engineer Toni Noble published research held since **July**: a technique that suppresses Android's clipboard-access notification — the toast Android 12+ shows whenever an app reads what you've copied. By rapidly triggering two app-controlled toast notifications, a malicious foreground app can display its own messages "instead of the message alerting the user that their clipboard was read", making clipboard exfiltration invisible at the moment it happens. Google rated the issue **Moderate** and has now marked the CVE **Won't Fix** — which is why the disclosure is public. The post situates the gap carefully: Android 10 blocked background clipboard access, and the `EXTRA_IS_SENSITIVE` flag hides preview thumbnails (Google Authenticator uses it) — but the read itself remains permitted for foreground apps, with only an auto-dismissing toast as the check. The author has filed a feature request for per-app clipboard permissions (like Location or Notifications) and is soliciting +1s.
+
+**Why it matters:** The toast is the *only* consent UX for clipboard reads, and it loses to a race any app can run. Passwords copied out of managers, MFA codes, and secrets shuffled through chat apps are the exfiltration targets — and a Won't-Fix verdict means the mitigation stays procedural: paste into the target app immediately, avoid copying secrets through apps you don't trust, and treat "nothing popped up" as zero evidence.
+
+> "Since I have received update that this CVE of Moderate severity is now a Won't Fix I am disclosing the details publicly."
+
+[`🔗 Ctrl+C, Ctrl+v, Ctrl+cve (Toni Noble)`](https://toninoble.com/post/ctrlc-ctrlv-ctrlcve) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50487605)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-14T04:25:24Z |
-| Items | 28 |
-| Sources tracked | 26 (Hacker News, GitHub Trending, CISA KEV, NVD, FAA advisories, vendor blogs, major tech press) |
+| Generated | 2026-11-14T12:26:51Z |
+| Items | 37 |
+| Sources tracked | 35 (Hacker News, GitHub Trending, CISA KEV, NVD, FAA advisories, vendor blogs, major tech press) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

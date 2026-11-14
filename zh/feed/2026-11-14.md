@@ -1,8 +1,8 @@
 ---
 date: 2026-11-14
-updated: 2026-11-14T04:25:24Z
+updated: 2026-11-14T12:26:51Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 26
+sources: 35
 license: CC-BY-4.0
 ---
 
@@ -424,13 +424,155 @@ The Guardian 的 Sanya Mansoor 记录了校园监控的一次回退浪潮：**�
 
 ---
 
+## 29. WSJ：英伟达被指通过投资 AI 初创公司回购自家 GPU 来制造稀缺——一位董事在丑闻爆发前的 9.46 亿美元减持也随之浮出水面
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** techpowerup.com（WSJ，经 Wccftech） · 661+ pts on HN · 9.2h ago (~10:50 UTC+8)
+- **Tags:** `nvidia` `gpu-market` `ai-bubble` `industry`
+
+自昨天报道辞职事件之后：余波正在产生自己的报道浪潮。**华尔街日报**的一份报道（由 TechPowerUp 转载，经 Wccftech）指称英伟达**人为夸大了 GPU 与内存短缺**——方法是投资那些回过头来采购英伟达 GPU 建数据中心的 AI 初创公司，以维持高需求表象，同时把英伟达绑在"雪崩"般的台积电产能上，而这些芯片本没有即时买家。报道聚焦黄仁勋与高管财务团队的一次**八月会议**：CFO、现任临时 CEO **Colette Kress** 主张削减循环融资协议——包括** 2500 亿美元的 OpenAI 交易**——据称被黄仁勋骂作"deer in the headlights"（车灯前的鹿）；报道还指出英伟达投资的小型云厂商根本买不起他们被期望采购的 GPU。与此同时，申报文件（经 Moneywise/雅虎财经）显示董事会董事 **Mark Stevens**——被称为英伟达第二大个人股东——在丑闻爆发前的数月内减持了约 **9.46 亿美元**（8 月 31 日至 9 月 18 日的三批交易共 420 万股，价格 220–234 美元），且**没有申报任何预定交易计划**；他仍持有约 2750 万股。NVDA 在 11 月 13 日约 163 美元成交——较辞职以来下跌约 15%，自十月初以来市值蒸发约 **1.7 万亿美元**。
+
+**Why it matters:** 循环融资问题一直是 AI 建设热潮的软肋——如果 GPU 的买家是由 GPU 的卖家资助的，需求信号就不再是证据。新的地方在于具体：一场点名的会议、一笔点名的交易、财务职能与创始人之间点名的紧张关系——而且是在公司没有正式 CEO 的间隙浮出。如果监管者或诉讼方采纳 WSJ 的框架，"制造稀缺"就不再是一条泄露的轶事，而是一套证券或反垄断理论。
+
+> "deer in the headlights" —— 据 WSJ 报道（TechPowerUp 转载），这是黄仁勋对 Colette Kress 主张削减循环融资的形容
+
+[`🔗 TechPowerUp：NVIDIA Allegedly Engineered Scarcity`](https://www.techpowerup.com/354814/nvidia-allegedly-engineered-scarcity-by-funding-ai-startups-to-buy-its-gpus) · [`🔗 Yahoo Finance：Nvidia 董事减持近 10 亿美元`](https://finance.yahoo.com/markets/stocks/articles/nvidia-director-sold-nearly-1b-160000846.html) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50493251)
+
+---
+
+## 30. ggml 发布自己的 v1.0.0——昨天承诺的细节落地了，而且是一份真正的变更日志
+
+- **Velocity:** ▮▮ rising
+- **Source:** ggml-org/ggml · 293+ pts on HN · 9.6h ago (~10:25 UTC+8)
+- **Tags:** `ggml` `local-llm` `release`
+
+自昨天报道 llama.cpp v1.0.0——细节承诺于欧洲中部时间下午 3 点——之后：实质内容以 **ggml v1.0.0** 的形式落地——llama.cpp 底下的张量库发布了它自己的首个稳定版本（11 月 13 日 08:34 UTC 发布，今日登上 HN）。按发布说明，ggml 1.0.0 "prunes the deprecated public API and the legacy `DIAG_MASK` ops, adds configurable YaRN truncation and FP8 support, and brings broad performance work across backends"。后端清单读起来就像一张"本地推理实际跑在哪"的地图：CUDA/Metal 上的少行量化矩阵乘（batch 2–24）与 MoE 融合、Vulkan prefill FlashAttention 路径、SYCL 上的设备端 MoE 调度器、OpenCL 中分解式 Adreno FlashAttention、新的 WebGPU kernel、扩展的 Hexagon 算子覆盖——外加一个不再上传计算图从不读取的输入的调度器。RPC 协议升至 v9 并拒绝不兼容对端，混合版本的部署会大声失败而不是悄悄出错。
+
+**Why it matters:** 昨天的条目把"1.0"当作"已宣布、未发布"处理，因为说明是占位符。这一份发布给了这个说法实质——而实质是一张支持矩阵快照：如果你在 Vulkan、SYCL、OpenCL 手机或 WebGPU 上部署本地模型，这次发布里有意思的增量是你的那份，不是 CUDA 的那份。
+
+[`🔗 ggml v1.0.0 发布说明`](https://github.com/ggml-org/ggml/releases/tag/v1.0.0) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50493062)
+
+---
+
+## 31. M-Vave 的 FM-1 合成器迎来完整开放工作台——一个能在浏览器里演奏、编辑、甚至给硬件刷固件的编辑器
+
+- **Velocity:** ▮▮ rising
+- **Source:** open.m-vave.com · 240+ pts on HN · 16.8h ago (~03:15 UTC+8)
+- **Tags:** `synthesizer` `web-midi` `open-source` `hardware`
+
+M-Vave——以平价 MIDI 设备闻名的珠海公司——因其 **FM1 Workbench** 登上 HN：一个面向 FM-1 复调合成器的完整单页编辑器，**不接设备也能在浏览器里运行**（六个发声引擎全部可试奏：DX7 式 FM、303 酸性贝斯、808 鼓机、PSG 芯片、拨弦、采样器），然后通过 **Web MIDI/SysEx** 连接设备，带读回校验地保存工程、管理 128 音色 DX7 曲库、编辑 8 槽采样库（436 KiB ≈ 19.55 秒），甚至**直接从页面刷固件**——包括恢复与官方版/"Open"版之间的迁移。对一个平价厂商来说，许可异常严肃：应用是带 SDK 链接例外的 GPLv3，固件资源是 Apache-2.0，源码 + SDK 可下载，第三方引擎（Dexed 的 MSFA FM 模型、Open303、DaisySP、emu2149）逐一署名。
+
+**Why it matters:** 开放硬件的门槛悄悄移动了：一家以便宜设备为业的公司，现在交付了桌面音频项目都难以持续维护的文档、浏览器工具链、固件升级路径与许可链条——而"无设备预览"的设计意味着整台乐器在你拥有它之前就能演奏。Web MIDI 正在成为乐器 UX 的真正分发渠道。
+
+> "APP: GPLv3 with the FM1 SDK linking exception; no warranty."
+
+[`🔗 FM1 Workbench`](https://open.m-vave.com/fm1-workbench) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50488325)
+
+---
+
+## 32. 《猴岛小英雄》全部 13 个版本并排对比——同样的十二个场景，于是"切换版本改变的是机器，不是时刻"
+
+- **Velocity:** ▮ steady
+- **Source:** monkeyisland.pages.dev · 189+ pts on HN · 7.7h ago (~12:20 UTC+8)
+- **Tags:** `game-preservation` `scummvm` `retro`
+
+一个游戏保存向的爱好项目把**《The Secret of Monkey Island》全部 13 个版本**并排对比——每个画面都在 ScummVM 中截取（Atari ST 单色版经由 Hatari 模拟器），以最近邻像素与 4:3 比例修正缩放至 1600×1200，"so every original pixel keeps the shape it had on a period monitor"。对比的纪律就是手艺本身：同样的十二个时刻，在每个版本里以同样的构图呈现，"so switching versions changes the machine, not the moment"——你比较的是硬件与移植，而不是场景选择。一个 CRT 着色器实验室把每张截图渲染进符合年代的显示模拟，版本元数据记录了从 16 色 PC 原版（取自西班牙语拷贝）到后期重制版的移植迷宫。
+
+**Why it matters:** 这就是数字保存做出方法感时的样子——固定构图、有据可查的截取工具链、对特殊拷贝（西班牙语 PC 版、法语 Atari ST 版）诚实的来源说明。受控变量加声明截取管线，正是怀旧画廊与参考档案之间的分界线。
+
+> "The twelve moments are the same in every version, with the same framing, so switching versions changes the machine, not the moment."
+
+[`🔗 The Secret of Monkey Island：13 个版本并排对比`](https://monkeyisland.pages.dev/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50493904)
+
+---
+
+## 33. Unsloth 的 Dynamic V3.1 量化声称同体积下 5–10% 的精度提升——并公开质疑竞品的基准方法学
+
+- **Velocity:** ▮▮ rising
+- **Source:** unsloth.ai docs · 161+ pts on HN · 12h ago (~08:05 UTC+8)
+- **Tags:** `quantization` `gguf` `qwen` `local-llm`
+
+Unsloth 的 **Dynamic V3.1** 量化更新（11 月 11 日，今日登上 HN）重建了 Qwen3.8 家族的 GGUF 量化——包括八月发布的 Qwen3.8-27B 稠密模型（视觉 + 256K 上下文）与 2.4T 总参/95B 激活的 Qwen3.8-2.4T-A95B——声称在 Terminal Bench 2.1、DeepSWE v1.1、LiveCodeBench v6、GPQA Diamond 与 AIME25 上取得"comparable sizes 下 5-10% 的精度"，2-bit 至 6-bit 量化全部更新（3-bit UD3 保留，"on par"）。更劲爆的一半是一场公开的方法学之争：文档里名为 **"GSQ-RCO results are misleading"** 的章节质疑 ISTA-DASLab 的竞品量化——Unsloth 估计 ISTA 只跑了 **1 次试验**而自己跑了 **14 次**（平均恢复率 93–96%，而非 ISTA 报告的 100%），上下文预算也更小（估计 96K 对 128K），并且依赖贪心解码——那是 "not representative of real world use cases"。还有：NVFP4 量化声称在 Blackwell GPU 上达到约 1.5 倍 BF16 速度、92–97% 的 top-1 精度（目前仅 vLLM 可用）；以及新的 1.1875 bpw 数据类型（IQ1_XXXS），把 2.4T 模型压进 **397 GB** 的下载体积——比 4.9 TB 全精度小 91%——需要约 450 GB 内存，按 Unsloth 的说法在 B200 上约 20 tok/s。
+
+**Why it matters:** 本地模型量化已经成为一个精度攸关、且有商业利益相互竞争的学科——而这场论战本身就是一份案例研究：决定胜负的是基准方法学（试验次数、上下文预算、解码策略），而不只是每权重比特数。对任何量化表格，可复现的问题是：跑了几次试验、在什么上下文长度？
+
+> "Qwen3.8-27B GGUFs now use Unsloth Dynamic V3.1 which improves average accuracy by 5-10% accuracy at comparable sizes including Terminal Bench, DeepSWE and more benchmarks."
+
+[`🔗 Unsloth：Qwen3.8 文档（Dynamic V3.1 更新）`](https://unsloth.ai/docs/models/qwen3.8) · [`🔗 ISTA-DASLab Qwen3.8-Flash-Next GSQ-RCO GGUFs`](https://huggingface.co/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50491980)
+
+---
+
+## 34. 《如何不建造一个音乐播放器》：一个在伊朗断网中打造的 Zig 应用，先被 vibecode，再被手写重写
+
+- **Velocity:** ▮ steady
+- **Source:** alichraghi.github.io · 127+ pts on HN · 13h ago (~07:05 UTC+8)
+- **Tags:** `zig` `vibecoding` `music-player`
+
+Ali Chraghi 对他的 Zig 音乐播放器 **AMP**（含模糊着色器）的复盘，也是迄今发表的最具体的 vibecoding 后悔叙事之一。起点是物质性的：在伊朗的互联网封锁之后——其中一次持续了**四个多月**，其间"a black market had formed for the freaking internet"，1 GB 要价 5 美元以上——他需要能离线使用、带逐行歌词的音乐播放器，嫌现有的不好用，于是开始自己写。然后，揣着一份获赠的 Claude Max 20x 订阅，他把 AMP 的"相当大一部分"交给了 vibecoding，随后发现自己"mentally incapable of reviewing tens of thousands lines of code"；在 Anthropic 判定他住在伊朗后账号被封；当 **Codeberg 宣布其 no-AI 政策**时，他面临选择：删掉 slop，或者搬走仓库。他选择逐行阅读、逐行重写——"Four months later, nearly half the codebase is gone, and somehow it's more robust with the same set of features (and more)." 他的结论落在两个阵营之间：与 LLM 保持健康关系是可能的，"as long as you look at them as a fancy IDE feature"；以及"Never rush your hobbies!"
+
+**Why it matters:** 这篇帖子与 No-AI-Slop 宣言（第 18 条）落在同一周，是它的田野数据：生产端成本趋近于零，消费端成本——这里是作者自己的——大得惊人。它也是账户政策、平台 AI 政策与一个开发者的爱好在国家级断网中交汇的罕见一手记录。
+
+> "Little did I know I'm mentally incapable of reviewing tens of thousands lines of code."
+
+[`🔗 How Not to Build a Music Player`](https://alichraghi.github.io/blog/how-not-to-build-a-music-player/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50491400)
+
+---
+
+## 35. Bloomberg + Citizen Lab：Penlink 的广告式定位追踪系统 Webloc 已售予至少 12 个国家的安全机构
+
+- **Velocity:** ▮ rising
+- **Source:** citizenlab.ca + Bloomberg · 113+ pts on HN · 9.8h ago (~10:15 UTC+8)
+- **Tags:** `surveillance` `adtech` `location-tracking` `privacy**
+
+**Bloomberg** 对 **Penlink 的 Webloc**——一个经由数字广告生态获取位置数据的广告式监控系统——的调查，建立在 Citizen Lab 四月研究之上，并且不断加宽客户地图：该实验室确认了**美国、萨尔瓦多与匈牙利**的买家（通过开源调查、FOIA 申请与服务器基础设施测绘），奥地利内政部随后被证实，Bloomberg 又补充了**英国、荷兰、德国、墨西哥、新加坡、沙特、阿联酋与以色列**——至少 12 个国家。Citizen Lab 高级研究员 Wolfie Christl：Webloc "is a powerful mass surveillance tool that's trickling down from military and intelligence agencies to federal law enforcement and then to state and local police"。实验室指出，此类系统在欧洲与英国的合法性"高度争议"，而在被点名的威权国家的使用"尤其危险"。
+
+**Why it matters:** 本来为了给你看一双鞋而建的广告技术实时竞价管道，已经变成了政府可以整货架采购的位置情报供应链——而买家名单现在包含了位置隐私规则最严的欧盟成员国。对工程师来说，常设提醒是：RTB 竞价流会把精确位置泄露给任何付钱接入的人；每一份后续报告加宽的是已知买家名单，而不是机制本身。
+
+> "a powerful mass surveillance tool that's trickling down from military and intelligence agencies to federal law enforcement and then to state and local police" —— Wolfie Christl，Citizen Lab
+
+[`🔗 Citizen Lab：Security agencies worldwide found to use ad-based surveillance`](https://citizenlab.ca/security-agencies-worldwide-found-to-use-ad-based-surveillance-system/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50492950)
+
+---
+
+## 36. FreeBSD bhyve 迈出首个可用的热迁移——pre-copy、脏页跟踪，以 WIP RFC 发布
+
+- **Velocity:** ▮ steady
+- **Source:** gyptazy.com · 112+ pts on HN · 16.1h ago (~03:55 UTC+8)
+- **Tags:** `freebsd` `bhyve` `virtualization`
+
+bhyve——FreeBSD 的原生 hypervisor——在 FreeBSD 15.1 上有了**首个可用的热迁移状态**，由开发者 gyptazy 以 **WIP RFC** 加测试工具的形式发布：一个运行中的 amd64 客户机可以在继续运行的同时经由 TCP 在两台主机之间移动，只在最后的 stop-and-copy 阶段暂停。实现建立在 bhyve 的实验性快照支持之上，在 vmm 内核模块中加入**脏页跟踪**，并在 `bhyve`/`bhyvectl` 中加入迁移协议：迭代的 pre-copy 轮次发送变更页，直到脏页集合满足停机目标（或达到轮次上限），客户机暂停、最终状态传输、目的地校验并恢复——只有源端最后发出的 **`GO`** 消息才会提交迁移；在 `GO` 之前，失败的迁移可以恢复源端客户机。还附带一个 warm stop-and-copy 模式，作为回退与对照基线。动机是具体的：**Sylve**（一个面向 FreeBSD 的类 Proxmox 虚拟化平台）与免费 VPS 服务 BoxyBSD 都需要热迁移，才能让日常主机维护不造成停机。
+
+**Why it matters:** 十年来，热迁移一直是 bhyve 与 Linux/KVM 世界之间最大的缺口——它是让集群化虚拟化真正可用的那个特性。以公开 RFC、协议白纸黑字的方式落地，意味着评审发生在行为定型之前——这正是这类基础设施改动应有的到来方式。
+
+> "The goal is deliberately practical: make it possible to test, discuss, and improve a real implementation rather than discuss live migration only in the abstract."
+
+[`🔗 gyptazy：FreeBSD bhyve Live Migration（WIP RFC）`](https://gyptazy.com/blog/freebsd-bhyve-live-migration-support-rfc/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50488835)
+
+---
+
+## 37. Google 将安卓剪贴板隐私绕过标记为"Won't Fix"：快速双 toast 掩盖剪贴板读取提示
+
+- **Velocity:** ▮ steady
+- **Source:** toninoble.com · 90+ pts on HN · 17.7h ago (~02:20 UTC+8)
+- **Tags:** `android` `clipboard` `security`
+
+工程师 Toni Noble 发表了自 **7 月**起被搁置的研究：一种压制安卓剪贴板访问通知的技术——Android 12 及以上系统在应用读取你复制的内容时显示的那个 toast。通过快速触发两个应用自控的 toast 通知，恶意前台应用可以显示自己的消息"instead of the message alerting the user that their clipboard was read"，让剪贴板窃取在发生的当下不可见。Google 将该问题评为 **Moderate**，并已将对应的 CVE 标记为 **Won't Fix**——这也是披露得以公开的原因。帖子谨慎地界定了缺口：Android 10 已禁止后台剪贴板访问，`EXTRA_IS_SENSITIVE` 标志隐藏预览缩略图（Google Authenticator 在用）——但读取本身对前台应用依然被允许，唯一的制约只是一个会自动消失的 toast。作者已就"像位置或通知那样的按应用剪贴板权限"提交了功能请求，并征集 +1。
+
+**Why it matters:** toast 是剪贴板读取**唯一**的知情同意 UX，而它输给了一场任何应用都能发起的竞态。从密码管理器复制出的密码、MFA 验证码、经由聊天应用中转的机密，都是窃取目标——而 Won't Fix 的裁定意味着缓解只能停留在流程层面：立即粘贴进目标应用、避免经由不信任的应用复制机密，并且把"什么都没弹出来"当作零证据。
+
+> "Since I have received update that this CVE of Moderate severity is now a Won't Fix I am disclosing the details publicly."
+
+[`🔗 Ctrl+C, Ctrl+v, Ctrl+cve（Toni Noble）`](https://toninoble.com/post/ctrlc-ctrlv-ctrlcve) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50487605)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-14T04:25:24Z |
-| Items | 28 |
-| Sources tracked | 26 (Hacker News, GitHub Trending, CISA KEV, NVD, FAA advisories, vendor blogs, major tech press) |
+| Generated | 2026-11-14T12:26:51Z |
+| Items | 37 |
+| Sources tracked | 35 (Hacker News, GitHub Trending, CISA KEV, NVD, FAA advisories, vendor blogs, major tech press) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

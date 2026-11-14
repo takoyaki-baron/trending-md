@@ -1,8 +1,8 @@
 ---
 date: 2026-11-14
-updated: 2026-11-14T04:25:24Z
+updated: 2026-11-14T12:26:51Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 26
+sources: 35
 license: CC-BY-4.0
 ---
 
@@ -424,13 +424,155 @@ The Guardian の Sanya Mansoor が、キャンパス監視の反転の波を追�
 
 ---
 
+## 29. WSJ：Nvidia が AI スタートアップへの出資で自社 GPU の希少性を人為的に作った疑い——取締役のスキャンダル前 9.46 億ドル売却も浮上
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** techpowerup.com（WSJ 経由 Wccftech） · 661+ pts on HN · 9.2h ago (~10:50 UTC+8)
+- **Tags:** `nvidia` `gpu-market` `ai-bubble` `industry`
+
+昨日の辞任報道に続く動き：余波が今度はそれ自体の報道の波を生み始めている。**Wall Street Journal** の報道（TechPowerUp が、Wccftech 経由で伝えるもの）は、Nvidia が GPU とメモリの不足を**人為的に膨らませた**と主張している——Nvidia GPU を買いデータセンターを建てる AI スタートアップに投資することで、高い需要の見せかけを維持しつつ、即時の買い手のいない TSMC の「avalanche（雪崩）」的な供給を抱え込ませたという。報道の中心は、Huang と上級財務チームとの**8 月の会議**だ：CFO で現臨時 CEO の **Colette Kress** が、**2500 億ドルの OpenAI 取引**を含む循環融資の縮小を求め、「deer in the headlights」（ヘッドライトを浴びた鹿）と呼ばれたとされる。報道はさらに、Nvidia が投資した小規模クラウド事業者が、買うはずだった GPU を買える資金力を持たなかったことも指摘する。並行して、提出書類（Moneywise/Yahoo Finance 経由）から、取締役の **Mark Stevens**——Nvidia で 2 番目に大きな株主とされる——がスキャンダル発覚前の数か月で約 **9.46 億ドル**（8 月 31 日〜9 月 18 日の 3 回、420 万株、220〜234 ドル）を売却し、**予定取引計画（10b5-1）の届け出がなかった**ことが浮上した。彼はなお約 2750 万株を保有している。NVDA は 11 月 13 日に約 163 ドルで取引され——辞任以降数日で約 15% 下落、10 月初め以来の時価総額の目減りは約 **1.7 兆ドル**に達する。
+
+**Why it matters:** 循環融資の疑問は、AI 建設ラッシュの昔からの弱点だった——GPU の買い手が GPU の売り手に資金されているなら、需要のシグナルはもはや証拠にならない。今回新しいのは具体性だ：名前の挙がった会議、名前の挙がった取引、財務機能と創業者の間の名前の挙がった緊張——そしてそれが、会社が常任 CEO を欠いた隙間で届いたこと。規制当局や原告が WSJ の枠組みを採用すれば、「engineered scarcity」は漏洩したエピソードではなく、証券か独占禁止の法的理論になる。
+
+> "deer in the headlights" —— WSJ の報道（TechPowerUp が伝えるもの）による、循環融資の縮小を求めた Colette Kress への Huang の形容
+
+[`🔗 TechPowerUp：NVIDIA Allegedly Engineered Scarcity`](https://www.techpowerup.com/354814/nvidia-allegedly-engineered-scarcity-by-funding-ai-startups-to-buy-its-gpus) · [`🔗 Yahoo Finance：Nvidia の取締役が約 10 億ドルの株を売却`](https://finance.yahoo.com/markets/stocks/articles/nvidia-director-sold-nearly-1b-160000846.html) · [`🔗 HN Discussion`](https://news.ycombinator.com/item?id=50493251)
+
+---
+
+## 30. ggml が自らの v1.0.0 を出荷——昨日約束された詳細が着地、中身は本物の changelog
+
+- **Velocity:** ▮▮ rising
+- **Source:** ggml-org/ggml · 293+ pts on HN · 9.6h ago (~10:25 UTC+8)
+- **Tags:** `ggml` `local-llm` `release`
+
+昨日の llama.cpp v1.0.0——詳細は 15 時 CET に約束されていた——に続く動き：実体が **ggml v1.0.0** として着地した——llama.cpp の下にあるテンソルライブラリが、自身の最初の安定版リリースを出した（11 月 13 日 08:34 UTC 公開、今日 HN の表へ）。リリースノートによれば、ggml 1.0.0 は「prunes the deprecated public API and the legacy `DIAG_MASK` ops, adds configurable YaRN truncation and FP8 support, and brings broad performance work across backends」。そのバックエンドのリストは、「ローカル推論が実際にどこで走るか」の地図のように読める：CUDA/Metal での少数行量子化 matmul（バッチ 2〜24）と MoE 融合、Vulkan の prefill FlashAttention パス、SYCL のデバイス側 MoE スケジューラ、OpenCL での分解済み Adreno FlashAttention、新しい WebGPU カーネル、拡張された Hexagon 演算対応——加えて、グラフが決して読まない入力のアップロードをやめるスケジューラ。RPC プロトコルは v9 に上がり、非互換のピアを拒否するので、バージョン混在のデプロイは静かに壊れる代わりに大声で失敗する。
+
+**Why it matters:** 昨日の項目は、ノートがプレースホルダだったため「1.0」を「発表済み・未リリース」として扱った。今回のリリースがその主張に中身を与える——そしてその中身はサポートマトリクスのスナップショットだ：Vulkan、SYCL、OpenCL のスマホ、WebGPU にローカルモデルをデプロイしているなら、このリリースで面白い差分は CUDA ではなくあなたの側にある。
+
+[`🔗 ggml v1.0.0 リリースノート`](https://github.com/ggml-org/ggml/releases/tag/v1.0.0) · [`🔗 HN Discussion`](https://news.ycombinator.com/item?id=50493062)
+
+---
+
+## 31. M-Vave の FM-1 シンセにフルオープンなワークベンチ——ブラウザで演奏・編集、ハードウェアへのファーム書き込みまでできるエディタ
+
+- **Velocity:** ▮▮ rising
+- **Source:** open.m-vave.com · 240+ pts on HN · 16.8h ago (~03:15 UTC+8)
+- **Tags:** `synthesizer` `web-midi` `open-source` `hardware`
+
+M-Vave——低価格 MIDI 機器で知られる珠海の会社——が **FM1 Workbench** で HN に現れた：FM-1 ポリフォニック・シンセサイザ向けの完全なシングルページ・エディタで、**デバイスなしでもブラウザで動く**（6 つのサウンドエンジンすべてを試奏できるプレビュー：DX7 方式 FM、303 アシッド、808 ドラム、PSG チップ、プラック、サンプラー）。**Web MIDI/SysEx** でデバイスに接続すれば、読み返し検証つきでプロジェクトを保存し、128 音色の DX7 ライブラリを管理し、8 スロットのサンプルバンク（436 KiB ≈ 19.55 秒）を編集し、さらには**ページからファームウェアを書き込む**ことまでできる——リカバリや公式ビルドと「Open」ビルドの間の移行を含めて。低価格ベンダーとしては珍しくライセンスが真剣だ：アプリは SDK リンク例外つきの GPLv3、ファームウェアリソースは Apache-2.0、ソース + SDK がダウンロード可能、サードパーティのエンジン（Dexed の MSFA FM モデル、Open303、DaisySP、emu2149）はコンポーネント単位でクレジットされている。
+
+**Why it matters:** オープンハードウェアのハードルは静かに上がった：安い機器を商材にする会社が、デスクトップオーディオのプロジェクトですら維持に苦労するドキュメント、ブラウザツール、ファームウェア更新経路、ライセンスチェーンを出荷している——そして「デバイスなしプレビュー」の設計は、楽器全体を所有する前に演奏可能にする。Web MIDI は、楽器 UX の本物の配信チャネルになりつつある。
+
+> "APP: GPLv3 with the FM1 SDK linking exception; no warranty."
+
+[`🔗 FM1 Workbench`](https://open.m-vave.com/fm1-workbench) · [`🔗 HN Discussion`](https://news.ycombinator.com/item?id=50488325)
+
+---
+
+## 32. 『Monkey Island の秘密』全 13 バージョンを並べて比較——同じ 12 のシーン、「バージョンを切り替えると変わるのはマシンであってシーンではない」
+
+- **Velocity:** ▮ steady
+- **Source:** monkeyisland.pages.dev · 189+ pts on HN · 7.7h ago (~12:20 UTC+8)
+- **Tags:** `game-preservation` `scummvm` `retro`
+
+ゲーム保存を志向ある愛好プロジェクトが、**『The Secret of Monkey Island』の全 13 バージョン**を並べて比較している——すべてのスクリーンを ScummVM でキャプチャし（Atari ST モノクロ版は Hatari エミュレータ経由）、ニアレストネイバーのピクセルと 4:3 アスペクト補正で 1600×1200 にスケール、「so every original pixel keeps the shape it had on a period monitor」。比較の規律そのものが職人技だ：同じ 12 の瞬間を、すべてのバージョンで同一のフレーミングで捉え、「so switching versions changes the machine, not the moment」——比較しているのはハードウェアと移植であって、シーンの選択ではない。CRT シェーダーのラボが各キャプチャを時代に合った表示エミュレーションで描画し、バージョン情報は 16 色 PC オリジナル（スペイン語コピーから取得）から後のリマスターまでの移植の迷宮を記録している。
+
+**Why it matters:** これは、デジタル保存が手法を持って行われたときの姿だ——固定されたフレーミング、記録されたキャプチャツール、特殊なコピー（スペイン語 PC 版、フランス語 Atari ST 版）への正直な由来説明。制御変数と宣言されたキャプチャパイプラインこそが、ノスタルジアのギャラリーとリファレンスアーカイブを分ける線だ。
+
+> "The twelve moments are the same in every version, with the same framing, so switching versions changes the machine, not the moment."
+
+[`🔗 The Secret of Monkey Island：13 バージョンを並べて`](https://monkeyisland.pages.dev/) · [`🔗 HN Discussion`](https://news.ycombinator.com/item?id=50493904)
+
+---
+
+## 33. Unsloth の Dynamic V3.1 量子化、同じサイズで 5〜10% の精度を主張——ライバルのベンチマーク手法に公に異議
+
+- **Velocity:** ▮▮ rising
+- **Source:** unsloth.ai docs · 161+ pts on HN · 12h ago (~08:05 UTC+8)
+- **Tags:** `quantization` `gguf` `qwen` `local-llm`
+
+Unsloth の **Dynamic V3.1** 量子化アップデート（11 月 11 日、今日 HN の表へ）は、Qwen3.8 ファミリー向けに GGUF 量子を再構築した——8 月リリースの Qwen3.8-27B 高密度モデル（ビジョン + 256K コンテキスト）と、2.4T 総パラメータ/95B アクティブの Qwen3.8-2.4T-A95B だ——Terminal Bench 2.1、DeepSWE v1.1、LiveCodeBench v6、GPQA Diamond、AIME25 にわたって「comparable sizes で 5-10% の精度」を主張し、2-bit から 6-bit までの量子を更新した（3-bit UD3 は維持、「on par」）。より辛い半分は、公開された方法論の争いだ：**「GSQ-RCO results are misleading」**という見出しのセクションが ISTA-DASLab の競合量子に異議を唱える——Unsloth の推定では、ISTA は自分が **14 回**回したところを **1 試行**しか回しておらず（平均回復率は 93〜96% で、ISTA が報告した 100% ではない）、より小さいコンテキスト予算（推定 96K 対 128K）を使い、greedy デコーディングに頼っていた——それは「not representative of real world use cases」だ。さらに新しいもの：Blackwell GPU で BF16 の約 1.5 倍の速度を主張する NVFP4 量子（top-1 精度 92〜97%、現時点で vLLM のみ）、そして新しい 1.1875 bpw のデータ型（IQ1_XXXS）は、2.4T モデルを **397 GB** のダウンロードに押し込む——4.9 TB のフルプレシジョンより 91% 小さい——約 450 GB の RAM を必要とし、Unsloth によれば B200 で約 20 tok/s。
+
+**Why it matters:** ローカルモデルの量子化は、精度が生死を分け、商業的利害が衝突する学問になっている——そしてこの論争そのものが、勝敒を決めるのが bits-per-weight ではなくベンチマーク方法論（試行回数、コンテキスト予算、デコーディング戦略）であることのケーススタディだ。どんな量子化テーブルにも聞ける再現可能な質問：何回試行したか、どのコンテキスト長か。
+
+> "Qwen3.8-27B GGUFs now use Unsloth Dynamic V3.1 which improves average accuracy by 5-10% accuracy at comparable sizes including Terminal Bench, DeepSWE and more benchmarks."
+
+[`🔗 Unsloth：Qwen3.8 ドキュメント（Dynamic V3.1 アップデート）`](https://unsloth.ai/docs/models/qwen3.8) · [`🔗 ISTA-DASLab Qwen3.8-Flash-Next GSQ-RCO GGUFs`](https://huggingface.co/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF) · [`🔗 HN Discussion`](https://news.ycombinator.com/item?id=50491980)
+
+---
+
+## 34. 「How Not to Build a Music Player」：イランのネット遮断の中で作られた Zig アプリ、vibe コーディングされ、それから手で書き直された
+
+- **Velocity:** ▮ steady
+- **Source:** alichraghi.github.io · 127+ pts on HN · 13h ago (~07:05 UTC+8)
+- **Tags:** `zig` `vibecoding` `music-player`
+
+Ali Chraghi による彼の Zig 音楽プレーヤー **AMP**（ブラーシェーダー込み）の事後分析は、これまで発表された中で最も具体的な vibe コーディング後悔の物語のひとつでもある。起点は物質的だ：イランのインターネット遮断の後——そのひとつは**4 か月以上**続き、その間「a black market had formed for the freaking internet」、1 GB に 5 ドル以上——彼はオフラインで使え、行同期の歌詞を表示できる音楽プレーヤーを必要とし、既存のものに不満があり、作り始めた。それから、贈られた Claude Max 20x サブスクリプションを手に、AMP の「かなりの部分」を vibe コーディングし、「mentally incapable of reviewing tens of thousands lines of code」であることを発見し、Anthropic が彼がイランに住むと判定した後アカウントを停止され、**Codeberg が no-AI ポリシーを発表した**とき、slop を消すかリポジトリを動かすかの選択に立たされた。彼はすべての行を読んで書き直す道を選んだ——「Four months later, nearly half the codebase is gone, and somehow it's more robust with the same set of features (and more).」彼の結論は両陣営の間に着地する：LLM との健全な関係は「as long as you look at them as a fancy IDE feature」可能であり、「Never rush your hobbies!」
+
+**Why it matters:** この投稿は No-AI-Slop マニフェスト（項目 18）と同じ週に届き、そのフィールドデータだ：生産者の労力はゼロに近く、消費者コスト——ここでは作者自身の——は巨大だ。さらに、アカウントポリシー、プラットフォームの AI ポリシー、一人の開発者の趣味が国家的なネット遮断の中で交差する、希有な一次記録でもある。
+
+> "Little did I know I'm mentally incapable of reviewing tens of thousands lines of code."
+
+[`🔗 How Not to Build a Music Player`](https://alichraghi.github.io/blog/how-not-to-build-a-music-player/) · [`🔗 HN Discussion`](https://news.ycombinator.com/item?id=50491400)
+
+---
+
+## 35. Bloomberg + Citizen Lab：Penlink の広告ベース位置追跡システム Webloc、少なくとも 12 カ国の保安機関が購入者に
+
+- **Velocity:** ▮ rising
+- **Source:** citizenlab.ca + Bloomberg · 113+ pts on HN · 9.8h ago (~10:15 UTC+8)
+- **Tags:** `surveillance` `adtech` `location-tracking` `privacy`
+
+**Penlink の Webloc**——デジタル広告のエコシステムを通じて位置データを取得する広告ベースの監視システム——に関する **Bloomberg** の調査は、Citizen Lab の 4 月の研究を土台に、顧客マップを広げ続けている：ラボは**米国、エルサルバドル、ハンガリー**の購入者を特定し（オープンソース調査、FOIA 要求、サーバーインフラのマッピングによる）、オーストリア内務省はその後確認され、Bloomberg が**英国、オランダ、ドイツ、メキシコ、シンガポール、サウジアラビア、UAE、イスラエル**を加えた——少なくとも 12 カ国だ。Citizen Lab の上級研究員 Wolfie Christl：Webloc「is a powerful mass surveillance tool that's trickling down from military and intelligence agencies to federal law enforcement and then to state and local police」。ラボは、ヨーロッパと英国でのこうしたシステムの合法性は「highly controversial」であり、指名された権威主義的国家での使用は「particularly dangerous」だと指摘する。
+
+**Why it matters:** 靴を見せるために作られた広告テックのリアルタイムビッディング・パイプラインが、政府が店頭で買える位置情報サプライチェーンになり、買い手リストには位置プライバシー規則が最も厳しい EU 加盟国が含まれるようになった。エンジニアへの常設の注意はこうだ：RTB のビッドストリームは、アクセスに払う者の誰にでも正確な位置を漏らす。続く報道ごとに広がるのは既知の買い手リストであって、機構ではない。
+
+> "a powerful mass surveillance tool that's trickling down from military and intelligence agencies to federal law enforcement and then to state and local police" —— Wolfie Christl、Citizen Lab
+
+[`🔗 Citizen Lab：Security agencies worldwide found to use ad-based surveillance`](https://citizenlab.ca/security-agencies-worldwide-found-to-use-ad-based-surveillance-system/) · [`🔗 HN Discussion`](https://news.ycombinator.com/item?id=50492950)
+
+---
+
+## 36. FreeBSD bhyve が初めて動作するライブマイグレーションに到達——pre-copy、ダーティページ追跡、WIP RFC として公開
+
+- **Velocity:** ▮ steady
+- **Source:** gyptazy.com · 112+ pts on HN · 16.1h ago (~03:55 UTC+8)
+- **Tags:** `freebsd` `bhyve` `virtualization`
+
+bhyve——FreeBSD のネイティブハイパーバイザー——が FreeBSD 15.1 で**ライブマイグレーションの最初の動作状態**に達した。開発者 gyptazy がテストツールつきの **WIP RFC** として公開したものだ：稼働中の amd64 ゲストが、実行を続けたまま TCP 越しに 2 台のホスト間を移動でき、最後の stop-and-copy フェーズでのみ一時停止する。実装は bhyve の実験的スナップショットサポートの上に築かれ、vmm カーネルモジュールに**ダーティページ追跡**を、`bhyve`/`bhyvectl` にマイグレーションプロトコルを追加する：反復する pre-copy ラウンドが、ダーティ集合がダウンタイム目標（またはラウンド上限）に収まるまで変更ページを送り、ゲストが一時停止し、最終状態が転送され、宛先が検証して復元する——そしてソースが最後に送る **`GO`** メッセージでのみコミットされる。`GO` の前なら、失敗したマイグレーションはソース側のゲストを再開できる。warm な stop-and-copy モードも、フォールバックと比較基準として同梱される。動機は具体的だ：**Sylve**（FreeBSD 向け Proxmox 的仮想化プラットフォーム）と無料 VPS プロバイダの BoxyBSD は、日常のホストメンテナンスを乗り切るためにマイグレーションを必要としている。
+
+**Why it matters:** ライブマイグレーションは十年間、bhyve と Linux/KVM の世界の間で最も大きな欠落だった——クラスタ化仮想化を実用にする特性だ。プロトコルを書き下ろした公開 RFC として着地させることは、レビューが振る舞いが固まる前に起きることを意味する。この種のインフラ変更の到来方法としては、それが正しい。
+
+> "The goal is deliberately practical: make it possible to test, discuss, and improve a real implementation rather than discuss live migration only in the abstract."
+
+[`🔗 gyptazy：FreeBSD bhyve Live Migration（WIP RFC）`](https://gyptazy.com/blog/freebsd-bhyve-live-migration-support-rfc/) · [`🔗 HN Discussion`](https://news.ycombinator.com/item?id=50488835)
+
+---
+
+## 37. Google、Android クリップボード・プライバシー回避手法を「Won't Fix」に：高速ダブル トーストがクリップボード読み取りの通知を隠す
+
+- **Velocity:** ▮ steady
+- **Source:** toninoble.com · 90+ pts on HN · 17.7h ago (~02:20 UTC+8)
+- **Tags:** `android` `clipboard` `security`
+
+エンジニアの Toni Noble が、**7 月**以来保留されていた研究を公開した：Android がクリップボードアクセス時に表示する通知——Android 12 以降でアプリがコピーした内容を読むたびに出るトースト——を抑制する手法だ。アプリが制御する 2 つのトースト通知を高速で発生させることで、悪意のあるフォアグラウンドアプリは自らのメッセージを「instead of the message alerting the user that their clipboard was read」として表示でき、クリップボードの持ち出しが発生の瞬間に見えなくなる。Google はこの問題を **Moderate** と評価し、対応する CVE を **Won't Fix** と印を付した——だからこそ開示が公開になった。投稿はギャップを慎重に位置づける：Android 10 はバックグラウンドのクリップボードアクセスを禁止し、`EXTRA_IS_SENSITIVE` フラグはプレビューサムネイルを隠す（Google Authenticator が使用）——しかし読み取り自体はフォアグラウンドアプリに対して許可されたままであり、唯一の抑制は自動的に消えるトーストだけだ。作者は、位置情報や通知のようなアプリごとのクリップボード権限を求める機能リクエストを提出し、+1 を呼びかけている。
+
+**Why it matters:** トーストはクリップボード読み取りに対する**唯一の**同意 UX であり、どんなアプリでも走らせられる競合に負ける。パスワードマネージャからコピーしたパスワード、MFA コード、チャットアプリを経由する機密が持ち出しの標的だ——そして Won't Fix の判定は、緩和が手続きレベルに留まることを意味する：すぐに目的のアプリへ貼り付け、信頼しないアプリ経由での機密のコピーを避け、「何もポップアップしなかった」をゼロの証拠として扱う。
+
+> "Since I have received update that this CVE of Moderate severity is now a Won't Fix I am disclosing the details publicly."
+
+[`🔗 Ctrl+C, Ctrl+v, Ctrl+cve（Toni Noble）`](https://toninoble.com/post/ctrlc-ctrlv-ctrlcve) · [`🔗 HN Discussion`](https://news.ycombinator.com/item?id=50487605)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-14T04:25:24Z |
-| Items | 28 |
-| Sources tracked | 26 (Hacker News, GitHub Trending, CISA KEV, NVD, FAA advisories, vendor blogs, major tech press) |
+| Generated | 2026-11-14T12:26:51Z |
+| Items | 37 |
+| Sources tracked | 35 (Hacker News, GitHub Trending, CISA KEV, NVD, FAA advisories, vendor blogs, major tech press) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

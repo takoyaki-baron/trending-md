@@ -1,16 +1,16 @@
 {
- "generated": "2026-11-14T05:00:41.778Z",
+ "generated": "2026-11-14T12:27:05.184Z",
  "files": [
   {
    "file": "2026-11-14.md",
-   "items": 28,
+   "items": 37,
    "findings": [
     {
      "check": "status",
      "item": 11,
      "verdict": "ok",
      "claim": "CVE-2026-123039 `Undergoing Analysis`",
-     "detail": "Undergoing Analysis (lastModified 2026-11-13T20:18:14.257)"
+     "detail": "Undergoing Analysis (lastModified 2026-11-14T05:18:31.413)"
     },
     {
      "check": "status",
@@ -38,28 +38,28 @@
      "item": 9,
      "verdict": "ok",
      "claim": "alibaba/open-code-review",
-     "detail": "50762★, last push 2026-11-14"
+     "detail": "51054★, last push 2026-11-14"
     },
     {
      "check": "repo",
      "item": 14,
      "verdict": "ok",
      "claim": "ChromeDevTools/chrome-devtools-mcp",
-     "detail": "55572★, last push 2026-11-13"
+     "detail": "55901★, last push 2026-11-13"
     },
     {
      "check": "repo",
      "item": 25,
      "verdict": "ok",
      "claim": "block/buzz",
-     "detail": "37329★, last push 2026-11-14"
+     "detail": "37420★, last push 2026-11-14"
     },
     {
      "check": "repo",
      "item": 26,
      "verdict": "ok",
      "claim": "backnotprop/plannotator",
-     "detail": "10523★, last push 2026-11-14"
+     "detail": "10672★, last push 2026-11-14"
     },
     {
      "check": "idrange",
@@ -244,6 +244,76 @@
      "detail": "verbatim in 2 readable source(s)"
     },
     {
+     "check": "quotation",
+     "item": 29,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 30,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 31,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 32,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 33,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 34,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 35,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 36,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 37,
+     "verdict": "quote-not-read",
+     "claim": "“instead of the message alerting the user that their clipboard was read”",
+     "detail": "12 words, 0 hits in 1 readable source(s), but 1 cited page(s) went unread — unread is not absent, so this is not called a fabrication; open those page(s) before publishing"
+    },
+    {
+     "check": "quotation",
+     "item": 37,
+     "verdict": "quote-not-read",
+     "claim": "“since i have received update that this cve of moderate severity is now a wont fix i am disclosin…”",
+     "detail": "19 words, 0 hits in 1 readable source(s), but 1 cited page(s) went unread — unread is not absent, so this is not called a fabrication; open those page(s) before publishing"
+    },
+    {
      "check": "attribution",
      "item": 8,
      "verdict": "attribution-page-verified",
@@ -263,7 +333,7 @@
  "status_watch": [],
  "api_calls": 0,
  "readme_calls": 0,
- "cited_page_calls": 14,
+ "cited_page_calls": 0,
  "repo_page_calls": 0,
  "nvd_calls": 1,
  "nvd_failed_chunks": 0,
