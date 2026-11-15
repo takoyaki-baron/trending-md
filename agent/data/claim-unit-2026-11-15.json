@@ -1,44 +1,93 @@
 {
- "generated": "2026-11-14T20:25:32.014Z",
+ "generated": "2026-11-15T04:35:49.029Z",
  "files": [
   {
    "file": "2026-11-15.md",
-   "items": 20,
+   "items": 31,
    "findings": [
+    {
+     "check": "cvss",
+     "item": 24,
+     "verdict": "ok",
+     "claim": "3.1 9.9",
+     "detail": "CVE-2026-129433 · Primary/disclosure@vulncheck.com · vector reproduces 9.9"
+    },
+    {
+     "check": "status",
+     "item": 24,
+     "verdict": "ok",
+     "claim": "CVE-2026-129433 `Deferred`",
+     "detail": "Deferred (lastModified 2026-11-14T13:17:22.940)"
+    },
+    {
+     "check": "date",
+     "item": 24,
+     "verdict": "ok",
+     "claim": "CVE-2026-129433 published 2026-11-14",
+     "detail": "NVD published 2026-11-14T13:17:22.820 (2026-11-14 UTC) · cveawg datePublished 2026-11-14T12:32:52.619Z (2026-11-14 UTC) — the two clocks differ; 2026-11-14 is the NVD published day"
+    },
+    {
+     "check": "cvss",
+     "item": 28,
+     "verdict": "ok",
+     "claim": "4.0 8.2",
+     "detail": "CVE-2026-129319 · Secondary/7ffcee3d-2c14-4c3e-b844-86c6a321a158"
+    },
+    {
+     "check": "status",
+     "item": 28,
+     "verdict": "ok",
+     "claim": "CVE-2026-129319 `Received`",
+     "detail": "Received (lastModified 2026-11-14T07:17:21.370)"
+    },
     {
      "check": "repo",
      "item": 3,
      "verdict": "ok",
      "claim": "dream-num/univer",
-     "detail": "24401★, last push 2026-11-14"
+     "detail": "25010★, last push 2026-11-15"
     },
     {
      "check": "repo",
      "item": 9,
      "verdict": "ok",
      "claim": "JuliusBrussee/caveman",
-     "detail": "119978★, last push 2026-11-14"
+     "detail": "120130★, last push 2026-11-14"
+    },
+    {
+     "check": "repo",
+     "item": 13,
+     "verdict": "star-surge",
+     "claim": "122 quoted vs 190 now",
+     "detail": "paul-nameless/agweb: 122 → 190 (+36%, 68 stars) since the batch was written on a 3-day-old record (launch window) — a rising count is not a wrong one; date the reading if the number will be re-used"
     },
     {
      "check": "repo",
      "item": 13,
      "verdict": "ok",
      "claim": "paul-nameless/agweb",
-     "detail": "126★, last push 2026-11-13"
+     "detail": "190★, last push 2026-11-14"
+    },
+    {
+     "check": "repo",
+     "item": 14,
+     "verdict": "star-surge",
+     "claim": "17 quoted vs 31 now",
+     "detail": "FURSOY/fursoy-cpu: 17 → 31 (+45%, 14 stars) since the batch was written — a rising count is not a wrong one; date the reading if the number will be re-used"
     },
     {
      "check": "repo",
      "item": 14,
      "verdict": "ok",
      "claim": "FURSOY/fursoy-cpu",
-     "detail": "18★, last push 2026-11-14"
+     "detail": "31★, last push 2026-11-14"
     },
     {
      "check": "repo",
      "item": 15,
      "verdict": "stale-disclosed",
      "claim": "IRS-Public/direct-file",
-     "detail": "last push 2026-06-11 (156d) with 4652 stars — the item states the state itself (“archived”), so the staleness is the story rather than an unexamined number"
+     "detail": "last push 2026-06-11 (156d) with 4708 stars — the item states the state itself (“archived”), so the staleness is the story rather than an unexamined number"
     },
     {
      "check": "quotation",
@@ -73,7 +122,7 @@
      "item": 17,
      "verdict": "quote-not-read",
      "claim": "“the languages that typically consume more energy also tend to have lower accuracy in the model o…”",
-     "detail": "17 words, 0 hits in 1 readable source(s), but 1 cited page(s) went unread — unread is not absent, so this is not called a fabrication; open those page(s) before publishing"
+     "detail": "17 words, 0 hits in 2 readable source(s), but 1 cited page(s) went unread — unread is not absent, so this is not called a fabrication; open those page(s) before publishing"
     },
     {
      "check": "quotation",
@@ -83,11 +132,95 @@
      "detail": "verbatim in 2 readable source(s)"
     },
     {
+     "check": "quotation",
+     "item": 21,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 1 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 22,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 23,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 25,
+     "verdict": "quote-not-read",
+     "claim": "“you write your instructions on the right side of the page you write the addresses over on the le…”",
+     "detail": "20 words, 0 hits in 1 readable source(s), but 1 cited page(s) went unread — unread is not absent, so this is not called a fabrication; open those page(s) before publishing"
+    },
+    {
+     "check": "quotation",
+     "item": 25,
+     "verdict": "quote-not-read",
+     "claim": "“the basic which we shipped with the first apple iis was never assembled ever there was one handw…”",
+     "detail": "24 words, 0 hits in 1 readable source(s), but 1 cited page(s) went unread — unread is not absent, so this is not called a fabrication; open those page(s) before publishing"
+    },
+    {
+     "check": "quotation",
+     "item": 25,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 1 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 26,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 27,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 29,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 31,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
      "check": "attribution",
      "item": 17,
-     "verdict": "attribution-uncited",
+     "verdict": "attribution-page-verified",
      "claim": "Deng",
-     "detail": "a quotation is attributed to Deng (“The languages that typically consume more energy also tend t…”), but no cited URL names the party — a quotation ABOUT a party is a claim about THAT party's bytes, and the cited page can be a second-hand copy whose figures the party has since corrected (the 11-12 item-41 lesson: the essay quoted the earlier version of Aaronson's dump post). Open Deng's primary artifact before publishing, or drop the quotation marks"
+     "detail": "a quotation is attributed to Deng (“The languages that typically consume more energy also tend t…”) and the party's token appears in the fetched text of a cited page — the quotation arm's page set carries the party's statement even though no cited URL string names the party (the party lives in the prose, not the domain); the second-hand-copy risk the URL arm carries applies here too, so a load-bearing quotation still wants the party's own artifact"
+    },
+    {
+     "check": "attribution",
+     "item": 26,
+     "verdict": "attribution-uncited",
+     "claim": "Schaumann",
+     "detail": "a quotation is attributed to Schaumann (“as good as I am,”), but no cited URL names the party — a quotation ABOUT a party is a claim about THAT party's bytes, and the cited page can be a second-hand copy whose figures the party has since corrected (the 11-12 item-41 lesson: the essay quoted the earlier version of Aaronson's dump post). Open Schaumann's primary artifact before publishing, or drop the quotation marks"
+    },
+    {
+     "check": "attribution",
+     "item": 31,
+     "verdict": "attribution-satisfied",
+     "claim": "Forethought",
+     "detail": "a quotation is attributed to Forethought (“the lowest-cost place to put AI will be space […] within two…”) and a cited URL carries the party's token — the quotation arm's page set reaches the party's own artifact"
     }
    ]
   }
@@ -95,9 +228,9 @@
  "status_watch": [],
  "api_calls": 0,
  "readme_calls": 0,
- "cited_page_calls": 0,
+ "cited_page_calls": 3,
  "repo_page_calls": 0,
- "nvd_calls": 0,
+ "nvd_calls": 1,
  "nvd_failed_chunks": 0,
  "cna_calls": 0
 }

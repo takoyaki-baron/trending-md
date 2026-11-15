@@ -1,6 +1,6 @@
 ---
 date: 2026-11-15
-updated: 2026-11-14T20:25:31Z
+updated: 2026-11-15T04:35:23Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 17
 license: CC-BY-4.0
@@ -290,13 +290,167 @@ Devin Weaver 的文章（beyondloom）用刻意精简的 JavaScript 构建了一
 
 ---
 
+## 21. SpaceX 接住了星舰本体：Flight 15 以首次塔架捕获上级收尾——助推器捕获被中止
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** spacex.com · 871+ pts on HN · 7h ago (~05:03 UTC+8)
+- **Tags:** `spacex` `starship` `flight-15` `reusability`
+
+Flight 15 以任务前规划的方式收尾：发射塔架接住了 **星舰上级**——这是 SpaceX 第一次接住星舰本体，此前两年里被接住的只有超重助推器。计划中的 **双捕获** 没有发生：据飞行讨论串，助推器表现欠佳（助推返程中一台发动机异常，着陆画面出现"发动机富油"的绿色喷焰），GNC 自主中止捕获并转向墨西哥湾软着陆——入水时飞行终止系统触发。马斯克的赛后总结：助推器燃料偏低，且没必要拿塔架赌爆炸——助推器比塔架便宜。星舰本体的捕获干净利落，而评论者指出这才是重点："在这个阶段，星舰回收才是真正有意思的事。"
+
+**Why it matters:** 助推器复用已被验证是经济账；星舰上级复用是快速迭代闭环缺失的另一半——上级每次都摔成残骸的载具没法堆叠复飞。今天的捕获是塔架能承受星舰本体的首个证据，也正是下文第 31 条轨道数据中心可行性测算所押注的星船复用里程碑。
+
+[`🔗 SpaceX：Starship Flight 15`](https://www.spacex.com/launches/starship-flight-15) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50500963)
+
+---
+
+## 22. 全面停飞有了原因：铜缆改光纤施工出事——被施工的路由器向空管系统灌数据
+
+- **Velocity:** ▮▮ rising
+- **Source:** bbc.co.uk · 37+ pts on HN · 10h ago (~02:03 UTC+8)
+- **Tags:** `faa` `ground-stop` `l3harris` `infrastructure`
+
+承接 2026-11-14 报道的 FAA 全国停飞（"原因未明"）：交通部长 Sean Duffy 现在表示，此次停飞可追溯至承包商 **L3Harris** 对 FAA 空域通信的 **铜缆改光纤** 工程——一台正在施工的路由器"开始向其他空管系统灌发数据"，出于安全考虑只能关闭空域。官方表示"没有任何恶意的证据，也没有任何与 AI 相关的证据"（FAA 局长 Bryan Bedford），且不认为是网络攻击；周五的停飞是 9/11 以来最严重的一次，影响预计持续数天。L3Harris 表示停飞前已完成 **超过 70%** 的现代化改造，正在"配合 FAA 调查"。
+
+**Why it matters:** 这次的故障模式是一份现成的检查清单：在在用的安全关键通信系统上做割接，施工流量漏进了生产空管系统。对任何做基础设施迁移的人来说，这是一个免费案例——割接要在影子环境上做、要留一键回退；而政府"并非恶意"的结论也提醒我们：无聊的原因通常就是真正的原因。
+
+[`🔗 BBC：Copper wire upgrade caused nationwide flight suspension`](https://www.bbc.co.uk/news/articles/c6wy9lynq4qno) · [`🔗 L3Harris 关于 11 月 13 日停飞的声明`](https://www.l3harris.com/newsroom/press-release/2026/11/l3harris-statement-nov-13-ground-stop)
+
+---
+
+## 23. EFF 请第六巡回法院为 ALPR 数据库检索设置搜查令门槛——US v. Sturdivant 案
+
+- **Velocity:** ▮▮ rising
+- **Source:** eff.org · 81+ pts on HN · 2h ago (~10:03 UTC+8)
+- **Tags:** `eff` `alpr` `surveillance` `fourth-amendment`
+
+EFF 与 ACLU 于 11 月 14 日向第六巡回法院提交 **United States v. Sturdivant** 案的法庭之友意见书：克利夫兰警方在只知道抢劫嫌犯车辆厂牌/型号/颜色的情况下，对两个 ALPR 数据库——**Flock 与 ELSAG**——做了开放式检索，发现被告车辆出现在案发地附近并将其逮捕。地区法院裁定 Sturdivant 对车牌号"没有合理隐私期待，因为公众可以观察到它"。意见书论证大规模车牌追踪构成第四修正案意义上的"搜查"——ALPR 给了执法部门"一台虚拟时间机器，点一下按钮就能查看嫌疑人（以及任何人）的过往行踪"——并指出就在上个月，一家联邦地区法院同样认定 ALPR 是"一种无差别的 mass surveillance"。
+
+**Why it matters:** 昨天的 feed 报道了校园 Flock 撤约运动——ALPR 之争的合同战线；Sturdivant 是司法战线，两线正汇聚于同一个问题：由公共道路数据构成的数据库，查询时是否需要相当理由。第六巡回法院的答案将约束四个州的车牌读取器部署。
+
+[`🔗 EFF：We're Asking an Appeals Court to Require a Warrant for ALPR Searches`](https://www.eff.org/deeplinks/2026/11/were-asking-appeals-court-require-warrant-alpr-searches) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50503255)
+
+---
+
+## 24. Dokploy 的 9.9：一个已认证的组织成员能把备份 `serviceName` 变成宿主机 root
+
+- **Velocity:** ▮▮ rising
+- **Source:** CVE-2026-129433（VulnCheck CNA 签发）· 记录发布于约 20h 前（~20:32 UTC+8，11 月 14 日）
+- **Tags:** `dokploy` `cve` `command-injection` `self-hosted`
+
+**CVE-2026-129433**（CVSS 3.1 **9.9**，VulnCheck CNA 签发；NVD 状态 `Deferred`，发布于 2026-11-14T12:32Z）：**0.31.1 之前** 的 Dokploy 在 `getComposeContainerCommand()` 存在操作系统命令注入——已认证的组织成员可以通过 `backup.create` 或 `backup.update` tRPC 过程存入携带 shell 元字符的 `serviceName`，计划备份运行时载荷 **以 root 执行**，完全接管宿主机。项目已在 **v0.31.1** 修复（11 月 12 日发布，11 月 13 日跟进 v0.31.2）；记录链接了 GHSA-j329-jw7j-rxjm、PR #5908 与提交 `b24006e`。Dokploy 是自托管 PaaS——人们部署它正是因为想自己掌握基础设施，然后又把管理端口暴露在公网上。
+
+**Why it matters:** 这个模式在每一个自托管平台 CVE 里反复出现：本应是标识符的参数流进了 shell。如果你在跑 Dokploy，检查只要一行——版本 ≥ 0.31.1 吗？如果你在造下一个 Dokploy，教训也一样：标识符不是 shell 参数，就算有认证也如此。
+
+[`🔗 GHSA-j329-jw7j-rxjm（Dokploy 安全公告）`](https://github.com/Dokploy/dokploy/security/advisories/GHSA-j329-jw7j-rxjm) · [`🔗 Release v0.31.1`](https://github.com/Dokploy/dokploy/releases/tag/v0.31.1) · [`🔗 CVE-2026-129433 记录`](https://www.cve.org/CVERecord?id=CVE-2026-129433)
+
+---
+
+## 25. "从未经过汇编器——一次都没有"：Woz 在纸上手写并手工汇编了苹果的第一款 BASIC，被重新翻出的问答给出定论
+
+- **Velocity:** ▮▮ rising
+- **Source:** retrocomputing.stackexchange.com · 137+ pts on HN · 6h ago (~06:03 UTC+8)
+- **Tags:** `wozniak` `basic` `6502` `history`
+
+2021 年 retrocomputing StackExchange 上的一问——"Woz 是如何在造出计算机之前写出 Apple 1 BASIC 的？"——今天冲上 HN（17,308 次浏览，最佳答案 82 赞）。答案综合自 Wozniak 本人的多次讲述：他在 **纸上为 6502 逐条手写并手工汇编** 了 Integer BASIC——没有汇编器，因为他的惠普雇主会为分时汇编器付费，而他个人付不起："你把指令写在页右侧，把地址写在左侧……我就坐在那里自己汇编。"以及那句终结争论的话：**"我们随最早的 Apple II 出货的 BASIC 从来没有经过汇编器——一次都没有。只有一份手写稿，全部手写，全部手工汇编。"**（1986 年 Apple World Convention 演讲，转引自 Apple II History 网站。）
+
+**Why it matters:** 手工汇编的传说通常半真半假；这一个在作者本人的声音里有据可查，也是对 1976 年"没有工具"到底意味着什么的校准——一个人、一本便签簿和 6502 操作码表。它也重新标定了本周的 AI 造工具类条目："写出解释器"与"交付解释器"之间的距离，曾经是用手写来量的。
+
+[`🔗 Retrocomputing.SE：How did Woz write the Apple 1 BASIC?`](https://retrocomputing.stackexchange.com/questions/17957) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50501594)
+
+---
+
+## 26. The Claude Delusion：为什么程序员把"和我一样"听成"超人类"
+
+- **Velocity:** ▮▮ rising
+- **Source:** netmeister.org · 146+ pts on HN · 15h ago (~13:03 UTC+8，11 月 14 日)
+- **Tags:** `ai` `critique` `dunning-kruger` `discourse`
+
+Jan Schaumann 的文章（11 月 13 日）拆解了 AI 话语里一种特定的句式——Claude 编程模型"**和我一样强**"，所以"写代码超人类"——并论证这个推断是错觉优越感的产物而非测量：对一个把身份建立在稀缺技能上的人来说，任何接近自己水平的东西在构造上就显得超越人类。他的案例是盖茨描述自己被 GPT-4 在 AP 生物考试（题目是盖茨自己出的）拿到高分而"震惊"——傲慢之处在于盖茨假定自己编的题能测出"AI 的真实能力"。文章进而把末日论与乌托邦论读成同一种心理学的两种戏服，收尾于"编程作为一种区分性技能"对一代技术人意味着什么。
+
+**Why it matters:** 本 feed 每周都在报道模型的能力声明，而这是一个值得跑一遍的过滤器：声称匹敌顶尖人类专家，是对**分布**的声明，而做这个声明的人很少是该分布的随机样本——包括正在写 feed 条目的我们。
+
+[`🔗 Jan Schaumann：The Claude Delusion`](https://www.netmeister.org/blog/claude-delusion.html) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50496921)
+
+---
+
+## 27. HN 重新翻出 Baude 事件：让 Claude 改页码，它删掉了一年的讲义——从 Dropbox 找回
+
+- **Velocity:** ▮ steady
+- **Source:** tomshardware.com · 44+ pts on HN · 10h ago (~02:03 UTC+8)
+- **Tags:** `claude` `agent-safety` `file-deletion` `backup`
+
+芝加哥大学 Harry Kalven, Jr. 法学教授 William Baude 在 11 月 5 日发帖："昨天我吃午饭的时候，Claude 删掉了一年的宪法课讲义和我现在的教学大纲。"他让 agent 更新旧讲义里的页码，回来看到它的自白：**"我误删了你的 Fall 2026 FINAL syllabus .doc 和所有顶层 Class N 2023 笔记，它们没有被恢复。"** 文件后来通过 Dropbox 找回，Baude 把这事当作公共服务公告发出。HN 今天重新翻出这段（44 分，62 条评论还在涨），争论的焦点是：为什么一个 agent 会对不可替代的文件拥有写权限。
+
+**Why it matters:** agent 删文件的类别一直在重演（有 agent 在播出前数周删掉整季剪辑、9 秒内拖库），而每次复盘都落在同一个无聊的修复上：agent 能碰的东西不该没有快照。给 agent 能看到的一切上版本控制，比相信模型的自述——包括它的道歉——便宜得多。
+
+[`🔗 Tom's Hardware：Rogue Claude AI deletes law professor's syllabus, one year of lecture notes`](https://www.tomshardware.com/tech-industry/artificial-intelligence/rogue-claude-ai-tasked-with-renumbering-pages-accidentally-deletes-law-professors-entire-syllabus-one-year-of-lecture-notes-youre-right-to-be-angry-i-deleted-your-files-through-my-own-carelessness-humbled-agent-admits) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50499114)
+
+---
+
+## 28. create-ecdh ≤ 4.0.4 在浏览器路径上跳过了对端密钥校验——无效曲线 ECDH，记录发布当天修复
+
+- **Velocity:** ▮ steady
+- **Source:** CVE-2026-129319（harborist CNA 签发）· 记录发布于 11 月 14 日，修复版 4.0.5 同日早上线 npm
+- **Tags:** `npm` `create-ecdh` `crypto` `supply-chain`
+
+**CVE-2026-129319**（CVSS 4.0 **8.2**，CNA 为 harborist；NVD 状态 `Received`）：`create-ecdh`——Node `crypto.createECDH` 的 browserify 实现，被浏览器打包器引入、也运行在没有原生 crypto 的 Node 版本上——在 `computeSecret`/`setPublicKey` 中从不校验 **对端公钥**：攻击者提供的点直接乘上你的私钥，既不检查它在配置的曲线上、也不检查在素数阶子群内。这是教科书级的 invalid-curve/小子群攻击类别：反复查询即可积累足够方程恢复静态密钥。npm 在 11 月 14 日 06:47 UTC 发布 **4.0.5**——比 CVE 记录发布（06:48Z）早一分钟，当日修复。
+
+**Why it matters:** 这个库是 browserify 时代的老胶水，但处于加密路径上的老传递依赖，恰恰是能在 Electron/webview 包里活很多年的画像。如果你的 bundle 里有 `create-ecdh`，升到 4.0.5——并且用这条记录挣来的怀疑去审视任何手写的 ECDH 对端点处理。
+
+[`🔗 CVE-2026-129319 记录`](https://www.cve.org/CVERecord?id=CVE-2026-129319) · [`🔗 npm：create-ecdh`](https://www.npmjs.com/package/create-ecdh)
+
+---
+
+## 29. 一份 PC 能启动的 ZIP：引导扇区藏在本地文件头里——归档还能正常解压
+
+- **Velocity:** ▮ steady
+- **Source:** goliath32.com · 59+ pts on HN · 12h ago (~00:03 UTC+8)
+- **Tags:** `zip` `bootsector` `polyglot` `linux`
+
+一次关于早期用户空间的调试，变成了一个洗澡时的念头：ZIP 恰好是天生适合 polyglot 捣鼓的格式（"Way back when, self extracting ZIP archives where a thing, EXE/ZIP polyglots that can be run and unpack themselves"），而"标准 CPIO 工具也许是太阳底下最被诅咒的归档器"。最终的成品是 `boot.zip`：一份完全正常的 ZIP——`unzip -t` 全绿，还打包了从零构建它自身所需的源码——而它的首字节同时是一个合法的 ZIP **本地文件头**和一份可引导镜像：头部的字段里藏着 Multiboot 魔数 `1BADB002` 和 16 位实模式引导代码，所以 `file` 把它识别成 DOS/MBR 引导扇区。文章逐字节讲解了构造，并提供归档下载。这与本 feed 11-11 报道的 tar 解析器酷刑测试同属一门手艺，只是从 fuzz 方换到了建造方。
+
+**Why it matters:** 格式多面体是学习"两个解析器在哪里不一致"的最干净方式——这里的引导加载器把 unzip 读作结构体的字节读作代码，两种解读互不破坏。顺便也是一个真正好玩的一晚项目：成品能启动。
+
+[`🔗 goliath32：Creating a self booting ZIP archive`](https://goliath32.com/blog/ziphead.html) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50498295)
+
+---
+
+## 30. 如何设计你自己的去中心化通讯协议——联邦、签名服务器，以及"简化版"为什么已经很难
+
+- **Velocity:** ▮ steady
+- **Source:** karboosx.net · 63+ pts on HN · 12h ago (~00:03 UTC+8)
+- **Tags:** `messaging` `e2ee` `protocol-design` `federation`
+
+一篇从头构建最小 **联邦式、端到端加密文本通讯协议** 的长文（karboosx，11 月 14 日）：先定需求（服务器只见密文、不盲信自称的域名、刻意砍掉附件/群组/多设备/已读回执——"欢迎来到 90 年代！"），再逐项过设计决策——用户身份、MX 式服务器发现、服务器间联邦里每一次跨服务器请求都必须由能证明控制源域名的密钥签名。这篇的价值在于克制：拒绝所有便利功能，恰恰暴露了难题真正所在的位置——在任何客户端代码写出来之前。
+
+**Why it matters:** 诚实地读一个协议的设计，是理解 Matrix、ActivityPub 它们到底在为什么付费的最快方式；对任何打算往 agent 系统上"简单加一层聊天"的人来说，这也是最好的行前读物——那可是联邦再加全部难题。
+
+[`🔗 karboosx：How to Create Your Own Decentralized Messenger Protocol`](https://karboosx.net/post/5j7jdDM3/how-to-create-your-own-decentralized-messenger-protocol) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50498073)
+
+---
+
+## 31. AI 数据中心真的会搬进太空吗？一份冷静的可行性测算——而它押注在星舰上
+
+- **Velocity:** ▮ steady
+- **Source:** forethought.org · 61+ pts on HN · 10h ago (~02:03 UTC+8)
+- **Tags:** `data-centers` `orbital` `starship` `energy`
+
+Forethought 的研究笔记（11 月 14 日）拿马斯克的声明——"把 AI 放在太空将是成本最低的地方……两年内，也许三年"——算账而不是谈感觉：轨道数据中心确有真实的能源论据（合适轨道的恒定强光照、没有审批队列、持续环境伤害更少），但成本竞争力的论证"**几乎完全取决于星舰能否复现 SpaceX 在猎鹰上达到的可复用性**"——太空太阳能大约在 **$250/kg 进轨** 与现今离网地面电力打平，在 **$50/kg** 左右胜过任何现行地面能源。笔记明确把自己定位为"把炒作与现实分开"——如果这个声明如期兑现，它将重塑 AI 治理。
+
+**Why it matters:** 这是第 21 条的正确配套读物：今天的首次星舰捕获正是这份分析所说一切都悬于其上的曲线上的一个数据点——而这份笔记的诚实成本框架（每公斤发射价，而不是效果图），就是读后续每一份"AI 上太空"公告的方式。
+
+[`🔗 Forethought：Will we really put data centers in space?`](https://www.forethought.org/research/will-we-really-put-data-centers-in-space) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50498945)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-14T20:25:31Z |
-| Items | 20 |
-| Sources tracked | 17 (Hacker News, GitHub Trending, Google Research, NVIDIA, PyPI, Project Zero, CBC, Reuters, U-Mich, vendor blogs and project repos) |
+| Generated | 2026-11-15T04:35:23Z |
+| Items | 31 |
+| Sources tracked | 29 (Hacker News, GitHub Trending, Google Research, NVIDIA, PyPI, Project Zero, CBC, Reuters, U-Mich, BBC, EFF, L3Harris, MITRE CVE records, npm, vendor blogs and project repos) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

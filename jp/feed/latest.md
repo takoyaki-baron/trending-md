@@ -1,6 +1,6 @@
 ---
 date: 2026-11-15
-updated: 2026-11-14T20:25:31Z
+updated: 2026-11-15T04:35:23Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 17
 license: CC-BY-4.0
@@ -290,13 +290,167 @@ Devin Weaver のエッセイ（beyondloom）は、意図的に簡素な JavaScri
 
 ---
 
+## 21. SpaceX が Starship 本体をキャッチ：Flight 15 は初のタワーによる上段捕獲で幕を閉じる——ブースターの捕獲は中断
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** spacex.com · 871+ pts on HN · 7h ago (~05:03 UTC+8)
+- **Tags:** `spacex` `starship` `flight-15` `reusability`
+
+Flight 15 は打ち上げ前の計画どおりに幕を閉じました。発射タワーが **Starship 上段** をキャッチ——SpaceX が船体そのものをキャッチしたのはこれが初めてで、この 2 年間捕獲してきたのは Super Heavy ブースターだけでした。計画されていた **ダブルキャッチ** は実現しませんでした。飛行スレッドによると、ブースターは期待より低性能（ブーストバック中に 1 基のエンジンが異常、着陸映像には「エンジン・リッチ」の緑がかった噴射）で、GNC が自律的にキャッチを中止してメキシコ湾への軟着陸に迂回——着水時に飛行中止システムが作動しました。Musk の飛行後まとめはブースターは燃料が少なく、タワーを爆発で賭ける気分ではなかった——ブースターはタワーより安い、というのです。船体のキャッチは美しく決まり、コメント者はこれこそが要点だったと指摘します。「この開発段階で本当に面白いのは船のキャッチです」。
+
+**Why it matters:** ブースターの再利用は経済性が証明済みです。船体の再利用は高速反復ループの欠けた半分です。上段がいつも残骸で帰る機体は積み重ねて再飛行できません。今日のキャッチはタワーが船を受け止められる最初の証明であり、まさに下の項目 31 の軌道データセンター可能性計算が Starship の価格を置いている再利用マイルストーンです。
+
+[`🔗 SpaceX：Starship Flight 15`](https://www.spacex.com/launches/starship-flight-15) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50500963)
+
+---
+
+## 22. 全土的な離陸停止の原因が判明：銅線から光ファイバーへの切り替え工事の失敗——工事中のルーターが航空管制システムにデータを洪水的に送信
+
+- **Velocity:** ▮▮ rising
+- **Source:** bbc.co.uk · 37+ pts on HN · 10h ago (~02:03 UTC+8)
+- **Tags:** `faa` `ground-stop` `l3harris` `infrastructure`
+
+2026-11-14 に報じた FAA 全土離陸停止（「原因不明」）の続報です。交通長官 Sean Duffy は、停止が請負業者 **L3Harris** による FAA 航空域通信の **銅線から光ファイバーへの転換** に遡ると説明しました。工事中だったルーターが「他の航空交通管制システムへのデータ送出を始め」、安全のため空域を閉鎖せざるを得ませんでした。当局は「悪意のあるものの証拠はゼロ、AI に関係する証拠もゼロ」（FAA 長官 Bryan Bedford）とし、サイバー攻撃ではないとの認識です。金曜の停止は 9/11 以来最長で、混乱は数日続く見込みです。L3Harris は停止前に刷新作業の **70% 以上** を完了していたと述べ、「FAA の調査を支援している」としています。
+
+**Why it matters:** この障害モードはそのままチェックリスト項目です。稼働中の安全重要通信系での切り替えが、施工トラフィックを本番 ATC システムに漏らしました。インフラ移行を運用するすべての人への無料の事例研究です——転換はシャドウ環境で行い、緊急停止スイッチを用意する。そして政府の「悪意なし」の結論は、退屈な原因がたいてい本当の原因だという教訓でもあります。
+
+[`🔗 BBC：Copper wire upgrade caused nationwide flight suspension`](https://www.bbc.co.uk/news/articles/c6wy9lynq4qno) · [`🔗 L3Harris の 11/13 離陸停止に関する声明`](https://www.l3harris.com/newsroom/press-release/2026/11/l3harris-statement-nov-13-ground-stop)
+
+---
+
+## 23. EFF が第六巡区控訴裁判所に ALPR データベース検索の令状要件を求める——US v. Sturdivant
+
+- **Velocity:** ▮▮ rising
+- **Source:** eff.org · 81+ pts on HN · 2h ago (~10:03 UTC+8)
+- **Tags:** `eff` `alpr` `surveillance` `fourth-amendment`
+
+EFF と ACLU は 11 月 14 日、第六巡区控訴裁判所の **United States v. Sturdivant** に amicus brief を提出しました。クリーブランド警察は強盗容疑者の車のメーカー/モデル/色しか知らないまま、2 つの ALPR データベース——**Flock と ELSAG**——を無制限に検索し、被告の車が犯行現場付近にいたことを突き止めて逮捕しました。地裁判決は、Sturdivant はナンバープレート番号について「公衆が観察できるものだから」合理的なプライバシー期待を持たない、としました。意見書は大規模なプレート追跡が第四修正案の「捜索」にあたると論じます——ALPR は法執行機関に「ボタン一つで容疑者（やその他誰でも）の過去の移動を視える仮想タイムマシン」を与える——そして先月、連邦地裁も ALPR を「一種の無差別 mass surveillance」と認めたことに触れています。
+
+**Why it matters:** 昨日のフィードはキャンパスの Flock 撤去運動——ALPR をめぐる契約の戦線——を扱いました。Sturdivant は司法の戦線で、両者は同じ問いに収束しつつあります。公道から作られたデータベースの照会に、相応の理由（probable cause）が必要か。第六巡区の答えは 4 州分のプレートリーダー導入を拘束します。
+
+[`🔗 EFF：We're Asking an Appeals Court to Require a Warrant for ALPR Searches`](https://www.eff.org/deeplinks/2026/11/were-asking-appeals-court-require-warrant-alpr-searches) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50503255)
+
+---
+
+## 24. Dokploy の 9.9：認証済み組織メンバーがバックアップの `serviceName` をホストの root に変える
+
+- **Velocity:** ▮▮ rising
+- **Source:** CVE-2026-129433（VulnCheck CNA 割当）· レコード公開 約 20h 前（~20:32 UTC+8、11 月 14 日）
+- **Tags:** `dokploy` `cve` `command-injection` `self-hosted`
+
+**CVE-2026-129433**（CVSS 3.1 **9.9**、VulnCheck CNA 割当。NVD は `Deferred`、公開 2026-11-14T12:32Z）：**0.31.1 未満** の Dokploy は `getComposeContainerCommand()` に OS コマンドインジェクションを抱えています。認証済み組織メンバーが `backup.create` または `backup.update` tRPC プロシージャ経由でシェルメタ文字を含む `serviceName` を保存でき、予定バックアップの実行時にペイロードが **root として実行** され、ホストを完全に乗っ取られます。プロジェクトは **v0.31.1** で修正（11/12 リリース、11/13 に v0.31.2）。レコードは GHSA-j329-jw7j-rxjm、PR #5908、コミット `b24006e` をリンクしています。Dokploy はセルフホスト PaaS——人々が自分のインフラを持ちたいからこそデプロイし、そして管理ポートを公開インターネットに置いたままにする類の箱です。
+
+**Why it matters:** このパターンはこのフィードが扱ったすべてのセルフホスト プラットフォーム CVE で繰り返されています。識別子であるべきパラメータがシェルに流れ込む。Dokploy を動かしているなら、確認は 1 行です——バージョン ≥ 0.31.1 か？次の Dokploy を作る人への教訓も同じです。識別子はシェル引数ではない。認証があっても、です。
+
+[`🔗 GHSA-j329-jw7j-rxjm（Dokploy セキュリティ勧告）`](https://github.com/Dokploy/dokploy/security/advisories/GHSA-j329-jw7j-rxjm) · [`🔗 Release v0.31.1`](https://github.com/Dokploy/dokploy/releases/tag/v0.31.1) · [`🔗 CVE-2026-129433 レコード`](https://www.cve.org/CVERecord?id=CVE-2026-129433)
+
+---
+
+## 25. 「アセンブラを通したことは——一度もない」：Woz は紙の上で Apple 初の BASIC を手で書き手でアセンブルした。掘り起こされた Q&A がその方法を確定させる
+
+- **Velocity:** ▮▮ rising
+- **Source:** retrocomputing.stackexchange.com · 137+ pts on HN · 6h ago (~06:03 UTC+8)
+- **Tags:** `wozniak` `basic` `6502` `history`
+
+2021 年の retrocomputing StackExchange の質問——「Woz はどうやってコンピュータを組み上げる前に Apple 1 BASIC を書いたのか？」——が今日 HN の front を取りました（17,308 ビュー、最良回答 82 点）。Wozniak 本人の講演から組み立てられた答え：彼は Integer BASIC を **6502 向けに紙の上で書き、すべての命令を手でアセンブル** しました。アセンブラはなく、勤務先の HP なら払えるタイムシェアの課金を個人は払えなかったからです。「命令をページの右側に書き、アドレスを左側に書いて……私はそこに座って自分でアセンブルしていました」。そして議論を終わらせる一文：**「初期の Apple II に同梱した BASIC は、アセンブラを通したことが——一度もない。手書きのコピーは 1 部だけ。すべて手書き、すべて手アセンブルでした」**（1986 年 Apple World Convention 講演、Apple II History サイト経由）。
+
+**Why it matters:** 手アセンブルの逸話はたいてい神話の隣にあります。これは著者自身の声で裏付けがあり、1976 年の「道具がない」とは何を意味したかの校正点にもなります——一人と、メモ帳と、6502 のオペコード表。今週の AI 生成ツール類の項目の物差しも替わります。「インタプリタを書いた」と「インタプリタを出荷した」の間の距離は、かつて手書きの枚数で測られていたのです。
+
+[`🔗 Retrocomputing.SE：How did Woz write the Apple 1 BASIC?`](https://retrocomputing.stackexchange.com/questions/17957) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50501594)
+
+---
+
+## 26. The Claude Delusion：なぜプログラマは「私と同じ」を「超人」として聞くのか
+
+- **Velocity:** ▮▮ rising
+- **Source:** netmeister.org · 146+ pts on HN · 15h ago (~13:03 UTC+8、11 月 14 日)
+- **Tags:** `ai` `critique` `dunning-kruger` `discourse`
+
+Jan Schaumann のエッセイ（11/13）は、AI 論の中の特定の文型——Claude コーディングモデルは「**私と同じくらい** うまい」、ゆえに「コーディングにおいて超人」——を分解し、その推論が測定ではなく錯覚的優越性の産物だと論じます。希少なスキルにアイデンティティを置く人にとって、自分の水準に近づくものは構成上、人間を超えて見える。彼の事例研究は、Gates が自身で作った AP Biology の問題に GPT-4 が満点を取って「衝撃を受けた」と語った場面です。傲慢なのは、自分の作った問題が「AI の真の能力」を測ると前提した点です。エッセイはそこから、破滅論とユートピア論を同じ心理学の異なる衣装として読み、「区別的スキルとしてのプログラミング」が一世代の技術者に何を意味したかで閉じます。
+
+**Why it matters:** このフィードは毎週モデルの実力主張を報じています。これはそれを読むときに通すべきフィルタです。トップ人間専門家に匹敵するという主張は、**分布** についての主張であり、それを口にする人はその分布の無作為サンプルではほぼない——フィード項目を書いている私たち自身も含めて。
+
+[`🔗 Jan Schaumann：The Claude Delusion`](https://www.netmeister.org/blog/claude-delusion.html) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50496921)
+
+---
+
+## 27. HN が Baude 事件を掘り起こす：ページ番号の付け直しを頼んだ Claude が 1 年分の講義ノートを削除——Dropbox から復旧
+
+- **Velocity:** ▮ steady
+- **Source:** tomshardware.com · 44+ pts on HN · 10h ago (~02:03 UTC+8)
+- **Tags:** `claude` `agent-safety` `file-deletion` `backup`
+
+シカゴ大学の Harry Kalven, Jr. 証法教授 William Baude は 11 月 5 日にこう書きました。「昨日、昼食に行っている間に、Claude が憲法の講義ノート 1 年分と現行のシラバスを削除しました」。彼はエージェントに古い講義ノートのページ番号更新を頼み、戻ると自白が残っていました：**「誤って Fall 2026 FINAL syllabus .doc と、すべてのトップレベルの Class N 2023 ノートを削除しました。復元されていません」**。ファイルは後で Dropbox から復旧し、Baude はこの話を公益告知として共有しました。HN は今日これを掘り起こし（44 点、コメント 62 で増加中）、なぜエージェントが代替不能なファイルへの書き込み権限を持つのかを議論しています。
+
+**Why it matters:** エージェントがファイルを削除するクラスは繰り返し起きています（放送 2 週間前のシーズン編集を消したエージェント、9 秒でデータベースを落としたエージェント）。そして毎回の検証は同じ退屈な修正に行き着きます。エージェントが触れるものにスナップショットがない状態をなくす。モデルの自己申告——謝罪を含めて——を信じるより、エージェントが見るすべてにバージョン管理を敷くほうが安いのです。
+
+[`🔗 Tom's Hardware：Rogue Claude AI deletes law professor's syllabus, one year of lecture notes`](https://www.tomshardware.com/tech-industry/artificial-intelligence/rogue-claude-ai-tasked-with-renumbering-pages-accidentally-deletes-law-professors-entire-syllabus-one-year-of-lecture-notes-youre-right-to-be-angry-i-deleted-your-files-through-my-own-carelessness-humbled-agent-admits) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50499114)
+
+---
+
+## 28. create-ecdh ≤ 4.0.4 はブラウザ経路でピア鍵の検証を飛ばしていた——invalid-curve ECDH、レコード公開と同じ日に修正
+
+- **Velocity:** ▮ steady
+- **Source:** CVE-2026-129319（harborist CNA 割当）· レコード公開 11 月 14 日、修正 4.0.5 は同朝 npm へ
+- **Tags:** `npm` `create-ecdh` `crypto` `supply-chain`
+
+**CVE-2026-129319**（CVSS 4.0 **8.2**、CNA は harborist。NVD は `Received`）：`create-ecdh`——Node の `crypto.createECDH` の browserify 実装で、ブラウザバンドラが取り込み、ネイティブ crypto のない Node バージョンでも動く——は `computeSecret`/`setPublicKey` で **相手の公開鍵** を検証していませんでした。攻撃者が渡した点は、設定された曲線上にあることも素数位数の部分群に属することも確認されずに、あなたの秘密鍵で乗算されます。これは教科書的な invalid-curve/小部分群攻撃のクラスで、問いを繰り返せば静的鍵を復元する方程式が蓄積します。npm は 11 月 14 日 06:47 UTC に **4.0.5** を出しました——CVE レコードの公開（06:48Z）の 1 分前。当日修正です。
+
+**Why it matters:** このライブラリは browserify 時代の古い糊ですが、暗号経路にある古い推移依存は、まさに Electron/webview バンドルの中で何年も生き延びるタイプです。バンドルに `create-ecdh` が含まれるなら 4.0.5 に上げてください。そして、このレコードが稼いだ疑いの目で、手書きの ECDH ピア点処理を眺め直しましょう。
+
+[`🔗 CVE-2026-129319 レコード`](https://www.cve.org/CVERecord?id=CVE-2026-129319) · [`🔗 npm：create-ecdh`](https://www.npmjs.com/package/create-ecdh)
+
+---
+
+## 29. PC が起動できる ZIP アーカイブ：ブートセクタはローカルファイルヘッダの中に隠れる——しかもアーカイブは普通に展開できる
+
+- **Velocity:** ▮ steady
+- **Source:** goliath32.com · 59+ pts on HN · 12h ago (~00:03 UTC+8)
+- **Tags:** `zip` `bootsector` `polyglot` `linux`
+
+初期ユーザースペースについてのデバッグセッションが、シャワーでの思いつきになりました。ZIP はまさにポリグロットの細工に適した形式です（"Way back when, self extracting ZIP archives where a thing, EXE/ZIP polyglots that can be run and unpack themselves"）。そして「標準の CPIO ツールはおそらく太陽の下で最も呪われたアーカイバ」。出来上がった成果物は `boot.zip`：完全に正常な ZIP です——`unzip -t` は通過し、ゼロから自分自身をビルドするのに必要なソースコードまで同梱しています——なのにその先頭バイトは、有効な ZIP **ローカルファイルヘッダ** であると同時に起動可能イメージでもあります。ヘッダのフィールドには Multiboot マジック `1BADB002` と 16 ビットリアルモードのブートコードが隠されており、だからこそ `file` はこれを DOS/MBR ブートセクタと報告するのです。エッセイはバイトレベルの構築を歩き、アーカイブをダウンロード付きで公開しています。11-11 にこのフィードが扱った tar パーサの拷問テストと同じ職芸の一族で、fuzz 側ではなく建造側から見たものです。
+
+**Why it matters:** 形式ポリグロットは「2 つのパーサがどこで食い違うか」を学ぶ最もきれいな方法です。ここではブートローダが、unzip には構造体として見えるバイトをコードとして読み、どちらの解釈ももう一方を壊しません。ついでに本当に楽しい一晩プロジェクトでもあります。成果物は起動します。
+
+[`🔗 goliath32：Creating a self booting ZIP archive`](https://goliath32.com/blog/ziphead.html) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50498295)
+
+---
+
+## 30. 自分だけの分散型メッセンジャープロトコルの設計方法——フェデレーション、署名付きサーバ、そして「シンプル版」がすでに難しい理由
+
+- **Velocity:** ▮ steady
+- **Source:** karboosx.net · 63+ pts on HN · 12h ago (~00:03 UTC+8)
+- **Tags:** `messaging` `e2ee` `protocol-design` `federation`
+
+最小の **フェデレーテッドでエンドツーエンド暗号化のテキストメッセンジャープロトコル** をゼロから作る長文ウォークスルー（karboosx、11/14）：まず要件（サーバは暗号文しか見ない、自称ドメインを盲信しない、添付/グループ/マルチデバイス/既読はあえて捨てる——「90 年代へようこそ！」）、次に設計判断を一つずつ。ユーザー ID、MX 風のサーバ発見、そしてサーバ間フェデレーションではすべての越境リクエストが、送信元ドメインの支配を証明できる鍵による署名を要求します。エッセイの価値はその禁欲にあります。便利機能をすべて拒否することで、クライアントコードの 1 行が書かれる前に、難しい問題がどこに住んでいるかを正確に晒すのです。
+
+**Why it matters:** 一つのプロトコルを正直に設計して読むことは、Matrix や ActivityPub が実際に何のために支払っているかを理解する最速の道です。エージェントシステムに「シンプルなチャット層」を足そうとしている人への最良の出発前読み物でもあります。それはフェデレーションに、難しい部分の全部を足す作業です。
+
+[`🔗 karboosx：How to Create Your Own Decentralized Messenger Protocol`](https://karboosx.net/post/5j7jdDM3/how-to-create-your-own-decentralized-messenger-protocol) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50498073)
+
+---
+
+## 31. AI データセンターは本当に宇宙に行くのか？冷静な実現可能性の読み解き——そしてそれは Starship に価格を置いている
+
+- **Velocity:** ▮ steady
+- **Source:** forethought.org · 61+ pts on HN · 10h ago (~02:03 UTC+8)
+- **Tags:** `data-centers` `orbital` `starship` `energy`
+
+Forethought の研究ノート（11/14）は、Musk の主張——「AI を置く場所として最もコストが低いのは宇宙になる……2 年、3 年以内に」——を気分ではなく計算します。軌道データセンターには現実のエネルギー論拠があります（適切な軌道での一定した強い日光、許認可の待ち行列なし、進行中の環境負荷は少ない）。しかしコスト競争力の主張は「**ほぼ完全に、Starship が SpaceX が Falcon で達成したのと同等の再利用性を実現できるかにかかっている**」——宇宙太陽光はおよそ **$250/kg の軌道投入** で現在のオフグッド地面電力と並び、**$50/kg** 前後で現行のあらゆる地上エネルギー源を上回ります。ノートは自らを「ハイプと現実を切り分ける」枠組みと位置づけています。この主張が予定どおりに実現すれば AI ガバナンスを形作り直すものだからです。
+
+**Why it matters:** これは項目 21 の正しい companion 読み物です。今日の初の船体キャッチは、この分析がすべてがかかっていると言う曲線上の 1 つのデータポイントです。そしてこのノートの正直なコストの枠組み（レンダリングではなく、kg あたりの打ち上げ価格）こそ、これから続くすべての「AI を宇宙へ」の発表を読む方法です。
+
+[`🔗 Forethought：Will we really put data centers in space?`](https://www.forethought.org/research/will-we-really-put-data-centers-in-space) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50498945)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-14T20:25:31Z |
-| Items | 20 |
-| Sources tracked | 17 (Hacker News, GitHub Trending, Google Research, NVIDIA, PyPI, Project Zero, CBC, Reuters, U-Mich, vendor blogs and project repos) |
+| Generated | 2026-11-15T04:35:23Z |
+| Items | 31 |
+| Sources tracked | 29 (Hacker News, GitHub Trending, Google Research, NVIDIA, PyPI, Project Zero, CBC, Reuters, U-Mich, BBC, EFF, L3Harris, MITRE CVE records, npm, vendor blogs and project repos) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

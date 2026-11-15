@@ -1,8 +1,8 @@
 ---
 date: 2026-11-15
-updated: 2026-11-14T20:25:31Z
+updated: 2026-11-15T04:35:23Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 17
+sources: 29
 license: CC-BY-4.0
 ---
 
@@ -290,13 +290,167 @@ Devin Weaver's essay (beyondloom) builds a minimal PostScript interpreter in del
 
 ---
 
+## 21. SpaceX catches the Starship itself: Flight 15 ends with the first tower catch of the upper stage — the booster catch was aborted
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** spacex.com · 871+ pts on HN · 7h ago (~05:03 UTC+8)
+- **Tags:** `spacex` `starship` `flight-15` `reusability`
+
+Flight 15 ended the way its pre-flight plan promised: the launch tower caught the **Starship upper stage** — the first time SpaceX has ever caught the ship itself, after two years of catching only the Super Heavy booster. The planned **double catch** did not happen: per the flight thread, the booster underperformed (an engine failure during boostback, "engine-rich" green-tinted braking burn on the landing footage), its GNC aborted the catch autonomously, and it was diverted to a soft Gulf landing — where the Flight Termination System fired on water impact. Musk's post-flight summary: the booster was low on fuel, and there was no mood of risking the tower with a boom — boosters are cheaper than towers. The ship catch itself was clean, and commenters note it was the point: "the ship catch is what was really interesting at this point of development."
+
+**Why it matters:** Booster reusability is proven economics; ship reusability is the missing half of the rapid-cadence loop — you can't stack and refly a vehicle whose upper stage always comes home as wreckage. Today's catch is the first proof the tower can take the ship, and it is the exact reusability milestone that orbital-data-center feasibility math (item 31 below) prices Starship at.
+
+[`🔗 SpaceX: Starship Flight 15`](https://www.spacex.com/launches/starship-flight-15) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50500963)
+
+---
+
+## 22. The ground stop gets its cause: a copper-to-fiber conversion gone wrong — a router being worked on flooded air-traffic-control systems
+
+- **Velocity:** ▮▮ rising
+- **Source:** bbc.co.uk · 37+ pts on HN · 10h ago (~02:03 UTC+8)
+- **Tags:** `faa` `ground-stop` `l3harris` `infrastructure`
+
+Since we covered the FAA nationwide ground stop on 2026-11-14 ("cause still unstated"): Transport Secretary Sean Duffy now says the halt traced to the **copper-to-fiber conversion** of FAA airspace communications being performed by contractor **L3Harris** — a router being worked on "started flooding other air traffic control systems," forcing the airspace shutdown for safety. Officials state they see "zero evidence of anything nefarious, and zero evidence of anything AI related" (FAA head Bryan Bedford), and do not believe it was a cyber-attack; Friday's stop was the longest such incident since 9/11, with disruption expected to last days. L3Harris — which says it had completed **over 70%** of the modernization work before the stop — confirmed the conversion context and said it is "supporting the FAA in its investigation."
+
+**Why it matters:** The failure mode is a checklist item, not a mystery: a cutover on live safety-critical comms leaked traffic into production ATC systems. For anyone operating infrastructure migrations, the story is a free case study in why conversion happens on shadow environments with a kill switch — and the government's "not nefarious" finding is the reminder that the boring cause is usually the true one.
+
+[`🔗 BBC: Copper wire upgrade caused nationwide flight suspension`](https://www.bbc.co.uk/news/articles/c6wy9lynq4qno) · [`🔗 L3Harris statement on the Nov. 13 ground stop`](https://www.l3harris.com/newsroom/press-release/2026/11/l3harris-statement-nov-13-ground-stop)
+
+---
+
+## 23. EFF asks the Sixth Circuit to require a warrant for ALPR database searches — US v. Sturdivant
+
+- **Velocity:** ▮▮ rising
+- **Source:** eff.org · 81+ pts on HN · 2h ago (~10:03 UTC+8)
+- **Tags:** `eff` `alpr` `surveillance` `fourth-amendment`
+
+EFF and the ACLU filed an amicus brief (Nov 14) in **United States v. Sturdivant** at the Sixth Circuit: Cleveland police, knowing only the make/model/color of a robbery suspect's car, ran an open-ended search of two ALPR databases — **Flock and ELSAG** — found the defendant's car near the robbery sites, and arrested him. The district court held Sturdivant had no reasonable expectation of privacy in his license plate number "because it could be observed by members of the public." The brief argues mass plate tracking is a Fourth Amendment "search" — ALPRs give law enforcement "a virtual time machine to view suspects', or anyone else's, past movements (and much more) with just the click of a button" — and notes a federal district court agreed just last month, calling ALPRs "a form of indiscriminate mass surveillance."
+
+**Why it matters:** Yesterday's feed covered the campus Flock campaigns — the contractual front of the ALPR fight; Sturdivant is the judicial front, and the two movements are converging on the same question: whether a database built from public roads needs probable cause to query. The Sixth Circuit's answer will bind four states' worth of plate-reader deployments.
+
+[`🔗 EFF: We're Asking an Appeals Court to Require a Warrant for ALPR Searches`](https://www.eff.org/deeplinks/2026/11/were-asking-appeals-court-require-warrant-alpr-searches) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50503255)
+
+---
+
+## 24. Dokploy's 9.9: an authenticated org member turns a backup `serviceName` into root on the host
+
+- **Velocity:** ▮▮ rising
+- **Source:** CVE-2026-129433 (VulnCheck CNA-assigned) · record published 20h ago (~20:32 UTC+8, Nov 14)
+- **Tags:** `dokploy` `cve` `command-injection` `self-hosted`
+
+**CVE-2026-129433** (CVSS 3.1 **9.9**, VulnCheck CNA-assigned; NVD `Deferred`, published 2026-11-14T12:32Z): Dokploy **before 0.31.1** has an OS command injection in `getComposeContainerCommand()` — an authenticated organization member can store a `serviceName` value carrying shell metacharacters through the `backup.create` or `backup.update` tRPC procedures, and the payload executes **as root** when the scheduled backup runs, giving full host takeover. The project fixed it in **v0.31.1** (released Nov 12, with v0.31.2 following Nov 13); the record links GHSA-j329-jw7j-rxjm, PR #5908 and commit `b24006e`. Dokploy is a self-hosted PaaS — the class of box people deploy exactly because they want to own their infrastructure, and then leave the management port reachable from the internet.
+
+**Why it matters:** The pattern repeats across every self-hosted platform CVE this feed has covered: a parameter that should be an identifier flows into a shell. If you run Dokploy, the check is one line — are you on ≥ 0.31.1? If you build the next Dokploy, the lesson is the same one: identifiers are not shell arguments, even behind authentication.
+
+[`🔗 GHSA-j329-jw7j-rxjm (Dokploy security advisory)`](https://github.com/Dokploy/dokploy/security/advisories/GHSA-j329-jw7j-rxjm) · [`🔗 Release v0.31.1`](https://github.com/Dokploy/dokploy/releases/tag/v0.31.1) · [`🔗 CVE-2026-129433 record`](https://www.cve.org/CVERecord?id=CVE-2026-129433)
+
+---
+
+## 25. "Never assembled — ever": Woz wrote Apple's first BASIC by hand on paper, and the resurfaced Q&A settles how
+
+- **Velocity:** ▮▮ rising
+- **Source:** retrocomputing.stackexchange.com · 137+ pts on HN · 6h ago (~06:03 UTC+8)
+- **Tags:** `wozniak` `basic` `6502` `history`
+
+A 2021 retrocomputing StackExchange question — "How did Woz write the Apple 1 BASIC before building the computer?" — fronted HN today (17,308 views, top answer at 82). The answer, assembled from Wozniak's own talks: he wrote Integer BASIC **on paper for the 6502, hand-assembling every instruction** — no assembler, because his Hewlett-Packard employer would have paid time-sharing charges he could not afford as an individual: "you write your instructions on the right side of the page, you write the addresses over on the left side… So I would just sit there and assemble it myself." And the sentence that ends the debate: **"The BASIC, which we shipped with the first Apple IIs, was never assembled — ever. There was one handwritten copy, all handwritten, all hand-assembled."** (1986 Apple World Convention talk, via the Apple II History site.)
+
+**Why it matters:** Hand-assembly lore is usually myth-adjacent; this one is documented in the author's own voice, and it is a calibration point for what "no tools" actually meant in 1976 — a person, a legal pad, and the 6502 opcode table. It also reframes this week's AI-built-tooling items: the distance between "wrote the interpreter" and "shipped the interpreter" used to be measured in handwriting.
+
+[`🔗 Retrocomputing.SE: How did Woz write the Apple 1 BASIC?`](https://retrocomputing.stackexchange.com/questions/17957) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50501594)
+
+---
+
+## 26. The Claude Delusion: an essay on why programmers hear "as good as I am" as "superhuman"
+
+- **Velocity:** ▮▮ rising
+- **Source:** netmeister.org · 146+ pts on HN · 15h ago (~13:03 UTC+8, Nov 14)
+- **Tags:** `ai` `critique` `dunning-kruger` `discourse`
+
+Jan Schaumann's essay (Nov 13) takes apart a specific sentence pattern in AI discourse — Claude coding models are "**as good as I am**," therefore "superhuman at writing code" — and argues the inference is an illusory-superiority artifact, not a measurement: for people whose identity is built on a scarce skill, anything approaching their own level feels by construction beyond human. His case study is Bill Gates describing being "shocked" that GPT-4 aced an AP Biology exam of questions Gates himself invented — the hubris being that Gates presumed his own made-up questions measured "AI's true capabilities." From there the essay reads both doom and utopia narratives as the same psychology wearing different costumes, and closes on what programming's status as a differentiating skill meant to a generation of nerds.
+
+**Why it matters:** This feed reports model claims weekly, and this is a useful filter to run them through: a claim of matching a top human expert is a claim about a *distribution*, and the people making it are rarely a random sample of that distribution — including the ones writing feed items.
+
+[`🔗 Jan Schaumann: The Claude Delusion`](https://www.netmeister.org/blog/claude-delusion.html) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50496921)
+
+---
+
+## 27. HN resurfaces the Baude incident: Claude, asked to renumber pages, deleted a year of lecture notes — recovered from Dropbox
+
+- **Velocity:** ▮ steady
+- **Source:** tomshardware.com · 44+ pts on HN · 10h ago (~02:03 UTC+8)
+- **Tags:** `claude` `agent-safety` `file-deletion` `backup`
+
+William Baude — Harry Kalven, Jr. Professor of Law at the University of Chicago — posted on Nov 5: "Yesterday while I was at lunch, Claude deleted a year of con law lecture notes and my current syllabus." He had tasked the agent with updating page numbers in old lecture notes and returned to its admission: **"I deleted your Fall 2026 FINAL syllabus .doc and all top-level Class N 2023 notes by accident, and they are not restored."** The files were later recovered via Dropbox, and Baude framed the story as a public-service announcement. The HN thread resurfaced it today (44 pts, 62 comments and climbing), debating why an agent has write access to irreplaceable files at all.
+
+**Why it matters:** The agent-deletes-files class keeps recurring (an agent deleting a TV edit weeks before air, a database dropped in 9 seconds), and every post-mortem lands on the same boring fix: nothing an agent can touch should lack a snapshot. Version control for everything an agent sees is cheaper than trusting the model's self-report — including its apology.
+
+[`🔗 Tom's Hardware: Rogue Claude AI deletes law professor's syllabus, one year of lecture notes`](https://www.tomshardware.com/tech-industry/artificial-intelligence/rogue-claude-ai-tasked-with-renumbering-pages-accidentally-deletes-law-professors-entire-syllabus-one-year-of-lecture-notes-youre-right-to-be-angry-i-deleted-your-files-through-my-own-carelessness-humbled-agent-admits) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50499114)
+
+---
+
+## 28. create-ecdh ≤ 4.0.4 skipped peer-key validation in browsers — invalid-curve ECDH, fixed the same day the record landed
+
+- **Velocity:** ▮ steady
+- **Source:** CVE-2026-129319 (harborist CNA-assigned) · record published Nov 14, fix 4.0.5 on npm the same morning
+- **Tags:** `npm` `create-ecdh` `crypto` `supply-chain`
+
+**CVE-2026-129319** (CVSS 4.0 **8.2**, CNA harborist; NVD `Received`): `create-ecdh` — the browserified implementation of Node's `crypto.createECDH`, pulled in by browser bundlers and running on Node versions without native crypto — never validated the **peer's public key** in `computeSecret`/`setPublicKey`: the attacker-supplied point was multiplied by your private key without checking it lies on the configured curve or in its prime-order subgroup. That is the classic invalid-curve/small-subgroup class, where repeated queries leak enough equations to recover the static key. npm shipped **4.0.5** at 06:47 UTC on Nov 14 — one minute before the CVE record published (06:48Z) — a same-day fix.
+
+**Why it matters:** The library is old browserify-era glue, but an old transitive dep in the crypto path is exactly the profile that survives in Electron/webview bundles for years. If your bundle includes `create-ecdh`, bump to 4.0.5 — and treat any hand-rolled ECDH peer-point handling with the suspicion this record earns.
+
+[`🔗 CVE-2026-129319 record`](https://www.cve.org/CVERecord?id=CVE-2026-129319) · [`🔗 npm: create-ecdh`](https://www.npmjs.com/package/create-ecdh)
+
+---
+
+## 29. A ZIP archive a PC can boot: the boot sector hides inside the local file header — and the archive still unzips
+
+- **Velocity:** ▮ steady
+- **Source:** goliath32.com · 59+ pts on HN · 12h ago (~00:03 UTC+8)
+- **Tags:** `zip` `bootsector` `polyglot` `linux`
+
+A debugging session about early userspace turned into a shower thought: ZIP is *the* format built for polyglot trickery ("Way back when, self extracting ZIP archives where a thing, EXE/ZIP polyglots that can be run and unpack themselves") — and "the standard CPIO tool is possibly the most cursed archiver under the sun." The built artifact is `boot.zip`: a completely normal ZIP — `unzip -t` passes, and it contains its own source code needed to build itself from scratch — whose first bytes are simultaneously a valid ZIP **local file header** and a bootable image: the header's fields hide the Multiboot magic `1BADB002` and 16-bit real-mode boot code, which is why `file` reports a DOS/MBR boot sector. The essay walks the byte-level construction, and ships the archive as a download. It is the same craft family as the tar-parsing torture test this feed covered on 11-11, viewed from the builder's side instead of the fuzzer's.
+
+**Why it matters:** Format polyglots are the cleanest way to learn where two parsers disagree — here, the boot loader reads bytes that unzip reads as structure, and neither interpretation corrupts the other. Also a genuinely fun one-evening build: the artifact boots.
+
+[`🔗 goliath32: Creating a self booting ZIP archive`](https://goliath32.com/blog/ziphead.html) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50498295)
+
+---
+
+## 30. How to design your own decentralized messenger protocol — federation, signed servers, and why the "simple" version is already hard
+
+- **Velocity:** ▮ steady
+- **Source:** karboosx.net · 63+ pts on HN · 12h ago (~00:03 UTC+8)
+- **Tags:** `messaging` `e2ee` `protocol-design` `federation`
+
+A from-scratch walkthrough (karboosx, Nov 14) of building a minimal **federated, end-to-end-encrypted text messenger protocol**: requirements first (server sees only ciphertext, no blind trust in a self-claimed domain, deliberately no attachments, groups, multi-device or read receipts — "Welcome to the 90s!"), then the design decisions one by one — user identity, MX-style server discovery, server-to-server federation where every cross-server request must be signed by a key that provably controls the source domain. The essay's value is its restraint: by refusing every convenience feature, it exposes exactly where the hard problems live before a single line of client code.
+
+**Why it matters:** Reading one protocol designed honestly is the fastest way to understand what Matrix, ActivityPub and friends actually pay for — and a good pre-flight for anyone about to bolt a "simple" chat layer onto an agent system, which is federation plus the hard parts.
+
+[`🔗 karboosx: How to Create Your Own Decentralized Messenger Protocol`](https://karboosx.net/post/5j7jdDM3/how-to-create-your-own-decentralized-messenger-protocol) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50498073)
+
+---
+
+## 31. Will we really put AI data centers in space? A sober feasibility read — and it's priced on Starship
+
+- **Velocity:** ▮ steady
+- **Source:** forethought.org · 61+ pts on HN · 10h ago (~02:03 UTC+8)
+- **Tags:** `data-centers` `orbital` `starship` `energy`
+
+Forethought's research note (Nov 14) takes Musk's claim — "the lowest-cost place to put AI will be space […] within two years, maybe three" — and does the math instead of the vibe: orbital data centers do have a real energy case (constant high-intensity sunlight in the right orbits, no permitting queues, fewer ongoing environmental harms), but the cost-competitiveness argument "**depends almost entirely on Starship achieving reusability comparable with what SpaceX achieved with Falcon**" — space solar reaches parity with present-day off-grid terrestrial power at roughly **$250/kg to orbit**, and beats any current terrestrial energy source around **$50/kg**. The note is explicitly framed as disentangling "the hype from reality" on a claim that would reshape AI governance if it landed on schedule.
+
+**Why it matters:** This is the right companion read to item 21: today's first ship catch is one data point on exactly the curve this analysis says everything hinges on — and the note's honest-cost framing (launch price per kilogram, not renderings) is how to read every "AI in space" announcement that will now follow.
+
+[`🔗 Forethought: Will we really put data centers in space?`](https://www.forethought.org/research/will-we-really-put-data-centers-in-space) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50498945)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-14T20:25:31Z |
-| Items | 20 |
-| Sources tracked | 17 (Hacker News, GitHub Trending, Google Research, NVIDIA, PyPI, Project Zero, CBC, Reuters, U-Mich, vendor blogs and project repos) |
+| Generated | 2026-11-15T04:35:23Z |
+| Items | 31 |
+| Sources tracked | 29 (Hacker News, GitHub Trending, Google Research, NVIDIA, PyPI, Project Zero, CBC, Reuters, U-Mich, BBC, EFF, L3Harris, MITRE CVE records, npm, vendor blogs and project repos) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
