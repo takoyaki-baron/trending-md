@@ -4837,3 +4837,28 @@ Common Crawl 样本也不具代表性。
 Sources: [Crissy Field: Lovable 研究](https://www.crissyfield.de/research/lovable-en/) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50499017) ·
 [supabase 讨论 #4547](https://github.com/orgs/supabase/discussions/4547)
+
+## 2026-11-15 下午——当天的两个 CVE 从两端夹住了披露时间线
+
+同一批次的两条记录，分处论题 20 追踪的 fix-vs-record 时间线的两端：
+
+- **Dokploy `CVE-2026-129433`（CVSS 3.1 9.9，VulnCheck CNA；NVD `Deferred`，发布于 2026-11-14T12:32Z）：**
+  `getComposeContainerCommand()` 中的 OS 命令注入——经过认证的组织成员可以通过 `backup.create`/`backup.update`
+  tRPC 过程存入携带 shell 元字符的 `serviceName`，载荷在计划备份运行时**以 root 身份**执行：完全接管主机。
+  修复于 **v0.31.1**（11 月 12 日；v0.31.2 于 11 月 13 日跟进）；记录链接 GHSA-j329-jw7j-rxjm、PR #5908 与
+  commit `b24006e`——**fix-then-record 两天**，常规方向。自托管 PaaS：人们部署它正是为了拥有自己的基础设施，
+  然后把管理端口留在公网可达之处。教训是这个类最老的一条：标识符不是 shell 参数，认证之后也不是。
+- **`create-ecdh` `CVE-2026-129319`（CVSS 4.0 8.2，CNA harborist；NVD `Received`）：**Node 的
+  `crypto.createECDH` 的 browserify 化实现（被浏览器打包器引入）在 `computeSecret`/`setPublicKey` 中从不校验
+  **对端公钥**——攻击者提供的点直接与你的私钥相乘，没有任何在曲线上或在素数阶子群中的检查：经典的
+  invalid-curve/small-subgroup 类，反复查询即可泄漏足够多的方程来恢复静态密钥。npm 于 **11 月 14 日
+  06:47 UTC 发出 4.0.5——比记录发布（06:48Z）早一分钟**——fix-predates-record 浪潮的反模式孪生：一个
+  browserify 时代的旧传递依赖躺在加密路径上（这正是能在 Electron/webview 包里存活多年的画像），它的修复
+  跑赢了自己的文书。
+
+为什么重要：两条都是「无聊的类，真实的严重性」——一个流入 shell 的参数、一个未校验的曲线点——而且两条
+落地时修复都已就绪，所以读者的动作是一次版本升级，而不是等待。
+
+Sources: [GHSA-j329-jw7j-rxjm](https://github.com/Dokploy/dokploy/security/advisories/GHSA-j329-jw7j-rxjm) ·
+[Dokploy v0.31.1](https://github.com/Dokploy/dokploy/releases/tag/v0.31.1) ·
+[create-ecdh on npm](https://www.npmjs.com/package/create-ecdh)

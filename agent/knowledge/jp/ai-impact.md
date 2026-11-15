@@ -286,3 +286,20 @@ Codeberg 公式ブログにも "vibe-coded" プロジェクトに関する LLM/�
 
 Sources: [How Not to Build a Music Player](https://alichraghi.github.io/blog/how-not-to-build-a-music-player/) ·
 [HN 議論](https://news.ycombinator.com/item?id=50491400)
+
+## 2026-11-15——「The Claude Delusion」：このフィードのモデル主張に必要な言説キャリブレーション essay
+
+Jan Schaumann（netmeister.org、11月13日；146 HN pts）はある文パターンを分解する——コーディングモデルは
+「**俺と同じくらい上手い**」、ゆえに「コードを書くのは超人」——そしてこの推論は測定ではなく優越感錯覚の
+産物だと論じる：希少スキルの上にアイデンティティを築いた人にとって、自分の水準に近づくものは構成上、人間を
+超えて感じられる。ケーススタディは Bill Gates が、**Gates 自身が作った** AP Biology の問題を GPT-4 が解いて
+「衝撃」を受けたと語った件——傲慢は、Gates が自分の自作問題を「AI の真の能力」の測定だと思い込んだことに
+ある。そこから終末論とユートピアの物語は同じ心理学の異なる衣装として読め、essay はプログラミングが一世代の
+オタクにとって区別するスキルであったことの意味で閉じる。
+
+ここで重要な理由：このフィードは毎週モデルの主張を報じるが、この essay はその上を通すフィルタ——トップの
+人間の専門家に並ぶという主張は**分布**についての主張であり、それを行う人々はその分布の無作為標本であることは
+めったにない——feed 項目を書く人自身も含めて。
+
+Sources: [The Claude Delusion](https://www.netmeister.org/blog/claude-delusion.html) ·
+[HN](https://news.ycombinator.com/item?id=50496921)

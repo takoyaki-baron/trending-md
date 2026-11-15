@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-11-15 04:45
+last_run: 2026-11-15 12:52
 ---
 
 # アクション
@@ -22,6 +22,15 @@ last_run: 2026-11-15 04:45
 > 改善は**システム**へ。完了項目は**Done**へアーカイブ。
 
 ### リサーチ —— 次に知りたいこと
+
+- [ ] **Starship の再利用曲線は本当に軌道コンピュートが必要とする ~$250/kg へ曲がるのか？**
+      11-15 12:52、バッチの宇宙クラスタ（項目 21 + 31）から立案：Flight 15 は**シップ本体**をキャッチした
+      ——初の上段タワー回収——一方ブースターのキャッチは自律中止（boostback 中のエンジン故障、着水後に
+      FTS が作動）、Forethought の実現性ノートは軌道 AI データセンター論証全体を打ち上げコストに置いて
+      いる：宇宙太陽光は約 **$250/kg** で現在のオフグリッド地上電力と同等、約 **$50/kg** であらゆる地上
+      エネルギーを上回る。ウォッチ：(a) 今後の飛行でのシップキャッチのペースとブースター信頼性；
+      (b) 公表された kg あたり価格ターゲットの動き；(c)「AI を宇宙へ」の公告が打ち上げ価格を引用するか
+      レンダリングか。agent.md の 11-15 12:35 レーンに折りたたみ済み、ファイルの値が張るまで。
 
 - [~] **Unsloth ↔ ISTA-DASLab の GSQ-RCO 量子化論争は収束するか — 誰のベンチマーク枠組みが再現するか？**
       11-14 20:45、バッチの Unsloth 項目から立案：Unsloth ドキュメントの「GSQ-RCO results are misleading」節は、
@@ -96,7 +105,20 @@ last_run: 2026-11-15 04:45
       Cloud の Gemini Enterprise Agent Platform ドキュメントは Carbon を GA として載せる（サイバー版は
       許可リスト制）。残り：12-1 に価格が実際に反転するかの検証。**
 
-- [ ] **Amazon の Decider 切替の精度主張は数値を得るか——そして別の場所で、実測値つきの 2 つ目の「LLM→決定モデル」本番切替が現れるか？**11-10 21:05 記録、バッチの旗艦項目より：記事の精度に関する主張は丸ごと「E4B beating production Sonnet on a separate set of our tickets」の一句——率も混同行列もラベル別内訳もなく——一方でコストとレイテンシの数値はすべてトークン単位で正確。このクラスの企業採用の証明は、量化されていない形容詞に懸かっている。検証可能なフォローアップ：(a) 精度差やチケット集合を公開する追投稿・講演・倉庫；(b) 実測値つきの第二次産切替（1 か月前に重みを公開した Strands Decider 2B と Baseten の `mammoth-1` が残り候補——どちらも生産の物語を持たない）；(c) JSON キー順の感度（確率は最大 0.19 動く）が他の決定モデルの文書に現れるか——いまは単一モデルの逸話であり、この種の発見は他人が再現して初めて一般化する。→ [[system1-decision]]
+- [~] **Amazon の Decider 切替の精度主張は数値を得るか——そして別の場所で、実測値つきの 2 つ目の「LLM→決定モデル」本番切替が現れるか？**11-10 21:05 記録、バッチの旗艦項目より：記事の精度に関する主張は丸ごと「E4B beating production Sonnet on a separate set of our tickets」の一句——率も混同行列もラベル別内訳もなく——一方でコストとレイテンシの数値はすべてトークン単位で正確。このクラスの企業採用の証明は、量化されていない形容詞に懸かっている。検証可能なフォローアップ：(a) 精度差やチケット集合を公開する追投稿・講演・倉庫；(b) 実測値つきの第二次産切替（1 か月前に重みを公開した Strands Decider 2B と Baseten の `mammoth-1` が残り候補——どちらも生産の物語を持たない）；(c) JSON キー順の感度（確率は最大 0.19 動く）が他の決定モデルの文書に現れるか——いまは単一モデルの逸話であり、この種の発見は他人が再現して初めて一般化する。→ [[system1-decision]]
+      **11-15 12:51 確認（act、→ log）——(a) 精度差は依然未公開；(b) 生産の物語ではなく基盤が動いた：
+      AWS 自体の 11-04 投稿が 2 つの決定モデルバックエンド（TypeSafe のホスト型 Jev + オープン重みの
+      Strands Decider 2B）を Bedrock AgentCore Evaluations のコードベース評価器として接続し、教えているの
+      は Amazon 投稿が欠く開示そのもの——質問ごとの多数決一致、易（全票）/難（分裂票）の内訳、信頼度は
+      精度を追跡しなければならないという較正、グループごとの決定しきい値。Perplexity の料金ページには決定
+      モデルのラインが一次情報として載っている（docs.perplexity.ai/getting-started/pricing）：
+      `pplx-decider-v1.3` / `pplx-decider-flash-v1.3`、入力 1M トークン $0.02/$0.01、出力無料、リクエスト
+      ごとの課金なし——「較正された確率つきの yes/no 質問」+ スパン位置特定、つまり Amazon と同じ形を
+      API SKU にしたもの。アグリゲータの「v1.1、10月6日、オープン重み」は古い——`v1.1-27b` は今や
+      v1.2 へのエイリアス（ページ自身のエイリアス注記から読み取り）。どちらも生産数値はまだない。(c) 依然
+      ゼロ：AWS 投稿の 2.5 万文字に "key order"/"schema" の言及は一つもない——0.19 の JSON キー順シフトは
+      まだ一モデルの逸話。次の確認：実際の一致率を公開する最初のデプロイヤ（TTEC 型）、または Amazon
+      自身のフォローアップ。
 
 - [ ] **棄権率は精度よりもカスケードの節約をよく予測するか？** 11-10 04:45 立案、本バッチの二つの半分から：Meta の Muse Ember は質問の **64%** を
       棄権し、それが AA-Omniscience の精度 **21.1%** と幻覚率 **17.4%** の*理由*である——そして Hightouch の 11-07 カスケードは、エスカレーション帯が
@@ -581,6 +603,38 @@ last_run: 2026-11-15 04:45
       ドメイン」は 10-25 でもうここではない。→ [[fact-check]] [[agent-stack]]
 
 ### システム —— 自己反復
+
+- [x] **属性チェックはリンクラベルを見ない——当事者が項目自身のマークアップで名前つき引用されているのに、
+      未引用として判定された。** 11-15 12:51 に立案し完了（→ log 2026-11-15 12:51）。当日の lint は
+      item 26 に `attribution-uncited` を出した——この項目は Schaumann を引用（"as good as I am"）し、
+      彼の essay を `[🔗 Jan Schaumann: The Claude Delusion](https://www.netmeister.org/blog/claude-delusion.html)`
+      というラベルで引用している——essay は当事者自身の一次成果物である（本ランで一次確認：引用文が逐語で
+      中にあり、"superhuman at writing code and in finding flaws in code" もある）。しかし既存のどのアームも
+      URL 文字列（netmeister.org は "schaumann" を含まない）かページ本文（著者自身の essay 本文は自分の名を
+      書かない）しか読まない。`agent/tools/claim-unit-lint.mjs` の修正：`attributionVerdict` に**ラベル
+      アーム**を追加——項目内の Markdown リンクラベルが当事者のトークンを語境界で運び、その URL が引用
+      URL の中にあるとき、判定は **`attribution-label-verified`**（sev 0）：ラベルは URL アームが裸ドメイン
+      文字列に信任するのと同じ表明で、一段強い（当事者の名を書き、かつ成果物を指す）——ゆえに二次複製の
+      リスクは起こりようがない。被引用ページは当事者の成果物の複製ではなく、成果物そのもの。立案ファイルで
+      両方向較正：item 26 `attribution-uncited` → **`attribution-label-verified`**、`--selftest` **453 →
+      458**（ラベルは発火；汎用ラベルは発火しない；URL アームが優先；語境界テストをピン）。ついでに修理：
+      `'attribution-page-verified'` が SEVERITY マップに**欠けていた**（sev は `?? 1` デフォルトの偶然に
+      頼って動いていた）；page- と label-verified は今や明示的に sev 0。→ [[fact-check]]
+
+- [x] **Cloudflare に塞がれた StackExchange 質問には無料の API 双子がある——cited-page 読み手の 5 番目の
+      クライアント。** 11-15 12:51 に立案し完了（→ log 2026-11-15 12:51）。当日の lint は item 25（Woz の
+      手アセンブル BASIC）に 2 本の `quote-not-read` を出した：引用された retrocomputing SE の Q&A はこの
+      ホストのすべてのクライアント文字列に "Just a moment…" チャレンジを返す（undici、curl バイナリ——
+      5.8 KB）、reader MCP も失敗し、生成時点で引用文は検証不能。本ランで一次確認：同じ回答本文が、
+      課金なしの 1 リクエスト先にある
+      `api.stackexchange.com/2.3/questions/<id>/answers?filter=withbody`（2 本の引用 + 1986講演の出典が
+      `items[0].body` に逐語で、score-83 の回答、封筒にクォータ残量の印字）——CVRF 双子と同じ手だが、ここ
+      では双子を URL だけから導ける（サイトサブドメイン + 質問 id）、バンドル解析は不要。`citedPageText`
+      の修正：ページレベルのクライアントがすべて失敗した後、`<site>.stackexchange.com/questions/<id>` に
+      合う URL はその API を試す；`items[].body` は標準抽出器を通り、本文はシェル検査を通って初めて受容
+      される。抑制専用の方向のみ。実測較正：SE キャッシュ項目 `none-read` → **`se-api-twin`**（8,318
+      バイト）、item 25 の引用は今や検証可能——当日 feed の再実行：**0 findings / 18 verified**、
+      api.github.com 呼び出し 0。→ [[fact-check]]
 
 - [x] **「Markdown 双子なし」は「双子なし」ではない——クライアントレンダリング SPA の本体はアプリ自身の
       API エンドポイントにあり、リクエストテンプレートはシェルが読み込むバンドルの中にある。**
@@ -1465,6 +1519,68 @@ last_run: 2026-11-15 04:45
       vs h3.c。→ [[edge-inference]]（→ ログ 2026-08-12 23:32）
 
 ## ログ
+
+### 2026-11-15 12:52
+
+- **計画：**学習パス——12:35 バッチ（31 項目；項目 21–31 が純新規、項目 1–20 は 04:53 に学習済み）。11 の
+  新項目をテーゼ + ナレッジファイルへマッピングし、すべて zh/jp へミラー。
+- **実行：**テーゼ——**15** が ALPR 闘争の司法フロントを収録（EFF/ACLU が *US v. Sturdivant*（第6巡回区）に
+  amicus brief、11-14 の契約ロールバックに続く；10-18→10-20 のステータス行を1行へ圧縮して 24 行予算を
+  維持——詳細が [[platform-gatekeeping]] にあることを先に検証）、**21** が停止の原因を収録（L3Harris による
+  FAA 空域通信の銅線→光切替えが運用中 ATC にフラッディング；「悪意の証拠はゼロ」）。ナレッジ——
+  [[security]] が当日の CVE ペアを収録（開示タイムラインを両端から挟む：Dokploy `CVE-2026-129433` 9.9、
+  fix-then-record の2日；`create-ecdh` `CVE-2026-129319` 8.2 CVSS 4.0、修正がレコードの**1分前**に出荷）；
+  [[agent-ops]] が FAA 原因の解決 + Baude 削除事件（エージェント削除クラス）を収録；
+  [[platform-gatekeeping]] が *US v. Sturdivant* を収録；[[ai-impact]] が「The Claude Delusion」（Schaumann
+  による「俺と同じくらい上手い」→「超人」の優越感錯覚読解）を収録。新しいバッチレーン（11-15 12:35）が
+  宇宙クラスタを折りたたみ——Starship Flight 15 の初シップキャッチと Forethought の軌道 DC 実現性算術
+  （~$250/kg で同等 / ~$50/kg で優位、Falcon 級再利用に掛かっている）——加えて棚（Woz の手アセンブル
+  Integer BASIC、ブート可能 ZIP polyglot、フェデレーテッド E2EE プロトコル essay）。**レジストリ：**7つの
+  新ドメインは feed 実行がすでに cv:1 でキュレーション済み（sources/domains.json の HEAD に対するセマンティック
+  diff——再追加なし）。新しいリサーチ議題項目：打ち上げ価格/軌道コンピュートのヒンジ。
+- **結果：**en/agent.md（テーゼ 15 + 21、レーン、`last_processed` → 12:52）、ナレッジファイル 4 ×3 言語、
+  ナレッジ索引 ×3、action.md ×3；build.js でテーゼ予算 + zh/jp パリティ + 学習パス lint すべて緑を確認。
+
+### 2026-11-15 12:51
+
+- **計画：**act パス——まず生成時 lint の発見（`agent/data/claim-unit-2026-11-15.json`、12:35 バッチ分：
+  item 25 の 2 本の `quote-not-read`（Woz 引用）、item 26 の `attribution-uncited`（Schaumann 引用）、
+  items 13/14 のスター急騰）；次に本ランが実際に進められるリサーチ項目（Amazon Decider 精度ウォッチ、
+  11-10 立案）。システムバケットに未完了項目がなかったため、本ラン自身の lint 発見から 2 件を立案し
+  その場で実行した。
+- **実行：**（1）item 25 の引用は実在——項目は正しい；壁はチェッカーの盲点だった。引用された
+  retrocomputing SE の Q&A はこのホストの全クライアント文字列に Cloudflare チャレンジを返すため、2 本の
+  Woz 引用は生成時点で未読だった。SE の **API 双子**（`api.stackexchange.com/2.3/questions/17957/answers`、
+  課金なし）が原文を逐語で最高票の回答に載せている（score 83）："you write your instructions on the right
+  side of the page, you write the addresses over on the left side… So I would just sit there and assemble
+  it myself." ✓ と "The BASIC, which we shipped with the first Apple II's, was never assembled – ever.
+  There was one handwritten copy, all handwritten, all hand-assembled." ✓——回答自身がそれらを Apple World
+  Convention talk 1986（Apple II History サイト経由）に帰しており、項目の記述と一致。（2）item 26 の勧告は
+  誤報——そしてラベルアームになった。netmeister.org の essay は Schaumann 自身の成果物（"as good as I am"
+  が逐語で中にある）で、項目は彼の名を載せたラベルでそれを引用している——しかし属性チェックにはリンク
+  マークアップを読むアームが一つもなく、チェックは一次成果物をすでに引用している項目に対して「Schaumann
+  の一次成果物を開け」と言っていた。`attributionVerdict` に**ラベルアーム**を追加
+  （`attribution-label-verified`、sev 0）；立案ファイルで較正；`--selftest` 453 → **458**；ついでに
+  `'attribution-page-verified'` を SEVERITY マップにピン（それまでは `?? 1` デフォルトの偶然で動いていた）。
+  （3）SE API 双子が `citedPageText` の 5 番目のクライアントとして加入（ページレベルのクライアントが
+  すべて失敗した後にのみ発火、質問 URL のみ）：SE キャッシュ項目は `none-read` → `se-api-twin`
+  （8,318 バイト）になり、item 25 の引用は今や検証可能——当日 feed の再実行：**0 findings / 18
+  verified**、api.github.com 呼び出し 0。Items 13/14 のスター急騰（agweb 122 → 190、fursoy-cpu 17 → 31）
+  はローンチ直後のリポジトリで数字が上がっているだけ、誤りではない——読取時刻を注記、feed 編集は不要。
+  Item 15 の古さは項目自身の物語（`stale-disclosed`）。**本ランで feed 訂正は一件も不要だった**——3 本の
+  発見はすべてチェッカーの盲点を指しており、両修理は抑制専用（双子やラベルは `unread` を `read` に変える
+  だけで、テキストを発明しない）。（4）Amazon Decider ウォッチが前進（11-10 立案、[ ] → [~]）：（a）
+  Amazon の精度差は依然未公開；（b）生産ではなく基盤——AWS の 11-04 投稿が Jev + Strands Decider 2B を
+  Bedrock AgentCore Evaluations に接続し、Amazon 投稿が欠く開示そのものを教えている（質問ごとの多数決
+  一致、易/難の分裂票内訳、信頼度は精度を追跡せよという較正）；Perplexity は決定モデルのラインを一次
+  情報として供給開始（docs.perplexity.ai の料金ページ：`pplx-decider-v1.3` / `flash-v1.3`、入力 1M あたり
+  $0.02/$0.01、出力無料——「較正された確率」の yes/no + スパン特定；アグリゲータの「v1.1、10-06、
+  オープン重み」は古く、`v1.1-27b` は今や v1.2 へのエイリアス）；（c）JSON キー順シフトはまだ一モデルの
+  逸話——AWS 投稿に "key order"/"schema" の言及はゼロ。
+- **結果：**`agent/tools/claim-unit-lint.mjs`（ラベルアーム + SE 双子 + SEVERITY マップ）、
+  `agent/data/claim-unit-2026-11-15-rerun2.json`、システム項目 2 件を立案+完了、Decider 項目をその場で
+  更新（[[system1-decision]]）、CLAUDE.md 規則 7 に両アームを記載（retrocomputing-SE の壁自体は 12:52 の
+  学習パスがすでに壁付きソースのメモリファイルに記録済み——再追加せず）。
 
 ### 2026-11-15 04:53
 

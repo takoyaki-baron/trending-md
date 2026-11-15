@@ -5306,3 +5306,30 @@ Crissy Field GmbH の研究者たち（Handelsblatt と共同）は Common Crawl
 Sources: [Crissy Field: Lovable 研究](https://www.crissyfield.de/research/lovable-en/) ·
 [HN](https://news.ycombinator.com/item?id=50499017) ·
 [supabase ディスカッション #4547](https://github.com/orgs/supabase/discussions/4547)
+
+## 2026-11-15 午後——当日の2つの CVE が開示タイムラインを両端から挟む
+
+同一バッチの2つのレコードが、テーゼ 20 が追う fix-vs-record タイムラインの両端に座る：
+
+- **Dokploy `CVE-2026-129433`（CVSS 3.1 9.9、VulnCheck CNA；NVD `Deferred`、2026-11-14T12:32Z 公開）：**
+  `getComposeContainerCommand()` 内の OS コマンドインジェクション——認証済み組織メンバーが
+  `backup.create`/`backup.update` tRPC プロシージャ経由でシェルメタ文字を含む `serviceName` を保存でき、
+  ペイロードは定時バックアップの実行時に**root として**実行される：ホスト完全乗っ取り。修正は **v0.31.1**
+  （11月12日；v0.31.2 が11月13日に続く）；レコードは GHSA-j329-jw7j-rxjm、PR #5908、commit `b24006e` を
+  リンク——**fix-then-record の2日**、通常の方向。セルフホスト PaaS：人々がこれをデプロイするのは自分の
+  インフラを所有するためで、そして管理ポートをインターネットから到達可能なままにする。教訓はこのクラスの
+  最古のもの：識別子はシェル引数ではない——認証の後でも。
+- **`create-ecdh` `CVE-2026-129319`（CVSS 4.0 8.2、CNA harborist；NVD `Received`）：**Node の
+  `crypto.createECDH` の browserify 実装（ブラウザバンドラが取り込む）は `computeSecret`/`setPublicKey` で
+  **ピアの公開鍵を一切検証しなかった**——攻撃者が供給した点は、曲線上や素数位数部分群のチェックなしに
+  あなたの秘密鍵と掛けられた：古典的な invalid-curve/small-subgroup クラスで、繰り返しクエリが静的鍵を
+  復元するのに十分な方程式を漏らす。npm は **11月14日 06:47 UTC に 4.0.5 を出荷——レコード公開（06:48Z）の
+  1分前**——fix-predates-record 波のアンチパターンの双子：暗号経路に生き残る browserify 時代の古い推移依存
+  （Electron/webview バンドルに何年も生き残るプロファイル）の修正が、自分の書類に勝った。
+
+なぜ重要か：両方とも「退屈なクラス、実際の重大性」——シェルに流れるパラメータ、未検証の曲線点——そして
+両方とも修正済みで着地したので、読者の取るべき行動は待機ではなく1つのバージョンアップ。
+
+Sources: [GHSA-j329-jw7j-rxjm](https://github.com/Dokploy/dokploy/security/advisories/GHSA-j329-jw7j-rxjm) ·
+[Dokploy v0.31.1](https://github.com/Dokploy/dokploy/releases/tag/v0.31.1) ·
+[create-ecdh on npm](https://www.npmjs.com/package/create-ecdh)

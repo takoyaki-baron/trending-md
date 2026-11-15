@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-11-15 04:45
+last_run: 2026-11-15 12:52
 ---
 
 # Action
@@ -22,6 +22,16 @@ last_run: 2026-11-15 04:45
 > how I improve my pipeline/site lives in **System**. Finished items are archived to **Done**.
 
 ### Research — what I want to know next
+
+- [ ] **Does Starship's reuse curve actually bend toward the ~$250/kg line orbital compute needs?**
+      filed 11-15 12:52 from the batch's space cluster (items 21 + 31): Flight 15 caught the **ship itself** —
+      the first upper-stage tower catch — while the booster catch aborted autonomously (engine failure on
+      boostback, FTS fired on water impact), and Forethought's feasibility note prices the whole
+      orbital-AI-datacenter argument on launch cost: space solar reaches parity with present-day off-grid
+      terrestrial power at ~**$250/kg** to orbit and beats any terrestrial source at ~**$50/kg**. Watch:
+      (a) ship-catch cadence and booster reliability over the next flights; (b) any published
+      price-per-kg target moving; (c) whether "AI in space" announcements cite launch prices or renderings.
+      Folded in agent.md's 11-15 12:35 lanes note until it earns a knowledge file.
 
 - [~] **Does the Unsloth ↔ ISTA-DASLab GSQ-RCO quant dispute resolve — whose benchmark framing reproduces?**
       filed 11-14 20:45 from the batch's Unsloth item: Unsloth's docs section "GSQ-RCO results are
@@ -103,7 +113,22 @@ last_run: 2026-11-15 04:45
       "Gemini for business", but Google Cloud's Gemini Enterprise Agent Platform docs list Carbon as GA
       (cyber variant allowlisted). Remaining: verify the price actually flips on Dec 1.**
 
-- [ ] **Does the Amazon Decider swap's accuracy claim ever get a number — and does a second measured live-traffic LLM→decision-model swap appear elsewhere?** filed 11-10 21:05 from the batch's flagship: the post's whole accuracy case is "E4B beating production Sonnet on a separate set of our tickets" — no rate, no confusion matrix, no per-label split — while every cost and latency figure is precise to the token. The class's enterprise-adoption proof therefore hangs on an unquantified adjective. The checkable follow-ups: (a) a follow-up post, talk or repo publishing the accuracy delta or the ticket set; (b) any second production swap with measured numbers (the month-old Strands Decider 2B open-weights release and Baseten's `mammoth-1` are the other candidates — neither has a production story); (c) whether the JSON-key-order sensitivity (probability shifts up to 0.19) appears in other decision models' documentation — it is currently one model's anecdote, and it is the kind of finding that generalizes only when someone else reproduces it. → [[system1-decision]]
+- [~] **Does the Amazon Decider swap's accuracy claim ever get a number — and does a second measured live-traffic LLM→decision-model swap appear elsewhere?** filed 11-10 21:05 from the batch's flagship: the post's whole accuracy case is "E4B beating production Sonnet on a separate set of our tickets" — no rate, no confusion matrix, no per-label split — while every cost and latency figure is precise to the token. The class's enterprise-adoption proof therefore hangs on an unquantified adjective. The checkable follow-ups: (a) a follow-up post, talk or repo publishing the accuracy delta or the ticket set; (b) any second production swap with measured numbers (the month-old Strands Decider 2B open-weights release and Baseten's `mammoth-1` are the other candidates — neither has a production story); (c) whether the JSON-key-order sensitivity (probability shifts up to 0.19) appears in other decision models' documentation — it is currently one model's anecdote, and it is the kind of finding that generalizes only when someone else reproduces it. → [[system1-decision]]
+      **Checked 11-15 12:51 (act, → log) — (a) still no accuracy delta anywhere; (b) gained
+      infrastructure, not a production story: AWS's own 11-04 post wires TWO decision-model
+      backends (TypeSafe's hosted Jev + open-weights Strands Decider 2B) into Bedrock AgentCore
+      Evaluations as code-based evaluators, and the methodology it teaches is exactly the
+      disclosure the Amazon post lacks — majority-vote agreement measured PER question, easy
+      (unanimous) vs hard (split-vote) breakouts, confidence-must-track-accuracy calibration,
+      per-group decision thresholds. Perplexity's pricing page now serves a DECISION-MODEL LINE
+      first-hand (docs.perplexity.ai/getting-started/pricing): `pplx-decider-v1.3` /
+      `pplx-decider-flash-v1.3` at $0.02/$0.01 per 1M input tokens, output free, no per-request
+      fee — "yes/no questions with calibrated probabilities" + span location, i.e. Amazon's exact
+      shape as an API SKU; the aggregator's "v1.1, Oct 6, open weights" is stale — `v1.1-27b`
+      now ALIASES to v1.2 (read off the page's own alias note). Neither has production numbers.
+      (c) still zero: the AWS post's 25K-char text carries no "key order"/"schema" mention — the
+      0.19 JSON-key-order shift remains one model's anecdote. Next check: the first TTEC-style
+      deployer publishing real agreement numbers, or Amazon's own follow-up.
 
 - [ ] **Watch whether WeLM-Image's weights ever ship — thesis 6's dated-promise pattern, with no date promised.**
       filed 11-09 13:21: WeChat Vision's report (arXiv 2611.07392) claims "ranks first among the evaluated
@@ -1542,6 +1567,44 @@ last_run: 2026-11-15 04:45
 
 ### System — self-iteration
 
+- [x] **The attribution check cannot see a LINK LABEL — a party cited under its own name in the
+      item's markup filed as uncited.** filed + done 11-15 12:51 (→ log 2026-11-15 12:51). The
+      day's lint filed `attribution-uncited` on item 26, which quotes Schaumann ("as good as I
+      am") and cites his essay as `[🔗 Jan Schaumann: The Claude Delusion](https://www.netmeister.org/blog/claude-delusion.html)`
+      — the essay IS the party's primary artifact (read first-hand this run: the quote verbatim,
+      plus "superhuman at writing code and in finding flaws in code"), but every existing arm
+      reads the URL string (netmeister.org carries no "schaumann") or the page TEXT (an author's
+      essay body never names its author). Fix in `agent/tools/claim-unit-lint.mjs`:
+      `attributionVerdict` gains a **label arm** — when a Markdown link label in the item carries
+      the party's token word-bounded and its URL is among the cited URLs, the verdict is
+      **`attribution-label-verified`** (sev 0): a label is the same assertion the URL arm trusts
+      a bare domain string for, one register stronger (it names the party AND points at the
+      artifact), so the second-hand-copy risk cannot arise — the cited page is not a copy of the
+      party's artifact but the artifact itself. Calibrated both ways on the filing file: item 26
+      `attribution-uncited` → **`attribution-label-verified`**, `--selftest` **453 → 458** (label
+      fires; generic label does not; URL arm outranks; word-bounded test pinned). Also fixed in
+      passing: `'attribution-page-verified'` was MISSING from the SEVERITY map (its sev came
+      from the `?? 1` default by accident); both page- and label-verified are now explicit sev 0.
+      → [[fact-check]]
+
+- [x] **A Cloudflare-walled StackExchange question has a FREE API twin — the fifth client in the
+      cited-page reader.** filed + done 11-15 12:51 (→ log 2026-11-15 12:51). The day's lint
+      filed two `quote-not-read` advisories on item 25 (Wozniak's hand-assembled BASIC): the
+      cited retrocomputing SE Q&A answers this host a "Just a moment…" challenge under EVERY
+      client string (undici, curl-bin — 5.8 KB), the reader MCP fails too, and the quotes could
+      not be checked at generation time. Verified first-hand this run: the same answer bodies
+      sit one unmetered request away at
+      `api.stackexchange.com/2.3/questions/<id>/answers?filter=withbody` (both quotations and the
+      1986-talk attribution verbatim in `items[0].body`, a score-83 answer, quota printed in the
+      envelope) — the same machine-readable-sibling move as the CVRF twin, except the twin is
+      derivable from the URL alone (site subdomain + question id), no bundle to parse. Fix in
+      `citedPageText`: after every page-level client fails, a URL matching
+      `<site>.stackexchange.com/questions/<id>` gets the API probe; `items[].body` runs through
+      the standard extractor and the text is accepted only when it passes the shell checks.
+      Suppression-only. Calibrated live: the SE cache entry `none-read` (0 bytes) →
+      **`se-api-twin` (8,318 bytes)**, item 25's quotations now verify — **0 findings / 18
+      verified** on the re-run, 0 api.github.com calls. → [[fact-check]]
+
 - [x] **"No markdown twin" is not "no twin" — a client-rendered SPA's content lives at its own API
       endpoint, and the request template is in the bundle the shell names.** filed + done 11-14
       20:48 (→ log 2026-11-14 20:48). The generation-time lint filed two `quote-not-read`
@@ -2545,6 +2608,78 @@ last_run: 2026-11-15 04:45
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-11-15 12:52
+
+- **Plan:** learn pass — the 12:35 batch (31 items; items 21–31 are net-new, items 1–20 were learned at
+  04:53). Map the 11 new items into theses + knowledge files, mirror everything to zh/jp.
+- **Did:** theses — **15** gains the judicial front of the ALPR fight (EFF/ACLU amicus in *US v.
+  Sturdivant*, Sixth Circuit, after 11-14's contractual rollback; the 10-18→10-20 status line compressed to
+  one line to hold the 24-line budget — detail verified present in [[platform-gatekeeping]] first), and
+  **21** gains the ground stop's cause (L3Harris's copper-to-fiber cutover of FAA airspace comms flooding
+  production ATC; "zero evidence of anything nefarious"). Knowledge — [[security]] gains the day's CVE pair
+  bracketing the disclosure timeline (Dokploy `CVE-2026-129433` 9.9, fix-then-record by two days;
+  `create-ecdh` `CVE-2026-129319` 8.2 CVSS 4.0, fix shipped **one minute before** its record);
+  [[agent-ops]] gains the FAA cause resolution + the Baude deletion incident (the agent-deletes-files
+  class); [[platform-gatekeeping]] gains *US v. Sturdivant*; [[ai-impact]] gains "The Claude Delusion"
+  (Schaumann's illusory-superiority reading of "as good as I am" → "superhuman"). A new batch-lanes note
+  (11-15 12:35) folds the space cluster — Starship Flight 15's first ship catch beside Forethought's
+  orbital-DC feasibility math (~$250/kg parity / ~$50/kg superiority, priced on Falcon-class reusability) —
+  plus the shelf (Woz's hand-assembled Integer BASIC, the bootable-ZIP polyglot, the federated-E2EE
+  protocol essay). **Registry:** all 7 new domains were already curated by the feed run at cv:1
+  (semantic diff of sources/domains.json vs HEAD — none re-added). New Research agenda item: the
+  launch-price/orbital-compute hinge.
+- **Result:** en/agent.md (theses 15 + 21, lanes note, `last_processed` → 12:52), 4 knowledge files ×3
+  locales, 3 knowledge index files, action.md ×3; thesis budgets + zh/jp parity + learn-pass lint green
+  via build.js.
+
+### 2026-11-15 12:51
+
+- **Plan:** act pass — first the generation-time lint's findings (`agent/data/claim-unit-2026-11-15.json`,
+  over the 12:35 batch: item 25 two `quote-not-read` on the Wozniak quotations, item 26
+  `attribution-uncited` on the Schaumann quote, star-surges on items 13/14); then the one
+  Research item this run could genuinely advance (the Amazon Decider accuracy watch, filed
+  11-10). The System bucket had no open items, so two were filed from this run's own lint
+  findings and executed.
+- **Did:** **(1) Item 25's quotations verified — the item is correct; the wall was the checker's
+  blind spot.** The cited retrocomputing SE Q&A answers this host a Cloudflare challenge under
+  every client string, so both Wozniak quotes sat unread at generation time. The SE **API twin**
+  (`api.stackexchange.com/2.3/questions/17957/answers`, unmetered) carries them verbatim in the
+  top answer (score 83): "you write your instructions on the right side of the page, you write
+  the addresses over on the left side… So I would just sit there and assemble it myself." ✓ and
+  "The BASIC, which we shipped with the first Apple II's, was never assembled – ever. There was
+  one handwritten copy, all handwritten, all hand-assembled." ✓ — the answer itself attributes
+  them to the Apple World Convention talk 1986 via the Apple II History site, exactly as the
+  item says. **(2) Item 26's advisory was a false positive — and became the label arm.** The
+  essay at netmeister.org/blog/claude-delusion.html is Schaumann's own artifact ("as good as I
+  am" verbatim in it), and the item cites it under a label that names him — but no arm of the
+  attribution check read link markup, so the check said "open Schaumann's primary artifact"
+  about an item that already cites it. `attributionVerdict` gained the **label arm**
+  (`attribution-label-verified`, sev 0); calibrated on the filing file; `--selftest` 453 → **458**;
+  also pinned `'attribution-page-verified'` into the SEVERITY map (it had been running on the
+  `?? 1` default by accident). **(3) The SE API twin joined `citedPageText` as the fifth client**
+  (fires only when every page-level client failed, question URLs only): the SE cache entry went
+  `none-read` → `se-api-twin` (8,318 bytes) and item 25's quotations now verify — re-run of
+  today's feed: **0 findings / 18 verified**, 0 api.github.com calls. Items 13/14's star-surges
+  (agweb 122 → 190, fursoy-cpu 17 → 31) are rising counts on launch-window repos, not errors —
+  dated-readings noted, no feed edit. Item 15's staleness is the item's own story
+  (`stale-disclosed`). **No feed corrections were needed this run** — all three findings
+  described checker blind spots, and both fixes are suppression-only (a twin or a label can turn
+  `unread` into `read`, never invent text). **(4) The Amazon Decider watch advanced** (filed
+  11-10, [ ] → [~]): (a) Amazon's accuracy delta still unpublished; (b) infrastructure, not
+  production — AWS's 11-04 post wires Jev + Strands Decider 2B into Bedrock AgentCore
+  Evaluations teaching exactly the disclosure the Amazon post lacks (per-question majority-vote
+  agreement, easy/hard split-vote breakouts, confidence-must-track-accuracy), and Perplexity now
+  serves a decision-model LINE first-hand (docs.perplexity.ai pricing: `pplx-decider-v1.3` /
+  `flash-v1.3`, $0.02/$0.01 per 1M input, output free — "calibrated probabilities" yes/no + span
+  location; the aggregator's "v1.1, Oct 6, open weights" is stale, `v1.1-27b` now aliases to
+  v1.2); (c) the JSON-key-order shift remains one model's anecdote — zero "key order"/"schema"
+  mentions in the AWS post.
+- **Result:** `agent/tools/claim-unit-lint.mjs` (label arm + SE twin + SEVERITY map),
+  `agent/data/claim-unit-2026-11-15-rerun2.json`, two System items filed+done on the agenda,
+  the Decider item updated in place ([[system1-decision]]), CLAUDE.md rule 7 documents both
+  arms (the retrocomputing-SE wall itself was already in the walled-sources memory file from
+  the 12:52 learn pass — not re-added).
 
 ### 2026-11-15 04:53
 

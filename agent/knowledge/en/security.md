@@ -7699,3 +7699,31 @@ sample is not representative.
 Sources: [Crissy Field: Lovable research](https://www.crissyfield.de/research/lovable-en/) ·
 [HN](https://news.ycombinator.com/item?id=50499017) ·
 [supabase discussion #4547](https://github.com/orgs/supabase/discussions/4547)
+
+## 2026-11-15 PM — the day's two CVEs bracket the disclosure timeline from both ends
+
+Two records in one batch sit at opposite ends of the fix-vs-record timeline thesis 20 tracks:
+
+- **Dokploy `CVE-2026-129433` (CVSS 3.1 9.9, VulnCheck CNA; NVD `Deferred`, published 2026-11-14T12:32Z):**
+  OS command injection in `getComposeContainerCommand()` — an authenticated organization member stores a
+  `serviceName` carrying shell metacharacters through the `backup.create`/`backup.update` tRPC procedures,
+  and the payload executes **as root** when the scheduled backup runs: full host takeover. Fixed in
+  **v0.31.1** (Nov 12; v0.31.2 followed Nov 13); the record links GHSA-j329-jw7j-rxjm, PR #5908 and commit
+  `b24006e` — **fix-then-record by two days**, the ordinary direction. Self-hosted PaaS: the box people
+  deploy precisely to own their infrastructure, with the management port reachable from the internet. The
+  lesson is the class's oldest one: identifiers are not shell arguments, even behind authentication.
+- **`create-ecdh` `CVE-2026-129319` (CVSS 4.0 8.2, CNA harborist; NVD `Received`):** the browserified
+  implementation of Node's `crypto.createECDH` (pulled in by browser bundlers) never validated the **peer's
+  public key** in `computeSecret`/`setPublicKey` — the attacker-supplied point was multiplied by your
+  private key without any on-curve or prime-order-subgroup check: the classic invalid-curve/small-subgroup
+  class, where repeated queries leak enough equations to recover the static key. npm shipped **4.0.5 at
+  06:47 UTC Nov 14 — one minute before the record published (06:48Z)** — the anti-pattern twin of the
+  fix-predates-record wave: an old browserify-era transitive dep in the crypto path (the profile that
+  survives in Electron/webview bundles for years) whose fix beat its own paperwork.
+
+Why it matters: both are "boring class, real severity" — a parameter flowing into a shell, an unvalidated
+curve point — and both landed with a fix already out, so the reader's action is one version bump, not a wait.
+
+Sources: [GHSA-j329-jw7j-rxjm](https://github.com/Dokploy/dokploy/security/advisories/GHSA-j329-jw7j-rxjm) ·
+[Dokploy v0.31.1](https://github.com/Dokploy/dokploy/releases/tag/v0.31.1) ·
+[create-ecdh on npm](https://www.npmjs.com/package/create-ecdh)

@@ -488,3 +488,19 @@ Sources: [Citizen Lab](https://citizenlab.ca/security-agencies-worldwide-found-t
 
 Sources: [Reuters](https://www.reuters.com/world/italy-fines-meta-887-million-over-android-users-data-access-2026-11-14/) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50497009)
+
+## 2026-11-15——ALPR 之战的司法前线立案：第六巡回法院的 *US v. Sturdivant*
+
+EFF 与 ACLU 于 11 月 14 日就 **United States v. Sturdivant** 提交法庭之友陈述：克利夫兰警方在只知道一辆
+抢劫嫌疑人汽车的车型/颜色的情况下，对两个 ALPR 数据库——**Flock 与 ELSAG**——进行了开放式搜索，发现
+被告的车在案发地附近并实施逮捕。地区法院认定，被告对车牌号没有合理的隐私期待，「因为公众本可观察到
+它」。陈述主张大规模车牌追踪构成第四修正案意义上的**搜查**——ALPR 给执法部门「一台只需点击按钮、即可
+查看嫌疑人或任何人过往行踪（以及更多信息）的虚拟时光机」——并指出就在上月，一家联邦地区法院刚刚认同此
+观点，称 ALPR 是「一种无差别大规模监控」。
+
+为什么重要：11-14 的回滚（10+ 所大学终止 Flock 合同）是**合同**前线；Sturdivant 是**司法**前线，两者正在
+向同一个问题合流——由公共道路构建的数据库，查询是否需要 probable cause。第六巡回法院的答案将约束四个
+州的车牌读取器部署。
+
+Sources: [EFF deeplinks](https://www.eff.org/deeplinks/2026/11/were-asking-appeals-court-require-warrant-alpr-searches) ·
+[HN](https://news.ycombinator.com/item?id=50503255)

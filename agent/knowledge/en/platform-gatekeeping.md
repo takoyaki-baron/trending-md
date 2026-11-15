@@ -654,3 +654,22 @@ thesis 15's class: the capability removed by regulator order rather than by the 
 
 Sources: [Reuters](https://www.reuters.com/world/italy-fines-meta-887-million-over-android-users-data-access-2026-11-14/) ·
 [HN](https://news.ycombinator.com/item?id=50497009)
+
+## 2026-11-15 — the ALPR fight's judicial front files: *US v. Sturdivant* at the Sixth Circuit
+
+EFF and the ACLU filed an amicus brief (Nov 14) in **United States v. Sturdivant**: Cleveland police, knowing
+only the make/model/color of a robbery suspect's car, ran an open-ended search of two ALPR databases —
+**Flock and ELSAG** — found the defendant's car near the robbery sites, and arrested him. The district court
+held Sturdivant had no reasonable expectation of privacy in his license plate number "because it could be
+observed by members of the public." The brief argues mass plate tracking is a Fourth Amendment **search** —
+ALPRs give law enforcement "a virtual time machine to view suspects', or anyone else's, past movements (and
+much more) with just the click of a button" — and notes a federal district court agreed just last month,
+calling ALPRs "a form of indiscriminate mass surveillance."
+
+Why it matters here: the 11-14 rollback (10+ universities dropping Flock contracts) was the **contractual**
+front; Sturdivant is the **judicial** front, and both converge on the same question — whether a database
+built from public roads needs probable cause to query. The Sixth Circuit's answer will bind four states'
+worth of plate-reader deployments.
+
+Sources: [EFF deeplinks](https://www.eff.org/deeplinks/2026/11/were-asking-appeals-court-require-warrant-alpr-searches) ·
+[HN](https://news.ycombinator.com/item?id=50503255)

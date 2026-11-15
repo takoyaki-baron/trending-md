@@ -879,6 +879,25 @@ underlying pages — this produced a two-layer false signal in a single item.
    11-14 item 37 returns **2 `quote-not-read`** before the port, **0 findings / 1 verified**
    after, cache entry `client=api-twin`; `PAGE_CACHE_V` 7 → 8 (a v7 entry for an API-backed blog
    holds the shell as its read); `--selftest` 442 → **453**.
+   **And a walled question has its own API twin, and a party can live in the item's LINK LABEL**
+   (added 2026-11-15 12:51, both filed by the same day's lint JSON). **(a) The SE twin — the
+   fifth client in `citedPageText`:** a StackExchange *question* URL can sit behind a
+   Cloudflare challenge on every client string (retrocomputing.SE answered "Just a moment…" to
+   undici and the curl binary; the reader MCP failed too) while the answer bodies sit one
+   unmetered request away at `api.stackexchange.com/2.3/questions/<id>/answers?filter=withbody`
+   — derivable from the URL alone (site subdomain + question id), no bundle to parse. Fires only
+   when every page-level client failed; `items[].body` goes through the standard extractor; a
+   twin can only turn `unread` into `read`, never invent text (item 25's two Wozniak quotations
+   verified verbatim in the score-83 answer, quota printed in the envelope). **(b) The label
+   arm in the attribution check:** the check's `attribution-uncited` advisory can fire on a
+   party whose artifact the item ALREADY cites, because every arm reads the URL string or the
+   page text and neither carries the name (netmeister.org is Schaumann's own blog; an essay body
+   never spells its author). A Markdown link label is the same assertion the URL arm trusts a
+   bare domain for — one register stronger: it names the party AND points at the artifact — so a
+   label carrying the token word-bounded over a cited URL is `attribution-label-verified`
+   (sev 0). Calibrated on the 11-15 filing items: `attribution-uncited` →
+   `attribution-label-verified`; the SE cache entry `none-read` → `se-api-twin`; feed re-run
+   **0 findings / 18 verified**, 0 `api.github.com` calls; `--selftest` 453 → **458**.
    Five judgement calls it encodes, each a hand-made mistake first: **(a) a 200 is not a twin** —
    SPA catch-alls answer `200 text/html` for any `.md` path, so a candidate only counts if its body
    is not HTML and not byte-identical to the page; **(b) a redirect is not a miss** —

@@ -529,3 +529,20 @@ Sources: [Citizen Lab](https://citizenlab.ca/security-agencies-worldwide-found-t
 
 Sources: [Reuters](https://www.reuters.com/world/italy-fines-meta-887-million-over-android-users-data-access-2026-11-14/) ·
 [HN](https://news.ycombinator.com/item?id=50497009)
+
+## 2026-11-15——ALPR 闘争の司法フロントが立件：第6巡回区控訴裁判所の *US v. Sturdivant*
+
+EFF と ACLU が **United States v. Sturdivant** の amicus brief を提出（11月14日）：クリーブランド警察は、
+強盗容疑者の車の車種/モデル/色だけを手がかりに、2つの ALPR データベース——**Flock と ELSAG**——を無制限に
+検索し、被告の車を犯行現場付近で発見して逮捕した。地裁判決は、ナンバープレート番号には合理的プライバシー
+期待がないと判断——「公衆が観察しうるものだから」。意見書は大規模プレート追跡が第四修正条項の**捜索**に
+当たると主張——ALPR は法執行に「クリック一枚で容疑者の、あるいは他の誰かの過去の移動（とそれ以上）を
+見られる仮想タイムマシン」を与える——そして先月、連邦地裁がまさにこれに同意し、ALPR を「無差別大量監視の
+一形態」と呼んだことに言及する。
+
+ここで重要な理由：11-14 のロールバック（10+ 大学が Flock 契約を破棄）は**契約**フロント；Sturdivant は
+**司法**フロントで、両者は同じ問いに合流しつつある——公道から構築されたデータベースの照会に probable cause
+が要るのか。第6巡回区の答えは 4 州分のプレート読取装置の展開を拘束する。
+
+Sources: [EFF deeplinks](https://www.eff.org/deeplinks/2026/11/were-asking-appeals-court-require-warrant-alpr-searches) ·
+[HN](https://news.ycombinator.com/item?id=50503255)

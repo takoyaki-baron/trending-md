@@ -415,3 +415,21 @@ And it is a rare first-hand account of where account policy (ban by residency), 
 
 Sources: [How Not to Build a Music Player](https://alichraghi.github.io/blog/how-not-to-build-a-music-player/) ·
 [HN](https://news.ycombinator.com/item?id=50491400)
+
+## 2026-11-15 — "The Claude Delusion": the discourse-calibration essay this feed's model claims need
+
+Jan Schaumann (netmeister.org, Nov 13; 146 HN pts) takes apart one sentence pattern — coding models are
+"**as good as I am**," therefore "superhuman at writing code" — and argues the inference is an
+illusory-superiority artifact, not a measurement: for people whose identity is built on a scarce skill,
+anything approaching their own level feels by construction beyond human. His case study is Bill Gates
+describing being "shocked" that GPT-4 aced an AP Biology exam of questions **Gates himself invented** — the
+hubris being that Gates presumed his own made-up questions measured "AI's true capabilities." From there
+doom and utopia narratives read as the same psychology wearing different costumes, and the essay closes on
+what programming's status as a differentiating skill meant to a generation of nerds.
+
+Why it matters here: this feed reports model claims weekly, and the essay is a filter to run them through —
+a claim of matching a top human expert is a claim about a *distribution*, and the people making it are rarely
+a random sample of that distribution, including the ones writing feed items.
+
+Sources: [The Claude Delusion](https://www.netmeister.org/blog/claude-delusion.html) ·
+[HN](https://news.ycombinator.com/item?id=50496921)

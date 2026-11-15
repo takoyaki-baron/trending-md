@@ -157,3 +157,31 @@ Sources: [LibreOffice on X](https://twitter.com/LibreOffice/status/2121205272479
 Sources: [FAA ATCSCC cancellation advisory ADVZY 005](https://www.fly.faa.gov/adv/adv_otherdis?adv_date=11142026&advn=5) ·
 [HN discussion (1,400 pts)](https://news.ycombinator.com/item?id=50489641) ·
 [HN: FAA lifted National Ground Stop at 0119Z](https://news.ycombinator.com/item?id=50492601)
+
+## 2026-11-15 — the ground stop gets its cause (a cutover, not a cyber-attack); the agent-deletes-files class resurfaces at a law professor's desk
+
+- **FAA cause resolved:** Transport Secretary Sean Duffy traced Friday's nationwide ground stop to the
+  **copper-to-fiber conversion** of FAA airspace communications being performed by contractor **L3Harris** —
+  a router being worked on "started flooding other air traffic control systems", forcing the airspace
+  shutdown for safety. FAA head Bryan Bedford: "zero evidence of anything nefarious, and zero evidence of
+  anything AI related"; officials do not believe it was a cyber-attack. Friday's stop was the longest such
+  incident since 9/11, with disruption expected to last days. L3Harris — which says it had completed
+  **over 70%** of the modernization before the stop — confirmed the conversion context and is "supporting
+  the FAA in its investigation". The 11-14 section's open watch ("the advisories state no cause") is now
+  answered, and the answer is the boring one — a cutover on live safety-critical comms leaked into
+  production ATC. The free case study for anyone migrating infrastructure: conversions belong on shadow
+  environments with a kill switch.
+- **The Baude incident resurfaces (44 pts, resurfaced Nov 14):** William Baude (Harry Kalven, Jr. Professor
+  of Law, UChicago) posted Nov 5 that Claude, tasked with renumbering pages in old lecture notes, deleted a
+  year of con law notes and his current syllabus — its own admission: "I deleted your Fall 2026 FINAL
+  syllabus .doc and all top-level Class N 2023 notes by accident, and they are not restored." The files were
+  recovered via Dropbox and Baude framed the story as a public-service announcement. The HN thread's debate
+  is the right one: why does an agent have write access to irreplaceable files at all. Joins the class (an
+  agent deleting a TV edit weeks before air, a database dropped in 9 seconds); the fix stays the same boring
+  one — nothing an agent can touch should lack a snapshot, and version control for everything an agent sees
+  is cheaper than trusting the model's self-report, apology included.
+
+Sources: [BBC: copper-fibre upgrade caused ground stop](https://www.bbc.co.uk/news/articles/c6wy9lynq4qno) ·
+[L3Harris statement](https://www.l3harris.com/newsroom/press-release/2026/11/l3harris-statement-nov-13-ground-stop) ·
+[Tom's Hardware: the Baude incident](https://www.tomshardware.com/tech-industry/artificial-intelligence/rogue-claude-ai-tasked-with-renumbering-pages-accidentally-deletes-law-professors-entire-syllabus-one-year-of-lecture-notes-youre-right-to-be-angry-i-deleted-your-files-through-my-own-carelessness-humbled-agent-admits) ·
+[HN](https://news.ycombinator.com/item?id=50499114)

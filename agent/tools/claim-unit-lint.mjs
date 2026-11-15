@@ -4145,6 +4145,35 @@ async function citedPageText(page) {
       }
     } catch { /* unread this run — the short TTL re-fetches */ }
   }
+  /* THE FIFTH CLIENT IS THE QUESTION'S OWN API TWIN (2026-11-15 12:51, filed by this day's own
+   * JSON — item 25). The item quotes Wozniak twice from a retrocomputing SE Q&A whose HTML
+   * answers this host a Cloudflare challenge under EVERY client string ("Just a moment…", 5.8 KB,
+   * undici + curl-bin), while the same answer bodies sit one unmetered request away at
+   * api.stackexchange.com/2.3/questions/<id>/answers (verified first-hand: both quotations and
+   * the 1986-talk attribution verbatim in `items[0].body`, a score-83 answer, quota printed in
+   * the envelope). The same machine-readable-sibling move as the CVRF twin (CLAUDE.md rule 7)
+   * and the SPA api-twin above — here the twin is derivable from the URL alone (site subdomain +
+   * question id), no bundle to parse. Fires only when every page-level client failed, and only
+   * for question URLs — an SE profile or tag page has no answer twin. Suppression-only: the twin
+   * can turn `unread` into `read`, never invent text. */
+  if (!text || isBlockShell(text) || isWhitespaceShell(text) || stripperAtePage(bigBodyLen, text.length)) {
+    const se = page.url.match(/^https?:\/\/([a-z0-9-]+)\.stackexchange\.com\/questions\/(\d+)/i);
+    if (se) {
+      try {
+        const r = await fetch(`https://api.stackexchange.com/2.3/questions/${se[2]}/answers?order=desc&sort=votes&site=${se[1]}&filter=withbody`, { signal: AbortSignal.timeout(20_000), headers: { 'user-agent': UA, accept: 'application/json' } });
+        citedPages_requests += 1;
+        if (r.ok) {
+          const d = await r.json();
+          const bodies = (d.items ?? []).map((a) => htmlText(String(a.body ?? ''), page.raw)).filter((t) => t.length > 0);
+          const twinText = bodies.join('\n\n');
+          if (bodies.length && !isBlockShell(twinText) && !isWhitespaceShell(twinText) && twinText.length > text.length) {
+            text = twinText;
+            client = 'se-api-twin';
+          }
+        }
+      } catch { /* unread this run — the short TTL re-fetches */ }
+    }
+  }
   cache[key] = { v: PAGE_CACHE_V, fetched_at: new Date().toISOString(), bytes: text.length, text, client: needsThirdClient(text) ? 'none-read' : client };
   /* the short TTL above reads this entry's own contents, so a wall re-fetches after 10 minutes
      rather than being stored as fact for six hours */
@@ -5382,16 +5411,31 @@ function attributionClaims(plain) {
  * substring: "Mast" must not verify against a page that only ever says "masterpiece" or
  * "Mastodon". */
 const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-function attributionVerdict(claim, citedUrls, pageTexts) {
+function attributionVerdict(claim, citedUrls, pageTexts, labels) {
   const tok = claim.token.toLowerCase();
   if (citedUrls.some((u) => u.toLowerCase().includes(tok))) return 'attribution-satisfied';
   if (pageTexts && pageTexts.some((t) => t && new RegExp(`\\b${escapeRe(tok)}\\b`, 'i').test(t))) return 'attribution-page-verified';
+  /* THE LABEL ARM (2026-11-15 12:51, filed by this day's own JSON — item 26). The item quotes
+   * Schaumann ("as good as I am") and cites his essay with the label `[🔗 Jan Schaumann: The
+   * Claude Delusion](https://www.netmeister.org/blog/claude-delusion.html)`; the advisory still
+   * said "open Schaumann's primary artifact" — because every arm reads the URL string or the
+   * page TEXT, and neither carries the party: the domain is netmeister.org (his own blog, which
+   * never spells his name), and an author's essay body almost never names its author. A link
+   * label is the SAME assertion the URL arm already trusts a bare domain string for — "this
+   * cited page is the party's own artifact" — one register stronger: it names the party AND
+   * points at the artifact. When the labeled URL is among the cited URLs and the label carries
+   * the token word-bounded, the second-hand-copy risk the advisory exists for cannot arise: the
+   * cited page is not a copy of the party's artifact, it IS it. */
+  if (labels && labels.some((l) => citedUrls.includes(l.url) && new RegExp(`\\b${escapeRe(tok)}\\b`, 'i').test(l.label))) return 'attribution-label-verified';
   return 'attribution-uncited';
 }
 
 function checkAttribution(it, pages) {
   const out = [];
   const urls = [...it.plain.matchAll(/https?:\/\/[^\s)\]]+/g)].map((m) => m[0]);
+  /* the label arm's input: every Markdown link's (label, url) pair, so a cited artifact whose
+   * label names the party can satisfy the way a domain string does (2026-11-15, item 26) */
+  const labels = [...it.plain.matchAll(/\[([^\]]*)\]\((https?:\/\/[^\s)]+)\)/g)].map((m) => ({ label: m[1], url: m[2] }));
   /* The page-text arm reads the CACHE only (`cachedPageTextOnly`), so this check never spends a
    * request and stays pure under `--no-net`; in a normal run the `count`/`quotation` checks have
    * already fetched this item's cited pages into the in-memory cache, so the texts are free. */
@@ -5407,8 +5451,8 @@ function checkAttribution(it, pages) {
    * leftover risk — the carrier being a second-hand copy the origin corrected — is the class the
    * satisfied verdict itself already covers poorly, and co-citation is not a cross-check; that
    * rule lives in the sources directory, not here. */
-  const verdicts = claims.map((c) => attributionVerdict(c, urls, pageTexts));
-  const satSpans = new Set(claims.filter((c, i) => verdicts[i] === 'attribution-satisfied' || verdicts[i] === 'attribution-page-verified').map((c) => c.span));
+  const verdicts = claims.map((c) => attributionVerdict(c, urls, pageTexts, labels));
+  const satSpans = new Set(claims.filter((c, i) => verdicts[i] !== 'attribution-uncited').map((c) => c.span));
   const seen = new Set();
   for (let i = 0; i < claims.length; i++) {
     const c = claims[i], v = verdicts[i];
@@ -5419,6 +5463,8 @@ function checkAttribution(it, pages) {
       out.push({ check: 'attribution', item: it.n, verdict: v, claim: c.party, detail: `a quotation is attributed to ${c.party} (“${c.span.slice(0, 60)}${c.span.length > 60 ? '…' : ''}”) and a cited URL carries the party's token — the quotation arm's page set reaches the party's own artifact` });
     } else if (v === 'attribution-page-verified') {
       out.push({ check: 'attribution', item: it.n, verdict: v, claim: c.party, detail: `a quotation is attributed to ${c.party} (“${c.span.slice(0, 60)}${c.span.length > 60 ? '…' : ''}”) and the party's token appears in the fetched text of a cited page — the quotation arm's page set carries the party's statement even though no cited URL string names the party (the party lives in the prose, not the domain); the second-hand-copy risk the URL arm carries applies here too, so a load-bearing quotation still wants the party's own artifact` });
+    } else if (v === 'attribution-label-verified') {
+      out.push({ check: 'attribution', item: it.n, verdict: v, claim: c.party, detail: `a quotation is attributed to ${c.party} (“${c.span.slice(0, 60)}${c.span.length > 60 ? '…' : ''}”) and the item cites the party's own artifact under a link label that carries the party's name — the label is the same assertion the URL arm trusts a domain string for, one register stronger (it names the party AND points at the artifact), so the cited page is not a second-hand copy of the party's artifact but the artifact itself` });
     } else {
       out.push({ check: 'attribution', item: it.n, verdict: v, claim: c.party, detail: `a quotation is attributed to ${c.party} (“${c.span.slice(0, 60)}${c.span.length > 60 ? '…' : ''}”), but no cited URL names the party — a quotation ABOUT a party is a claim about THAT party's bytes, and the cited page can be a second-hand copy whose figures the party has since corrected (the 11-12 item-41 lesson: the essay quoted the earlier version of Aaronson's dump post). Open ${c.party}'s primary artifact before publishing, or drop the quotation marks` });
     }
@@ -7064,6 +7110,28 @@ if (SELFTEST) {
     att(`Brian Mast said Huang "has agreed to come" testify before Thanksgiving on the record.`),
     ['attribution-uncited']);
 
+  /* 2026-11-15 12:51 — the label arm, filed by this day's own JSON: item 26 quotes Schaumann
+     ("as good as I am") and cites his essay with the label `[🔗 Jan Schaumann: The Claude
+     Delusion](https://www.netmeister.org/blog/claude-delusion.html)`; the check still filed
+     `attribution-uncited` because no arm reads the item's own link markup — the URL string
+     (netmeister.org) and the page text (an author's essay body) never spell the party's name.
+     A label is the same assertion the URL arm trusts a bare domain for, one register stronger. */
+  t('attribution: a party cited under a LABEL that names it is label-verified (2026-11-15 item 26)',
+    att(`Jan Schaumann's essay on AI discourse — the item quotes it as "they are as good as I am — it's significantly my most developed talent" — is linked as [🔗 Jan Schaumann: The Claude Delusion](https://www.netmeister.org/blog/claude-delusion.html).`),
+    ['attribution-label-verified']);
+  t('attribution: a generic label over the party artifact does not verify (the label arm needs the name)',
+    att(`Jan Schaumann's essay on AI discourse — the item quotes it as "they are as good as I am — it's significantly my most developed talent" — is linked as [the essay](https://www.netmeister.org/blog/claude-delusion.html).`),
+    ['attribution-uncited']);
+  t('attribution: label-verified fires at the verdict level (pure)',
+    attributionVerdict({ party: 'Schaumann', token: 'schaumann', span: 'x' }, ['https://www.netmeister.org/blog/claude-delusion.html'], undefined, [{ label: 'Jan Schaumann: The Claude Delusion', url: 'https://www.netmeister.org/blog/claude-delusion.html' }]),
+    'attribution-label-verified');
+  t('attribution: URL satisfaction outranks the label arm',
+    attributionVerdict({ party: 'Schaumann', token: 'schaumann', span: 'x' }, ['https://schaumann.example.net/post'], undefined, [{ label: 'Jan Schaumann: essay', url: 'https://www.netmeister.org/blog/claude-delusion.html' }]),
+    'attribution-satisfied');
+  t('attribution: a label token match is word-bounded, not a substring',
+    attributionVerdict({ party: 'Schaumann', token: 'schaumann', span: 'x' }, ['https://www.netmeister.org/blog/claude-delusion.html'], undefined, [{ label: 'the Schaumannian reading', url: 'https://www.netmeister.org/blog/claude-delusion.html' }]),
+    'attribution-uncited');
+
   for (const c of cases) console.log(`  ${c.pass ? '✓' : '✗'} ${c.name}${c.pass ? '' : ` — got ${JSON.stringify(c.got)}, want ${JSON.stringify(c.want)}`}`);
   const ok = cases.filter((c) => c.pass).length;
   console.log(`selftest ${ok}/${cases.length}`);
@@ -7251,7 +7319,7 @@ try {
   writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 1));
 } catch { /* cache is best-effort */ }
 
-const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'temporal-disclosed': 0, 'score-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'star-surge': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, 'stale-disclosed': 0, 'archived-disclosed': 0, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'date-local-shift': 2, 'date-mismatch': 2, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'field-present': 3, 'field-present-empty': 2, 'field-empty-contradicted': 2, 'field-empty-since-moved': 1, 'field-absent-not-empty': 1, 'field-dated': 0, 'field-unknown-name': 0, 'field-unreadable': 0, 'span-empty': 2, 'cve-range-span-mismatch': 2, 'cve-range-disclosed': 0, 'ok-range': 0, 'range-ambiguous': 0, 'range-distribution-disclosed': 0, 'range-cross-year': 0, 'range-inverted': 2, 'tranche-binding-ok': 0, 'tranche-binding-mismatch': 3, 'tranche-unread': 0, 'tranche-distribution-ok': 0, 'span-inverted': 3, 'span-unverifiable': 0, 'ok-span': 0, 'range-absent-but-served': 3, 'range-only-in-cna': 1, 'range-absent-confirmed': 0, 'range-absent-products-only': 0, 'ghsa-absent-confirmed': 0, 'ghsa-range-served': 3, 'ghsa-not-in-db': 0, 'unreadable-subject': 0, 'advisory-subject-ambiguous': 0, 'repo-advisory-cells': 0, 'affected-count-ok': 0, 'affected-count-mismatch': 3, 'affected-package-ok': 0, 'affected-package-absent': 3, 'affected-ambiguous': 0, 'range-unread': 0, 'range-in-references': 1, 'boundary-named-no-artifact': 0, 'vector-product-mismatch': 1, 'product-mismatch-disclosed': 0, 'schema-absent': 0, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'ratio-row-count': 3, 'ok-ratio': 0, 'ok-delimited': 0, 'not-a-repo': 0, 'repo-absent-asserted': 0, 'ok-table-rows': 0, 'table-columns-unresolved': 0, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-paraphrase': 2, 'quote-short': 1, 'quote-not-read': 0, 'paper-date-imprecise': 1, 'paper-date-mismatch': 2, 'paper-date-revision': 1, 'paper-date-unread': 0, 'batch-count-ok': 0, 'batch-count-mismatch': 3, 'batch-subcount-ok': 0, 'batch-subcount-mismatch': 3, 'batch-unread': 0, 'path-in-repo': 0, 'path-absent': 2, 'path-repo-ambiguous': 0, 'attribution-satisfied': 0, 'attribution-uncited': 1 };
+const SEVERITY = { ok: 0, 'ok-cited-page': 0, 'no-cve-named': 1, 'no-record': 1, 'slot-quoted': 1, 'counted-by-author': 0, 'number-other-noun': 1, 'temporal-stopping-point': 1, 'temporal-disclosed': 0, 'score-stopping-point': 1, 'cna-only-score': 1, 'star-drift': 2, 'star-dated': 1, 'star-surge': 1, 'ok-history': 0, 'history-older-than-record': 2, 'history-unreadable': 1, stale: 2, archived: 2, 'stale-disclosed': 0, 'archived-disclosed': 0, differs: 2, absent: 2, 'unsplit-issue-count': 3, 'compound-lags-parts': 3, 'version-swapped': 3, 'version-absent': 3, 'score-not-reproducible': 2, 'score-mismatch': 3, 'wrong-subject': 3, 'absence-contradicted': 3, 'status-stale': 2, 'status-dated': 1, 'date-local-shift': 2, 'date-mismatch': 2, 'cwe-absent-but-recorded': 3, 'cwe-mismatch': 3, 'cwe-unreadable': 1, 'field-present': 3, 'field-present-empty': 2, 'field-empty-contradicted': 2, 'field-empty-since-moved': 1, 'field-absent-not-empty': 1, 'field-dated': 0, 'field-unknown-name': 0, 'field-unreadable': 0, 'span-empty': 2, 'cve-range-span-mismatch': 2, 'cve-range-disclosed': 0, 'ok-range': 0, 'range-ambiguous': 0, 'range-distribution-disclosed': 0, 'range-cross-year': 0, 'range-inverted': 2, 'tranche-binding-ok': 0, 'tranche-binding-mismatch': 3, 'tranche-unread': 0, 'tranche-distribution-ok': 0, 'span-inverted': 3, 'span-unverifiable': 0, 'ok-span': 0, 'range-absent-but-served': 3, 'range-only-in-cna': 1, 'range-absent-confirmed': 0, 'range-absent-products-only': 0, 'ghsa-absent-confirmed': 0, 'ghsa-range-served': 3, 'ghsa-not-in-db': 0, 'unreadable-subject': 0, 'advisory-subject-ambiguous': 0, 'repo-advisory-cells': 0, 'affected-count-ok': 0, 'affected-count-mismatch': 3, 'affected-package-ok': 0, 'affected-package-absent': 3, 'affected-ambiguous': 0, 'range-unread': 0, 'range-in-references': 1, 'boundary-named-no-artifact': 0, 'vector-product-mismatch': 1, 'product-mismatch-disclosed': 0, 'schema-absent': 0, 'status-no-record': 1, 'status-no-cve': 1, 'advisory-unreadable': 1, 'advisory-repo-only': 0, unreadable: 1, 'artifact-unreadable': 1, 'nvd-unavailable': 1, 'ratio-row-count': 3, 'ok-ratio': 0, 'ok-delimited': 0, 'not-a-repo': 0, 'repo-absent-asserted': 0, 'ok-table-rows': 0, 'table-columns-unresolved': 0, 'bundle-ok': 0, 'bundle-lines-named': 0, 'bundle-unavailable': 0, 'bundle-line-count': 3, 'bundle-total-mismatch': 2, 'quote-not-found': 3, 'quote-paraphrase': 2, 'quote-short': 1, 'quote-not-read': 0, 'paper-date-imprecise': 1, 'paper-date-mismatch': 2, 'paper-date-revision': 1, 'paper-date-unread': 0, 'batch-count-ok': 0, 'batch-count-mismatch': 3, 'batch-subcount-ok': 0, 'batch-subcount-mismatch': 3, 'batch-unread': 0, 'path-in-repo': 0, 'path-absent': 2, 'path-repo-ambiguous': 0, 'attribution-satisfied': 0, 'attribution-uncited': 1, 'attribution-page-verified': 0, 'attribution-label-verified': 0 };
 const REAL = (f) => (SEVERITY[f.verdict] ?? 1) >= 2;
 
 /* `status_watch` rides the findings file so the act pass sees a backwards move without re-reading

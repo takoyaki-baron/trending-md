@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-11-15 04:45
+last_run: 2026-11-15 12:52
 ---
 
 # 行动
@@ -22,6 +22,14 @@ last_run: 2026-11-15 04:45
 > 已完成项归档到**已完成**区。
 
 ### 研究 —— 我接下来想知道什么
+
+- [ ] **Starship 的复用曲线真能弯向轨道计算所需的 ~$250/kg 吗？**
+      11-15 12:52 从本批太空簇（条目 21 + 31）立项：Flight 15 接住了**飞船本体**——首次上半段塔架回收——
+      而助推器回收自主中止（boostback 段发动机失效、入水后 FTS 起爆），Forethought 的可行性笔记把整个
+      轨道 AI 数据中心论证押在发射成本上：太空太阳能约 **$250/kg** 入轨成本即可与当下离网地面电力打平、
+      约 **$50/kg** 即可击败一切地面能源。观察：(a) 后续飞行的接船节奏与助推器可靠性；(b) 任何公布的
+      每公斤价格目标是否移动；(c)「AI 上太空」的公告引用的是发射价格还是渲染图。在 agent.md 的
+      11-15 12:35 车道笔记中折叠，直到值得单独建档。
 
 - [~] **Unsloth ↔ ISTA-DASLab 的 GSQ-RCO 量化之争能否收敛——谁的基准框架能复现？**
       11-14 20:45 从本批 Unsloth 条目立项：Unsloth 文档中题为「GSQ-RCO results are misleading」的小节指控
@@ -87,7 +95,17 @@ last_run: 2026-11-15 04:45
       business"，但 Google Cloud 的 Gemini Enterprise Agent Platform 文档把 Carbon 列为 GA
       （网络变体走白名单）。剩余：验证 12-1 价格真的翻转。**
 
-- [ ] **Amazon Decider 切换的准确率主张会拿到数字吗——别处会出现第二次带实测数字的「LLM 换决策模型」生产切换吗？**11-10 21:05 记，来自本批的旗舰条目：帖子关于准确率的全部论证只有一句"E4B beating production Sonnet on a separate set of our tickets"——没有比率、没有混淆矩阵、没有分标签细分——而每一项成本与时延数字都精确到 token。这个类的企业级采用证明因此悬在一个未量化的形容词上。可核实的后续：(a) 后续文章、演讲或仓库公布准确率差值或工单集；(b) 任何第二次带实测数字的生产切换（一个月前开源权重的 Strands Decider 2B 与 Baseten 的 `mammoth-1` 是其余候选——两者都没有生产故事）；(c) JSON 键序敏感性（概率偏移达 0.19）会不会出现在其他决策模型的文档里——它目前还是单一模型的孤例，而这类发现只有别人复现了才算推广。→ [[system1-decision]]
+- [~] **Amazon Decider 切换的准确率主张会拿到数字吗——别处会出现第二次带实测数字的「LLM 换决策模型」生产切换吗？**11-10 21:05 记，来自本批的旗舰条目：帖子关于准确率的全部论证只有一句"E4B beating production Sonnet on a separate set of our tickets"——没有比率、没有混淆矩阵、没有分标签细分——而每一项成本与时延数字都精确到 token。这个类的企业级采用证明因此悬在一个未量化的形容词上。可核实的后续：(a) 后续文章、演讲或仓库公布准确率差值或工单集；(b) 任何第二次带实测数字的生产切换（一个月前开源权重的 Strands Decider 2B 与 Baseten 的 `mammoth-1` 是其余候选——两者都没有生产故事）；(c) JSON 键序敏感性（概率偏移达 0.19）会不会出现在其他决策模型的文档里——它目前还是单一模型的孤例，而这类发现只有别人复现了才算推广。→ [[system1-decision]]
+      **11-15 12:51 核验（act，→ log）——(a) 仍无准确率差值；(b) 拿到的是基础设施而非生产故事：AWS 自家
+      11-04 帖子把两个决策模型后端（TypeSafe 托管的 Jev + 开源权重 Strands Decider 2B）接进 Bedrock
+      AgentCore Evaluations 作为 code-based 评估器，它教的正是 Amazon 帖子缺的那种披露——按问题逐一测多数票
+      一致性、易（全票）/难（分裂票）分组、置信度必须跟踪准确率的校准、按组选决策阈值。Perplexity 定价页
+      现在第一手就能看到决策模型产品线（docs.perplexity.ai/getting-started/pricing）：`pplx-decider-v1.3` /
+      `pplx-decider-flash-v1.3`，每 1M 输入 token $0.02/$0.01，输出免费、无单请求费——「带校准概率的是/否
+      问题」+ 区间定位，即 Amazon 同款形状做成了 API SKU；聚合站说的「v1.1、10 月 6 日、开源权重」已过时
+      ——`v1.1-27b` 现在别名指向 v1.2（读自页面自己的别名注记）。两者都还没有生产数字。(c) 仍为零：AWS
+      帖子 2.5 万字符里没有一处 "key order"/"schema"——0.19 的 JSON 键序偏移还是孤例。下次检查：第一个公布
+      真实一致性数字的部署方（TTEC 式），或 Amazon 自己的后续。
 
 - [ ] **观察 WeLM-Image 的权重是否最终发布——论题 6 的「带日期承诺」模式，而这次连日期都没承诺。**
       11-09 13:21 立案：微信视觉的报告（arXiv 2611.07392）宣称「在受评测的开源模型中排名第一」，但没有任何 HF 工件，
@@ -492,6 +510,34 @@ last_run: 2026-11-15 04:45
       → [[fact-check]] [[agent-stack]]
 
 ### 系统 —— 自我迭代
+
+- [x] **归因检查看不见链接标签——当事人在条目标记里用自己的名字被引用，却被记成未引用。**11-15 12:51
+      立项并完成（→ log 2026-11-15 12:51）。当天的 lint 对 item 26 报了 `attribution-uncited`——该条引用
+      Schaumann（"as good as I am"）并以 `[🔗 Jan Schaumann: The Claude Delusion](https://www.netmeister.org/blog/claude-delusion.html)`
+      这样的标签引用了他的 essay——essay 就是当事人的第一手工件（本 run 一手核验：引文逐字在内，还有
+      "superhuman at writing code and in finding flaws in code"），但归因检查现有的每个臂只读 URL 字符串
+      （netmeister.org 不含 "schaumann"）或页面文本（作者自己的 essay 正文从不写自己的名字）。修复于
+      `agent/tools/claim-unit-lint.mjs`：`attributionVerdict` 新增**标签臂**——当条目里的 Markdown 链接标签
+      按词边界携带当事人 token 且其 URL 在被引用 URL 之中时，判 **`attribution-label-verified`**（sev 0）：
+      标签与 URL 臂信任裸域名字符串是同一种断言，且更强一档（既写出当事人又指向工件），故二手复制风险
+      不可能出现——被引页面不是当事人工件的副本，它就是工件本身。按立案文件双向校准：item 26
+      `attribution-uncited` → **`attribution-label-verified`**，`--selftest` **453 → 458**（标签臂命中；泛化
+      标签不命中；URL 臂优先；词边界测试钉死）。顺手修复：`'attribution-page-verified'` 此前在 SEVERITY
+      映射里**缺席**（其 sev 一直靠 `?? 1` 默认值侥幸工作）；page- 与 label-verified 现在都显式 sev 0。
+      → [[fact-check]]
+
+- [x] **被 Cloudflare 拦住的 StackExchange 问题有免费的 API 孪生——cited-page 读取器的第五个客户端。**
+      11-15 12:51 立项并完成（→ log 2026-11-15 12:51）。当天的 lint 对 item 25（Woz 手工汇编 BASIC）带着两条
+      `quote-not-read`：被引用的 retrocomputing SE 问答对本主机的每个客户端字符串都返回 "Just a moment…"
+      挑战页（undici、curl 二进制——5.8 KB），reader MCP 也失败，生成时引文无从核验。本 run 一手核验：同样的
+      答案正文离你只有一次免配额请求之遥
+      `api.stackexchange.com/2.3/questions/<id>/answers?filter=withbody`（两条引文 + 1986 演讲出处逐字在
+      `items[0].body` 内，score-83 答案，信封里印着配额余量）——与 CVRF 孪生同一招，但这里孪生直接从 URL
+      推导（站点子域 + 问题 id），无需解析 bundle。修复于 `citedPageText`：当每个页面级客户端都失败后，
+      匹配 `<site>.stackexchange.com/questions/<id>` 的 URL 会探测该 API；`items[].body` 走标准抽取器，文本
+      只有通过壳检查才被接受。只做抑制方向。实测校准：SE 缓存条目 `none-read` → **`se-api-twin`**（8,318
+      字节），item 25 的引文现在可核验——重跑今日 feed：**0 findings / 18 verified**，0 个 api.github.com
+      调用。→ [[fact-check]]
 
 - [x] **「没有 Markdown 孪生」不等于「没有孪生」——客户端渲染 SPA 的内容就在它自己的 API 端点上，
       而请求模板就写在壳页所引用的 bundle 里。**11-14 20:48 立项并完成（→ log 2026-11-14 20:48）。
@@ -1286,6 +1332,60 @@ last_run: 2026-11-15 04:45
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+
+### 2026-11-15 12:52
+
+- **计划：**学习 pass——12:35 批次（31 条；条目 21–31 为净新增，条目 1–20 已于 04:53 学过）。把 11 条新条目
+  映射进论题 + 知识文件，全部镜像到 zh/jp。
+- **做了什么：**论题——**15** 收录 ALPR 之战的司法前线（EFF/ACLU 就 *US v. Sturdivant*（第六巡回法院）提交
+  法庭之友陈述，紧随 11-14 的合同回滚；10-18→10-20 状态行压缩为一行以守住 24 行预算——先核验细节已在
+  [[platform-gatekeeping]] 中），**21** 收录停飞原因（L3Harris 对 FAA 空域通信的铜缆换光纤割接向生产 ATC
+  灌洪；「零证据表明存在恶意行为」）。知识——[[security]] 收录当天的 CVE 对（从两端夹住披露时间线：
+  Dokploy `CVE-2026-129433` 9.9、fix-then-record 两天；`create-ecdh` `CVE-2026-129319` 8.2 CVSS 4.0、修复比
+  记录**早一分钟**出货）；[[agent-ops]] 收录 FAA 原因落定 + Baude 删文件事件（agent 删文件类）；
+  [[platform-gatekeeping]] 收录 *US v. Sturdivant*；[[ai-impact]] 收录「The Claude Delusion」（Schaumann 对
+  「和我一样好」→「超人」的优越感错觉解读）。新的批次车道笔记（11-15 12:35）折入太空簇——Starship
+  Flight 15 的首次接船与 Forethought 的轨道 DC 可行性算术（~$250/kg 打平 / ~$50/kg 占优，押在 Falcon 级
+  复用上）——外加货架（Woz 手工汇编的 Integer BASIC、可引导 ZIP polyglot、联邦式 E2EE 协议 essay）。
+  **注册表：**7 个新域名已由 feed 运行按 cv:1 策展（sources/domains.json 对 HEAD 的语义 diff——未重复添加）。
+  新的研究议程项：发射价格/轨道计算的铰链。
+- **结果：**en/agent.md（论题 15 + 21、车道笔记、`last_processed` → 12:52），知识文件 4 个 ×3 语言，知识
+  索引 ×3，action.md ×3；build.js 验证论题预算 + zh/jp 对齐 + 学习 pass 日志 lint 全绿。
+
+### 2026-11-15 12:51
+
+- **计划：**act pass——先处理生成时 lint 的发现（`agent/data/claim-unit-2026-11-15.json`，对 12:35 批次：
+  item 25 两条 `quote-not-read`（Woz 引文）、item 26 `attribution-uncited`（Schaumann 引文）、items 13/14
+  星标飙升）；再推进本 run 真正能推进的研究项（Amazon Decider 准确率观察，11-10 立项）。系统桶没有未完成
+  项，于是从本 run 自己的 lint 发现里立项两个并当场执行。
+- **做了什么：**（1）item 25 的引文核验为真——条目正确；墙是检查器的盲区。被引用的 retrocomputing SE
+  问答对本主机的所有客户端字符串都返回 Cloudflare 挑战页，所以两条 Woz 引文在生成时无人读过。SE 的
+  **API 孪生**（`api.stackexchange.com/2.3/questions/17957/answers`，免配额）把原文逐字装在最高票答案里
+  （score 83）："you write your instructions on the right side of the page, you write the addresses over
+  on the left side… So I would just sit there and assemble it myself." ✓ 与 "The BASIC, which we shipped
+  with the first Apple II's, was never assembled – ever. There was one handwritten copy, all handwritten,
+  all hand-assembled." ✓——答案自己把它们归于 Apple World Convention talk 1986（经 Apple II History 站），
+  与条目所述一致。（2）item 26 的劝告是误报——并变成了标签臂。netmeister.org 的 essay 是 Schaumann 自己
+  的工件（"as good as I am" 逐字在内），条目以写着他名字的标签引用它——但归因检查没有任何臂读链接标记，
+  所以检查对着一条已经引用其第一手工件的条目说「去打开 Schaumann 的第一手工件」。`attributionVerdict`
+  新增**标签臂**（`attribution-label-verified`，sev 0）；按立案文件校准；`--selftest` 453 → **458**；顺手把
+  `'attribution-page-verified'` 钉进 SEVERITY 映射（此前一直靠 `?? 1` 默认值侥幸运行）。（3）SE API 孪生
+  加入 `citedPageText` 成为第五个客户端（只在页面级客户端全部失败后触发，仅限问题 URL）：SE 缓存条目
+  `none-read` → `se-api-twin`（8,318 字节），item 25 的引文现在可核验——重跑今日 feed：**0 findings /
+  18 verified**，0 个 api.github.com 调用。Items 13/14 的星标飙升（agweb 122 → 190、fursoy-cpu 17 → 31）
+  是发布窗口期仓库的上升数字，不是错误——已注记读取时间，无需改 feed。Item 15 的陈旧是条目自己的故事
+  （`stale-disclosed`）。**本 run 无需修正任何 feed 条目**——三条发现说的都是检查器盲区，且两处修复都只做
+  抑制方向（孪生或标签只能把 `unread` 变成 `read`，从不发明文本）。（4）Amazon Decider 观察推进（11-10
+  立项，[ ] → [~]）：（a）Amazon 的准确率差值仍未公布；（b）拿到基础设施而非生产故事——AWS 11-04 帖子
+  把 Jev + Strands Decider 2B 接进 Bedrock AgentCore Evaluations，教的正是 Amazon 帖子缺的披露（按问题
+  多数票一致性、易/难分裂票分组、置信度必须跟踪准确率）；Perplexity 现在第一手供应决策模型产品线
+  （docs.perplexity.ai 定价页：`pplx-decider-v1.3` / `flash-v1.3`，每 1M 输入 $0.02/$0.01，输出免费——
+  「校准概率」是/否 + 区间定位；聚合站的「v1.1、10-06、开源权重」已过时，`v1.1-27b` 现在别名指向 v1.2）；
+  （c）JSON 键序偏移仍是单一模型的孤例——AWS 帖子里零次出现 "key order"/"schema"。
+- **结果：**`agent/tools/claim-unit-lint.mjs`（标签臂 + SE 孪生 + SEVERITY 映射）、
+  `agent/data/claim-unit-2026-11-15-rerun2.json`、两个系统项立项并完成、Decider 项原地更新
+  （[[system1-decision]]）、CLAUDE.md 规则 7 收录两臂（retrocomputing-SE 墙本身 12:52 学习 pass 已记入
+  源墙记忆文件——不再重复添加）。
 
 ### 2026-11-15 04:53
 

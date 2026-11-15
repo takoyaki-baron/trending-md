@@ -88,3 +88,27 @@ Sources: [LibreOffice on X](https://twitter.com/LibreOffice/status/2121205272479
 Sources: [FAA ATCSCC 解除公告 ADVZY 005](https://www.fly.faa.gov/adv/adv_otherdis?adv_date=11142026&advn=5) ·
 [HN 議論（1,400 pts）](https://news.ycombinator.com/item?id=50489641) ·
 [HN：FAA が 0119Z に全国停止を解除](https://news.ycombinator.com/item?id=50492601)
+
+## 2026-11-15——地上停止の原因が判明（サイバー攻撃ではなく切替え）；エージェント削除クラスが法学教授の机で再演
+
+- **FAA の原因が解決：**Duffy 長官は金曜日の全国地上停止を、請負業者 **L3Harris** が進めていた FAA 空域
+  通信の**銅線→光ファイバ転換**に trace——工事中だったルータが「他の航空交通管制システムへの
+  フラッディングを開始」し、安全のため空域を閉鎖。FAA の Bryan Bedford 長官：「悪意のある何かの証拠は
+  ゼロ、AI 関連の証拠もゼロ」；サイバー攻撃とは信じていない。金曜の停止は 9/11 以来最長で、混乱は数日
+  続く見込み。停止前に近代化の **70% 超**を完了したと説明する L3Harris は転換の背景を確認し、「FAA の
+  調査を支援している」。11-14 小節の未決ウォッチ（「公告に原因の記載なし」）は答えが出た——そしてその
+  答えは退屈な方：稼働中の安全重要通信での切替えが運用中 ATC に漏出した。インフラ移行をする全員への
+  無料のケーススタディ：切替えは kill switch 付きのシャドウ環境で行うべき。
+- **Baude 事件が再浮上（44 pts）：**William Baude（シカゴ大学 Harry Kalven, Jr. 法学教授）が 11月5日に投稿：
+  古い講義ノートのページ番号の付け直しを頼んだ Claude が、1年分の憲法講義ノートと現在のシラバスを削除
+  ——本人の告白：「Fall 2026 FINAL シラバス .doc とトップレベルの Class N 2023 ノートをすべて誤って削除し、
+  復元されていません。」ファイルは Dropbox で復元され、Baude はこの話を公益告知として書いた。HN スレッドの
+  論点は正しい：なぜエージェントが代替不能なファイルへの書き込み権限を持つのか。クラスに合流（放送前の
+  テレビ編集を削除したエージェント、9秒で消えたデータベース）；修正は同じ退屈なもの——エージェントが触れる
+  ものはスナップショットなしであってはならず、エージェントが見るすべてのバージョン管理は、モデルの自己報告
+  （謝罪を含む）を信頼するより安い。
+
+Sources: [BBC：銅線アップグレードが全国停止を引き起こした](https://www.bbc.co.uk/news/articles/c6wy9lynq4qno) ·
+[L3Harris 声明](https://www.l3harris.com/newsroom/press-release/2026/11/l3harris-statement-nov-13-ground-stop) ·
+[Tom's Hardware：Baude 事件](https://www.tomshardware.com/tech-industry/artificial-intelligence/rogue-claude-ai-tasked-with-renumbering-pages-accidentally-deletes-law-professors-entire-syllabus-one-year-of-lecture-notes-youre-right-to-be-angry-i-deleted-your-files-through-my-own-carelessness-humbled-agent-admits) ·
+[HN](https://news.ycombinator.com/item?id=50499114)

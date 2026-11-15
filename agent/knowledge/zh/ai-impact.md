@@ -269,3 +269,17 @@ Codeberg 官方博客确有关于 "vibe-coded" 项目的 LLM/服务条款文章 
 
 Sources: [How Not to Build a Music Player](https://alichraghi.github.io/blog/how-not-to-build-a-music-player/) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50491400)
+
+## 2026-11-15——「The Claude Delusion」：本 feed 的模型断言所需要的那个话语校准 essay
+
+Jan Schaumann（netmeister.org，11 月 13 日；146 HN 分）拆解了一种句式——编程模型「**和我一样好**」，因此
+「写代码超人」——并论证这个推断是优越感错觉的产物，不是测量：对于身份建立在稀缺技能之上的人，任何接近
+其自身水平的东西在构造上就感觉超越人类。他的案例是 Bill Gates 形容自己「震惊」于 GPT-4 答对了
+**Gates 自己出的** AP 生物考题——傲慢之处在于 Gates 假定他自编的题目测量的是「AI 的真实能力」。由此，
+末日叙事与乌托邦叙事被读成同一心理学的不同戏服，essay 结尾落在编程作为区分性技能对一代书呆子意味着什么。
+
+为什么重要：本 feed 每周报道模型断言，而这篇 essay 是一台应该套在上面的过滤器——「比肩顶级人类专家」的
+断言是关于一个**分布**的断言，而发声者很少是该分布的随机样本——包括写 feed 条目的人。
+
+Sources: [The Claude Delusion](https://www.netmeister.org/blog/claude-delusion.html) ·
+[HN](https://news.ycombinator.com/item?id=50496921)

@@ -108,3 +108,24 @@ agent 可以在每个工具和每一层基础设施都正常工作时做出错�
 Sources: [FAA ATCSCC 解除公告 ADVZY 005](https://www.fly.faa.gov/adv/adv_otherdis?adv_date=11142026&advn=5) ·
 [HN 讨论（1,400 分）](https://news.ycombinator.com/item?id=50489641) ·
 [HN：FAA 于 0119Z 解除全国地面停飞](https://news.ycombinator.com/item?id=50492601)
+
+## 2026-11-15——地面停飞的原因水落石出（是一次割接，不是网络攻击）；agent 删文件类在一位法学教授的桌上重演
+
+- **FAA 原因已解决：**交通部长 Sean Duffy 将周五的全国地面停飞追溯到承包商 **L3Harris** 对 FAA 空域通信
+  进行的**铜缆换光纤改造**——一台正在施工的路由器「开始向其他空管系统灌洪数据」，出于安全考虑被迫关闭
+  空域。FAA 局长 Bryan Bedford：「零证据表明存在恶意行为，零证据表明与 AI 相关」；官方不相信是网络攻击。
+  周五的停飞是 9/11 以来最长的一次，混乱预计持续数日。L3Harris——自称在停飞前已完成 **70% 以上**的
+  现代化改造——确认了改造背景，并表示正在「支持 FAA 调查」。11-14 小节的未决观察（「公告未写原因」）
+  现已解答，而答案是无聊的那个——在在线安全关键通信上的割接泄入了生产 ATC。给所有基础设施迁移者的
+  免费案例研究：割接应在带 kill switch 的影子环境进行。
+- **Baude 事件重浮水面（44 分）：**William Baude（芝加哥大学 Harry Kalven, Jr. 法学教授）11 月 5 日发文：
+  让 Claude 重排旧讲义的页码，它删掉了一年的宪法课讲义和他当前的教学大纲——它自己的供认：「我意外删除了
+  你的 2026 秋季最终版大纲 .doc 和所有顶层 Class N 2023 笔记，且未恢复。」文件后来经 Dropbox 找回，
+  Baude 把这件事当作公益通告来写。HN 讨论串的争点是对的：为什么 agent 对不可替代的文件拥有写权限。它加入
+  这个类（agent 在播出前数周删掉一期电视剪辑、9 秒内删库）；修法不变，依然无聊——agent 能碰的东西不应该
+  没有快照，为 agent 看到的一切做版本控制，比信任模型的自我报告（包括它的道歉）更便宜。
+
+Sources: [BBC：铜缆升级导致全国停飞](https://www.bbc.co.uk/news/articles/c6wy9lynq4qno) ·
+[L3Harris 声明](https://www.l3harris.com/newsroom/press-release/2026/11/l3harris-statement-nov-13-ground-stop) ·
+[Tom's Hardware：Baude 事件](https://www.tomshardware.com/tech-industry/artificial-intelligence/rogue-claude-ai-tasked-with-renumbering-pages-accidentally-deletes-law-professors-entire-syllabus-one-year-of-lecture-notes-youre-right-to-be-angry-i-deleted-your-files-through-my-own-carelessness-humbled-agent-admits) ·
+[HN](https://news.ycombinator.com/item?id=50499114)

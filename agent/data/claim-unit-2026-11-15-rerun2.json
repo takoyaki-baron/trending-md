@@ -1,0 +1,222 @@
+{
+ "generated": "2026-11-15T05:01:33.376Z",
+ "files": [
+  {
+   "file": "2026-11-15.md",
+   "items": 31,
+   "findings": [
+    {
+     "check": "cvss",
+     "item": 24,
+     "verdict": "nvd-unavailable",
+     "claim": "3.1 9.9",
+     "detail": "the NVD request that would have carried CVE-2026-129433 failed, so nothing is known about the record — a failed request is not a registry statement (1 chunk(s) unanswered)"
+    },
+    {
+     "check": "status",
+     "item": 24,
+     "verdict": "nvd-unavailable",
+     "claim": "CVE-2026-129433 `Deferred`",
+     "detail": "the NVD request that would have carried CVE-2026-129433 failed, so its `vulnStatus` was never read — \"I could not read it\" is not \"it says something else\""
+    },
+    {
+     "check": "date",
+     "item": 24,
+     "verdict": "ok",
+     "claim": "CVE-2026-129433 published 2026-11-14",
+     "detail": "2026-11-14T12:32:52.619Z"
+    },
+    {
+     "check": "cvss",
+     "item": 28,
+     "verdict": "nvd-unavailable",
+     "claim": "4.0 8.2",
+     "detail": "the NVD request that would have carried CVE-2026-129319 failed, so nothing is known about the record — a failed request is not a registry statement (1 chunk(s) unanswered)"
+    },
+    {
+     "check": "status",
+     "item": 28,
+     "verdict": "nvd-unavailable",
+     "claim": "CVE-2026-129319 `Received`",
+     "detail": "the NVD request that would have carried CVE-2026-129319 failed, so its `vulnStatus` was never read — \"I could not read it\" is not \"it says something else\""
+    },
+    {
+     "check": "repo",
+     "item": 3,
+     "verdict": "ok",
+     "claim": "dream-num/univer",
+     "detail": "25010★, last push 2026-11-15"
+    },
+    {
+     "check": "repo",
+     "item": 9,
+     "verdict": "ok",
+     "claim": "JuliusBrussee/caveman",
+     "detail": "120130★, last push 2026-11-14"
+    },
+    {
+     "check": "repo",
+     "item": 13,
+     "verdict": "star-surge",
+     "claim": "122 quoted vs 190 now",
+     "detail": "paul-nameless/agweb: 122 → 190 (+36%, 68 stars) since the batch was written on a 3-day-old record (launch window) — a rising count is not a wrong one; date the reading if the number will be re-used"
+    },
+    {
+     "check": "repo",
+     "item": 13,
+     "verdict": "ok",
+     "claim": "paul-nameless/agweb",
+     "detail": "190★, last push 2026-11-14"
+    },
+    {
+     "check": "repo",
+     "item": 14,
+     "verdict": "star-surge",
+     "claim": "17 quoted vs 31 now",
+     "detail": "FURSOY/fursoy-cpu: 17 → 31 (+45%, 14 stars) since the batch was written — a rising count is not a wrong one; date the reading if the number will be re-used"
+    },
+    {
+     "check": "repo",
+     "item": 14,
+     "verdict": "ok",
+     "claim": "FURSOY/fursoy-cpu",
+     "detail": "31★, last push 2026-11-14"
+    },
+    {
+     "check": "repo",
+     "item": 15,
+     "verdict": "stale-disclosed",
+     "claim": "IRS-Public/direct-file",
+     "detail": "last push 2026-06-11 (156d) with 4708 stars — the item states the state itself (“archived”), so the staleness is the story rather than an unexamined number"
+    },
+    {
+     "check": "quotation",
+     "item": 3,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 7,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 9,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 15,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 17,
+     "verdict": "quote-not-read",
+     "claim": "“the languages that typically consume more energy also tend to have lower accuracy in the model o…”",
+     "detail": "17 words, 0 hits in 2 readable source(s), but 1 cited page(s) went unread — unread is not absent, so this is not called a fabrication; open those page(s) before publishing"
+    },
+    {
+     "check": "quotation",
+     "item": 18,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 21,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 1 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 22,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 23,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 25,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 26,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 27,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 29,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 31,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "attribution",
+     "item": 17,
+     "verdict": "attribution-page-verified",
+     "claim": "Deng",
+     "detail": "a quotation is attributed to Deng (“The languages that typically consume more energy also tend t…”) and the party's token appears in the fetched text of a cited page — the quotation arm's page set carries the party's statement even though no cited URL string names the party (the party lives in the prose, not the domain); the second-hand-copy risk the URL arm carries applies here too, so a load-bearing quotation still wants the party's own artifact"
+    },
+    {
+     "check": "attribution",
+     "item": 26,
+     "verdict": "attribution-label-verified",
+     "claim": "Schaumann",
+     "detail": "a quotation is attributed to Schaumann (“as good as I am,”) and the item cites the party's own artifact under a link label that carries the party's name — the label is the same assertion the URL arm trusts a domain string for, one register stronger (it names the party AND points at the artifact), so the cited page is not a second-hand copy of the party's artifact but the artifact itself"
+    },
+    {
+     "check": "attribution",
+     "item": 31,
+     "verdict": "attribution-satisfied",
+     "claim": "Forethought",
+     "detail": "a quotation is attributed to Forethought (“the lowest-cost place to put AI will be space […] within two…”) and a cited URL carries the party's token — the quotation arm's page set reaches the party's own artifact"
+    }
+   ]
+  }
+ ],
+ "status_watch": [],
+ "api_calls": 0,
+ "readme_calls": 0,
+ "cited_page_calls": 28,
+ "repo_page_calls": 0,
+ "nvd_calls": 0,
+ "nvd_failed_chunks": 1,
+ "cna_calls": 0
+}
