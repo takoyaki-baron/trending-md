@@ -1,8 +1,8 @@
 ---
 date: 2026-11-15
-updated: 2026-11-15T04:35:23Z
+updated: 2026-11-15T12:24:30Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 17
+sources: 36
 license: CC-BY-4.0
 ---
 
@@ -444,13 +444,167 @@ Forethought 的研究笔记（11 月 14 日）拿马斯克的声明——"把 AI
 
 ---
 
+## 32. 法官拒绝驳回 DRAM 供应操纵集体诉讼——三星、SK 海力士、美光将被迫就 DDR5 短缺应诉
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** litnews.ai · 221+ pts on HN · 10.8h ago (~09:18 UTC+8)
+- **Tags:** `dram` `antitrust` `memory-prices` `litigation`
+
+11 月 14 日，美国加州北区联邦地区法院法官 Noël Wise **全部驳回**了三星、SK 海力士与美光就一项拟议集体诉讼提出的联合撤诉动议——该诉讼指控三家合谋"削减传统 DRAM（如 DDR5）的供应，并将产能转向 HBM"。这项谢尔曼法第 1 条指控之所以存活，恰恰是因为此刻不同于 2022 年第九巡回法院驳回同一三家被告早前操纵案的 DRAM II 判例。起诉书的支撑性指控全是内存买家这几周的亲身经历：长期 HBM 锁定协议、拒绝签订长期传统 DRAM 合同、美光关闭 Crucial 品牌、晶圆厂延期、在创纪录价格下仍不扩产、几乎一致的客户审查流程，以及三家此前的卡特尔历史。法官对原告另外三项论点（投资人声明中的"供应纪律"、行业会议上的会面、三家寡头市场结构）未予采信。被告答辩截止日为 2026 年 12 月 7 日。
+
+**Why it matters:** 本栏目整周都在从买方角度报道 DRAM 涨价（RAM Altman、树莓派涨价 80 美元）；这份裁定让供应侧的故事进入法庭取证阶段——被告现在必须宣誓回答的指控包括拒绝长期合同、在创纪录价格下拒绝扩产。取证验证尚需数年，但框架已经立起：传统 DRAM 稀缺被指为策略而非意外。
+
+[`🔗 LitNews：Judge Refuses to Dismiss DRAM Supply Conspiracy Suit`](https://litnews.ai/articles/garciaguirre-samsung-sk-hynix-micron-dram-conspiracy-suit-survives-dismissal) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50502988)
+
+---
+
+## 33. Modern Web Guidance 开源其源码仓库：创作/评测仓库以 +1,220★ 成为当日 GitHub 涨幅第一
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending · +1,220★ today · 6.6k total
+- **Tags:** `modern-web-guidance` `agent-skills` `evals` `governance`
+
+继我们 2026-11-13 报道 Modern Web Guidance v1.0.0（Chrome、Edge、Firefox 与 MDN 团队为编码代理打造的技能）之后：该项目的配套**源码仓库** `GoogleChrome/modern-web-guidance-src` 现在是当日 GitHub Trending 涨幅第一（今日 +1,220★，共 6,555★），距消费仓库的发布浪潮仅两天。它的 README 把分工说得很直白："This repo is the source repository for GoogleChrome/modern-web-guidance and includes the code and documentation for **authoring, calibrating, and evaluating** its contents."——也就是消费仓库背后的部分现已可浏览：支撑指引内容的评测框架与仪表盘、说明跨厂商共治如何运作的 `GOVERNANCE.md`，以及把 Web 平台专业知识转化为技能内容的创作流水线。开发依然活跃（提交至 11 月 14 日）。
+
+**Why it matters:** 本栏目多次指出，agent-skills 项目成败在于其指引是被测量的还是凭感觉的；公开校准/评测流水线——还带公开仪表盘——正是问责的那一半，而这是其他技能合集（只发 SKILL.md 文件外加一纸祈祷）大多没有的。涨幅榜说明社区认同这一点。
+
+[`🔗 GoogleChrome/modern-web-guidance-src`](https://github.com/GoogleChrome/modern-web-guidance-src) · [`🔗 评测仪表盘`](https://googlechrome.github.io/modern-web-guidance-src/)
+
+---
+
+## 34. EFF：科技公司正再次试图改写整个隐私概念——558 分
+
+- **Velocity:** ▮▮ rising
+- **Source:** eff.org · 558+ pts on HN · 23.3h ago (~20:45 UTC+8, Nov 14)
+- **Tags:** `privacy` `wearables` `always-on-recording` `bystanders`
+
+Thorin Klosowski 的 EFF 文章（11 月 13 日）指出，隐私行业最古老的话术——把监控重新包装成"个人选择"——正被常开式 AI 硬件重演："Privacy, which companies were once happy to claim was all about personal choice, is now primed to affect everyone around you even more than it already did." 文中例子全是已出货的产品而非思想实验：Meta 与 Google 的智能眼镜录制佩戴者所看到的一切并由 AI 描述；**Apple 的 Audio Intelligence** 把每块 Apple Watch 变成录制或总结你一天的设备；Amazon 的 Bee 捕获并转写一切。文章的论点是结构性的：当麦克风和摄像头戴在别人身上时，靠个人不使用来自保的建议已无法遵循——旁观者没有设置页面。
+
+**Why it matters:** 这是今天第 23 条 ALPR 抗争的普遍化版本：两者都关于被你无法控制的设备记录。对任何构建或部署可穿戴/环境 AI 的人而言，这篇文章就是即将被诉讼检验的同意模式清单——房间里的权利主体不只是 recording 设备的持有者。
+
+[`🔗 EFF：Tech Companies Are Trying to Shift the Entire Concept of Privacy (Again)`](https://www.eff.org/deeplinks/2026/11/tech-companies-are-trying-shift-entire-concept-privacy-again) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50496602)
+
+---
+
+## 35. Claude Code Projects 重新走红：描述目标，协调者负责其余——Boris Cherny 亲自回答 HN 提问
+
+- **Velocity:** ▮▮ rising
+- **Source:** claude.com · 98+ pts on HN · 35.6h ago (~08:28 UTC+8, Nov 14)
+- **Tags:** `claude-code` `orchestration` `parallel-agents` `anthropic`
+
+本周 HN 的浪潮接住了 Anthropic 重新设计的 **Claude Code Projects**——文章本身日期是 9 月 17 日，但 beta 进入 Claude Code 的推出才是这个周末拿到 98 分 93 条评论的原因。其模型是："Claude scopes the request, delegates the work, coordinates parallel threads, reviews the outputs, and assembles the finished result." 文中两个例子：设定降低结账 p75 延迟的目标，Claude 会对每个端点做性能分析、测试优化并开出并行线程的 PR；连接 API、Web 与移动端仓库并设定退役已弃用 v1 端点的目标，它会为每个仓库建一条线程、迁移调用方、跑测试，并告诉你哪些 PR 必须先合并。进度可以从手机上操控，离开电脑后工作继续。在讨论帖里，Boris Cherny（"Projects are how I write pretty much all my code these days"）直接回答了设计问题。
+
+**Why it matters:** 协调者层正在进入主流编码 harness——与本栏目跟踪过的第三方工具（LoopForge、OpenBot、herdr）相同的协调者加并行工作者形态，现在成了原生功能，也带来了意料之中的 HN 反弹：一位评论者眼看你问了个琐碎问题却生出七个子代理、十分钟烧光配额。
+
+[`🔗 Anthropic：Projects redesigned — from folder to conversation`](https://claude.com/resources/articles/projects-redesigned) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50492141)
+
+---
+
+## 36. 微软 FORGE 实验室在 Rust 标准库中发现内存安全漏洞——纯安全 Rust 触发未定义行为，由 AI 扫描器发现
+
+- **Velocity:** ▮▮ rising
+- **Source:** forge-blog.github.io · 161+ pts on HN · 54.7h ago (~13:22 UTC+8, Nov 13)
+- **Tags:** `rust` `memory-safety` `ai-scanning` `vulnerability-research`
+
+微软 FORGE 实验室（Yechan Bae，11 月 9 日）报告了 Rust `std` 与 `core` 中的多个内存安全问题——"including cases where code written **entirely in safe Rust** can trigger undefined behavior"——由该实验室的 AI 漏洞扫描器 **Hyenas**（codename MDASH 的研究版）发现，随后复现并连同 Rust 维护者修复。文章把 bug 归为 unsafe 代码中三种错位的信任：**相信代码不会 panic**（不变量在函数中途被 panic 打穿）、**相信用户提供的实现是正确的**（行为不端的比较器或 trait 实现破坏 unsafe 代码的假设）、**相信底层系统**。一个具体案例：`join()`——CVE-2020-36323 的旧修复从未覆盖调用间变长的字符串，2026 年 4 月同一函数因 remaining-length 计算下溢成堆溢出而再次修复。部分报告仍未关闭。
+
+**Why it matters:** 两件事同时发生：一份 Rust 保证实际漏点在哪的分类学（边界不是 FFI——是 panic、trait 实现和操作系统假设），以及"AI 找到真实漏洞"系列的又一数据点——扫描器在地球上被审阅最多的代码库之一里找到了健全性 bug，而修复正在进入所有人容器里都带着的 std。
+
+[`🔗 FORGE Lab：Memory Safety Bugs in Rust Standard Library`](https://forge-blog.github.io/posts/rust-std-memory-safety/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50478701)
+
+---
+
+## 37. Kiri 发布 v0.2.1：Apache-2.0 的 Docker Desktop 替代品，宣称 8 倍速 `docker run`——附上 HN 帖的质疑
+
+- **Velocity:** ▮▮ rising
+- **Source:** Show HN · 59+ pts · 7.4h ago (~12:40 UTC+8)
+- **Tags:** `kiri` `containers` `docker` `rust`
+
+Kiri（libracoder/kiri，Rust，Apache-2.0，创建于 11 月 2 日，4.7k 星，v0.2.1 今日发布）是一个面向 Mac/Windows/Linux 的桌面容器运行时，用一个守护进程跑 Docker 容器——docker CLI、Compose 与 Docker API 原样可用——并宣称"docker run takes 22 ms on Kiri and 178 ms on Docker Desktop (152 ms on Colima, 279 ms on OrbStack), every engine on 2 CPUs and 8 GB"。容器之外，它还能构建和扫描镜像、跑 Kubernetes、跑完整的 Linux 虚拟机，并内置一个自称为免费 Ngrok 替代品的隧道。HN 帖里的证据值得与宣传一同阅读：约 20 万行代码约两周内完成（带评论者读作 AI 生成的破折号特征）、网站 CPU/内存表格仍写着"Measured numbers replace these soon"、其 Podman 替代品页面比较时没有 Podman 的计时数据，而 8 倍指的是容器*启动*延迟而非吞吐。
+
+**Why it matters:** Mac 容器运行时这个位置（OrbStack/Colima/Docker Desktop）确实存在竞争，一个单守护进程的宽松许可 Rust 新入场者是真正的架构主张——但这是一个 13 天大的项目，头牌基准是冷启动数字，所以先归档为"有前景、未验证"，等承诺的实测表格出来再做切换决定。
+
+[`🔗 libracoder/kiri`](https://github.com/libracoder/kiri) · [`🔗 Kiri 网站与基准`](https://runkiri.com/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50504077)
+
+---
+
+## 38. Veyra-NRVideo：+731★，给采集卡画面实时补帧的 GPU 流水线——GTA6 标题只是营销
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · +731★ today · 2.6k total
+- **Tags:** `veyra` `video-processing` `frame-generation` `upscaling`
+
+Likely7/Veyra-NRVideo（GPL-3.0，C++，创建于 9 月 9 日，208 fork）是今天尚未被本栏目报道的最大 GitHub Trending 新面孔。README 的自我定位比它的走红标题更踏实："Turn local video, capture cards and game streaming into one real-time GPU enhancement pipeline"——超分辨率、降噪、HDR 与补帧在 Windows 上实时应用于流经它的一切，支持视频文件、图片与采集卡源的实时预览。那个标题党题目——"Bring PS5 GTA6 to 120FPS with DLSS 5"——说的是对*采集到的*主机游戏画面做 AI 超分与插帧，而不是让游戏本身渲染更快；作者（@likely2002）通过 YouTube 与 Bilibili 的中英文教程推动传播。
+
+**Why it matters:** 对采集流做外置补帧已经是真实的产品品类——它用增加的延迟换流畅度，用在无法升级的硬件（主机）上，与引擎内 DLSS/FSR 的取舍正好相反。一个 GPL-3.0 实现走红，值得任何做采集类流水线的人一看，附带一贯的提醒：插出来的帧是模型的猜测，输入延迟是它的收费处。
+
+[`🔗 Likely7/Veyra-NRVideo`](https://github.com/Likely7/Veyra-NRVideo) · [`🔗 README 与教程`](https://github.com/Likely7/Veyra-NRVideo#readme)
+
+---
+
+## 39. "Actor, Judge, or Teacher?"：行动不佳的决策模型照样能当好老师——在 ALFWorld 上靠评分而非行动 +10 分
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2611.17167 · Hugging Face daily papers (Nov 13)
+- **Tags:** `decision-models` `agents` `rl` `research`
+
+登上 Hugging Face 每日榜单的论文（11 月 12 日发布）追问"whether a decision model that acts poorly can still teach well"。决策模型——用类型化输出加概率作答的模型，即本栏目跟踪过的 Gemini Decisions API 与 Flide 服务层的形态——通常按*行动者*来评价。作者（Haochen Liu 等）在 ALFWorld 上比较三个决策模型与三个通用 LLM 分别作为行动者与裁判，并用 JEV 在 ALFWorld 与 WebShop 上当老师。发现干净地分成两半：作为行动者，六个模型全都被更简单的子目标诱离必须先完成的子目标；作为看到完整轨迹的裁判，同样的模型却能正确给那些步骤记分——而问"每个动作是否有帮助"而不是"任务会不会成功"，就能把有用动作与无用动作分开。作为老师，JEV 把 Qwen2.5-1.5B 策略在 GRPO 之上从 ALFWorld 的 **72.8% 提到 82.9%**、WebShop 的 **56.8% 提到 71.4%**。作者的解释：回合结束后再评判，能看到行动时必须预判的后果。代码已公开。
+
+**Why it matters:** 它给决策模型这个品类提供了有证据的第二份工作：不只是选择动作，还可以为 RL 训练给动作评分——在这个岗位上，一个弱但便宜的决策模型可能胜过它打不过的大行动者，因为后见之明是更容易的推断。
+
+[`🔗 arXiv 2611.17167：Actor, Judge, or Teacher?`](https://arxiv.org/abs/2611.17167) · [`🔗 代码：ZJU-REAL/decision-agents`](https://github.com/ZJU-REAL/decision-agents)
+
+---
+
+## 40. 揭秘手机解锁工具：Cellebrite 级取证"并非魔法"——监控研究组织的技术概览重新走红
+
+- **Velocity:** ▮ steady
+- **Source:** osservatorionessuno.org · 114+ pts on HN · 21.3h ago (~22:44 UTC+8, Nov 14)
+- **Tags:** `cellebrite` `forensics` `android` `surveillance`
+
+Osservatorio Nessuno 的技术概览（5 月 7 日发布，本周末以 114 分登上 HN）揭开了商业手机解锁工具的神秘外衣："Commercial phone unlocking tools are not magic. They exploit the same classes of vulnerabilities that security researchers publish about at conferences and in academic papers." Cellebrite 级产品的独特之处"not the novelty of the techniques, but the systematic commercialization of exploitation"——为每一种软硬件组合收购或开发漏洞，并打包成只需极少操作员专业知识的自动化流程。文章把持物理访问权的取证人员能走的受限攻击面画了出来——启动链、可信执行环境（TEE）、安全元件（secure element）、内核外设驱动栈——主要以 Android 内部机制展开，并致谢 Quarkslab 的 TEE 研究与 Amnesty 的报道作为基础。
+
+**Why it matters:** 去神秘化是双向的：它告诉防守方取证行业到底在把哪些边界变成商品（下一笔加固经费该花在哪），也难得地公开绘制了那些常出现在诉讼中的工具背后的漏洞供应链——而出具这份地图的组织，恰恰记录过 Cellebrite 在意大利的常规使用。
+
+[`🔗 Osservatorio Nessuno：Demystifying phone unlocking tools`](https://osservatorionessuno.org/blog/2026/05/demystifying-phone-unlocking-tools-a-technical-overview/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50497416)
+
+---
+
+## 41. 104 个软件职位家谱，从 1940 年代到"AI Agent / Context Engineer"——借 Claude 之手，一个 Graphviz 文件
+
+- **Velocity:** ▮ steady
+- **Source:** zwischenzugs.com · 340+ pts on HN · 18.3h ago (~01:45 UTC+8)
+- **Tags:** `careers` `industry-history` `visualization` `graphviz`
+
+Ian Miell（zwischenzugs）在多年看着自己同样的工作被从 Head of DevOps 改名到 SRE、再到平台工程之后，"with the help of Mr Claude"建成了"this family tree of software job titles, from the 1940s to now"。共 **104 个职位**，"from 'Computer' (a person, not a machine) at the top to 'AI Agent / Context Engineer' at the bottom"，按五年一行排布、分七个彩色家族列（开发；分析、架构与领导力；运维；网络与安全；数据与 AI；质量与测试；支持）。实线箭头表示职位由父节点长出，虚线表示影响或常见跳槽路径；每个节点都链到一段文字史。整个项目是一个 Graphviz 文件加一个 JSON 描述文件，渲染成可点击的网站。
+
+**Why it matters:** 这棵树把行业的头衔更迭呈现为谱系而非时尚——而它的终点正是本栏目的报道对象：最新的节点是给 agent 写上下文的工作，它在 1940 年叫"程序员"，2005 年叫"构建工程师"，一直在换名字，工作没换。
+
+[`🔗 zwischenzugs：A Family Tree of Software Job Titles`](https://zwischenzugs.com/2026/11/03/a-family-tree-of-software-job-titles/) · [`🔗 交互式家谱`](https://ianmiell.github.io/sw-job-title-family-tree/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50499038)
+
+---
+
+## 42. Apache Shiro 今天发布 9.1 漏洞：LDAP 认证缓存在首次登录后接受任意密码——修复版 3.0.1 八月就有了
+
+- **Velocity:** ▮ steady
+- **Source:** CVE-2026-129349 (Apache CNA-assigned) · record published 1.8h ago (~18:16 UTC+8)
+- **Tags:** `shiro` `cve` `ldap` `authentication`
+
+**CVE-2026-129349**（CVSS **4.0** 9.1，`security@apache.org` CNA 评分；NVD `Received`，记录发布于 2026-11-15T10:16:53Z）："When authentication caching is enabled on DefaultLdapRealm, after a user logs in successfully once, subsequent logins for that user succeed with **any password**." 机制与字面一致：缓存的认证跳过 LDAP bind，而 `DefaultLdapRealm` 默认安装的 `AllowAllCredentialsMatcher` 接受任何凭据——于是任何知道有效用户名的人都能以该用户身份认证。受影响范围是 **3.0.1 之前**的一切；关键在时间线：3.0.1 于 **8 月 23 日**发布（3.0.2 随后于 11 月 8 日），修复已存在十二周，而公开此漏洞的记录今天才落地——且该缺陷要求 opt-in 的认证缓存设置处于开启状态。
+
+**Why it matters:** 一条记录里装着两个教训：缓存认证决策的强度取决于你连同缓存的是哪个匹配器（跳过 bind 的缓存命中绝不能再跳过凭据校验）；而"刚发布的 CVE"标题需要做发布时间线核查——这里升级建议八月起就躺在 releases 页面里，今天发布的只是*知晓*。
+
+[`🔗 CVE-2026-129349 记录`](https://www.cve.org/CVERecord?id=CVE-2026-129349) · [`🔗 Apache Shiro releases (3.0.1 / 3.0.2)`](https://github.com/apache/shiro/releases)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-15T04:35:23Z |
-| Items | 31 |
-| Sources tracked | 29 (Hacker News, GitHub Trending, Google Research, NVIDIA, PyPI, Project Zero, CBC, Reuters, U-Mich, BBC, EFF, L3Harris, MITRE CVE records, npm, vendor blogs and project repos) |
+| Generated | 2026-11-15T12:24:30Z |
+| Items | 42 |
+| Sources tracked | 36 (Hacker News, GitHub Trending, Google Research, NVIDIA, PyPI, Project Zero, CBC, Reuters, U-Mich, BBC, EFF, L3Harris, MITRE CVE records, npm, LitNews, Anthropic, Hugging Face, FORGE Lab, Osservatorio Nessuno, vendor blogs and project repos) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

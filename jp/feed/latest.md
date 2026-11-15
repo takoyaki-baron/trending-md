@@ -1,8 +1,8 @@
 ---
 date: 2026-11-15
-updated: 2026-11-15T04:35:23Z
+updated: 2026-11-15T12:24:30Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 17
+sources: 36
 license: CC-BY-4.0
 ---
 
@@ -444,13 +444,167 @@ Forethought の研究ノート（11/14）は、Musk の主張——「AI を置�
 
 ---
 
+## 32. DRAM 供給カルテル集団訴訟、却下モーションが棄却——Samsung・SK Hynix・Micron は DDR5 不足について答えることに
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** litnews.ai · 221+ pts on HN · 10.8h ago (~09:18 UTC+8)
+- **Tags:** `dram` `antitrust` `memory-prices` `litigation`
+
+11 月 14 日、カリフォルニア北部地区連邦地裁の Noël Wise 判事は、Samsung・SK Hynix・Micron が「"to cut supply of conventional DRAM, such as DDR5, and shift capacity to HBM"（DDR5 など従来型 DRAM の供給を減らし、容量を HBM に振り替える）」ための共謀を狙う proposed 集団訴訟に対する共同却下モーションを**全面的に棄却**した。この Sherman 法第 1 条の主張が生き残ったのは、まさに今が 2022 年に同じ 3 社を被告にした前回のカルテル訴訟を第九巡回区が棄却した DRAM II 判例とは異なるからだ。訴状の支援的アルゴリズムは、メモリ購入者がこの数週間体験してきたことのリストになっている：HBM の長期ロックアップ、従来型 DRAM の長期契約拒否、Micron による Crucial ブランド閉鎖、ファブ遅延、記録的な価格下でも増産しなかったこと、ほぼ同一の顧客審査、そして 3 社の過去のカルテル歴。判事は原告の他の 3 つの論点（「供給規律」を語る投資家声明、業界会議での面会、3 社寡占の市場構造）には重みを与えなかった。答弁書は 2026 年 12 月 7 日が期限。
+
+**Why it matters:** このフィードは今週ずっと買い手側から DRAM 価格高騰を報じてきた（RAM Altman、Raspberry Pi の 80 ドル値上がり）。この決定は供給側の物語を法廷の証拠開示段階に進めた——被告が宣誓の下で答えねばならない主張には、長期契約の拒否や記録的価格下での増産拒否が含まれる。検証までには何年もかかるが、枠組みは確定した：従来型 DRAM の希少性は事故ではなく戦略だった可能性があるという主張だ。
+
+[`🔗 LitNews：Judge Refuses to Dismiss DRAM Supply Conspiracy Suit`](https://litnews.ai/articles/garciaguirre-samsung-sk-hynix-micron-dram-conspiracy-suit-survives-dismissal) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50502988)
+
+---
+
+## 33. Modern Web Guidance がソースを公開：オーサリング/評価リポジトリが +1,220★ で当日の GitHub 伸び率 1 位に
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending · +1,220★ today · 6.6k total
+- **Tags:** `modern-web-guidance` `agent-skills` `evals` `governance`
+
+2026-11-13 に Modern Web Guidance v1.0.0（Chrome・Edge・Firefox・MDN チームによるコーディングエージェント向けスキル）を取り上げた続き：プロジェクトの姉妹**ソースリポジトリ** `GoogleChrome/modern-web-guidance-src` が当日の GitHub Trending 最大ゲイナーになった（本日 +1,220★、計 6,555★）。コンシューマリポジトリのローンチ波からわずか 2 日後だ。README は分担を明確に語る："This repo is the source repository for GoogleChrome/modern-web-guidance and includes the code and documentation for **authoring, calibrating, and evaluating** its contents."——つまりコンシューマリポジトリの背後に隠れていた部分がすべて閲覧可能になった：ガイダンスの主張を支える評価ハーネスとダッシュボード、ベンダー横断の運営がどう機能するかを示す `GOVERNANCE.md`、Web プラットフォームの専門知識をスキルコンテンツに変換するオーサリングパイプライン。開発は活発（コミットは 11 月 14 日まで）。
+
+**Why it matters:** このフィードは繰り返し指摘してきた——agent-skills プロジェクトの死命は、そのガイダンスが測定されているか、感覚かにある。キャリブレーション/評価パイプラインの公開——しかも公開ダッシュボード付き——はその説明責任の半分であり、SKILL.md ファイルと祈りしか出さない他のスキルコレクションがほぼ持っていないものだ。急上昇はコミュニティがそれに同意している証拠だ。
+
+[`🔗 GoogleChrome/modern-web-guidance-src`](https://github.com/GoogleChrome/modern-web-guidance-src) · [`🔗 評価ダッシュボード`](https://googlechrome.github.io/modern-web-guidance-src/)
+
+---
+
+## 34. EFF：テック企業は再びプライバシーという概念そのもののすり替えを図っている——558 ポイント
+
+- **Velocity:** ▮▮ rising
+- **Source:** eff.org · 558+ pts on HN · 23.3h ago (~20:45 UTC+8, Nov 14)
+- **Tags:** `privacy` `wearables` `always-on-recording` `bystanders`
+
+Thorin Klosowski による EFF のエッセイ（11 月 13 日）は、プライバシー業界最古の話術——監視を「個人の選択」として再パッケージする——が、常時稼働の AI ハードウェアによって再演されていると論じる："Privacy, which companies were once happy to claim was all about personal choice, is now primed to affect everyone around you even more than it already did." 例として挙げられるのは思想実験ではなくすべて出荷済みの製品：Meta と Google のスマートグラスが着用者の見ているものを記録し AI が描写すること、**Apple の Audio Intelligence** がすべての Apple Watch を一日を記録・要約するデバイスに変えること、Amazon の Bee がすべてを録音・文字起こしすること。エッセイの論点は構造的だ：マイクとカメラを他人が身につけているとき、使わないことで自保するという助言はもはや従えなくなる——傍観者には設定ページがない。
+
+**Why it matters:** これは本日の項目 23 の ALPR 闘争の一般版だ。どちらも、自分が制御できないデバイスに記録されることについての話だ。ウェアラブル/アンビエント AI を開発・展開する者にとって、このエッセイは法廷で検証されようとしている同意モデルのチェックリストだ——部屋の中で権利を持つのは記録デバイスの所有者だけではない。
+
+[`🔗 EFF：Tech Companies Are Trying to Shift the Entire Concept of Privacy (Again)`](https://www.eff.org/deeplinks/2026/11/tech-companies-are-trying-shift-entire-concept-privacy-again) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50496602)
+
+---
+
+## 35. Claude Code Projects が再浮上：ゴールを記述すればコーディネーターが残りを捌く——Boris Cherny が HN の質問に直接回答
+
+- **Velocity:** ▮▮ rising
+- **Source:** claude.com · 98+ pts on HN · 35.6h ago (~08:28 UTC+8, Nov 14)
+- **Tags:** `claude-code` `orchestration` `parallel-agents` `anthropic`
+
+今週の HN の波が捉えたのは Anthropic が再設計した **Claude Code Projects**——記事自体の日付は 9 月 17 日だが、ベータ版の Claude Code への展開が今週末 98 ポイント・93 コメントを集めた理由だ。そのモデルは："Claude scopes the request, delegates the work, coordinates parallel threads, reviews the outputs, and assembles the finished result." 記事の 2 つの例：チェックアウトの p75 レイテンシ削減をゴールに設定すれば、Claude が各エンドポイントをプロファイリングし、最適化をテストし、並列スレッドで PR を開く。API・Web・モバイルのリポジトリを接続し、非推奨の v1 エンドポイントの退役をゴールにすれば、リポジトリごとにスレッドを作り、呼び出し元を移行し、テストを回し、どの PR を先にマージすべきか教えてくれる。進捗はスマホから操舵でき、PC を離れても作業は続く。スレッドでは Boris Cherny（"Projects are how I write pretty much all my code these days"）が設計の質問に直接答えた。
+
+**Why it matters:** オーケストレータ層がメインストリームのコーディングハーネス内に到達した——このフィードがサードパーティツール（LoopForge、OpenBot、herdr）で追ってきたのと同じコーディネーター・プラス・並列ワーカーの形がネイティブになった。そして予想通りの HN の反動も一緒に：あるコメント投稿者は、些細な質問に 7 つのサブエージェントが生出されて 10 分でクォータを使い果たすのを見た。
+
+[`🔗 Anthropic：Projects redesigned — from folder to conversation`](https://claude.com/resources/articles/projects-redesigned) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50492141)
+
+---
+
+## 36. Microsoft の FORGE Lab が Rust 標準ライブラリのメモリ安全性バグを発見——安全な Rust のみで未定義動作が起こるケースを、AI スキャナが見つけた
+
+- **Velocity:** ▮▮ rising
+- **Source:** forge-blog.github.io · 161+ pts on HN · 54.7h ago (~13:22 UTC+8, Nov 13)
+- **Tags:** `rust` `memory-safety` `ai-scanning` `vulnerability-research`
+
+Microsoft の FORGE Lab（Yechan Bae、11 月 9 日）は Rust の `std` と `core` に複数のメモリ安全性問題を報告した——"including cases where code written **entirely in safe Rust** can trigger undefined behavior"——同ラボの AI 脆弱性スキャナ **Hyenas**（codename MDASH の研究版）による発見で、その後再現され Rust メンテナとともに報告・修正された。記事はバグを unsafe コードにおける 3 つの誤った信頼に分類する：**コードがパニックしないと信じること**（不変条件が関数の途中でパニックに破られる）、**ユーザー提供の実装が正しいと信じること**（不正な比較器や trait 実装が unsafe コードの前提を壊す）、**根底のシステムを信じること**。具体例がひとつ：`join()`——CVE-2020-36323 の古い修正は呼び出し間で伸びる文字列をカバーしておらず、2026 年 4 月に残り長さ計算がアンダーフローしてヒープオーバーフローに至り、同じ関数が再修正を要した。一部の報告はまだ未解決のままだ。
+
+**Why it matters:** 2 つのことが同時に起きている：Rust の保証が実際にどこで漏れるかの分類学（境界は FFI ではない——パニックと、trait 実装と、OS の仮定だ）、そして「AI が本物の脆弱性を見つける」シリーズのもうひとつのデータポイント——スキャナが地上で最もレビューされたコードベースのひとつから soundness バグを見つけ、その修正は全員のコンテナが積んでいる std に展開されつつある。
+
+[`🔗 FORGE Lab：Memory Safety Bugs in Rust Standard Library`](https://forge-blog.github.io/posts/rust-std-memory-safety/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50478701)
+
+---
+
+## 37. Kiri が v0.2.1 をリリース：Apache-2.0 の Docker Desktop 代替が 8 倍速い `docker run` を主張——スレッドの懐疑論も添えて
+
+- **Velocity:** ▮▮ rising
+- **Source:** Show HN · 59+ pts · 7.4h ago (~12:40 UTC+8)
+- **Tags:** `kiri` `containers` `docker` `rust`
+
+Kiri（libracoder/kiri、Rust、Apache-2.0、11 月 2 日作成、4.7k スター、v0.2.1 は本日リリース）は、単一デーモンで Docker コンテナを走らせる Mac/Windows/Linux 向けデスクトップコンテナランタイムだ——docker CLI・Compose・Docker API はそのまま動き、"docker run takes 22 ms on Kiri and 178 ms on Docker Desktop (152 ms on Colima, 279 ms on OrbStack), every engine on 2 CPUs and 8 GB" を主張する。コンテナのほかに、イメージのビルドとスキャン、Kubernetes、Linux マシン全体の実行ができ、無料の Ngrok 代替をうたうトンネル機能を内蔵する。HN スレッドの「証拠」は主張と併読する価値がある：約 20 万行が約 2 週間で出現（コメント投稿者が AI 生成と読む em ダッシュの痕跡つき）、サイトの CPU/メモリ表はまだ "Measured numbers replace these soon" と書かれたまま、Podman 代替ページは Podman の計測なしで比較しており、8 倍とはコンテナの*起動*レイテンシであってスループットではない。
+
+**Why it matters:** Mac のコンテナランタイム枠（OrbStack/Colima/Docker Desktop）は実際に争われている位置で、単一デーモンの緩いライセンスの Rust 製新規参加者は本物のアーキテクチャ主張だ——しかし 13 日齢のプロジェクトで、看板ベンチマークはコールドスタートの数字なので、「有望、未証明」にファイリングし、約束された実測表が出てから切り替えを判断すること。
+
+[`🔗 libracoder/kiri`](https://github.com/libracoder/kiri) · [`🔗 Kiri サイトとベンチマーク`](https://runkiri.com/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50504077)
+
+---
+
+## 38. Veyra-NRVideo：+731★、キャプチャーカードの映像に GPU パイプラインで補間フレームを生成——GTA6 の見出しはマーケティング
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · +731★ today · 2.6k total
+- **Tags:** `veyra` `video-processing` `frame-generation` `upscaling`
+
+Likely7/Veyra-NRVideo（GPL-3.0、C++、9 月 9 日作成、208 fork）は本日、まだこのフィードで扱っていない中で最大の GitHub Trending の新顔だ。README の自己認識はトレンドの釣り見出しより地に足がついている："Turn local video, capture cards and game streaming into one real-time GPU enhancement pipeline"——スーパー解像度・デノイズ・HDR・フレーム生成を Windows 上で流れてくるものすべてにリアルタイムで適用し、動画ファイル・画像・キャプチャーカードソースのリアルタイムプレビューに対応。釣り見出しの「Bring PS5 GTA6 to 120FPS with DLSS 5」が意味するのは、コンソールゲームの*キャプチャされた*映像に AI 超解像とフレーム補間をかけることであって、ゲームの描画を速くすることではない。作者（@likely2002）は YouTube と Bilibili の英語・中国語チュートリアルで普及を進めている。
+
+**Why it matters:** キャプチャストリームへの外付けフレーム生成は、今や実在する製品カテゴリだ——アップグレードできないハードウェア（コンソール）で、追加レイテンシと引き換えに滑らかさを買う、エンジン内 DLSS/FSR と正反対のトレードだ。GPL-3.0 実装がバズったことは、キャプチャ系パイプラインを作るすべての人に見る価値がある。恒例の注意つき：補間フレームはモデルの推測であり、入力レイテンシがその代金を徴収する場所だ。
+
+[`🔗 Likely7/Veyra-NRVideo`](https://github.com/Likely7/Veyra-NRVideo) · [`🔗 README とチュートリアル`](https://github.com/Likely7/Veyra-NRVideo#readme)
+
+---
+
+## 39. 「Actor, Judge, or Teacher?」：行動が下手な意思決定モデルでも教えるのはうまい——ALFWorld で採点によって +10 ポイント
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2611.17167 · Hugging Face daily papers (Nov 13)
+- **Tags:** `decision-models` `agents` `rl` `research`
+
+Hugging Face のデイリーランキングを飾る論文（11 月 12 日公開）は"whether a decision model that acts poorly can still teach well"を問う。意思決定モデル——型付き出力と確率で答えるモデル。このフィードが Gemini の Decisions API や Flide のサービング層として追ってきた形だ——は通常*アクター*として評価されてきた。著者ら（Haochen Liu ら）は ALFWorld 上で 3 つの意思決定モデルと 3 つの汎用 LLM をアクターおよびジャッジとして比較し、JEV を ALFWorld と WebShop のティーチャーとして使った。発見はきれいに二分される：アクターとしては、6 モデルすべてが必須の先行サブゴールからより簡単なものへと釣られて外れる。軌跡全体を見るジャッジとしては、同じモデル群がそのサブゴールに向かうステップを正しく評価する——そして「タスクは成功するか」ではなく「*各アクションが助けになったか*」を問うことで、有用なアクションと無用なアクションを分離できる。ティーチャーとしては、JEV が Qwen2.5-1.5B のポリシーを GRPO から ALFWorld で **72.8% → 82.9%**、WebShop で **56.8% → 71.4%** へ引き上げた。解釈：エピソード終了後に判定すれば、行動時に予測していなければならない結果が見える。コードは公開済み。
+
+**Why it matters:** この論文は意思決定モデルカテゴリに、証拠つきの第 2 の仕事を与える：アクションを選ぶだけでなく、RL 訓練のためにアクションを採点すること——そのポジションでは、弱いが安い意思決定モデルが、勝てない大きなアクターを上回るかもしれない。後知恵のほうが推論が簡単だからだ。
+
+[`🔗 arXiv 2611.17167：Actor, Judge, or Teacher?`](https://arxiv.org/abs/2611.17167) · [`🔗 コード：ZJU-REAL/decision-agents`](https://github.com/ZJU-REAL/decision-agents)
+
+---
+
+## 40. スマホ解錠ツールの解剖：Cellebrite 級フォレンジックは「魔法ではない」——監視研究団体の技術概説が再浮上
+
+- **Velocity:** ▮ steady
+- **Source:** osservatorionessuno.org · 114+ pts on HN · 21.3h ago (~22:44 UTC+8, Nov 14)
+- **Tags:** `cellebrite` `forensics` `android` `surveillance`
+
+Osservatorio Nessuno の技術概説（5 月 7 日公開、今週末 114 ポイントで HN に）は、商用スマホ解錠ツールの神秘を剥ぐ："Commercial phone unlocking tools are not magic. They exploit the same classes of vulnerabilities that security researchers publish about at conferences and in academic papers." Cellebrite 級製品を特徴づけるのは"not the novelty of the techniques, but the systematic commercialization of exploitation"——ハードウェア/ソフトウェアの組み合わせごとにエクスプロイトを取得・開発し、オペレータの専門知識をほとんど要さない自動化ワークフローにパッケージすることだ。記事は、物理アクセスを持つフォレンジック検査官が辿る制約された攻撃面を地図化する——ブートチェーン、TEE（Trusted Execution Environment）、セキュアエレメント、カーネルの周辺機器ドライバスタック——主に Android の内部構造で、Quarkslab の TEE 研究と Amnesty の報道を基礎としてクレジットしている。
+
+**Why it matters:** 脱神秘化は双方向に効く：防御側に、フォレンジック業界がどの境界を商品化しているのか（次の強化予算はどこに割くべきか）を正確に伝え、訴追に常用されるツールの背後にあるエクスプロイト供給網の、得がたい公開地図を提供する——この地図を描いた団体自身が、Cellebrite のイタリアでの常態的使用を記録してきたところだ。
+
+[`🔗 Osservatorio Nessuno：Demystifying phone unlocking tools`](https://osservatorionessuno.org/blog/2026/05/demystifying-phone-unlocking-tools-a-technical-overview/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50497416)
+
+---
+
+## 41. ソフトウェア職種 104 個の系統樹、1940 年代から「AI Agent / Context Engineer」まで——Claude の助けを借りて、Graphviz ファイルひとつで
+
+- **Velocity:** ▮ steady
+- **Source:** zwischenzugs.com · 340+ pts on HN · 18.3h ago (~01:45 UTC+8)
+- **Tags:** `careers` `industry-history` `visualization` `graphviz`
+
+Ian Miell（zwischenzugs）は、自分の同じ仕事が Head of DevOps → SRE → プラットフォームエンジニアリングと名前を変えていくのを長年見たのち、"with the help of Mr Claude" で "this family tree of software job titles, from the 1940s to now" を作った。全部で **104 職種**、"from 'Computer' (a person, not a machine) at the top to 'AI Agent / Context Engineer' at the bottom"、5 年ごとの行に 7 つの色分けファミリー列（開発／分析・アーキテクチャ・リーダーシップ／運用／ネットワークとセキュリティ／データと AI／品質とテスト／サポート）で配置。実線の矢印は職種が親から生まれたことを、破線は影響や典型的な転職を意味し、各ノードは解説記事にリンクする。全体は Graphviz ファイルひとつと説明の JSON ファイルひとつで、クリック可能なサイトとしてレンダリングされている。
+
+**Why it matters:** この系統樹は、業界の肩書きの目まぐるしい変遷を流行ではなく系譜として読めるようにする——そしてその終点はこのフィードの守備範囲だ：最新のノードはエージェントのためにコンテキストを書く仕事であり、1940 年には「programmer」、2005 年には「build engineer」と呼ばれた、同じ仕事が新しい上層管理の下で名前だけ変えている。
+
+[`🔗 zwischenzugs：A Family Tree of Software Job Titles`](https://zwischenzugs.com/2026/11/03/a-family-tree-of-software-job-titles/) · [`🔗 インタラクティブな系統樹`](https://ianmiell.github.io/sw-job-title-family-tree/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50499038)
+
+---
+
+## 42. Apache Shiro が本日 9.1 を公開：LDAP 認証キャッシュが初回ログイン後に任意のパスワードを受け入れる——修正版 3.0.1 は 8 月から存在
+
+- **Velocity:** ▮ steady
+- **Source:** CVE-2026-129349 (Apache CNA-assigned) · record published 1.8h ago (~18:16 UTC+8)
+- **Tags:** `shiro` `cve` `ldap` `authentication`
+
+**CVE-2026-129349**（CVSS **4.0** 9.1、`security@apache.org` による CNA 採点；NVD `Received`、レコード公開 2026-11-15T10:16:53Z）："When authentication caching is enabled on DefaultLdapRealm, after a user logs in successfully once, subsequent logins for that user succeed with **any password**." メカニズムは文字どおりだ：キャッシュされた認証は LDAP バインドをスキップし、`DefaultLdapRealm` がデフォルトでインストールする `AllowAllCredentialsMatcher` は任意の資格情報を受け入れる——有効なユーザー名を知っている者は誰でもそのユーザーとして認証できる。影響範囲は **3.0.1 未満**のすべて。問題はタイミングだ：3.0.1 は **8 月 23 日**にリリース済み（3.0.2 は 11 月 8 日に後続）で、修正は 12 週間存在していたのに、脆弱性を公開するレコードは今日ようやく着地した——しかもこの欠陥はオプトインの認証キャッシュ設定が有効であることを要する。
+
+**Why it matters:** ひとつのレコードに 2 つの教訓：認証判断のキャッシュは、キャッシュしたマッチャーと同じ強度しかない（バインドをスキップするキャッシュヒットが資格情報の検証までスキップしてはならない）。そして「出たばかりの CVE」という見出しにはリリースタイムラインの確認が要る——ここではアップグレードの助言が 8 月から releases ページに転がっていて、今日出荷されたのは*認知*のほうだった。
+
+[`🔗 CVE-2026-129349 レコード`](https://www.cve.org/CVERecord?id=CVE-2026-129349) · [`🔗 Apache Shiro releases (3.0.1 / 3.0.2)`](https://github.com/apache/shiro/releases)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-15T04:35:23Z |
-| Items | 31 |
-| Sources tracked | 29 (Hacker News, GitHub Trending, Google Research, NVIDIA, PyPI, Project Zero, CBC, Reuters, U-Mich, BBC, EFF, L3Harris, MITRE CVE records, npm, vendor blogs and project repos) |
+| Generated | 2026-11-15T12:24:30Z |
+| Items | 42 |
+| Sources tracked | 36 (Hacker News, GitHub Trending, Google Research, NVIDIA, PyPI, Project Zero, CBC, Reuters, U-Mich, BBC, EFF, L3Harris, MITRE CVE records, npm, LitNews, Anthropic, Hugging Face, FORGE Lab, Osservatorio Nessuno, vendor blogs and project repos) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

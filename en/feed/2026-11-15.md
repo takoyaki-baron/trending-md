@@ -1,8 +1,8 @@
 ---
 date: 2026-11-15
-updated: 2026-11-15T04:35:23Z
+updated: 2026-11-15T12:24:30Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 29
+sources: 36
 license: CC-BY-4.0
 ---
 
@@ -444,13 +444,167 @@ Forethought's research note (Nov 14) takes Musk's claim — "the lowest-cost pla
 
 ---
 
+## 32. Judge refuses to dismiss the DRAM supply-conspiracy suit — Samsung, SK hynix and Micron will answer for the DDR5 shortage
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** litnews.ai · 221+ pts on HN · 10.8h ago (~09:18 UTC+8)
+- **Tags:** `dram` `antitrust` `memory-prices` `litigation`
+
+On Nov 14, U.S. District Judge Noël Wise (N.D. Cal.) **denied in full** the joint motion to dismiss a proposed class action accusing Samsung, SK hynix and Micron of conspiring "to cut supply of conventional DRAM, such as DDR5, and shift capacity to HBM" — a Sherman Act §1 claim that survives precisely because this moment is different from DRAM II, the Ninth Circuit's 2022 affirmance dismissing the earlier conspiracy suit against the same three companies. The complaint's supporting allegations are a list of what memory buyers have been living through: long-term HBM lock-ups, refusals of long-term conventional-DRAM contracts, Micron's Crucial brand closure, fab delays, failure to expand capacity despite record prices, near-identical customer vetting, and the companies' prior cartel history. The judge gave no weight to three other plaintiff arguments (investor statements about "supply discipline", industry-conference meetings, and the three-company market structure). Answers are due Dec 7, 2026.
+
+**Why it matters:** This feed has covered the DRAM price spike from the buyer's side all week (RAM Altman, the $80 Raspberry Pi jump); this order is the supply-side story entering court discovery — the allegations the defendants must now answer under oath include refusing long-term contracts and not expanding into record prices. Whether discovery validates them is years away, but the frame is set: conventional-DRAM scarcity as an alleged strategy, not an accident.
+
+[`🔗 LitNews: Judge Refuses to Dismiss DRAM Supply Conspiracy Suit`](https://litnews.ai/articles/garciaguirre-samsung-sk-hynix-micron-dram-conspiracy-suit-survives-dismissal) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50502988)
+
+---
+
+## 33. Modern Web Guidance opens its source: the authoring/eval repo is the day's biggest GitHub gainer at +1,220★
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub Trending · +1,220★ today · 6.6k total
+- **Tags:** `modern-web-guidance` `agent-skills` `evals` `governance`
+
+Since we covered Modern Web Guidance v1.0.0 on 2026-11-13 (Chrome, Edge, Firefox and MDN's skill for coding agents): the project's companion **source repository** — `GoogleChrome/modern-web-guidance-src` — is now the day's biggest GitHub Trending gainer (+1,220★ today, 6,555 total), two days after the consumer-repo launch wave. Its README states the split plainly: "This repo is the source repository for GoogleChrome/modern-web-guidance and includes the code and documentation for **authoring, calibrating, and evaluating** its contents." That means the parts the consumer repo hides are now browsable: the eval harness and dashboard behind the guidance claims, `GOVERNANCE.md` for how the cross-vendor stewardship works, and the authoring pipeline that turns web-platform expertise into skill content. Development is active (commits through Nov 14).
+
+**Why it matters:** The feed keeps noting that agent-skills projects live or die on whether their guidance is measured or vibes; publishing the calibration/eval pipeline — with a public dashboard — is the accountability half of that, and it is the part other skill collections (which ship SKILL.md files and a prayer) mostly don't have. The spike suggests the community agrees.
+
+[`🔗 GoogleChrome/modern-web-guidance-src`](https://github.com/GoogleChrome/modern-web-guidance-src) · [`🔗 Eval dashboard`](https://googlechrome.github.io/modern-web-guidance-src/)
+
+---
+
+## 34. EFF: tech companies are trying to shift the entire concept of privacy (again) — 558 points
+
+- **Velocity:** ▮▮ rising
+- **Source:** eff.org · 558+ pts on HN · 23.3h ago (~20:45 UTC+8, Nov 14)
+- **Tags:** `privacy` `wearables` `always-on-recording` `bystanders`
+
+Thorin Klosowski's EFF essay (Nov 13) argues the privacy industry's oldest move — reframing surveillance as *personal choice* — is being rerun by always-on AI hardware: "Privacy, which companies were once happy to claim was all about personal choice, is now primed to affect everyone around you even more than it already did." The examples are all shipping products, not thought experiments: Meta's and Google's smart glasses recording whatever the wearer looks at, with AI describing it; **Apple's Audio Intelligence** turning every Apple Watch into a device that records or summarizes your day; Amazon's Bee capturing and transcribing everything. The essay's point is structural: when the microphone and camera are worn by someone else, the advice to simply not use the product stops being something you can follow — the bystander has no settings page.
+
+**Why it matters:** This is the general-case version of the ALPR fight already in today's feed (item 23): both are about being recorded by a device you don't control. For anyone building or deploying wearable/ambient AI, the essay is a checklist of the consent model that is about to be litigated — the recording device's owner is not the only party with rights in the room.
+
+[`🔗 EFF: Tech Companies Are Trying to Shift the Entire Concept of Privacy (Again)`](https://www.eff.org/deeplinks/2026/11/tech-companies-are-trying-shift-entire-concept-privacy-again) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50496602)
+
+---
+
+## 35. Claude Code Projects, resurfaced: describe the goal, a coordinator threads the rest — and Boris Cherny answered HN's questions
+
+- **Velocity:** ▮▮ rising
+- **Source:** claude.com · 98+ pts on HN · 35.6h ago (~08:28 UTC+8, Nov 14)
+- **Tags:** `claude-code` `orchestration` `parallel-agents` `anthropic`
+
+The HN wave this week caught Anthropic's redesigned **Claude Code Projects** — the article itself dates to September 17, but the beta-in-Claude-Code rollout is what got 98 points and 93 comments this weekend. The model: "Claude scopes the request, delegates the work, coordinates parallel threads, reviews the outputs, and assembles the finished result." Two examples from the article: set a goal to cut checkout p75 latency and Claude profiles each endpoint, tests optimizations and opens PRs in parallel threads; connect API, web and mobile repos with a goal to retire a deprecated v1 endpoint, and it creates a thread per repo, migrates callers, runs tests, and tells you which PRs must merge first. Progress is steerable from your phone and work continues after you step away. In the thread, Boris Cherny ("Projects are how I write pretty much all my code these days") answered design questions directly.
+
+**Why it matters:** This is the orchestrator layer arriving inside a mainstream coding harness — the same coordinator-plus-parallel-workers shape the feed has tracked in third-party tools (LoopForge, OpenBot, herdr), now native, with the predictable HN pushback about usage burn: one commenter watched a trivial question spawn seven sub-agents and drain their quota in ten minutes.
+
+[`🔗 Anthropic: Projects redesigned — from folder to conversation`](https://claude.com/resources/articles/projects-redesigned) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50492141)
+
+---
+
+## 36. Microsoft's FORGE Lab finds memory-safety bugs in Rust's standard library — safe Rust hitting undefined behavior, found by an AI scanner
+
+- **Velocity:** ▮▮ rising
+- **Source:** forge-blog.github.io · 161+ pts on HN · 54.7h ago (~13:22 UTC+8, Nov 13)
+- **Tags:** `rust` `memory-safety` `ai-scanning` `vulnerability-research`
+
+Microsoft's FORGE Lab (Yechan Bae, Nov 9) reports several memory-safety issues in Rust's `std` and `core` — "including cases where code written **entirely in safe Rust** can trigger undefined behavior" — found with **Hyenas**, the lab's AI-powered vulnerability scanner (a research version of codename MDASH), then reproduced and reported with Rust maintainers. The post organizes the bugs into three patterns of misplaced trust in unsafe code: **trusting code not to panic** (invariants broken mid-function when a panic unwinds through), **trusting user-provided implementations to be correct** (a misbehaving comparator or trait impl corrupting unsafe code's assumptions), and **trusting the underlying system**. One concrete case: `join()` — CVE-2020-36323's old fix never covered strings that grow between calls, and in April 2026 the same function needed another fix when the remaining-length calculation underflowed into a heap overflow. Some reports remain open.
+
+**Why it matters:** Two things at once: a taxonomy of where Rust's guarantees actually leak (the boundary isn't FFI — it's panics, trait impls, and OS assumptions), and another data point in the AI-finds-real-vulns series — the scanner found soundness bugs in one of the most-reviewed codebases on earth, and the fixes are landing in the std everyone's containers ship.
+
+[`🔗 FORGE Lab: Memory Safety Bugs in Rust Standard Library`](https://forge-blog.github.io/posts/rust-std-memory-safety/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50478701)
+
+---
+
+## 37. Kiri launches v0.2.1: an Apache-2.0 Docker Desktop alternative claiming 8× faster `docker run` — with the thread's skepticism included
+
+- **Velocity:** ▮▮ rising
+- **Source:** Show HN · 59+ pts · 7.4h ago (~12:40 UTC+8)
+- **Tags:** `kiri` `containers` `docker` `rust`
+
+Kiri (libracoder/kiri, Rust, Apache-2.0, created Nov 2, 4.7k stars, v0.2.1 released today) is a desktop container runtime for Mac/Windows/Linux that runs Docker containers with one daemon — docker CLI, Compose and the Docker API work unchanged — and claims "docker run takes 22 ms on Kiri and 178 ms on Docker Desktop (152 ms on Colima, 279 ms on OrbStack), every engine on 2 CPUs and 8 GB." Beyond containers it builds and scans images, runs Kubernetes, whole Linux machines, and ships built-in tunneling pitched as a free Ngrok alternative. The HN thread's receipts are worth reading alongside the claims: ~200k lines materialized in about two weeks (with the em-dash tells commenters read as AI-generated), the site's CPU/memory table still says "Measured numbers replace these soon," its Podman-alternative page compares without Podman timings, and the 8× is container *start* latency, not throughput.
+
+**Why it matters:** The Mac container-runtime slot (OrbStack/Colima/Docker Desktop) is genuinely contested and a permissive-licensed Rust entrant with one daemon is a real architecture claim — but this is a 13-day-old project whose headline benchmark is a cold-start number, so file it under "promising, unproven," and wait for the promised measured tables before any switch decision.
+
+[`🔗 libracoder/kiri`](https://github.com/libracoder/kiri) · [`🔗 Kiri site & benchmarks`](https://runkiri.com/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50504077)
+
+---
+
+## 38. Veyra-NRVideo: +731★ for a GPU pipeline that frame-generates your capture card's feed — the GTA6 headline is the marketing
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · +731★ today · 2.6k total
+- **Tags:** `veyra` `video-processing` `frame-generation` `upscaling`
+
+Likely7/Veyra-NRVideo (GPL-3.0, C++, created Sep 9, 208 forks) is today's biggest new GitHub Trending entry not yet covered here. The README's own framing is more grounded than its trending hook: "Turn local video, capture cards and game streaming into one real-time GPU enhancement pipeline" — super resolution, denoising, HDR, and frame generation applied in real time on Windows to whatever flows through it, with real-time preview for video files, images and capture-card sources. The clickbait title — "Bring PS5 GTA6 to 120FPS with DLSS 5" — describes enhancing the *captured feed* of a console game with AI upscaling and frame interpolation, not making the game render faster; the creator (@likely2002) drives adoption through YouTube and Bilibili tutorials, in English and Chinese.
+
+**Why it matters:** External frame generation on a captured stream is a real product category now — it trades added latency for smoothness on hardware you can't upgrade (consoles), which is the opposite trade from in-engine DLSS/FSR. A GPL-3.0 implementation going viral is worth a look for anyone building capture-based pipelines, with the standing caveat: interpolated frames are the model's guess, and input latency is where it collects.
+
+[`🔗 Likely7/Veyra-NRVideo`](https://github.com/Likely7/Veyra-NRVideo) · [`🔗 README & tutorials`](https://github.com/Likely7/Veyra-NRVideo#readme)
+
+---
+
+## 39. "Actor, Judge, or Teacher?": a decision model that acts poorly can still teach well — +10 points on ALFWorld by grading, not acting
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2611.17167 · Hugging Face daily papers (Nov 13)
+- **Tags:** `decision-models` `agents` `rl` `research`
+
+A paper topping the Hugging Face daily list (published Nov 12) asks "whether a decision model that acts poorly can still teach well." Decision models — models that answer with typed output plus probabilities, the shape this feed has tracked as Gemini's Decisions API and Flide's serving layer — are usually judged as *actors*. The authors (Haochen Liu et al.) compare three decision models and three general LLMs as actors and judges on ALFWorld, and use JEV as a teacher on ALFWorld and WebShop. The findings are cleanly split: as actors, all six models get lured off a must-come-first subgoal by an easier one; as judges seeing whole trajectories, the same models correctly credit the steps toward that subgoal — and asking whether *each action helped*, rather than whether the task will succeed, separates useful actions from useless ones. As a teacher, JEV lifts a Qwen2.5-1.5B policy over GRPO from **72.8% to 82.9%** on ALFWorld and **56.8% to 71.4%** on WebShop. The interpretation: judging after the episode ends reveals consequences that acting must anticipate. Code is public.
+
+**Why it matters:** It gives the decision-model category a second job with evidence behind it: not just choosing actions but grading them for RL training — where a weak-but-cheap decision model may outperform the big actor it cannot match, because hindsight is the easier inference.
+
+[`🔗 arXiv 2611.17167: Actor, Judge, or Teacher?`](https://arxiv.org/abs/2611.17167) · [`🔗 Code: ZJU-REAL/decision-agents`](https://github.com/ZJU-REAL/decision-agents)
+
+---
+
+## 40. Demystifying phone unlocking tools: Cellebrite-class forensics are "not magic" — a surveillance-research group's technical overview resurfaces
+
+- **Velocity:** ▮ steady
+- **Source:** osservatorionessuno.org · 114+ pts on HN · 21.3h ago (~22:44 UTC+8, Nov 14)
+- **Tags:** `cellebrite` `forensics` `android` `surveillance**
+
+Osservatorio Nessuno's technical overview (published May 7, fronted HN this weekend at 114 points) takes the mystery out of commercial phone-unlocking tools: "Commercial phone unlocking tools are not magic. They exploit the same classes of vulnerabilities that security researchers publish about at conferences and in academic papers." What makes Cellebrite-class products distinctive is "not the novelty of the techniques, but the systematic commercialization of exploitation" — acquiring or developing exploits for each hardware/software combination and packaging them into automated workflows that require minimal operator expertise. The post maps the constrained attack surfaces an examiner with physical access works through — the boot chain, the trusted execution environment, the secure element, and the kernel's peripheral-driver stack — mostly via Android internals, crediting Quarkslab's TEE research and Amnesty's reporting as foundations.
+
+**Why it matters:** The demystification cuts both ways: it tells defenders exactly which boundaries the forensic industry monetizes (and where the next hardening dollar goes), and it is a rare public mapping of the exploit-supply chain behind the tools that routinely appear in prosecutions — from a group that has documented Cellebrite's routine use in Italy specifically.
+
+[`🔗 Osservatorio Nessuno: Demystifying phone unlocking tools`](https://osservatorionessuno.org/blog/2026/05/demystifying-phone-unlocking-tools-a-technical-overview/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50497416)
+
+---
+
+## 41. A family tree of 104 software job titles, 1940s to "AI Agent / Context Engineer" — built with Claude's help, one Graphviz file
+
+- **Velocity:** ▮ steady
+- **Source:** zwischenzugs.com · 340+ pts on HN · 18.3h ago (~01:45 UTC+8)
+- **Tags:** `careers` `industry-history` `visualization` `graphviz`
+
+Ian Miell (zwischenzugs) built "this family tree of software job titles, from the 1940s to now" — "with the help of Mr Claude," he notes — after watching his own work be renamed Head of DevOps → SRE → platform engineering over the years. There are **104 titles**, "from 'Computer' (a person, not a machine) at the top to 'AI Agent / Context Engineer' at the bottom," laid out in five-year rows across seven colored family columns (development; analysis, architecture and leadership; operations; networks and security; data and AI; quality and test; support). Solid arrows mean a title grew out of its parent; dashed ones mean influence or a common career move; each node links to a written history. The whole thing is one Graphviz file plus one JSON file of descriptions, rendered as a clickable site.
+
+**Why it matters:** The tree makes the industry's title churn legible as lineages rather than fashion — and its endpoint is this feed's beat: the newest node is the job of writing context for agents, which in 1940 was called "programmer," in 2005 "build engineer," and keeps being the same work under new management.
+
+[`🔗 zwischenzugs: A Family Tree of Software Job Titles`](https://zwischenzugs.com/2026/11/03/a-family-tree-of-software-job-titles/) · [`🔗 Interactive tree`](https://ianmiell.github.io/sw-job-title-family-tree/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50499038)
+
+---
+
+## 42. Apache Shiro ships a 9.1 today: LDAP auth caching accepts any password after the first login — fixed in 3.0.1 since August
+
+- **Velocity:** ▮ steady
+- **Source:** CVE-2026-129349 (Apache CNA-assigned) · record published 1.8h ago (~18:16 UTC+8)
+- **Tags:** `shiro` `cve` `ldap` `authentication`
+
+**CVE-2026-129349** (CVSS **4.0** 9.1, CNA-assigned by `security@apache.org`; NVD `Received`, published 2026-11-15T10:16:53Z): "When authentication caching is enabled on DefaultLdapRealm, after a user logs in successfully once, subsequent logins for that user succeed with **any password**." The mechanism is exactly what it says: the cached authentication skips the LDAP bind, and the `AllowAllCredentialsMatcher` installed by default in `DefaultLdapRealm` accepts any credentials — so anyone who knows a valid username authenticates as that user. Affected is everything **before 3.0.1**; the catch is timing: 3.0.1 shipped **Aug 23** (3.0.2 followed Nov 8), so the fix has existed for twelve weeks while the record publishing the vulnerability landed only today — and the flaw requires the opt-in authentication-cache setting to be on.
+
+**Why it matters:** Two lessons in one record: caching an authentication decision is only as strong as the matcher you cached it with (a cache hit that skips the bind must not also skip credential verification), and "just released CVE" headlines need the release-timeline check — here the upgrade advice has been sitting in the releases page since August; the *awareness* is what shipped today.
+
+[`🔗 CVE-2026-129349 record`](https://www.cve.org/CVERecord?id=CVE-2026-129349) · [`🔗 Apache Shiro releases (3.0.1 / 3.0.2)`](https://github.com/apache/shiro/releases)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-15T04:35:23Z |
-| Items | 31 |
-| Sources tracked | 29 (Hacker News, GitHub Trending, Google Research, NVIDIA, PyPI, Project Zero, CBC, Reuters, U-Mich, BBC, EFF, L3Harris, MITRE CVE records, npm, vendor blogs and project repos) |
+| Generated | 2026-11-15T12:24:30Z |
+| Items | 42 |
+| Sources tracked | 36 (Hacker News, GitHub Trending, Google Research, NVIDIA, PyPI, Project Zero, CBC, Reuters, U-Mich, BBC, EFF, L3Harris, MITRE CVE records, npm, LitNews, Anthropic, Hugging Face, FORGE Lab, Osservatorio Nessuno, vendor blogs and project repos) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

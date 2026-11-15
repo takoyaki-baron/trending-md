@@ -1,9 +1,9 @@
 {
- "generated": "2026-11-15T04:35:49.029Z",
+ "generated": "2026-11-15T12:24:45.890Z",
  "files": [
   {
    "file": "2026-11-15.md",
-   "items": 31,
+   "items": 42,
    "findings": [
     {
      "check": "cvss",
@@ -41,53 +41,74 @@
      "detail": "Received (lastModified 2026-11-14T07:17:21.370)"
     },
     {
+     "check": "cvss",
+     "item": 42,
+     "verdict": "ok",
+     "claim": "4.0 9.1",
+     "detail": "CVE-2026-129349 · Secondary/security@apache.org"
+    },
+    {
+     "check": "status",
+     "item": 42,
+     "verdict": "ok",
+     "claim": "CVE-2026-129349 `Received`",
+     "detail": "Received (lastModified 2026-11-15T10:16:53.020)"
+    },
+    {
+     "check": "date",
+     "item": 42,
+     "verdict": "ok",
+     "claim": "CVE-2026-129349 published 2026-11-15",
+     "detail": "NVD published 2026-11-15T10:16:53.020 (2026-11-15 UTC) · cveawg datePublished 2026-11-15T09:31:50.485Z (2026-11-15 UTC) — the two clocks differ; 2026-11-15 is the NVD published day"
+    },
+    {
      "check": "repo",
      "item": 3,
      "verdict": "ok",
      "claim": "dream-num/univer",
-     "detail": "25010★, last push 2026-11-15"
+     "detail": "25216★, last push 2026-11-15"
     },
     {
      "check": "repo",
      "item": 9,
      "verdict": "ok",
      "claim": "JuliusBrussee/caveman",
-     "detail": "120130★, last push 2026-11-14"
+     "detail": "120314★, last push 2026-11-15"
     },
     {
      "check": "repo",
      "item": 13,
      "verdict": "star-surge",
-     "claim": "122 quoted vs 190 now",
-     "detail": "paul-nameless/agweb: 122 → 190 (+36%, 68 stars) since the batch was written on a 3-day-old record (launch window) — a rising count is not a wrong one; date the reading if the number will be re-used"
+     "claim": "122 quoted vs 209 now",
+     "detail": "paul-nameless/agweb: 122 → 209 (+42%, 87 stars) since the batch was written on a 4-day-old record (launch window) — a rising count is not a wrong one; date the reading if the number will be re-used"
     },
     {
      "check": "repo",
      "item": 13,
      "verdict": "ok",
      "claim": "paul-nameless/agweb",
-     "detail": "190★, last push 2026-11-14"
+     "detail": "209★, last push 2026-11-14"
     },
     {
      "check": "repo",
      "item": 14,
      "verdict": "star-surge",
-     "claim": "17 quoted vs 31 now",
-     "detail": "FURSOY/fursoy-cpu: 17 → 31 (+45%, 14 stars) since the batch was written — a rising count is not a wrong one; date the reading if the number will be re-used"
+     "claim": "17 quoted vs 35 now",
+     "detail": "FURSOY/fursoy-cpu: 17 → 35 (+51%, 18 stars) since the batch was written — a rising count is not a wrong one; date the reading if the number will be re-used"
     },
     {
      "check": "repo",
      "item": 14,
      "verdict": "ok",
      "claim": "FURSOY/fursoy-cpu",
-     "detail": "31★, last push 2026-11-14"
+     "detail": "35★, last push 2026-11-15"
     },
     {
      "check": "repo",
      "item": 15,
      "verdict": "stale-disclosed",
      "claim": "IRS-Public/direct-file",
-     "detail": "last push 2026-06-11 (156d) with 4708 stars — the item states the state itself (“archived”), so the staleness is the story rather than an unexamined number"
+     "detail": "last push 2026-06-11 (157d) with 4720 stars — the item states the state itself (“archived”), so the staleness is the story rather than an unexamined number"
     },
     {
      "check": "quotation",
@@ -155,23 +176,9 @@
     {
      "check": "quotation",
      "item": 25,
-     "verdict": "quote-not-read",
-     "claim": "“you write your instructions on the right side of the page you write the addresses over on the le…”",
-     "detail": "20 words, 0 hits in 1 readable source(s), but 1 cited page(s) went unread — unread is not absent, so this is not called a fabrication; open those page(s) before publishing"
-    },
-    {
-     "check": "quotation",
-     "item": 25,
-     "verdict": "quote-not-read",
-     "claim": "“the basic which we shipped with the first apple iis was never assembled ever there was one handw…”",
-     "detail": "24 words, 0 hits in 1 readable source(s), but 1 cited page(s) went unread — unread is not absent, so this is not called a fabrication; open those page(s) before publishing"
-    },
-    {
-     "check": "quotation",
-     "item": 25,
      "verdict": "ok",
-     "claim": "1 quotation(s)",
-     "detail": "verbatim in 1 readable source(s)"
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
     },
     {
      "check": "quotation",
@@ -202,6 +209,83 @@
      "detail": "verbatim in 2 readable source(s)"
     },
     {
+     "check": "quotation",
+     "item": 32,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 33,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 34,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 35,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 36,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 4 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 37,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 38,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 1 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 39,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 40,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 41,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 42,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 4 readable source(s)"
+    },
+    {
      "check": "attribution",
      "item": 17,
      "verdict": "attribution-page-verified",
@@ -211,9 +295,9 @@
     {
      "check": "attribution",
      "item": 26,
-     "verdict": "attribution-uncited",
+     "verdict": "attribution-label-verified",
      "claim": "Schaumann",
-     "detail": "a quotation is attributed to Schaumann (“as good as I am,”), but no cited URL names the party — a quotation ABOUT a party is a claim about THAT party's bytes, and the cited page can be a second-hand copy whose figures the party has since corrected (the 11-12 item-41 lesson: the essay quoted the earlier version of Aaronson's dump post). Open Schaumann's primary artifact before publishing, or drop the quotation marks"
+     "detail": "a quotation is attributed to Schaumann (“as good as I am,”) and the item cites the party's own artifact under a link label that carries the party's name — the label is the same assertion the URL arm trusts a domain string for, one register stronger (it names the party AND points at the artifact), so the cited page is not a second-hand copy of the party's artifact but the artifact itself"
     },
     {
      "check": "attribution",
@@ -228,7 +312,7 @@
  "status_watch": [],
  "api_calls": 0,
  "readme_calls": 0,
- "cited_page_calls": 3,
+ "cited_page_calls": 0,
  "repo_page_calls": 0,
  "nvd_calls": 1,
  "nvd_failed_chunks": 0,
