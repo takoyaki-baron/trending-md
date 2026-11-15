@@ -1,0 +1,208 @@
+{
+ "generated": "2026-11-15T20:44:53.406Z",
+ "files": [
+  {
+   "file": "2026-11-16.md",
+   "items": 19,
+   "findings": [
+    {
+     "check": "cvss",
+     "item": 5,
+     "verdict": "ok",
+     "claim": "3.1 9.1",
+     "detail": "CVE-2026-129483 · Primary/disclosure@vulncheck.com · vector reproduces 9.1"
+    },
+    {
+     "check": "status",
+     "item": 5,
+     "verdict": "ok",
+     "claim": "CVE-2026-129483 `Received`",
+     "detail": "Received (lastModified 2026-11-15T14:17:27.530)"
+    },
+    {
+     "check": "date",
+     "item": 5,
+     "verdict": "ok",
+     "claim": "CVE-2026-129483 published 2026-11-15",
+     "detail": "NVD published 2026-11-15T14:17:27.530 (2026-11-15 UTC) · cveawg datePublished 2026-11-15T13:47:23.552Z (2026-11-15 UTC) — the two clocks differ; 2026-11-15 is the NVD published day"
+    },
+    {
+     "check": "temporal",
+     "item": 16,
+     "verdict": "temporal-disclosed",
+     "claim": "CVE-2026-129449 · CNA 9.9 / base 9.9 / full 8.9",
+     "detail": "the item names a stopping point — silent, because the prose already lets the reader tell which number it read"
+    },
+    {
+     "check": "temporal",
+     "item": 16,
+     "verdict": "temporal-disclosed",
+     "claim": "CVE-2026-129452 · CNA 9.1 / base 9.1 / full 8.2",
+     "detail": "the item names a stopping point — silent, because the prose already lets the reader tell which number it read"
+    },
+    {
+     "check": "temporal",
+     "item": 16,
+     "verdict": "temporal-disclosed",
+     "claim": "CVE-2026-129450 · CNA 9.9 / base 9.9 / full 8.9",
+     "detail": "the item names a stopping point — silent, because the prose already lets the reader tell which number it read"
+    },
+    {
+     "check": "temporal",
+     "item": 16,
+     "verdict": "temporal-disclosed",
+     "claim": "CVE-2026-129451 · CNA 9.9 / base 9.9 / full 8.9",
+     "detail": "the item names a stopping point — silent, because the prose already lets the reader tell which number it read"
+    },
+    {
+     "check": "temporal",
+     "item": 16,
+     "verdict": "temporal-disclosed",
+     "claim": "CVE-2026-129453 · CNA 9.9 / base 9.9 / full 8.9",
+     "detail": "the item names a stopping point — silent, because the prose already lets the reader tell which number it read"
+    },
+    {
+     "check": "repo",
+     "item": 1,
+     "verdict": "star-surge",
+     "claim": "13700 quoted vs 28750 now",
+     "detail": "meta/astryx: 13700 → 28750 (+52%, 15050 stars) since the batch was written — a rising count is not a wrong one; date the reading if the number will be re-used"
+    },
+    {
+     "check": "repo",
+     "item": 1,
+     "verdict": "ok",
+     "claim": "meta/astryx",
+     "detail": "28750★, last push 2026-11-15"
+    },
+    {
+     "check": "repo",
+     "item": 6,
+     "verdict": "star-surge",
+     "claim": "5500 quoted vs 19664 now",
+     "detail": "google/elephant-goldfish-model: 5500 → 19664 (+72%, 14164 stars) since the batch was written — a rising count is not a wrong one; date the reading if the number will be re-used"
+    },
+    {
+     "check": "repo",
+     "item": 6,
+     "verdict": "ok",
+     "claim": "google/elephant-goldfish-model",
+     "detail": "19664★, last push 2026-11-15"
+    },
+    {
+     "check": "repo",
+     "item": 9,
+     "verdict": "stale-disclosed",
+     "claim": "google-labs-code/stitch-skills",
+     "detail": "last push 2026-08-17 (90d) with 9216 stars — the item states the state itself (“no commits since”), so the staleness is the story rather than an unexamined number"
+    },
+    {
+     "check": "repo",
+     "item": 12,
+     "verdict": "stale-disclosed",
+     "claim": "lucypero/lucynes",
+     "detail": "last push 2026-05-14 (185d) with 81 stars — the item names this repo's own last-push day (2026-05-14), so the staleness is the story rather than an unexamined number"
+    },
+    {
+     "check": "repo",
+     "item": 15,
+     "verdict": "ok",
+     "claim": "matheuzgomes/gawain",
+     "detail": "41★, last push 2026-11-15"
+    },
+    {
+     "check": "count",
+     "item": 7,
+     "verdict": "ok",
+     "claim": "83 skills",
+     "detail": "README states it"
+    },
+    {
+     "check": "quotation",
+     "item": 1,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 2,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 6,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 7,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 8,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 10,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 11,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 12,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 14,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 18,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 1 readable source(s)"
+    },
+    {
+     "check": "attribution",
+     "item": 10,
+     "verdict": "attribution-satisfied",
+     "claim": "Duffy",
+     "detail": "a quotation is attributed to Duffy (“got overloaded with data”) and a cited URL carries the party's token — the quotation arm's page set reaches the party's own artifact"
+    }
+   ]
+  }
+ ],
+ "status_watch": [],
+ "api_calls": 0,
+ "readme_calls": 0,
+ "cited_page_calls": 0,
+ "repo_page_calls": 0,
+ "nvd_calls": 1,
+ "nvd_failed_chunks": 0,
+ "cna_calls": 0
+}

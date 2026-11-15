@@ -4708,6 +4708,78 @@
      "modified": "2026-11-15T10:16:53.020"
     }
    ]
+  },
+  "CVE-2026-129449": {
+   "status": "Deferred",
+   "modified": "2026-11-15T11:17:11.580",
+   "seen": "2026-11-15T20:44:50.189Z",
+   "history": [
+    {
+     "at": "2026-11-15T20:44:50.189Z",
+     "status": "Deferred",
+     "modified": "2026-11-15T11:17:11.580"
+    }
+   ]
+  },
+  "CVE-2026-129450": {
+   "status": "Deferred",
+   "modified": "2026-11-15T12:17:21.790",
+   "seen": "2026-11-15T20:44:50.189Z",
+   "history": [
+    {
+     "at": "2026-11-15T20:44:50.189Z",
+     "status": "Deferred",
+     "modified": "2026-11-15T12:17:21.790"
+    }
+   ]
+  },
+  "CVE-2026-129451": {
+   "status": "Deferred",
+   "modified": "2026-11-15T13:16:59.647",
+   "seen": "2026-11-15T20:44:50.189Z",
+   "history": [
+    {
+     "at": "2026-11-15T20:44:50.189Z",
+     "status": "Deferred",
+     "modified": "2026-11-15T13:16:59.647"
+    }
+   ]
+  },
+  "CVE-2026-129452": {
+   "status": "Deferred",
+   "modified": "2026-11-15T13:16:59.867",
+   "seen": "2026-11-15T20:44:50.189Z",
+   "history": [
+    {
+     "at": "2026-11-15T20:44:50.189Z",
+     "status": "Deferred",
+     "modified": "2026-11-15T13:16:59.867"
+    }
+   ]
+  },
+  "CVE-2026-129453": {
+   "status": "Deferred",
+   "modified": "2026-11-15T14:17:26.730",
+   "seen": "2026-11-15T20:44:50.189Z",
+   "history": [
+    {
+     "at": "2026-11-15T20:44:50.189Z",
+     "status": "Deferred",
+     "modified": "2026-11-15T14:17:26.730"
+    }
+   ]
+  },
+  "CVE-2026-129483": {
+   "status": "Received",
+   "modified": "2026-11-15T14:17:27.530",
+   "seen": "2026-11-15T20:44:50.189Z",
+   "history": [
+    {
+     "at": "2026-11-15T20:44:50.189Z",
+     "status": "Received",
+     "modified": "2026-11-15T14:17:27.530"
+    }
+   ]
   }
  },
  "_note": "vulnStatus watch (agent/tools/claim-unit-lint.mjs --status-watch). Records the one field NVD moves on its own, so a BACKWARDS move is visible rather than inferred from four timestamps by hand. Filed 2026-10-30 after CVE-2026-97229 went Analyzed → Undergoing Analysis when CISA-ADP rewrote its container 27 minutes after a KEV add. `at` is when this tool observed it; `modified` is the record's own lastModified."
