@@ -152,6 +152,18 @@ node "$REPO_DIR/agent/tools/disclosure-watch.mjs" \
   --state "$REPO_DIR/agent/data/disclosure-watch.json" 2>&1 \
   || echo "disclosure watch failed (non-fatal)"
 
+# ── Pass 6b: Ollama digest watch (standing, best-effort) ──
+# arXiv 2609.05881 ("Broken on Arrival") found 7 official Ollama tags (2.3% of the screened
+# library) solving ≤6/164 HumanEval+ tasks, all low-bit quants of ≤4B models — and the registry
+# still serves the same blobs (verified byte-identical 2026-11-16, act pass). Nobody re-tests a
+# tag a reader is told to download, so this watch makes the movement question cheap: does a
+# tested-broken blob ever change (digest-changed — ambiguous: fix OR silent re-upload), does a
+# tag vanish, and did the at-risk class grow (new ≤3-bit instruct quants of ≤4B models on the
+# three suspect lines, unscreened by the census). 10 unmetered requests; reports only movement.
+# See agent/tools/ollama-digest-watch.mjs + agent/data/ollama-digest-state.json.
+node "$REPO_DIR/agent/tools/ollama-digest-watch.mjs" --watch 2>&1 \
+  || echo "ollama digest watch failed (non-fatal)"
+
 # ── Pass 7: cited-link liveness check (standing, best-effort) ──
 # Nothing in the pipeline re-resolves a published link after the run that cited it — a 404 that
 # lands tomorrow surfaces only when a reader hits it, and CLAUDE.md's correction convention

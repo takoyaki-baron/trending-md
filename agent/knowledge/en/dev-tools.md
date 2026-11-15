@@ -2147,3 +2147,52 @@ Sources: [libracoder/kiri](https://github.com/libracoder/kiri) ·
 [Kiri site](https://runkiri.com/) ·
 [HN](https://news.ycombinator.com/item?id=50504077) ·
 [Likely7/Veyra-NRVideo](https://github.com/Likely7/Veyra-NRVideo)
+
+## 2026-11-16 — the dev machine's display measured; text-first browsing resurfaces; an emulator post-mortem; type-coverage enforcement
+
+**The MacBook Pro OLED PWM measurement** (MacAnorak, Nov 14, 301+ HN pts): the new "PROLED XDR
+Display" (tandem OLED) modulates brightness at **240 Hz** (worst case, at brightness settings of 99%
+and below) while the Mini-LED MacBook Pro it replaced ran at **14,880 Hz** — roughly **62× higher**
+(Notebookcheck lab numbers). MacRumors and Reddit threads are full of owners reporting headaches,
+dizziness and eye fatigue within hours; several are returning machines. The essay is careful where
+the discourse isn't: individual reports are not evidence the display harms everyone, frequency alone
+doesn't determine comfort, and some reported discomfort may be nano-texture related. Its ask is
+modest — Apple already ships a **Display Pulse Smoothing** accessibility toggle on OLED iPhones and
+the new iPad mini; extend it to the Mac — and its advice is to try before committing to a
+£2,899-and-up machine. The primary dev machine is bought for whole working days in front of it:
+"spectacular specs" and "usable by you" are diverging for a subset of buyers, and 240-vs-14,880 Hz is
+the first number in this debate that isn't anecdote.
+
+**Emacs Is My Browser** resurfaces (Joshua Blais, April essay, 113+ HN pts): **EWW** (`shr.el`) as
+*default* browser — a routing table more than a browser: videos to **mpv**, PDFs to **pdf-tools**,
+gopher/gemini to **Elpher**, self-hosted **SearXNG** as the search engine, `browse-url-handlers` to
+dispatch, `eww-readable` as reader mode, `&` to hand any page that fights back to Chromium. His
+numbers: "about 85-90% of use cases"; runs on his phone under Termux, real browser ~5-10% of the
+time; honest limits — no x.com, no social logins, no banking or government forms. The recurring
+lesson: defaults are policy, and the same accessibility-tree text extraction agents need is what
+`shr.el` has been doing since 2013.
+
+**lucyNES** post-mortem (Lucy; solo NES emulator in **Odin**, built April 2024–January 2025, honestly
+labeled "Finished" with partial sound; repo last push 2026-05-14 — a finished project resurfacing,
+the write-up doing the traveling, 81+ HN pts): enough accuracy to run Battletoads (a notorious timing
+stress test) and hundreds of other games, seven mappers (NROM through MMC3, GxROM, AxROM), save
+states, a debugger view, CRT shaders — and **no DMC channel**, so audio is poor on many titles. The
+post-mortem is the best part: the 80/90% trap (the final accuracy push consumed most of the 7 months),
+cycle-timing between CPU and PPU, and Odin specifics — no automatic integer promotion caused real
+bugs; the absence of GC forced a deliberate three-allocator design (per-frame temporary, global heap,
+session arena); CBOR serialization needed custom handlers for raw unions with bitfields, which she
+calls a great fit for emulation.
+
+**Gawain** (Show HN, 67+ pts, `matheuzgomes/gawain`, repo created Nov 12) makes type annotations
+load-bearing in Python: it requires annotations on variables, parameters, returns and class
+attributes — and then runs a real type checker, **ty** or **pyrefly**, to verify the types. The
+design bet: annotation *coverage* and annotation *checking* are separable concerns — existing
+checkers treat missing annotations as a soft warning by default, while Gawain makes the missing
+annotation itself a failure. The gap between a fast checker and an actually-annotated codebase is
+exactly where agent-written code drifts; a 67-point Show HN is early traction, and the tool is two
+checkers' flags away from being a pre-commit hook.
+
+Sources: [MacAnorak](https://macanorak.com/the-macbook-pros-oled-pwm-problem-when-a-better-display-becomes-worse-to-use/) ·
+[Joshua Blais](https://joshblais.com/blog/emacs-as-my-browser/) ·
+[lucyNES write-up](https://lucypero.com/lucynes.html) ·
+[matheuzgomes/gawain](https://github.com/matheuzgomes/gawain)

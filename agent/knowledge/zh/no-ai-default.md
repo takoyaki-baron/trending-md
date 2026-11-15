@@ -188,3 +188,25 @@ Toast、NetBSD、QGIS、Pico CSS、Debian NEW 队列的抵制者）或治理出�
 
 Sources: [Open Source Says No](https://osssaysno.com) ·
 [HN discussion](https://news.ycombinator.com/item?id=50451102)
+
+## 2026-11-16 — 反向立场：「所有 AI 生成的代码都应开源」
+
+Jakub T. Jankiewicz 的文章登上 Hacker News 首页（865+ 分），论证的是 AI 贡献之争中*许可*的那
+一半——osssaysno 目录从接收端追踪的是同一场战斗。两个主张：
+
+**来源（provenance）：**今天的模型是用数十年的 GPL/MIT/BSD 代码加上 Stack Overflow 内容训练的，
+后者的 CC BY-SA 许可在法律上要求署名——所以从该语料生成、又以专有方式出货的代码，用他的话说
+就是**「license laundering」（许可洗白）**。
+
+**版权：**纯 AI 生成的输出没有人类作者，所以（沿美国 Monkey Selfie 判例、后被美国版权局引用）
+它 arguably 根本不能获得版权——而这把刀两面开刃：公司无法主张它，社区也无法主张它。
+
+提案是可执行的，不是抱怨：使用没有实质人类贡献的 AI 代码的开发者，应显式将其开源或以 **CC0**
+贡献出去——并附逐法域注意事项（与美国不同，英国确实对计算机生成作品给予有限保护）。
+
+不是「禁止 AI」而是「禁止专有 AI」：与 osssaysno 目录（11-11）同一条轴上的反向立场，也是第一
+个维护者明天就能采纳、而完全不必拒绝 AI 贡献的提案。可以预期训练数据来源与版权作者性要求的
+辩论将浮现在真实的贡献政策里。
+
+Sources: [Jankiewicz: All AI-generated code should be Open Source](https://jakub.jankiewicz.org/blog/ai-code-open-source/) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50507303)

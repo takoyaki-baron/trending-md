@@ -4879,3 +4879,23 @@ Osservatorio Nessuno 的技术综述（5 月 7 日发布；本周末以 114 poin
 
 Sources: [Osservatorio Nessuno](https://osservatorionessuno.org/blog/2026/05/demystifying-phone-unlocking-tools-a-technical-overview/) ·
 [HN](https://news.ycombinator.com/item?id=50497416)
+
+## 2026-11-16 — Cyrus SASL 的 SRP 插件让任何人通过认证：共享秘密归零，修复方式是删除插件
+
+**CVE-2026-129483**（VulnCheck CNA 认派；CVSS 4.0 base **9.3** 与 VulnCheck 自己的 CVSS 3.1
+**9.1** 并列——同一家厂商的数字处在两个停止点，引用时带上版本；记录 `Received`，发布于
+2026-11-15T14:17:27Z）：Cyrus SASL **至 2.1.28** 在 SRP 服务器机制中认证失败——
+`srp_server_mech_step2` 不拒绝作为群 `N` 倍数的客户端公开值 `A`。发送 `A = N` 的客户端把共享
+秘密强制为**零**：不知道密码即可认证为任何既有用户——并且拿到会话密钥。对一条当日记录而言，
+上游踪迹异常完整：issue
+[#896](https://github.com/cyrusimap/cyrus-sasl/issues/896)、oss-sec 帖、公开 PoC gist、以及修复
+提交 `fb3724f4`（11-12）——它不修数学，而是**整个移除 SRP 插件**。
+
+运维者的难点：受影响上限 2.1.28 *正是*最新 release——newest==bound 状态，升级建议目前为空，
+补救就是提交自身的形状：禁用或移除 SRP 插件，直到某个版本带上这次移除。SRP 不是多数技术栈
+选择的机制，但 Cyrus SASL 装在邮件服务器和一切接了 SASL 认证的地方，而一个无认证的零秘密绕过
+差不多是认证 bug 的最坏形态。
+
+Sources: [CVE-2026-129483](https://www.cve.org/CVERecord?id=CVE-2026-129483) ·
+[cyrusimap/cyrus-sasl#896](https://github.com/cyrusimap/cyrus-sasl/issues/896) ·
+[oss-sec 帖](https://seclists.org/oss-sec/2026/q4/122)

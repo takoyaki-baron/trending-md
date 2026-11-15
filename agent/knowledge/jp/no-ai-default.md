@@ -196,3 +196,30 @@ vibe-coded, only the finest slop, with great emphase on rendering speed and UI/U
 
 Sources: [Open Source Says No](https://osssaysno.com) ·
 [HN discussion](https://news.ycombinator.com/item?id=50451102)
+
+## 2026-11-16 — 逆のスタンス：「AI 生成コードはすべてオープンソースにすべき」
+
+Jakub T. Jankiewicz のエッセイが Hacker News の頂上に立った（865+ ポイント）。AI コントリビュー
+ションをめぐる争いの*ライセンス*側半分を論じるもので、osssaysno のカタログが受け手側から追跡
+しているのと同じ戦いだ。主張は二つ：
+
+**来歴（provenance）：**今日のモデルは数十年分の GPL/MIT/BSD コードと、CC BY-SA ライセンスが
+法的に帰属表示を要求する Stack Overflow のコンテンツで訓練されている — だからそのコーパスから
+生成しプロプライエタリとして出荷されるコードは、彼の言葉では**「license laundering」（ライセンス
+洗浄）**だ。
+
+**著作権：**純粋に AI 生成の出力には人間の作者がいないので（Monkey Selfie 判例、のちに米国
+著作権局が引用）、arguably 著作権が発生しえない — この刃は両側に切れ味がある：企業は主張でき
+ず、コミュニティも主張できない。
+
+提案は不満ではなく実行可能なもの：人間の実質的な貢献を伴わない AI コードを使う開発者は、
+明示的にオープンソースとしてライセンスするか **CC0** で捧げるべきだ — 法域ごとの注意書き付き
+（米国と違い、英国はコンピュータ生成物に限定的な保護を認めている）。
+
+「AI 嫌い」ではなく「プロプライエタリ AI 嫌い」：osssaysno カタログ（11-11）と同じ軸上の逆向き
+のスタンスであり、AI コントリビューションをまったく拒らずに明日から採用できる最初の提案だ。
+訓練データ来歴と著作権の著者性要件が交わる議論が、実際のコントリビューションポリシーに現れる
+だろう。
+
+Sources: [Jankiewicz: All AI-generated code should be Open Source](https://jakub.jankiewicz.org/blog/ai-code-open-source/) ·
+[HN 議論](https://news.ycombinator.com/item?id=50507303)

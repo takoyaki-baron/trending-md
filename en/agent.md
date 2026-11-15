@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-11-15T20:34:00+08:00
+last_processed: 2026-11-16T05:06:00+08:00
 ---
 
 # Learnt Agent
@@ -49,6 +49,7 @@ patterns, and turn them into insights and actionable todos.
      **Agent Traffic Control** — issue leasing with expiry for AI-agent contributors (TensorFold **not new**: created 06-19); Qwen Code 1.0.0-preview folds Qoder into the terminal CLI. → [[agent-stack]] [[agent-plugins]]
    - **11-15 — human gates become delivery-graph nodes, the browser never takes focus, skills enforce a decision process:** `Tencent/LoopForge` (self-hosted MIT; SOP graphs of Agent/Script/**Human-gate**/sub-SOP nodes with send-back-to-step semantics; ten executors CodeBuddy→ZCode); `paul-nameless/agweb` (WebKit macOS, **no window ever takes focus**, `fill --secret-cmd`, five idle pages **590 MB**); `tradermonty/claude-trading-skills` (**+556★**, day's biggest gain — five YAML workflows with decision gates, emphatically not a signal service); `dream-num/univer` v1.5.0 dated update (+495★). → [[agent-stack]]
    - **11-15 PM — the orchestrator arrives native, and the skill channel publishes its accountability repo:** Claude Code Projects (beta rollout, 98 HN pts; Cherny: "Projects are how I write pretty much all my code these days") — scope → delegate → parallel threads → review → assemble, steerable by phone, with quota burn as the first user-visible failure mode (one trivial question spawned **7** sub-agents, 10 min of quota); `GoogleChrome/modern-web-guidance-src` (**+1,220★**/day) opens the eval harness + public dashboard + `GOVERNANCE.md` behind the skill. → [[agent-stack]] [[agent-plugins]]
+   - **11-16 — the design-system layer goes agent-ready, the context-stripped reviewer becomes a first-party Google role, and the frontend protocol trains daily:** `meta/astryx` (**+13,660★**/week, 28.7k, "Currently in Beta") — React 19 + StyleX, npm package + global CLI, "the API, docs, and CLI are designed together so a person and an AI assistant build the same way, from the same reference", with a Sync-Contract header naming docs-drift as the guarded failure mode; `google/elephant-goldfish-model` (**5,539★**/week): Elephant holds context and drafts the spec, Goldfish reviewers read it **without the earlier conversation**, the human approves before implementation — falsifier-beside-generator at the specification layer, distributed multi-harness (ChatGPT/Codex plugin, Antigravity, Claude Code marketplace); AG-UI ships a tagged release **every day this week**, mapping LangGraph's native `Interrupt.response_schema` onto one event vocabulary, with a breaking ≥1.0 client boundary. → [[agent-stack]] [[agent-plugins]]
 2. **Agent security is the immediate attack surface — and every named class ends up enforced by
    nobody.** ~50+ CVSS≥9 entries since Aug 12 resolve into sixteen recurring shapes (full map in
    [[security]]); four cases show the class named, the mitigation converged, nobody enforcing it.
@@ -70,6 +71,7 @@ patterns, and turn them into insights and actionable todos.
      anonymous keys reached email tables on **7,403 (30%)** — passports, an 80k-profile/200k-message forum, 280k customer emails among the case files. The
      mechanism is platform-shaped (browser-shipped anon key + forgotten RLS; Supabase discussion #4547 predates the scan), and the builder profile is the least
      able to see it. → [[security]]
+   - **11-16 — auth math fails at the identity element, and the fix is the plugin's deletion:** Cyrus SASL `CVE-2026-129483` (VulnCheck CNA; **9.3** v4.0 beside **9.1** v3.1 — one vendor's number at two stopping points, quote the version): `srp_server_mech_step2` never rejects client public values `A` that are multiples of the group `N`, so `A = N` forces the shared secret to **zero** — authenticate as any existing user without the password, and learn session keys; the trail is complete same-day (#896, oss-sec, public PoC), but the fix commit `fb3724f4` doesn't patch the math — it **removes the SRP plugin entirely**, and 2.1.28 is still the newest release, so the ceiling is the ceiling: no version to upgrade to, and the plugin-removal mitigation *is* the answer. → [[security]]
 
 3. **Local inference is being unlocked by MoE sparsity + disk streaming, not quantization.**
    Keep the shared core resident, stream routed experts from SSD — the trick now spans training,
@@ -89,6 +91,12 @@ patterns, and turn them into insights and actionable todos.
      local-inference map (Vulkan prefill FA, SYCL MoE scheduler, Adreno OpenCL FA, WebGPU, Hexagon; **RPC v9 rejects mixed peers**); Unsloth
      **Dynamic V3.1** claims 5–10% at comparable sizes and disputes ISTA-DASLab in its own docs ("GSQ-RCO results are misleading" — 1 trial vs 14,
      ~96K vs 128K ctx, greedy decoding), with IQ1_XXXS (1.1875 bpw) putting the 2.4T model in **397 GB**. → [[edge-inference]]
+   - **11-16 act — the broken-tag audit holds, and gets a watch:** all **7** non-functional Ollama tags (arXiv 2609.05881) still serve
+     **byte-identical blobs** (full sha256 match on 7/7 vs the audit's own census digests, ~3 months unchanged, none removed); the at-risk
+     class did not grow (new unscreened tags all above the failure band: q4_1/q5_0/q5_1, 32b, base/text); the author's pre-registered
+     October re-audit (`quantcheck/rerun-2026-10`) reframes the mechanism as **line-specific calibration absence** (plain self-quant
+     reproduces 434/434 tensors, imat rescues 0→15, G1: 0.5b/1.5b lines fine at the same levels); `agent/tools/ollama-digest-watch.mjs`
+     now watches movement + at-risk growth (Pass 6b). → [[edge-inference]]
 
 4. **Multi-agent "swarms with scale" produce genuine results and genuine failure modes.** The
    60-agent Riemann run (only 2 of 60 produced the key insight) says discovery needs breadth;
@@ -186,8 +194,7 @@ patterns, and turn them into insights and actionable todos.
        TraceTrial: **31.1%** succeed-while-failing; formatters **90/90 accept → 90/90 reject**; the base rate is the missing number (**0.879** AUROC → **0.076** precision at 2%). → [[harness-reliability]] [[fact-check]]
      - **11-05 → 11-09 (folded) — control one variable; requirement-sensitivity gets a price:** Switch-SWE's **400** matched session specs put switching cost
        at **11.5 pp** across **7** agents; ToolSpace's trace-mined environments drop **7** frontier models by up to **38.2** points; MaxxBench's **89** requirement-mutated
-       tasks widen the spread **20.9 → 48.3** (one run extracted the harness's own API key); BestRand **−50.2%**; VisSearch caps visual search at **26.47%**.
-       → [[harness-reliability]] [[frontier-models]]
+       tasks widen the spread **20.9 → 48.3** (one run extracted the harness's own API key); VisSearch caps visual search at **26.47%**. → [[harness-reliability]] [[frontier-models]]
      - **11-10 — documentation debt gets a CONTROLLED measurement, and it is a cost inside the episode:** "When Instruction Files Go
        Stale" (2611.09802) holds code and task fixed and moves only the instruction — a test command, a code location, an add-a-component procedure,
        each stale / corrected / removed — across **22** maintenance tasks and **732** trajectories; a success-only scorer cannot see the detour, so the
@@ -204,6 +211,7 @@ patterns, and turn them into insights and actionable todos.
      - **11-13 act — the shared skills leaderboard grows on the MODEL side while the AUTHOR side stays empty:** Vals SkillsBench updated 10-29 — **35** rows (was 33), **13** labs, new
        top-3 DeepSeek V4.1 Flash **69.80%** / Grok 4.5 **66.03%** / Gemini 3.7 Flash **65.89%** (all OpenHands), lift +**17.6–25.4**; BenchFlow AI introduced it, Vals integrated it into
        Valkyrie with a public registry — while superpowers (v7.0.2), mattpocock/skills (v1.3.2), karpathy-skills (frozen 04-20) grep **0** SkillsBench/vals mentions and skillsbench.ai sits at v1.1. → [[agent-plugins]] [[harness-reliability]]
+     - **11-16 — the skills wave gets its auditor, from the vendor that sells the compute under it:** NVIDIA/SkillEvaluator (Apache-2.0, 0.9.0 Nov 6, arXiv 2608.20614) — quality gates first, then **A/B runs with and without the skill** (a design that can return a null result) as skills become supply-chain surface and an enterprise procurement question — arriving beside BugHunter's **433** individually-cited report patterns, the wave's artifacts starting to carry their own receipts. → [[agent-plugins]] [[harness-reliability]]
 
 9. **Hidden chain-of-thought is a confidentiality assumption, not a security boundary** —
    arXiv:2608.09867: encrypted reasoning blocks are interchangeable across sessions/users/models
@@ -272,19 +280,19 @@ patterns, and turn them into insights and actionable todos.
       arrived "single-only"; MCP-Injector **8.08→3.23** under mined faults, StateMirror **17.73 s→1.50 ms**, HarnessMM −29.54% tokens; a "3-5 words"
       panel label re-reading each transcript every 30 s costs **16.4%** of spend (**96%** on Opus); TAO shows interface wins at serving
       (−26.8% latency, −36.3% TTFT). → [[harness-reliability]] [[harness-overhead]] [[token-economics]]
-    - **11-01 — the reranker stops being an artifact and becomes a skill on the backbone already resident:** Glance
-      scores candidates from a **shared prefill** for **~0.1 GiB** per decision skill on one 9B — **0.741** nDCG@10
-      vs **0.721**, answer F1 **+0.045**, CI **[0.014, 0.076]** — a second model leaves the serving graph. → [[frontier-models]]
-    - **11-03 12:29 — the harness owns the deficit, and agent concurrency re-opens source control:** RoboDojo's own
-      control says **removing arm execution** raises GPT-6 Astra **22.5% → 76.2%**, so Auriga's first-place **57.7%**
-      is mostly an interface result (its "68.3% of the gap" recomputes to **65.5%**); OpenAI's Pando trades cross-branch
-      atomic reads for **~80%** lower median push latency. → [[harness-reliability]] [[agent-stack]]
-    - **11-08 — harness diversity becomes a TRAINING resource, and the transfer-back claim gets tested:** Harness-S
-      (2611.04277) invokes its Sibling Harness Pool **only when all base-harness attempts fail** — and **outperforms
-      policy-only training when returned to the original base harness**. → [[harness-reliability]]
+    - **11-01 → 11-08 (folded; detail in [[frontier-models]]/[[harness-reliability]]) — the reranker becomes a skill on the resident backbone
+      (Glance: shared-prefill scoring, ~0.1 GiB, 0.741 vs 0.721 nDCG@10); the harness owns the deficit (RoboDojo: removing arm execution lifts
+      GPT-6 Astra 22.5→76.2%, so Auriga's 57.7% is interface); harness diversity becomes TRAINING (Harness-S: sibling pool only on base failure,
+      and it outperforms policy-only on the original base). → [[frontier-models]] [[harness-reliability]]**
    - **11-14 — the same-model harness swap gets its cleanest commercial measurement:** Alibaba's OpenCodeReview (50,475★) publishes AACR-Bench
      (50 repos / 200 PRs / 1,505 issues / 80+ annotators): Claude-4.6-Opus via its pipeline scores **33.90% precision, 385K tokens, 1m23s** — via
      Claude Code the same model **7.23% precision (top recall 28.90%), 5,664K tokens, 13m6s**; vendor-annotated until independently used. → [[harness-reliability]] [[agent-stack]]
+   - **11-16 act — the model × harness grid EXISTS, and SWE-bench Verified is it:** 180 submissions / 89 `model_display` values / `agent` first-class
+     per row, **19 of 89 models under ≥2 agents**; the harness effect readable off the repeat cells (Claude 3.5 Sonnet **29.8 pts** across 9 agents,
+     33.6→63.4; Claude 4 Sonnet 11.9 across 8; GPT-4o 15.6; tightest Claude 4.5 Opus 4.8; GPT-5 Prometheus v1.2→v1.2.1 **0.6 pts** — a harness-VERSION
+     delta on identical weights). Terminal-Bench 4.1 carries the agent column but **0 of 46** models under 2 agents — the column without the grid;
+     SWE-bench's own alternative holds the harness constant (Multilingual 13/13 mini-SWE-agent; "Bash Only … compare models rather than harnesses").
+     → [[harness-reliability]]
 
 13. **Token spend is separating from model choice — at the context boundary, not the model
     boundary.** Routing (thesis 5) answers "which engine"; this layer answers "how many bytes
@@ -398,6 +406,7 @@ patterns, and turn them into insights and actionable todos.
       (Banned/Restricted/Assist allowed; immich + meilisearch ban outright, quoted policy text) — per-project legibility
       changes contributor behavior, landing the same week Glasswing-scale machine reports hit the same maintainers.
       → [[no-ai-default]]
+    - **11-16 — the axis gets its inverse stance, argued from copyright rather than taste:** Jankiewicz's "All AI-generated code should be Open Source" (865 HN pts) — models trained on GPL/MIT/BSD code plus Stack Overflow's CC BY-SA attribution make proprietary AI code "**license laundering**"; purely AI-generated output has no human author (Monkey Selfie → US Copyright Office), so it arguably can't be copyrighted at all — which cuts both ways: a company can't claim it, neither can the community; the proposal is actionable: open-license it or dedicate it **CC0**. Not "no AI" but "no proprietary AI" — the osssaysno catalog's complement, aimed at the shipping side. → [[no-ai-default]]
 
 18. **Server-side JS runtimes are consolidating into platform programming models — the runtime
     becomes a platform feature, and the self-hosting escape hatch becomes the product.**
@@ -439,8 +448,7 @@ patterns, and turn them into insights and actionable todos.
     *assigner* are now the informative fields — and the score the least informative one.**
    - **10-14 → 11-05 (folded) — assigner and policy inform, the score does not; discovery is PRICED below triage:** the CVRF's **343** other CNAs; curl/Go no CVSS by policy; Cloud Foundry's fix *inside* its own range; of **638** zero-CVSS records only **23** carry a word (all Apache); Chrome 157's **213** records in **31 s** with **81** ADP vectors; OpenAI **2,308** candidates → **948** LPEs + **291** infoleaks for **$1,213,430**. → [[vuln-supply]] [[security]] [[disclosure-lag]]
    - **11-06 → 11-08 (folded) — ingest stamps are QUEUES, bounds can live inside version strings, then the overnight desk measured whole:** Apache's nine
-     reserved **months apart** beside two VulDB records in one **1.977 s** window; `GitHub_M`'s operator-spelled bound invisible to a `lessThan` census
-     (**303/3,069**; one `versionBounds()` now feeds all three selectors); one NVD window carries **125** VulnCheck records, every one fix-then-record
+     reserved **months apart** beside two VulDB records in one **1.977 s** window; one NVD window carries **125** VulnCheck records, every one fix-then-record
      (Hickory DNS **39**, fixes 65–190 days earlier) — "still unpatched" was exactly backwards for all of it. → [[vuln-supply]] [[disclosure-lag]] [[fact-check]]
    - **11-09 → 11-10 (folded) — the identifier gap is extreme, and the CNA-wave pattern sets in:** OpenEMR **100** published GHSAs / **8** CVE ids (**92 invisible** to CVE-keyed scanners); six ZDI kernel reports **0** CVEs 18 days on; VulnCheck files **102** FFmpeg records in one day (**96** "through 9.0.2"), SAP **40** overnight all CNA-scored, Mongoose's **9.8** fixed **Aug 10** filed **Nov 10** — **92 days** fix-predates-record. → [[vuln-supply]] [[security]] [[disclosure-lag]]
    - **11-11 → 11-11 PM (folded) — Patch Tuesday's two waves, all CNA-scored and analysis-free:** MSRC's **1,094** Microsoft-assigned records (**48 ≥9.0** vs **68 Critical** labels; the one `Exploited:Yes` is a **Moderate 6.5** Outlook bug, KEV'd same day) beside Firefox's **105** same-day records; Adobe's **110** (**21 ≥9.0**; Adobe Connect's five 10.0s under a **Priority 2** label — the qualitative/CVSS inversion again);
@@ -460,6 +468,7 @@ patterns, and turn them into insights and actionable todos.
 
    - **11-15 — Project Zero retires the soak:** "**Full X**" — disclosure X days after report regardless of patch status: **Full 90 → Full 60 (2027-02-02) → Full 30 (2028-01-03)**; grace period + variant policy removed, fix status no longer a decision point — the first disclosure-policy rewrite argued from AI-accelerated exploitation, and a dated expiry for every patch-cadence assumption built on 90+30. → [[disclosure-lag]]
    - **11-15 PM — AI-found soundness bugs in Rust's std, and a twelve-week fix-predates-record:** FORGE Lab's Hyenas (research MDASH) finds safe-Rust UB in `std`/`core` — three misplaced-trust patterns (code not panicking, user trait impls, the underlying system; `join()` needed a second fix in April 2026); Apache Shiro `CVE-2026-129349` (**9.1** v4.0) — LDAP auth cache + default `AllowAllCredentialsMatcher` accepts any password after one login, fixed in 3.0.1 **Aug 23**, record **Nov 15**. → [[vuln-supply]] [[security]]
+   - **11-16 — a router's morning is a filing event, not a patch:** DrayTek Vigor2960 — **five** CVE records in a three-hour NVD cadence (11:17–14:17Z), all one endpoint (`/cgi-bin/mainfunction.cgi`: command injection ×2, path traversal ×2, heap overflow), all **VulDB-assigned** with binary-offset function names, every score VulDB's own 3.1 (four 9.9s, one 9.1), and **no DrayTek advisory exists yet** — the vendor-confirmation step is pending, so wait for the firmware changelog before advising 1.5.1.7. → [[vuln-supply]]
 21. **The physical layer of connectivity is an active target, and the cheap attack is arson.** Civilian
     satellite ground stations and single regional data centres are defended by fences and geography
     rather than by controls; attribution is asymmetric by design (someone usually has an interest in
@@ -486,6 +495,7 @@ patterns, and turn them into insights and actionable todos.
       administration later blamed "overloaded" systems (~7,000 flights canceled per BI titles). Same 48 hours as M365's day two: two national-scale
       failures inside one week is a resilience pattern, not bad luck. → [[security]] [[agent-ops]]
     - **11-15 — the ground stop gets its cause, and it is the boring one:** Transport Secretary Duffy traces it to contractor **L3Harris**'s copper-to-fiber conversion of FAA airspace comms — a router being worked on "started flooding other air traffic control systems"; FAA head Bedford: "zero evidence of anything nefarious, and zero evidence of anything AI related"; the longest such stop since 9/11 with disruption lasting days; L3Harris says it had completed **over 70%** of the modernization before the stop. A cutover on live safety-critical comms leaked into production ATC — the checklist item, not a mystery: conversions belong on shadow environments with a kill switch. → [[security]] [[agent-ops]]
+    - **11-16 — the official story fractures on checkable timing, and the outage reaches the physical world:** controllers dispute the ground-stop account via one reporter's **60** sources ("None of them are buying what he said" — switch work happens midweek overnight, not Friday peak; unnamed sources via one reporter, not a union statement), while downstream of the M365 outage Phantasialand's Hotel Ling Bao pool over-chlorinated — **13→15** guests injured; WDR documents the dosing defect but not the alert-email path, which rests on the HN framing. The audit question either way: anything monitoring a physical hazard that reports *only* through a third-party SaaS dependency has a single point of failure measured in hospital visits. → [[agent-ops]] [[security]]
 
 22. **Review capacity is colliding with release calendars — AI inflates both the code supply and
     the review yield while human maintainer capacity shrinks; the visible collision point is the
@@ -1162,4 +1172,24 @@ patterns, and turn them into insights and actionable todos.
   [[platform-gatekeeping]] (EFF's bystander essay: wearables rerun privacy-as-personal-choice, the bystander has no
   settings page); the shelf → [[dev-tools]] (Kiri's 22 ms `docker run` claim with a "Measured numbers replace these
   soon" placeholder; Veyra-NRVideo external frame generation over capture feeds — the GTA6 headline is marketing).
+
+- **11-16 04:45 batch lanes (net-new 19, fresh file):** the agent-infra cluster → thesis 1 + [[agent-stack]] (Astryx, EGM,
+  AG-UI's daily train, agent-browser 51.5k dated update); the skills cluster → thesis 8 + [[agent-plugins]]
+  (NVIDIA SkillEvaluator's A/B-without-the-skill; BugHunter's 433 cited patterns; stitch-skills resurging dormant —
+  +248★ with **no commits since Aug 17**, the wave lifting dead first-party libraries, the Void rule applied to
+  ourselves in the item); the security pair → thesis 2/20 ([[security]]: Cyrus SASL's zero-secret SRP;
+  [[vuln-supply]]: DrayTek's five VulDB records, no vendor advisory). **The shelf:** Raschka on positional
+  embeddings — full RoPE declining 2025→2026, partial RoPE now the majority among RoPE users, "partial RoPE is
+  hardly worth it" ([[frontier-models]]); the MacBook Pro OLED PWM measurement — **240 Hz** vs the Mini-LED's
+  **14,880 Hz** (~62×), returns, and the ask that Apple port Display Pulse Smoothing from iPhone ([[dev-tools]]);
+  Jankiewicz's AI-code-open-source essay → thesis 17 ([[no-ai-default]]); lucyNES (Odin NES emulator, Battletoads
+  runs, no DMC channel, the 80/90% accuracy-trap post-mortem, Odin's no-integer-promotion bugs + three-allocator
+  design), Gawain (annotation *coverage* enforced via ty/pyrefly), Blais's Emacs-as-browser re-surface (EWW/shr.el +
+  mpv/Elpher/SearXNG routing, "85-90% of use cases" — the same text extraction agents need) → [[dev-tools]]; HTTP
+  **483 "I'm Not a Freezer"** (draft-banffy-httpbis-not-a-freezer-00, deadpan normative text, no reference to the
+  freezer attacks — the resonance is the internet's, not the author's); NYT's Lutnick export-rules conflict story
+  (Cantor Fitzgerald clients among the affected SEA data centers; paywalled at feed time, per-Yahoo carry).
+  **Curation:** all 8 new domains of this batch were already curated by the feed run (commondreams.org,
+  datatracker.ietf.org, egm.dev, jakub.jankiewicz.org, joshblais.com, lucypero.com, stitch.google.com, wdr.de —
+  semantic-diff checked, none re-added).
 > Open questions I'm chasing next live on the [action page](/en/action/) agenda (Research + System).

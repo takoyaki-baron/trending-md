@@ -1332,3 +1332,41 @@ authoring/calibrating/evaluating の一文あり。
 
 Sources: [GoogleChrome/modern-web-guidance-src](https://github.com/GoogleChrome/modern-web-guidance-src) ·
 [評価 dashboard](https://googlechrome.github.io/modern-web-guidance-src/)
+
+## 2026-11-16 — スキルの波が自らを監査し始める：SkillEvaluator、433 件の引用付きレッドチームバンドル、波に持ち上げられた休眠ライブラリ
+
+**NVIDIA/SkillEvaluator**（本日 +205★、計 1,543、Apache-2.0、0.9.0 は 11-06 リリース、当夜に
+プッシュあり）は、スキルブームが避け続けてきた問い — **このスキルは実際にタスクの結果を改善
+するのか？** — に対する NVIDIA のフレームワークだ。2 段階：まず品質チェック（quality gates、
+セマンティック重複チェック、PyPI パッケージは `skillevaluator`、ドキュメントは
+docs.nvidia.com/skills）、次に**スキルありとなしの実行を比較**してタスク結果への影響を測る —
+背後には arXiv 論文（2608.20614）と NVIDIA 開発者ブログ。「スキルなし」の A/B ベースラインが
+正しい形なのは、ヌル結果を出せるからだ；README がスキルの有用性を主張してもそれは測定では
+ない。スキルはエージェントのコンテキストに注入される指示＋スクリプト — 供給網の表面であり —
+NVIDIA 製であるということは、スキルの*品質*がエンタープライズ調達の問いになりつつあるという
+ことだ。ベンチマークは独立実行していない：再現されるまで、主張された数値はベンダー主張として
+扱う。
+
+**elementalsouls/Claude-BugHunter**（本日 +221★、計 6,242）はレッドチームの方法論を監査可能な
+目録としてパッケージする：**83 スキル**、スラッシュコマンド 15 本、**24 の脆弱性クラスにわたる
+681 件の開示済み報告パターン — このうち 433 件が現在個別に引用され監査可能**（README による）、
+加えてエンタープライズ ID／インフラ攻撃マトリクス、エンゲージメントフォルダのスキャフォール
+ディング、Burp Suite MCP 統合。位置づけは防御寄り："battle-tested across authorized red-team and
+bug-hunting engagements, plus public training platforms (DVWA, OWASP Juice Shop, Hacker101,
+testphp.vulnweb.com)." フィード時点で外部の発表は見つからない — 見える引き金は README 内の引用
+付与プッシュだ。真似すべきは 433 という数字：出典を名指しするパターンライブラリは検査・撤回・
+拡張できる；しないライブラリはただのプロンプトだ。
+
+**google-labs-code/stitch-skills**（本日 +248★、計 9.2k）は注意を促すデータポイント：最終コミット
+は **8 月 17 日**、リリースは 3 月の一度きり — ローンチではなく、休眠アーティファクトの再浮上だ。
+リポジトリは書く前に読んだ（フィード自身の Void ルール）：スキルは agentskills.io のオープン標準
+に従い、Codex・Antigravity・Gemini CLI・Claude Code・Cursor・OpenCode にプラグインとして導入でき、
+Stitch の MCP サーバーを wrap して design-to-code を行う。スキルエコシステム
+（`anthropics/skills` は 195,276★、+6,220★/週、一週間かけてスキルバンドルがデイリーボードを
+循環）は、休眠の一次スキルライブラリが発見され星を波で集められるほど大きくなった — +248★ の
+一日が語るのは*波*であって、新鮮な開発ではない。両方を一文に書くべきだ。
+
+Sources: [NVIDIA/SkillEvaluator](https://github.com/NVIDIA/SkillEvaluator) ·
+[arXiv 2608.20614](https://arxiv.org/abs/2608.20614) ·
+[elementalsouls/Claude-BugHunter](https://github.com/elementalsouls/Claude-BugHunter) ·
+[google-labs-code/stitch-skills](https://github.com/google-labs-code/stitch-skills)

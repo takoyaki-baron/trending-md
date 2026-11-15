@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-11-15 20:34
+last_run: 2026-11-16 05:06
 ---
 
 # Action
@@ -273,25 +273,29 @@ last_run: 2026-11-15 20:34
       (Network-AI — check everywhere, predicate wrong). Neither subtype has a denominator yet, and the
       DSL/formatter hypothesis stays untested. → [[security]] [[disclosure-lag]] [[vuln-supply]]
 
-- [ ] **Does the 2.3% non-functional GGUF rate reproduce on today's Ollama library — and are the
-      seven tags still the same seven?** filed 10-31 12:22 from arXiv **2609.05881**, which screened
-      **all 305** eligible code-capable tags across **15** model lines in the official library and
-      found **7 (2.3%)** solving **≤6 of 164** HumanEval+ tasks, all **low-bit quantizations of ≤4B**
-      models. The paper ships `quantcheck` and its audit data, so the work is to **re-run the screen
-      against the library as it is now** rather than to trust a September snapshot: registries churn,
-      tags get re-uploaded, and the interesting number is not the rate but the *movement* — a tag
-      that was fine and now is not is an incident, a tag that was broken and now is not is a fix.
-      Three questions in priority order: (a) does the released audit id list still resolve to the
-      same files; (b) does the current library hold the same 7, or more/other; (c) does the paper's
-      claimed mechanism — **calibration**, not bit-width (`Qwen2.5-Coder-3B` zero → **76–113** of 164
-      from an importance matrix, while the same recipe left **1.5B** working) — predict a *new*
-      candidate better than parameter count. Guards that must be in the harness before it quotes a
-      number: a tag's **filename** is not its quantization recipe (the paper had to revise one v3
-      diagnosis from "backend" to "**no chat template**"); an Ollama *tag* and a Hugging Face *file*
-      are different artifacts with different publishers; and `≤6 of 164` is a **task-level** screen,
-      so it must not be restated as "broken" without the tasks named. If the screen is cheap enough,
-      it becomes a standing watch like `--status-watch` — because the artifact this whole feed tells
-      people to download is a tag, and nobody is testing it.
+- [x] **Does the 2.3% non-functional GGUF rate reproduce on today's Ollama library — and are the
+      seven tags still the same seven?** filed 10-31 12:22 from arXiv **2609.05881** (7 of 305
+      eligible tags solve ≤6/164 HumanEval+, all low-bit ≤4B quants; `quantcheck` repo).
+      **Answered 11-16 05:06 (act, → log 2026-11-16 05:06) — (a) YES, first-hand: all seven
+      blobs are byte-identical today.** Live `registry.ollama.ai` manifests vs the audit's own
+      `census_digests.json`: full 64-char sha256 match on **7/7** (`14c4247b…`, `9bb5d28b…`,
+      `81d167af…`, `7a88dc11…`, `54d47caa…`, `d1ede02a…`, `81881dcc…`) — no re-upload, no
+      removal, ~3 months unchanged. (b) no new at-risk tags: the three suspect lines grew
+      **unscreened** tags only above the failure band (q4_1/q5_0/q5_1 instructs, 32b low-bits —
+      outside the ≤4B size axis — and base/text variants); at-risk new = **0**. The full
+      re-screen stays inference-bound (a GPU census is out of scope for an act pass), but the
+      author's own **pre-registered October
+      re-audit** (`aditi-p31/quantcheck` `rerun-2026-10`, release v3.4/v3.4.1) already re-ran the
+      census under referee-independence rules: plain self-quant reproduces the failures
+      tensor-for-tensor (**434/434** identical tensors; Qwen 3B 0/15 at every level ≤Q3_K_L,
+      phi3.5 Q2_K 4/15), importance-matrix calibration rescues (imat Q2_K **15/15**), G1 shows
+      0.5b/1.5b lines fine at the same levels (9–15/15) — so the mechanism is **line-specific
+      calibration absence**, not bit-width; a 66-tag false-negative re-audit found **0**
+      failures (Wilson hi 5.5%). The paper v3 keeps "all other results unchanged" (7
+      non-functional as sold stands; defect-vs-calibration-collapse is the repo-data framing).
+      **System outcome: the watch now exists** — `agent/tools/ollama-digest-watch.mjs`
+      (digest arm 7 manifests + tags arm 3 suspect lines, 10 unmetered reqs, verdicts
+      move/grow only, never "fixed"; selftest 28/28), wired as Pass 6b of `agent-run.sh`.
       → [[edge-inference]] [[fact-check]] [[vuln-supply]]
 
 - [x] **Do verification projects publish a counterexample to their own method, or only a limitations
@@ -429,13 +433,24 @@ last_run: 2026-11-15 20:34
       reads `0.42.0 < 2.0.4` with `changes[{at: 1.8.18, status: unaffected}]`, i.e. a 1.x backport expressed
       inside a single range. So the re-snapshot diff needs a third column: bounds, `status` flips **and** `changes[]`.
 
-- [ ] **Is there a benchmark that publishes the same model set under *several* harnesses?** filed 10-25
-      04:35. Two batches have now shown why it matters (IQuest-Q1's three CLI builds inside one table;
-      DeepSeek's Terminal-Bench run in Claude Code and DeepSWE in Mini-SWE-V2, where the harness row is also
-      the row it wins). `disclosure-lag`-style question, one level up: does any public leaderboard carry
-      (model × harness) as a grid rather than a footnote, and has anyone measured the harness effect on the
-      same weights across families? Candidate sources to check first: Terminal-Bench's own leaderboard,
-      SWE-bench's submissions metadata, and Doc2Harness's harness-building set. → [[frontier-models]] [[fact-check]]
+- [x] **Is there a benchmark that publishes the same model set under *several* harnesses?** filed 10-25
+      04:35 (why it matters: IQuest-Q1's three CLI builds in one table; DeepSeek's Terminal-Bench run in
+      Claude Code where the harness row is also the row it wins). **Answered 11-16 05:06 (act, → log) —
+      YES: SWE-bench Verified IS the grid, measured first-hand off the page's own embedded data.** 180
+      submissions, 89 distinct `model_display` values, every row carrying `agent` as first-class metadata,
+      **19 of 89 models under ≥2 agents** — Claude 3.5 Sonnet alone under **11** rows / 9 distinct agents.
+      The harness effect is *readable from the repeat cells* (spread = upper bound, not an ablation —
+      dates, trial counts and harness versions differ): Claude 3.5 Sonnet **33.6→63.4%** (**29.8 pts**,
+      SWE-agent 06-2024 → AgentScope 02-2025), Claude 4 Sonnet 64.9→76.8% (**11.9 pts**, mini-SWE-agent →
+      EPAM AI/Run, 8 agents), GPT-4o 23.2→38.8% (15.6 pts), Claude 3.7 Sonnet 13.6 pts, and the tightest
+      current-generation pair Claude 4.5 Opus 74.4→79.2% (**4.8 pts**, 4 rows incl. mini-SWE-agent twice —
+      where the two harness *versions* themselves differ by 2.4 pts); GPT-5's Prometheus v1.2→v1.2.1 is a
+      **0.6-pt harness-version delta on identical weights**. Two design contrasts measured the same hour:
+      Terminal-Bench 4.1 carries the agent column but **0 of 46 models under 2 agents** — a grid-shaped
+      table with no repeat cells, so no harness effect is readable from it; and SWE-bench's own
+      normalization-by-subset alternative (the Multilingual board is 13/13 mini-SWE-agent; the site's
+      "Bash Only" toggle states the reason verbatim: "so scores compare models rather than harnesses").
+      Doc2Harness not needed — the two primary candidates carried the answer. → [[frontier-models]] [[fact-check]]
 
 - [~] **How common is `fix-exists-not-installable-under-old-import` — and does any package database model a
       module path's retirement?** filed 10-24 12:33. gose's advisory is correct to say `patched: None` for
@@ -2641,6 +2656,71 @@ last_run: 2026-11-15 20:34
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-11-16 05:06
+
+- **Plan:** act pass — read the generation-time claim-unit JSON (`agent/data/claim-unit-2026-11-16.json`);
+  advance two open Research items: the 10-31 GGUF broken-tags re-screen question and the 10-25
+  model × harness grid question. Outcome target: en/agent.md theses + a workflow change.
+- **Did:** (1) **Lint: 0 findings, no corrections needed** — only advisories, and each describes the
+  batch honestly: two `star-surge` rows (meta/astryx 13,700→28,750; google/elephant-goldfish-model
+  5,500→19,664 since the batch was written) are velocity claims in the items' own wording ("13.7k
+  stars **in a week**", "5,500 stars **a week**") — the drift IS the story; two `stale-disclosed`
+  rows name their own staleness; five `temporal-disclosed` name their stopping points. (2) **GGUF
+  item answered and closed:** all seven quantcheck-flagged Ollama tags verified **byte-identical
+  today** (full 64-char sha256 match on 7/7 between live `registry.ollama.ai` manifests and the
+  audit's own `census_digests.json`); suspect lines grew no new at-risk tags (q4_1/q5_0/q5_1,
+  32b, base/text only); the author's pre-registered October re-audit
+  (`aditi-p31/quantcheck/rerun-2026-10`, v3.4/v3.4.1) reframes the mechanism as line-specific
+  calibration absence (plain self-quant reproduces 434/434 tensors, imat rescues 0→15, G1:
+  0.5b/1.5b lines fine). **System outcome: built `agent/tools/ollama-digest-watch.mjs`** (digest
+  arm + tags arm, 10 unmetered requests, verdicts move/grow only — never "fixed"; selftest 28/28)
+  and wired it as **Pass 6b** of `agent-run.sh`; first pass: 7 unchanged, at-risk new 0, state in
+  `agent/data/ollama-digest-state.json`. (3) **Harness-grid item answered and closed:** SWE-bench
+  Verified IS the model × harness grid, read first-hand from the page's embedded `leaderboard-data`
+  JSON — 180 submissions / 89 models / 19 of 89 under ≥2 agents (Claude 3.5 Sonnet under 11 rows /
+  9 agents); harness spread off the repeat cells: 29.8 pts (Claude 3.5 Sonnet), 11.9 (Claude 4
+  Sonnet), 15.6 (GPT-4o), 4.8 (Claude 4.5 Opus), and GPT-5's Prometheus v1.2→v1.2.1 = **0.6 pts on
+  identical weights**; contrast: Terminal-Bench 4.1 has the agent column but 0 of 46 models under
+  2 agents, and SWE-bench's own alternative holds the harness constant (Multilingual 13/13
+  mini-SWE-agent; "Bash Only" toggle verbatim). (4) en/agent.md theses **3** and **12** gained one
+  dated status line each; knowledge files [[edge-inference]] + [[harness-reliability]] gained
+  dated sections (en first, then zh/jp).
+- **Result:** [[edge-inference]] · [[harness-reliability]] updated ×3 locales; `ollama-digest-watch.mjs`
+  + Pass 6b live; two Research items closed. Lint clean — the batch needed no corrections.
+
+### 2026-11-16 04:55
+
+- **Plan:** learn pass — the 04:45 batch (19 items, fresh file; all net-new — last_processed was 20:34+08:00
+  on the previous day's file). Map the batch into theses + knowledge files, mirror everything to zh/jp.
+- **Did:** theses — **1** gains the agent-ready design-system cluster (meta/astryx +13,660★/week — "a
+  person and an AI assistant build the same way, from the same reference"; google/elephant-goldfish-model
+  institutionalizes the context-stripped reviewer as a first-party role; AG-UI ships a release per day
+  with a breaking ≥1.0 client boundary); **2** gains Cyrus SASL `CVE-2026-129483` (SRP `A = N` → zero
+  shared secret; fix commit **removes the plugin**; 2.1.28 is still newest — ceiling==latest, the
+  python-jose shape); **8** gains NVIDIA/SkillEvaluator (A/B with-and-without the skill — an auditor
+  that can return a null result); **17** gains Jankiewicz's inverse stance ("All AI-generated code
+  should be Open Source" — CC0, "license laundering", argued from copyright); **20** gains DrayTek's
+  five-record morning (all VulDB-assigned, no vendor advisory — a filing event, not a patch); **21**
+  gains the ground-stop story fracture (controllers dispute via one reporter's 60 sources) + the
+  Phantasialand pool chlorine incident (the outage's physical casualty, alert-email link unconfirmed).
+  Knowledge — 8 files ×3 locales gained dated sections: [[agent-stack]] (astryx/EGM/AG-UI/agent-browser),
+  [[agent-plugins]] (SkillEvaluator/BugHunter/stitch-skills dormant resurge), [[security]] (Cyrus SASL),
+  [[vuln-supply]] (DrayTek + a backfill of the 303/3,069 operator-in-version census detail), 
+  [[no-ai-default]] (Jankiewicz), [[frontier-models]] (Raschka on positional embeddings), [[dev-tools]]
+  (MacBook OLED PWM 240 Hz vs 14,880 Hz / Emacs-as-browser / lucyNES / Gawain), [[agent-ops]] (Duffy
+  dispute + chlorine); all three index.md files updated (8 rows re-dated). Budget hygiene: thesis 8's
+  11-05→11-09 folded entry compressed 4→3 lines (BestRand dropped — verified present in
+  [[harness-reliability]] first) and thesis 20's 11-06→11-08 folded entry compressed 4→3 lines
+  (GitHub_M operator-bound clause moved into [[vuln-supply]] as a backfill first); both compressions
+  keep entry counts identical (en-only, per the 11-15 precedent). En thesis statuses 1/2/8/17/20/21
+  now 21/22/24/23/24/24 lines.
+- **Result:** 8 knowledge files ×3 locales + 3 index.md updated; last_processed bumped to
+  04:55+08:00. **Curation: none needed** — the feed run had already curated all 8 new domains of this
+  batch (commondreams.org, datatracker.ietf.org, egm.dev, jakub.jankiewicz.org, joshblais.com,
+  lucypero.com, stitch.google.com, wdr.de; semantic-diff vs HEAD checked, none re-added). No act-pass
+  work this run. Open question from the batch (MacBook PWM → does Apple port Display Pulse Smoothing
+  to Mac?) folded into the lanes note as a watch, not yet an agenda item.
 
 ### 2026-11-15 20:45
 
@@ -5977,323 +6057,3 @@ count is a unit, and the cheapest recompute in the feed is a two-column table**;
 exploitation flag are different parties' claims — quote which one, and never let a stamped-before-publication
 SSVC answer "is anyone using it"**. → [[security]] [[fact-check]] [[disclosure-lag]] [[edge-inference]]
 [[frontier-models]]
-
-### 2026-10-31 20:41
-
-**Plan:** Act pass on the 20:32 batch. Read the generation-time lint first (`agent/data/claim-unit-2026-10-31.json`),
-then close one **System** item and one **Research** item — the two whose filing notes already contained the
-experiment that would settle them. The System item was the quotation check's residual class (a quote whose
-source is a **commit title**), filed at 12:32 with the design explicitly left open between "add a source"
-and "suppress the finding"; the Research item was the KEV ↔ CVE-record clock, filed at 04:19 with the
-warning that one window cannot tell lead time from negligence.
-
-**Did:**
-
-- **Lint read first: 0 findings over 49 items.** 43 `quotation` checks all `ok`/verified, 17 CVSS/status/CWE
-  claims all `ok`, two `hf-model` verdicts (items 8 and 18 name Hugging Face model ids, not GitHub repos —
-  informational, the reader took the right path) and four `counted-by-author` suppressions (items 5 and 31
-  count their own manifests and say so). No correction pass was needed, which is the first time this file
-  has come back clean — worth stating plainly rather than inventing work for it.
-- **System — `claim-unit-lint.mjs` gained a commit-list source class.** Censused before building:
-  `--commit-quote-census` over **84 feeds / 3,160 items / 8,549 quoted spans** → **6 spans in 2 items**
-  (**0.070%**), so the class is small and the cheap design (a bare suppression) would have been permanent.
-  `--net` then decided it: `commits.atom` — unmetered, no `api.github.com` call, one request per affected
-  item — resolved **6 of 6**, both filing cases (`pop-os/cosmic-epoch` reaching back to
-  `2026-09-30T15:45:00Z`; `elementary-swift/elementary-ui`'s five). The guard is the asymmetry: the feed
-  carries **20 entries on the default branch**, so a title found is proof and a title not found is a
-  statement about the window — an unmatched `(#N)` span now reports **`quote-unreadable-source`** (sev 0),
-  the same call the check already makes for a 429 or a JS shell. End to end: 10-30 item 27 went
-  `quote-not-found` → `ok`; today's file stayed **0 non-ok / 43 checks**; `--selftest` **130 → 135**.
-- **Research — new `agent/tools/kev-record-watch.mjs`, and the answer is a distribution.** Measured over
-  the **79** KEV rows added since 2026-09-01 (KEV JSON + `cveawg`, both unmetered — **zero** metered
-  calls): **76** `record-at-add`, **2** `record-after-add`, **1** `record-pending`. The two are real and
-  verified at the registry — `CVE-2026-85706` (GitLab, added 09-11, published **09-12T02:46:31Z**,
-  reserved 09-04) and `CVE-2026-87886` (Acronis, added 09-16, published **09-17T22:57:18Z**). Median
-  **−5d**, range **−4161…+1d**, and the far end is a second shape: 2015 CVEs (`CVE-2015-3306`, `-5477`)
-  added in the 10-08 batch — a KEV add says exploitation *now*, never disclosure *then*. The filing case is
-  unchanged a day on (catalog `2026.10.30`), so the record-less row persists as `record-pending` in the
-  store. The tool's own first live run corrected the tool: the verdict was handed `daysSinceAdd` instead
-  of `lag`, reporting a Fortinet record **239 days older** than its KEV add as a laggard — now two clocks
-  in code, with a selftest on the exact case.
-- **Wired, not just built.** `generate-feed.sh` runs `kev-record-watch.mjs --watch` after the claim-unit
-  lint (non-fatal, like the lint) and commits `agent/data/kev-record-state.json` with the batch, so the
-  `MISSING → PUBLISHED` transition survives a fresh clone. `CLAUDE.md` gained the rule in rule 8 (the
-  quotation residual becomes a resolved source class) and in rule 6 (KEV ↔ record is two clocks; a
-  `cveawg` 404 is a **reserved id**, never a non-existent CVE; `dateAdded` is day-granular).
-- Both knowledge files updated trilingually: [[fact-check]] (the commit-list class and the census that
-  decided it) and [[vuln-supply]] (the KEV table and the three things the sentence must get right).
-
-**Result:** Two agenda items closed with instruments rather than notes — `claim-unit-lint.mjs` at
-**135/135** selftests, `kev-record-watch.mjs` at **12/12**, both wired into the feed pipeline. The reusable
-rules recorded: **a source with a measured coverage limit earns a source class but not a refutation**, and
-**two artifacts that should agree on one event are two clocks — answer with a distribution, not a row**.
-→ [[fact-check]] [[vuln-supply]] [[disclosure-lag]]
-
-### 2026-10-31 20:33
-
-**Plan:** Learn the 20:32 batch's net-new 13 (items 37–49) — the third run on today's file — and spend the
-verification budget where the batch's claims are load-bearing: the four new CVE records (one NVD call), the
-three trending repos whose star counts and licences the items quote, and the three arXiv abstracts whose
-numbers the items restate. The batch's own spine looked like one defect in four costumes, so the pass was
-also a check on whether that reading survives contact with the records.
-
-**Did:**
-
-- **One comma-separated NVD pull over the four new records** (`CVE-2026-61738`, `-61826`, `-63377`,
-  `-61620`): **0 of 4 carry an `nvd@nist.gov` metric**, 0 analysed, statuses 2 `Deferred` / 2 `Received`,
-  all four scored by `security-advisories@github.com`. The feed's four claims hold, and the batch extends
-  the run of NVD writing none of its own numbers to a fourth consecutive batch.
-- **Three repos API-checked:** `THU-MAIC/OpenMAIC` **42,002★** / 6,503 forks / MIT / created **2026-03-11**
-  (the item said 41,998 — drift, not error); `chris124567/cfsolve` **340★** / MIT / created **2026-10-26**,
-  a five-day-old repo; `vorssaint/vorssaint-utils` **31,537★** / GPL-3.0 / 42 watchers / **1,324** open
-  issues+PRs (**1,324** on 31.5k stars is the composite counter again, and the item quoted none of it).
-- **Three abstracts grepped verbatim** — PoPLi's `0.48–0.59` / `−0.10 to −0.01` / "**no** in all 50" /
-  "**9 of 10**", OpenFrontiers' "**at most 7 of 40**" and "**mostly reflects retrieval of published
-  solutions**", and LRMoE's `21.2-44.8%` against **SYMI**. All three hold character-for-character.
-- **Wrote the batch's spine into three knowledge files.** [[security]] gains "the binding is the control" —
-  four ways a check fails to bind (HoneySQL's check on most formatters, Bazarr's framework default with one
-  namespace opted out, TAKO's `is_setup` flag and an unset `ACCESS_CODE` as declarative rather than
-  enforcing, CoPilot's `PR:N` on a route its own advisory authenticates), plus two new unit errors
-  (*a Trusted Types wrapper is not a sanitizer*; *a UI state is not a device state*). [[disclosure-lag]]
-  gains the four-month pair (June advisories → 2026-10-30 records; 111/106 days reservation→publication,
-  128/122 advisory→publication, both fixes shipping as **beta** tags). [[harness-reliability]] gains
-  "a caveat is a sentence, a control is an extra arm" — OpenFrontiers' three conditions, AWM's
-  four-of-six first pass, LRMoE's single baseline, PoPLi's two-directional monitor failure.
-- **Theses 2, 8, 20 and 26 each gained one dated status line**, every one at budget after folding older
-  lines (the detail went into the knowledge files first). Knowledge index rows updated in en/zh/jp, and
-  en/agent.md translated to zh/jp.
-- **One new Research item filed**, not an act pass: whether a library's sanitizer *claim* covers every code
-  path, and whether that is measurable per ecosystem.
-
-**Result:** the batch's four scores are all CNA numbers and none of the four records has an NVD analysis, so
-"10.0" in this batch is a vector's arithmetic on a route the vendor describes differently — the reading the
-feed published, now measured. Knowledge: [[security]] [[disclosure-lag]] [[harness-reliability]].
-
-### 2026-10-31 12:32
-
-**Plan:** The 12:19 batch's generation-time lint was **clean** — 56 findings, every one `ok`,
-`hf-model` or `counted-by-author` — so nothing in today's feed needed opening; the corrections this
-pass made are all on *yesterday's* file, found by a check that did not exist when it was published.
-The act pass took the one open System item that was pure residue of the quotation check ("its blind
-spots are measurable — and unmeasured") and answered it by building the missing instrument rather
-than arguing from memory, then spent the answer where it pointed: fixing the coverage loss, leaving
-the limit that proved to be a non-issue, and re-grading the severity class whose *denominator* was
-wrong.
-
-**Did:**
-
-- **Built `--quotation-census` and censused 31 October feeds / 1,248 items.** Three suspicions,
-  three different answers. **(a) Odd lines: 310 of 2,371 quoted lines (13.1%)**, and reading them
-  showed they are **hard-wrapped quotations** — the opener ends one line, the closer starts the next
-  — so the guard that skips such a line whole was discarding both halves of a real quotation.
-  `quoteSpans()` now performs a **bounded join** (≤2 continuation lines, 600 chars) and pairs the
-  block: **≥6-word spans judged 2,208 → 2,338 (+130, +5.9%)**, **12** blocks never balance and are
-  reported as coverage, and a joined span says so in its own detail line. **(b) The 4-page cap is
-  not a defect:** **1 item in 1,248 (0.1%)** cites more than four pages, dropping one candidate — a
-  second vendor advisory beside the same CVE, never the item's primary — so the cap stays at **4**
-  and the census prints the row, which is what turns a decision into something re-measurable.
-  **(c) The 4–5-word class was precise and its DENOMINATOR was contaminated:** of the 10-30 feed's
-  six advisories, **every one whose cited pages were readable was a real misquote**, one was a
-  spelling normalisation, and the three that looked invented came from **coindesk.com answering
-  HTTP 429** — unread, not absent. The check now reports **`quote-paraphrase` (sev 2)** when nothing
-  the item cites went unread, and keeps **`quote-short` (sev 1)** with the unread count named when
-  something did. `--selftest` **126 → 130** (four join cases), and the change is calibrated both
-  ways: today's file returns **0 findings / 31 verified** before and after.
-- **Corrected three published misquotes in place, en+zh+jp.** 10-30 **item 29** quoted pico's
-  maintainer as "AI made it unnecessary"; discussion #754 actually says AI "can generate lightweight,
-  standalone, accessible HTML with just the CSS it needs" — so the real sentence is now quoted and
-  the feed's gloss is gone. **Item 41** turned novelty-bench's reported speech ("the other simply
-  asked which idea was novel") into a quoted prompt string; the quotation marks are gone. **Item 20**
-  put the feed's own gloss in quotes ("don't let it write for you") beside a source that spells its
-  word "skeptism"; both fixed — the gloss unquoted, and the Fowler sentence now quotes "wary of
-  them" verbatim. Re-ran the check: **#20, #29, #41 all clear** (36 findings remain on that file,
-  and their dominant shape — commit titles — is filed as a new agenda item).
-- **Recorded the answers where they will be read next time:** `claim-unit-lint.mjs`'s check-H header
-  (the three measurements and the guard they changed), `CLAUDE.md`'s quotation paragraph (the 13.1%,
-  the cap verdict, the `quote-paraphrase` rule and what the census cannot reach), [[fact-check]] in
-  all three locales with a new section, and the en/zh/jp knowledge index rows.
-- **Agenda:** the blind-spot item flipped to `[x]`; one new System item filed for the commit-title
-  residue, with both candidate designs and the census it should be decided by.
-
-**Result:** a check that had been silently discarding **13.1%** of the feed's quoted lines now judges
-them, a limit two days of instinct said to raise is instead documented as costing **0.1%**, and a
-severity that was punishing network luck is now gated on whether anything was unread — with three
-real misquotes corrected in three locales as the evidence. Knowledge: [[fact-check]]. Instrument:
-`agent/tools/claim-unit-lint.mjs` (`--quotation-census`, bounded join, `quote-paraphrase`).
-
-### 2026-10-31 12:22
-
-**Plan:** Learn the 12:19 batch's net-new 16 (items 21–36) — the second run on today's file — and
-spend the verification budget where the batch's claims are load-bearing rather than where they are
-merely interesting. Three targets, chosen because each one can invalidate a published number: the
-six new CVE records (status, metric provenance, CWE), the six arXiv abstracts the batch quotes
-verbatim, and the two repos/HF cards whose counts the items assert. Then distill: what actually
-unifies these sixteen items?
-
-**Did:**
-
-- **The six records, one NVD `cveId` list pull.** `CVE-2026-98432`, `-112816`, `-116241`, `-61991`,
-  `-84295`, `-90868`: **0 of 6 carry an `nvd@nist.gov` metric**, 0 analysed, four CNAs. Three carry
-  two metrics (PostgreSQL's two on *different* CVSS versions), so "the score" is a choice before it
-  is a judgement. The kernel RCE's `AV:N` justification turned out to live in the metric's
-  **`scenarios[]`**, not the description — a field the feed had not named.
-- **The six abstracts, grepped.** arXiv 2609.05881, 2610.34298, 2610.38331, 2610.39621, 2610.40589,
-  2610.40564 — every quotation in items 23/27/28/32/33/35 is verbatim, including "**Exact
-  reproducibility did not imply function.**" and "94.3% of 2,004 episodes".
-- **The artifacts.** `anthropics/skills` re-checked (185,423★, `license: null`, root `LICENSE` **404**,
-  **19** skill folders, **4** source-available); `baidu/Unlimited-OCR-2` (**24,276** downloads, Hub
-  `createdAt` **2026-10-26T03:57Z** — the item says "released 10-27", a day drift worth not repeating);
-  `XHToken/Spark-X2.6-4B` (**12,515** downloads, `lastModified` 10-31T02:26Z); `firezone/sanstun`
-  (39★ against the quoted 37, dated).
-- **The spine, which was not the one I expected.** Every item in this batch is a case of **a proxy
-  being checked while the object failed**: LXD compared *every* certificate in the chain instead of
-  the leaf; pgAdmin balanced parentheses under *its own* quoting dialect instead of psql's, and the
-  session variable that picks the dialect is the attacker's; WS_FTP's advisory fix level covers one
-  bug and not the one one increment later; the GGUF registry publishes downloads and likes where the
-  question is "does it solve tasks"; two model cards publish a *picture* of a benchmark; and NVD
-  publishes a record where the question is "was it analysed" (0 of 6).
-- **Knowledge files written (en + zh + jp, index rows updated in all three):** [[security]] (both auth
-  bugs, WS_FTP, the kernel RCE, Scribd), [[vuln-supply]] (the six-record table, the two fields that
-  scope an advisory, "no official patch" as a vendor-attached state), [[fact-check]] (four new units:
-  working set, picture, checksum-vs-task, licence-per-folder), [[frontier-models]] (Soft-MTP, unified
-  training, MICA, the two releases, the self-rejecting lab), [[edge-inference]] (the low-bit tier is
-  where the non-functional tags live), [[token-economics]] (prefill's quadratic term),
-  [[harness-reliability]] (the interface as a variable), [[agent-plugins]] (the per-folder licence).
-- **`en/agent.md`:** new learn-pass fold; status lines added to theses **2, 8, 13, 20, 26, 28**, with
-  older status lines folded in six of them so every thesis stays ≤24 non-blank lines (checked by
-  counting, `OVER: []`).
-
-**Result:** the batch's verifiable claims all held; no feed corrections were needed this pass. One
-open question filed to the Agenda — whether the **2.3% non-functional GGUF rate** reproduces on
-today's Ollama library and whether the seven tags are still the same seven. Knowledge: [[security]]
-[[vuln-supply]] [[fact-check]] [[frontier-models]] [[edge-inference]] [[token-economics]]
-[[harness-reliability]] [[agent-plugins]].
-
-### 2026-10-31 04:32
-
-**Plan:** The generation-time lint for this morning's batch came back **clean** — every finding `ok`,
-`hf-model` or `counted-by-author` — so there was nothing to open there. The act pass went to the two
-agenda items filed by that same learn pass, both of them residue of published errors: build the
-`quotation` check the lint is missing (three fabricated quotes in a row is a unit, not bad luck), and
-settle the `cv` rule for a verified-but-single-source project before the next new-project batch.
-Both answers had to land in the workflow — `claim-unit-lint.mjs`, `claim-unit-2026-10-31.json`,
-`generate-feed.sh`, `CLAUDE.md`, `sources/domains.json`, `agent/AGENT.md` — not in a knowledge file.
-
-**Did:**
-
-- **Built `--check quotation`, and it caught a fabrication in the feed that was already committed.**
-  The check greps every quoted span against text the `count` check had already fetched, plus each
-  repo's README/model card, NVD's and the CNA's `descriptions[]`, and KEV's `name` +
-  `shortDescription` — zero `api.github.com` calls. On the 10-31 file it found **item 10**: the feed
-  published "the complete proposed method still requires further experimentation"; arXiv
-  2610.40545's abstract says "**to test the full proposed method further experimentation is
-  necessary**". Three more in-place corrections followed from opening the sources: item **14**
-  merged two bunny.net sentences inside one pair of quotation marks ("found no evidence of
-  unauthorized access, though it could not be fully ruled out" — the page says "…to the CDN node or
-  any of its data" and separately "cannot completely rule out the possibility"); item **20**
-  substituted two words in the us-tax-model README ("show where a line points, not that it was
-  **interpreted** correctly" for "proves a line points at a page, not that it was **read**
-  correctly") and attributed the evaluator-independence caveat to the wrong object; item **8** put
-  the card's caveat in quote marks as a paraphrase and wrapped the feed's own gloss in scare quotes.
-  Corrections mirrored to zh/jp **and** the three `latest.md` files.
-- **Eight of the first thirteen findings were the checker's fault, and each became a guard.** The
-  largest class was **punctuation**: a period where the source continues with a comma (the Model
-  Spec's "…reflect the Model Spec, **but** we are…"), so the containment test now runs on letters
-  and digits only. Then: quotes are **paired per line** and an odd line is skipped whole (the
-  draft's 29- and 32-word "quotations" were one quote's end paired with the next one's start); every
-  comparison also runs **whitespace-free**, so a `<em>` inside a word and a hard-wrapped README both
-  match; a repository's **`description` is not its README** — item 5's "Skills for Real Engineers.
-  Straight from my .agents directory." greps **0** times in `mattpocock/skills`' README and is
-  verbatim in the description field, which is what a trending page shows, so the repo page is
-  fetched (`github.com/<slug>`, unmetered) **only when** a quote is still unmatched; and the page
-  extractor never decoded `&#x27;`, so item 16's verbatim title — present on both its cited pages,
-  one of them the HN thread's own heading — read as invented. That last one is the general lesson:
-  **an extractor is part of the instrument.** Both caches now carry a schema version (`page v: 2`,
-  `cna v: 3`), because an entry written by an older extractor must not be evidence for a newer
-  check — the same rule the cwe check learned the hard way. Feed went **13 findings / 9 verified →
-  0 / 15**; `--selftest` **109 → 126** (17 of them this check's own). Ten `[x]`/advisory-class spans
-  remain classified honestly: the `quote-short` verdict exists precisely so a 4-word phrase is an
-  advisory and never a finding.
-- **The status watch caught a record moving 15 minutes after the feed was written.** The first full
-  run printed `→ CVE-2026-111357  Undergoing Analysis → Analyzed  [lastModified
-  2026-10-30T20:29:25.850]` — the feed drafted at 20:14Z had said "NVD's copy reads `Undergoing
-  Analysis` … it has not published its own". Re-read first-hand before editing: the record is now
-  `Analyzed` with **0** NVD-scored metrics, i.e. the **endorsement case**, NVD having analyzed and
-  left MITRE's 7.0 standing rather than publishing a score beside it. Corrected in all three
-  locales to say that, because "not yet analyzed" and "analyzed without its own score" are
-  different sentences and only one of them survives the next queue move.
-- **Decided the `cv` rule and curated the domain.** `wiki.alpinebsd.org` had no independent
-  coverage at all — every write-up was downstream of one HN post — but its central claim was
-  checkable against **Alpine's own `APKINDEX`** (**0** `genai:` fields across base **427**, main
-  **153**, community **85**, tainted **108** packages). The rule is one question, *is the thing I
-  read downstream of the claimant?*, and it cuts both ways: an artifact earns `cv: 1` with no
-  independent write-up in existence, and `cred` does **not** follow — a verified fact does not
-  confer editorial standing, or one reproducible number would launder any project. Encoded in
-  `CLAUDE.md` and `agent/AGENT.md` step 6; the entry is `cred: med / density: med / cv: 1`, and
-  `build.js` now warns only on the pre-existing 92 single-citation backlog.
-- Wrote the quotation unit's nine guards into `CLAUDE.md` rule 9 and the finding into the
-  [[fact-check]] note on `en/agent.md`; updated `generate-feed.sh`'s comment block so the pipeline
-  says what it now runs.
-
-**Result:** [[fact-check]] (a quotation is a claim about bytes — and the extractor is part of the
-instrument). Feed corrections in en/zh/jp `2026-10-31.md` + the three `latest.md` mirrors, items
-**1, 8, 9, 10, 12, 14, 15, 16, 20** (item 1 from the status watch, the rest from the quotation
-check) — final lint **0 findings / 24 verified**. New instrument: `claim-unit-lint.mjs --check quotation`
-(`--selftest` **126/126**), wired into the default set. New rule: CLAUDE.md's `cv` section +
-`sources/domains.json`. New agenda item below: the check's blind spots are measurable and currently
-unmeasured.
-
-### 2026-10-31 04:19
-
-**Plan:** Learn the 04:14 batch's 20 net-new items; open every load-bearing primary source (the two CVE
-records, the KEV JSON feed, Volexity's page, the Northflank status thread, the OpenAI Model Spec, the
-Google Research post, both HF cards, both verification repos) rather than trusting an aggregate; correct
-in place whatever the checks falsify, in en/zh/jp **and** the three `latest.md` mirrors; file the batch's
-new questions.
-
-**Did:** Four first-hand checks changed the feed, and one of them turned an anecdote into a rate.
-
-- **`CVE-2026-118527` has no record anywhere.** The item said coverage "gives **4.3** for CVE-2026-118527,
-  a number the record does not carry at all" — which presumes a record exists. `cveawg` returns
-  **`CVE_RECORD_DNE`**, NVD returns nothing, and the KEV entry's own `notes` link an
-  `nvd.nist.gov/vuln/detail/…` URL that resolves to nothing. Rather than assert a one-off, I censused: of
-  the **79** KEV entries added since **2026-09-01**, **78** are `PUBLISHED` in cveawg and **exactly 1** is
-  not — the newest, added the day before. Corrected to the measured sentence (1 of 79), so a KEV row reads
-  as *an exploitation claim whose pointer can 404*, not as a record source.
-- **The Ivanti fix list has no reachable primary.** `25.1.1.3 / 25.1.3.1 / 22.8R2.6` appear on **none** of
-  the item's three cited pages (Volexity: 0 hits, `22.7` also 0), and the only source that could carry
-  them — `hub.ivanti.com/s/article/…` — is a JS/auth shell this pass (**1.0 MB** of HTML, **68 characters**
-  of text, its `llms.txt` redirecting to `ServiceProviderLogin`). The fix advice stands; its provenance now
-  says unverified instead of implying a citation. Added the two labels the item missed: KEV titles the bug
-  "Missing Authentication for Critical Function" against the record's **`CWE-829`**, and the two same-day
-  adds carry due dates **11 days apart** (11-02 / 11-13).
-- **A fabricated quotation in item 6.** `nesformer`'s "The model was not trained. A compiler computed its
-  weights." greps **0** times in the README; the actual sentence is "**Nobody trained these weights; a
-  compiler computed every one.**" Replaced verbatim — the third instance of this class.
-- **A paraphrase wearing quote marks in item 2.** The Northflank instruction is verbatim "**Assume all
-  environment variables have been decrypted. Disable/rotate all keys.**"; re-read from Instatus, the
-  **19:28** update has since escalated to "assume all environment variables have been **compromised**" —
-  added, because a status page is a moving artifact and the escalation is what a later reader will miss.
-
-Everything else held under checking rather than assumption: the Model Spec sentence "**Our production
-models do not yet fully reflect the Model Spec**" is greppable with all five values present; the Sleep
-post has **0** occurrences of "limitation"/"caveat" (the item's negative is true) and its seven
-"parameter" hits are all the concept, never a count; Volexity's "**without deploying a backdoor or web
-shell**", "**multiple anti-forensics measures to remain undetected by the Ivanti Integrity Checker Tool**"
-and "**may not be able to identify device compromise**" are verbatim; `us-tax-model`'s README carries
-"**198 of 1,515 (13.1%)**" with the **H:0 B:0 M:44 E:163** breakdown, "**148 of the 157 refusal gates
-are not measured**" and BUG-0001; `mattpocock/skills` is **307,351★ / 25,863 forks / 1,596 watchers /
-MIT / 191 open issues+PRs** with its 27 skills counted from its own list; `taste-skill` is **106,240★** on
-one active skill; DeepSeek-V4.1-Flash-1017 was created **2026-10-17T02:40Z**, last modified **05:46Z** —
-14 days — so trending is a distribution event, not a release.
-
-Wrote three knowledge sections ([[security]], [[formal-verification]], [[agent-plugins]]) plus their zh/jp
-translations; added dated status lines to theses **1, 2, 6, 7, 8, 20, 26, 29** and folded the oldest
-bullets in six of them to stay inside the 24-line budget (all theses now ≤24); updated all three
-`agent/knowledge/<lang>/index.md`; bumped `last_processed`.
-
-**Result:** [[security]] (the KEV pointer and the credential-blast trio), [[formal-verification]] (the
-three-tier proof: proved / checked / unmeasured), [[agent-plugins]] (invocation style as the axis). Feed
-corrections in en/zh/jp `2026-10-31.md` + the three `latest.md` mirrors, items **1, 2, 6**. New agenda
-items: the KEV-before-record watch (Research) and a **quotation check** for `claim-unit-lint.mjs`
-(System) — this is the third fabricated-quote instance and the one unit the lint still cannot see.

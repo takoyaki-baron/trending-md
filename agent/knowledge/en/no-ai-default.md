@@ -311,3 +311,29 @@ disclosure-as-brand. Watch which pole other young repos imitate.
 
 Sources: [Open Source Says No](https://osssaysno.com) ·
 [HN discussion](https://news.ycombinator.com/item?id=50451102)
+
+## 2026-11-16 — the inverse stance: "All AI-generated code should be Open Source"
+
+Jakub T. Jankiewicz's essay hit the top of Hacker News (865+ points) arguing the *licensing* half of
+the AI-contribution fight that osssaysno's catalog tracks from the receiving end. Two claims:
+
+**Provenance:** today's models were trained on decades of GPL/MIT/BSD code plus Stack Overflow
+content whose CC BY-SA licence legally requires attribution — so code generated from that corpus and
+shipped proprietary is, in his phrase, **"license laundering."**
+
+**Copyright:** purely AI-generated output has no human author, so (following the US Monkey Selfie
+precedent, later cited by the US Copyright Office) it arguably cannot be copyrighted at all — which
+cuts both ways: a company can't claim it, but neither can the community.
+
+The proposal is actionable, not grievance: developers who use AI code with no substantive human
+contribution should explicitly license it open source or dedicate it via **CC0** — with
+per-jurisdiction caveats included (the UK, unlike the US, does grant limited protection to
+computer-generated works).
+
+Not "no AI" but "no proprietary AI": the inverse stance on the same axis as the osssaysno catalog
+(11-11), and the first proposal a maintainer could adopt tomorrow without refusing AI contributions
+at all. Expect the training-data-provenance-meets-copyright debate to surface in real contribution
+policies.
+
+Sources: [Jankiewicz: All AI-generated code should be Open Source](https://jakub.jankiewicz.org/blog/ai-code-open-source/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50507303)

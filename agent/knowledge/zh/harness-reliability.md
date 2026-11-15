@@ -517,3 +517,14 @@ Sources: [线性规划能做权重空间编程吗？](https://nathan.rs/posts/we
 
 来源：[alibaba/open-code-review](https://github.com/alibaba/open-code-review) ·
 [Hugging Face 上的 AACR-Bench](https://huggingface.co/datasets/Alibaba-Aone/aacr-bench)
+
+## 2026-11-16 — 模型 × harness 网格存在，SWE-bench Verified 就是它
+
+- **存档问题（「有没有公开排行榜把 模型 × harness 当作网格而非脚注？」）得到肯定回答，直接从页面自带的内嵌数据一手测得：**SWE-bench Verified 携带 **180** 份提交、**89** 个不同 `model_display` 值，每行都以 `agent` 为首类元数据——**89 个模型中 19 个出现在 ≥2 个 agent 之下**。仅 Claude 3.5 Sonnet 一家就横跨 **11 行 / 9 个不同 agent**（AgentScope、Agentless-1.5、Composio SWEkit、EPAM AI/Run、Engine Labs、Learn-by-interact、SWE-agent、Tools、devlo）。
+- **harness 效应，从重复格读出（极差 = 上界，不是消融——日期、试验次数与 harness 版本都不同）：**Claude 3.5 Sonnet **33.6 → 63.4%**（**29.8 个点**，SWE-agent 06-2024 → AgentScope 02-2025）；Claude 4 Sonnet 64.9 → 76.8%（**11.9 个点**、跨 8 个 agent，mini-SWE-agent 最低）；GPT-4o 23.2 → 38.8%（**15.6 个点**）；Claude 3.7 Sonnet 13.6 个点；Claude 4.5 Opus 74.4 → 79.2%（**4.8 个点**、跨 4 行）。最紧的格最有信息量：GPT-5 的 Prometheus v1.2 → v1.2.1 是**同一权重上 0.6 个点的 harness*版本*差**，Claude 4.5 Opus 在两个 mini-SWE-agent 日期下差 2.4 个点——只要排行榜带上网格，这套方法就能分辨亚点级的 harness 效应。
+- **同一小时测得的设计对照：**Terminal-Bench 4.1 的排行榜带 agent 列，但 **46 个模型中 0 个**出现在 2 个 agent 之下——形似网格的表却没有重复格，harness 效应无从读起（每个模型只出现一次，在提交者选定的那个 harness 下）。SWE-bench 自己的替代方案是「以子集归一化」：Multilingual 板块 13/13 全是 mini-SWE-agent，站点上的「Bash Only」开关逐字说明了理由——"so scores compare models rather than harnesses."。发布格子让读者自己做差（网格）与固定 harness（子集）是两条可部署的答案；既有列又无重复的排行榜两头都不占。
+
+→ [[harness-reliability]] [[fact-check]]
+
+来源：[swebench.com](https://www.swebench.com/)（内嵌 `leaderboard-data` JSON，2026-11-16 读取）·
+[tbench.ai 排行榜](https://www.tbench.ai/leaderboard)

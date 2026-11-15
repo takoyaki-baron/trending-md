@@ -5920,3 +5920,25 @@ anecdote — arriving while the company sits between permanent CEOs.
 Sources: [TechPowerUp carry](https://www.techpowerup.com/354814/nvidia-allegedly-engineered-scarcity-by-funding-ai-startups-to-buy-its-gpus) ·
 [Yahoo Finance](https://finance.yahoo.com/markets/stocks/articles/nvidia-director-sold-nearly-1b-160000846.html) ·
 [HN](https://news.ycombinator.com/item?id=50493251)
+
+## 2026-11-16 — Raschka on positional embeddings: partial RoPE quietly became the majority choice
+
+Sebastian Raschka's "Understanding Positional Embeddings in Modern LLMs" (Ahead of AI, Nov 15, 157+ HN
+pts) is a from-first-principles walkthrough with PyTorch code throughout — GPT-2's learned absolute
+embeddings, the original sinusoidal scheme, then the modern landscape. The news is the trend data from
+his LLM Architecture Gallery: **full RoPE in every attention layer is still the most common choice but
+declined from 2025 into 2026**, while **partial RoPE went from minority to majority among RoPE-using
+models** (e.g. MiniMax-M3 rotating 64 of 128 head dimensions), and mixed RoPE/NoPE designs are growing
+(SmolLM3 skips RoPE in every fourth layer; some recurrent hybrids use NoPE throughout). His own take
+is usefully contrarian: "**partial RoPE is hardly worth it**" — citing a paper finding ~10% rotation
+often matched full RoPE, though full RoPE won some evaluations. His prediction: RoPE stays dominant
+into 2027, with T5-style learned relative attention biases (as in Thinky's Inkling) as the niche to
+watch.
+
+Architecture galvanism — copying what frontier models do — is how a lot of open-model design actually
+happens, so a measured claim that the fashionable tweak may buy nothing is directly useful to anyone
+training or configuring models. The piece is also a clean on-ramp to the RoPE/NoPE literature for
+anyone who joined the field after absolute embeddings stopped being the default.
+
+Sources: [Ahead of AI: Understanding Positional Embeddings in Modern LLMs](https://magazine.sebastianraschka.com/p/understanding-positional-embeddings) ·
+[HN discussion](https://news.ycombinator.com/item?id=50506376)

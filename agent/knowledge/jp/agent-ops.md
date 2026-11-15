@@ -112,3 +112,34 @@ Sources: [BBC：銅線アップグレードが全国停止を引き起こした]
 [L3Harris 声明](https://www.l3harris.com/newsroom/press-release/2026/11/l3harris-statement-nov-13-ground-stop) ·
 [Tom's Hardware：Baude 事件](https://www.tomshardware.com/tech-industry/artificial-intelligence/rogue-claude-ai-tasked-with-renumbering-pages-accidentally-deletes-law-professors-entire-syllabus-one-year-of-lecture-notes-youre-right-to-be-angry-i-deleted-your-files-through-my-own-carelessness-humbled-agent-admits) ·
 [HN](https://news.ycombinator.com/item?id=50499114)
+
+## 2026-11-16 — 地上停止の公式説明に亀裂；アウテージが物理世界へ届く
+
+**「Duffy は嘘をついた」**（Common Dreams、107+ HN pts）：11-15 の原因報道（請負業者の銅→光
+ファイバ移行が運用中の ATC にフラッドした）から一歩進み、管制官自身が公式説明に異議を唱えて
+いる — Washington Examiner 記者 Anna Giaritelli が **60 人の航空交通管制官**に話を聞いた後の
+CNN 出演によれば：その種の切り替え作業は「週半ばの深夜、航空交通がないとき」に行われるもので
+ピーク時ではない — "They don't happen during busy times like a Friday afternoon" — そして
+"**None of them are buying what he said.**" Duffy の説明は、L3Harris が銅を光ファイバに置き換える
+間にルーターが「データで過負荷になった」というものと、FAA の 8 億 7500 万ドルの SMART AI
+システムは「まだプラグにすら刺さっていない」というものだ。管制官の時点への反論は検証可能で
+具体的 — だからこそ議論の音量より重要だ。政治的枠組み：史上 3 度目しかない地上停止と 25 年で
+最長の全国停止（約 150 万人の旅行者に影響、土曜だけで 4,100 便以上欠航）、9 月の GAO 報告書は
+急ぐ近代化による障害をすでに警告していた、Hochul 州知事は Duffy の辞任を要求。ソースに注意：
+一人の記者経由の匿名管制官であり、組合の声明ではない。
+
+**M365 アウテージの物理的犠牲**（WDR、Rhein-Erft-Kreis の警察・消防への取材）：11-13 金曜の
+午後、ドイツの Phantasialand リゾート内の **Hotel Ling Bao** の宿泊客がプール使用後に呼吸器の
+刺激を訴えた；現場検査では**プールの自動薬剤注入システムの欠陥**が塩素を安全レベルを大きく
+超えて上昇させていたことが判明。WDR の同夜の集計は塩素ガス刺激の宿泊客 **13 人**、**5 人が
+入院**；その後の報道では **15 人**。HN で取り上げられた理由 — 注目すべきアラート経路だ：
+ホテルのプール安全警告は企業メールに乗っており、その日のアウテージの時間窓は、まさにこれらの
+アラートが発火するはずの時間だった。WDR 自身の記事は注入システムの欠陥と死傷者を記録するが、
+メール経路は**記録していない**；アウテージと事故のリンクは HN の見出しと、開けられなかった
+ドイツ語の後続報道に依存している（WindowsForum は Cloudflare 壁）。いずれにせよ監査すべき
+パターン：物理的危険を監視し、*第三者 SaaS 依存のみ*を通じて報告するものは、病院送りで測られる
+単一障害点を持つ。
+
+Sources: [Common Dreams：'Duffy Lied'](https://www.commondreams.org/news/duffy-ground-stop-explanation) ·
+[WDR（ドイツ語）](https://www1.wdr.de/nrw/rheinland/rhein-erft-kreis/technischer-defekt-chlor-phantasialand-100.html) ·
+[HN](https://news.ycombinator.com/item?id=50509411)

@@ -602,3 +602,15 @@ Sources: [NVIDIA テクニカルブログ](https://developer.nvidia.com/blog/whe
 
 Sources: [LitNews](https://litnews.ai/articles/garciaguirre-samsung-sk-hynix-micron-dram-conspiracy-suit-survives-dismissal) ·
 [HN](https://news.ycombinator.com/item?id=50502988)
+
+## 2026-11-16 — 壊れたタグの監査は保持される：同じ 7 つの blob、メカニズムはキャリブレーション欠如
+
+- **10-31 のファイル済み問い（「7 つの非機能タグは今日のライブラリに残っているか？」に一次データで回答）：**arXiv 2609.05881（"Broken on Arrival"、スクリーニング済み 305 タグのうち 7 が ≤6/164 HumanEval+、すべて ≤4B モデルの低ビット量子化）がフラグを立てた 7 タグは、今日 `registry.ollama.ai` で**バイト単位で同一の blob** に解決される——監査自体の `census_digests.json` とのフル 64 文字 sha256 一致が **7/7**（約 3 か月無変更、削除ゼロ、再アップロードゼロ）。レジストリは今なお、論文が **0/164** と実測したファイルをダウンロード可能な製品として提供している。
+- **リスククラスは成長していない：**3 つの疑義線（llama3.2、phi3.5、qwen2.5-coder）が得た未スクリーニング・タグは、すべて失敗帯の**上**——q4_1/q5_0/q5_1 instruct、32b 低ビット（≤4B サイズ軸の外）、base/text バリアント。リスク新規 = 0。完全な再スクリーニングは推論資源に拘束されるままが、著者自身の**preregistered 十月再監査**（`aditi-p31/quantcheck/rerun-2026-10`、v3.4/v3.4.1、10-20 にいかなる実行より先に書かれた——BigData 審査者がレフェリー独立性に疑問を呈したことが発端）がすでに国勢調査をやり直している。
+- **再監査が読みを変えた点：**プレーン（未校準）自己量子化は失敗を**テンソル単位で**再現する（4 つの Qwen レベルすべてで **434/434** テンソル同一、0/15；phi3.5 プレーン Q2_K は 4/15）——つまり失敗は**系固有のキャリブレーション欠如**であり、ビット幅でも破損でもない：importance-matrix キャリブレーションが同じウェイトを救う（imat Q2_K **15/15**；code-imat 全 164 問 = 113）。論文の G1 テストは同レベルが 0.5b/1.5b 系で正常（9–15/15）であることを示す。PPL も機能を予測しない（ライブラリ q2_K の PPL **66,391**；しかしプレーン Q2_K は PPL 12.3 で 0/15）。66 タグの偽陰性再監査は失敗 **0**（Wilson 上界 5.5%）で、2.3% の比率を保つ（95% CI 1.1–4.7%）。論文 v3 は「その他の結果は不変」を保つ——販売時点で非機能は成立したまま；defect 対 calibration-collapse の区別はリポジトリデータの読み方。
+- **監視器ができた：**`agent/tools/ollama-digest-watch.mjs`（digest 腕：7 件の manifest GET；tags 腕：3 つの疑義線を国勢調査目録と差分；10 リクエスト未計量；判定語は move/grow のみ——digest 変化はそれだけでは曖昧で、修正か無言の再アップロードか、決めるのは再スクリーニングだけ）、`agent-run.sh` の Pass 6b に配線、状態は `agent/data/ollama-digest-state.json`。
+
+→ [[edge-inference]] [[vuln-supply]]
+
+Sources: [arXiv 2609.05881](https://arxiv.org/abs/2609.05881) ·
+[aditi-p31/quantcheck](https://github.com/aditi-p31/quantcheck)（census_digests.json、rerun-2026-10）

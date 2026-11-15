@@ -995,9 +995,9 @@
           "found": "2026-11-10T14:09:38.979Z"
         }
       },
-      "runs": 161,
+      "runs": 162,
       "first_run": "2026-09-01T04:34:31.653Z",
-      "last_run": "2026-11-15T12:59:01.833Z",
+      "last_run": "2026-11-15T21:29:31.183Z",
       "last_total": 100
     },
     "ra-paper-id": {
@@ -1805,27 +1805,99 @@
           "path": "docs/reproductions/2609.03430-random-attention/README.md",
           "html_url": "https://github.com/daiwk/auto-research/blob/a2f8a1e6cadc5d4105193d40335573b1dbed1c83/docs/reproductions/2609.03430-random-attention/README.md",
           "found": "2026-10-27T20:38:19.872Z"
+        },
+        "HuangOwen/Awesome-LLM-Compression::README.md": {
+          "repo": "HuangOwen/Awesome-LLM-Compression",
+          "path": "README.md",
+          "html_url": "https://github.com/HuangOwen/Awesome-LLM-Compression/blob/dfdb484f5cc8e03d81e02e147429a3778c99c2d4/README.md",
+          "found": "2026-11-15T21:29:31.183Z"
+        },
+        "Xnhyacinth/Awesome-LLM-Long-Context-Modeling::papers/03-kv-cache.md": {
+          "repo": "Xnhyacinth/Awesome-LLM-Long-Context-Modeling",
+          "path": "papers/03-kv-cache.md",
+          "html_url": "https://github.com/Xnhyacinth/Awesome-LLM-Long-Context-Modeling/blob/c3b9ed7059db9d279966818dbca8484a8da02f8f/papers/03-kv-cache.md",
+          "found": "2026-11-15T21:29:31.183Z"
+        },
+        "daiwk/auto-research::docs/en/recent-paper-scan-20260905.md": {
+          "repo": "daiwk/auto-research",
+          "path": "docs/en/recent-paper-scan-20260905.md",
+          "html_url": "https://github.com/daiwk/auto-research/blob/d93821a6883cf29e1b69c6686665f4848aa1ba9d/docs/en/recent-paper-scan-20260905.md",
+          "found": "2026-11-15T21:29:31.183Z"
+        },
+        "daiwk/auto-research::docs/en/papers/index.md": {
+          "repo": "daiwk/auto-research",
+          "path": "docs/en/papers/index.md",
+          "html_url": "https://github.com/daiwk/auto-research/blob/d93821a6883cf29e1b69c6686665f4848aa1ba9d/docs/en/papers/index.md",
+          "found": "2026-11-15T21:29:31.183Z"
+        },
+        "daiwk/auto-research::docs/en/papers/foundation-models.md": {
+          "repo": "daiwk/auto-research",
+          "path": "docs/en/papers/foundation-models.md",
+          "html_url": "https://github.com/daiwk/auto-research/blob/d93821a6883cf29e1b69c6686665f4848aa1ba9d/docs/en/papers/foundation-models.md",
+          "found": "2026-11-15T21:29:31.183Z"
+        },
+        "daiwk/auto-research::docs/en/reproductions/README.md": {
+          "repo": "daiwk/auto-research",
+          "path": "docs/en/reproductions/README.md",
+          "html_url": "https://github.com/daiwk/auto-research/blob/d93821a6883cf29e1b69c6686665f4848aa1ba9d/docs/en/reproductions/README.md",
+          "found": "2026-11-15T21:29:31.183Z"
+        },
+        "daiwk/auto-research::docs/en/foundation-models/catalog.md": {
+          "repo": "daiwk/auto-research",
+          "path": "docs/en/foundation-models/catalog.md",
+          "html_url": "https://github.com/daiwk/auto-research/blob/d93821a6883cf29e1b69c6686665f4848aa1ba9d/docs/en/foundation-models/catalog.md",
+          "found": "2026-11-15T21:29:31.183Z"
+        },
+        "daiwk/auto-research::docs/en/foundation-models/catalog/by-year.md": {
+          "repo": "daiwk/auto-research",
+          "path": "docs/en/foundation-models/catalog/by-year.md",
+          "html_url": "https://github.com/daiwk/auto-research/blob/d93821a6883cf29e1b69c6686665f4848aa1ba9d/docs/en/foundation-models/catalog/by-year.md",
+          "found": "2026-11-15T21:29:31.183Z"
+        },
+        "daiwk/auto-research::docs/en/foundation-models/catalog/by-topic.md": {
+          "repo": "daiwk/auto-research",
+          "path": "docs/en/foundation-models/catalog/by-topic.md",
+          "html_url": "https://github.com/daiwk/auto-research/blob/d93821a6883cf29e1b69c6686665f4848aa1ba9d/docs/en/foundation-models/catalog/by-topic.md",
+          "found": "2026-11-15T21:29:31.183Z"
+        },
+        "daiwk/auto-research::docs/foundation-models/catalog/by-organization.md": {
+          "repo": "daiwk/auto-research",
+          "path": "docs/foundation-models/catalog/by-organization.md",
+          "html_url": "https://github.com/daiwk/auto-research/blob/d93821a6883cf29e1b69c6686665f4848aa1ba9d/docs/foundation-models/catalog/by-organization.md",
+          "found": "2026-11-15T21:29:31.183Z"
+        },
+        "daiwk/auto-research::docs/en/foundation-models/catalog/by-organization.md": {
+          "repo": "daiwk/auto-research",
+          "path": "docs/en/foundation-models/catalog/by-organization.md",
+          "html_url": "https://github.com/daiwk/auto-research/blob/d93821a6883cf29e1b69c6686665f4848aa1ba9d/docs/en/foundation-models/catalog/by-organization.md",
+          "found": "2026-11-15T21:29:31.183Z"
+        },
+        "mtuann/llm-serving-papers::README.md": {
+          "repo": "mtuann/llm-serving-papers",
+          "path": "README.md",
+          "html_url": "https://github.com/mtuann/llm-serving-papers/blob/acd3361ad2a4058184793113ccaff40a850d8143/README.md",
+          "found": "2026-11-15T21:29:31.183Z"
         }
       },
-      "runs": 108,
+      "runs": 109,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-11-15T12:59:01.833Z",
+      "last_run": "2026-11-15T21:29:31.183Z",
       "last_total": 100
     },
     "ra-vllm": {
       "seen": {},
-      "runs": 148,
+      "runs": 149,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-11-15T12:59:01.833Z",
+      "last_run": "2026-11-15T21:29:31.183Z",
       "last_total": 0
     },
     "ra-sglang": {
       "seen": {},
-      "runs": 148,
+      "runs": 149,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-11-15T12:59:01.833Z",
+      "last_run": "2026-11-15T21:29:31.183Z",
       "last_total": 0
     }
   },
-  "last_run": "2026-11-15T12:59:01.833Z"
+  "last_run": "2026-11-15T21:29:31.183Z"
 }

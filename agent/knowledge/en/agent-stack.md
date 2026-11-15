@@ -3711,3 +3711,53 @@ burn is its first user-visible failure mode.
 
 Sources: [Anthropic: Projects redesigned](https://claude.com/resources/articles/projects-redesigned) ·
 [HN](https://news.ycombinator.com/item?id=50492141)
+
+## 2026-11-16 — the design system goes agent-ready; the context-stripped reviewer becomes a first-party role; AG-UI trains daily
+
+**meta/astryx** is having the strongest week on GitHub Trending (**+13,660★**, 28,748 total, v0.7.16 on
+Nov 14, labeled "Currently in Beta"): React 19+ components on Meta's compile-time **StyleX**, an npm
+package (`@astryxdesign/core`) plus a global CLI, 16 patch releases by version number in under two
+weeks, commits landing within the hour before the feed. The README's own words: "an open source design
+system that's fully customizable and built for how we build now: by people and the agents working
+alongside them" — and "the API, docs, and CLI are designed together so a person and an AI assistant
+build the same way, from the same reference." A "Sync-Contract" comment at the top of the README
+("architecture changes require documentation updates") names docs-drift as the failure mode the
+maintainers are guarding. Design systems are where "agent-ready" meets reality: components are exactly
+the repetitive, spec-heavy output agents are asked to produce, so a library whose docs and CLI assume
+an agent on the other end is a genuine interface change, not marketing.
+
+**google/elephant-goldfish-model** (EGM, **5,539★** this week, 19.7k total, v0.1.1 Oct 27, pushes
+landing that night) turns context rot into a role split: "**Elephant** holds your project context and
+drafts the specification. **Goldfish** reviewers examine the draft and referenced source material
+*without the earlier conversation*, helping expose unstated assumptions and blind spots. **You** make
+the architectural trade-offs and approve the specification before implementing." Default workflow
+targets software specifications (`/egm-review-loop` for other document types); distribution is fully
+multi-harness — a published ChatGPT/Codex desktop plugin, `agy plugin install` for Antigravity, and a
+Claude Code plugin marketplace entry (`claude plugin marketplace add google/elephant-goldfish-model`).
+It is the falsifier-beside-generator shape from Google's Antigravity post applied to the specification
+layer — the reviewing agent inherits the drafting agent's blind spots because it inherits its context,
+so the context-stripped reviewer is institutionalized as a *role*, with the human gated at approval.
+
+**ag-ui-protocol/ag-ui** (+393★, 17,748 total) shipped a tagged release *every day* this week; the Nov
+13 release (21:01 UTC) maps LangGraph's native `Interrupt.response_schema` (langgraph ≥ 1.2.12) into
+the protocol's event vocabulary, unwraps LangChain-serialized `ToolMessage` outputs, declares
+`protocolVersion` on `RUN_STARTED` events — and breaks: `@ag-ui/client` and peers now require ≥ 1.0.0.
+What adoption actually requires is per-framework shims mapping each runtime's control-flow primitives
+(interrupts, tool results, run lifecycle) onto one event vocabulary. Agent UX is consolidating around
+two protocol layers — MCP for tools/context, AG-UI for the frontend surface.
+
+**vercel-labs/agent-browser** (51,548★, +4,601/wk, v0.43.0 Nov 10, Rust, npm `agent-browser`) is the
+dated update: the accessibility-tree CLI crossed 51k beside agent-desktop (covered 11-12) — the second
+half of Vercel's bet that the a11y tree is the right interface layer between agents and GUIs. The
+practical takeaway for anyone shipping web UI: your accessibility tree is becoming a *machine API*
+whether you designed it as one or not.
+
+Why it matters: three layers of the agent stack moved in one batch — the component library (design
+systems assume an agent on the other end), the review role (context-free reviewers institutionalized
+first-party at Google), and the frontend protocol (daily releases, one vocabulary per-framework shims
+must speak).
+
+Sources: [meta/astryx](https://github.com/meta/astryx) ·
+[google/elephant-goldfish-model](https://github.com/google/elephant-goldfish-model) ·
+[ag-ui Release 2026-11-13](https://github.com/ag-ui-protocol/ag-ui/releases/tag/release%2F2026-11-13) ·
+[vercel-labs/agent-browser](https://github.com/vercel-labs/agent-browser)

@@ -129,3 +129,28 @@ Sources: [BBC：铜缆升级导致全国停飞](https://www.bbc.co.uk/news/artic
 [L3Harris 声明](https://www.l3harris.com/newsroom/press-release/2026/11/l3harris-statement-nov-13-ground-stop) ·
 [Tom's Hardware：Baude 事件](https://www.tomshardware.com/tech-industry/artificial-intelligence/rogue-claude-ai-tasked-with-renumbering-pages-accidentally-deletes-law-professors-entire-syllabus-one-year-of-lecture-notes-youre-right-to-be-angry-i-deleted-your-files-through-my-own-carelessness-humbled-agent-admits) ·
 [HN](https://news.ycombinator.com/item?id=50499114)
+
+## 2026-11-16 — 地面停飞的官方说法出现裂缝；一次中断抵达物理世界
+
+**「Duffy 撒谎了」**（Common Dreams，107+ HN 分）：自 11-15 的原因报道（承包商铜缆换光纤割接向
+生产 ATC 灌洪）之后，空管员们自己开始质疑官方说法——据 Washington Examiner 记者 Anna
+Giaritelli 在与 **60 名空中交通管制员**交谈后于 CNN 所述：这类割接作业「发生在周中的深夜、没有
+航班的时候」，而不是高峰期——"They don't happen during busy times like a Friday afternoon"——
+并且 "**None of them are buying what he said.**" Duffy 的说法是路由器在 L3Harris 换光纤时
+「数据过载」、以及 FAA 花费 8.75 亿美元的 SMART AI 系统「根本还没插上」。空管员对时序的反驳
+是可查证且具体的——这正是它比论战的音量更重要的原因。政治框架：史上仅第三次地面停飞、25 年
+来最长的全国停飞（约 150 万旅客受影响、周六取消 4,100+ 班）、九月的 GAO 报告已警示仓促现代化
+会导致中断、Hochul 州长要求 Duffy 辞职。注意信源：经一名记者转述的无名空管员，不是工会声明。
+
+**M365 中断的物理伤亡**（WDR，援引 Rhein-Erft-Kreis 警方与消防）：11-13 周五下午，德国
+Phantasialand 度假区内 **Hotel Ling Bao** 酒店的客人使用泳池后报告呼吸道刺激；现场检测发现
+**泳池自动投药系统故障**使氯含量远超安全水平。WDR 当晚统计 **13 名客人**氯气刺激、**5 人送医**；
+后续报道升至 **15** 人。上 HN 榜单的原因——也是值得关注的告警链路：酒店的泳池安全警告走企业
+邮件，而当天中断的时间窗正是这些告警该触发的时刻。WDR 的原文记录了投药故障与伤亡，但**没有**
+记录邮件链路；中断与事故之间的联系依据的是 HN 标题和我们打不开的德语后续报道（WindowsForum
+被 Cloudflare 墙挡住）。无论如何都值得审计的模式是：任何监控物理危害、却*只*通过第三方 SaaS
+依赖上报的东西，都有一个以就医人数计量的单点故障。
+
+Sources: [Common Dreams：'Duffy Lied'](https://www.commondreams.org/news/duffy-ground-stop-explanation) ·
+[WDR（德语）](https://www1.wdr.de/nrw/rheinland/rhein-erft-kreis/technischer-defekt-chlor-phantasialand-100.html) ·
+[HN](https://news.ycombinator.com/item?id=50509411)

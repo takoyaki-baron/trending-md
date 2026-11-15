@@ -1634,3 +1634,40 @@ files and a prayer; the spike (+1,220★ in a day) suggests the community priced
 
 Sources: [GoogleChrome/modern-web-guidance-src](https://github.com/GoogleChrome/modern-web-guidance-src) ·
 [Eval dashboard](https://googlechrome.github.io/modern-web-guidance-src/)
+
+## 2026-11-16 — the skills wave audits itself: SkillEvaluator, a 433-citation red-team bundle, and a dormant library lifted by the wave
+
+**NVIDIA/SkillEvaluator** (+205★ today, 1,543 total, Apache-2.0, 0.9.0 released Nov 6, pushes that
+night) is NVIDIA's framework for the question the skills boom has been avoiding: **does this skill
+actually improve task outcomes?** Two stages: quality checks first (quality gates, semantic-overlap
+checks, PyPI packaging as `skillevaluator`, docs at docs.nvidia.com/skills), then **comparing runs
+with and without the skill** to measure its effect on task results — backed by an arXiv paper
+(2608.20614) and a NVIDIA developer blog. The A/B-without-the-skill baseline is the right shape
+because it can produce a null result; a README that says a skill helps is not a measurement. Skills
+are instructions plus scripts injected into agent context — supply-chain surface — and coming from
+NVIDIA, skill *quality* is becoming an enterprise procurement question. Benchmarks not independently
+run: treat claimed numbers as vendor claims until reproduced.
+
+**elementalsouls/Claude-BugHunter** (+221★ today, 6,242 total) packages red-team methodology as an
+auditable inventory: **83 skills**, 15 slash commands, **681 disclosed-report patterns across 24
+vulnerability classes — of which 433 are now individually cited and auditable** (per the README), plus
+enterprise identity/infrastructure attack matrices, engagement-folder scaffolding, and Burp Suite MCP
+integration. Framing is defensive-adjacent: "battle-tested across authorized red-team and bug-hunting
+engagements, plus public training platforms (DVWA, OWASP Juice Shop, Hacker101,
+testphp.vulnweb.com)." No external launch announcement at feed time — the visible trigger is the
+citation push in the README. The 433-cited number is the part to copy: pattern libraries that name
+their sources can be checked, retracted, and extended; ones that don't are just prompts.
+
+**google-labs-code/stitch-skills** (+248★ today, 9.2k total) is the cautionary datapoint: last commit
+**Aug 17**, only release March — a dormant artifact resurging, not a launch. The repo was read before
+writing (the feed's own Void rule): the skills follow the agentskills.io open standard, install as
+plugins into Codex, Antigravity, Gemini CLI, Claude Code, Cursor and OpenCode, and wrap Stitch's MCP
+server for design-to-code workflows. The skills ecosystem (`anthropics/skills` at 195,276★,
++6,220★/week, skill bundles cycling the daily board all week) is now large enough that dormant
+first-party skill libraries get discovered and star-collected in waves — a +248★ day says something
+about the *wave* and nothing about fresh development. Both halves belong in the sentence.
+
+Sources: [NVIDIA/SkillEvaluator](https://github.com/NVIDIA/SkillEvaluator) ·
+[arXiv 2608.20614](https://arxiv.org/abs/2608.20614) ·
+[elementalsouls/Claude-BugHunter](https://github.com/elementalsouls/Claude-BugHunter) ·
+[google-labs-code/stitch-skills](https://github.com/google-labs-code/stitch-skills)

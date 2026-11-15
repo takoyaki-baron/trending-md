@@ -557,3 +557,14 @@ Sources: [線形計画は weight-space programming をできるか？](https://n
 
 Sources: [alibaba/open-code-review](https://github.com/alibaba/open-code-review) ·
 [Hugging Face の AACR-Bench](https://huggingface.co/datasets/Alibaba-Aone/aacr-bench)
+
+## 2026-11-16 — モデル × ハーネスのグリッドは実在し、SWE-bench Verified がそれだ
+
+- **アーカイブされた問い（「モデル × ハーネスを脚注ではなくグリッドとして載せる公開リーダーボードはあるか？」）には YES と答え、ページ自体の埋め込みデータから一次測定した：**SWE-bench Verified は **180** 提出物を **89** 個の異なる `model_display` 値で載せ、各行が `agent` を第一級メタデータとして持つ——**89 モデル中 19 が ≥2 エージェントの下に現れる**。Claude 3.5 Sonnet だけで **11 行 / 9 個の異なるエージェント**に跨る（AgentScope、Agentless-1.5、Composio SWEkit、EPAM AI/Run、Engine Labs、Learn-by-interact、SWE-agent、Tools、devlo）。
+- **ハーネス効果は反復セルから読む（スプレッド = 上界であってアブレーションではない——日付・試行数・ハーネス版が異なる）：**Claude 3.5 Sonnet **33.6 → 63.4%**（**29.8 ポイント**、SWE-agent 06-2024 → AgentScope 02-2025）；Claude 4 Sonnet 64.9 → 76.8%（**11.9 ポイント**、8 エージェント、mini-SWE-agent が最低）；GPT-4o 23.2 → 38.8%（**15.6 ポイント**）；Claude 3.7 Sonnet 13.6 ポイント；Claude 4.5 Opus 74.4 → 79.2%（**4.8 ポイント**、4 行）。最も狭いセルが最も情報量が多い：GPT-5 の Prometheus v1.2 → v1.2.1 は**同一ウェイト上の 0.6 ポイントのハーネス*バージョン*差**で、Claude 4.5 Opus は 2 つの mini-SWE-agent 日付で 2.4 ポイント差——リーダーボードがグリッドを載せている限り、この手法はサブポイントのハーネス効果を分解できる。
+- **同じ時間に測った設計の対照：**Terminal-Bench 4.1 のリーダーボードはエージェント列を持つが **46 モデル中 0** が 2 エージェントの下に現れる——グリッド型の表に反復セルがなく、ハーネス効果は読めない（各モデルは提出者が選んだハーネスの下に一度だけ現れる）。SWE-bench 自身の代替はサブセットによる正規化：Multilingual ボードは 13/13 が mini-SWE-agent で、サイトの「Bash Only」トグルは理由を逐語で述べる——"so scores compare models rather than harnesses."。セルを公開して読者に差を取らせる（グリッド）と、ハーネスを固定する（サブセット）が二つの実装可能な答えで、列だけあって反復のないリーダーボードはどちらでもない。
+
+→ [[harness-reliability]] [[fact-check]]
+
+Sources: [swebench.com](https://www.swebench.com/)（埋め込み `leaderboard-data` JSON、2026-11-16 読取）·
+[tbench.ai リーダーボード](https://www.tbench.ai/leaderboard)

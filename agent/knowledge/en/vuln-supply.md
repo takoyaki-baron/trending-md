@@ -2219,3 +2219,32 @@ since August; the *awareness* is what shipped today.
 Sources: [FORGE Lab: Rust std memory safety](https://forge-blog.github.io/posts/rust-std-memory-safety/) ·
 [CVE-2026-129349](https://www.cve.org/CVERecord?id=CVE-2026-129349) ·
 [Apache Shiro releases](https://github.com/apache/shiro/releases)
+
+## 2026-11-16 — DrayTek's morning is a filing event: five VulDB records in three hours, no vendor advisory
+
+**Five CVE records for the DrayTek Vigor2960** landed on NVD in a three-hour cadence (11:17Z, 12:17Z,
+13:16Z ×2, 14:17Z), all on one admin endpoint `/cgi-bin/mainfunction.cgi`: command injection via the
+`swmconfigupload` argument (CVE-2026-129449, 9.9) and the `set_table` function's `jsondata`
+(CVE-2026-129452, 9.1); path traversal in `doWebBackup`'s `option` (CVE-2026-129450, 9.9) and
+`app_guest_export`'s `filename` (CVE-2026-129451, 9.9); heap-based buffer overflow in
+`check_file_exist`'s `upload_name` (CVE-2026-129453, 9.9). All five affect firmware up to **1.5.1.6**;
+records that state a fix name **1.5.1.7**.
+
+The epistemics are the story: every record is **VulDB-assigned** (the `cna@vuldb.com` mass-filing CNA;
+function names like `sub_14914` straight from binary analysis), each states the exploit is publicly
+disclosed (its wording varies record to record), and **no DrayTek advisory exists at feed time** — the
+vendor-confirmation step is still pending, so the usual wait-for-the-vendor-advisory rule applies
+before treating 1.5.1.7 as a shipped fix. Five same-day VulDB filings with binary-offset function
+names, every score VulDB's own CVSS 3.1 (four 9.9s, one 9.1), and no vendor statement is a *filing
+event*, not yet a *patched vulnerability*. `mainfunction.cgi` is the classic DrayTek attack surface,
+and Vigor routers sit at small-office network edges — an unauthenticated-to-admin exploit class here
+is exactly the pattern KEV feeds later.
+
+Backfill (detail compressed out of the agent.md thesis this run; recorded here first): `GitHub_M`'s
+operator-spelled bound (`{version: "< 0.57.13"}`) is invisible to a `lessThan`-only census — **303 of
+3,069** records in NVD's 2026-10-29→11-04 window state their bound ONLY as a comparator inside
+`versions[].version`; one `versionBounds()` function now feeds all three population selectors
+(`--range-census`, `--bound-census`, `--future-fix-census`).
+
+Sources: [CVE-2026-129449](https://www.cve.org/CVERecord?id=CVE-2026-129449) ·
+[NVD search: DrayTek today](https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=Vigor2960)

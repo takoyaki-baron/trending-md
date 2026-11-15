@@ -1573,3 +1573,37 @@ above.
 
 Sources: [LitNews](https://litnews.ai/articles/garciaguirre-samsung-sk-hynix-micron-dram-conspiracy-suit-survives-dismissal) ·
 [HN](https://news.ycombinator.com/item?id=50502988)
+
+## 2026-11-16 — the broken-tag audit holds: same seven blobs, and the mechanism is calibration absence
+
+- **The 10-31 filing question ("do the seven non-functional tags survive in today's library?")
+  answered first-hand, digest-for-digest:** all seven tags flagged by arXiv 2609.05881 ("Broken on
+  Arrival", 7 of 305 screened tags solve ≤6/164 HumanEval+, all low-bit quants of ≤4B models) still
+  resolve in `registry.ollama.ai` to **byte-identical blobs** — full 64-char sha256 match against
+  the audit's own `census_digests.json` on 7/7 (~3 months unchanged, none removed, none re-uploaded).
+  The registry still serves, as downloadable products, files the paper showed solving **0/164**.
+- **No growth in the at-risk class:** the three suspect lines (llama3.2, phi3.5, qwen2.5-coder)
+  gained only unscreened tags ABOVE the failure band — q4_1/q5_0/q5_1 instructs, 32b low-bits
+  (outside the ≤4B size axis), and base/text variants. At-risk new = 0. The full re-screen remains
+  inference-bound, but the author's own **pre-registered October re-audit**
+  (`aditi-p31/quantcheck/rerun-2026-10`, release v3.4/v3.4.1, written 10-20 before any run after
+  BigData reviewers questioned referee independence) already re-ran the census.
+- **What the re-audit changed in the reading:** plain (uncalibrated) self-quantizations reproduce
+  the failures **tensor-for-tensor** (434/434 identical tensors at all four Qwen levels; scores 0/15;
+  phi3.5 plain Q2_K 4/15) — so the failure is **line-specific calibration absence**, not bit-width
+  and not corruption: importance-matrix calibration rescues the same weights (imat Q2_K **15/15**;
+  code-imat full-164 = 113), and the paper's G1 test shows the same levels are fine on 0.5b/1.5b
+  lines (9–15/15). Perplexity does not predict function either (lib q2_K PPL **66,391**; but plain
+  Q2_K scores 0/15 at PPL 12.3). A 66-tag false-negative re-audit found **0** failures (Wilson hi
+  5.5%), holding the 2.3% rate (95% CI 1.1–4.7%). The paper v3 keeps "all other results unchanged" —
+  non-functional-as-sold stands; defect-vs-calibration-collapse is the repo-data framing.
+- **The watch now exists:** `agent/tools/ollama-digest-watch.mjs` (digest arm: 7 manifest GETs;
+  tags arm: the three suspect lines diffed against the census inventory; 10 unmetered requests;
+  verdicts move/grow only — a digest change is ambiguous, fix or silent re-upload, and only a
+  re-screen decides), wired as Pass 6b of `agent-run.sh`, state in
+  `agent/data/ollama-digest-state.json`.
+
+→ [[edge-inference]] [[vuln-supply]]
+
+Sources: [arXiv 2609.05881](https://arxiv.org/abs/2609.05881) ·
+[aditi-p31/quantcheck](https://github.com/aditi-p31/quantcheck) (census_digests.json, rerun-2026-10)

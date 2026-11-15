@@ -1529,3 +1529,53 @@ Sources: [libracoder/kiri](https://github.com/libracoder/kiri) ·
 [Kiri サイト](https://runkiri.com/) ·
 [HN](https://news.ycombinator.com/item?id=50504077) ·
 [Likely7/Veyra-NRVideo](https://github.com/Likely7/Veyra-NRVideo)
+
+## 2026-11-16 — 開発機のディスプレイに測定値；テキストファースト閲覧の再浮上；エミュレータの検死報告；型アノテーション強制
+
+**MacBook Pro OLED PWM の測定**（MacAnorak、11-14、301+ HN pts）：新 "PROLED XDR Display"
+（タンデム OLED）は明るさを **240 Hz** で変調する（最悪値、輝度 99% 以下の設定時）— 置き換わる
+前の Mini-LED MacBook Pro は **14,880 Hz** で走っていた — およそ **62 倍**の差（Notebookcheck の
+実験室数値）。MacRumors や Reddit のスレッドは、数時間以内に頭痛・めまい・眼精疲労を報告する
+オーナーで埋まり、返品する人もいる。エッセイは議論がそうでない場所で慎重だ：個人の報告は全員
+への害の証拠ではない、周波数だけでは快適性は決まらない、不快の一部はナノテクスチャ由来の
+可能性がある。要求は控えめ — Apple はすでに OLED iPhone と新型 iPad mini に **Display Pulse
+Smoothing** アクセシビリティトグルを搭載している；それを Mac に広げるだけ — 買い物の助言は
+£2,899 からのマシンにコミットする前に試せ、というもの。主力開発機はその前で丸一日働くために
+買う：「壮観なスペック」と「あなたが使える」が、一部の買い手の上で乖離し始めており、240 対
+14,880 Hz はこの議論で初めての逸話ではない数字だ。
+
+**Emacs Is My Browser** が再浮上（Joshua Blais、4 月のエッセイ、113+ HN pts）：**EWW**
+（`shr.el`）を*デフォルト*のブラウザにする — ブラウザというよりルーティングテーブル：動画は
+**mpv** へ、PDF は **pdf-tools** へ、gopher/gemini は **Elpher** へ、自己ホストの **SearXNG** を
+検索エンジンに、`browse-url-handlers` が振り分け、`eww-readable` がリーダーモード、`&` が反抗
+するページを Chromium へ手渡す。彼の数値："about 85-90% of use cases"；Termux の下でスマホでも
+動かし、約 5-10% は実際のブラウザへフォールバック；正直な限界 — x.com は不可、ソーシャル
+ログイン不可、銀行と行政フォームは不可。繰り返される教訓：デフォルトはポリシーであり、
+エージェントが必要とするアクセシビリティツリーのテキスト抽出は、`shr.el` が 2013 年からやって
+きたことそのものだ。
+
+**lucyNES** の検死報告（Lucy；**Odin** で一人書いた NES エミュレータ、2024 年 4 月〜2025 年 1 月
+に構築、「Finished」と部分的なサウンドと正直に明記；リポジトリの最終プッシュは 2026-05-14 —
+完成品が再浮上し、記事が旅をしている、81+ HN pts）：Battletoads（悪名高いタイミングのストレス
+テスト）と数百のゲームを走らせる精度、7 つのマッパー（NROM から MMC3、GxROM、AxROM）、
+セーブステート、デバッガ表示、CRT シェーダー — そして**DMC チャネルなし**、だから多くの
+タイトルで音が貧弱だ。検死報告の最良の部分が最後の 10% に値を付ける：80/90% の罠（最後の精度
+追い込みが 7 か月の大半を消費）、CPU と PPU のサイクルタイミング、そして Odin 固有の話 —
+自動整数昇格がないことが本物のバグを生んだ；GC がないことが意図的な 3 アロケータ設計
+（フレーム毎テンポラリ、グローバルヒープ、セッションアリーナ）を強いた；CBOR 直列化には
+ビットフィールド付き raw union のカスタムハンドラが必要で、彼女はこれをエミュレーションに
+ぴったりと呼ぶ。
+
+**Gawain**（Show HN、67+ pts、`matheuzgomes/gawain`、リポジトリは 11-12 作成）は Python の型
+アノテーションを耐力壁にする：変数・引数・戻り値・クラス属性にアノテーションを要求し、その上で
+実際の型チェッカー（**ty** か **pyrefly**）を走らせて型を検証する。設計の賭け：アノテーションの
+*カバレッジ*と*チェック*は分離可能だ — 既存チェッカーは欠落アノテーションをデフォルトで軟らかい
+警告扱いするが、Gawain は欠落アノテーションそのものを失敗にする。高速チェッカーと実際に
+アノテーションされたコードベースの間の溝こそ、エージェントの書いたコードがドリフトする場所だ；
+67 ポイントの Show HN は初期の牽引力であり、このツールは pre-commit hook になるまでチェッカー
+2 つのフラグしか離れていない。
+
+Sources: [MacAnorak](https://macanorak.com/the-macbook-pros-oled-pwm-problem-when-a-better-display-becomes-worse-to-use/) ·
+[Joshua Blais](https://joshblais.com/blog/emacs-as-my-browser/) ·
+[lucyNES 検死報告](https://lucypero.com/lucynes.html) ·
+[matheuzgomes/gawain](https://github.com/matheuzgomes/gawain)

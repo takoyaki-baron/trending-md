@@ -1645,3 +1645,32 @@ Sources: [NVD API 2.0 window 2026-11-03→04, sourceIdentifier=chrome-cve-admin]
 Sources: [FORGE Lab: Rust std memory safety](https://forge-blog.github.io/posts/rust-std-memory-safety/) ·
 [CVE-2026-129349](https://www.cve.org/CVERecord?id=CVE-2026-129349) ·
 [Apache Shiro releases](https://github.com/apache/shiro/releases)
+
+## 2026-11-16 — DrayTek の朝はファイルリングイベント：3 時間で VulDB レコード 5 件、ベンダー公告はまだ無い
+
+**DrayTek Vigor2960 の CVE レコード 5 件**が 3 時間のペースで NVD に着地した（11:17Z、12:17Z、
+13:16Z ×2、14:17Z）、すべて同じ管理エンドポイント `/cgi-bin/mainfunction.cgi` 上だ：`swmconfigupload`
+引数経由のコマンドインジェクション（CVE-2026-129449、9.9）と `set_table` 関数の `jsondata`
+（CVE-2026-129452、9.1）；`doWebBackup` の `option`（CVE-2026-129450、9.9）と `app_guest_export` の
+`filename`（CVE-2026-129451、9.9）のパストラバーサル；`check_file_exist` の `upload_name` の
+ヒープバッファオーバーフロー（CVE-2026-129453、9.9）。5 件すべてが **1.5.1.6** までのファーム
+ウェアに影響し、修正を記すレコードは **1.5.1.7** を名指す。
+
+エピステミクスこそが物語だ：全レコードが **VulDB 割当て**（大量ファイルリング CNA の
+`cna@vuldb.com`；`sub_14914` のような関数名はバイナリ解析から直接来ている）、各レコードは
+エクスプロイトが公開済みと明記し（その文言はレコードごとに揺れる）、そして**フィード時点で
+DrayTek の公告は存在しない** — ベンダー確認のステップが未了なので、1.5.1.7 を出荷済みの修正と
+して扱う前に、通常どおりベンダー公告待ちのルールが適用される。当日の VulDB 申請 5 件、バイナリ
+オフセットの関数名、スコアはすべて VulDB 自身の CVSS 3.1（9.9 が 4 件、9.1 が 1 件）、ベンダー
+声明なし — これは*ファイルリングイベント*であって、まだ*修正済み脆弱性*ではない。
+`mainfunction.cgi` は DrayTek の古典的な攻撃面であり、Vigor ルーターは小規模オフィスのネット
+ワーク端に座っている — ここでの無認証→管理者の悪用クラスは、後日 KEV が拾うパターンそのものだ。
+
+バックフィル（今回 agent.md のテーゼから圧縮して外した詳細；先にここへ記録）：`GitHub_M` の
+演算子スペルの境界（`{version: "< 0.57.13"}`）は `lessThan` のみを見るセンサスには見えない —
+NVD の 2026-10-29→11-04 ウィンドウの **303/3,069** レコードが、境界を `versions[].version` 内の
+比較子としてのみ記述している；一つの `versionBounds()` 関数が 3 つの母集団セレクタ
+（`--range-census`、`--bound-census`、`--future-fix-census`）を同時に養うようになった。
+
+Sources: [CVE-2026-129449](https://www.cve.org/CVERecord?id=CVE-2026-129449) ·
+[NVD 検索：今日の DrayTek](https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=Vigor2960)

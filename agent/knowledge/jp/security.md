@@ -5353,3 +5353,25 @@ Quarkslab の TEE 研究と Amnesty の報道を基礎として credit してい
 
 Sources: [Osservatorio Nessuno](https://osservatorionessuno.org/blog/2026/05/demystifying-phone-unlocking-tools-a-technical-overview/) ·
 [HN](https://news.ycombinator.com/item?id=50497416)
+
+## 2026-11-16 — Cyrus SASL の SRP プラグインが誰でも認証を通る：共有シークレットがゼロに、修正はプラグインの削除
+
+**CVE-2026-129483**（VulnCheck CNA 割当て；CVSS 4.0 ベース **9.3** と VulnCheck 自身の CVSS 3.1
+**9.1** が並ぶ — 同一ベンダーの数値が 2 つの停止点に存在するので、引用時にはバージョンを添える；
+レコードは `Received`、公開 2026-11-15T14:17:27Z）：Cyrus SASL **〜 2.1.28** は SRP サーバー
+メカニズムの認証に失敗する — `srp_server_mech_step2` が、群 `N` の倍数であるクライアント公開値
+`A` を拒否しないのだ。`A = N` を送るクライアントは共有シークレットを**ゼロ**に強制でき、
+パスワードを知らずに既存の任意のユーザーとして認証する — しかもセッション鍵を手にする。当日
+レコードとしては異例なほど上流の痕跡が揃っている：issue
+[#896](https://github.com/cyrusimap/cyrus-sasl/issues/896)、oss-sec 投稿、公開 PoC gist、そして
+修正コミット `fb3724f4`（11-12）— これは数学を修正しない。**SRP プラグインごと削除する**のだ。
+
+運用者側の落とし穴：影響上限の 2.1.28 は最新リリースそのもの — newest==bound の状態なので、
+アップグレード先は現状存在せず、 remediation はコミット自身の形になる：リリースがこの削除を
+引き取るまで、SRP プラグインを無効化または除去する。SRP は多くのスタックが選ぶメカニズムでは
+ないが、Cyrus SASL はメールサーバーや SASL 認証が接続されるあらゆる場所に同梱されており、
+認証前のゼロシークレットバイパスは認証バグとしてほぼ最悪の部類だ。
+
+Sources: [CVE-2026-129483](https://www.cve.org/CVERecord?id=CVE-2026-129483) ·
+[cyrusimap/cyrus-sasl#896](https://github.com/cyrusimap/cyrus-sasl/issues/896) ·
+[oss-sec 投稿](https://seclists.org/oss-sec/2026/q4/122)

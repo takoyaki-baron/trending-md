@@ -1413,3 +1413,44 @@ Sources: [libracoder/kiri](https://github.com/libracoder/kiri) ·
 [Kiri 站点](https://runkiri.com/) ·
 [HN](https://news.ycombinator.com/item?id=50504077) ·
 [Likely7/Veyra-NRVideo](https://github.com/Likely7/Veyra-NRVideo)
+
+## 2026-11-16 — 开发者主力机的屏幕有了测量；文本优先浏览重浮；一份模拟器复盘；类型覆盖强制
+
+**MacBook Pro OLED PWM 测量**（MacAnorak，11-14，301+ HN 分）：新款 "PROLED XDR Display"
+（tandem OLED）以 **240 Hz** 调制亮度（最坏情形、亮度设为 99% 及以下时），而被它取代的 Mini-LED
+MacBook Pro 是 **14,880 Hz**——约 **62 倍**之差（Notebookcheck 实验室数字）。MacRumors 与
+Reddit 讨论串里满是数小时内报告头痛、眩晕、眼疲劳的用户；多人正在退货。文章在话语不谨慎的地方
+保持了谨慎：个例报告不等于对所有人有害的证据、频率单独不决定舒适度、部分不适可能与纳米纹理
+有关。它的诉求很克制——Apple 已在 OLED iPhone 与新款 iPad mini 上提供 **Display Pulse
+Smoothing** 无障碍开关；把它带到 Mac 即可——对买家的建议是在决定一台 £2,899 起的机器之前先
+试用。主力开发机是为整天盯着它而买的：「参数惊人」与「你用着舒服」正在一部分买家的身上分岔，
+240 对 14,880 Hz 是这场争论里第一个不是轶事的数字。
+
+**Emacs Is My Browser** 重浮（Joshua Blais，四月文章，113+ HN 分）：把 **EWW**（`shr.el`）当作
+*默认*浏览器——与其说是浏览器，不如说是一张路由表：视频给 **mpv**、PDF 给 **pdf-tools**、
+gopher/gemini 给 **Elpher**、自托管 **SearXNG** 当搜索引擎、`browse-url-handlers` 负责分派、
+`eww-readable` 当阅读模式、`&` 把任何反抗的页面交还 Chromium。他的数字："about 85-90% of use
+cases"；在手机上于 Termux 里运行、约 5-10% 的时候退回真浏览器；诚实的边界——上不了 x.com、
+社交登录、银行与政务表格。反复出现的教训：默认值就是政策，而 agent 需要的无障碍树文本抽取，
+正是 `shr.el` 自 2013 年起一直在做的事。
+
+**lucyNES** 复盘（Lucy；用 **Odin** 单人写的 NES 模拟器，2024 年 4 月–2025 年 1 月，诚实地标注
+「Finished」、声音不完整；仓库最后推送 2026-05-14——是完成品重浮，文章在替它旅行，81+ HN 分）：
+精度足以跑 Battletoads（一个臭名昭著的时序压力测试）和数百款其他游戏、七个 mapper（NROM 到
+MMC3、GxROM、AxROM）、存档状态、调试器视图、CRT 着色器——以及**没有 DMC 通道**，所以许多
+游戏音效很差。复盘是最好的部分：80/90% 陷阱（最后的精度冲刺吃掉了七个月中的大部分）、CPU 与
+PPU 的周期时序、以及 Odin 的细节——没有自动整数提升造成了真实 bug；没有 GC 迫使出刻意的三
+分配器设计（每帧临时、全局堆、会话 arena）；CBOR 序列化需要为带位域的裸联合写自定义处理器，
+她称之为对模拟器非常合适。
+
+**Gawain**（Show HN，67+ 分，`matheuzgomes/gawain`，仓库 11-12 创建）让 Python 的类型注解变成
+承重墙：它要求对变量、参数、返回值与类属性写注解——然后运行真正的类型检查器（**ty** 或
+**pyrefly**）来验证类型。设计赌注：注解*覆盖*与注解*检查*是可分离的两件事——现有检查器默认把
+缺失注解当软警告，而 Gawain 让缺失注解本身就是失败。快检查器与真正被注解的代码库之间的落差，
+恰恰是 agent 写的代码漂移的地方；67 分的 Show HN 是早期热度，而它离 pre-commit hook 只差两个
+检查器的旗标。
+
+Sources: [MacAnorak](https://macanorak.com/the-macbook-pros-oled-pwm-problem-when-a-better-display-becomes-worse-to-use/) ·
+[Joshua Blais](https://joshblais.com/blog/emacs-as-my-browser/) ·
+[lucyNES 复盘](https://lucypero.com/lucynes.html) ·
+[matheuzgomes/gawain](https://github.com/matheuzgomes/gawain)

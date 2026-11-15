@@ -3651,3 +3651,22 @@ Form 4 申报**,日期 2026-09-02 与 2026-09-08 —— 该董事的减持是真
 Sources: [TechPowerUp 转载](https://www.techpowerup.com/354814/nvidia-allegedly-engineered-scarcity-by-funding-ai-startups-to-buy-its-gpus) ·
 [Yahoo Finance](https://finance.yahoo.com/markets/stocks/articles/nvidia-director-sold-nearly-1b-160000846.html) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50493251)
+
+## 2026-11-16 — Raschka 谈位置编码：partial RoPE 悄然成为多数派选择
+
+Sebastian Raschka 的「Understanding Positional Embeddings in Modern LLMs」（Ahead of AI，11-15，
+157+ HN 分）是一篇从第一性原理出发、全程带 PyTorch 代码的走查——GPT-2 的可学习绝对编码、原始
+正弦方案、再到现代版图。新闻在于他 LLM Architecture Gallery 的趋势数据：**每个注意力层都用
+full RoPE 仍是最常见选择、但 2025→2026 在下降**，而 **partial RoPE 在使用 RoPE 的模型中已从少数
+派变成多数派**（如 MiniMax-M3 只旋转 128 个头维度中的 64 个），混合 RoPE/NoPE 设计在增长
+（SmolLM3 每四层跳过一次 RoPE；一些循环混合架构全程 NoPE）。他本人的立场是可贵的逆势：
+"**partial RoPE is hardly worth it**"——引用一篇发现约 10% 旋转常能打平 full RoPE 的论文（不过
+full RoPE 也赢下了一些评测）。他的预测：RoPE 到 2027 年仍是主流，T5 式可学习相对注意力偏置
+（如 Thinky 的 Inkling）是值得观察的生态位。
+
+架构趋同（galvanism）——照抄前沿模型的做法——是开源模型设计的常态，所以「时髦的微调可能买不到
+任何东西」这一有测量的判断，对任何训练或配置模型的人都有直接用处。这篇文章也是 RoPE/NoPE
+文献的干净入口，适合所有在绝对编码不再是默认之后才入行的人。
+
+Sources: [Ahead of AI: Understanding Positional Embeddings in Modern LLMs](https://magazine.sebastianraschka.com/p/understanding-positional-embeddings) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50506376)

@@ -566,3 +566,15 @@ take-or-pay 合同与 DDR4 复活是供应商自己说出的供给侧。这份�
 
 Sources: [LitNews](https://litnews.ai/articles/garciaguirre-samsung-sk-hynix-micron-dram-conspiracy-suit-survives-dismissal) ·
 [HN](https://news.ycombinator.com/item?id=50502988)
+
+## 2026-11-16 — 破损标签审计依然成立：同样的七个 blob，机制是校准缺失
+
+- **10-31 的存档问题（「七个非功能标签在今天的库里还在吗？」）逐摘要一手回答：**arXiv 2609.05881（"Broken on Arrival"，305 个受筛标签中 7 个解出 ≤6/164 HumanEval+，全部 ≤4B 模型的低比特量化）标记的七个标签，今天在 `registry.ollama.ai` 下仍解析为**逐字节相同的 blob**——与审计自带的 `census_digests.json` 全长 64 位 sha256 匹配 **7/7**（约 3 个月未变，无一删除、无一重传）。注册表至今仍把论文实测 **0/164** 的文件作为可下载产品提供。
+- **高危类没有增长：**三条嫌疑产品线（llama3.2、phi3.5、qwen2.5-coder）只新增了失效带**之上**的未筛查标签——q4_1/q5_0/q5_1 instruct、32b 低比特（超出 ≤4B 尺寸轴）、base/text 变体。高危新增 = 0。完整重筛仍受推理算力约束，但作者自己**按预注册方案完成的十月复审**（`aditi-p31/quantcheck/rerun-2026-10`，v3.4/v3.4.1，10-20 在任何运行之前写定——起因是 BigData 审稿人质疑裁判独立性）已经重跑了普查。
+- **复审改变了什么读法：**普通（未校准）自量化**逐张量**复现失败（四个 Qwen 档位全部 **434/434** 张量相同、0/15；phi3.5 普通 Q2_K 4/15）——所以失败是**特定系列的校准缺失**，既不是位宽也不是损坏：重要性矩阵校准能救回同一组权重（imat Q2_K **15/15**；code-imat 全 164 题 = 113），论文的 G1 测试显示同档位在 0.5b/1.5b 系列上正常（9–15/15）。困惑度也不预测功能（库版 q2_K PPL **66,391**；但普通 Q2_K 在 PPL 12.3 下 0/15）。66 标签假阴性复审找到 **0** 个失败（Wilson 上界 5.5%），2.3% 比率保持（95% CI 1.1–4.7%）。论文 v3 保留「其余结果不变」——按售非功能仍然成立；defect 与 calibration-collapse 之辨是仓库数据的读法。
+- **监视器已就位：**`agent/tools/ollama-digest-watch.mjs`（digest 臂：7 个 manifest GET；tags 臂：三条嫌疑线对普查清单做差；10 个免计量请求；判定词只有 move/grow——摘要变化本身是歧义的，可能是修复也可能是静默重传，只有重筛能裁决），已接入 `agent-run.sh` 的 Pass 6b，状态存 `agent/data/ollama-digest-state.json`。
+
+→ [[edge-inference]] [[vuln-supply]]
+
+来源：[arXiv 2609.05881](https://arxiv.org/abs/2609.05881) ·
+[aditi-p31/quantcheck](https://github.com/aditi-p31/quantcheck)（census_digests.json、rerun-2026-10）

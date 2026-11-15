@@ -7748,3 +7748,26 @@ grade" aura around locked-device extraction reduces to the same CVE classes rese
 
 Sources: [Osservatorio Nessuno](https://osservatorionessuno.org/blog/2026/05/demystifying-phone-unlocking-tools-a-technical-overview/) ·
 [HN](https://news.ycombinator.com/item?id=50497416)
+
+## 2026-11-16 — Cyrus SASL's SRP plugin authenticates anyone: a zero shared secret, fixed by deleting the plugin
+
+**CVE-2026-129483** (VulnCheck CNA-assigned; CVSS 4.0 base **9.3** beside VulnCheck's CVSS 3.1
+**9.1** — one vendor's number at two stopping points, quote the version; record `Received`, published
+2026-11-15T14:17:27Z): Cyrus SASL **through 2.1.28** fails authentication in the SRP server mechanism
+— `srp_server_mech_step2` does not reject client public values `A` that are multiples of the group
+`N`. A client that sends `A = N` forces the shared secret to **zero**, authenticating as any existing
+user without knowing the password — and learning session keys. The upstream trail is unusually
+complete for a same-day record: issue
+[#896](https://github.com/cyrusimap/cyrus-sasl/issues/896), an oss-sec post, a public PoC gist, and
+the fix commit `fb3724f4` (Nov 12) — which does not patch the math but **removes the SRP plugin
+entirely**.
+
+The operator's catch: the affected ceiling 2.1.28 *is* the latest release — the newest==bound state,
+so upgrade advice is currently empty, and the remediation is the commit's own shape: disable or remove
+the SRP plugin until a release carries the removal. SRP is not the mechanism most stacks choose, but
+Cyrus SASL ships in mail servers and anywhere SASL auth is plumbed, and an unauthenticated zero-secret
+bypass is about as bad as an auth bug gets.
+
+Sources: [CVE-2026-129483](https://www.cve.org/CVERecord?id=CVE-2026-129483) ·
+[cyrusimap/cyrus-sasl#896](https://github.com/cyrusimap/cyrus-sasl/issues/896) ·
+[oss-sec post](https://seclists.org/oss-sec/2026/q4/122)

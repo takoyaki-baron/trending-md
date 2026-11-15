@@ -1913,6 +1913,15 @@
     "jp": "個人エンジニアリングブログ——Prince of Persia フロンティアモデル比較を 2026-10-01 にページ上で検証（レベル1のピクセル差 8,429→2、SDLPoP のルーム描画ルーチン移植、EXEPACK 展開の詳細を確認）。単著の非公式評価で、著者自身の限定条件がそのまま。突合：HN 63 pts（公開時 38）。",
     "zh": "个人工程博客——Prince of Persia 前沿模型对比已于 2026-10-01 在页面上核实（第一关像素差 8,429→2、SDLPoP 房间绘制例程移植、EXEPACK 解包细节均在）；单作者非正式评测，作者自己的限定条件完整保留。交叉核对：HN 63 分（发布时 38）。"
   },
+  "blog.pypi.org": {
+    "cat": "vendor",
+    "cred": "high",
+    "density": "high",
+    "cv": 1,
+    "en": "PyPI official blog — announcements about the package index itself; claims about shipped UI verified against the deployed site (the /project/<pkg>/security/ route serves the Security tab).",
+    "zh": "PyPI 官方博客——关于包索引自身的公告；已上线 UI 的主张对部署站点核验（/project/<pkg>/security/ 路由即 Security 标签页）。",
+    "jp": "PyPI 公式ブログ——パッケージインデックス自身に関する発表；出荷済み UI の主張はデプロイ済みサイトで検証（/project/<pkg>/security/ ルートが Security タブ）。"
+  },
   "blog.python.org": {
     "cat": "vendor",
     "cred": "high",
@@ -2970,6 +2979,15 @@
     "jp": "AI とソフトウェア文化についての個人エッセイ——文学的で引用されやすいが、散文でありデータではない：数値は引用先で検証してから使う。2026-11-12 に捕捉：Mathocalypse の一節は Scott Aaronson のポストを訂正*前*の数値（8,000 問/~5%）で引用していた；Aaronson のポストは現在 ~4,000/~10% で訂正を自文に明記——フィードの項目は en/zh/jp でその場修正済み。",
     "zh": "关于 AI 与软件文化的个人随笔——文学性强、常被引用，但属散文而非数据：引用其中数字前先对照被引用方核验。2026-11-12 捕获：其 Mathocalypse 段落引用的是 Scott Aaronson 帖子**更正前**的数字（8,000 题/~5%）；Aaronson 帖子现读作 ~4,000/~10% 且更正注记写在帖内——feed 对应条目已在 en/zh/jp 原地更正。"
   },
+  "commondreams.org": {
+    "cat": "news",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Progressive advocacy news outlet. The Nov 15 ground-stop piece relays a named reporter's on-air statements (Washington Examiner's Giaritelli on CNN) and the quotes check against the page first-hand; advocacy framing means read it for the sourcing chain, then verify against the named originals. 2026-11-15: its Duffy copper/fiber framing independently matches BBC's Nov 14 report of the same incident.",
+    "zh": "进步派倡导性新闻网站。11 月 15 日的地面停飞报道转述具名记者的电视发言（Washington Examiner 的 Giaritelli 在 CNN 上），引文经本站一手对照核实；倡导性立场意味着读它要盯信源链，再对具名原始出处核验。2026-11-15：其对 Duffy 铜改纤因果的框架与 BBC 11 月 14 日同一事件的报道相互独立地吻合。",
+    "jp": "進歩派のアドボカシー系ニュースサイト。11 月 15 日の地上停止記事は、具名記者（Washington Examiner の Giaritelli）のオンエア発言を伝えるもので、引用は一次でページ照合済み。アドボカシー性が強いため、取材チェーンを読み、名指された本来の発信元で検証すること。2026-11-15：Duffy の銅/光ファイバー因果の枠組みは、BBC の 11 月 14 日の同一事件報道と独立に一致。"
+  },
   "community.bitwarden.com": {
     "cat": "vendor",
     "cred": "high",
@@ -3194,6 +3212,15 @@
     "en": "Criminal IP — threat-intel platform's blog; technical CVE analysis (Adobe ColdFusion CVE-2026-48362), secondary to the vendor bulletin.",
     "jp": "Criminal IP——脅威インテルプラットフォームのブログ。CVE技術分析（Adobe ColdFusion CVE-2026-48362）、ベンダー勧告に次ぐ。",
     "zh": "Criminal IP——威胁情报平台博客；CVE 技术分析（Adobe ColdFusion CVE-2026-48362），次于厂商公告。"
+  },
+  "crissyfield.de": {
+    "cat": "security",
+    "cred": "high",
+    "density": "high",
+    "cv": 1,
+    "en": "Security research firm (Crissy Field GmbH) — first-party for its own scan methodology and numbers; the Lovable/Supabase exposure mechanism is anchored in a third-party artifact, Supabase discussion #4547.",
+    "zh": "安全研究公司（Crissy Field GmbH）——其扫描方法与数字的一手来源；Lovable/Supabase 暴露机制锚定在第三方工件 Supabase 讨论 #4547 上。",
+    "jp": "セキュリティ調査会社（Crissy Field GmbH）——走査手法と数値の一次情報源。Lovable/Supabase 露出のメカニズムは第三者アーティファクト（Supabase ディスカッション #4547）に锚定。"
   },
   "crowdsec.net": {
     "cat": "vendor",
@@ -3548,6 +3575,15 @@
     "en": "Datasette's project site — release announcements and blog posts by Simon Willison; primary for its security releases. Cross-validated (09-11): the frontier-model-audited 1.0a39/0.65.4 releases confirmed against github.com/simonw/datasette release objects.",
     "jp": "Datasette のプロジェクトサイト —— Simon Willison によるリリース告知とブログで、セキュリティリリースの一次情報。突合済み（09-11）：フロンティアモデル監査付き 1.0a39/0.65.4 リリースは github.com/simonw/datasette のリリース記録と突合済み。",
     "zh": "Datasette 项目官网 —— Simon Willison 的发布公告与博客，是其安全发布的一手来源。已交叉核验（09-11）：经前沿模型审计的 1.0a39/0.65.4 发布已对照 github.com/simonw/datasette 的 release 记录确认。"
+  },
+  "datatracker.ietf.org": {
+    "cat": "research",
+    "cred": "high",
+    "cv": 1,
+    "density": "high",
+    "en": "The IETF's primary document repository (internet-drafts, RFCs, metadata). Artifact-checked 2026-11-15: draft-banffy-httpbis-not-a-freezer-00 fetched first-hand — title, author, dates and abstract text all read directly in the document; the canonical place to verify any 'the IETF says' claim.",
+    "zh": "IETF 的一手文档库（互联网草案、RFC、元数据）。2026-11-15 工件核验：一手抓取 draft-banffy-httpbis-not-a-freezer-00——标题、作者、日期与摘要文本均直接读自文档本身；核验任何'IETF 说'类主张的权威出处。",
+    "jp": "IETF の一次ドキュメントリポジトリ（インターネットドラフト、RFC、メタデータ）。2026-11-15 にアーティファクト検証：draft-banffy-httpbis-not-a-freezer-00 を一次取得し、タイトル・著者・日付・要約テキストをすべて文書そのものから確認。'IETF が言う'系の主張を検証する正規の場所。"
   },
   "dawo.community": {
     "cat": "other",
@@ -4408,6 +4444,15 @@
     "en": "Embedding Gemma Transcribe — indie free Mac app repurposing Google's EmbeddingGemma 2 as STT. Fetched first-hand (10-14): 288x / 12.6s per hour / 715 MB / ~229k words all on-page, and the honesty is real — the comparison table self-labels 'a rough guide, not a like-for-like ranking' and discloses WER ~5% vs 2-3% for leading models. Numbers self-measured; cross-checked against Google's EmbeddingGemma 2 release (covered 10-07).",
     "jp": "Embedding Gemma Transcribe——GoogleのEmbeddingGemma 2をSTTに転用する個人製無料Macアプリ。一次確認済み（10-14）：288倍/1時間12.6秒/715 MB/約22.9万語すべて掲載、誠実さも本物——比較表は自己ラベルで『大まかな目安、同等比較ではない』と明示し、WER約5%（先行モデルは2-3%）を開示。数値は自己測定；GoogleのEmbeddingGemma 2リリース（10-07掲載）と突合。",
     "zh": "Embedding Gemma Transcribe——将 Google EmbeddingGemma 2 改作 STT 的个人免费 Mac 应用。已一手核验（10-14）：288×/每小时 12.6 秒/715 MB/约 22.9 万词均在页面，且足够诚实——对比表自带『粗略指南、非同条件排名』标注并披露 WER 约 5%（领先模型 2-3%）。数字为自测；与 Google EmbeddingGemma 2 发布（10-07 已收录）交叉核验。"
+  },
+  "egm.dev": {
+    "cat": "vendor",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "First-party website for Google's Elephant-Goldfish Model (EGM) agent plugin. First-party stays med even though the facts held: install paths and project description verified 2026-11-15 against the google/elephant-goldfish-model repo the site links. A project site is authoritative about its own product and nothing else.",
+    "zh": "Google 的 Elephant-Goldfish Model（EGM）智能体插件的官方网站。事实虽经核实，一线站点仍保持 med：2026-11-15 对照该站链接的 google/elephant-goldfish-model 仓库核验了安装路径与项目描述。项目官网只对自家产品有权威性，别无其他。",
+    "jp": "Google の Elephant-Goldfish Model（EGM）エージェントプラグインの一次公式サイト。事実は確認できたが一次サイトは med のまま：2026-11-15、サイトがリンクする google/elephant-goldfish-model リポジトリに対してインストール手順と記述を検証。プロジェクトサイトに権威があるのは自社製品についてだけ。"
   },
   "eiln.github.io": {
     "cat": "research",
@@ -6802,6 +6847,15 @@
     "jp": "Jake A. Smith の個人ブログ（PHP/Composer エコシステム）——http_build_url() 非推奨化の記事は「管理された退役」についてのメンテナ自身の一次記述で、xz 時代の理由づけが明快。単一著者、インストール数は自己報告。",
     "zh": "Jake A. Smith 的个人博客（PHP/Composer 生态）——http_build_url() 弃用公告是维护者关于“有管理的退役”的第一手叙述，xz 时代的理由陈述清晰。单一作者；安装量为自报。"
   },
+  "jakub.jankiewicz.org": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Personal blog of Jakub T. Jankiewicz (JS/Linux developer). 2026-11-15: the AI-code-open-source essay's load-bearing licensing facts check out — Stack Overflow content is CC BY-SA per SO's published terms, and the Monkey Selfie / US Copyright Office authorship position is public record; single-author opinion pieces otherwise, verify numbers against originals.",
+    "zh": "Jakub T. Jankiewicz（JS/Linux 开发者）的个人博客。2026-11-15：'AI 代码应开源'一文的承重性许可事实经核验成立——Stack Overflow 内容依其公开条款为 CC BY-SA，'猴子自拍照'与美国版权局的作者性立场属公共记录；其余为单一作者观点文，数字请对照原始出处。",
+    "jp": "Jakub T. Jankiewicz（JS/Linux 開発者）の個人ブログ。2026-11-15：「AI コードはオープンソースべき」エッセイの荷重となるライセンス事実は確認成立——Stack Overflow コンテンツは SO の公開条件通り CC BY-SA、サルの自撮り/米国著作権局の著者性の立場は公記録。それ以外は単独執筆の論説のため、数字は一次資料で確認。"
+  },
   "jamesfmackenzie.com": {
     "cat": "community",
     "cred": "med",
@@ -6945,6 +6999,15 @@
     "en": "Jorge Garcia-Herrero's personal site — co-author's host for the IMDEA Networks conversational-AI privacy paper (\"Prompt like a Butterfly, Sting like a Tracker\", PoPETs submission, CC-BY). Cross-checked (09-29): PDF read first-hand — the abstract's claims, Grok permalinks public-by-default with opt-out (§6.3), and the TikTok screenshot via share-page og:image (Fig 11/12) all verified; authors are IMDEA Networks/UC3M + independent, with responsible disclosure to providers and EU DPAs. The one-word feed slip: the screenshot travels on the *sharing* flow, not export.",
     "jp": "Jorge Garcia-Herrero の個人サイト——IMDEA Networks の対話型 AI プライバシー論文（\"Prompt like a Butterfly, Sting like a Tracker\"、PoPETs 投稿、CC-BY）の共著者による公開ページ。突合済み（09-29）：PDF を一次通読——要旨の主張、Grok パーマリンクのデフォルト公開（オプトアウトあり、§6.3）、共有ページ og:image 経由で TikTok に渡る会話スクリーンショット（Fig 11/12）をすべて確認。著者は IMDEA Networks/UC3M+独立研究者で、ベンダーと EU DPA に責任ある開示済み。フィード側の一言のずれ：スクリーンショットは*エクスポート*でなく*共有*フローに乗る。",
     "zh": "Jorge Garcia-Herrero 个人网站——IMDEA Networks 对话式 AI 隐私论文（\"Prompt like a Butterfly, Sting like a Tracker\"，PoPETs 投稿，CC-BY）的共同作者托管页。已交叉核验（09-29）：PDF 一手通读——摘要论断、Grok 永久链接默认公开可退出的发现（§6.3）、经分享页 og:image 传给 TikTok 的对话截图（图 11/12）全部证实；作者为 IMDEA Networks/UC3M + 独立研究者，并已向厂商与欧盟 DPA 负责任披露。我们唯一用词偏差：截图走的是*分享*流程而非导出。"
+  },
+  "joshblais.com": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Personal blog (Joshua Blais — Emacs, tooling, workflows). 2026-11-15: the Emacs-as-browser piece's tooling claims verified against GNU Emacs's own documentation (EWW, shr.el, eww-readable, browse-url-handlers are real built-ins); workflow essays are one person's setup, not a benchmark.",
+    "zh": "个人博客（Joshua Blais——Emacs、工具链与工作流）。2026-11-15：'Emacs 当浏览器'一文中的工具链主张经 GNU Emacs 自身文档核验（EWW、shr.el、eww-readable、browse-url-handlers 均为真实内建）；工作流类文章是个人配置，不是基准。",
+    "jp": "個人ブログ（Joshua Blais——Emacs、ツール、ワークフロー）。2026-11-15：「Emacos をブラウザに」のツール主張を GNU Emacs 自身のドキュメントで検証（EWW、shr.el、eww-readable、browse-url-handlers は実在の内蔵機能）。ワークフロー系エッセイは個人の設定でありベンチマークではない。"
   },
   "joshka.net": {
     "cat": "community",
@@ -7765,6 +7828,15 @@
     "en": "Armin Ronacher's (Flask, Sentry) engineering blog — long-running first-hand practitioner writeups; his agent-eval posts include their own negative results. Cross-checked (09-12): the Astra 35-hour experiment numbers match his post as discussed on HN.",
     "jp": "Armin Ronacher氏（Flask、Sentry）の技術ブログ——長年の実践者による一次的な長文レビュー。エージェント評価記事は否定的結果も自ら記載。クロスチェック済み（09-12）：Astra 35時間実験の数値は本文とHN議論と一致。",
     "zh": "Armin Ronacher（Flask、Sentry）的工程博客——长期的一线实践者长文；其智能体评测文章自带负面结果。已交叉核验（09-12）：Astra 35 小时实验的数字与其原文及 HN 讨论一致。"
+  },
+  "lucypero.com": {
+    "cat": "community",
+    "cred": "med",
+    "cv": 1,
+    "density": "med",
+    "en": "Personal project write-up site (Lucy's Save Room). 2026-11-15: the lucyNES post's repo claim verified first-hand against github.com/lucypero/lucynes, and the site's own feature list matches the page text; single-author retro — verify accuracy claims against the linked repo.",
+    "zh": "个人项目复盘站点（Lucy's Save Room）。2026-11-15：lucyNES 一文的仓库主张经 github.com/lucypero/lucynes 一手核验，站点自身的功能清单与页面文本一致；单人作者怀旧向——精度类主张请对照其链接的仓库。",
+    "jp": "個人プロジェクト解説サイト（Lucy's Save Room）。2026-11-15：lucyNES 記事のリポジトリ主張を github.com/lucypero/lucynes に対して一次検証し、サイト自身の機能リストはページ本文と一致。単独執筆のレトロ回——精度主張はリンク先リポジトリで確認すること。"
   },
   "ludeon.com": {
     "cat": "vendor",
@@ -10872,6 +10944,15 @@
     "jp": "Check Point Research の技術ブログ。ドライバ内部やプロトコル暗号の長編リバースエンジニアリング記事で、攻撃手法と併せて具体的な検知指針を示す。",
     "zh": "Check Point Research 技术博客——长篇逆向分析（驱动内部、协议加密），在给出攻击面发现的同时提供具体检测建议。"
   },
+  "research.google": {
+    "cat": "research",
+    "cred": "high",
+    "density": "high",
+    "cv": 1,
+    "en": "Google's research blog — first-party for its own measured results by definition; publication facts anchor against third-party venues (the Sleep-framework post pairs with the team's arXiv 2606.03979), so existence checks out while performance numbers stay vendor-measured.",
+    "zh": "Google 研究博客——其自测结果天然是一手来源；发表事实可对第三方场所锚定（Sleep framework 博文对应团队自己的 arXiv 2606.03979），存在性可核验而性能数字仍是厂商自测。",
+    "jp": "Google の研究ブログ——自社測定の結果は定義上一次情報源。公表事実は第三者の場（Sleep framework 投稿 ↔ チーム自身の arXiv 2606.03979）で锚定でき、存在は検証できるが性能数値はベンダー測定のまま。"
+  },
   "research.jfrog.com": {
     "cat": "security",
     "cred": "high",
@@ -12228,6 +12309,15 @@
     "en": "Alice's (@aliceisplaying) simulated-oil-paint gallery — a single-artist project site where models paint brushstroke-by-brushstroke in code, no image generator in the loop. The behavioral findings (31/65 dusk paintings, the lemon-jug 6/6) are self-reported and unreplicated, though the code (claude-paint) is published for checking. Cross-validated (10-03): project existence and method corroborated by the HN discussion (140 pts).",
     "jp": "Alice（@aliceisplaying）の模擬油絵ギャラリー——単一作者のプロジェクトサイト。モデルがコードで一筆ずつ描き、ループに画像生成器なし。行動科学的発見（65 点中 31 点が黄昏、レモン瓶 6/6）は自己報告・未再現だが、コード（claude-paint）は検証可能に公開済み。突合済み（10-03）：プロジェクトの存在と手法は HN 議論（140 pts）で裏付け。",
     "zh": "Alice（@aliceisplaying）的模拟油画画廊——单作者项目站，模型以代码逐笔作画、环路中无图像生成器。行为学发现（65 幅中 31 幅黄昏、柠檬罐 6/6）系自报且无复现，但代码（claude-paint）已公开可供检验。已交叉核验（10-03）：项目存在性与方法有 HN 讨论（140 分）佐证。"
+  },
+  "stitch.google.com": {
+    "cat": "vendor",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "Google Labs' Stitch (AI UI design tool) product page. 2026-11-15: product existence and description corroborated by independent third-party references (Chrome Web Store 'Stitch Export' extension, Google Cloud / Gemini Enterprise docs); a vendor page is authoritative about its own product and nothing else. The google-labs-code/stitch-skills README links stitch.withgoogle.com, which redirects here.",
+    "zh": "Google Labs 的 Stitch（AI UI 设计工具）产品页。2026-11-15：产品存在性与描述经独立第三方引用佐证（Chrome Web Store 的 'Stitch Export' 扩展、Google Cloud / Gemini Enterprise 文档）；厂商页面只对自家产品有权威性，别无其他。google-labs-code/stitch-skills 的 README 链接的 stitch.withgoogle.com 会重定向到这里。",
+    "jp": "Google Labs の Stitch（AI UI デザインツール）製品ページ。2026-11-15：製品の存在と説明は独立のサードパーティ参照（Chrome Web Store の「Stitch Export」拡張、Google Cloud / Gemini Enterprise ドキュメント）で裏付け。ベンダーページに権威があるのは自社製品についてだけ。google-labs-code/stitch-skills の README がリンクする stitch.withgoogle.com はここへリダイレクトされる。"
   },
   "stockfishchess.org": {
     "cat": "community",
@@ -14067,6 +14157,15 @@
     "jp": "Wccftech——ハードウェア/テックニュース（Vera Rubin NVL72 ベンチ）。ベンダー宣伝のハードウェア数値に信頼性。ベンダー計測の主張はその旨を明記。",
     "zh": "Wccftech——硬件/科技新闻（Vera Rubin NVL72 基准）。对厂商宣传的硬件数字较可靠；厂商自测的主张请照实标注。"
   },
+  "wdr.de": {
+    "cat": "news",
+    "cred": "high",
+    "cv": 1,
+    "density": "med",
+    "en": "WDR, German public broadcaster (North Rhine-Westphalia regional news). 2026-11-15: the Phantasialand chlorine report (13 guests, Hotel Ling Bao, automatic-dosing defect, sourced to Rhein-Erft-Kreis police and fire) corroborated by later German coverage of the same incident — later outlets say 15 injured, a count evolution noted rather than a contradiction; public-broadcaster sourcing standard.",
+    "zh": "WDR，德国公共广播机构（北威州地方新闻）。2026-11-15：Phantasialand 氯气报道（13 名客人、Hotel Ling Bao、自动加药系统故障，信源为 Rhein-Erft-Kreis 警察与消防）与后续德语媒体对同一事件的报道相互印证——后续报道称 15 人受伤，属于人数口径的演进而非矛盾；公共广播机构的采信标准。",
+    "jp": "WDR、ドイツの公共放送（北ライン＝ヴェストファーレン州の地域ニュース）。2026-11-15：Phantasialand 塩素事件の報道（負傷 13 名、Hotel Ling Bao、自動注入システムの故障、Rhein-Erft-Kreis 警察・消防が源）は、のちのドイツ語報道と相互に裏付け——後発は 15 名としており、矛盾ではなく人数の更新と捉える。公共放送としての取材水準。"
+  },
   "we-have-a-problem.com": {
     "cat": "security",
     "en": "Independent incident site for the eMudhra CA compromise: a timeline of the block across Chrome/Firefox (17 Oct), Microsoft (20 Oct) and Apple products (22 Oct), per-product patched/unpatched tables, and self-check commands (a `git ls-remote` probe, a chain test). High-density primary measurement rather than coverage; ties its claims to artifacts you can run, and states its own limits (CT absence constrains clients that enforce CT, not attackers).",
@@ -14716,32 +14815,5 @@
     "en": "Vendor security advisories for its own products. The GS1900 CVE-2026-7273 advisory lists fixed firmware per model (corroborated by the CISA KEV entry) but itself shows no CVSS — the 8.8 exists only in the CNA-assigned CVE record (NVD Deferred). Cross-checked (09-22).",
     "jp": "自社製品のセキュリティ勧告。GS1900 CVE-2026-7273 勧告はモデル別修正ファームウェアを列挙（CISA KEV 掲載と一致）するが、ページ自体に CVSS なし——8.8 は CNA 採点の CVE レコードにのみ存在（NVD Deferred）。突合済み（09-22）。",
     "zh": "厂商自身产品的安全公告。GS1900 CVE-2026-7273 公告按型号列出修复固件（与 CISA KEV 条目互证），但页面本身无 CVSS——8.8 只存在于 CNA 评分的 CVE 记录（NVD Deferred）。已交叉核验（09-22）。"
-  },
-  "crissyfield.de": {
-    "cat": "security",
-    "cred": "high",
-    "density": "high",
-    "cv": 1,
-    "en": "Security research firm (Crissy Field GmbH) — first-party for its own scan methodology and numbers; the Lovable/Supabase exposure mechanism is anchored in a third-party artifact, Supabase discussion #4547.",
-    "zh": "安全研究公司（Crissy Field GmbH）——其扫描方法与数字的一手来源；Lovable/Supabase 暴露机制锚定在第三方工件 Supabase 讨论 #4547 上。",
-    "jp": "セキュリティ調査会社（Crissy Field GmbH）——走査手法と数値の一次情報源。Lovable/Supabase 露出のメカニズムは第三者アーティファクト（Supabase ディスカッション #4547）に锚定。"
-  },
-  "blog.pypi.org": {
-    "cat": "vendor",
-    "cred": "high",
-    "density": "high",
-    "cv": 1,
-    "en": "PyPI official blog — announcements about the package index itself; claims about shipped UI verified against the deployed site (the /project/<pkg>/security/ route serves the Security tab).",
-    "zh": "PyPI 官方博客——关于包索引自身的公告；已上线 UI 的主张对部署站点核验（/project/<pkg>/security/ 路由即 Security 标签页）。",
-    "jp": "PyPI 公式ブログ——パッケージインデックス自身に関する発表；出荷済み UI の主張はデプロイ済みサイトで検証（/project/<pkg>/security/ ルートが Security タブ）。"
-  },
-  "research.google": {
-    "cat": "research",
-    "cred": "high",
-    "density": "high",
-    "cv": 1,
-    "en": "Google's research blog — first-party for its own measured results by definition; publication facts anchor against third-party venues (the Sleep-framework post pairs with the team's arXiv 2606.03979), so existence checks out while performance numbers stay vendor-measured.",
-    "zh": "Google 研究博客——其自测结果天然是一手来源；发表事实可对第三方场所锚定（Sleep framework 博文对应团队自己的 arXiv 2606.03979），存在性可核验而性能数字仍是厂商自测。",
-    "jp": "Google の研究ブログ——自社測定の結果は定義上一次情報源。公表事実は第三者の場（Sleep framework 投稿 ↔ チーム自身の arXiv 2606.03979）で锚定でき、存在は検証できるが性能数値はベンダー測定のまま。"
   }
 }

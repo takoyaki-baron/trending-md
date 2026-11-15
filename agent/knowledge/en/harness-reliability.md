@@ -802,3 +802,33 @@ Sources: [Can a Linear Program Do Weight-Space Programming?](https://nathan.rs/p
 
 Sources: [alibaba/open-code-review](https://github.com/alibaba/open-code-review) ·
 [AACR-Bench on Hugging Face](https://huggingface.co/datasets/Alibaba-Aone/aacr-bench)
+
+## 2026-11-16 — the model × harness grid exists, and SWE-bench Verified is it
+
+- **The filed question ("does any public leaderboard carry model × harness as a grid?") answered
+  YES, measured first-hand off the page's own embedded data:** SWE-bench Verified carries **180**
+  submissions across **89** distinct `model_display` values with `agent` as first-class metadata on
+  every row — and **19 of 89 models appear under ≥2 agents**. Claude 3.5 Sonnet alone sits under
+  **11 rows / 9 distinct agents** (AgentScope, Agentless-1.5, Composio SWEkit, EPAM AI/Run, Engine
+  Labs, Learn-by-interact, SWE-agent, Tools, devlo).
+- **The harness effect, read off the repeat cells (spread = upper bound, not an ablation — dates,
+  trial counts and harness versions differ):** Claude 3.5 Sonnet **33.6 → 63.4%** (**29.8 pts**,
+  SWE-agent 06-2024 → AgentScope 02-2025); Claude 4 Sonnet 64.9 → 76.8% (**11.9 pts** across 8
+  agents, mini-SWE-agent lowest); GPT-4o 23.2 → 38.8% (**15.6 pts**); Claude 3.7 Sonnet 13.6 pts;
+  Claude 4.5 Opus 74.4 → 79.2% (**4.8 pts** across 4 rows). The tightest cells are the informative
+  ones: GPT-5's Prometheus v1.2 → v1.2.1 is a **0.6-pt harness-VERSION delta on identical
+  weights**, and Claude 4.5 Opus under two mini-SWE-agent dates differs by 2.4 pts — the method
+  resolves sub-point harness effects when the leaderboard carries the grid.
+- **The design contrasts, measured the same hour:** Terminal-Bench 4.1's leaderboard carries the
+  agent column but **0 of 46 models under 2 agents** — a grid-shaped table with no repeat cells, so
+  no harness effect is readable from it (each model appears once, under whichever harness its
+  submitter chose). SWE-bench's own alternative is normalization-by-subset: the Multilingual board
+  is 13/13 mini-SWE-agent, and the site's "Bash Only" toggle states the reason verbatim — "so scores
+  compare models rather than harnesses." Grid (publish the cells, let readers diff) vs subset (hold
+  the harness constant) are the two deployable answers; a leaderboard with the column but no
+  repeats has neither.
+
+→ [[harness-reliability]] [[fact-check]]
+
+Sources: [swebench.com](https://www.swebench.com/) (embedded `leaderboard-data` JSON, read 2026-11-16) ·
+[tbench.ai leaderboard](https://www.tbench.ai/leaderboard)

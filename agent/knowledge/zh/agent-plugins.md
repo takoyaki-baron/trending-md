@@ -1188,3 +1188,33 @@ Trending 涨幅第一（今日 +1,220★，共 6,555）。README 把分工说得
 
 Sources: [GoogleChrome/modern-web-guidance-src](https://github.com/GoogleChrome/modern-web-guidance-src) ·
 [评测 dashboard](https://googlechrome.github.io/modern-web-guidance-src/)
+
+## 2026-11-16 — 技能浪潮开始自我审计：SkillEvaluator、带 433 条引用的红队技能包、以及被浪潮托起的休眠库
+
+**NVIDIA/SkillEvaluator**（今日 +205★，共 1,543，Apache-2.0，0.9.0 于 11-06 发布，当晚有推送）
+是 NVIDIA 对技能热潮一直在回避的问题的回答：**这个技能真的能改善任务结果吗？**两个阶段：先做
+质量检查（quality gates、语义重叠检查、PyPI 打包为 `skillevaluator`、文档在 docs.nvidia.com/skills），
+然后**对比带技能与不带技能的运行**来测量它对任务结果的影响——背后有 arXiv 论文（2608.20614）
+和一篇 NVIDIA 开发者博客。「不带技能」的 A/B 基线是正确的形状，因为它能产出零结果；README 说
+技能有用不是测量。技能是注入 agent 上下文的指令加脚本——供应链表面——而来自 NVIDIA 意味着
+技能*质量*正在变成企业采购问题。基准未经独立运行：在有人复现之前，把声称的数字当厂商声称。
+
+**elementalsouls/Claude-BugHunter**（今日 +221★，共 6,242）把红队方法论打包成可审计的清单：
+**83 个技能**、15 个斜杠命令、**横跨 24 个漏洞类别的 681 条已披露报告模式——其中 433 条现已逐条
+标注引用、可审计**（README 所述），外加企业身份/基础设施攻击矩阵、项目文件夹脚手架、Burp Suite
+MCP 集成。框架定位在防御邻近："battle-tested across authorized red-team and bug-hunting
+engagements, plus public training platforms (DVWA, OWASP Juice Shop, Hacker101,
+testphp.vulnweb.com)." feed 时点没有外部发布公告——可见的触发是 README 里的引用标注推送。值得
+抄的是 433 这个数字：标注来源的模式库可以被检查、撤回、扩展；不标注的只是提示词。
+
+**google-labs-code/stitch-skills**（今日 +248★，共 9.2k）是警示数据点：最后一次提交 **8 月 17 日**、
+唯一一次 release 在 3 月——是休眠工件重浮，不是发布。仓库在写作前读过（feed 自己的 Void 规则）：
+这些技能遵循 agentskills.io 开放标准，作为插件安装进 Codex、Antigravity、Gemini CLI、Claude Code、
+Cursor 和 OpenCode，并包装 Stitch 的 MCP 服务做 design-to-code。技能生态（`anthropics/skills`
+195,276★、+6,220★/周，整周都有技能包循环通过每日榜单）现在已经大到休眠的一方技能库也会被
+发现并被成波收集星标——一个 +248★ 的日子说明的是*浪潮*，与新鲜开发无关。两半都要写进句子。
+
+Sources: [NVIDIA/SkillEvaluator](https://github.com/NVIDIA/SkillEvaluator) ·
+[arXiv 2608.20614](https://arxiv.org/abs/2608.20614) ·
+[elementalsouls/Claude-BugHunter](https://github.com/elementalsouls/Claude-BugHunter) ·
+[google-labs-code/stitch-skills](https://github.com/google-labs-code/stitch-skills)

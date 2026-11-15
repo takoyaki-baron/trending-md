@@ -3984,3 +3984,24 @@ carried by TechPowerUp")。検証可能な単位は申告書類:EDGAR 全文検�
 Sources: [TechPowerUp 転載](https://www.techpowerup.com/354814/nvidia-allegedly-engineered-scarcity-by-funding-ai-startups-to-buy-its-gpus) ·
 [Yahoo Finance](https://finance.yahoo.com/markets/stocks/articles/nvidia-director-sold-nearly-1b-160000846.html) ·
 [HN 議論](https://news.ycombinator.com/item?id=50493251)
+
+## 2026-11-16 — Raschka 位置エンコーディングを語る：partial RoPE が静かに多数派の選択になった
+
+Sebastian Raschka の「Understanding Positional Embeddings in Modern LLMs」（Ahead of AI、11-15、
+157+ HN pts）は PyTorch コードを全編に添えた原理からのウォークスルー — GPT-2 の学習型絶対
+エンべディング、最初期の正弦波スキーム、そして現代の地形。ニュースは彼の LLM Architecture
+Gallery のトレンドデータだ：**全アテンション層での full RoPE は依然最も一般的だが 2025→2026 で
+減少**、一方 **partial RoPE は RoPE を使うモデルの中で少数派から多数派へ**（例：MiniMax-M3 は
+128 ヘッド次元のうち 64 を回転）、RoPE/NoPE の混合設計も増えている（SmolLM3 は 4 層ごとに
+RoPE をスキップ；一部のリカレントハイブリッドは全体が NoPE）。彼自身の見立ては有用な反逆：
+"**partial RoPE is hardly worth it**" — 約 10% の回転がしばしば full RoPE に匹敵したという論文を
+引く（ただし full RoPE が勝った評価もある）。彼の予測：RoPE は 2027 年まで支配的で、T5 型の
+学習型相対アテンションバイアス（Thinky の Inkling など）が注視すべきニッチ。
+
+アーキテクチャのガルヴァニズム — フロンティアモデルのやることをコピーする — はオープン
+モデル設計の実際の進め方でもある。だから「流行りの細工は何も買わないかもしれない」という測定
+された主張は、モデルを訓練・設定する任何人に直接有用だ。この記事は、絶対エンべディングが
+デフォルトでなくなった後に業界へ来た人への RoPE/NoPE 文献のきれいな入口にもなる。
+
+Sources: [Ahead of AI: Understanding Positional Embeddings in Modern LLMs](https://magazine.sebastianraschka.com/p/understanding-positional-embeddings) ·
+[HN 議論](https://news.ycombinator.com/item?id=50506376)

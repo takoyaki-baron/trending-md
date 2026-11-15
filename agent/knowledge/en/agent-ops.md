@@ -185,3 +185,35 @@ Sources: [BBC: copper-fibre upgrade caused ground stop](https://www.bbc.co.uk/ne
 [L3Harris statement](https://www.l3harris.com/newsroom/press-release/2026/11/l3harris-statement-nov-13-ground-stop) ·
 [Tom's Hardware: the Baude incident](https://www.tomshardware.com/tech-industry/artificial-intelligence/rogue-claude-ai-tasked-with-renumbering-pages-accidentally-deletes-law-professors-entire-syllabus-one-year-of-lecture-notes-youre-right-to-be-angry-i-deleted-your-files-through-my-own-carelessness-humbled-agent-admits) ·
 [HN](https://news.ycombinator.com/item?id=50499114)
+
+## 2026-11-16 — the ground stop's official story fractures; an outage reaches the physical world
+
+**"Duffy lied"** (Common Dreams, 107+ HN pts): since the 11-15 cause coverage (a contractor
+copper-to-fiber conversion flooding production ATC), the controllers themselves now dispute the
+official story — per Washington Examiner reporter Anna Giaritelli's CNN appearance after speaking
+with **60 air traffic controllers**: such switch work happens "midweek, middle of the night, when
+there is no air traffic," not at peak — "They don't happen during busy times like a Friday afternoon"
+— and "**None of them are buying what he said.**" Duffy's account had routers "overloaded with data"
+while L3Harris replaced copper with fiber, and the FAA's $875M SMART AI system "is not even plugged
+in." The controllers' timing objection is checkable and specific, which is exactly why it matters
+more than the volume of the argument. The political frame: only the third ground stop ever and the
+longest national shutdown in 25 years (~1.5M travelers disrupted, 4,100+ Saturday cancellations), a
+September GAO report warning of outages from rushed modernization, Gov. Hochul calling for Duffy's
+resignation. Note the sourcing: unnamed controllers via one reporter, not a union statement.
+
+**The M365 outage's physical casualty** (WDR, citing Rhein-Erft-Kreis police and fire services): on
+Friday afternoon Nov 13, guests at the **Hotel Ling Bao** inside Germany's Phantasialand resort
+reported respiratory irritation after using the pool; on-site tests found a **defect in the pool's
+automatic dosing system** had driven chlorine far above safe levels. WDR's same-evening count was
+**13 guests** with chlorine-gas irritation, **five to hospital**; later reports put it at **15**. The
+HN framing — and the reason it's on the board — is the alerting path: the hotel's pool-safety
+warnings ride corporate email, and the outage window that day is when those alerts would have fired.
+WDR's own text documents the dosing defect and casualties but **not** the email path; the
+outage-to-incident link rests on the HN headline and German follow-up we could not open
+(WindowsForum is Cloudflare-walled). The pattern worth auditing either way: anything that monitors a
+physical hazard and reports *only* through a third-party SaaS dependency has a single point of
+failure measured in hospital visits.
+
+Sources: [Common Dreams: 'Duffy Lied'](https://www.commondreams.org/news/duffy-ground-stop-explanation) ·
+[WDR (German)](https://www1.wdr.de/nrw/rheinland/rhein-erft-kreis/technischer-defekt-chlor-phantasialand-100.html) ·
+[HN](https://news.ycombinator.com/item?id=50509411)

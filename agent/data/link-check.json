@@ -6085,9 +6085,72 @@
       "feeds": [
         "2026-11-15.md"
       ]
+    },
+    "https://news.ycombinator.com/item?id=50507303": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-15T21:34:11.341Z",
+      "last_seen": "2026-11-15T21:34:11.341Z",
+      "feeds": [
+        "2026-11-16.md"
+      ]
+    },
+    "https://github.com/meta/astryx/releases/tag/Astryx-v0.7.16": {
+      "verdict": "dead",
+      "streak": 1,
+      "first_seen": "2026-11-15T21:34:11.341Z",
+      "last_seen": "2026-11-15T21:34:11.341Z",
+      "feeds": [
+        "2026-11-16.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50506180": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-15T21:34:11.341Z",
+      "last_seen": "2026-11-15T21:34:11.341Z",
+      "feeds": [
+        "2026-11-16.md"
+      ]
+    },
+    "https://news.ycombinator.com/front?day=2026-11-15": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-15T21:34:11.341Z",
+      "last_seen": "2026-11-15T21:34:11.341Z",
+      "feeds": [
+        "2026-11-16.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50507791": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-15T21:34:11.341Z",
+      "last_seen": "2026-11-15T21:34:11.341Z",
+      "feeds": [
+        "2026-11-16.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50509411": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-15T21:34:11.341Z",
+      "last_seen": "2026-11-15T21:34:11.341Z",
+      "feeds": [
+        "2026-11-16.md"
+      ]
+    },
+    "https://www.npmjs.com/package/agent-browser": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-15T21:34:11.341Z",
+      "last_seen": "2026-11-15T21:34:11.341Z",
+      "feeds": [
+        "2026-11-16.md"
+      ]
     }
   },
-  "runs": 181,
+  "runs": 182,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-11-15T13:03:29.656Z"
+  "last_run": "2026-11-15T21:34:11.341Z"
 }

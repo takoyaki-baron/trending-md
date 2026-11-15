@@ -1518,3 +1518,28 @@ opt-in 的缓存设置。为什么重要：缓存一个认证决策，其强度�
 Sources: [FORGE Lab: Rust std memory safety](https://forge-blog.github.io/posts/rust-std-memory-safety/) ·
 [CVE-2026-129349](https://www.cve.org/CVERecord?id=CVE-2026-129349) ·
 [Apache Shiro releases](https://github.com/apache/shiro/releases)
+
+## 2026-11-16 — DrayTek 的早晨是一次申报事件：三小时五条 VulDB 记录、尚无厂商公告
+
+**DrayTek Vigor2960 的五条 CVE 记录**以三小时的节奏落在 NVD 上（11:17Z、12:17Z、13:16Z ×2、
+14:17Z），全部指向同一个管理端点 `/cgi-bin/mainfunction.cgi`：经 `swmconfigupload` 参数的命令注入
+（CVE-2026-129449，9.9）与 `set_table` 函数的 `jsondata`（CVE-2026-129452，9.1）；`doWebBackup` 的
+`option`（CVE-2026-129450，9.9）与 `app_guest_export` 的 `filename`（CVE-2026-129451，9.9）的路径
+穿越；`check_file_exist` 的 `upload_name` 的堆缓冲区溢出（CVE-2026-129453，9.9）。五条全部影响
+**1.5.1.6** 及以下固件；写了修复版本的记录都指向 **1.5.1.7**。
+
+认识论才是故事本身：每条记录都是 **VulDB 认派**（`cna@vuldb.com` 大批量申报 CNA；像 `sub_14914`
+这样的函数名直接来自二进制分析），每条都声明利用已公开披露（措辞逐条不同），而 **feed 时点尚无
+DrayTek 公告**——厂商确认步骤仍未完成，所以在把 1.5.1.7 当作已出货的修复之前，先按惯例等厂商
+公告。五条同日 VulDB 申报、二进制偏移函数名、分数全是 VulDB 自己的 CVSS 3.1（四个 9.9、一个
+9.1）、无厂商声明——这是一次*申报事件*，还不是*已修补的漏洞*。`mainfunction.cgi` 是 DrayTek 的
+经典攻击面，Vigor 路由器坐在小型办公网络的边缘——这里的无认证到管理员利用类正是日后 KEV
+收录的模式。
+
+回填（本轮从 agent.md 论题中压缩掉的细节，先记录在这里）：`GitHub_M` 的操作符拼写边界
+（`{version: "< 0.57.13"}`）对只查 `lessThan` 的普查不可见——NVD 2026-10-29→11-04 窗口内有
+**303/3,069** 条记录只以 `versions[].version` 内部的比较器陈述其边界；一个 `versionBounds()`
+函数现在同时喂养三个总体选择器（`--range-census`、`--bound-census`、`--future-fix-census`）。
+
+Sources: [CVE-2026-129449](https://www.cve.org/CVERecord?id=CVE-2026-129449) ·
+[NVD 搜索：今日 DrayTek](https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=Vigor2960)

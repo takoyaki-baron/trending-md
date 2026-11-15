@@ -2463,3 +2463,46 @@ sub-agent，十分钟烧光了他的配额。编排原生把花费单位从「�
 
 Sources: [Anthropic: Projects redesigned](https://claude.com/resources/articles/projects-redesigned) ·
 [HN](https://news.ycombinator.com/item?id=50492141)
+
+## 2026-11-16 — 设计系统走向 agent-ready；剥离上下文的评审者成为一方角色；AG-UI 每日发车
+
+**meta/astryx** 正经历 GitHub Trending 上最强的一周（**+13,660★**，共 28,748，v0.7.16 于 11-14
+发布，标注 "Currently in Beta"）：React 19+ 组件构建在 Meta 的编译期 **StyleX** 之上，npm 包
+（`@astryxdesign/core`）加全局 CLI，两周内按版本号发了 16 个补丁版本，feed 前一小时还有提交落盘。
+README 原话："an open source design system that's fully customizable and built for how we build now:
+by people and the agents working alongside them"——以及 "the API, docs, and CLI are designed
+together so a person and an AI assistant build the same way, from the same reference." README 顶部的
+一条 "Sync-Contract" 注释（"architecture changes require documentation updates"）把文档漂移点名为
+他们防守的失效模式。设计系统正是 "agent-ready" 与现实碰撞的地方：组件恰好是 agent 被要求产出的
+那种重复、重规格的输出，所以一个文档和 CLI 默认对面坐着 agent 的库是真正的接口变化，不是营销。
+
+**google/elephant-goldfish-model**（EGM，本周 **5,539★**，共 19.7k，v0.1.1 于 10-27，当晚有推送）
+把上下文腐化变成一种角色拆分："**Elephant** holds your project context and drafts the
+specification. **Goldfish** reviewers examine the draft and referenced source material *without the
+earlier conversation*, helping expose unstated assumptions and blind spots. **You** make the
+architectural trade-offs and approve the specification before implementing." 默认工作流面向软件规格
+（其他文档类型走 `/egm-review-loop`）；分发完全多 harness——已发布的 ChatGPT/Codex 桌面插件、
+Antigravity 的 `agy plugin install`、以及 Claude Code 插件市场条目
+（`claude plugin marketplace add google/elephant-goldfish-model`）。这是 Google Antigravity 帖子
+里 generator 旁配 falsifier 的形状，应用在规格层——评审 agent 之所以继承起草 agent 的盲点，正
+是因为继承了它的上下文，所以「剥离上下文的评审者」被制度化为一个*角色*，人把守在审批步。
+
+**ag-ui-protocol/ag-ui**（+393★，共 17,748）本周**每天**发一个带标签的 release；11-13 的版本
+（21:01 UTC）把 LangGraph 原生的 `Interrupt.response_schema`（langgraph ≥ 1.2.12）映射进协议的
+事件词汇表、解开 LangChain 序列化的 `ToolMessage` 输出、在 `RUN_STARTED` 事件上声明
+`protocolVersion`——并且是破坏性的：`@ag-ui/client` 及同侪现在要求 ≥ 1.0.0。采纳真正需要的是
+逐框架 shim，把每个运行时的控制流原语（interrupt、工具结果、运行生命周期）映射到同一套事件词汇。
+Agent UX 正在收敛到两个协议层——MCP 管工具/上下文，AG-UI 管前端表面。
+
+**vercel-labs/agent-browser**（51,548★，+4,601/周，v0.43.0 于 11-10，Rust，npm `agent-browser`）
+是带日期的更新：无障碍树 CLI 破 51k，与 agent-desktop（11-12 已覆盖）并列——Vercel 押注 a11y
+树是 agent 与 GUI 之间正确接口层的下半场。对任何交付 Web UI 的人，实操结论是：无论你是否如此
+设计，你的无障碍树正在变成一台*机器 API*。
+
+为什么重要：一个批次里 agent 栈的三层同时移动——组件库（设计系统默认对面是 agent）、评审角色
+（剥离上下文的评审者在 Google 一方制度化）、前端协议（每日发车、逐框架 shim 说同一套词汇）。
+
+Sources: [meta/astryx](https://github.com/meta/astryx) ·
+[google/elephant-goldfish-model](https://github.com/google/elephant-goldfish-model) ·
+[ag-ui Release 2026-11-13](https://github.com/ag-ui-protocol/ag-ui/releases/tag/release%2F2026-11-13) ·
+[vercel-labs/agent-browser](https://github.com/vercel-labs/agent-browser)

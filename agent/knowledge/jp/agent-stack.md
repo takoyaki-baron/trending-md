@@ -2795,3 +2795,57 @@ OpenBot、herdr）が、主流 harness の中にネイティブで入ってき�
 
 Sources: [Anthropic: Projects redesigned](https://claude.com/resources/articles/projects-redesigned) ·
 [HN](https://news.ycombinator.com/item?id=50492141)
+
+## 2026-11-16 — デザインシステムが agent-ready に；コンテキストを剥がしたレビュアーが一次ロールに；AG-UI は毎日リリース
+
+**meta/astryx** が GitHub Trending で最強の週を過ごしている（**+13,660★**、計 28,748、v0.7.16 は
+11-14 リリース、"Currently in Beta" 表記）：React 19+ コンポーネントを Meta のコンパイル時
+**StyleX** の上に構築、npm パッケージ（`@astryxdesign/core`）にグローバル CLI、2 週間足らずで
+バージョン番号ベースのパッチ 16 本、フィードの 1 時間前にもコミットが着地。README 自身の言葉：
+"an open source design system that's fully customizable and built for how we build now: by people
+and the agents working alongside them" — そして "the API, docs, and CLI are designed together so a
+person and an AI assistant build the same way, from the same reference." README 冒頭の
+"Sync-Contract" コメント（"architecture changes require documentation updates"）は、ドキュメント
+ドリフトを守るべき失敗モードとして名指ししている。デザインシステムは "agent-ready" が現実と
+突き合わされる場所だ：コンポーネントはまさにエージェントが生成を求められる反復的で仕様駆動の
+出力であり、ドキュメントと CLI が最初から相手をエージェントと想定しているライブラリは、本来の
+インターフェイス変更であってマーケティングではない。
+
+**google/elephant-goldfish-model**（EGM、今週 **5,539★**、計 19.7k、v0.1.1 は 10-27、当夜に
+プッシュあり）はコンテキストロットをロール分割に変える："**Elephant** holds your project context
+and drafts the specification. **Goldfish** reviewers examine the draft and referenced source material
+*without the earlier conversation*, helping expose unstated assumptions and blind spots. **You**
+make the architectural trade-offs and approve the specification before implementing."
+デフォルトのワークフローはソフトウェア仕様向け（他の文書タイプは `/egm-review-loop`）；配布は
+完全にマルチハーネス — 公開済みの ChatGPT/Codex デスクトッププラグイン、Antigravity 向け
+`agy plugin install`、そして Claude Code プラグインマーケットプレイスのエントリ
+（`claude plugin marketplace add google/elephant-goldfish-model`）。Google の Antigravity 投稿が
+中心に置いた「generator の隣に falsifier」の形を仕様レイヤーに適用したもの — レビューする
+エージェントが下書きエージェントの盲点を引き継ぐのはコンテキストを引き継ぐからであり、だから
+こそコンテキストを剥がしたレビュアーが*ロール*として制度化され、人間が承認ステップでゲート
+する。
+
+**ag-ui-protocol/ag-ui**（+393★、計 17,748）は今週*毎日*タグ付きリリースを出した；11-13 の
+リリース（21:01 UTC）は LangGraph のネイティブな `Interrupt.response_schema`（langgraph ≥ 1.2.12）
+をプロトコルのイベント語彙に写像し、LangChain 直列化の `ToolMessage` 出力をアンラップし、
+`RUN_STARTED` イベントに `protocolVersion` を宣言する — そして破壊的変更：`@ag-ui/client` と
+関連パッケージは ≥ 1.0.0 を要求するようになった。採用に実際に必要なのは、各ランタイムの制御
+フロー プリミティブ（割り込み、ツール結果、実行ライフサイクル）を一つのイベント語彙へ写像する
+フレームワーク別シムだ。エージェント UX は 2 つのプロトコル層に収束しつつある — ツール/コンテキ
+ストは MCP、フロントエンド表面は AG-UI。
+
+**vercel-labs/agent-browser**（51,548★、+4,601/週、v0.43.0 は 11-10、Rust、npm `agent-browser`）
+は日付付きアップデート：アクセシビリティツリー CLI が 51k を超え、agent-desktop（11-12 網羅）と
+並んだ — エージェントと GUI の間の正しいインターフェイス層は a11y ツリーだという Vercel の賭け
+の後半だ。Web UI を出荷する任何人への実務的教訓：設計したつもりがなくても、あなたのアクセシビ
+リティツリーは*マシン API* になりつつある。
+
+なぜ重要か：一つのバッチでエージェントスタックの 3 層が動いた — コンポーネントライブラリ
+（デザインシステムが相手にエージェントを想定する）、レビューロール（コンテキストフリーの
+レビュアーが Google の一次側で制度化される）、フロントエンドプロトコル（毎日リリース、全
+フレームワークのシムが同じ語彙を話す）。
+
+Sources: [meta/astryx](https://github.com/meta/astryx) ·
+[google/elephant-goldfish-model](https://github.com/google/elephant-goldfish-model) ·
+[ag-ui Release 2026-11-13](https://github.com/ag-ui-protocol/ag-ui/releases/tag/release%2F2026-11-13) ·
+[vercel-labs/agent-browser](https://github.com/vercel-labs/agent-browser)

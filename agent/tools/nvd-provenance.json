@@ -3033,6 +3033,36 @@
    "id": "CVE-2026-129349",
    "why": "2026-11-15 — Apache Shiro ships a 9.1 today: LDAP auth caching accepts any password after the first login — fixed in 3.0.1 since August",
    "seeded": "2026-11-15 [Received] 4.0 Secondary/security@apache.org 9.1, CWE-287, published 11-15"
+  },
+  {
+   "id": "CVE-2026-129483",
+   "why": "2026-11-16 — Cyrus SASL 9.3: a zero shared secret in the SRP plugin authenticates anyone — fixed by removing the plugin, and 2.1.28 is still the newest r",
+   "seeded": "2026-11-15 [Received] 3.1 Primary/disclosure@vulncheck.com 9.1, 4.0 Secondary/disclosure@vulncheck.com 9.3, CWE-287, published 11-15"
+  },
+  {
+   "id": "CVE-2026-129449",
+   "why": "2026-11-16 — DrayTek Vigor2960: five CVE records in three hours on one CGI endpoint — command injection, path traversal and a heap overflow, scores all V",
+   "seeded": "2026-11-15 [Deferred] 2.0 Secondary/cna@vuldb.com 9, 3.1 Primary/cna@vuldb.com 9.9, 4.0 Secondary/cna@vuldb.com 8.6, CWE-74/CWE-77, published 11-15"
+  },
+  {
+   "id": "CVE-2026-129452",
+   "why": "2026-11-16 — DrayTek Vigor2960: five CVE records in three hours on one CGI endpoint — command injection, path traversal and a heap overflow, scores all V",
+   "seeded": "2026-11-15 [Deferred] 2.0 Secondary/cna@vuldb.com 8.3, 3.1 Primary/cna@vuldb.com 9.1, 4.0 Secondary/cna@vuldb.com 8.5, CWE-74/CWE-77, published 11-15"
+  },
+  {
+   "id": "CVE-2026-129450",
+   "why": "2026-11-16 — DrayTek Vigor2960: five CVE records in three hours on one CGI endpoint — command injection, path traversal and a heap overflow, scores all V",
+   "seeded": "2026-11-15 [Deferred] 2.0 Secondary/cna@vuldb.com 9, 3.1 Primary/cna@vuldb.com 9.9, 4.0 Secondary/cna@vuldb.com 8.6, CWE-22, published 11-15"
+  },
+  {
+   "id": "CVE-2026-129451",
+   "why": "2026-11-16 — DrayTek Vigor2960: five CVE records in three hours on one CGI endpoint — command injection, path traversal and a heap overflow, scores all V",
+   "seeded": "2026-11-15 [Deferred] 2.0 Secondary/cna@vuldb.com 9, 3.1 Primary/cna@vuldb.com 9.9, 4.0 Secondary/cna@vuldb.com 8.6, CWE-22, published 11-15"
+  },
+  {
+   "id": "CVE-2026-129453",
+   "why": "2026-11-16 — DrayTek Vigor2960: five CVE records in three hours on one CGI endpoint — command injection, path traversal and a heap overflow, scores all V",
+   "seeded": "2026-11-15 [Deferred] 2.0 Secondary/cna@vuldb.com 9, 3.1 Primary/cna@vuldb.com 9.9, 4.0 Secondary/cna@vuldb.com 8.6, CWE-119/CWE-122, published 11-15"
   }
  ]
 }
