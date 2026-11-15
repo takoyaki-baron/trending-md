@@ -5926,132 +5926,168 @@
     },
     "https://news.ycombinator.com/item?id=50499017": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-11-14T21:11:41.960Z",
-      "last_seen": "2026-11-15T05:14:37.824Z",
+      "last_seen": "2026-11-15T13:03:29.656Z",
       "feeds": [
         "2026-11-15.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50497009": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-11-14T21:11:41.960Z",
-      "last_seen": "2026-11-15T05:14:37.824Z",
+      "last_seen": "2026-11-15T13:03:29.656Z",
       "feeds": [
         "2026-11-15.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50497155": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-11-14T21:11:41.960Z",
-      "last_seen": "2026-11-15T05:14:37.824Z",
+      "last_seen": "2026-11-15T13:03:29.656Z",
       "feeds": [
         "2026-11-15.md"
       ]
     },
     "https://www.reuters.com/world/italy-fines-meta-887-million-over-android-users-data-access-2026-11-14/": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-11-14T21:11:41.960Z",
-      "last_seen": "2026-11-15T05:14:37.824Z",
-      "feeds": [
-        "2026-11-15.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=50499723": {
-      "verdict": "blocked",
-      "streak": 2,
-      "first_seen": "2026-11-14T21:11:41.960Z",
-      "last_seen": "2026-11-15T05:14:37.824Z",
+      "last_seen": "2026-11-15T13:03:29.656Z",
       "feeds": [
         "2026-11-15.md"
       ]
     },
     "https://news.umich.edu/generative-ai-uses-more-energy-on-non-english-text/": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-11-14T21:11:41.960Z",
-      "last_seen": "2026-11-15T05:14:37.824Z",
-      "feeds": [
-        "2026-11-15.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=50496051": {
-      "verdict": "blocked",
-      "streak": 1,
-      "first_seen": "2026-11-15T05:14:37.824Z",
-      "last_seen": "2026-11-15T05:14:37.824Z",
+      "last_seen": "2026-11-15T13:03:29.656Z",
       "feeds": [
         "2026-11-15.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50497147": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-15T05:14:37.824Z",
-      "last_seen": "2026-11-15T05:14:37.824Z",
-      "feeds": [
-        "2026-11-15.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=50500963": {
-      "verdict": "blocked",
-      "streak": 1,
-      "first_seen": "2026-11-15T05:14:37.824Z",
-      "last_seen": "2026-11-15T05:14:37.824Z",
-      "feeds": [
-        "2026-11-15.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=50501594": {
-      "verdict": "blocked",
-      "streak": 1,
-      "first_seen": "2026-11-15T05:14:37.824Z",
-      "last_seen": "2026-11-15T05:14:37.824Z",
-      "feeds": [
-        "2026-11-15.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=50498295": {
-      "verdict": "blocked",
-      "streak": 1,
-      "first_seen": "2026-11-15T05:14:37.824Z",
-      "last_seen": "2026-11-15T05:14:37.824Z",
+      "last_seen": "2026-11-15T13:03:29.656Z",
       "feeds": [
         "2026-11-15.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50498073": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-15T05:14:37.824Z",
-      "last_seen": "2026-11-15T05:14:37.824Z",
+      "last_seen": "2026-11-15T13:03:29.656Z",
       "feeds": [
         "2026-11-15.md"
       ]
     },
     "https://retrocomputing.stackexchange.com/questions/17957": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-15T05:14:37.824Z",
-      "last_seen": "2026-11-15T05:14:37.824Z",
+      "last_seen": "2026-11-15T13:03:29.656Z",
       "feeds": [
         "2026-11-15.md"
       ]
     },
     "https://www.npmjs.com/package/create-ecdh": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-15T05:14:37.824Z",
-      "last_seen": "2026-11-15T05:14:37.824Z",
+      "last_seen": "2026-11-15T13:03:29.656Z",
+      "feeds": [
+        "2026-11-15.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50497900": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-15T13:03:29.656Z",
+      "last_seen": "2026-11-15T13:03:29.656Z",
+      "feeds": [
+        "2026-11-15.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50441444": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-15T13:03:29.656Z",
+      "last_seen": "2026-11-15T13:03:29.656Z",
+      "feeds": [
+        "2026-11-15.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50503255": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-15T13:03:29.656Z",
+      "last_seen": "2026-11-15T13:03:29.656Z",
+      "feeds": [
+        "2026-11-15.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50496921": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-15T13:03:29.656Z",
+      "last_seen": "2026-11-15T13:03:29.656Z",
+      "feeds": [
+        "2026-11-15.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50478701": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-15T13:03:29.656Z",
+      "last_seen": "2026-11-15T13:03:29.656Z",
+      "feeds": [
+        "2026-11-15.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50496602": {
+      "verdict": "transient",
+      "streak": 1,
+      "first_seen": "2026-11-15T13:03:29.656Z",
+      "last_seen": "2026-11-15T13:03:29.656Z",
+      "feeds": [
+        "2026-11-15.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50504077": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-15T13:03:29.656Z",
+      "last_seen": "2026-11-15T13:03:29.656Z",
+      "feeds": [
+        "2026-11-15.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50497416": {
+      "verdict": "transient",
+      "streak": 1,
+      "first_seen": "2026-11-15T13:03:29.656Z",
+      "last_seen": "2026-11-15T13:03:29.656Z",
+      "feeds": [
+        "2026-11-15.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50499038": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-15T13:03:29.656Z",
+      "last_seen": "2026-11-15T13:03:29.656Z",
       "feeds": [
         "2026-11-15.md"
       ]
     }
   },
-  "runs": 180,
+  "runs": 181,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-11-15T05:14:37.824Z"
+  "last_run": "2026-11-15T13:03:29.656Z"
 }

@@ -4862,3 +4862,20 @@ Sources: [Crissy Field: Lovable 研究](https://www.crissyfield.de/research/lova
 Sources: [GHSA-j329-jw7j-rxjm](https://github.com/Dokploy/dokploy/security/advisories/GHSA-j329-jw7j-rxjm) ·
 [Dokploy v0.31.1](https://github.com/Dokploy/dokploy/releases/tag/v0.31.1) ·
 [create-ecdh on npm](https://www.npmjs.com/package/create-ecdh)
+
+## 2026-11-15 20:24——漏洞利用供应链的祛魅：Cellebrite 级工具「并非魔法」
+
+Osservatorio Nessuno 的技术综述（5 月 7 日发布；本周末以 114 points 登上 HN）：「商业手机解锁
+工具并非魔法。它们利用的漏洞类别，与安全研究者在会议上和学术论文里发表的相同。」Cellebrite
+级产品的独特之处「不在技术的新颖性，而在漏洞利用的**系统化商业化**」——为每一种硬件/软件
+组合获取或开发漏洞，再打包成只需最少操作员专长的自动化工作流。文章绘制了持物理访问权限的
+取证人员要穿过的受限攻击面——启动链、可信执行环境（TEE）、安全元件、内核外设驱动栈——
+主要以 Android 内部机制为例，并致谢 Quarkslab 的 TEE 研究与 Amnesty 的报道作为基础；该组织
+专门记录过 Cellebrite 在意大利的常规使用。
+
+为什么重要：这是对 routinely 出现在检控中的工具背后漏洞利用供应链的罕见公开测绘——祛魅是
+双向的：防御者确切得知取证行业把哪些边界变成了商品（下一笔加固预算该花在哪），而锁定设备
+提取周围的「商业级」光环还原为研究者们早已发表的同一批 CVE 类别。
+
+Sources: [Osservatorio Nessuno](https://osservatorionessuno.org/blog/2026/05/demystifying-phone-unlocking-tools-a-technical-overview/) ·
+[HN](https://news.ycombinator.com/item?id=50497416)

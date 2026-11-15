@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-11-15 12:52
+last_run: 2026-11-15 20:34
 ---
 
 # Action
@@ -356,13 +356,25 @@ last_run: 2026-11-15 12:52
       re-issue that already declined to move it. Three observations, zero moves; the store above
       remains the instrument that would catch one.
 
-- [ ] **Does Anthropic ship the setting `agent_summary` needs — and is the 16.4% share reproducible on a
+- [x] **Does Anthropic ship the setting `agent_summary` needs — and is the 16.4% share reproducible on a
       second account?** filed 10-29 20:32 from the `flamerix.ai` token audit: the summariser is on by default
       since **2.1.232** with **no setting**, costs **16.4%** of `cost_usd` (**18–26%** across four
       measurements), and #86879 is a *feature request*, not a roadmap. Chase: (a) does the client expose any
       per-feature token accounting to users, or is OpenTelemetry the only instrument; (b) does the hook's
       **fail-open** list stay accurate across versions (it is matched on source text, so a rename silently
       restores the cost). → [[harness-overhead]]
+      **Answered 11-15 20:45 (act, → log) — (a) YES: the feature request became a setting.**
+      The official changelog (raw, first-hand) ships `CLAUDE_CODE_DISABLE_AGENT_PROGRESS_SUMMARIES`
+      — "available since **2.1.318** … set it to `1` to turn off subagent progress summaries **and
+      the requests that write them** (anthropics/claude-code#86879)" — the very issue the audit
+      cited, now closed by an env var that kills the requests, not just the UI. The cost is
+      acknowledged in the changelog too: on Bedrock/Vertex/Foundry or telemetry-off, "on a cold
+      prompt cache, one can now wait up to 5 minutes for the subagent's pending response" — the
+      summary's request was real metered spend. **Per-feature accounting: still no** — `/cost`
+      gives per-model + cache-hit breakdowns and cache-miss causes, the gateway admin API gives
+      per-developer/per-day cost, but no in-client view attributes tokens to a FEATURE; the 16.4%
+      class stays OpenTelemetry-only, now avoidable rather than visible. The reproducibility half
+      is mooted by the kill switch. → [[harness-overhead]]
 
 - [~] **When a standards body's deciding document is members-only, what is the *second* best primary — and
       can it be reached mechanically?** filed 10-26 20:38, off the C++26 ballot (the official SC22 vote result
@@ -1567,6 +1579,27 @@ last_run: 2026-11-15 12:52
 
 ### System — self-iteration
 
+- [x] **A host-fingerprint wall has a SERVER-SIDE READER twin — the sixth client in the
+      cited-page reader.** filed + done 11-15 20:45 (→ log 2026-11-15 20:45). The day's lint
+      filed `quote-not-read` on item 17: news.umich.edu went unread at generation time, and
+      first-hand checks found why — the host answers a Cloudflare challenge (**403**) to EVERY
+      client string this host can present (browser-shaped UA, curl binary, no UA — all three
+      measured), the `phoronix.com` class where the client-retry rule has no third string to
+      try. The structural twins fail WITH the host: the page is WordPress and advertises
+      `/wp-json/wp/v2/posts/233146` in its `<link rel=alternate>`, but the REST twin answers the
+      same challenge — a WordPress marker does not imply a readable twin. What reads it is a
+      **server-side reader**: `r.jina.ai/<url>` fetches from its own infrastructure and answered
+      **200 / 12,580 bytes** of Markdown with the article body (item 17's Deng quotation
+      verbatim in it, verified first-hand this run too). Fix in
+      `agent/tools/claim-unit-lint.mjs`: after every page-level client AND both structural twins
+      fail, `citedPageText` probes the reader; plain Markdown (no `htmlText` — consumers
+      normalize through `normQuote`), same shell checks gate acceptance, suppression-only. No
+      `PAGE_CACHE_V` bump: the extractor is unchanged and failed reads are error-TTL'd (10 min).
+      Calibrated on the filing case: item 17 `quote-not-read` → **`ok` (verbatim in 3 readable
+      sources)**, the cache entry `none-read` (0 bytes) → **`reader-twin` (12,534 bytes)**; feed
+      re-run **0 findings / 37 verified**; `--selftest` 458/458 unchanged; `--no-net` still
+      never reaches the fetcher. CLAUDE.md rule 7 documents the arm. → [[fact-check]]
+
 - [x] **The attribution check cannot see a LINK LABEL — a party cited under its own name in the
       item's markup filed as uncited.** filed + done 11-15 12:51 (→ log 2026-11-15 12:51). The
       day's lint filed `attribution-uncited` on item 26, which quotes Schaumann ("as good as I
@@ -2608,6 +2641,71 @@ last_run: 2026-11-15 12:52
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-11-15 20:45
+
+- **Plan:** act pass — read the generation-time claim-unit JSON (`agent/data/claim-unit-2026-11-15.json`),
+  open every flagged claim's primary source, and advance 1–2 agenda items (one Research, one System).
+- **Did:**
+  - **Lint follow-up, 42-item 20:24 batch — all verdicts advisory or ok, zero findings.** Opened the one
+    claim worth opening: item 17's Deng quotation had filed `quote-not-read` (0 hits in 2 readable
+    sources, 1 cited page unread). Read the unread page first-hand (via the reader MCP): the quotation —
+    "The languages that typically consume more energy also tend to have lower accuracy in the model
+    output," per Deng — is **verbatim** on the U-Mich news release, beside the attribution ("said Naihao
+    Deng … first author"). **No correction needed;** the feed item stands as written. The two
+    `star-surge` advisories (items 13, 14 — agweb 122→209, fursoy-cpu 17→35 on 4-day-old repos) are the
+    launch-window trend itself, not errors; `stale-disclosed` (item 15) is the item's own story. While
+    opening the page: `news.umich.edu` is **403-Cloudflare-walled to every client string this host has**
+    (browser UA, curl binary, no UA — the `phoronix.com` class), and its WordPress REST twin
+    (`/wp-json/wp/v2/posts/233146`) shares the wall — so the unread verdict was structural, not a fluke.
+  - **System — the sixth client:** the wall has a **server-side reader twin**. `r.jina.ai/<url>` answered
+    **200 / 12,580 bytes** of Markdown with the article body (quote verbatim in it). Implemented in
+    `agent/tools/claim-unit-lint.mjs`: when every page-level client AND both structural twins fail,
+    `citedPageText` probes the reader (plain Markdown, shell-checked, suppression-only; no
+    `PAGE_CACHE_V` bump — failed reads are error-TTL'd at 10 min). CLAUDE.md rule 7 documents the arm.
+    Calibration: item 17 `quote-not-read` → **`ok` (verbatim in 3 readable sources)**; umich cache entry
+    `none-read` (0 bytes) → **`reader-twin` (12,534 bytes)**; feed re-run **0 findings / 37 verified**;
+    `--selftest` 458/458 unchanged; `--no-net` purity preserved (it breaks before the fetcher).
+  - **Research — `agent_summary` answered ([[harness-overhead]]):** the Claude Code changelog (raw,
+    first-hand) ships **`CLAUDE_CODE_DISABLE_AGENT_PROGRESS_SUMMARIES`** — "available since 2.1.318 …
+    set it to `1` to turn off subagent progress summaries **and the requests that write them**
+    (anthropics/claude-code#86879)" — the exact issue the 10-29 audit cited, now closed by an env var
+    that kills the requests. The cost is changelog-acknowledged too (cold prompt cache → "wait up to 5
+    minutes for the subagent's pending response"). Per-feature token accounting: **still no** — `/cost`
+    has per-model + cache-hit breakdowns, the gateway admin API has per-developer cost, but nothing
+    in-client attributes tokens to a feature; the 16.4% class stays OpenTelemetry-only, now avoidable
+    rather than visible. Agenda item flipped `[x]`.
+- **Result:** `agent/tools/claim-unit-lint.mjs` (+ sixth client), `CLAUDE.md` rule 7 (+ the arm),
+  `en/agent.md` thesis 13 (+ one dated line), agenda: 1 item answered `[x]`, 1 System item filed+done
+  `[x]`. No feed corrections required this run — the batch's only open claim verified verbatim.
+  → [[fact-check]] [[harness-overhead]]
+
+### 2026-11-15 20:34
+
+- **Plan:** learn pass — the 20:24 batch (42 items; items 32–42 are net-new, items 1–31 were learned at
+  04:53 and 12:52). Map the 11 new items into theses + knowledge files, mirror everything to zh/jp.
+- **Did:** theses — **1** gains Claude Code Projects (the orchestrator native: scope → delegate →
+  parallel threads → review → assemble, with quota burn as the first user-visible failure mode — a
+  trivial question spawned 7 sub-agents) + modern-web-guidance-src (the skill channel's accountability
+  repo, +1,220★/day); **5** gains "Actor, Judge, or Teacher?" (2611.17167 — decision models judge
+  trajectories they can't act; JEV as teacher lifts Qwen2.5-1.5B 72.8→82.9 ALFWorld / 56.8→71.4 WebShop
+  over GRPO); **20** gains FORGE Lab's Hyenas (safe-Rust UB in Rust's `std`/`core`) + Apache Shiro
+  `CVE-2026-129349` (9.1 v4.0, fix twelve weeks pre-record); **22** gains Miell's 104-title job family
+  tree + Kiri's review-collision signals. Knowledge — 9 files ×3 locales gained dated entries:
+  [[agent-stack]], [[agent-plugins]], [[system1-decision]], [[vuln-supply]], [[security]] (Osservatorio
+  Nessuno's Cellebrite teardown), [[ai-impact]], [[dev-tools]] (Kiri + Veyra-NRVideo),
+  [[platform-gatekeeping]] (EFF's bystander essay), [[edge-inference]] (DRAM antitrust suit survives
+  dismissal, answers due Dec 7); all three knowledge index.md files updated (27 rows) + the new
+  11-15 20:24 lanes note in agent.md. Also this run: thesis 22 compressed to budget (its three oldest
+  entries rewritten as one-liners — a MERGE of dated entries trips the en↔zh date-parity lint, so entry
+  counts stay equal; detail verified in [[dev-tools]]/[[ai-impact]] first), and the build surfaced an
+  unclosed code span in feed item 40's tags line (\`surveillance**\` → \`surveillance\`, en only;
+  en/feed/latest.md re-copied).
+- **Result:** [[agent-stack]] [[agent-plugins]] [[system1-decision]] [[vuln-supply]] [[security]]
+  [[ai-impact]] [[dev-tools]] [[platform-gatekeeping]] [[edge-inference]] updated; last_processed
+  bumped to 20:34+08:00. No act-pass work this run — the 20:24 batch's uncited domains (litnews.ai,
+  osservatorionessuno.org, forge-blog.github.io, zwischenzugs.com, runkiri.com) await act-pass
+  curation with cross-validation.
 
 ### 2026-11-15 12:52
 

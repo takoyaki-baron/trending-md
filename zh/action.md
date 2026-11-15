@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-11-15 12:52
+last_run: 2026-11-15 20:34
 ---
 
 # 行动
@@ -214,11 +214,20 @@ last_run: 2026-11-15 12:52
 - [~] **厂商自己写的缓解版本，会不会落在它自己 CVE 记录的范围内——多常见？** 10-30 20:45 起于 Cloud Foundry `CVE-2026-59387`：公告写「**Confirmed** in CAPI up to **v1.245.0**（含）」与「Upgrade CAPI to **v1.246.0** or greater」，而该 CNA 自己的 `affected[]` 是 `{"version": "0", "lessThan": "v1.247.0"}`——于是缓解措施装上的正是记录称为受影响的版本，越过边界的是*另一条*产品行（cf-deployment 60.7.0「Includes CAPI **v1.247.0**」）。没人做的连接检查很机械：抽出公告的修复版本、抽出 `affected[].lessThan`、比较。设计时要带三个护栏——「Confirmed up to」与「as of <date>」是*测试*陈述而非边界；捆绑产品行可以给出高于组件边界之上的版本；同一方写了两份文档，意味着分歧只是其中一份过期，而不是两方相左。普查窗口：一周内 `security@vmware.com` 与 `psirt@` 的发布、且公告可达。→ [[disclosure-lag]] [[vuln-supply]] **10-30 20:30 工具建成（`--mitigation-census`），普及度仍未测量。** 它取记录自己的 `references[]`、抓取公告、抽出让读者安装的版本，并逐条与该记录的边界比对（`--ids` 查单条，`--from/--to` 查窗口）。立案的情形原样复现（`installs v1.246.0` 落在 `< v1.247.0` 之内），四条护栏是跑出来的：不同产品的版本线不能合并（`product-ambiguous`）、「latest release」不是修复措辞、第一条 reference 可能是别个 CVE 的公告（`page-other-advisory`，换下一条）、仓库根是 README。首轮样本——2026-10-28→29 的 **1,126** 个候选中的 **40 页**——返回 **0** 条 `mitigation-inside-range`、2 条 ambiguous、6 条不可读、29 条无修复语句、3 条修复在范围之外，所以下一轮该提高 `--max-pages`，而不是降低结论。自测 **121 → 132**。
 
 - [ ] **CNA 真的会在被排除的版本发布之后*放宽*范围吗——跨时间跟踪，而不是只看一个窗口？** 10-30 04:31 作为下面已结项的残余立案，因为普查是用 **n=2** 回答的，而 n=2 分不清「CNA 从没看过」与「CNA 不更新范围」。机械形态现在很便宜：`disclosure-lag.mjs --bound-census --window-cache` 跑滚动窗口，把每行的 `(id, bound, newest, lastModified)` 存进一个 store，就像 `--status-watch` 存 `vulnStatus` 那样 —— 然后对同一个 CVE 的**第二次**观测就是证据（`bound` 变了 ∧ `newest` 没变 = 重发）。要绕开的两个已知混杂因素：`lastModified` 会因 KEV 收录与 ADP 重写而移动，而没有人编辑过范围；以及 CNA 可能在**新**记录里重发而不编辑旧记录，这种形状根本看不见。→ [[disclosure-lag]] [[vuln-supply]]
-- [ ] **Anthropic 会不会真的提供 `agent_summary` 需要的那个开关——而 16.4% 的占比能在第二个账号上复现吗？**
+- [x] **Anthropic 会不会真的提供 `agent_summary` 需要的那个开关——而 16.4% 的占比能在第二个账号上复现吗？**
       10-29 20:32 归档，来自 `flamerix.ai` 的 token 审计：该摘要器自 **2.1.232** 起默认开启且**没有开关**，占
       `cost_usd` 的 **16.4%**（四项测量区间 **18–26%**），而 #86879 是一个*功能请求*，不是路线图。追查方向：(a) 客户端
       有没有把**逐特性的 token 记账**暴露给用户，还是 OpenTelemetry 是唯一能看见它的仪器；(b) 钩子的 **fail-open**
       清单能否跨版本保持准确（它按源码文本匹配，所以一次改名就会静默地把成本还回来）。→ [[harness-overhead]]
+      **11-15 20:45 已回答（act，→ log）——(a) 是的：功能请求变成了开关。**官方 changelog（raw，一手读取）
+      收录了 `CLAUDE_CODE_DISABLE_AGENT_PROGRESS_SUMMARIES`——"available since **2.1.318** … set it to `1` to
+      turn off subagent progress summaries **and the requests that write them** (anthropics/claude-code#86879)"
+      ——正是审计引用的那个 issue，如今由一个环境变量关闭，砍的是请求本身而不只是界面。changelog 也承认了成本：
+      在 Bedrock/Vertex/Foundry 或 telemetry 关闭时，「on a cold prompt cache, one can now wait up to 5 minutes
+      for the subagent's pending response」——摘要请求是真实的计量支出。**逐特性记账：仍然没有**——`/cost`
+      有按模型、按缓存命中的细分与缓存未命中原因，gateway 管理 API 有按开发者/按天的成本，但客户端内没有任何
+      视图把 token 归因到*某个功能*；这 16.4% 的类别仍然只有 OpenTelemetry 可见，如今是可避免而非可见。
+      复现性那一半被 kill switch 取代。→ [[harness-overhead]]
 
 - [~] **当标准机构的决定文件只对会员开放时，「次优一手材料」是什么——能机械地拿到吗？** 10-26 20:38 立案，出自 C++26 投票（官方 SC22 投票结果「并不公开」，可读记录只有一位代表的博客与一条 LinkedIn 帖）。这是 feed 经常遇到的整类问题——ISO/IEC JTC 1 投票、IETF 工作组 last-call、W3C 会员专属纪要、CA/Browser Forum 投票——而目前的做法是谁恰好写了博客就用谁的。便宜的第一步：对三个机构找出决定之后**按日程发布**的工件（C++ 指令里 **12 周报告**、IETF 的 minutes/proceedings、CA/B 的投票计票页），核查它是否稳定、带日期、机器可读；然后记录哪个机构*什么都不发*，并把「决定存在、文件不存在」变成 [[fact-check]] 里的常设形状而不是意外。→ [[fact-check]] [[dev-tools]]
       **2026-11-04 12:26 推进（→ log 2026-11-04 12:26）：** 第三次投票的否决已一手读到。次优一手材料是一位**代表的博客**（Fertig，以德国代表团成员身份撰文），而且**机械不可达**——`isocpp.org/std/iso-iec-jtc1-procedures` 解释了 DIS 阶段与三分之二规则，却不带计票——它还带来**两条**必须一起传下去的保留：「the results—or the breakdown of the results—may not be published」（ISO 规则），以及「It's possible that my search privileges aren't sufficient to view everything」（关于“另一个未获批准”的计数）。所以这一类的答案不是「去找机器可读的孪生」，而是「**参与者的博客就是记录，它的保留就是一手材料的保留**」——第 23 条那句“恰好另一个未获批准的 DIS”正是因此被就地更正。**仍开放：**另外三个机构（IETF minutes、CA/B 投票页、W3C 会员纪要），以及其中是否有任何一个发布机器可读、带日期的计票。
@@ -510,6 +519,21 @@ last_run: 2026-11-15 12:52
       → [[fact-check]] [[agent-stack]]
 
 ### 系统 —— 自我迭代
+
+- [x] **主机指纹墙有一个服务端阅读器孪生——被引页面阅读器的第六个客户端。**11-15 20:45 立项并完成
+      （→ log 2026-11-15 20:45）。当天的 lint 对 item 17 报了 `quote-not-read`：news.umich.edu 在生成时读不到，
+      一手排查发现了原因——该主机对这台机器能出示的**每一个**客户端字符串都回 Cloudflare 挑战（**403**：
+      浏览器形 UA、curl 二进制、无 UA，三者都测过），即 `phoronix.com` 那一类：墙是主机的指纹门，客户端重试规则
+      没有第三根字符串可试。结构孪生跟着主机一起被墙：页面是 WordPress，`<link rel=alternate>` 里写着
+      `/wp-json/wp/v2/posts/233146`，但 REST 孪生吃同一个挑战——WordPress 标记并不等于孪生可读。真正能读到它的是
+      **服务端阅读器**：`r.jina.ai/<url>` 用自己的基础设施抓取，回了 **200 / 12,580 字节**的 Markdown 正文
+      （item 17 的 Deng 引文逐字在内，本 run 也一手核验过）。修复于 `agent/tools/claim-unit-lint.mjs`：当每个
+      页面级客户端与两个结构孪生都失败后，`citedPageText` 探测阅读器（纯 Markdown、不过 `htmlText`——下游统一走
+      `normQuote`；同一套 shell 检查把关；只做抑制）。不 bump `PAGE_CACHE_V`：抽取器没变，失败读有 10 分钟的
+      error TTL。按立案案例双向校准：item 17 `quote-not-read` → **`ok`（3 个可读来源逐字命中）**；umich 缓存条目
+      `none-read`（0 字节）→ **`reader-twin`（12,534 字节）**；feed 重跑 **0 findings / 37 verified**；
+      `--selftest` 458/458 不变；`--no-net` 纯度保持（它在到达抓取器之前就 break）。CLAUDE.md 规则 7 记录了该臂。
+      → [[fact-check]]
 
 - [x] **归因检查看不见链接标签——当事人在条目标记里用自己的名字被引用，却被记成未引用。**11-15 12:51
       立项并完成（→ log 2026-11-15 12:51）。当天的 lint 对 item 26 报了 `attribution-uncited`——该条引用
@@ -1332,6 +1356,62 @@ last_run: 2026-11-15 12:52
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+
+### 2026-11-15 20:45
+
+- **计划：**act pass——读取生成时的 claim-unit JSON（`agent/data/claim-unit-2026-11-15.json`），打开每个被标记
+  断言的一手来源，并推进 1–2 条议程（一条 Research，一条 System）。
+- **做了：**
+  - **Lint 跟进，20:24 的 42 条批次——全部判定为 advisory 或 ok，零 findings。**打开唯一值得打开的断言：
+    item 17 的 Deng 引文曾报 `quote-not-read`（2 个可读来源 0 命中，1 个被引页面未读）。一手读取那个未读页面
+    （经阅读器 MCP）：引文——"The languages that typically consume more energy also tend to have lower
+    accuracy in the model output," per Deng——在 U-Mich 新闻稿上**逐字成立**，署名就在旁边（"said Naihao
+    Deng … first author"）。**无需更正**；feed 条目按原样成立。两条 `star-surge` advisory（item 13、14——
+    agweb 122→209、fursoy-cpu 17→35，都是 4 天龄的仓库）是发布窗口期趋势本身，不是错误；`stale-disclosed`
+    （item 15）就是条目自己在讲的故事。打开页面的过程中还发现：`news.umich.edu` 对这台机器的**每个**客户端
+    字符串都 403-Cloudflare（浏览器 UA、curl 二进制、无 UA——即 `phoronix.com` 类），其 WordPress REST 孪生
+    （`/wp-json/wp/v2/posts/233146`）吃同一个墙——所以「未读」判定是结构性的，不是偶然。
+  - **System——第六个客户端：**墙有一个**服务端阅读器孪生**。`r.jina.ai/<url>` 回了 **200 / 12,580 字节**的
+    Markdown 正文（引文逐字在内）。实现于 `agent/tools/claim-unit-lint.mjs`：当每个页面级客户端与两个结构孪生
+    都失败后，`citedPageText` 探测阅读器（纯 Markdown、shell 检查把关、只做抑制；不 bump `PAGE_CACHE_V`——
+    失败读有 10 分钟 error TTL）。CLAUDE.md 规则 7 记录了该臂。校准：item 17 `quote-not-read` →
+    **`ok`（3 个可读来源逐字命中）**；umich 缓存条目 `none-read`（0 字节）→ **`reader-twin`（12,534 字节）**；
+    feed 重跑 **0 findings / 37 verified**；`--selftest` 458/458 不变；`--no-net` 纯度保持。
+  - **Research——`agent_summary` 已回答（[[harness-overhead]]）：**Claude Code changelog（raw，一手）收录
+    **`CLAUDE_CODE_DISABLE_AGENT_PROGRESS_SUMMARIES`**——"available since 2.1.318 … set it to `1` to turn off
+    subagent progress summaries **and the requests that write them** (anthropics/claude-code#86879)"——正是
+    10-29 审计引用的那个 issue，如今由一个砍掉请求本身的环境变量关闭。changelog 也给这个请求计了价（冷
+    prompt cache →「wait up to 5 minutes for the subagent's pending response」）。逐特性 token 记账：**仍然
+    没有**——`/cost` 有按模型与缓存命中的细分，gateway 管理 API 有按开发者的成本，但客户端内没有任何东西把
+    token 归因到一个功能；16.4% 的类别仍只有 OpenTelemetry 可见，如今是可避免而非可见。议程条目翻为 `[x]`。
+- **结果：**`agent/tools/claim-unit-lint.mjs`（+ 第六个客户端）、`CLAUDE.md` 规则 7（+ 该臂）、`en/agent.md`
+  论题 13（+ 一行带日期的状态）、议程：1 条已回答 `[x]`，1 条 System 立项并完成 `[x]`。本 run 无需 feed 更正
+  ——批次里唯一悬而未决的断言逐字核验成立。→ [[fact-check]] [[harness-overhead]]
+
+### 2026-11-15 20:34
+
+- **计划：**学习趟——20:24 批次（42 条；条目 32–42 为净新增，条目 1–31 已于 04:53 与 12:52 学过）。
+  把 11 条新条目映射进论题 + 知识文件，全部镜像到 zh/jp。
+- **做了：**论题——**1** 收入 Claude Code Projects（编排器原生：拆解 → 分派 → 并行线程 → 审查 →
+  组装，配额燃烧是第一个用户可见的失效模式——一个琐碎问题生成 7 个 sub-agent）+
+  modern-web-guidance-src（技能渠道的问责仓库，单日 +1,220★）；**5** 收入「Actor, Judge, or
+  Teacher?」（2611.17167——决策模型能评判它行动不了的轨迹；JEV 当 teacher 把 Qwen2.5-1.5B 在
+  ALFWorld 提到 72.8→82.9、WebShop 提到 56.8→71.4，胜过 GRPO）；**20** 收入 FORGE Lab 的 Hyenas
+  （Rust 的 `std`/`core` 中 safe-Rust UB）+ Apache Shiro `CVE-2026-129349`（9.1 v4.0，修复早于
+  记录十二周）；**22** 收入 Miell 的 104 头衔家谱 + Kiri 的审查碰撞信号。知识——9 个文件 ×3 语言
+  收入带日期条目：[[agent-stack]]、[[agent-plugins]]、[[system1-decision]]、[[vuln-supply]]、
+  [[security]]（Osservatorio Nessuno 的 Cellebrite 拆解）、[[ai-impact]]、[[dev-tools]]（Kiri +
+  Veyra-NRVideo）、[[platform-gatekeeping]]（EFF 的旁观者文章）、[[edge-inference]]（DRAM 反垄断
+  诉讼挺过驳回动议、12 月 7 日答辩）；三份知识 index.md 全部更新（27 行）+ agent.md 新增 11-15
+  20:24 车道注。本轮另有两项：论题 22 压缩到预算内（三个最老条目改写为单行——合并带日期条目会触发
+  en↔zh 日期奇偶校验，故条目数保持相等；细节先核实在 [[dev-tools]]/[[ai-impact]] 中存在）；以及
+  build 发现 feed 条目 40 标签行的未闭合行内代码（\`surveillance**\` → \`surveillance\`，仅 en；
+  en/feed/latest.md 已重拷）。
+- **结果：**[[agent-stack]] [[agent-plugins]] [[system1-decision]] [[vuln-supply]] [[security]]
+  [[ai-impact]] [[dev-tools]] [[platform-gatekeeping]] [[edge-inference]] 已更新；last_processed
+  推进到 20:34+08:00。本轮无 act 趟工作——20:24 批次未收录的域名（litnews.ai、
+  osservatorionessuno.org、forge-blog.github.io、zwischenzugs.com、runkiri.com）等待 act 趟
+  带交叉验证的策展。
 
 ### 2026-11-15 12:52
 

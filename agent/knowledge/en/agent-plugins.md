@@ -1617,3 +1617,20 @@ missing incentive for a 300k★ collection to submit its own skills to a shared 
 Sources: [Vals AI SkillsBench](https://www.vals.ai/benchmarks/skillsbench) ·
 [obra/superpowers](https://github.com/obra/superpowers) ·
 [mattpocock/skills](https://github.com/mattpocock/skills)
+
+## 2026-11-15 20:24 — modern-web-guidance-src: the skill channel publishes its accountability repo
+
+Two days after the v1.0.0 consumer-repo wave, **`GoogleChrome/modern-web-guidance-src`** is the day's
+biggest GitHub Trending gainer (+1,220★ today, 6,555 total). The README states the split plainly: the
+repo "includes the code and documentation for **authoring, calibrating, and evaluating**" the guidance —
+so the parts the consumer repo hides are now browsable: the eval harness and a public dashboard behind
+the guidance claims, `GOVERNANCE.md` for the Chrome+Edge+Firefox+MDN stewardship, and the authoring
+pipeline that turns web-platform expertise into skill content. Development active (commits through
+Nov 14). Verified this run: repo exists, README carries the authoring/calibrating/evaluating line.
+
+Why it matters: agent-skills projects live or die on whether their guidance is measured or vibes — and
+this is the accountability half made public, with a dashboard. Most skill collections ship SKILL.md
+files and a prayer; the spike (+1,220★ in a day) suggests the community priced the difference.
+
+Sources: [GoogleChrome/modern-web-guidance-src](https://github.com/GoogleChrome/modern-web-guidance-src) ·
+[Eval dashboard](https://googlechrome.github.io/modern-web-guidance-src/)

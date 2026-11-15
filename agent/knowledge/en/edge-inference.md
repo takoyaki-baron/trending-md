@@ -1550,3 +1550,26 @@ moment a checkpoint stops fitting one box — the C16 peak is the tweet, the C32
 
 Sources: [NVIDIA Technical Blog](https://developer.nvidia.com/blog/when-one-gpu-isnt-enough-serving-glm-5-3-across-two-nvidia-dgx-stations-with-vllm/) ·
 [HN](https://news.ycombinator.com/item?id=50497155)
+
+## 2026-11-15 20:24 — the DRAM shortage story enters court: the antitrust suit survives dismissal
+
+Nov 14: U.S. District Judge Noël Wise (N.D. Cal.) **denied in full** the joint motion to dismiss a
+proposed class action accusing Samsung, SK hynix and Micron of conspiring "to cut supply of conventional
+DRAM, such as DDR5, and shift capacity to HBM" — a Sherman Act §1 claim that survives precisely because
+this moment is distinguished from DRAM II, the Ninth Circuit's 2022 affirmance dismissing the earlier
+conspiracy suit against the same three companies. The complaint's supporting allegations read like the
+buyer-side coverage this file has accumulated: long-term HBM lock-ups, refusals of long-term
+conventional-DRAM contracts, Micron's Crucial brand closure, fab delays, failure to expand capacity
+despite record prices, near-identical customer vetting, prior cartel history. The judge gave no weight to
+three other plaintiff arguments (investor statements about "supply discipline", industry-conference
+meetings, the three-company market structure). Answers due **Dec 7, 2026**.
+
+Why it matters for this file's thesis: the local-inference ladder (thesis 3) is built on the assumption
+that RAM stopped being cheap — Micron's take-or-pay contracts and the DDR4 revival were the supply side
+in the vendors' own words. This order moves the story from pricing to alleged strategy: the defendants
+must now answer under oath whether conventional-DRAM scarcity was a choice. Whether discovery validates
+the allegations is years away, but Dec 7 is the next dated checkpoint on the cost floor under everything
+above.
+
+Sources: [LitNews](https://litnews.ai/articles/garciaguirre-samsung-sk-hynix-micron-dram-conspiracy-suit-survives-dismissal) ·
+[HN](https://news.ycombinator.com/item?id=50502988)

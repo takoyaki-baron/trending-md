@@ -625,3 +625,22 @@ AutoTrust, Amazon Strands, Google) its first entry anyone can actually run.
 Sources: [Perplexity: Decider v1.3 — Training, eval, and use cases](https://www.perplexity.ai/hub/blog/perplexity-decider) ·
 [HF: perplexity-ai/pplx-decider-v1.3](https://huggingface.co/perplexity-ai/pplx-decider-v1.3) ·
 [HN discussion](https://news.ycombinator.com/item?id=50488464)
+
+## 2026-11-15 20:24 — "Actor, Judge, or Teacher?": the decision model's second job, with evidence
+
+arXiv **2611.17167** (Haochen Liu et al., ZJU-REAL; published Nov 12, topped the Hugging Face daily
+papers list Nov 13) asks whether a decision model that acts poorly can still teach well. Setup: three
+decision models vs three general LLMs as actors and judges on ALFWorld; JEV as teacher on ALFWorld and
+WebShop. Findings split cleanly: as **actors**, all six models get lured off a must-come-first subgoal
+by an easier one; as **judges** seeing whole trajectories, the same models correctly credit the steps
+toward that subgoal — and asking whether *each action helped* (rather than whether the task will
+succeed) separates useful actions from useless ones. As a **teacher**, JEV lifts a Qwen2.5-1.5B policy
+over GRPO from **72.8% to 82.9%** on ALFWorld and **56.8% to 71.4%** on WebShop. Interpretation: judging
+after the episode ends reveals consequences that acting must anticipate. Code public.
+
+Why it matters: the decision-model category (thesis 5) gets a second job with numbers behind it — not
+just choosing actions but grading them for RL training — where a weak-but-cheap decision model may
+outperform the big actor it cannot match, because hindsight is the easier inference.
+
+Sources: [arXiv 2611.17167](https://arxiv.org/abs/2611.17167) ·
+[ZJU-REAL/decision-agents](https://github.com/ZJU-REAL/decision-agents)

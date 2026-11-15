@@ -1388,3 +1388,28 @@ Sources: [gyptazy RFC](https://gyptazy.com/blog/freebsd-bhyve-live-migration-sup
 [FM1 Workbench](https://open.m-vave.com/fm1-workbench) ·
 [13 versions](https://monkeyisland.pages.dev/) ·
 [bhyve HN 讨论](https://news.ycombinator.com/item?id=50488835)
+
+## 2026-11-15 20:24——Kiri 的 22 ms `docker run` 声明与它的「Measured numbers replace these soon」占位符；Veyra 给采集卡画面插帧
+
+**Kiri**（`libracoder/kiri`，Rust，Apache-2.0，11 月 2 日创建，4.7k★，v0.2.1）：面向
+Mac/Windows/Linux 的桌面容器运行时，单 daemon 跑 Docker 容器——docker CLI、Compose 与
+Docker API 原样可用——声称「docker run 在 Kiri 上 22 ms，Docker Desktop 上 178 ms（Colima
+152 ms，OrbStack 279 ms），每个引擎 2 CPU / 8 GB」。容器之外：镜像构建/扫描、Kubernetes、
+完整 Linux 虚拟机、内置隧道（定位为免费 Ngrok 替代）。HN 帖里的证据应与声明并读：约 20 万
+行代码在两周左右出现（评论者读着 em-dash 痕迹）、站点的 CPU/内存表仍写着「Measured numbers
+replace these soon」、其 Podman 替代品页面在没有 Podman 时序的情况下做比较、而 8× 是容器
+*启动*延迟而非吞吐。为什么重要：Mac 容器运行时席位（OrbStack/Colima/Docker Desktop）确实
+争夺中，一个宽松许可的 Rust 单 daemon 参战者是真实的架构主张——但这是一个 13 天大的项目，
+头版数字是冷启动：在承诺的实测表落地之前，归档为「有前途，未证明」。
+
+**Veyra-NRVideo**（`Likely7/Veyra-NRVideo`，GPL-3.0，C++，今日 +731★，共 2.6k）：实时 GPU
+增强流水线——超分、去噪、HDR、插帧——叠加在 Windows 上的本地视频、采集卡与游戏串流之上，
+带实时预览。趋势标题（「Bring PS5 GTA6 to 120FPS with DLSS 5」）描述的是增强*被采集的画面*，
+不是让游戏渲染更快；README 自己的表述才是务实的那句。对采集流做外部插帧如今是真实的品类
+——它用额外延迟换流畅度，用在升级不了的硬件（主机）上，与引擎内 DLSS/FSR 的取舍正好相反；
+插出的帧是模型的猜测，而延迟是它收账的地方。
+
+Sources: [libracoder/kiri](https://github.com/libracoder/kiri) ·
+[Kiri 站点](https://runkiri.com/) ·
+[HN](https://news.ycombinator.com/item?id=50504077) ·
+[Likely7/Veyra-NRVideo](https://github.com/Likely7/Veyra-NRVideo)

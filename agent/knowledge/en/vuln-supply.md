@@ -2190,3 +2190,32 @@ enrichment beside Google's triage** — case (5) provenance again — and the ho
 Sources: [NVD API 2.0 window 2026-11-03→04, sourceIdentifier=chrome-cve-admin](https://services.nvd.nist.gov/rest/json/cves/2.0?sourceIdentifier=chrome-cve-admin%40google.com&pubStartDate=2026-11-03T00:00:00.000&pubEndDate=2026-11-04T23:59:59.999) · [CVE-2026-121029](https://nvd.nist.gov/vuln/detail/CVE-2026-121029)
 
 → [[security]] [[fact-check]] [[disclosure-lag]]
+
+## 2026-11-15 20:24 — AI finds soundness bugs in Rust's std; Shiro's fix beats its record by twelve weeks
+
+**FORGE Lab (Microsoft; Yechan Bae, Nov 9; 161 HN pts):** memory-safety issues in Rust's `std` and
+`core` — "including cases where code written **entirely in safe Rust** can trigger undefined behavior" —
+found with **Hyenas**, the lab's AI-powered vulnerability scanner (a research version of codename
+MDASH), then reproduced and reported with Rust maintainers. The taxonomy is three patterns of misplaced
+trust in unsafe code: **trusting code not to panic** (invariants broken mid-function when a panic
+unwinds through), **trusting user-provided implementations to be correct** (a misbehaving comparator or
+trait impl corrupting unsafe code's assumptions), **trusting the underlying system**. Concrete case:
+`join()` — CVE-2020-36323's old fix never covered strings that grow between calls, and in April 2026 the
+same function needed another fix when the remaining-length calculation underflowed into a heap overflow.
+Some reports remain open. Why it matters: the boundary where Rust's guarantees leak is not FFI — it is
+panics, trait impls and OS assumptions; and it is another AI-finds-real-vulns datapoint, in one of the
+most-reviewed codebases on earth, with fixes landing in the std everyone's containers ship.
+
+**Apache Shiro `CVE-2026-129349`** (CVSS **4.0 9.1**, CNA `security@apache.org`; NVD `Received`,
+published 2026-11-15T10:16:53Z): with authentication caching enabled on `DefaultLdapRealm`, after a user
+logs in successfully once, subsequent logins for that user succeed with **any password** — the cache hit
+skips the LDAP bind, and the `AllowAllCredentialsMatcher` installed by default accepts any credentials.
+Affected: everything **before 3.0.1**; the timing is the story: 3.0.1 shipped **Aug 23** (3.0.2 Nov 8) —
+**twelve weeks fix-predates-record** — and the flaw needs the opt-in cache setting. Why it matters:
+caching an authentication decision is only as strong as the matcher you cached it with; and "just
+released CVE" headlines need the release-timeline check — the upgrade advice sat on the releases page
+since August; the *awareness* is what shipped today.
+
+Sources: [FORGE Lab: Rust std memory safety](https://forge-blog.github.io/posts/rust-std-memory-safety/) ·
+[CVE-2026-129349](https://www.cve.org/CVERecord?id=CVE-2026-129349) ·
+[Apache Shiro releases](https://github.com/apache/shiro/releases)

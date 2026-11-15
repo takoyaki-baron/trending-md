@@ -303,3 +303,24 @@ Jan Schaumann（netmeister.org、11月13日；146 HN pts）はある文パター
 
 Sources: [The Claude Delusion](https://www.netmeister.org/blog/claude-delusion.html) ·
 [HN](https://news.ycombinator.com/item?id=50496921)
+
+## 2026-11-15 20:24 —— 104 職種の 1 枚の系統樹：その末端は "AI Agent / Context Engineer"
+
+Ian Miell（zwischenzugs；340+ HN pts）が、1940 年代から現在までのソフトウェア職種の系統樹を
+作った——本人いわく「with the help of Mr Claude」——きっかけは、自身の役職が年々 Head of
+DevOps → SRE → platform engineering と改名されるのを見てきたこと。**104 職種**、「頂点は
+'Computer'（人間のことであり機械ではない）、末端は 'AI Agent / Context Engineer'」、5 年刻みの
+行で 7 つの系統列（開発；分析・アーキテクチャ・リーダーシップ；運用；ネットワーク・セキュリティ；
+データ・AI；品質・テスト；サポート）に俯瞰。実線 = 親から育った職種、破線 = 影響または一般的な
+キャリア移動、各ノードは書かれた歴史にリンク。成果物全体が Graphviz ファイル 1 つと説明の JSON
+1 つで、クリック可能なサイトとして描画されている。
+
+なぜ重要か：この木は、職種の改名ラッシュを流行としてではなく系譜として読めるようにする——そして
+その末端はこのフィードの守備範囲そのもの：agent のために context を書く仕事は、1940 年の
+"programmer"、2005 年の "build engineer" の経営陣交代である。同じバッチが供給側の脚注を出した：
+Kiri の Show HN スレッドが、em-dash の痕跡から 2 週間で現れた約 20 万行を読み取った話
+（[[dev-tools]]）——線の上に職種改名、線の下にレビュー衝突の信号。
+
+Sources: [zwischenzugs](https://zwischenzugs.com/2026/11/03/a-family-tree-of-software-job-titles/) ·
+[インタラクティブ樹](https://ianmiell.github.io/sw-job-title-family-tree/) ·
+[HN](https://news.ycombinator.com/item?id=50499038)

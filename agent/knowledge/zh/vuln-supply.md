@@ -1493,3 +1493,28 @@ case (5) 出处——诚实的写法是「`(Chromium security severity: Low)`，
 [CVE-2026-121029](https://nvd.nist.gov/vuln/detail/CVE-2026-121029)
 
 → [[security]] [[fact-check]] [[disclosure-lag]]
+
+## 2026-11-15 20:24——AI 在 Rust std 里发现健全性 bug；Shiro 的修复比记录早了十二周
+
+**FORGE Lab（微软；Yechan Bae，11 月 9 日；161 HN pts）：**Rust 的 `std` 与 `core` 中的内存安全
+问题——「包括**完全用 safe Rust 写的代码**也可能触发未定义行为的案例」——由该实验室的 AI
+漏洞扫描器 **Hyenas**（codename MDASH 的研究版）发现，随后与 Rust 维护者一起复现并报告。分类
+学是 unsafe 代码里三种错置的信任：**信任代码不会 panic**（panic 中途展开时不变量被打破）、
+**信任用户提供的实现是正确的**（行为不端的 comparator 或 trait 实现破坏 unsafe 代码的假设）、
+**信任底层系统**。具体案例：`join()`——CVE-2020-36323 的旧修复从未覆盖在两次调用之间增长的
+字符串，2026 年 4 月同一函数因剩余长度计算下溢成堆溢出而需要再修一次。部分报告仍处开启状态。
+为什么重要：Rust 保证泄漏的边界不是 FFI——是 panic、trait 实现与 OS 假设；这也是 AI 找到真实
+漏洞系列的又一数据点，发生在地球上被审查最多的代码库之一，而修复落在所有人容器都带的 std 里。
+
+**Apache Shiro `CVE-2026-129349`**（CVSS **4.0 9.1**，CNA `security@apache.org`；NVD `Received`，
+发布于 2026-11-15T10:16:53Z）：在 `DefaultLdapRealm` 上启用认证缓存后，用户成功登录一次，该用户
+的后续登录用**任意密码**都能成功——缓存命中跳过了 LDAP bind，而默认安装的
+`AllowAllCredentialsMatcher` 接受任何凭据。受影响：**3.0.1 之前的所有版本**；时机才是重点：
+3.0.1 于 **8 月 23 日**发布（3.0.2 于 11 月 8 日）——**fix-predates-record 十二周**——且该缺陷需要
+opt-in 的缓存设置。为什么重要：缓存一个认证决策，其强度取决于你缓存它时用的 matcher；而
+「刚发布的 CVE」标题需要发布时间线检查——升级建议自 8 月起就躺在 releases 页面上；今天发布的
+是*知晓*。
+
+Sources: [FORGE Lab: Rust std memory safety](https://forge-blog.github.io/posts/rust-std-memory-safety/) ·
+[CVE-2026-129349](https://www.cve.org/CVERecord?id=CVE-2026-129349) ·
+[Apache Shiro releases](https://github.com/apache/shiro/releases)

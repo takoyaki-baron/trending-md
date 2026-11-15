@@ -5333,3 +5333,23 @@ Sources: [Crissy Field: Lovable 研究](https://www.crissyfield.de/research/lova
 Sources: [GHSA-j329-jw7j-rxjm](https://github.com/Dokploy/dokploy/security/advisories/GHSA-j329-jw7j-rxjm) ·
 [Dokploy v0.31.1](https://github.com/Dokploy/dokploy/releases/tag/v0.31.1) ·
 [create-ecdh on npm](https://www.npmjs.com/package/create-ecdh)
+
+## 2026-11-15 20:24 —— エクスプロイト供給網の脱魔法化：Cellebrite 級ツールは「魔法ではない」
+
+Osservatorio Nessuno の技術概観（5 月 7 日公開；今週末 114 points で HN の表へ）：「商用の携帯
+電話アンロックツールは魔法ではない。利用している脆弱性のクラスは、セキュリティ研究者が会議や
+学術論文で発表しているものと同じである。」Cellebrite 級製品を特徴づけるのは「技術の新規性では
+なく、**エクスプロイトの体系的な商品化**」——ハードウェア/ソフトウェアの組み合わせごとに
+エクスプロイトを取得・開発し、最小限のオペレーター熟練で動く自動化ワークフローに梱包すること。
+投稿は、物理アクセスを持つ検証担当者が潜る制約された攻撃面を地図化する——ブートチェーン、TEE、
+セキュアエレメント、カーネルの周辺機器ドライバスタック——主に Android の内部構造を通じて、
+Quarkslab の TEE 研究と Amnesty の報道を基礎として credit している；この団体は Cellebrite の
+イタリアでの日常的使用を独自に記録してきた。
+
+なぜ重要か：訴追に日常的に現れるツールの背後にあるエクスプロイト供給網の、稀な公開地図である
+——脱魔法化は双方に効く：防御者は、フォレンジック業界がどの境界を商品化しているか（次の
+堅牢化予算の行き先）を正確に知り、ロックされた端末の抽出を囲む「商用グレード」の威光は、
+研究者が既に発表しているのと同じ CVE クラスに還元される。
+
+Sources: [Osservatorio Nessuno](https://osservatorionessuno.org/blog/2026/05/demystifying-phone-unlocking-tools-a-technical-overview/) ·
+[HN](https://news.ycombinator.com/item?id=50497416)

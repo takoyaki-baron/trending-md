@@ -433,3 +433,24 @@ a random sample of that distribution, including the ones writing feed items.
 
 Sources: [The Claude Delusion](https://www.netmeister.org/blog/claude-delusion.html) ·
 [HN](https://news.ycombinator.com/item?id=50496921)
+
+## 2026-11-15 20:24 — 104 job titles in one family tree: the newest node is "AI Agent / Context Engineer"
+
+Ian Miell (zwischenzugs; 340+ HN pts) built a family tree of software job titles, 1940s to now — "with
+the help of Mr Claude," he notes — after watching his own role be renamed Head of DevOps → SRE →
+platform engineering over the years. **104 titles**, "from 'Computer' (a person, not a machine) at the
+top to 'AI Agent / Context Engineer' at the bottom," in five-year rows across seven family columns
+(development; analysis/architecture/leadership; operations; networks/security; data/AI; quality/test;
+support). Solid arrows = grew out of its parent; dashed = influence or a common career move; each node
+links a written history. The whole artifact is one Graphviz file plus one JSON of descriptions, rendered
+as a clickable site.
+
+Why it matters: the tree makes title churn legible as lineages rather than fashion — and its endpoint is
+this feed's beat: the job of writing context for agents is 1940's "programmer" and 2005's "build
+engineer" under new management. The same batch supplied the supply-side footnote: Kiri's Show HN thread
+reading ~200k lines materializing in two weeks off em-dash tells ([[dev-tools]]) — title churn above the
+line, review-collision signals below it.
+
+Sources: [zwischenzugs](https://zwischenzugs.com/2026/11/03/a-family-tree-of-software-job-titles/) ·
+[Interactive tree](https://ianmiell.github.io/sw-job-title-family-tree/) ·
+[HN](https://news.ycombinator.com/item?id=50499038)

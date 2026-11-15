@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-15T05:22:46.223Z",
+ "updated": "2026-11-15T13:11:18.277Z",
  "cves": {
   "CVE-2026-64671": {
    "vulnStatus": "Deferred",
@@ -14363,6 +14363,56 @@
    ],
    "cwe": [
     "CWE-20"
+   ],
+   "kev": null,
+   "kevDue": null,
+   "nvdAnalyzed": false
+  },
+  "CVE-2020-36323": {
+   "vulnStatus": "Modified",
+   "published": "2021-04-14",
+   "lastModified": "2026-06-17T03:15",
+   "metrics": [
+    {
+     "version": "2.0",
+     "type": "Primary",
+     "source": "nvd@nist.gov",
+     "baseScore": 6.4,
+     "severity": null,
+     "vector": "AV:N/AC:L/Au:N/C:P/I:N/A:P"
+    },
+    {
+     "version": "3.1",
+     "type": "Primary",
+     "source": "nvd@nist.gov",
+     "baseScore": 8.2,
+     "severity": "HIGH",
+     "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:H"
+    }
+   ],
+   "cwe": [
+    "CWE-134"
+   ],
+   "kev": null,
+   "kevDue": null,
+   "nvdAnalyzed": true
+  },
+  "CVE-2026-129349": {
+   "vulnStatus": "Received",
+   "published": "2026-11-15",
+   "lastModified": "2026-11-15T10:16",
+   "metrics": [
+    {
+     "version": "4.0",
+     "type": "Secondary",
+     "source": "security@apache.org",
+     "baseScore": 9.1,
+     "severity": "CRITICAL",
+     "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:N/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:N/AU:Y/R:U/V:C/RE:L/U:Red"
+    }
+   ],
+   "cwe": [
+    "CWE-287"
    ],
    "kev": null,
    "kevDue": null,

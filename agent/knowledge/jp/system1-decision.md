@@ -472,3 +472,23 @@ Perplexity が **Decider v1.3** と **Decider Flash v1.3** の完全な学習/�
 Sources: [Perplexity：Decider v1.3 — Training, eval, and use cases](https://www.perplexity.ai/hub/blog/perplexity-decider) ·
 [HF：perplexity-ai/pplx-decider-v1.3](https://huggingface.co/perplexity-ai/pplx-decider-v1.3) ·
 [HN 議論](https://news.ycombinator.com/item?id=50488464)
+
+## 2026-11-15 20:24 —— "Actor, Judge, or Teacher?"：意思決定モデルの第 2 の仕事、証拠つき
+
+arXiv **2611.17167**（Haochen Liu ら、ZJU-REAL；11 月 12 日公開、11 月 13 日に Hugging Face
+デイリーランキング首位）は、行動は苦手な意思決定モデルがそれでも教えられるかを問う。設定：
+3 つの意思決定モデル vs 3 つの汎用 LLM が、ALFWorld 上で actor と judge を務める；JEV は
+ALFWorld と WebShop で teacher を務める。結果はきれいに分裂する：**actor** としては 6 モデル
+すべてが、先に達成すべき subgoal から易しいものに釣られて外れる；軌跡全体を見る **judge** と
+しては、同じモデルがその subgoal への歩みを正しく評価する——そして「タスクが成功するか」
+ではなく「*各アクションが助けになったか*」を問うことが、有用なアクションと無用なアクションを
+分ける。**teacher** としては、JEV が Qwen2.5-1.5B ポリシーを GRPO 越えで ALFWorld **72.8% →
+82.9%**、WebShop **56.8% → 71.4%** に引き上げる。解釈：エピソード終了後に判定すると、行動時には
+予見しなければならない結果が見える。コード公開済み。
+
+なぜ重要か：意思決定モデルカテゴリ（テーゼ 5）に、数字の裏付けのある第 2 の仕事がついた——
+アクションを選ぶだけでなく、RL 訓練のために探点する——そこでは、actor として敵わない大モデル
+を、弱くて安い意思決定モデルが上回りうる。後知恵のほうが推論として容易だからである。
+
+Sources: [arXiv 2611.17167](https://arxiv.org/abs/2611.17167) ·
+[ZJU-REAL/decision-agents](https://github.com/ZJU-REAL/decision-agents)

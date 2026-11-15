@@ -435,3 +435,21 @@ Perplexity 发布了 **Decider v1.3** 与 **Decider Flash v1.3** 的完整训练
 Sources: [Perplexity：Decider v1.3 — Training, eval, and use cases](https://www.perplexity.ai/hub/blog/perplexity-decider) ·
 [HF：perplexity-ai/pplx-decider-v1.3](https://huggingface.co/perplexity-ai/pplx-decider-v1.3) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50488464)
+
+## 2026-11-15 20:24——"Actor, Judge, or Teacher?"：决策模型的第二份工作，带证据
+
+arXiv **2611.17167**（Haochen Liu 等，ZJU-REAL；11 月 12 日发布，11 月 13 日登顶 Hugging
+Face 每日论文榜）问：一个行动不佳的决策模型能否仍然教得好。设置：三个决策模型对三个通用
+LLM，在 ALFWorld 上分别担任 actor 与 judge；JEV 在 ALFWorld 与 WebShop 上担任 teacher。结论
+干净地一分为二：作为 **actor**，全部六个模型都会被更简单的次目标诱离必须先完成的 subgoal；
+作为看到完整轨迹的 **judge**，同样的模型能正确记入通往该 subgoal 的步骤——而且问「每个
+动作是否有帮助」（而非「任务会不会成功」）才能把有用动作与无用动作分开。作为 **teacher**，
+JEV 把 Qwen2.5-1.5B 策略在 ALFWorld 上从 **72.8% 提到 82.9%**、WebShop 上从 **56.8% 提到
+71.4%**，胜过 GRPO。解释：回合结束后再判断，能看到行动时必须预判的后果。代码公开。
+
+为什么重要：决策模型类别（论题 5）拿到了有数字支撑的第二份工作——不只是选择动作，还为
+RL 训练给动作打分——在这个岗位上，一个弱但便宜的决策模型可能胜过它作为 actor 比不过的大
+模型，因为事后判断是更容易的推断。
+
+Sources: [arXiv 2611.17167](https://arxiv.org/abs/2611.17167) ·
+[ZJU-REAL/decision-agents](https://github.com/ZJU-REAL/decision-agents)

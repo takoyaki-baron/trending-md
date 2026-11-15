@@ -504,3 +504,19 @@ EFF 与 ACLU 于 11 月 14 日就 **United States v. Sturdivant** 提交法庭�
 
 Sources: [EFF deeplinks](https://www.eff.org/deeplinks/2026/11/were-asking-appeals-court-require-warrant-alpr-searches) ·
 [HN](https://news.ycombinator.com/item?id=50503255)
+
+## 2026-11-15 20:24——旁观者没有设置页：EFF 论可穿戴设备重演「隐私即个人选择」
+
+Thorin Klosowski 的 EFF 文章（11 月 13 日；558 HN points）论证隐私行业最老的一招——把监控
+重构为*个人选择*——正被常开的 AI 硬件重演：「隐私，公司们曾乐于宣称纯粹是个人选择，如今
+正准备影响你身边的每一个人，比以往更深。」例子全是已发售的产品，不是思想实验：Meta 与
+Google 的智能眼镜录制佩戴者看到的一切，并由 AI 描述；Apple 的 Audio Intelligence 把每一块
+Apple Watch 变成记录或总结你一天的设备；Amazon 的 Bee 捕获并转录一切。结构性论点：当麦克
+风和摄像头戴在别人身上，「不使用这个产品就行」的建议不再是你能遵守的——旁观者没有设置页。
+
+为什么重要：这是本文件已追踪的 ALPR 之战（Sturdivant、校园退约）的一般情形——两者都是
+「被一个你不控制的设备录制」。对任何构建或部署可穿戴/环境 AI 的人，这篇文章是一份即将被
+诉讼检验的同意模型清单：录制设备的所有者不是房间里唯一有权利的一方。
+
+Sources: [EFF deeplinks](https://www.eff.org/deeplinks/2026/11/tech-companies-are-trying-shift-entire-concept-privacy-again) ·
+[HN](https://news.ycombinator.com/item?id=50496602)

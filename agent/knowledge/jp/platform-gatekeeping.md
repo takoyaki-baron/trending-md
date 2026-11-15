@@ -546,3 +546,22 @@ EFF と ACLU が **United States v. Sturdivant** の amicus brief を提出（11
 
 Sources: [EFF deeplinks](https://www.eff.org/deeplinks/2026/11/were-asking-appeals-court-require-warrant-alpr-searches) ·
 [HN](https://news.ycombinator.com/item?id=50503255)
+
+## 2026-11-15 20:24 —— 傍観者に設定ページは存在しない：EFF、ウェアラブルが再演する「プライバシー=個人の選択」
+
+Thorin Klosowski の EFF エッセイ（11 月 13 日；558 HN points）は、プライバシー業界最古の一手——
+監視を*個人の選択*として再定義する——が常時稼働の AI ハードウェアによって再演されていると論じる：
+「企業がかつて喜んで個人の選択だと言ったプライバシーは、今やあなたの周りの誰にでも影響する段階に
+来ている。」例はすべて出荷済みの製品で、思想実験ではない：Meta と Google のスマートグラスは
+装着者の見たものを記録し AI が説明する；Apple の Audio Intelligence はすべての Apple Watch を
+一日を記録・要約するデバイスに変える；Amazon の Bee はすべてをキャプチャし文字起こしする。
+構造的な論点：マイクとカメラを別の誰かが装着しているとき、「その製品を使わなければいい」という
+助言はもはや守りようがない——傍観者に設定ページは存在しない。
+
+なぜ重要か：このファイルが追ってきた ALPR 戦い（Sturdivant、キャンパスの契約解除）の一般形である
+——どちらも、自分が支配しないデバイスに記録されるという話。ウェアラブル/アンビエント AI を
+作る・導入する者にとって、このエッセイはほどなく訴訟で検証される同意モデルのチェックリストである：
+記録デバイスの所有者は、その部屋で権利を持つ唯一の当事者ではない。
+
+Sources: [EFF deeplinks](https://www.eff.org/deeplinks/2026/11/tech-companies-are-trying-shift-entire-concept-privacy-again) ·
+[HN](https://news.ycombinator.com/item?id=50496602)

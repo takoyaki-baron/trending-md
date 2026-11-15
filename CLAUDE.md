@@ -898,6 +898,26 @@ underlying pages — this produced a two-layer false signal in a single item.
    (sev 0). Calibrated on the 11-15 filing items: `attribution-uncited` →
    `attribution-label-verified`; the SE cache entry `none-read` → `se-api-twin`; feed re-run
    **0 findings / 18 verified**, 0 `api.github.com` calls; `--selftest` 453 → **458**.
+   **And a host-fingerprint wall has a SERVER-SIDE READER twin — the sixth client in
+   `citedPageText`** (added 2026-11-15 20:45, filed by the same day's lint JSON). The client-retry
+   rule assumes a third client string exists; `news.umich.edu` is the class where none does — it
+   answers a Cloudflare challenge (**403**, ~5.8 KB) to undici's browser-shaped UA, the curl
+   binary, and a request with **no UA at all** (all three measured), the `phoronix.com` shape:
+   the wall is the HOST's fingerprint gate, so no local client gets through — and the host's own
+   machine twin shares the wall (the WordPress site's `/wp-json/wp/v2/posts/<id>` REST twin
+   answers the same challenge; a WordPress marker alone does not imply a readable twin). What
+   reads it is a **server-side reader** (`r.jina.ai/<url>`), which fetches from its own
+   infrastructure and answered **200 / 12,580 bytes** of Markdown with the article body — item
+   17's Deng quotation verbatim in it. Fires only when every page-level client AND both
+   structural twins failed, so a normal run pays zero extra requests; the response is the
+   READER'S rendering (plain Markdown, no `htmlText` — consumers normalize through `normQuote`),
+   and a reader can be rate-limited or challenged alongside us, so the same shell checks gate
+   acceptance as for every client above. Suppression-only: a twin can only turn `unread` into
+   `read`, never invent text. No `PAGE_CACHE_V` bump — the extractor is unchanged and a failed
+   read is error-TTL'd (10 min), so a stale `none-read` entry cannot block the arm for longer
+   than that. Calibrated on the filing case: item 17 `quote-not-read` → **`ok` (verbatim in 3
+   readable sources)**, the umich cache entry `none-read` (0 bytes) → **`reader-twin` (12,534
+   bytes)**; feed re-run **0 findings / 37 verified**; `--selftest` 458/458 unchanged.
    Five judgement calls it encodes, each a hand-made mistake first: **(a) a 200 is not a twin** —
    SPA catch-alls answer `200 text/html` for any `.md` path, so a candidate only counts if its body
    is not HTML and not byte-identical to the page; **(b) a redirect is not a miss** —

@@ -2119,3 +2119,31 @@ Sources: [gyptazy RFC](https://gyptazy.com/blog/freebsd-bhyve-live-migration-sup
 [FM1 Workbench](https://open.m-vave.com/fm1-workbench) ·
 [13 versions](https://monkeyisland.pages.dev/) ·
 [bhyve HN](https://news.ycombinator.com/item?id=50488835)
+
+## 2026-11-15 20:24 — Kiri's 22 ms `docker run` claim and its "Measured numbers replace these soon" placeholder; Veyra frame-generates the capture feed
+
+**Kiri** (`libracoder/kiri`, Rust, Apache-2.0, created Nov 2, 4.7k★, v0.2.1): a desktop container
+runtime for Mac/Windows/Linux running Docker containers with one daemon — docker CLI, Compose and the
+Docker API work unchanged — claiming "docker run takes 22 ms on Kiri and 178 ms on Docker Desktop
+(152 ms on Colima, 279 ms on OrbStack), every engine on 2 CPUs and 8 GB." Beyond containers: image
+build/scan, Kubernetes, whole Linux machines, built-in tunneling pitched as a free Ngrok alternative.
+The HN thread's receipts belong beside the claims: ~200k lines materialized in about two weeks
+(commenters reading em-dash tells), the site's CPU/memory table still says "Measured numbers replace
+these soon," its Podman-alternative page compares without Podman timings, and the 8× is container
+*start* latency, not throughput. Why it matters: the Mac container-runtime slot (OrbStack/Colima/Docker
+Desktop) is genuinely contested and a permissive-licensed Rust entrant with one daemon is a real
+architecture claim — but this is a 13-day-old project whose headline is a cold-start number: file under
+"promising, unproven" until the promised measured tables land.
+
+**Veyra-NRVideo** (`Likely7/Veyra-NRVideo`, GPL-3.0, C++, +731★ today, 2.6k total): a real-time GPU
+enhancement pipeline — super resolution, denoising, HDR, frame generation — over local video, capture
+cards and game streams on Windows, with live preview. The trending headline ("Bring PS5 GTA6 to 120FPS
+with DLSS 5") describes enhancing the *captured feed*, not making the game render faster; the README's
+own framing is the grounded one. External frame generation on a captured stream is a real category now —
+it trades added latency for smoothness on hardware you can't upgrade (consoles), the opposite trade from
+in-engine DLSS/FSR; interpolated frames are the model's guess, and input latency is where it collects.
+
+Sources: [libracoder/kiri](https://github.com/libracoder/kiri) ·
+[Kiri site](https://runkiri.com/) ·
+[HN](https://news.ycombinator.com/item?id=50504077) ·
+[Likely7/Veyra-NRVideo](https://github.com/Likely7/Veyra-NRVideo)

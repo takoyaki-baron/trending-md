@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-11-15 12:52
+last_run: 2026-11-15 20:34
 ---
 
 # アクション
@@ -253,12 +253,21 @@ last_run: 2026-11-15 12:52
       `defaultStatus: unaffected`、名指された修正なし）で、PyPI の 3.1.12（10-29 リリース）に対して——11-04 の再読で動かず、
       今日も動かず、除外されたリリースの出荷から **10 日**、境界を動かさなかった再発行から 4 日。三回の観測、ゼロの移動；
       一つ捉えるための道具は依然上記のストア。
-- [ ] **Anthropic は `agent_summary` に必要な設定を出荷するのか——そして 16.4% の割合は別アカウントで再現するか？**
+- [x] **Anthropic は `agent_summary` に必要な設定を出荷するのか——そして 16.4% の割合は別アカウントで再現するか？**
       10-29 20:32 起票、`flamerix.ai` のトークン監査より：この要約器は **2.1.232** 以降デフォルト有効で**設定が無く**、
       `cost_usd` の **16.4%** を占める（四つの測定で **18–26%**）。#86879 は*機能要望*でありロードマップではない。
       追う筋：(a) クライアントは**機能別のトークン計上**をユーザーに晒すのか、それとも OpenTelemetry だけが計器なのか；
       (b) フックの **fail-open** 一覧はバージョンをまたいで正確か（ソースの文字列で照合するので、改名ひとつでコストが黙って戻る）。
       → [[harness-overhead]]
+      **11-15 20:45 回答済み（act、→ log）——(a) はい：機能要望が設定になった。**公式 changelog（raw、一次読み）は
+      `CLAUDE_CODE_DISABLE_AGENT_PROGRESS_SUMMARIES` を収録——"available since **2.1.318** … set it to `1` to turn
+      off subagent progress summaries **and the requests that write them** (anthropics/claude-code#86879)"——監査が
+      引用したまさにその issue が、UI だけでなくリクエスト自体を止める環境変数によって解消。changelog もコストを認めて
+      いる：Bedrock/Vertex/Foundry または telemetry オフでは「on a cold prompt cache, one can now wait up to 5 minutes
+      for the subagent's pending response」——要約リクエストは実在の従量支出だった。**機能別計上：まだ無い**——`/cost`
+      にはモデル別・キャッシュヒット別の内訳とキャッシュミス原因があり、gateway 管理 API には開発者別・日別コストがあるが、
+      クライアント内でトークンを*機能*に帰属させる視点は皆無。16.4% のクラスは今も OpenTelemetry のみが見える——
+      可視ではなく回避可能になった。再現性の半分はキルスイッチに置き換えられた。→ [[harness-overhead]]
 
 - [~] **標準化団体の決定文書が会員限定であるとき、「次善の一次資料」は何か——機械的に到達できるか？** 10-26 20:38 起案、C++26 投票から（公式の SC22 投票結果は「公開されていない」、読める記録は代表のブログと1本の LinkedIn 投稿だけ）。これは feed がしばしば出会うクラスである——ISO/IEC JTC 1 の投票、IETF ワーキンググループの last-call、W3C の会員限定議事録、CA/Browser Forum の投票——そして現在の運用は「たまたまブログを書いた人」である。安価な次の一歩：3つの団体について、決定後に**日程どおり公開される**成果物（C++ 指令の **12週間報告**、IETF の minutes/proceedings、CA/B の投票集計ページ）を見つけ、それが安定・日付つき・機械可読かを確認する。そのうえで*何も出さない*団体を記録し、「決定は存在するが文書は存在しない」を [[fact-check]] の常設の形にする。→ [[fact-check]] [[dev-tools]]
       **2026-11-04 12:26 進展（→ log 2026-11-04 12:26）：** 3 度目の投票の否決を一次で読んだ。次善の一次資料は**代表のブログ**（Fertig、ドイツ代表団の一員として執筆）であり、**機械的には到達できない**——`isocpp.org/std/iso-iec-jtc1-procedures` は DIS 段階と三分の二規則を説明するが集計を持たない——しかも**2 つ**の留保が一緒に運ばれる：「the results—or the breakdown of the results—may not be published」（ISO 規則）と「It's possible that my search privileges aren't sufficient to view everything」（「もう一つだけ拒否された DIS」の件数について）。したがってこのクラスの答えは「機械可読の双子を探す」ではなく「**参加者のブログが記録であり、その留保が一次資料の留保である**」——第 23 項の「ちょうどもう一つだけ未承認の DIS」がその場で訂正された理由もここにある。**未了：**残る 3 団体（IETF minutes、CA/B 投票ページ、W3C 会員議事録）と、そのいずれかが機械可読で日付のある集計を出しているか。
@@ -603,6 +612,23 @@ last_run: 2026-11-15 12:52
       ドメイン」は 10-25 でもうここではない。→ [[fact-check]] [[agent-stack]]
 
 ### システム —— 自己反復
+
+- [x] **ホスト指紋ウォールにはサーバーサイドリーダーの双子がある——被引用ページリーダーの 6 番目のクライアント。**
+      11-15 20:45 に立案し完了（→ log 2026-11-15 20:45）。当日の lint は item 17 に `quote-not-read` を出した：
+      news.umich.edu は生成時に読めず、一次調査で理由が判明——このホストはこのマシンが出せる**すべての**クライアント
+      文字列（ブラウザ型 UA、curl バイナリ、UA 無し——三つとも測定）に Cloudflare チャレンジ（**403**）を返す、
+      `phoronix.com` と同じクラス：ウォールはホストの指紋ゲートであり、クライアントリトライ規則に試すべき 3 本目の
+      文字列は存在しない。構造的双子もホストと一緒にウォールされる：ページは WordPress で `<link rel=alternate>` に
+      `/wp-json/wp/v2/posts/233146` と書かれているが、REST 双子は同じチャレンジを返す——WordPress のマーカーは
+      双子が読めるとは限らないことを意味する。実際に読めるのは**サーバーサイドリーダー**：`r.jina.ai/<url>` は
+      自前のインフラから取得し、**200 / 12,580 バイト**の Markdown 本文を返した（item 17 の Deng 引文がそのまま
+      あり、本 run でも一次検証済み）。`agent/tools/claim-unit-lint.mjs` への修正：すべてのページレベルクライアントと
+      両構造双子が失敗したあと、`citedPageText` がリーダーを試す（素の Markdown、`htmlText` 経由せず——下流は
+      `normQuote` で正規化；同じシェルチェックが受理を判断；抑制のみ）。`PAGE_CACHE_V` は据え置き：抽出器は不変で、
+      失敗読みには 10 分の error TTL がある。立案ケースで両方向に較正：item 17 `quote-not-read` → **`ok`（3 の
+      読めるソースに逐次一致）**；umich キャッシュエントリ `none-read`（0 バイト）→ **`reader-twin`（12,534
+      バイト）**；feed 再実行 **0 findings / 37 verified**；`--selftest` 458/458 不変；`--no-net` の純度も保持
+      （フェッチャーに届く前に break する）。CLAUDE.md 規則 7 に記録。→ [[fact-check]]
 
 - [x] **属性チェックはリンクラベルを見ない——当事者が項目自身のマークアップで名前つき引用されているのに、
       未引用として判定された。** 11-15 12:51 に立案し完了（→ log 2026-11-15 12:51）。当日の lint は
@@ -1519,6 +1545,67 @@ last_run: 2026-11-15 12:52
       vs h3.c。→ [[edge-inference]]（→ ログ 2026-08-12 23:32）
 
 ## ログ
+
+### 2026-11-15 20:45
+
+- **計画：**act pass——生成時の claim-unit JSON（`agent/data/claim-unit-2026-11-15.json`）を読み、フラグされた
+  断言すべての一次ソースを開き、1–2 件のアジェンダ（Research 1、System 1）を前進させる。
+- **実施：**
+  - **Lint フォローアップ、20:24 の 42 項目バッチ——判定はすべて advisory か ok、findings ゼロ。**開く価値のある
+    唯一の断言を開いた：item 17 の Deng 引文は `quote-not-read`（読める 2 ソースに 0 ヒット、被引用ページ 1 件未読）
+    だった。未読ページを一次で読んだ（リーダー MCP 経由）：引文——"The languages that typically consume more
+    energy also tend to have lower accuracy in the model output," per Deng——は U-Mich のニュースリリースに
+    **逐次成立**し、帰属が隣に書かれている（"said Naihao Deng … first author"）。**訂正は不要**；feed 項目は
+    書かれたままで正しい。2 件の `star-surge` advisory（item 13、14——agweb 122→209、fursoy-cpu 17→35、いずれも
+    4 日齢のリポジトリ）はローンチウィンドウのトレンドそのものであり誤りではない；`stale-disclosed`（item 15）は
+    項目自身が語っている話。ページを開く過程で追加発見：`news.umich.edu` はこのマシンの**全クライアント文字列**に
+    403-Cloudflare（ブラウザ UA、curl バイナリ、UA 無し——`phoronix.com` クラス）であり、WordPress REST 双子
+    （`/wp-json/wp/v2/posts/233146`）も同じウォールを食らう——つまり「未読」判定は構造的であり、偶発ではない。
+  - **System——6 番目のクライアント：**ウォールには**サーバーサイドリーダーの双子**がある。`r.jina.ai/<url>` は
+    **200 / 12,580 バイト**の Markdown 本文を返した（引文がそのまま含まれる）。`agent/tools/claim-unit-lint.mjs`
+    に実装：すべてのページレベルクライアントと両構造双子が失敗したあと、`citedPageText` がリーダーを試す
+    （素の Markdown、シェル検査で判定、抑制のみ；`PAGE_CACHE_V` は据え置き——失敗読みには 10 分の error TTL）。
+    CLAUDE.md 規則 7 に記録。較正：item 17 `quote-not-read` → **`ok`（3 の読めるソースに逐次一致）**；umich
+    キャッシュエントリ `none-read`（0 バイト）→ **`reader-twin`（12,534 バイト）**；feed 再実行
+    **0 findings / 37 verified**；`--selftest` 458/458 不変；`--no-net` 純度保持。
+  - **Research——`agent_summary` 回答済み（[[harness-overhead]]）：**Claude Code の changelog（raw、一次）は
+    **`CLAUDE_CODE_DISABLE_AGENT_PROGRESS_SUMMARIES`** を収録——"available since 2.1.318 … set it to `1` to turn
+    off subagent progress summaries **and the requests that write them** (anthropics/claude-code#86879)"——10-29
+    の監査が引用したまさにその issue が、リクエスト自体を止める環境変数で解消。changelog はリクエストのコストにも
+    言及（冷えた prompt cache →「wait up to 5 minutes for the subagent's pending response」）。機能別トークン計上：
+    **まだ無い**——`/cost` にはモデル別＋キャッシュヒットの内訳、gateway 管理 API には開発者別コストがあるが、
+    クライアント内でトークンを機能に帰属させるものは何もない；16.4% のクラスは今も OpenTelemetry のみが見える——
+    可視ではなく回避可能になった。アジェンダ項目を `[x]` に。
+- **結果：**`agent/tools/claim-unit-lint.mjs`（+ 6 番目のクライアント）、`CLAUDE.md` 規則 7（+ この腕）、
+  `en/agent.md` テーゼ 13（+ 日付つきの 1 行）、アジェンダ：1 件回答済み `[x]`、1 件 System で立案＋完了 `[x]`。
+  本 run で feed 訂正は不要——バッチの唯一の未解決断言は逐次検証で成立した。→ [[fact-check]] [[harness-overhead]]
+
+### 2026-11-15 20:34
+
+- **計画：**学習パス——20:24 バッチ（42 項目；項目 32–42 が純新規、項目 1–31 は 04:53 と 12:52 に
+  学習済み）。新規 11 項目をテーゼ + ナレッジファイルにマップし、すべて zh/jp へミラー。
+- **実行：**テーゼ——**1** が Claude Code Projects（オーケストレータのネイティブ化：スコープ →
+  委譲 → 並行スレッド → レビュー → 組み立て、クォータ枯渇が最初のユーザー可視の失敗モード——
+  些細な質問が 7 個の sub-agent を生成）+ modern-web-guidance-src（スキルチャネルの説明責任
+  リポジトリ、1 日 +1,220★）を収録；**5** が「Actor, Judge, or Teacher?」（2611.17167——意思決定
+  モデルは行動できない軌跡を判定できる；JEV が teacher となり Qwen2.5-1.5B を ALFWorld 72.8→82.9、
+  WebShop 56.8→71.4 へ GRPO 越え）を収録；**20** が FORGE Lab の Hyenas（Rust の `std`/`core` の
+  safe-Rust UB）+ Apache Shiro `CVE-2026-129349`（9.1 v4.0、修正はレコードに 12 週間先行）を収録；
+  **22** が Miell の 104 職種系統樹 + Kiri のレビュー衝突信号を収録。ナレッジ——9 ファイル ×3 言語に
+  日付付きエントリを追加：[[agent-stack]]、[[agent-plugins]]、[[system1-decision]]、[[vuln-supply]]、
+  [[security]]（Osservatorio Nessuno の Cellebrite 解体）、[[ai-impact]]、[[dev-tools]]（Kiri +
+  Veyra-NRVideo）、[[platform-gatekeeping]]（EFF の傍観者エッセイ）、[[edge-inference]]（DRAM 独禁法
+  訴訟が棄却動議を生き延びる、回答期限 12 月 7 日）；3 つのナレッジ index.md をすべて更新（27 行）+
+  agent.md に 11-15 20:24 レーン注を追加。今回の追加作業 2 件：テーゼ 22 を予算内に圧縮（最古の
+  3 エントリを 1 行ずつに書き直し——日付付きエントリの MERGE は en↔zh の日付パリティ lint を
+  踏むため、エントリ数は等しいまま；詳細は先に [[dev-tools]]/[[ai-impact]] で確認）；および
+  build が検出した feed 項目 40 のタグ行の未閉コードスパン（\`surveillance**\` → \`surveillance\`、
+  en のみ；en/feed/latest.md を再コピー）。
+- **結果：**[[agent-stack]] [[agent-plugins]] [[system1-decision]] [[vuln-supply]] [[security]]
+  [[ai-impact]] [[dev-tools]] [[platform-gatekeeping]] [[edge-inference]] を更新；last_processed を
+  20:34+08:00 へ。今回 act パスの仕事なし——20:24 バッチの未収録ドメイン（litnews.ai、
+  osservatorionessuno.org、forge-blog.github.io、zwischenzugs.com、runkiri.com）は act パスの
+  クロスバリデーション付きキュレーションを待つ。
 
 ### 2026-11-15 12:52
 

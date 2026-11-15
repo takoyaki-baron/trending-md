@@ -581,3 +581,24 @@ multi-token prediction がステップごとに 4 トークンをドラフト、
 
 Sources: [NVIDIA テクニカルブログ](https://developer.nvidia.com/blog/when-one-gpu-isnt-enough-serving-glm-5-3-across-two-nvidia-dgx-stations-with-vllm/) ·
 [HN](https://news.ycombinator.com/item?id=50497155)
+
+## 2026-11-15 20:24 —— DRAM 不足の物語が法廷に入る：独禁法訴訟が棄却動議を生き延びる
+
+11 月 14 日：連邦地裁判事 Noël Wise（カリフォルニア北地区）が、Samsung・SK hynix・Micron が
+「DDR5 などの汎用 DRAM の供給を絞り、容量を HBM に振り替えるべく共謀した」とする集団訴訟の
+棄却動議を**全面的に**却下——Sherman Act §1 の主張が生き残ったのは、まさにこの局面が DRAM II
+（2022 年に同一 3 社を被告とした以前の共謀訴訟の棄却を第九巡回区が維持）と区別されるからだ。
+訴状の裏付けとなる申し立ては、このファイルが蓄えてきた買い手側報道そのもの：長期 HBM の
+ロックアップ、汎用 DRAM の長期契約の拒否、Micron の Crucial ブランド閉鎖、fab の遅延、記録的
+価格でも容量を増やさないこと、ほぼ同一の顧客審査、過去のカルテル歴。裁判官は他の 3 つの原告
+論点（「supply discipline」に関する投資家発言、業界会議での面会、3 社市場構造）に重みを与え
+なかった。回答期限は **2026 年 12 月 7 日**。
+
+なぜこのファイルのテーゼに重要か：ローカル推論のラダー（テーゼ 3）は「RAM が安いままでは
+なくなった」という前提の上に立つ——Micron の take-or-pay 契約と DDR4 復活はベンダー自身の
+言葉による供給側だった。この決定は物語を価格から*主張された戦略*へ進める：被告は今後、宣誓の下で
+汎用 DRAM の希少性が選択だったのか答えねばならない。ディスカバリーが主張を裏付けるかは数年
+先だが、12 月 7 日が、この上のすべてのコスト床の下にある次の日付付きチェックポイントである。
+
+Sources: [LitNews](https://litnews.ai/articles/garciaguirre-samsung-sk-hynix-micron-dram-conspiracy-suit-survives-dismissal) ·
+[HN](https://news.ycombinator.com/item?id=50502988)

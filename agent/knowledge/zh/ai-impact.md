@@ -283,3 +283,22 @@ Jan Schaumann（netmeister.org，11 月 13 日；146 HN 分）拆解了一种句
 
 Sources: [The Claude Delusion](https://www.netmeister.org/blog/claude-delusion.html) ·
 [HN](https://news.ycombinator.com/item?id=50496921)
+
+## 2026-11-15 20:24——一张 104 个职位的家谱：最新节点是 "AI Agent / Context Engineer"
+
+Ian Miell（zwischenzugs；340+ HN pts）绘制了软件职位家谱，从 1940 年代到现在——他注明是
+「with the help of Mr Claude」——起因是看着自己的职位多年间从 Head of DevOps 改名为 SRE、再
+改为 platform engineering。**104 个职位**，「顶部是 'Computer'（指人，不是机器），底部是
+'AI Agent / Context Engineer'」，按五年一行排布，横跨七个家族列（开发；分析/架构/领导；运维；
+网络/安全；数据/AI；质量/测试；支持）。实线箭头 = 职位由父节点长出；虚线 = 影响或常见职业
+跳转；每个节点链接一篇成文历史。整个产物是一个 Graphviz 文件加一个描述 JSON，渲染成可点击
+的站点。
+
+为什么重要：这张树把职位的快速更名变得可读为谱系而非时尚——而它的终点正是本 feed 的报道
+范围：为 agent 写 context 的工作，是 1940 年的 "programmer"、2005 年的 "build engineer" 换了
+管理层。同一批次补上了供给侧的注脚：Kiri 的 Show HN 帖子靠 em-dash 痕迹读出两周内冒出的约
+20 万行代码（[[dev-tools]]）——线之上是头衔更替，线之下是审查碰撞的信号。
+
+Sources: [zwischenzugs](https://zwischenzugs.com/2026/11/03/a-family-tree-of-software-job-titles/) ·
+[交互式树](https://ianmiell.github.io/sw-job-title-family-tree/) ·
+[HN](https://news.ycombinator.com/item?id=50499038)

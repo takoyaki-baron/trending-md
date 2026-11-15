@@ -7727,3 +7727,24 @@ curve point — and both landed with a fix already out, so the reader's action i
 Sources: [GHSA-j329-jw7j-rxjm](https://github.com/Dokploy/dokploy/security/advisories/GHSA-j329-jw7j-rxjm) ·
 [Dokploy v0.31.1](https://github.com/Dokploy/dokploy/releases/tag/v0.31.1) ·
 [create-ecdh on npm](https://www.npmjs.com/package/create-ecdh)
+
+## 2026-11-15 20:24 — the exploit supply chain demystified: Cellebrite-class tools are "not magic"
+
+Osservatorio Nessuno's technical overview (published May 7; fronted HN this weekend at 114 points):
+"Commercial phone unlocking tools are not magic. They exploit the same classes of vulnerabilities that
+security researchers publish about at conferences and in academic papers." What makes Cellebrite-class
+products distinctive is "not the novelty of the techniques, but the **systematic commercialization of
+exploitation**" — acquiring or developing exploits for each hardware/software combination and packaging
+them into automated workflows that require minimal operator expertise. The post maps the constrained
+attack surfaces an examiner with physical access works through — the boot chain, the trusted execution
+environment, the secure element, the kernel's peripheral-driver stack — mostly via Android internals,
+crediting Quarkslab's TEE research and Amnesty's reporting as foundations; the group has documented
+Cellebrite's routine use in Italy specifically.
+
+Why it matters here: it is a rare public mapping of the exploit-supply chain behind the tools that
+routinely appear in prosecutions — and the demystification cuts both ways: defenders learn exactly which
+boundaries the forensic industry monetizes (where the next hardening dollar goes), and the "commercial
+grade" aura around locked-device extraction reduces to the same CVE classes researchers publish.
+
+Sources: [Osservatorio Nessuno](https://osservatorionessuno.org/blog/2026/05/demystifying-phone-unlocking-tools-a-technical-overview/) ·
+[HN](https://news.ycombinator.com/item?id=50497416)

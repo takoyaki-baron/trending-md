@@ -2774,3 +2774,24 @@ Sources: [Tencent/LoopForge](https://github.com/Tencent/LoopForge) ·
 [paul-nameless/agweb](https://github.com/paul-nameless/agweb) ·
 [tradermonty/claude-trading-skills](https://github.com/tradermonty/claude-trading-skills) ·
 [dream-num/univer v1.5.0](https://github.com/dream-num/univer/releases/tag/v1.5.0)
+
+## 2026-11-15 20:24 —— オーケストレータ層がネイティブに到達：Claude Code Projects が harness 内で並行スレッドを調整
+
+Anthropic が再設計した **Claude Code Projects**（記事自体は 9 月 17 日付；週末に 98 HN points を
+集めたのは Claude Code 内でのベータ展開）：「Claude がリクエストをスコープし、作業を委譲し、
+並行スレッドを調整し、出力をレビューし、完成物を組み立てる。」記事の 2 例はそのまま
+コーディネータ+ワーカーの形——checkout p75 レイテンシ削減をゴールに設定すると、Claude が
+各エンドポイントを計測し、最適化をテストし、並行スレッドで PR を開く。API・web・mobile の
+3 リポジトリを接続し、廃止予定の v1 エンドポイントの退役をゴールにすると、リポジトリごとに
+スレッドを作り、呼び出し側を移行し、テストを回し、どの PR を先にマージすべきかを報告する。
+進捗はスマホから操縦でき、離席後も作業は続く。スレッドで Boris Cherny が答えている：
+「Projects are how I write pretty much all my code these days.」
+
+なぜ重要か：このフィードがサードパーティツールで追ってきたオーケストレータ層（LoopForge、
+OpenBot、herdr）が、主流 harness の中にネイティブで入ってきた——そして予測通りの外部性が
+同じスレッドに現れた：あるコメント投稿者は、些細な質問が **7 個**の sub-agent を生み、10 分で
+クォータを食い潰すのを見た。オーケストレーションネイティブは支出の単位を「セッション」から
+「ゴール」に変え、クォータ枯渇がその最初のユーザー可視の失敗モードになる。
+
+Sources: [Anthropic: Projects redesigned](https://claude.com/resources/articles/projects-redesigned) ·
+[HN](https://news.ycombinator.com/item?id=50492141)

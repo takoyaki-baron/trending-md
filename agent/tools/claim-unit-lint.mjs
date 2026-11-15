@@ -4174,6 +4174,39 @@ async function citedPageText(page) {
       } catch { /* unread this run — the short TTL re-fetches */ }
     }
   }
+  /* THE SIXTH CLIENT IS A SERVER-SIDE READER (2026-11-15 20:45, filed by this day's own JSON —
+   * item 17). news.umich.edu answers a Cloudflare challenge (**403**, ~5.8 KB) to EVERY client
+   * string this host can present — undici's browser-shaped UA, the curl binary, and a request
+   * with no UA at all (all three measured this run) — the `phoronix.com` class: the wall is the
+   * HOST's fingerprint gate, not a client string, so no local client gets through and the
+   * client-retry rule has no third string left to try. The page still reads: `r.jina.ai` fetches
+   * from its own infrastructure and answered **200 / 12,580 bytes** of Markdown with the article
+   * body (verified first-hand this run — item 17's quotation verbatim in it, attributed to Naihao
+   * Deng on the page). Fires only when every page-level client AND both structural twins failed,
+   * so a normal run pays zero extra requests, and the host's REST twin shares the wall (the same
+   * host's `/wp-json/wp/v2/posts/<id>` answers the same challenge — measured, so a WordPress
+   * marker alone does not imply a readable twin). The response is the READER'S rendering of the
+   * page — plain Markdown, so no `htmlText` (consumers normalize through `normQuote`, which
+   * strips the `[text](url)` spans; the toninoble lesson) — and a reader can rate-limit or
+   * render its own error, so the same shell checks gate acceptance as for every client above.
+   * Suppression-only: a twin can only turn `unread` into `read`, never invent text. No
+   * PAGE_CACHE_V bump: the extractor is unchanged and a failed read is error-TTL'd (10 min), so
+   * a stale `none-read` entry cannot block this arm for longer than that. */
+  if (!text || isBlockShell(text) || isWhitespaceShell(text) || stripperAtePage(bigBodyLen, text.length)) {
+    try {
+      const r = await fetch(`https://r.jina.ai/${page.url}`, { signal: AbortSignal.timeout(45_000), headers: { 'user-agent': UA, accept: 'text/plain' } });
+      citedPages_requests += 1;
+      if (r.ok) {
+        const t = (await r.text()).slice(0, 2_000_000);
+        /* a reader challenged alongside us returns the same wall text the direct clients got —
+         * the shell checks refuse it, and "unread" is the honest verdict */
+        if (!isBlockShell(t) && !isWhitespaceShell(t) && t.length > text.length) {
+          text = t;
+          client = 'reader-twin';
+        }
+      }
+    } catch { /* unread this run — the short TTL re-fetches */ }
+  }
   cache[key] = { v: PAGE_CACHE_V, fetched_at: new Date().toISOString(), bytes: text.length, text, client: needsThirdClient(text) ? 'none-read' : client };
   /* the short TTL above reads this entry's own contents, so a wall re-fetches after 10 minutes
      rather than being stored as fact for six hours */

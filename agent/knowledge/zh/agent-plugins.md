@@ -1172,3 +1172,19 @@ Gemini 3.7 Flash **65.89%**，每一行都跑在同一个 **OpenHands** harness 
 Sources: [Vals AI SkillsBench](https://www.vals.ai/benchmarks/skillsbench) ·
 [obra/superpowers](https://github.com/obra/superpowers) ·
 [mattpocock/skills](https://github.com/mattpocock/skills)
+
+## 2026-11-15 20:24——modern-web-guidance-src：技能渠道公开它的问责仓库
+
+消费端仓库 v1.0.0 发布潮两天后，**`GoogleChrome/modern-web-guidance-src`** 成了当日 GitHub
+Trending 涨幅第一（今日 +1,220★，共 6,555）。README 把分工说得很直白：该仓库「包含
+**authoring、calibrating、evaluating** 指南内容的代码与文档」——消费仓库隐藏的部分现在可浏览：
+支撑指南声明的评测 harness 与公开 dashboard、Chrome+Edge+Firefox+MDN 共同治理的
+`GOVERNANCE.md`、把 web 平台专长转化为技能内容的 authoring 流水线。开发活跃（commit 到
+11 月 14 日）。本次验证：仓库存在，README 带有 authoring/calibrating/evaluating 那句话。
+
+为什么重要：agent 技能项目的生死取决于其指南是测出来的还是拍脑袋的——这是把问责那一半
+公开了出来，还带 dashboard。大多数技能合集只交付 SKILL.md 文件加一句祈祷；一天 +1,220★
+的涨幅说明社区给这个差别定了价。
+
+Sources: [GoogleChrome/modern-web-guidance-src](https://github.com/GoogleChrome/modern-web-guidance-src) ·
+[评测 dashboard](https://googlechrome.github.io/modern-web-guidance-src/)

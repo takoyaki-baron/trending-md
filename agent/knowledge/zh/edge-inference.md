@@ -547,3 +547,22 @@ caching。在 80 个 SPEED-Bench 编码对话上：**并发 16 时 607.8 tok/s �
 
 Sources: [NVIDIA 技术博客](https://developer.nvidia.com/blog/when-one-gpu-isnt-enough-serving-glm-5-3-across-two-nvidia-dgx-stations-with-vllm/) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50497155)
+
+## 2026-11-15 20:24——DRAM 短缺故事进入法庭：反垄断诉讼挺过驳回动议
+
+11 月 14 日：美国地区法官 Noël Wise（加州北区）**全部驳回**了三星、SK 海力士与美光联合提出
+的驳回动议——该拟议集体诉讼指控三家公司合谋「削减 DDR5 等常规 DRAM 供给、把产能转向
+HBM」——一条 Sherman Act §1 主张，之所以挺过，正是因为本时刻被与 DRAM II 区分开（第九巡回
+法院 2022 年维持驳回针对同样三家公司的更早合谋诉讼）。起诉书的支撑指控读起来像本文件积累
+的买方侧报道：长期 HBM 锁定、拒绝常规 DRAM 长约、美光关闭 Crucial 品牌、 fab 延期、创纪录
+价格下仍不扩产、近乎相同的客户审查、既往卡特尔史。法官对另外三项原告论点不予采信（投资人
+关于「supply discipline」的声明、行业会议会面、三家公司市场结构）。答辩截止 **2026 年 12 月
+7 日**。
+
+为什么对本文件论题重要：本地推理阶梯（论题 3）建立在「RAM 不再便宜」的假设上——美光的
+take-or-pay 合同与 DDR4 复活是供应商自己说出的供给侧。这份裁定把故事从定价推进到被指控的
+策略：被告现在必须宣誓回答常规 DRAM 稀缺是否是一种选择。证据开示能否证实指控还需数年，
+但 12 月 7 日是悬在上述一切成本地板之下的下一个带日期的检查点。
+
+Sources: [LitNews](https://litnews.ai/articles/garciaguirre-samsung-sk-hynix-micron-dram-conspiracy-suit-survives-dismissal) ·
+[HN](https://news.ycombinator.com/item?id=50502988)

@@ -2445,3 +2445,21 @@ Sources: [Tencent/LoopForge](https://github.com/Tencent/LoopForge) ·
 [paul-nameless/agweb](https://github.com/paul-nameless/agweb) ·
 [tradermonty/claude-trading-skills](https://github.com/tradermonty/claude-trading-skills) ·
 [dream-num/univer v1.5.0](https://github.com/dream-num/univer/releases/tag/v1.5.0)
+
+## 2026-11-15 20:24——编排层原生到来：Claude Code Projects 在 harness 内部协调并行线程
+
+Anthropic 重新设计的 **Claude Code Projects**（文章日期是 9 月 17 日；本周末引来 98 个 HN
+points 的是 Claude Code 内的 beta 推广）：「Claude 拆解请求、分派工作、协调并行线程、审查
+产出、并组装最终结果。」文章的两个例子就是完整的协调者+工作者形态——设定降低 checkout p75
+延迟的目标，Claude 会分析每个端点、测试优化、在并行线程里开 PR；连接 API、web、mobile 三个
+repo 并设定退役废弃 v1 端点的目标，它会为每个 repo 建线程、迁移调用方、跑测试，并报告哪些
+PR 必须先合并。进度可以从手机上引导，你离开后工作继续。Boris Cherny 在帖中回复：「Projects
+are how I write pretty much all my code these days.」
+
+为什么重要：本 feed 在第三方工具里追踪的编排层（LoopForge、OpenBot、herdr）如今原生进入了
+主流 harness——而且可预见的外部性同帖现身：一位评论者看着一个琐碎问题生成了 **7 个**
+sub-agent，十分钟烧光了他的配额。编排原生把花费单位从「一个会话」变成「一个目标」，配额
+燃烧是它第一个用户可见的失效模式。
+
+Sources: [Anthropic: Projects redesigned](https://claude.com/resources/articles/projects-redesigned) ·
+[HN](https://news.ycombinator.com/item?id=50492141)

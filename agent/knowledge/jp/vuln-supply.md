@@ -1615,3 +1615,33 @@ Sources: [NVD: CVE-2026-111334（EPA/EPAS メモリオーバーフロー）](htt
 Sources: [NVD API 2.0 window 2026-11-03→04, sourceIdentifier=chrome-cve-admin](https://services.nvd.nist.gov/rest/json/cves/2.0?sourceIdentifier=chrome-cve-admin%40google.com&pubStartDate=2026-11-03T00:00:00.000&pubEndDate=2026-11-04T23:59:59.999) · [CVE-2026-121029](https://nvd.nist.gov/vuln/detail/CVE-2026-121029)
 
 → [[security]] [[fact-check]] [[disclosure-lag]]
+
+## 2026-11-15 20:24 —— AI が Rust std の健全性バグを発見；Shiro の修正はレコードに 12 週間先んじた
+
+**FORGE Lab（Microsoft；Yechan Bae、11 月 9 日；161 HN pts）：**Rust の `std` と `core` の
+メモリ安全性の問題——「**完全に safe Rust で書かれたコード**が未定義動作を引き起こしうるケース
+を含む」——同ラボの AI 脆弱性スキャナ **Hyenas**（codename MDASH の研究版）で発見され、Rust
+メンテナとともに再現・報告された。分類学は unsafe コードにおける 3 つの誤置された信頼：
+**コードが panic しないことへの信頼**（panic が途中で巻き戻ると不変式が破れる）、**ユーザー
+提供実装が正しいことへの信頼**（不正な comparator や trait 実装が unsafe コードの前提を壊す）、
+**基盤システムへの信頼**。具体例：`join()`——CVE-2020-36323 の古い修正は呼び出し間で成長する
+文字列をカバーしておらず、2026 年 4 月に同じ関数が残り長計算のアンダーフローによるヒープ
+オーバーフローで再修正を必要とした。一部の報告は未解決のまま。なぜ重要か：Rust の保証が漏れる
+境界は FFI ではない——panic、trait 実装、OS の前提である；そしてこれは AI が実在する脆弱性を
+見つけた系列のもう 1 つのデータポイントで、地球上で最もレビューされたコードベースの一つの
+中で発見され、修正は全員のコンテナが載せている std に降りてくる。
+
+**Apache Shiro `CVE-2026-129349`**（CVSS **4.0 9.1**、CNA `security@apache.org`；NVD `Received`、
+公開 2026-11-15T10:16:53Z）：`DefaultLdapRealm` で認証キャッシュを有効にすると、ユーザーが一度
+成功裏にログインした後、そのユーザーへの以降のログインが**任意のパスワード**で成功する——
+キャッシュヒットが LDAP bind をスキップし、デフォルトで据え付けられる
+`AllowAllCredentialsMatcher` が任意の資格情報を受け入れるため。影響：**3.0.1 未満のすべて**；
+物語はタイミングにある：3.0.1 は **8 月 23 日**に出荷（3.0.2 は 11 月 8 日）——**fix-predates-record
+12 週間**——しかも欠陥には opt-in のキャッシュ設定が必要。なぜ重要か：認証判断のキャッシュは、
+それをキャッシュした時の matcher と同じだけしか強くない；そして「出たばかりの CVE」の見出しには
+リリースタイムラインのチェックが要る——アップグレード勧告は 8 月から releases ページに寝ていた；
+今日出荷されたのは*認知*のほうである。
+
+Sources: [FORGE Lab: Rust std memory safety](https://forge-blog.github.io/posts/rust-std-memory-safety/) ·
+[CVE-2026-129349](https://www.cve.org/CVERecord?id=CVE-2026-129349) ·
+[Apache Shiro releases](https://github.com/apache/shiro/releases)

@@ -1314,3 +1314,21 @@ Inception、Meta、MiniMax、Moonshot AI、OpenAI、SpaceXAI、Thinking Machines
 Sources: [Vals AI SkillsBench](https://www.vals.ai/benchmarks/skillsbench) ·
 [obra/superpowers](https://github.com/obra/superpowers) ·
 [mattpocock/skills](https://github.com/mattpocock/skills)
+
+## 2026-11-15 20:24 —— modern-web-guidance-src：スキルチャネルがその説明責任リポジトリを公開
+
+コンシューマーリポジトリ v1.0.0 の波から 2 日後、**`GoogleChrome/modern-web-guidance-src`** が
+この日の GitHub Trending 最大ゲイナー（今日 +1,220★、計 6,555）。README は分担を明言する：
+このリポジトリはガイダンスの内容を「**authoring、calibrating、evaluating** するコードと文書を
+含む」——コンシューマーリポジトリが隠していた部分が閲覧可能になった：ガイダンス主張の背後の
+評価 harness と公開 dashboard、Chrome+Edge+Firefox+MDN の共同運営を定める `GOVERNANCE.md`、
+web プラットフォームの専門知識をスキルコンテンツに変換する authoring パイプライン。開発は
+活発（commit は 11 月 14 日まで）。今回検証：リポジトリ存在、README に
+authoring/calibrating/evaluating の一文あり。
+
+なぜ重要か：agent スキルプロジェクトの生死は、ガイダンスが測定済みか雰囲気かにかかっており、
+これは説明責任の半分を dashboard 付きで公開したもの。ほとんどのスキルコレクションは SKILL.md
+と祈りを出荷するだけ；1 日 +1,220★ の急上昇は、コミュニティがこの差に値を付けたことを示す。
+
+Sources: [GoogleChrome/modern-web-guidance-src](https://github.com/GoogleChrome/modern-web-guidance-src) ·
+[評価 dashboard](https://googlechrome.github.io/modern-web-guidance-src/)

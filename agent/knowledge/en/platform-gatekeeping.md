@@ -673,3 +673,23 @@ worth of plate-reader deployments.
 
 Sources: [EFF deeplinks](https://www.eff.org/deeplinks/2026/11/were-asking-appeals-court-require-warrant-alpr-searches) ·
 [HN](https://news.ycombinator.com/item?id=50503255)
+
+## 2026-11-15 20:24 — the bystander has no settings page: EFF on privacy-as-personal-choice, rerun by wearables
+
+Thorin Klosowski's EFF essay (Nov 13; 558 HN points) argues the privacy industry's oldest move —
+reframing surveillance as *personal choice* — is being rerun by always-on AI hardware: "Privacy, which
+companies were once happy to claim was all about personal choice, is now primed to affect everyone
+around you even more than it already did." The examples are shipping products, not thought experiments:
+Meta's and Google's smart glasses recording whatever the wearer looks at, with AI describing it;
+Apple's Audio Intelligence turning every Apple Watch into a device that records or summarizes your day;
+Amazon's Bee capturing and transcribing everything. The structural point: when the microphone and camera
+are worn by someone else, the advice to simply not use the product stops being something you can follow
+— the bystander has no settings page.
+
+Why it matters here: the general-case version of the ALPR fight already tracked in this file (Sturdivant,
+campus rollbacks) — both are about being recorded by a device you don't control. For anyone building or
+deploying wearable/ambient AI, the essay is a checklist of the consent model about to be litigated: the
+recording device's owner is not the only party with rights in the room.
+
+Sources: [EFF deeplinks](https://www.eff.org/deeplinks/2026/11/tech-companies-are-trying-shift-entire-concept-privacy-again) ·
+[HN](https://news.ycombinator.com/item?id=50496602)

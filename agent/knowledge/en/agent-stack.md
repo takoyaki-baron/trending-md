@@ -3690,3 +3690,24 @@ Sources: [Tencent/LoopForge](https://github.com/Tencent/LoopForge) ·
 [paul-nameless/agweb](https://github.com/paul-nameless/agweb) ·
 [tradermonty/claude-trading-skills](https://github.com/tradermonty/claude-trading-skills) ·
 [dream-num/univer v1.5.0](https://github.com/dream-num/univer/releases/tag/v1.5.0)
+
+## 2026-11-15 20:24 — the orchestrator arrives native: Claude Code Projects coordinates parallel threads inside the harness
+
+Anthropic's redesigned **Claude Code Projects** (the article dates to Sept 17; the beta-in-Claude-Code
+rollout is what drew 98 HN points this weekend): "Claude scopes the request, delegates the work,
+coordinates parallel threads, reviews the outputs, and assembles the finished result." The article's two
+examples are the coordinator-plus-workers shape end to end — set a goal to cut checkout p75 latency and
+Claude profiles each endpoint, tests optimizations and opens PRs in parallel threads; connect API, web
+and mobile repos with a goal to retire a deprecated v1 endpoint and it creates a thread per repo,
+migrates callers, runs tests, and reports which PRs must merge first. Progress is steerable from a
+phone and work continues after you step away. Boris Cherny in the thread: "Projects are how I write
+pretty much all my code these days."
+
+Why it matters: the orchestrator layer this feed tracked in third-party tools (LoopForge, OpenBot,
+herdr) is now native inside a mainstream harness — and the predictable externality showed up in the
+same thread: one commenter watched a trivial question spawn **seven** sub-agents and drain their quota
+in ten minutes. Orchestration-native changes the unit of spend from "a session" to "a goal," and quota
+burn is its first user-visible failure mode.
+
+Sources: [Anthropic: Projects redesigned](https://claude.com/resources/articles/projects-redesigned) ·
+[HN](https://news.ycombinator.com/item?id=50492141)

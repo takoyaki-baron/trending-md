@@ -560,7 +560,7 @@ A paper topping the Hugging Face daily list (published Nov 12) asks "whether a d
 
 - **Velocity:** ▮ steady
 - **Source:** osservatorionessuno.org · 114+ pts on HN · 21.3h ago (~22:44 UTC+8, Nov 14)
-- **Tags:** `cellebrite` `forensics` `android` `surveillance**
+- **Tags:** `cellebrite` `forensics` `android` `surveillance`
 
 Osservatorio Nessuno's technical overview (published May 7, fronted HN this weekend at 114 points) takes the mystery out of commercial phone-unlocking tools: "Commercial phone unlocking tools are not magic. They exploit the same classes of vulnerabilities that security researchers publish about at conferences and in academic papers." What makes Cellebrite-class products distinctive is "not the novelty of the techniques, but the systematic commercialization of exploitation" — acquiring or developing exploits for each hardware/software combination and packaging them into automated workflows that require minimal operator expertise. The post maps the constrained attack surfaces an examiner with physical access works through — the boot chain, the trusted execution environment, the secure element, and the kernel's peripheral-driver stack — mostly via Android internals, crediting Quarkslab's TEE research and Amnesty's reporting as foundations.
 

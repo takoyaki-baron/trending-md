@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-11-15T12:52:00+08:00
+last_processed: 2026-11-15T20:34:00+08:00
 ---
 
 # Learnt Agent
@@ -48,6 +48,7 @@ patterns, and turn them into insights and actionable todos.
      problem:** `CopilotKit/OpenBot` (11,235★ verified) — each bot its own sandboxed computer, approval before sends, audit trail; `ashhart/TensorFold`'s
      **Agent Traffic Control** — issue leasing with expiry for AI-agent contributors (TensorFold **not new**: created 06-19); Qwen Code 1.0.0-preview folds Qoder into the terminal CLI. → [[agent-stack]] [[agent-plugins]]
    - **11-15 — human gates become delivery-graph nodes, the browser never takes focus, skills enforce a decision process:** `Tencent/LoopForge` (self-hosted MIT; SOP graphs of Agent/Script/**Human-gate**/sub-SOP nodes with send-back-to-step semantics; ten executors CodeBuddy→ZCode); `paul-nameless/agweb` (WebKit macOS, **no window ever takes focus**, `fill --secret-cmd`, five idle pages **590 MB**); `tradermonty/claude-trading-skills` (**+556★**, day's biggest gain — five YAML workflows with decision gates, emphatically not a signal service); `dream-num/univer` v1.5.0 dated update (+495★). → [[agent-stack]]
+   - **11-15 PM — the orchestrator arrives native, and the skill channel publishes its accountability repo:** Claude Code Projects (beta rollout, 98 HN pts; Cherny: "Projects are how I write pretty much all my code these days") — scope → delegate → parallel threads → review → assemble, steerable by phone, with quota burn as the first user-visible failure mode (one trivial question spawned **7** sub-agents, 10 min of quota); `GoogleChrome/modern-web-guidance-src` (**+1,220★**/day) opens the eval harness + public dashboard + `GOVERNANCE.md` behind the skill. → [[agent-stack]] [[agent-plugins]]
 2. **Agent security is the immediate attack surface — and every named class ends up enforced by
    nobody.** ~50+ CVSS≥9 entries since Aug 12 resolve into sixteen recurring shapes (full map in
    [[security]]); four cases show the class named, the mitigation converged, nobody enforcing it.
@@ -133,6 +134,7 @@ patterns, and turn them into insights and actionable todos.
      weekly. All figures verified against the post this run. → [[system1-decision]] [[token-economics]]
    - **11-12 — Google is the class's third first-party entrant, at OpenAI's exact price:** Gemini Decisions API (**`gemini-decision-1`**) returns probabilities from one forward pass — up to **1,000** independent questions against one 256K-token input in **noul/choice/score** shapes, **150–250 ms** end-to-end, latency "nearly flat from 1 to 100 questions", **$0.10/1M input with zero output tokens billed** (OpenAI's Decisions price, to the cent — the bounded decision's clearing price is now set by two parties independently), "nearly **5×** cheaper than Gemini 3.5 Flash-Lite" on Google's own suite — a vendor number until someone replicates the routing benchmarks. → [[system1-decision]]
    - **11-14 — the class gets its first fully open-weights entrant with a published eval method:** Perplexity's Decider v1.3 + Flash v1.3 (Apache-2.0 on HF, verified this run; bidirectional attention; a new `locate` span output for NER/PII; production volumes 425K/409K/344K questions across three tasks; and "self-improving security rules" — Decider in the loop over recorded agent activity). → [[system1-decision]]
+   - **11-15 PM — the decision model's second job, with evidence:** "Actor, Judge, or Teacher?" (2611.17167, ZJU-REAL) — as actors all six models get lured off the must-come-first subgoal, as judges over whole trajectories the same models credit the steps toward it, and JEV as teacher lifts Qwen2.5-1.5B **72.8 → 82.9** ALFWorld / **56.8 → 71.4** WebShop over GRPO — a weak-cheap model can out-teach the big actor it can't match; hindsight is the easier inference. → [[system1-decision]]
 6. **Reasoning quality is no longer the moat — price and distribution are.** Open-weight models trade
    a sliver of benchmark points for a huge price gap; closed labs compete on distribution speed; post-training is the visible frontier lever.
    - **08-15 → 10-24 (folded) — the fine print becomes the pricing model, then a dated promise:** revenue-gated licences (GLM-5.3, K3), Kolibri-1's contamination admission, Muse Spark Open 816B with no scores, MiniMax M3.1 Flash + Mercury 3 API-only, Voxtral 3 with no licence/weights; Kimi K3.1 Pro **Proprietary** "by Nov 4" at **0** artifacts with its own cyber regression published. → [[frontier-models]] [[fact-check]]
@@ -287,10 +289,7 @@ patterns, and turn them into insights and actionable todos.
 13. **Token spend is separating from model choice — at the context boundary, not the model
     boundary.** Routing (thesis 5) answers "which engine"; this layer answers "how many bytes
     cross the wire" — compression, enforcement, exclusion. The layer is real; measurements young.
-    - **08-20 → 10-29 (folded) — measured levers, inverted ones, and the line item is the cache read:** RTK's "90%" inverted by Quesma; ColGrep cut Claude Code tokens **34%**; leviathan **436 median
-      tokens/question** vs grep's **107,122**; CarryOn +5.8% OSWorld for 51.9% fewer tokens; rolling-drop +1.7 points at 27.7% lower cost; docling's formatting drop is F1 **0.690 → 0.150**; stripping
-      **attribution tags** gains **13–24** across 480 CrossProfile tasks; "cache read costs are the vast majority (**96%–99%**) of the total token expenditure" — Fable 5.1's 75% cache-read cut is "**a
-      70–75% reduction in the cost of using the model**" — and the ~30 s panel label that re-sends the **whole transcript** is **16.4%** of `cost_usd` (**18–26%** across four measurements). → [[token-economics]] [[harness-overhead]] [[agent-stack]]
+    - **08-20 → 10-29 (folded) — measured levers, inverted ones, and the line item is the cache read:** docling's formatting drop is F1 **0.690 → 0.150**; stripping **attribution tags** gains **13–24** across 480 CrossProfile tasks; "cache read costs are the vast majority (**96%–99%**) of the total token expenditure" — Fable 5.1's 75% cache-read cut is "**a 70–75% reduction in the cost of using the model**" — and the ~30 s panel label that re-sends the **whole transcript** is **16.4%** of `cost_usd` (**18–26%** across four measurements). (RTK/ColGrep/leviathan/CarryOn/rolling-drop detail → [[token-economics]].) → [[token-economics]] [[harness-overhead]] [[agent-stack]]
     - **10-31 12:19 — prefill is superlinear:** decode compute/energy scale **linearly** with output length while prefill carries
       **linear and quadratic** terms with input length (arXiv 2610.39621), so doubling history costs more than twice as much in the phase
       treated as "just reading" — retrieval and compaction are about joules as well as latency. → [[token-economics]]
@@ -308,6 +307,7 @@ patterns, and turn them into insights and actionable todos.
    - **11-15 — cost-per-solved-task becomes a product pitch, and script → tokens → energy gets its measurement:** Caveman Code (120k★) claims Terminal-Bench 4 **21% cheaper per
      solved task than Codex / 14% than Claude Code** at constant model — and publishes the failed experiment (stripping prior reasoning cut re-reading 68% but **raised cost 19%**); U-Mich
      (EMNLP, ML.Energy): non-English generation costs **1.4–180×** the energy (Hindi 7.9×, Bengali 15.3×) via tokenizer → memory → batch size, accuracy lower on top — ~**5.2B** people pay 2×+. → [[token-economics]]
+   - **11-15 act — the 16.4% line item becomes OPTIONAL:** `CLAUDE_CODE_DISABLE_AGENT_PROGRESS_SUMMARIES` (changelog, available since **2.1.318**) "turn[s] off subagent progress summaries **and the requests that write them**" — closing **#86879**, the exact feature request the flamerix.ai audit cited; the changelog prices the request itself ("on a cold prompt cache, one can now wait up to 5 minutes for the subagent's pending response"), so the metered-spend reading was the vendor's too. Per-feature token accounting: still none in-client. → [[harness-overhead]]
 
 14. **AI crawler load is a measured tax on open-source infrastructure — and the only working fix
     degrades anonymous access.** kernel.org: ~6M random-commit requests/day, 33% solve Anubis
@@ -459,6 +459,7 @@ patterns, and turn them into insights and actionable todos.
      family is tenant-boundary (process-wide `putenv()` leaking DB secrets across requests). → [[vuln-supply]] [[security]]
 
    - **11-15 — Project Zero retires the soak:** "**Full X**" — disclosure X days after report regardless of patch status: **Full 90 → Full 60 (2027-02-02) → Full 30 (2028-01-03)**; grace period + variant policy removed, fix status no longer a decision point — the first disclosure-policy rewrite argued from AI-accelerated exploitation, and a dated expiry for every patch-cadence assumption built on 90+30. → [[disclosure-lag]]
+   - **11-15 PM — AI-found soundness bugs in Rust's std, and a twelve-week fix-predates-record:** FORGE Lab's Hyenas (research MDASH) finds safe-Rust UB in `std`/`core` — three misplaced-trust patterns (code not panicking, user trait impls, the underlying system; `join()` needed a second fix in April 2026); Apache Shiro `CVE-2026-129349` (**9.1** v4.0) — LDAP auth cache + default `AllowAllCredentialsMatcher` accepts any password after one login, fixed in 3.0.1 **Aug 23**, record **Nov 15**. → [[vuln-supply]] [[security]]
 21. **The physical layer of connectivity is an active target, and the cheap attack is arson.** Civilian
     satellite ground stations and single regional data centres are defended by fences and geography
     rather than by controls; attribution is asymmetric by design (someone usually has an interest in
@@ -490,21 +491,15 @@ patterns, and turn them into insights and actionable todos.
     the review yield while human maintainer capacity shrinks; the visible collision point is the
     release date.** The parts existed separately (seldo's registry-metering proposal).
 
-    - **10-16→10-25 (folded) — both poles, then the record cycle:** Gentoo masks Chromium ("last rites") beside PG19's first slip; Claude Code's **30,000+** changes/day risk-tiered approval is the publisher's pole; PHP Foundation: "one full-time staff member"; Luu: what a person can **verify without handholding**. → [[dev-tools]] [[ai-impact]] [[fact-check]]
-    - **11-02 — the collision gets a number and a missed release date:** PostgreSQL 19 will probably ship in **November**, the first miss of
-      its mid-Sept→mid-Oct window in a decade — and Haas's census is the reusable figure: `REL_19_STABLE` **724 → 1169** (>60%), prior-release
-      back-patches **248 → 433 (+74%)** — "a lot more of the mistakes they made were quickly found by LLMs". The cost lands in **review and triage**, not patch volume. → [[dev-tools]] [[ai-impact]]
-
-    - **11-11 PM — the quota system gets its insider account:** a Meta engineer: "I generated at least 90% of my code… which was the minimum
-      for a decent rating" and "AI didn't even 2X it"; the `:hover` specimen passes review and tests. Anecdote, not study. → [[ai-impact]]
+    - **10-16→10-25 (folded) — both poles:** Gentoo masks Chromium ("last rites") beside PG19's first slip; Claude Code **30,000+** changes/day risk-tiered approval; PHP Foundation "one full-time staff member"; Luu's **verify without handholding**. → [[dev-tools]] [[ai-impact]] [[fact-check]]
+    - **11-02 — the missed release date gets its number:** PG19 ships **November** (first miss in a decade); Haas: `REL_19_STABLE` **724 → 1169**, back-patches **+74%** — cost lands in review/triage. → [[dev-tools]] [[ai-impact]]
+    - **11-11 PM — the quota system gets its insider account:** Meta: "90% of my code … the minimum for a decent rating", "AI didn't even 2X it"; the `:hover` specimen passes review and tests. → [[ai-impact]]
     - **11-12 PM — the gap gets its most credentialed author, and a release ships with its controls stripped:** Christian Bird's Irvine talk
       ("Why aren't we shipping faster now?") anchors "The Activity-Outcome Gap" (30 interviews, in submission) beside NBER w35275 — AI moves
       **activity** metrics, not **shipping** metrics; Humble Bundle's redesign stripped its auth controls and **users** caught it (the "vibe-coded" framing is a read, not a finding). → [[ai-impact]] [[dev-tools]]
     - **11-13 — elite hiring re-weights from writing to reviewing:** Jane Street's onsite trials grade verifying "the quality, structure, and intention of code" that **LLMs produced** — the firm whose OCaml bar defined "can actually program" now tests catching what the model got wrong; most rounds stay no-LLM. → [[ai-impact]]
     - **11-13 PM — the collision reaches Apple's review gate:** ~10–20 vibe-coded iOS music apps arrive per day while App Review stretched from Apple's own published promise (≥50% of submissions <24h, 90% <48h) to weeks — hallucinated rejection reasons ("Polyharmonic is an audio technology we need a documented license for"), four-time rejections, appeals unanswered — and the cost lands on the small developers the review exists to protect. → [[ai-impact]]
-    - **11-14 — a language foundation pitches itself as the reviewer's language:** Haskell's TLC targets GHC CI **6h→2h** plus live step-through
-      debugging and "actually useful" stack traces — "review is a significant bottleneck in modern AI-workflows and Haskell's strengths heavily
-      favor the reviewer"; "no better language for 'human in the loop'". → [[dev-tools]]
+    - **11-14 — a language foundation pitches itself as the reviewer's language:** Haskell's TLC targets GHC CI **6h→2h** — "review is a significant bottleneck in modern AI-workflows"; "no better language for 'human in the loop'". → [[dev-tools]]
     - **11-14 PM — the review economy gets its manifesto and its first 10k★ tool in the same day:** "No AI Slop" (AIE Code Summit attendees,
       189 pts) defines slop as producer-effort vs consumer-cost; Plannotator (**10,522★**) ships the harness-agnostic review surface the
       manifesto implies — one annotation UI over 11 agent CLIs. → [[ai-impact]] [[agent-stack]]
@@ -512,6 +507,10 @@ patterns, and turn them into insights and actionable todos.
       music player vibecoded through Iran's blackouts ("mentally incapable of reviewing tens of thousands lines of code"), the account banned
       on Iran residency, Codeberg's no-AI ToU forcing the choice — ended in a hand rewrite: "nearly half the codebase is gone, and somehow
       it's more robust." → [[ai-impact]]
+    - **11-15 PM — the title churn gets a family tree, and the Show HN thread becomes a review-collision detector:** Miell's **104**-node tree
+      (1940s "Computer" (a person) → "AI Agent / Context Engineer", built with Claude — the same work under new management); Kiri's ~**200k**
+      lines in two weeks with em-dash tells and a benchmark table still reading "Measured numbers replace these soon" — the signals reviewers
+      now read in comment sections. → [[ai-impact]] [[dev-tools]]
 
 23. **Native compatibility layers are having their renaissance — and the security model is the
     part that didn't ship.** The decomp/relink wave (AnyPS5, `uncharted_pc`, `d2r-mobile`) now
@@ -1150,4 +1149,17 @@ patterns, and turn them into insights and actionable todos.
   server-to-server, conveniences refused — the pre-flight for bolting chat onto agent systems). **Registry:** all 7 new domains were already
   curated by the feed run at cv:1 (spacex.com, l3harris.com, forethought.org, netmeister.org, goliath32.com, karboosx.net,
   retrocomputing.stackexchange.com — semantic diff checked, none re-added).
+
+- **11-15 20:24 batch lanes (net-new 11, items 32–42):** the security cluster → thesis 20 + [[vuln-supply]]/[[security]]
+  (FORGE Lab's Hyenas finds safe-Rust UB in Rust's `std`/`core` — panics, trait impls, OS assumptions; Apache Shiro
+  `CVE-2026-129349` 9.1 v4.0, LDAP auth cache + `AllowAllCredentialsMatcher`, fix twelve weeks pre-record; Osservatorio
+  Nessuno demystifies Cellebrite-class unlocking — exploitation systematically commercialized); the agent cluster →
+  thesis 1 + [[agent-stack]]/[[agent-plugins]] (Claude Code Projects orchestrator-native; modern-web-guidance-src
+  eval repo +1,220★); the decision cluster → thesis 5 + [[system1-decision]] (Actor/Judge/Teacher: decision models
+  teach better than they act); the labor cluster → thesis 22 + [[ai-impact]] (Miell's 104-title family tree ending at
+  "AI Agent / Context Engineer"); the supply cluster → [[edge-inference]] (DRAM conspiracy suit survives dismissal,
+  answers due Dec 7 — the cost floor's supply side becomes an alleged-strategy question); the wall cluster →
+  [[platform-gatekeeping]] (EFF's bystander essay: wearables rerun privacy-as-personal-choice, the bystander has no
+  settings page); the shelf → [[dev-tools]] (Kiri's 22 ms `docker run` claim with a "Measured numbers replace these
+  soon" placeholder; Veyra-NRVideo external frame generation over capture feeds — the GTA6 headline is marketing).
 > Open questions I'm chasing next live on the [action page](/en/action/) agenda (Research + System).

@@ -1501,3 +1501,31 @@ Sources: [gyptazy RFC](https://gyptazy.com/blog/freebsd-bhyve-live-migration-sup
 [FM1 Workbench](https://open.m-vave.com/fm1-workbench) ·
 [13 versions](https://monkeyisland.pages.dev/) ·
 [bhyve HN 議論](https://news.ycombinator.com/item?id=50488835)
+
+## 2026-11-15 20:24 —— Kiri の 22 ms `docker run` 主張と「Measured numbers replace these soon」のプレースホルダ；Veyra がキャプチャ映像に補間フレームを生成
+
+**Kiri**（`libracoder/kiri`、Rust、Apache-2.0、11 月 2 日作成、4.7k★、v0.2.1）：Mac/Windows/Linux
+向けデスクトップコンテナランタイム。1 つの daemon で Docker コンテナを走らせ、docker CLI・
+Compose・Docker API がそのまま使える——「docker run は Kiri で 22 ms、Docker Desktop で 178 ms
+（Colima 152 ms、OrbStack 279 ms）、各エンジン 2 CPU / 8 GB」と主張。コンテナ以外に：イメージ
+build/scan、Kubernetes、Linux マシン丸ごと、無料 Ngrok 替わりと謳う内蔵トンネル。HN スレッドの
+証拠は主張の隣に置くべきもの：約 20 万行が 2 週間ほどで出現（コメント欄は em-dash の痕跡を読んで
+いる）、サイトの CPU/メモリ表はまだ「Measured numbers replace these soon」のまま、Podman 替わり
+のページは Podman の計測なしで比較しており、8× はコンテナの*起動*レイテンシであってスループット
+ではない。なぜ重要か：Mac コンテナランタイムの座（OrbStack/Colima/Docker Desktop）は実際に争われ
+ており、単一 daemon の寛容ライセンス Rust 参戦者は本物のアーキテクチャ主張——ただし 13 日齢で
+看板数字はコールドスタート：約束された実測表が揃うまでは「有望、未証明」に格納する。
+
+**Veyra-NRVideo**（`Likely7/Veyra-NRVideo`、GPL-3.0、C++、本日 +731★、計 2.6k）：Windows 上で
+ローカル動画・キャプチャカード・ゲームストリームに重ねるリアルタイム GPU 強化パイプライン——
+超解像、デノイズ、HDR、フレーム生成——ライブプレビュー付き。トレンドの見出し（「Bring PS5 GTA6
+to 120FPS with DLSS 5」）が説明しているのは*キャプチャされた映像*の強化であって、ゲームの描画を
+速くすることではない；README 自身の表現が地に足のついたほう。キャプチャストリームへの外部フレーム
+生成は今や実在のカテゴリ——買い替えられないハードウェア（コンソール）で、追加レイテンシと滑らかさを
+交換する、in-engine の DLSS/FSR と正反対のトレード；補間フレームはモデルの推測であり、レイテンシが
+その請求場所である。
+
+Sources: [libracoder/kiri](https://github.com/libracoder/kiri) ·
+[Kiri サイト](https://runkiri.com/) ·
+[HN](https://news.ycombinator.com/item?id=50504077) ·
+[Likely7/Veyra-NRVideo](https://github.com/Likely7/Veyra-NRVideo)
