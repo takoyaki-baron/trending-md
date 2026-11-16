@@ -1,9 +1,9 @@
 {
- "generated": "2026-11-15T20:44:53.406Z",
+ "generated": "2026-11-16T04:36:13.083Z",
  "files": [
   {
    "file": "2026-11-16.md",
-   "items": 19,
+   "items": 29,
    "findings": [
     {
      "check": "cvss",
@@ -62,46 +62,53 @@
      "detail": "the item names a stopping point — silent, because the prose already lets the reader tell which number it read"
     },
     {
+     "check": "status",
+     "item": 25,
+     "verdict": "ok",
+     "claim": "CVE-2026-125423 `Deferred`",
+     "detail": "Deferred (lastModified 2026-11-15T21:16:54.727)"
+    },
+    {
      "check": "repo",
      "item": 1,
      "verdict": "star-surge",
-     "claim": "13700 quoted vs 28750 now",
-     "detail": "meta/astryx: 13700 → 28750 (+52%, 15050 stars) since the batch was written — a rising count is not a wrong one; date the reading if the number will be re-used"
+     "claim": "13700 quoted vs 29027 now",
+     "detail": "meta/astryx: 13700 → 29027 (+53%, 15327 stars) since the batch was written — a rising count is not a wrong one; date the reading if the number will be re-used"
     },
     {
      "check": "repo",
      "item": 1,
      "verdict": "ok",
      "claim": "meta/astryx",
-     "detail": "28750★, last push 2026-11-15"
+     "detail": "29027★, last push 2026-11-16"
     },
     {
      "check": "repo",
      "item": 6,
      "verdict": "star-surge",
-     "claim": "5500 quoted vs 19664 now",
-     "detail": "google/elephant-goldfish-model: 5500 → 19664 (+72%, 14164 stars) since the batch was written — a rising count is not a wrong one; date the reading if the number will be re-used"
+     "claim": "5500 quoted vs 19888 now",
+     "detail": "google/elephant-goldfish-model: 5500 → 19888 (+72%, 14388 stars) since the batch was written — a rising count is not a wrong one; date the reading if the number will be re-used"
     },
     {
      "check": "repo",
      "item": 6,
      "verdict": "ok",
      "claim": "google/elephant-goldfish-model",
-     "detail": "19664★, last push 2026-11-15"
+     "detail": "19888★, last push 2026-11-15"
     },
     {
      "check": "repo",
      "item": 9,
      "verdict": "stale-disclosed",
      "claim": "google-labs-code/stitch-skills",
-     "detail": "last push 2026-08-17 (90d) with 9216 stars — the item states the state itself (“no commits since”), so the staleness is the story rather than an unexamined number"
+     "detail": "last push 2026-08-17 (90d) with 9409 stars — the item states the state itself (“no commits since”), so the staleness is the story rather than an unexamined number"
     },
     {
      "check": "repo",
      "item": 12,
      "verdict": "stale-disclosed",
      "claim": "lucypero/lucynes",
-     "detail": "last push 2026-05-14 (185d) with 81 stars — the item names this repo's own last-push day (2026-05-14), so the staleness is the story rather than an unexamined number"
+     "detail": "last push 2026-05-14 (185d) with 85 stars — the item names this repo's own last-push day (2026-05-14), so the staleness is the story rather than an unexamined number"
     },
     {
      "check": "repo",
@@ -116,6 +123,20 @@
      "verdict": "ok",
      "claim": "83 skills",
      "detail": "README states it"
+    },
+    {
+     "check": "count",
+     "item": 27,
+     "verdict": "number-other-noun",
+     "claim": "23 language",
+     "detail": "23 is on ykiko.me/en/articles/2105384023094834022/ as “23 and serves as an” — the page's head noun is not “language”, so this is the feed's paraphrase rather than the page's wording; quote what the page says"
+    },
+    {
+     "check": "batch",
+     "item": 25,
+     "verdict": "batch-count-ok",
+     "claim": "20 records (source=88ee5874-cf24-4952-aea0-31affedb7ff2, 2026-11-15)",
+     "detail": "20 records from 88ee5874-cf24-4952-aea0-31affedb7ff2 published 2026-11-15 — the claim's own set, retrieved by its own cited id CVE-2026-123006"
     },
     {
      "check": "quotation",
@@ -188,11 +209,60 @@
      "detail": "verbatim in 1 readable source(s)"
     },
     {
+     "check": "quotation",
+     "item": 21,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 24,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 25,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 10 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 26,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 27,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 28,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
      "check": "attribution",
      "item": 10,
      "verdict": "attribution-satisfied",
      "claim": "Duffy",
      "detail": "a quotation is attributed to Duffy (“got overloaded with data”) and a cited URL carries the party's token — the quotation arm's page set reaches the party's own artifact"
+    },
+    {
+     "check": "attribution",
+     "item": 29,
+     "verdict": "attribution-satisfied",
+     "claim": "Archive",
+     "detail": "a quotation is attributed to Archive (“After 31 years, Salon has announced that it is ceasing publi…”) and a cited URL carries the party's token — the quotation arm's page set reaches the party's own artifact"
     }
    ]
   }

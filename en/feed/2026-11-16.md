@@ -1,8 +1,8 @@
 ---
 date: 2026-11-16
-updated: 2026-11-15T20:44:34Z
+updated: 2026-11-16T04:35:38Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 24
+sources: 37
 license: CC-BY-4.0
 ---
 
@@ -274,13 +274,153 @@ Five CVE records for the **DrayTek Vigor2960** router landed on NVD today in a t
 
 ---
 
+## 20. Since we covered Qwen4-Max's no-details preview on Nov 11: it has shipped — an API-only flagship with 1M context, and still no open weights
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** qwen.ai · 168+ pts on HN · ~2h ago (~10:14 UTC+8)
+- **Tags:** `qwen` `qwen4-max` `llm` `model-release` `alibaba`
+
+When the Nov 11 feed covered Qwen4-Max entering preview — no weights, no benchmarks — this is the release that was pending. Alibaba's Qwen4 flagship is now listed on [OpenRouter](https://openrouter.ai/qwen/qwen4-max) (listing created 2026-11-16T02:18Z, minutes after the HN thread appeared) with a **1,000,000-token context** and pricing of **$1.50/M input, $4.50/M output** ($0.075/M cache read) — API-only: at feed time the Qwen Hugging Face org's newest upload is still Qwen-Image-2.1-Turbo from Oct 9, so no open weights have shipped for the 4 line. Early third-party readings are lukewarm — the HN thread cites Artificial Analysis scoring it 43 (against GPT-6.1 Sol's 46), and a good fraction of the thread is spent disputing AA's methodology rather than the model. Simon Willison ran his pelican-drawing test at all four reasoning efforts (none/low/high/xhigh).
+
+**Why it matters:** The gap between the preview existing and the model being servable closed in five days, but the open-weights gap did not — Qwen3.8's 2.4T-A95B weights shipped in August; the 4 line starts closed. Watch the Flash and 27B variants the thread is waiting on: historically those are where Qwen's open-weights drops land, and they're what most local deployments actually run.
+
+[`🔗 Qwen4-Max announcement`](https://qwen.ai/blog?id=qwen4-max) · [`🔗 OpenRouter: qwen/qwen4-max`](https://openrouter.ai/qwen/qwen4-max) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50513215)
+
+---
+
+## 21. Old Bitly links are being hijacked: a 2011 Burger King tweet's short link was re-registered and pointed at a Wikipedia list of Nazi concentration camps
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** ransomnews.com · 211+ pts on HN · ~6h ago (~06:11 UTC+8)
+- **Tags:** `bitly` `link-rot` `hijacking` `urls` `security`
+
+A Bitly short link inside a Burger King tweet from **July 24, 2011** was re-registered by a different party on **Nov 15, 2026** and redirected to Wikipedia's list of Nazi concentration camps; a post quoting it passed **2 million views** within hours. Ransomnews found the same pattern on a McDonald's tweet from June 2011 (pointed at Wikipedia's September 11 attacks article), then systematically checked **97 Bitly links in Donald Trump's 2009–2013 tweets** from a public archive: **56 of the link objects now living behind those tweets were created after the tweets themselves**, one is blocked by Bitly as malicious, and **four were registered on Nov 15** — at 23:35 UTC, 49 re-created links still worked. Bitly confirmed the issue on X at 19:13 UTC ("allowed bad actors to repurpose certain old, inactive links"), suspended the accounts involved and disabled the affected links; per a CNN update, links in old posts from Bill Gates, Justin Trudeau, Mike Pence, the FBI and the US Department of Defense were redirected too.
+
+**Why it matters:** The short-link layer of the 2010s web is now attack surface: when a link-shortening service recycles dead short codes, every decade-old post that embeds one becomes remotely rewriteable — a hijack that outlives the account that wrote it. Archive-grade advice falls out directly: cite original URLs, and treat any `bit.ly/…` in old content as unverified until it resolves where it always did.
+
+[`🔗 Ransomnews: Old Bitly links hijacked in Burger King, McDonald's and Trump tweets`](https://ransomnews.com/burger-king-tweet-bitly-link-hijack-2026/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50511395)
+
+---
+
+## 22. Universal XSS in uBlock Origin: a malicious page could drive the element picker into adding trusted scriptlet filters — found by GPT-5.6 Sol, fixed in 1.75.4
+
+- **Velocity:** ▮▮ rising
+- **Source:** iter.ca · 120+ pts on HN · ~2.1h ago (~10:04 UTC+8)
+- **Tags:** `ublock-origin` `uxss` `firefox` `extension-security` `ai-assisted`
+
+A one-click universal XSS in uBlock Origin's Firefox MV2 extension (a similar but less severe issue hit the MV3 uBO Lite): a malicious website could embed uBO's element picker in an invisible iframe, extract the extension's random per-install UUID by **hooking the XHR fired inside uBO's own `no-fetch-if` scriptlet shim**, drive the picker over `postMessage`, and abuse the picker's `opt` field — designed to hold a resource type like `image` — by injecting a newline, appending an arbitrary **trusted filter** (`…##+js(trusted-rpnt, script, …)`). Trusted filters can inject script into any page, so one user click on the attacker's page meant arbitrary JavaScript in any site's context. Per the [GitHub advisory GHSA-cmqw-9r2w-6wv2](https://github.com/gorhill/uBlock/security/advisories/GHSA-cmqw-9r2w-6wv2): affected **1.75.2 and lower**, patched in **1.75.4** (Nov 3, "launch element picker only with a verified secret token"), reported by email Nov 1, with further hardening through 1.76.4. The disclosure post credits GPT-5.6 Sol with finding the issue and Claude with most of the PoC code, while the author verified the report and wrote the prose.
+
+**Why it matters:** The extension everyone installs for safety became a script-injection vector through its own anti-ad machinery — and the fix pattern is worth copying everywhere: never let a web-reachable surface accept "trusted" input without a secret handshake. It is also one of the clearest AI-assisted vulnerability finds published this month: the hypothesis was human, the search was model, the verification was human.
+
+[`🔗 iter.ca: Universal XSS in uBlock Origin`](https://iter.ca/post/ubo-uxss/) · [`🔗 GHSA-cmqw-9r2w-6wv2`](https://github.com/gorhill/uBlock/security/advisories/GHSA-cmqw-9r2w-6wv2) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50513160)
+
+---
+
+## 23. Protomaps: self-hosting map tiles has gotten cheap and easy — a 139 GB world file for ~$5/month of storage, served by HTTP Range requests
+
+- **Velocity:** ▮▮ rising
+- **Source:** bruceroettgers.eu · 217+ pts on HN · ~8.7h ago (~03:26 UTC+8)
+- **Tags:** `protomaps` `pmtiles` `maps` `self-hosting` `cdn`
+
+Bruce Röttgers' walkthrough of [Protomaps](https://protomaps.com)' PMTiles format is front-paging: a tile archive that ships as **one single file** addressed via HTTP Range requests, so hosting a planet-wide basemap is literally "download the latest daily build, upload it to a storage bucket." The economics are the point: on Bunny.net, the **139 GB world map with 5× replication runs ~$5/month in storage**, bandwidth is $0.01/GB, and a full load-pan-zoom session of a European city moved ~5 MB — the author's estimate of **$0.05 per 1,000 map loads** vs Mapbox's $5/1k post-free-tier rate, "100× cheaper" (his estimate, usage-dependent). CDNs that don't cache Range requests (Cloudflare) need a small edge function translating x/y/z paths into byte ranges; the CLI can extract bounding boxes or specific zoom levels to shrink the file.
+
+**Why it matters:** Maps were one of the last "must buy SaaS" layers of web development, with a pricing cliff that punished any project that went viral. A format where the entire basemap is a static file on commodity storage turns a usage-billed API into a capacity-planning problem — the same move object storage made for media, now applied to geography.
+
+[`🔗 Bruce Röttgers: Self-hosting map tiles has gotten cheap and easy`](https://bruceroettgers.eu/blog/protomaps/) · [`🔗 Protomaps`](https://protomaps.com) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50509837)
+
+---
+
+## 24. Ductus: your handwriting, as a font — a browser tool that walks you through all 26 letters and never uploads a stroke
+
+- **Velocity:** ▮▮ rising
+- **Source:** ductus.sorenblank.com · 173+ pts on HN · ~8.4h ago (~03:42 UTC+8)
+- **Tags:** `fonts` `handwriting` `typography` `web-tool` `privacy`
+
+**Ductus** is a single-page web tool that turns your handwriting into a working font: it prompts you to write each glyph in sequence ("Write a small a, 1 of 26 lowercase"), collects the strokes, and exports a font file — entirely client-side. The page states its privacy model in one line: the checking happens on the visitor's own computer, and nothing is ever uploaded. There's nothing to install and no account; the HN thread (173+ points) is mostly people comparing letterforms and reporting which browsers behave.
+
+**Why it matters:** A small, polished entry in the local-first tools pattern this feed keeps tracking — the whole interaction (capture, normalize, package as a font) fits in a browser tab with zero server, which is both the privacy story and the distribution story. Also a tidy demo of what the Web's font toolchain now tolerates as input.
+
+[`🔗 Ductus`](https://ductus.sorenblank.com) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50509972)
+
+---
+
+## 25. Gitea's security sweep lands on NVD: 20 CVE records from its own CNA in one hour, against a v28.4.0 release that fixed command execution via repo auto-init and a password-hash leak in repo search
+
+- **Velocity:** ▮ steady
+- **Source:** NVD · 20 CVE records (Gitea CNA) · published 21:16–22:17 UTC Nov 15
+- **Tags:** `cve` `gitea` `self-hosted-git` `security-release` `password-hash`
+
+Gitea released **v28.4.0** (Nov 15, 19:39 UTC) as a security release, and twenty CVE records from Gitea's own CNA landed on NVD in two hourly tranches (21:16Z, 22:17Z) — all `Deferred` (NVD deferring analysis to the CNA), none carrying a CVSS score at feed time. The two the release notes lead with: **CVE-2026-125423**, a command-execution race — a repo created with auto-init accepted pushes before initialization finished, so a user could push a crafted tree making the README write follow a symlink and overwrite a git hook, "and ran commands as the Gitea system user"; and **CVE-2026-123006**, present **since 28.0.0**: the dashboard's `GET /repo/search` returned each repository's internal commit-status object including the owner's full user record, so "any signed-in user could read the password hash, salt and email address of the owner of any visible repository that has a commit status." The release also rebuilds binaries with Go 1.27.4 (CVE-2026-97054) and fixes issues across Actions, issues, PRs and packages; the blog's own line is "We strongly recommend that all users upgrade as soon as possible."
+
+**Why it matters:** A password-hash disclosure readable by any signed-in user on a default-configured self-hosted forge is exactly the kind of bug that outlives its patch — hashes leaked months ago don't rotate when you upgrade. If you run Gitea, the upgrade is one step, but treat the search endpoint's exposure window as an incident to review, not a line in a changelog.
+
+[`🔗 Gitea blog: 28.4.0 release`](https://blog.gitea.com/release-of-28.4.0/) · [`🔗 GHSA-5mx6-8rwm-52wf`](https://github.com/go-gitea/gitea/security/advisories/GHSA-5mx6-8rwm-52wf) · [`🔗 v28.4.0 release`](https://github.com/go-gitea/gitea/releases/tag/v28.4.0)
+
+---
+
+## 26. Tor ships 0.4.9.17 as a rapid-response security release amid a sustained DDoS: relay DoS defenses for IPv6, with more releases promised
+
+- **Velocity:** ▮ steady
+- **Source:** Tor Project forum · 65+ pts on HN · ~3.7h ago (~08:21 UTC+8)
+- **Tags:** `tor` `ddos` `relay` `dos-defense` `security-release`
+
+The Tor Project released **0.4.9.17** on Nov 13 "in rapid response to the ongoing DDoS attack on the network, which has affected most relay operators." The release announcement names the load-bearing fix — "**one fix in particular is especially important for relay DoS defenses related to IPv6 handling**" — and describes the attack shape plainly: relays "are being overwhelmed by a massive flood of client circuits." The post thanks relay operators, notes the tor-relays@ list has been very active, warns that defenses are still being evaluated ("expect further releases in the near future"), and gives operators one instruction: "If you run a relay, please upgrade as soon as possible." The HN thread surfaced the release overnight.
+
+**Why it matters:** Tor's censorship/DoS resistance is load-bearing infrastructure for people who need it, and a sustained circuit-flood attack degrades it without ever "breaking" it — the slow-motion version of an outage. The release cadence here is the story: a targeted fix shipped within days of the attack being acknowledged, and the network's health currently depends on volunteer relay operators applying it.
+
+[`🔗 Tor forum: Security Release 0.4.9.17`](https://forum.torproject.org/t/security-release-0-4-9-17/22454) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50512441)
+
+---
+
+## 27. Clice ships v1.0: a C++23 language server rewritten from the ground up — whose author candidly says most of his own CLI isn't useful for agents, except one command
+
+- **Velocity:** ▮ steady
+- **Source:** ykiko.me · 113+ pts on HN · ~10.7h ago (~01:22 UTC+8)
+- **Tags:** `clice` `cpp` `language-server` `tooling` `agents`
+
+**clice-io/clice** hit its 1,000-commit milestone and shipped its **first stable release** after ~2.5 years of work and four months of nightly/alpha testing since July 19. It's a C/C++ language server on LLVM/Clang — but redesigned from scratch against clangd/ccls, and written as a showcase of modern C++: entirely C++20 coroutines (on a homegrown libuv-based structured-concurrency library), C++20 named modules plus C++23 `import std`, static reflection for all serialization (TOML, JSON, bincode, blob, CLI args), and fully self-hosted — it provides language services on its own codebase via its own `clice modularize`. 1,513★ at feed time. The essay's best section is "What about agents?": the author designed a CLI for the agent era, then judged it honestly — `clice query` as a grep replacement "isn't actually all that useful" because exact symbol lookup needs a full-project index while "2 or 3 grep calls are usually enough" — and the command that "really earns its keep" is `clice modularize`: asked to modularize on its own, an agent "spins up a swarm of subagents and writes custom scripts to pull off the migration".
+
+**Why it matters:** Two things: a from-scratch language server in C++23 is a rare, readable artifact of the language's post-2023 shape; and the author's agent-CLI accounting is the sharpest statement yet of the pattern this feed keeps hitting — generic tool interfaces lose to the model's own script-writing, and only *deeply specialized* commands survive contact with agents. That's a design filter worth applying to every "MCP wrapper for X" being built right now.
+
+[`🔗 ykiko: clice v1.0 Released`](https://ykiko.me/en/articles/2105384023094834022/) · [`🔗 clice-io/clice`](https://github.com/clice-io/clice) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50508715)
+
+---
+
+## 28. Coles, one of Australia's two dominant supermarket chains, is investigating a cyber incident — "no evidence" of customer data compromise, operations normal
+
+- **Velocity:** ▮ steady
+- **Source:** colesgroup.com.au · 65+ pts on HN · ~2.8h ago (~09:14 UTC+8)
+- **Tags:** `cybersecurity` `incident-response` `retail` `australia`
+
+Coles Group posted a standing incident statement (current as of Nov 16, 8:30am): the company "is currently investigating a cyber security incident," and per its findings to date "we have not identified any evidence that customer, team or supplier data has been compromised or removed from Coles' systems." It is working with the **Australian Cyber Security Centre** and external cybersecurity firms "to contain and secure the Coles IT environment," and states that operations continue — "customers are able to shop as normal." No attribution, no technique detail, no timeline yet; the HN thread (65+ points, 45 comments) is tracking updates.
+
+**Why it matters:** Retail cyber incidents keep proving that the interesting question is never the initial "are we down" but the data-movement question — this statement is the early-days shape of every retail breach disclosure, and the "no evidence yet" line is perishable by definition. Watch for the follow-ups that actually move the story: payment telemetry, loyalty-program data, and supplier-system reach.
+
+[`🔗 Coles Group updates`](https://www.colesgroup.com.au/updates/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50512824)
+
+---
+
+## 29. Salon is ceasing publication after 31 years — the Internet Archive preserves 250,000+ articles and ships an experimental Salon Explorer
+
+- **Velocity:** ▮ steady
+- **Source:** blog.archive.org · 99+ pts on HN · ~5h ago (~07:00 UTC+8)
+- **Tags:** `internet-archive` `preservation` `journalism` `wayback` `vanishing-culture`
+
+The Internet Archive's post (Nov 12, Chris Freeland) records the closing of one of the web's first major publications: "**After 31 years, Salon has announced that it is ceasing publication.**" The Wayback Machine has archived Salon under its successive domains (salon1999.com, salonmag.com, salon.com since 1999) for nearly three decades — **more than 250,000 articles** by **over 20,000 writers** are discoverable — and the Archive shipped an experimental **[Salon Explorer](https://web.archive.org/collections/salon/)** interface for browsing the corpus with filters. The post sits in the Archive's "vanishing culture" series; the HN resurfacing (99+ points) landed it on the front page days later.
+
+**Why it matters:** The preservation post is the counterfactual that matters: a 31-year publication that launched in 1995 dies, and its full corpus survives because the archiving was *continuous* — started when the site was healthy, not when it died. Every "we'll be around" publication is one budget cycle from being the next argument for donating crawls to the Wayback Machine early.
+
+[`🔗 Internet Archive: Preserving 30 Years of Salon Journalism`](https://blog.archive.org/2026/11/12/preserving-30-years-of-salon-journalism/) · [`🔗 Salon Explorer`](https://web.archive.org/collections/salon/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50511806)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-15T20:44:34Z |
-| Items | 19 |
-| Sources tracked | 24 (Hacker News, GitHub Trending, NYT via Yahoo News, MacAnorak/Notebookcheck, Ahead of AI, Josh Blais, Common Dreams, WDR, Lucy's Save Room, IETF Datatracker, MITRE/NVD CVE records, VulDB, oss-sec, Jakub T. Jankiewicz, NVIDIA docs/blog, arXiv, Google Labs, Meta, Vercel, AG-UI releases, egm.dev, npm) |
+| Generated | 2026-11-16T04:35:38Z |
+| Items | 29 |
+| Sources tracked | 37 (Hacker News, GitHub Trending, NYT via Yahoo News, MacAnorak/Notebookcheck, Ahead of AI, Josh Blais, Common Dreams, WDR, Lucy's Save Room, IETF Datatracker, MITRE/NVD CVE records, VulDB, oss-sec, Jakub T. Jankiewicz, NVIDIA docs/blog, arXiv, Google Labs, Meta, Vercel, AG-UI releases, egm.dev, npm, Qwen blog, OpenRouter, iter.ca, uBlock GHSA advisory, Ransomnews, Gitea blog, Tor Project forum, Bruce Röttgers, Protomaps, ykiko.me, clice-io, Coles Group, Ductus, Internet Archive) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

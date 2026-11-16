@@ -1,8 +1,8 @@
 ---
 date: 2026-11-16
-updated: 2026-11-15T20:44:34Z
+updated: 2026-11-16T04:35:38Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 24
+sources: 37
 license: CC-BY-4.0
 ---
 
@@ -274,13 +274,153 @@ Ricardo Bánffy 提交了 **draft-banffy-httpbis-not-a-freezer-00**（个人草�
 
 ---
 
+## 20. 续 11 月 11 日我们对 Qwen4-Max 零细节预览的报道：它已正式发布——只有 API 的旗舰模型、100 万上下文，开放权重仍然缺席
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** qwen.ai · HN 168+ 分 · ~2h ago (~10:14 UTC+8)
+- **Tags:** `qwen` `qwen4-max` `llm` `model-release` `alibaba`
+
+11 月 11 日我们报道 Qwen4-Max 进入预览时"没有权重、没有基准"，这就是当时悬而未决的那次发布。阿里巴巴的 Qwen4 旗舰现在已上线 [OpenRouter](https://openrouter.ai/qwen/qwen4-max)（上架时间 2026-11-16T02:18Z，比 HN 讨论串晚几分钟）：**100 万 token 上下文**，定价 **$1.50/M 输入、$4.50/M 输出**（缓存读取 $0.075/M）——仅限 API：截至发稿，Qwen 在 Hugging Face 组织下最新的上传仍是 10 月 9 日的 Qwen-Image-2.1-Turbo，4 系列没有开放权重。早期第三方评价不温不火——HN 讨论串引用 Artificial Analysis 给它打 43 分（对照 GPT-6.1 Sol 的 46 分），而讨论串里相当一部分精力花在质疑 AA 的方法论而非模型本身。Simon Willison 用四种推理档位（none/low/high/xhigh）跑了他的画鹈鹕测试。
+
+**Why it matters:** "从预览存在到模型可用之间的鸿沟五天就填上了，但开放权重的鸿沟没有——Qwen3.8 的 2.4T-A95B 权重 8 月就发布了，4 系列却以闭门开局。盯着讨论串在等的 Flash 和 27B 变体：按历史规律，Qwen 的开放权重发布落在这些型号上，而它们才是大多数本地部署真正跑的东西。
+
+[`🔗 Qwen4-Max 发布公告`](https://qwen.ai/blog?id=qwen4-max) · [`🔗 OpenRouter: qwen/qwen4-max`](https://openrouter.ai/qwen/qwen4-max) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50513215)
+
+---
+
+## 21. 老 Bitly 链接正在被劫持：2011 年汉堡王推文里的短链被人重新注册，指向维基百科的纳粹集中营列表
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** ransomnews.com · HN 211+ 分 · ~6h ago (~06:11 UTC+8)
+- **Tags:** `bitly` `link-rot` `hijacking` `urls` `security`
+
+汉堡王 **2011 年 7 月 24 日**推文里的一条 Bitly 短链，于 **2026 年 11 月 15 日**被他人重新注册，重定向到维基百科的纳粹集中营列表；引用它的帖子数小时内突破 **200 万浏览**。Ransomnews 在 2011 年 6 月的一条麦当劳推文里发现了同样的手法（指向维基百科的九一一袭击条目），随后从公开存档里系统检查了特朗普 2009–2013 年推文中的 **97 条 Bitly 链接**：这些推文背后的链接对象中有 **56 个创建于推文发布之后**，一个被 Bitly 屏蔽为恶意，**四个注册于 11 月 15 日**——截至 23:35 UTC，仍有 49 条被重新创建的链接可以访问。Bitly 于 19:13 UTC 在 X 上确认了问题（"允许不良行为者重新利用某些旧的不活跃链接"），已封禁涉事账号并停用受影响链接；据 CNN 的更新，比尔·盖茨、贾斯廷·特鲁多、迈克·彭斯、FBI 以及美国国防部老帖里的链接也被重定向了。
+
+**Why it matters:** 2010 年代网页的短链层如今成了攻击面：当短链服务回收死掉的短码，每一条嵌了短链的老帖子都变成可远程改写的对象——一次比发布它的账号活得更久的劫持。归档级的建议直接就能落地：引用原始 URL，把老内容里任何 `bit.ly/…` 都当作未验证链接，除非它解析回原来的地址。
+
+[`🔗 Ransomnews：汉堡王、麦当劳与特朗普推文中的老 Bitly 链接被劫持`](https://ransomnews.com/burger-king-tweet-bitly-link-hijack-2026/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50511395)
+
+---
+
+## 22. uBlock Origin 通用 XSS：恶意页面可以驱使元素选择器添加可信 scriptlet 过滤器——由 GPT-5.6 Sol 发现，1.75.4 修复
+
+- **Velocity:** ▮▮ rising
+- **Source:** iter.ca · HN 120+ 分 · ~2.1h ago (~10:04 UTC+8)
+- **Tags:** `ublock-origin` `uxss` `firefox` `extension-security` `ai-assisted`
+
+uBlock Origin Firefox MV2 版扩展中的一个一键通用 XSS（MV3 的 uBO Lite 也有类似但较轻的问题）：恶意网站可以把 uBO 的元素选择器嵌进一个不可见的 iframe，通过 **hook uBO 自家 `no-fetch-if` scriptlet shim 内部发出的 XHR** 窃取扩展每次安装随机的 UUID，再用 `postMessage` 操纵选择器，并滥用其 `opt` 字段——它本应装资源类型如 `image`——注入一个换行符，追加任意**可信过滤器**（`…##+js(trusted-rpnt, script, …)`）。可信过滤器可以向任何页面注入脚本，所以在攻击者页面上的一次用户点击，就等于在任意站点上下文里执行任意 JavaScript。据 [GitHub 公告 GHSA-cmqw-9r2w-6wv2](https://github.com/gorhill/uBlock/security/advisories/GHSA-cmqw-9r2w-6wv2)：受影响版本为 **1.75.2 及更低**，**1.75.4**（11 月 3 日，"仅在验证密令后启动元素选择器"）修复，11 月 1 日经邮件报告，此后到 1.76.4 持续加固。披露文章把发现归功于 GPT-5.6 Sol、PoC 代码大部分由 Claude 写，作者本人验证了报告并亲自撰写了正文。
+
+**Why it matters:** 人人为安全而装的扩展，经由自己的反广告机制变成了脚本注入入口——而它的修复模式值得所有地方抄走：绝不让任何 web 可达的界面在没有密令握手的情况下接受"可信"输入。这也是本月已披露的最清晰的 AI 辅助漏洞发现之一：假设是人提的，搜索是模型做的，验证是人做的。
+
+[`🔗 iter.ca：uBlock Origin 通用 XSS`](https://iter.ca/post/ubo-uxss/) · [`🔗 GHSA-cmqw-9r2w-6wv2`](https://github.com/gorhill/uBlock/security/advisories/GHSA-cmqw-9r2w-6wv2) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50513160)
+
+---
+
+## 23. Protomaps：自托管地图瓦片变得又便宜又容易——139 GB 的全球单文件，靠 HTTP Range 请求伺服，存储每月约 5 美元
+
+- **Velocity:** ▮▮ rising
+- **Source:** bruceroettgers.eu · HN 217+ 分 · ~8.7h ago (~03:26 UTC+8)
+- **Tags:** `protomaps` `pmtiles` `maps` `self-hosting` `cdn`
+
+Bruce Röttgers 对 [Protomaps](https://protomaps.com) 的 PMTiles 格式的实操文章登上了首页：一种以**单个文件**发布、通过 HTTP Range 请求寻址的瓦片存档，所以托管一张覆盖全球的底图，字面上就是"下载最新每日构建，上传到存储桶"。经济账才是重点：在 Bunny.net 上，**139 GB 的全球地图以 5 倍副本存储每月约 5 美元**，带宽 $0.01/GB，加载并缩放一座欧洲城市的一次完整会话只传了约 5 MB——作者估算**每千次地图加载 $0.05**，对照 Mapbox 免费额度之外 $5/1k 的费率，"便宜 100 倍"（他的估算，随用量浮动）。不缓存 Range 请求的 CDN（Cloudflare）需要一个小的边缘函数把 x/y/z 路径翻译成字节区间；CLI 可以按包围盒或缩放级别裁出更小的文件。
+
+**Why it matters:** 地图是 web 开发里最后几个"必须买 SaaS"的图层之一，而且其定价悬崖专门惩罚走红的项目。整个底图变成商品化存储上的一个静态文件，把按用量计费的 API 变成了容量规划问题——对象存储当年对媒体做的事，现在轮到了地理数据。
+
+[`🔗 Bruce Röttgers：自托管地图瓦片变得又便宜又容易`](https://bruceroettgers.eu/blog/protomaps/) · [`🔗 Protomaps`](https://protomaps.com) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50509837)
+
+---
+
+## 24. Ductus：把你的笔迹做成字体——一个带你写完全部 26 个字母、绝不上传一笔一划的浏览器工具
+
+- **Velocity:** ▮▮ rising
+- **Source:** ductus.sorenblank.com · HN 173+ 分 · ~8.4h ago (~03:42 UTC+8)
+- **Tags:** `fonts` `handwriting` `typography` `web-tool` `privacy`
+
+**Ductus** 是一个把你的手写笔迹变成可用字体的单页网页工具：它提示你逐个书写字形（"写一个小写 a，26 个小写字母中的第 1 个"），采集笔画，导出字体文件——全程客户端完成。页面用一句话说清了它的隐私模型："在本机校验，绝不上传。"无需安装、没有账号；HN 讨论串（173+ 分）主要是大家在比较字形、汇报哪些浏览器表现正常。
+
+**Why it matters:** 这是本 feed 一直在追踪的本地优先工具模式的一件小巧精品——整个流程（采集、归一化、封装成字体）塞进一个零服务器的浏览器标签页，这既是隐私故事，也是分发故事。顺便也是"Web 字体工具链如今能把什么当输入"的一个漂亮演示。
+
+[`🔗 Ductus`](https://ductus.sorenblank.com) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50509972)
+
+---
+
+## 25. Gitea 安全清扫抵达 NVD：自家 CNA 一小时内落下 20 条 CVE 记录，对应 v28.4.0 修复的仓库自动初始化命令执行与仓库搜索口令哈希泄露
+
+- **Velocity:** ▮ steady
+- **Source:** NVD · 20 条 CVE 记录（Gitea CNA）· 发布于 11 月 15 日 21:16–22:17 UTC
+- **Tags:** `cve` `gitea` `self-hosted-git` `security-release` `password-hash`
+
+Gitea 发布了 **v28.4.0**（11 月 15 日 19:39 UTC）作为安全版本，随后二十条来自 Gitea 自家 CNA 的 CVE 记录在两个整点批次（21:16Z、22:17Z）落到 NVD——发稿时全部仍是 `Received`，没有一条有评分。版本说明打头的两条：**CVE-2026-125423**，一个命令执行竞态——自动初始化创建的仓库在初始化完成前就接受推送，用户可以推送一个精心构造的 tree，让 README 写入跟随符号链接、覆盖服务器上的 git 钩子，"并以 Gitea 系统用户身份运行命令"；**CVE-2026-123006**，**自 28.0.0 起就存在**：仪表盘的 `GET /repo/search` 返回每个仓库的内部 commit-status 对象、其中含仓库所有者的完整用户记录，于是"任何已登录用户都能读到任何可见且带 commit status 的仓库所有者的口令哈希、盐和邮箱"。本版本还用 Go 1.27.4 重新构建了二进制（CVE-2026-97054），并修复了 Actions、议题、PR 与包管理的一批问题；博客自己的原话是"我们强烈建议所有用户尽快升级"。
+
+**Why it matters:** 在默认配置的自托管 forge 上，任何已登录用户都能读到的口令哈希泄露，正是那种活得比补丁久的漏洞——几个月前泄露的哈希不会因为你升级就轮换。如果你在跑 Gitea，升级只有一步，但请把搜索端点的暴露窗口当作一次需要复盘的安全事件，而不是变更日志里的一行字。
+
+[`🔗 Gitea 博客：28.4.0 发布`](https://blog.gitea.com/release-of-28.4.0/) · [`🔗 GHSA-5mx6-8rwm-52wf`](https://github.com/go-gitea/gitea/security/advisories/GHSA-5mx6-8rwm-52wf) · [`🔗 v28.4.0 发布`](https://github.com/go-gitea/gitea/releases/tag/v28.4.0)
+
+---
+
+## 26. Tor 在持续 DDoS 之下快速响应发布 0.4.9.17：IPv6 相关的中继 DoS 防御，并预告更多版本将至
+
+- **Velocity:** ▮ steady
+- **Source:** Tor Project 论坛 · HN 65+ 分 · ~3.7h ago (~08:21 UTC+8)
+- **Tags:** `tor` `ddos` `relay` `dos-defense` `security-release`
+
+Tor Project 于 11 月 13 日发布 **0.4.9.17**，"以快速响应波及大多数中继运营者的持续 DDoS 攻击"。发布公告点名了承重的那条修复——"其中一条修复对 IPv6 处理相关的中继 DoS 防御尤为关键"——并直白描述了攻击形态：中继"正被海量的客户端电路洪流压垮"。帖子感谢了中继运营者，提到 tor-relays@ 邮件列表非常活跃，提醒防御仍在评估中（"近期预计还会有更多版本"），并给运营者下达了一条指令："如果你运营中继，请尽快升级。"HN 讨论串在夜间把这条发布顶上了首页。
+
+**Why it matters:** Tor 的抗审查/抗 DoS 能力是对需要它的人群承重的基础设施，而一场持续的电路洪流攻击不会"弄坏"它，只会让它慢性降级——停电的慢动作版本。这里真正的故事是发布节奏：从公开承认受击到定向修复上线只隔了几天，而网络的当下健康取决于志愿中继运营者是否应用了它。
+
+[`🔗 Tor 论坛：安全版本 0.4.9.17`](https://forum.torproject.org/t/security-release-0-4-9-17/22454) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50512441)
+
+---
+
+## 27. Clice 发布 v1.0：从零重写的 C++23 语言服务器——作者坦承自己的 CLI 大半对智能体没用，只有一条命令例外
+
+- **Velocity:** ▮ steady
+- **Source:** ykiko.me · HN 113+ 分 · ~10.7h ago (~01:22 UTC+8)
+- **Tags:** `clice` `cpp` `language-server` `tooling` `agents`
+
+**clice-io/clice** 达成 1,000 次提交的里程碑，在约两年半的开发和自 7 月 19 日以来四个月的 nightly/alpha 测试之后，发布了**首个稳定版本**。这是一个基于 LLVM/Clang 的 C/C++ 语言服务器——但针对 clangd/ccls 的架构顽疾从零重新设计，并写成了现代 C++ 的展示柜：全程 C++20 协程（跑在自研的基于 libuv 的结构化并发库上）、C++20 命名模块加 C++23 `import std`、用静态反射做全部序列化（TOML、JSON、bincode、blob、命令行参数），并且完全自举——它通过自己的 `clice modularize` 在自己的代码库上提供语言服务。发稿时 1,513★。文章最好的一节是"智能体呢？"：作者为智能体时代设计了 CLI，然后诚实地给它记账——`clice query` 作为 grep 替代"其实没那么有用"，因为精确符号查找要先索引整个项目，而"两三次 grep 调用通常就够"；真正"物有所值"的是 `clice modularize`，否则智能体"会拉起一群子智能体、手写自定义脚本"去做迁移。
+
+**Why it matters:** 两件事：一个从零开始的 C++23 语言服务器是这门语言 2023 年后形态的稀有且可读的标本；而作者对智能体 CLI 的算账，是本 feed 反复撞见的模式迄今最锋利的表述——通用工具接口输给模型自己写脚本的能力，只有*高度特化*的命令能在与智能体的接触中幸存。值得拿这把过滤器去量正在建造的每一个"给 X 套 MCP 壳"的项目。
+
+[`🔗 ykiko：clice v1.0 发布`](https://ykiko.me/en/articles/2105384023094834022/) · [`🔗 clice-io/clice`](https://github.com/clice-io/clice) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50508715)
+
+---
+
+## 28. 澳大利亚两大超市巨头之一的 Coles 正在调查一起网络安全事件——"无证据"表明客户数据泄露，运营正常
+
+- **Velocity:** ▮ steady
+- **Source:** colesgroup.com.au · HN 65+ 分 · ~2.8h ago (~09:14 UTC+8)
+- **Tags:** `cybersecurity` `incident-response` `retail` `australia`
+
+Coles Group 发布了一份常设事件声明（截至 11 月 16 日上午 8:30）：公司"正在调查一起网络安全事件"，且就目前的调查结果而言，"我们尚未发现任何证据表明客户、员工或供应商数据已从 Coles 系统中被泄露或移除"。公司正与**澳大利亚网络安全中心（ACSC）**及外部网络安全公司合作，"以遏制并保护 Coles 的 IT 环境"，并声明运营继续——"顾客可以照常购物。"尚无归因、技术细节或时间线；HN 讨论串（65+ 分、45 条评论）正在滚动更新。
+
+**Why it matters:** 零售业网络事件一再证明，有趣的问题从来不是最初的"我们是不是宕了"，而是数据移动问题——这份声明就是每一次零售漏洞披露早期的标准形状，而"暂无证据"这句话按定义是易腐的。盯住真正推动剧情的后续：支付遥测、会员计划数据、以及供应商系统的可达面。
+
+[`🔗 Coles Group 更新页`](https://www.colesgroup.com.au/updates/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50512824)
+
+---
+
+## 29. Salon 创刊 31 年后停刊——互联网档案馆保存了 25 万余篇文章，并发布实验性的 Salon Explorer
+
+- **Velocity:** ▮ steady
+- **Source:** blog.archive.org · HN 99+ 分 · ~5h ago (~07:00 UTC+8)
+- **Tags:** `internet-archive` `preservation` `journalism` `wayback` `vanishing-culture`
+
+互联网档案馆的帖子（11 月 12 日，Chris Freeland）记录了 web 最早一批重要出版物之一的落幕："**31 年后，Salon 宣布停止出版。**"Wayback Machine 近三十年来在 Salon 先后使用的域名下（salon1999.com、salonmag.com、1999 年起的 salon.com）持续存档——**超过 25 万篇文章**、出自 **2 万余位作者**，均可检索——档案馆还发布了实验性的 **[Salon Explorer](https://web.archive.org/collections/salon/)** 界面，可用过滤器浏览整个语料。该帖属于档案馆的"消逝文化"系列；HN 的重新发掘（99+ 分）在几天后把它顶上了首页。
+
+**Why it matters:** 这篇保存声明真正重要的是它的反事实：一份 1995 年创刊、有着 31 年历史的出版物死去了，而它的全部语料得以幸存，因为存档是*连续的*——网站还健康时就开始了，而不是等它死掉。每一份"我们会一直在"的出版物，离"早一点向 Wayback Machine 捐一次爬取"的下一次论证，只隔一个预算周期。
+
+[`🔗 互联网档案馆：保存 Salon 的 30 年新闻`](https://blog.archive.org/2026/11/12/preserving-30-years-of-salon-journalism/) · [`🔗 Salon Explorer`](https://web.archive.org/collections/salon/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50511806)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-15T20:44:34Z |
-| Items | 19 |
-| Sources tracked | 24 (Hacker News, GitHub Trending, NYT via Yahoo News, MacAnorak/Notebookcheck, Ahead of AI, Josh Blais, Common Dreams, WDR, Lucy's Save Room, IETF Datatracker, MITRE/NVD CVE records, VulDB, oss-sec, Jakub T. Jankiewicz, NVIDIA docs/blog, arXiv, Google Labs, Meta, Vercel, AG-UI releases, egm.dev, npm) |
+| Generated | 2026-11-16T04:35:38Z |
+| Items | 29 |
+| Sources tracked | 37 (Hacker News, GitHub Trending, NYT via Yahoo News, MacAnorak/Notebookcheck, Ahead of AI, Josh Blais, Common Dreams, WDR, Lucy's Save Room, IETF Datatracker, MITRE/NVD CVE records, VulDB, oss-sec, Jakub T. Jankiewicz, NVIDIA docs/blog, arXiv, Google Labs, Meta, Vercel, AG-UI releases, egm.dev, npm, Qwen blog, OpenRouter, iter.ca, uBlock GHSA advisory, Ransomnews, Gitea blog, Tor Project forum, Bruce Röttgers, Protomaps, ykiko.me, clice-io, Coles Group, Ductus, Internet Archive) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
