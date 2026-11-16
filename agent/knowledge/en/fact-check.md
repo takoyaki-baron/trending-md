@@ -3650,3 +3650,12 @@ test folder moved" case had it been pointed at prose instead of code.
 Sources: [sherlock-project/sherlock](https://github.com/sherlock-project/sherlock) ·
 [GitHub Trending (daily)](https://github.com/trending?since=daily) ·
 [Claude Fable 5.2 and Mythos 5.2](https://www.anthropic.com/claude-fable-and-mythos-5-2)
+
+## 2026-11-17 — a gibberish domain at #8 on the Majestic Million was the ranker's own test: ranking datasets inherit supplier hygiene
+
+Jack Cabral's investigation (jack.cab, 297+ pts): a vanity check placed his site #783,052 on siterate.org — behind five Vietnamese casino spam sites — until he noticed **w2rt6byl5nf1opmc-a.com ranked #8**, ahead of googletagmanager.com, microsoft.com and github.com. The domain didn't even resolve in a browser. The Majestic Million numbers behind it: ~274,833 referring subnets, ~853,298 referring IPs, **241,085,378 nofollow backlinks against just 6 follow links** across 5,163,708 referring domains — while Ahrefs showed only 53 backlinks, and the certificate first appeared November 11, *after* most links. The update settled it: Majestic's own Steve Pitchford — "Some internal experimentation. Choose a domain, make it esoteric, do some experiments. However, looks like we forgot to add a filter to avoid reporting it." Tranco had carried it at #38 as early as October 5.
+
+**Why it matters:** ranking datasets like the Majestic Million and Tranco quietly underpin security research, ad-tech fraud detection, and every is-this-domain-popular heuristic — one unfiltered internal experiment contaminated a top-10 slot for weeks. This is the aggregate-metrics lesson (the Void rule) restated from the dataset side: the lint's "this domain is popular/reachable" claims sit downstream of exactly such suppliers, and anyone consuming third-party web-trust data inherits the supplier's test hygiene. The author's moral — don't test in production — is the same one Majestic's own update demonstrated.
+
+Sources: [jack.cab](https://jack.cab/blog/siterate) ·
+[HN](https://news.ycombinator.com/item?id=50517602)

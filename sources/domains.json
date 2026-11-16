@@ -14959,5 +14959,122 @@
   "en": "Developer's personal domain hosting the Parcel mail client on Tangled; repo facts (Zig 99%, siv toolkit, v1.1.0, 287 commits) matched the Show HN thread's claims.",
   "zh": "开发者个人域名，在 Tangled 上托管 Parcel 邮件客户端；仓库事实（Zig 99%、siv 工具包、v1.1.0、287 提交）与 Show HN 讨论的表述一致。",
   "jp": "開発者の個人ドメイン。Tangled 上で Parcel メールクライアントをホストし、リポジトリの事実（Zig 99%、siv ツールキット、v1.1.0、287コミット）が Show HN スレッドの記述と一致した。"
+ },
+ "3ds.com": {
+  "cat": "vendor",
+  "cred": "high",
+  "cv": 1,
+  "density": "med",
+  "en": "Dassault Systèmes' trust-center security advisories — the vendor CNA's own record for 3DEXPERIENCE/PLM CVEs; fix details live in a gated support KB, so the advisory page names no patched versions. Cross-checked (11-17): CVE-2026-93664's 10.0 score, Station Launcher App placement and R2023x–R2026x scope read against the CVE Program record (cve.org).",
+  "zh": "达索系统信任中心安全公告——3DEXPERIENCE/PLM 类 CVE 的厂商 CNA 自有记录；修复细节在需登录的支持知识库中，公告页不列出修复版本。交叉核验（11-17）：CVE-2026-93664 的 10.0 评分、Station Launcher App 定位与 R2023x–R2026x 覆盖范围已对照 CVE Program 记录（cve.org）确认。",
+  "jp": "Dassault Systèmes トラストセンターのセキュリティアドバイザリ——3DEXPERIENCE/PLM 系 CVE のベンダー CNA 自身の記録。修正詳細は要ログインのサポート KB にあり、アドバイザリ页面は修正版を明示しない。クロスチェック（11-17）：CVE-2026-93664 の 10.0 スコア・Station Launcher App の位置づけ・R2023x–R2026x の適用範囲を CVE Program レコード（cve.org）と照合。"
+ },
+ "apnews.com": {
+  "cat": "news",
+  "cred": "high",
+  "cv": 1,
+  "density": "med",
+  "en": "AP wire — named-source national reporting; spokespeople quoted on the record. Cross-checked (11-17): the five-bank outage event corroborated by the HN thread's first-hand user reports; Chase's 'technical bug issue, not a cyber issue' line quoted with attribution in the story.",
+  "zh": "美联社通讯社——具名来源的全国性报道；发言人实名引述。交叉核验（11-17）：五家银行同时故障事件经 HN 讨论串的一手用户报告证实；Chase 的「技术 bug 问题，非网络攻击」表述在报道中具名引用。",
+  "jp": "AP 通信——名指しソースの全国報道。スポークスパーソンを実名引用。クロスチェック（11-17）：5 行同時障害の事実を HN スレッドの一次ユーザー報告で裏付け。Chase の「technical bug issue, not a cyber issue」発言は記事内で属性付き引用。"
+ },
+ "breck-mckye.com": {
+  "cat": "community",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "Jimmy Breck-McKye's essays — software culture and reliability; interpretive, single-author. Cross-checked (11-17): the essay's incident premises (M365 outage, FAA ground stop, eMudhra, Shai Hulud) were each independently verified by this feed's own first-hand coverage in prior batches — the argument rests on events this feed confirmed separately.",
+  "zh": "Jimmy Breck-McKye 的博客——软件文化与可靠性随笔；解读性、单一作者。交叉核验（11-17）：文中事件前提（M365 故障、FAA 停飞、eMudhra、Shai Hulud）均已在本 feed 此前的批次中独立一手核验——论证建立在已被分别证实的事件之上。",
+  "jp": "Jimmy Breck-McKye のブログ——ソフトウェア文化と信頼性のエッセイ。解釈中心の単一著者。クロスチェック（11-17）：事件の前提（M365 障害、FAA 地上停止、eMudhra、Shai Hulud）はいずれも本 feed が過去バッチで独自に一次検証済み——主張は別個に確認された出来事の上に立つ。"
+ },
+ "burntsushi.net": {
+  "cat": "community",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "Andrew Gallant (BurntSushi, ripgrep author)'s engineering posts — primary source for his own libraries; API-stability track record is the credibility base. Cross-checked (11-17): Jiff 1.0.0 confirmed as the newest version on crates.io (updated 2026-11-15/16).",
+  "zh": "Andrew Gallant（BurntSushi，ripgrep 作者）的工程博客——其自有库的第一手来源；API 稳定性履历是可信度基础。交叉核验（11-17）：Jiff 1.0.0 已确认为 crates.io 最新版本（更新于 2026-11-15/16）。",
+  "jp": "Andrew Gallant（BurntSushi、ripgrep 作者）の技術ブログ——自身のライブラリの一次ソース。API 安定性の実績が信頼の基盤。クロスチェック（11-17）：Jiff 1.0.0 が crates.io の最新版であることを確認（2026-11-15/16 更新）。"
+ },
+ "deanchen.me": {
+  "cat": "code",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "Project demo site for jiangshan-map (the GitHub repo is the primary). Cross-checked (11-17): the live demo serves the atlas the README describes (403 BCE→present timeline, 198 territory snapshots) — an artifact check of demo vs repo claims.",
+  "zh": "jiangshan-map 的项目演示站（GitHub 仓库为第一手来源）。交叉核验（11-17）：在线演示实际呈现 README 所述的地图集（公元前 403 年至今的时间轴、198 个疆域快照）——演示与仓库声明一致的工件核验。",
+  "jp": "jiangshan-map のプロジェクトデモサイト（一次ソースは GitHub リポジトリ）。クロスチェック（11-17）：公開デモが README の記述（紀元前403年〜現在のタイムライン、198 の領域スナップショット）を実際に表示することを確認——デモとリポジトリ記述のアーティファクト照合。"
+ },
+ "developers.heygen.com": {
+  "cat": "vendor",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "HeyGen's developer docs — primary for the Decision 1 API (noul/choice/score, 1–400 questions, Turbo tier). Cross-checked (11-17): the model listed independently on OpenRouter (heygen-decision-1). Vendor docs that carry their own un-calibrated-confidence caveat — the honest part.",
+  "zh": "HeyGen 开发者文档——Decision 1 API（noul/choice/score，单次 1–400 问，Turbo 档）的第一手来源。交叉核验（11-17）：该模型已独立上架 OpenRouter（heygen-decision-1）。厂商文档自带「非校准概率」的坦率告警——这是其诚实之处。",
+  "jp": "HeyGen の開発者ドキュメント——Decision 1 API（noul/choice/score、1〜400 質問、Turbo 版）の一次ソース。クロスチェック（11-17）：モデルは OpenRouter にも独立に掲載（heygen-decision-1）。キャリブレーションされていない確率である旨の注意書きを自分で載せている点は誠実。"
+ },
+ "faa.gov": {
+  "cat": "news",
+  "cred": "high",
+  "cv": 1,
+  "density": "med",
+  "en": "FAA newsroom — the agency's own press releases and Q&As. Cross-checked (11-17): the ground-stop Q&A's framing ('abundance of caution', the SMART rollout dates) is consistent with the ADVZY 005 advisory this feed fetched first-hand (11-14, via fly.faa.gov) and the L3Harris cutover cause reported independently (11-15).",
+  "zh": "FAA 新闻室——机构自己的新闻稿与问答。交叉核验（11-17）：停飞问答的表述（「出于审慎」、SMART 推广时间线）与本 feed 一手获取的 ADVZY 005 咨询（11-14，经 fly.faa.gov）及独立报道的 L3Harris 割接原因（11-15）一致。",
+  "jp": "FAA ニュースルーム——機関自身のプレスリリースと Q&A。クロスチェック（11-17）：地上停止 Q&A の説明（「abundance of caution」、SMART 展開の時期）は、本 feed が一次取得した ADVZY 005（11-14、fly.faa.gov 経由）および独立報道の L3Harris 切替原因（11-15）と整合。"
+ },
+ "infisical.com": {
+  "cat": "vendor",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "Infisical's blog — vendor-authored essays on secrets and identity; the credential-brokering conclusion is their own product. Cross-checked (11-17): the central diagnosis (perimeters nobody human approved) independently confirmed by this feed's first-hand CVE verifications (Auth0 FGA CVE-2026-107372/108167, otterdog CVE-2026-123870).",
+  "zh": "Infisical 博客——关于密钥与身份的厂商署名随笔；凭证托管结论即其自家产品。交叉核验（11-17）：核心诊断（无人审批的防护边界）已由本 feed 的一手 CVE 核验独立证实（Auth0 FGA CVE-2026-107372/108167、otterdog CVE-2026-123870）。",
+  "jp": "Infisical のブログ——シークレットとアイデンティティに関するベンダー署名エッセイ。クレデンシャルブローカリングの結論は自社製品。クロスチェック（11-17）：中心診断（人間が承認しないまま成立する境界）は、本 feed の一次 CVE 検証（Auth0 FGA CVE-2026-107372/108167、otterdog CVE-2026-123870）で独立に裏付け済み。"
+ },
+ "jack.cab": {
+  "cat": "community",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "Jack Cabral's investigation blog — single-author technical sleuthing. Cross-checked (11-17): the ranking claim confirmed by the ranked party itself — Majestic's Steve Pitchford acknowledged the domain was Majestic's own internal experiment; Tranco carried it at #38 from Oct 5 per the post.",
+  "zh": "Jack Cabral 的调查博客——单一作者的技术侦查。交叉核验（11-17）：排名结论由被排名方自身证实——Majestic 的 Steve Pitchford 承认该域名是 Majestic 内部实验；据文中，Tranco 自 10 月 5 日起将其列在第 38 位。",
+  "jp": "Jack Cabral の調査ブログ——単一著者の技術追跡。クロスチェック（11-17）：ランキングの主張はランク対象者自身が裏付け——Majestic の Steve Pitchford が同ドメインは自社の内部実験と認めた。Tranco は 10-05 から #38 で掲載（記事による）。"
+ },
+ "masnick.com": {
+  "cat": "community",
+  "cred": "high",
+  "cv": 1,
+  "density": "low",
+  "en": "Mike Masnick's personal posts — the 2007 ThinkPad power-button ritual post is the primary for its own folklore; the comment thread is 18 years of field reports. Cross-checked (11-17): the HN thread carries independent success reports (2008–2015, beyond ThinkPads); the mechanism stays unverified by design — folklore with a plausible power-drain explanation.",
+  "zh": "Mike Masnick 的个人博客——2007 年 ThinkPad 电源键仪式一文的原始出处；评论区是 18 年的现场报告。交叉核验（11-17）：HN 讨论串带有独立成功报告（2008–2015 年，超出 ThinkPad 范围）；机制本身刻意保持未证实——这是带合理放电解释的民间经验。",
+  "jp": "Mike Masnick の個人ブログ——2007 年の ThinkPad 電源ボタン儀式記事の一次ソース。コメント欄は 18 年分の現場報告。クロスチェック（11-17）：HN スレッドに独立の成功報告（2008〜2015、ThinkPad 以外も）。メカニズムは意図的に未検証のまま——もっともらしい放電説明付きのフォークロア。"
+ },
+ "s2.dev": {
+  "cat": "vendor",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "S2's engineering blog — primary for their own infrastructure decisions; candid about trade-offs (Go over Rust, Spanner consistency over caching, Cloudflare as the abuse shield). Cross-checked (11-17): the Route53 throttling mechanism ('about 5 UPSERTs per second', hedged in-post) matches AWS's own DNS-limitations documentation of per-second write throttling; post quotes verified verbatim.",
+  "zh": "S2 工程博客——其自身基础设施决策的第一手来源；对取舍坦率（选 Go 而非 Rust、选 Spanner 一致性而非缓存、Cloudflare 作滥用盾）。交叉核验（11-17）：Route53 限流机制（「约每秒 5 次 UPSERT」，文中自带保留）与 AWS 自家 DNS 限制文档中的每秒写入限流一致；博文引语逐字核对。",
+  "jp": "S2 のエンジニアリングブログ——自社インフラ判断の一次ソース。トレードオフに率直（Rust でなく Go、キャッシュでなく Spanner の一貫性、濫用盾として Cloudflare）。クロスチェック（11-17）：Route53 スロットリングの機構（「約 5 UPSERT/秒」と本文中で但し書き付き）が AWS 自身の DNS 制限ドキュメントの毎秒書き込み制限と一致。記事の引用は逐字確認。"
+ },
+ "trmnl.com": {
+  "cat": "vendor",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "TRMNL's product blog — launch posts for their own hardware; batch sizes and preorder claims are vendor-only numbers. Cross-checked (11-17): the display platform (E Ink Spectra 6) confirmed live on eink.com — the display maker's own page.",
+  "zh": "TRMNL 产品博客——自家硬件的发布文章；批量与预售数字仅厂商口径。交叉核验（11-17）：显示平台（E Ink Spectra 6）已在 eink.com 官网在线确认——显示屏制造商自己的页面。",
+  "jp": "TRMNL のプロダクトブログ——自社ハードウェアの発表記事。バッチ数と予約の数字はベンダー由来のみ。クロスチェック（11-17）：ディスプレイ基盤（E Ink Spectra 6）を eink.com の公式ページで確認——パネルメーカー自身のページ。"
+ },
+ "xenaproject.wordpress.com": {
+  "cat": "research",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "The Xena Project (Kevin Buzzard, Imperial College) — the formalization community's primary voice; the field's audit standard for 'checked in Lean' claims. Cross-checked (11-17): the post's numbers greppable first-hand (290 theorems/~38 not stating the main result, 722 papers ~45% with Lean code, three retracted over a sign error, lake comparator); the 13M-line FLT fact it cites was independently verified by this feed in October from a different origin.",
+  "zh": "Xena Project（Kevin Buzzard，帝国理工学院）——形式化社区的代表性声音；「已在 Lean 中验证」类声明领域的审计标准。交叉核验（11-17）：文中数字可一手检索（290 定理中约 38 个未陈述主结果、722 篇论文约 45% 附 Lean 代码、三篇因符号错误撤稿、lake comparator）；其引用的 FLT 1300 万行事实，本 feed 十月已从另一来源独立核实。",
+  "jp": "The Xena Project（Kevin Buzzard、Imperial College）——形式化コミュニティの代表的な発信源。「Lean で検証済み」主张に関する分野の監査基準。クロスチェック（11-17）：記事の数字を一次で確認（290 定理のうち約 38 が主結果を述べてすらいない、722 論文の約 45% に Lean コード、符号誤りで 3 本撤回、lake comparator）；引用される FLT 1300 万行の事実は本 feed が 10 月に別の出自から独立検証済み。"
  }
 }

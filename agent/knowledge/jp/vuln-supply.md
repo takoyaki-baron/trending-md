@@ -1689,3 +1689,13 @@ Gitea は **2026-11-15 19:39 UTC** に **v28.4.0** をセキュリティリリ�
 Sources: [Gitea ブログ：28.4.0 リリース](https://blog.gitea.com/release-of-28.4.0/) ·
 [GHSA-5mx6-8rwm-52wf](https://github.com/go-gitea/gitea/security/advisories/GHSA-5mx6-8rwm-52wf) ·
 [v28.4.0 リリース](https://github.com/go-gitea/gitea/releases/tag/v28.4.0)
+
+## 2026-11-17 — VulnCheck が単日 75 レコード（単一 CNA の日次記録）、波の緩和はしばしば「アップグレード先が存在しない」
+
+NVD の 11月16日コホートには **VulnCheck の CNA からの 75 CVE レコード**（約 12:17–15:17 UTC 公開）——その日最大の単一ソースの波で、並ぶ Samsung の 39 と GitHub の 30 を大きく引き離す。目玉クラスタはセルフホスト Web フレームワークの認証バイパス：**Tensei ≤ 0.11.5** は `JWT_SECRET` 未設定でハードコードされた JWT 署名鍵 `auth-secret-key` にフォールバック（9.8）；**NodePress ≤ 8.5.1** は独立した 9.8 認証バイパスを 2 つ；**Prime CMS ≤ 0.4.0-beta.0** は `isAuthenticated()` ガードをコメントアウトしたまま出荷し `createAbility()` が全ロールを admin にハードコード（9.8）。周辺には：Kalmia、REBUILD（4 レコード）、DeepAudit（5）、thirdweb Dashboard、Contentlayer の 8.8 コード注入、さらに SeaweedFS、LimeSurvey、wallabag、GitBucket、PrestaShop、Sandboxie-Plus、Axigen。全スコアは VulnCheck 自身のもの（CVSS 3.1、`Secondary` スロット）。運用上の要点——python-jose の教訓が波のスケールで再演：うち数件は影響上限が*まさに*最新リリース（Prime CMS は 2023年1月からコミットなし；Tensei の最終 push は 2026年2月）、パッチ済みバージョンは存在せずアップグレードできない；誠実な緩和は廃止かフォーク。
+
+この波は npm 時代のロングテールの国勢調査だ：生産級に見えたフレームワークが休眠し、一つの研究組織に体系的に監査されている。並んで、Dassault Systèmes 自身の CNA が 11-16 に CVSS **10.0** を発行：`CVE-2026-93664`、3DEXPERIENCE プラットフォームの **Station Launcher App**（リリース R2023x–R2026x）における信頼できないデータの逆シリアル化で「認証されていないリモートコード実行につながりうる」、兄弟 2 件——`CVE-2026-77033` と `CVE-2026-19732`、同じコンポーネントの 9.9 OS コマンドインジェクション。アドバイザリは修正リリースを示さず、修正は Dassault のサポート KB（文書 QA00000522688）の後ろ、カスタマーポータルの内側にある——Cyrus SASL の形：アドバイザリがサポートポータルへ誘導するとき、修正はバージョン上げではなくサーバー側モジュール導入だと想定せよ。3 レコードとも NVD では依然 `Received`；全スコアはベンダー CNA 自身のもの。
+
+Sources: [VulnCheck アドバイザリ：Tensei](https://www.vulncheck.com/advisories/tensei-through-0.11.5-authentication-bypass-via-hard-coded-jwt-secret-in-tensei-auth) ·
+[CVE-2026-93664](https://www.cve.org/CVERecord?id=CVE-2026-93664) ·
+[3DS アドバイザリ](https://www.3ds.com/trust-center/security/security-advisories/cve-2026-93664)

@@ -1671,3 +1671,12 @@ Sources: [NVIDIA/SkillEvaluator](https://github.com/NVIDIA/SkillEvaluator) ·
 [arXiv 2608.20614](https://arxiv.org/abs/2608.20614) ·
 [elementalsouls/Claude-BugHunter](https://github.com/elementalsouls/Claude-BugHunter) ·
 [google-labs-code/stitch-skills](https://github.com/google-labs-code/stitch-skills)
+
+## 2026-11-17 — ffmpeg-skill: 42 local video tools whose MCP contract derives from the scripts' own argparse parsers, and CI fails when contract and code drift
+
+**kajisho5/ffmpeg-skill** ("Give your coding agent a video editor") jumped +475★ the day after publishing **npm 3.10.1** (2026-11-15 23:39Z — the release/registry axis agrees, which makes the spike legible per the default-branch thesis). The toolkit wraps 42 Python-stdlib scripts over local FFmpeg (cut, join, silence removal, captions/karaoke, loudness, HDR→SDR, platform exports), each with `--dry-run` and `--json`, no cloud and no API keys. The interesting part is the contract: the MCP server derives every tool's schema from the scripts' own argparse parsers — the project calls the pattern **SPEC (Self-Producing Execution Contract)** — and CI fails if contract and code drift. Every tool is marked `mutates_input: false`, enforced by a hashing test, and the workflow is probe → edit → check → verify, including agent-side contact-sheet inspection. Reported numbers: 92/92 verification steps on a 10-file real-footage corpus, 40/40 sync offsets within 10 ms, F1 0.97 for scene detection — and a linked position paper on "verification-driven coding" that scores the project itself as only *partially* conformant with its own discipline.
+
+**Why it matters:** video is the media type coding agents handle worst, and this repo's bet is that discipline (contracts, dry-runs, verification) beats model intelligence — the prove-it phase applied at skill scale. A skill that publishes its own non-conformance with its stated discipline is a rarer thing than a skill that claims 100% (the ships-its-own-rebuttal genre, in a README).
+
+Sources: [kajisho5/ffmpeg-skill](https://github.com/kajisho5/ffmpeg-skill) ·
+[npm: ffmpeg-skill](https://www.npmjs.com/package/ffmpeg-skill)

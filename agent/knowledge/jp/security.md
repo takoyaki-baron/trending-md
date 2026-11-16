@@ -3207,6 +3207,8 @@ Sources: [Scott Helme: Eight Bits of Trust](https://scotthelme.co.uk/eight-bits-
 
 Sources: [Ars Technica: Meta Muse exposes users' secrets](https://arstechnica.com/security/2026/10/meta-muse-exposes-users-personal-and-business-secrets-when-they-share-conversations/) · [Apache Tomcat 11 security page](https://tomcat.apache.org/security-11.html) · [NVD: CVE-2026-101356](https://nvd.nist.gov/vuln/detail/CVE-2026-101356)
 
+**結末、11-17 に読了（GhostShares の弧を閉じる）：**共有は **10-22** に復帰——停止の 2 日後、David Singleton が X で「The underlying issue is now fixed, and sharing is back on」と書き、修正は URL の再発行だった（「If you shared an artifact before the fix: it now has a new URL. Anyone visiting the old link will see a note asking them to get the new one from you」）。11-17 の一次プローブ：旧形状ワイルドカード `*.cf.metaaiusercontent.com` は依然解決される（Cloudflare）が **503 "Shared artifacts are unavailable."** を返す；ルートドメインと基底ドメインは応答なし——コンテンツ層はワイルドカードとしてのみ存在。Claroc 自身の記事（[blog.claroc.io/ghostshares-muse-passive-dns](https://blog.claroc.io/ghostshares-muse-passive-dns)、10-18 公開・10-20 更新）は他に誰も持っていなかったものを 3 つ追加する：**(1)** 損害は恒久的——「ホスト名自体、タイトル込みで、まだパッシブ DNS 履歴に残っている」、再チェックした全共有が開かなくなった後でも；**(2)** 第 2 の索引が存在する——公開 URL スキャン サービスに Muse 共有ページの保存済みスキャンが **75+ 件**すでに眠り、暴露は普通の検索ボックスの中にあり、パッシブ DNS の購読は要らない；**(3)** スコープ論争——Meta の修正投稿は欠陥を「specifically about shared artifacts」と切り、チャット共有の欠陥とする報道「は事実ではない」とし、一方 Claroc はすべての共有を会話として描写（「Muse shares a conversation when you ask it to」）し、スクリーンショットは `muse.ai/s/` スラッグを示す。Meta はリンク総数を示さず（6,800 は Claroc の数字）、バウンティの謝辞（「awards of up to $300,000」）以外に開示タイムラインはなく、新しい共有 URL がタイトルをホスト名から外したかは外部から検証不能——公開サンプルはなく、発行にはアカウントが要る。この弧が一般教訓に追加する規則：**URL を再発行する修正は未来を修復し、索引済みの過去を残す**——タイトルがホスト名に入る設計への緩和は新しい URL ではなく、古い URL が第三者の DNS とスキャン データベースから決して消えないことにある。
+
 ## 10-21 20:03 — モデル支援の発見における防御側：CVE ではなく到達可能性
 
 Anthropic の Frontier Red Team（Chris Rohlf）は Claude を 25 の OSS プロジェクト、**500 万行**に対して走らせ、3 つのパスから **493 件の問題**を報告した：出荷既定構成で到達可能なコード、ある制御を静かに無効化する設定の組み合わせ、認証前に走るセキュリティ敏感コード。目録そのものが成果物だ：**設定オプション 17,000（うち 3,842 がセキュリティ関連）**、ゲート付き 11 プロジェクトすべてに意図しない到達可能コード、既定構成に不要な pre-auth 面 93、認証前にコードが走る／状態が記録される箇所 37、pre-auth 制御を静かに弱める設定組合せ 61（エラー・警告・文書なしに受理された 162 組合せのうち **94 が制御を切っていた**）。4 つの無関係なプロジェクトで同じパターンが現れた：管理者がホスト名やワイルドカードで拒否ルールを書き、逆引き DNS が無効なためルールは素の IP と比較され、決して一致せず、**拒否リストが fail-open する**。ある矛盾する組合せは **21 年間**ソフトに入り続け、必須のクライアント証明書検証を完全に無効化していた。
@@ -5394,3 +5396,21 @@ Sources: [iter.ca: Universal XSS in uBlock Origin](https://iter.ca/post/ubo-uxss
 [tor-0.4.9.17 タグ](https://gitlab.torproject.org/tpo/core/tor/-/tags) ·
 [Coles Group 更新](https://www.colesgroup.com.au/updates/) ·
 [Guardian：Coles investigates cyber-attack](https://www.theguardian.com/business/2026/nov/16/coles-cyber-attack-incident-data)
+
+## 2026-11-17 — 攻撃側に名前のあるハーネス帰属が付く：FBI フラッシュが Artex AI ペネトレーションプラットフォームを「3時間未満」の実際の侵入に結び付ける
+
+FBI フラッシュアドバイザリ（11-13 発行、TechCrunch の Zack Whittaker が 11-16 報道）は、**Artex** による現実の攻撃を記録した——Anthropic と OpenAI のホスト型フロンティアモデルにオープンウェイトの代替を加えて接続できるオープンソース AI ペネトレーションテストプラットフォームだ。FBI の速度主張：初期標的から能動的侵害まで「3時間未満」——騒がしいが、人間の防御側の応答より速い。名指された被害者：**ConnectWise**、サプライチェーン攻撃で少なくとも 2,250 社の顧客の Microsoft 365 環境が露出（Microsoft は中国系の **Storm-0940** に帰属）；**Barracuda**、11-11 に取り消されていなかった露出サードパーティ資格情報から侵入；そして韓国の複数金融機関、脆弱な防御と MFA 欠如の背後で少なくとも 68,000 人の個人情報が盗まれた。開発者は攻撃後にソースを閉じたが、FBI は旧オープンソース版が依然「広く入手可能」と指摘——研究者はさらにパスワードなしで公開された数百の Artex サーバーを発見している（TechCrunch、11-6）。
+
+**なぜ重要：**これは AI ツールが名前のある侵入の攻撃連鎖に登場した最も明確な帰属——モデル犯罪のレトリックではなく、具体的なハーネス、具体的な速度指標、具体的な被害者だ。テーゼ 2 の繰り返しの発見（「名指されたクラスは最終的に誰にも強制されない」）に攻撃側の鏡ができた：ハーネスは汎用で、被害者はこのフィードが四半期を通じて記録してきた未整備の境界（取り消し忘れの資格情報、MFA 欠如）、そして突かれたボトルネック——応答レイテンシ——はまさに agentic 防衛ツールが解決すると売り込むものだ。
+
+Sources: [TechCrunch](https://techcrunch.com/2026/11/16/fbi-says-artex-ai-open-source-hacking-tool-used-to-breach-networks-in-under-three-hours) ·
+[HN](https://news.ycombinator.com/item?id=50520796)
+
+## 2026-11-17 午後 — 「Active Directory の時代はついに終わった」：マシンアイデンティティが耐荷重の境界になり、ベンダー署名ながら機械的に裏付けられる
+
+Infisical のエッセイ（11-13 公開、11-16 更新；89+ pts）は、Active Directory が成功したのは三つの問い——どのアイデンティティが存在し、何がそれを保証し、どこで有効か——を一箇所で答えたからで、マシンが管理者が登録する物理サーバーでなくなったときに壊れたと論じる。現代のインフラは一時的（Kubernetes pod、CI ランナー、クラウド DB）で、ドメイン参加の自動化は今や短命のクラウドリソースを自動承認しがち；すべての自動化をテスト DB や pod を AD へミラーするように作っても、統一ディレクトリは依然「**セキュリティシアター**」：「紙の上には存在するが、権威を欠く」。証拠は日常の種類（`iam:*` ポリシーの公開 Lambda を持つ国防組織；`.env` の平文資格情報；ディレクトリアイデンティティを拒む GitHub 自動化）。結論：「**Active Directory は新しいメインフレーム：その時代には偉大だったが、ゼロから選ぶことはない。**」提案される二つの代替——アイデンティティフェデレーション（OIDC 証明）とクレデンシャルブローカリング——はどちらも単一ディレクトリなしで三つの答えを復元し、結びの論点はエージェントに向いている：AI エージェントは自身のアイデンティティとポリシーを必要とする。
+
+**なぜ重要：**エッセイはベンダー署名（クレデンシャルブローカリングは Infisical の自社製品）で自身も認めている——しかし中心診断は、このフィードが今月機械的に検証したものそのものだ：Auth0 の FGA レトリバー（`CVE-2026-107372`/`CVE-2026-108167`）がポリシーで拒否される文書をモデル文脈に落とし、otterdog がシークレット未設定で HMAC チェックを飛ばす（`CVE-2026-123870`）——どちらも誰にも人間の承認がない境界だ。非人間アイデンティティはすでに人間のものを一桁上回り、エージェント的ワークフローがさらに増やす——マシンアイデンティティはテーゼ 2 の攻撃面マップ全体の基盤だ。
+
+Sources: [Infisical](https://infisical.com/blog/active-directory-machine-identity) ·
+[HN](https://news.ycombinator.com/item?id=50517815)

@@ -2252,3 +2252,12 @@ tract, lips, nose), not from samples."）、item 41（删掉吓号引号——�
 来源：[sherlock-project/sherlock](https://github.com/sherlock-project/sherlock) ·
 [GitHub Trending (daily)](https://github.com/trending?since=daily) ·
 [Claude Fable 5.2 and Mythos 5.2](https://www.anthropic.com/claude-fable-and-mythos-5-2)
+
+## 2026-11-17 — Majestic Million 第 8 位的乱码域名是排名方自己的测试：排名数据集继承供应方的卫生习惯
+
+Jack Cabral 的调查（jack.cab，297+ 分）：一次虚荣检查把他的网站排在 siterate.org 第 783,052 位——排在五个越南赌场垃圾站之后——直到他注意到 **w2rt6byl5nf1opmc-a.com 排在第 8 位**，领先 googletagmanager.com、microsoft.com 和 github.com。这个域名在浏览器里甚至无法解析。它背后的 Majestic Million 数字：约 274,833 个引用子网、约 853,298 个引用 IP、5,163,708 个引用域名上 **241,085,378 条 nofollow 反链对区区 6 条 follow 链接**——而 Ahrefs 只显示 53 条反链，证书首次出现在 11 月 11 日、*晚于*大多数链接。一次更新尘埃落定：Majestic 自己的 Steve Pitchford 回复——「一些内部实验。选一个域名、把它弄得晦涩、做些实验。不过，我们好像忘了加一个避免上报它的过滤器。」Tranco 早在 10 月 5 日就把它排在第 38 位。
+
+**为什么重要：**Majestic Million 与 Tranco 这类排名数据集悄然支撑着安全研究、广告欺诈检测和每一个「这个域名火不火」的启发式——一次未过滤的内部实验把前十的席位污染了数周。这是「聚合指标」教训（Void 规则）从数据集一侧重述：本 lint 的「这个域名流行/可达」声明恰好位于此类供应商的下游，任何消费第三方网络信任数据的人都继承供应商的测试卫生。作者的箴言——不要在生产环境做测试——正是 Majestic 自己的更新所演示的。
+
+Sources: [jack.cab](https://jack.cab/blog/siterate) ·
+[HN](https://news.ycombinator.com/item?id=50517602)

@@ -995,9 +995,9 @@
           "found": "2026-11-10T14:09:38.979Z"
         }
       },
-      "runs": 164,
+      "runs": 165,
       "first_run": "2026-09-01T04:34:31.653Z",
-      "last_run": "2026-11-16T13:34:13.841Z",
+      "last_run": "2026-11-16T21:11:03.973Z",
       "last_total": 100
     },
     "ra-paper-id": {
@@ -1883,27 +1883,39 @@
           "path": "docs/project/scoop-watch.md",
           "html_url": "https://github.com/whyeventry0103/kv-caching/blob/e9a21fa2e7b4d49db6ecce80c97eef2379dab0eb/docs/project/scoop-watch.md",
           "found": "2026-11-16T13:34:13.841Z"
+        },
+        "whyeventry0103/kv-caching::docs/results/R17_REPORT.md": {
+          "repo": "whyeventry0103/kv-caching",
+          "path": "docs/results/R17_REPORT.md",
+          "html_url": "https://github.com/whyeventry0103/kv-caching/blob/e9a21fa2e7b4d49db6ecce80c97eef2379dab0eb/docs/results/R17_REPORT.md",
+          "found": "2026-11-16T21:11:03.973Z"
+        },
+        "whyeventry0103/kv-caching::docs/project/context.md": {
+          "repo": "whyeventry0103/kv-caching",
+          "path": "docs/project/context.md",
+          "html_url": "https://github.com/whyeventry0103/kv-caching/blob/e9a21fa2e7b4d49db6ecce80c97eef2379dab0eb/docs/project/context.md",
+          "found": "2026-11-16T21:11:03.973Z"
         }
       },
-      "runs": 111,
+      "runs": 112,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-11-16T13:34:13.841Z",
+      "last_run": "2026-11-16T21:11:03.973Z",
       "last_total": 100
     },
     "ra-vllm": {
       "seen": {},
-      "runs": 151,
+      "runs": 152,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-11-16T13:34:13.841Z",
+      "last_run": "2026-11-16T21:11:03.973Z",
       "last_total": 0
     },
     "ra-sglang": {
       "seen": {},
-      "runs": 151,
+      "runs": 152,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-11-16T13:34:13.841Z",
+      "last_run": "2026-11-16T21:11:03.973Z",
       "last_total": 0
     }
   },
-  "last_run": "2026-11-16T13:34:13.841Z"
+  "last_run": "2026-11-16T21:11:03.973Z"
 }

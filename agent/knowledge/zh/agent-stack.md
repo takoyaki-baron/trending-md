@@ -2536,3 +2536,14 @@ command-line details may still change before 1.0」），Apache-2.0 内核加部
 
 Sources: [db-branch/db-branch](https://github.com/db-branch/db-branch) ·
 [HN](https://news.ycombinator.com/item?id=50506940)
+
+## 2026-11-17 — Coral：agent 用原语自行编译工具，论文写作以可检视的五 agent 流水线落地
+
+**withcoral/coral**（Show HN，50+ 分，Apache-2.0，5.0k★）是一个自托管网关（「agent 的执行轨道」），agent 不止调用工具——它写短小的 **TypeScript 程序**串联多次工具调用，在全新 **V8 隔离区**运行：无网络访问、无凭证、无 import。每个底层工具调用在凭证挂接前先过工作区策略门（Allow / Ask / Block）；运行会为人工审批暂停，并归因到启动者。成功的程序持久化为可复用的自定义工具，放在 `coral.private` 或 `coral.shared` 下，任何 MCP 客户端可达（`claude mcp add --transport http coral <url>`）。README 自己的基准：跨 34 项 GitHub/Linear/Slack 任务，自定义工具削减 **token 37%、成本 31%、时间 29%**，宣传语是「Opus 5.5 的准确率、Haiku 5.5 的成本」。企业版目录（SSO/SCIM、RBAC、审计日志）在单独许可下「即将推出」。这是 OpenCode 的 Code Mode 形态抵达独立网关——工具蔓延是 MCP 生态的规模化税，而让 agent 在策略门控下用原语*编译*出自己的工具，是迄今最具体的答案；隔离区正是它该有的信任边界。
+
+**google-research/paper-orchestra**（Yiwen Song、Yale Song、Tomas Pfister、Jinsung Yoon；+306★ 单日，共 1.3k，8 次提交）把「无约束的写作前材料（想法与实验日志）」变成投稿就绪的 LaTeX 手稿。五个专职 agent 分工——Outline、Literature Review（检索、排序、整合相关论文）、Section Writing、Content Refinement、Plotting（从代码生成图示加概念图）——瞄准 CVPR 2025 等会议模板，附 `autoraters/` 目录做自动评估。README 很坦率：「**This is not an officially supported Google product**」，评估数据集单独发布，需要你自己的 Semantic Scholar/OpenAI/Vertex 密钥。引用指向 arXiv:2604.05018。自动化论文*写作*是 agent 浪潮的激励与出版激励相撞的地方——这个仓库把不性感的部分（文献甄别、图形生成、模板适配）作为可检视的流水线而非 demo 出货。
+
+Sources: [withcoral/coral](https://github.com/withcoral/coral) ·
+[Show HN](https://news.ycombinator.com/item?id=50517803) ·
+[paper-orchestra](https://github.com/google-research/paper-orchestra) ·
+[arXiv:2604.05018](https://arxiv.org/abs/2604.05018)

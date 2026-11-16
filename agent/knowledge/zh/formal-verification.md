@@ -328,3 +328,12 @@ because the Rocq kernel checks it, not because of who or what wrote it"),不是 
 
 **Why it matters:** 这是这一波里第一个在一个月内闭环的独立使用循环的验证语料库——复现 → 贡献 →
 证伪 → 上游修复。10-23 的担忧(没人能检查的证明)反转为相反的问题:外部证明多到仓库需要关于"证明可以断言什么"的治理 PR。
+
+## 2026-11-17 — Buzzard 的「已在 Lean 中验证」四项检验：OpenAI 722 篇论文库中，290 个附带代码定理约 38 个连主定理都没有陈述
+
+Xena Project 的文章（Kevin Buzzard，11-12；11-16 以 252+ 分上 HN）是 AI 数学时代的领域清单——编译是必要条件但远不充分，四件事必须检验。**(1) 陈述忠实性**——Lean 陈述说的是论文定理说的吗？本次一手逐字核实：「在附带 Lean 代码的 290 个 OpenAI 定理中，约 38 个的性质是 Lean 代码甚至没有陈述、更谈不上证明论文的主定理。而且 OpenAI 从未声称它做到了！」矛头指向把「论文附带的代码」升格为「论文已被证明」的读者。**(2) 编译**——Anthropic 的 1300 万行 FLT 形式化需要 96 核、500 GB 的机器，而 OpenAI 的 64 万行 Navier–Stokes 工作在笔记本电脑上就能构建（「检查」的成本背景）。**(3) 证明与陈述一致**——对隐藏 hack 的一行式答案是 `lake comparator`：「这个工具检查可信文件中陈述的定理与经不可信 import 证明的定理是否同一。」**(4) 内核健全性**——由 Lean 的多个独立内核缓解，其中一个「被形式化验证到汇编层级无 bug」，防奖励作弊用 `lake comparator --paranoid`（「利用 Lean 官方内核尚未发现的 bug 的恶意代码，除非同时利用多个独立内核尚未发现的 bug，否则通不过这个测试」）。背景：上月 OpenAI 论文库为 **722 篇数学论文、约 45% 附带 Lean 代码**；其中三篇（非 Lean 化的）已因一个符号错误撤稿。操作性警告：绝不在无沙箱时运行不可信的 AI 生成 Lean 代码。
+
+**为什么重要：**「已在 Lean 中验证」正在成为 AI 数学声明的信用货币（本周就有机器验证的 Signal 协议证明与哥德尔笔记本）——Buzzard 的论点是这句话是四个不同的声明，而其中大多数目前没人去跑。这份清单可直接嵌入事实核查的单位纪律：四项各自是关于*不同工件*的声明（陈述、构建、证明、内核），混淆任何两个就是与「把 threat 分当 base 分引用」同类的单位错误。
+
+Sources: [Xena Project](https://xenaproject.wordpress.com/2026/11/12/and-the-proof-is-checked-in-lean/) ·
+[HN](https://news.ycombinator.com/item?id=50515058)

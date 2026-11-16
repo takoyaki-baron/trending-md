@@ -2862,6 +2862,8 @@ Sources: [Scott Helme: Eight Bits of Trust](https://scotthelme.co.uk/eight-bits-
 
 Sources: [Ars Technica: Meta Muse exposes users' secrets](https://arstechnica.com/security/2026/10/meta-muse-exposes-users-personal-and-business-secrets-when-they-share-conversations/) · [Apache Tomcat 11 security page](https://tomcat.apache.org/security-11.html) · [NVD: CVE-2026-101356](https://nvd.nist.gov/vuln/detail/CVE-2026-101356)
 
+**结局，11-17 读取（GhostShares 之弧收口）：**分享于 **10-22** 回归——暂停两天后，David Singleton 在 X 上写道「The underlying issue is now fixed, and sharing is back on」，修复是重新发 URL（「If you shared an artifact before the fix: it now has a new URL. Anyone visiting the old link will see a note asking them to get the new one from you」）。11-17 一手探测：旧形状通配 `*.cf.metaaiusercontent.com` 仍可解析（Cloudflare）但返回 **503 "Shared artifacts are unavailable."**；根域与基础域无解析——内容层只以通配符形式存在。Claroc 自己的文（[blog.claroc.io/ghostshares-muse-passive-dns](https://blog.claroc.io/ghostshares-muse-passive-dns)，10-18 发布、10-20 更新）补了三件别人没有的东西：**(1)** 损害是永久的——「主机名本身、连同标题，仍在被动 DNS 历史里」，即使所有复查的分享都打不开了；**(2)** 存在第二个索引——公共 URL 扫描服务里已躺着 **75+ 份** Muse 分享页的保存扫描，暴露面就在一个普通搜索框里，不需要被动 DNS 订阅；**(3)** 范围之争——Meta 的修复帖说缺陷「specifically about shared artifacts」，媒体报道的聊天分享缺陷「不是事实」，而 Claroc 把每条分享都描述为会话（「Muse shares a conversation when you ask it to」），截图里是 `muse.ai/s/` slug。Meta 未给链接总量（6,800 是 Claroc 的数字），赏金致谢之外无披露时间线（「awards of up to $300,000」），而新分享 URL 是否把标题移出了主机名，外部无法验证——无公开样本，铸造一条需要账号。这条弧给通用教训追加的规则：**重新发 URL 的修复修补的是未来，留下的是已被索引的过去**——对任何标题进主机名的设计，缓解办法不是新 URL，而是旧 URL 永远不会离开第三方的 DNS 与扫描数据库。
+
 ## 10-21 20:03 — 模型辅助漏洞发现中防守方的那一半：降低可达面，而非刷 CVE
 
 Anthropic 前沿红队（Chris Rohlf）让 Claude 跑过 25 个开源项目、**五百万行代码**，三轮扫描报告 **493 个问题**：出厂默认配置下可达的代码、会静默关闭某项控制的配置组合、以及在认证之前就运行的安全敏感代码。清单本身就是产物：**17,000 个配置项，其中 3,842 个与安全相关**；11 个「有门禁」的项目全部存在非预期可达代码；默认配置里有 93 处多余的预认证面；37 处在认证前运行代码或记录状态；61 种配置组合静默削弱了某项预认证控制（162 种被无错误、无警告、无文档地接受的组合中，**94 种直接关掉了控制**）。一个反复出现的模式出现在四个互不相关的项目里：管理员按主机名或通配符写拒绝规则，反向 DNS 关闭，规则被拿去与纯 IP 地址比较，永远匹配不上，**拒绝列表失效即放行**。还有一对冲突配置在软件里存在了 **21 年**，直接禁用了必需的客户端证书校验。
@@ -4918,3 +4920,21 @@ Sources: [iter.ca: Universal XSS in uBlock Origin](https://iter.ca/post/ubo-uxss
 [tor-0.4.9.17 标签](https://gitlab.torproject.org/tpo/core/tor/-/tags) ·
 [Coles Group 更新](https://www.colesgroup.com.au/updates/) ·
 [Guardian：Coles investigates cyber-attack](https://www.theguardian.com/business/2026/nov/16/coles-cyber-attack-incident-data)
+
+## 2026-11-17 — 攻击侧获得具名工具归因：FBI 通报把 Artex AI 渗透测试平台与「不到三小时」完成的真实入侵联系起来
+
+FBI 通报（11-13 签发，TechCrunch 的 Zack Whittaker 11-16 报道）记录了用 **Artex** 发起的真实攻击——这是一个可挂接 Anthropic、OpenAI 托管前沿模型及开源权重替代品的开源 AI 渗透测试平台。FBI 的速度断言：从初始目标到主动攻陷「不到三小时」——嘈杂，但快过人类防守方的响应。点名受害者：**ConnectWise**，经供应链攻击暴露至少 2,250 家客户的 Microsoft 365 环境（微软归因于中国关联的 **Storm-0940**）；**Barracuda**，11-11 经一个从未撤销的暴露第三方凭证被攻破；以及多家**韩国金融机构**，攻击者在薄弱防御与缺失 MFA 背后窃取至少 68,000 人的个人信息。开发者在攻击后关闭了源码，但 FBI 指出旧开源版仍然「广泛可得」——研究者还发现了数百台无密码的 Artex 服务器暴露在公网（TechCrunch，11-6）。
+
+**为什么重要：**这是迄今对 AI 工具出现在具名入侵攻击链中最清晰的归因——不是「模型犯罪」修辞，而是具体的 harness、具体的速度指标、具体的受害者。论题 2 的循环发现（「每个被点名的类别最终无人执行」）现在有了攻击侧镜像：harness 是通用的，受害者是本 feed 整个季度记录在案的无人维护的防护边界（未撤销凭证、缺失 MFA），而它利用的瓶颈——响应时延——恰是 agentic 防御工具正在兜售要解决的问题。
+
+Sources: [TechCrunch](https://techcrunch.com/2026/11/16/fbi-says-artex-ai-open-source-hacking-tool-used-to-breach-networks-in-under-three-hours) ·
+[HN](https://news.ycombinator.com/item?id=50520796)
+
+## 2026-11-17 下午——「Active Directory 时代终于终结」：机器身份成为承重防护边界，厂商署名但被机械性佐证
+
+Infisical 的随笔（11-13 发布，11-16 更新；89+ 分）主张 Active Directory 的成功在于在一个地方回答三个问题——存在哪些身份、什么为它们作保、在哪里有效——而当机器不再是管理员注册的物理服务器时它就断了。现代基础设施是临时的（Kubernetes pod、CI runner、云数据库），于是域加入自动化现在常常自动批准短生命周期云资源；把每个自动化都建成把每个测试数据库和 pod 镜像进 AD，统一目录仍然是「**安全剧场**」：它「在纸面上存在，但缺乏权威性」。证据是日常那种（一个国防组织暴露在公网的 Lambda 函数、策略是 `iam:*`；`.env` 文件里的明文凭证；拒绝目录身份的 GitHub 自动化）。结论：「**Active Directory 是新的大型机：属于它的时代很伟大，但你绝不会从零选择它。**」两个提出的替代——身份联邦（跨平台 OIDC 证明）与凭证托管——都在没有单一目录的情况下恢复三个答案，而结尾论点瞄准 agent：AI agent 将需要自己的身份与策略，机器身份即将变得更为承重。
+
+**为什么重要：**这篇随笔是厂商署名的（凭证托管就是 Infisical 自家产品）而且自己承认——但它的中心诊断正是本 feed 这个月以机械方式验证过的东西：Auth0 的 FGA 检索器（`CVE-2026-107372`/`CVE-2026-108167`）让被策略拒绝的文档落进模型上下文、otterdog 在密钥未设时跳过 HMAC 检查（`CVE-2026-123870`），都是没有人类批准过的防护边界。非人类身份已比人类身份多一个数量级，agentic 工作流又把数量再翻——机器身份是论题 2 整张攻击面地图的基底。
+
+Sources: [Infisical](https://infisical.com/blog/active-directory-machine-identity) ·
+[HN](https://news.ycombinator.com/item?id=50517815)

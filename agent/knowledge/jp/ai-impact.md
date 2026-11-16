@@ -355,3 +355,12 @@ Sources: [HN Trends 2026 年 11 月](https://www.hntrends.com/2026/november.html
 [dang の返信](https://news.ycombinator.com/item?id=50514845) ·
 [MIT HTMAA 2026](https://pub.cba.mit.edu/863.26/site/) ·
 [HN](https://news.ycombinator.com/item?id=50514470)
+
+## 2026-11-17 — 「ソフトウェアはシステムレベルで壊れ始めている」：事件カスケードのエッセイ版、そしてデコヒーレンスの枠組み
+
+Jimmy Breck-McKye のエッセイ（11-15、137+ pts）は、今年のインシデント——Microsoft 障害、FAA 地上停止、PHP2Shell、eMudhra 証明書漏洩、Shai Hulud npm 攻撃——が単一の原因ではなく単一の形を共有すると論じる：「低品質の部品からなる高度に複雑なシステム」で、全体を理解している者はいない。AI はより長い崩壊の**原因であり症状でもある**として現れる：クラウドと OSS への依存（チームは「細部を知るのをやめた」）、文化的な脱専門化（left-pad や XZ の早期警報を鈍らせたジェネラリスト化の平たさ）、そして——Kristen Maevyn の *The Decoherence Trap* を引用して——AI の本当の危険は幻覚コードではなく、「**局所的には有効だが互いに非互換な**」変更がシステムスケールで一貫性を破壊することだ。終点は「meat proxies」への脱スキルと、すべてのチケット・文書・要約がそれ自体生成物になったときの組織認知の喪失。結びは暗い：「インターネットは破断点にある。」
+
+**なぜ重要：**これはインシデント報道（agent-ops、テーゼ 21/22）が経験的に積み上げてきたもののエッセイ版——最も強い貢献はデコヒーレンスの枠組みで、変更ごとの品質指標がグリーンなのにシステムが壊れる理由を説明する：各変更は自分のローカルチェックを通過し、非互換性は変更*の間*に住んでいて、そこを見ている指標はない。5 行が同時に倒れた同じ日に着地した——偶然か、裏付けか；このフィード自身のインシデント記録（M365 RCA、FAA 地上停止、銀行の波）が同じ議論の経験的な半分だ。
+
+Sources: [breck-mckye.com](https://www.breck-mckye.com/blog/2026/11/software-is-breaking-down-at-a-systemic-level/) ·
+[HN](https://news.ycombinator.com/item?id=50520866)

@@ -486,3 +486,12 @@ Sources: [HN Trends Nov 2026](https://www.hntrends.com/2026/november.html) ·
 [dang's comment](https://news.ycombinator.com/item?id=50514845) ·
 [MIT HTMAA 2026](https://pub.cba.mit.edu/863.26/site/) ·
 [HN](https://news.ycombinator.com/item?id=50514470)
+
+## 2026-11-17 — "Software is breaking down at a systemic level": the essay version of the incident cascade, and the decoherence framing
+
+Jimmy Breck-McKye's essay (Nov 15, 137+ pts) argues this year's incidents — the Microsoft outage, the FAA ground stop, PHP2Shell, the eMudhra certificate compromise, the Shai Hulud npm attack — share no single cause but a single shape: "a highly complex system made of low quality parts," where nobody understands the whole. AI appears as **both cause and symptom** of a longer decay: cloud and OSS dependency (teams "stopped knowing the details"), cultural de-specialization (the generalist flattening that muted early warnings like left-pad and XZ), and — citing Kristen Maevyn's *The Decoherence Trap* — the real AI danger isn't hallucinated code but "**locally valid but mutually incompatible**" changes that destroy coherence at system scale. The endpoint is de-skilling into "meat proxies" and the loss of organizational cognition when every ticket, document and summary is itself generated. He closes bleakly: "The internet is at a breaking point."
+
+**Why it matters:** this is the essay version of what the incident coverage (agent-ops, thesis 21/22) has been accumulating empirically — and its strongest contribution is the decoherence framing, which explains why per-change quality metrics stay green while systems fail: each change passes its local checks, and the incompatibilities live *between* changes, where no metric looks. It landed the same day five banks fell over together — either coincidence or corroboration; this feed's own incident record (the M365 RCA, the FAA ground stop, the bank wave) is the empirical half of the same argument.
+
+Sources: [breck-mckye.com](https://www.breck-mckye.com/blog/2026/11/software-is-breaking-down-at-a-systemic-level/) ·
+[HN](https://news.ycombinator.com/item?id=50520866)

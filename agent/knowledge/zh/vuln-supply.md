@@ -1558,3 +1558,13 @@ release notes 领头的两条：
 Sources: [Gitea 博客：28.4.0 release](https://blog.gitea.com/release-of-28.4.0/) ·
 [GHSA-5mx6-8rwm-52wf](https://github.com/go-gitea/gitea/security/advisories/GHSA-5mx6-8rwm-52wf) ·
 [v28.4.0 release](https://github.com/go-gitea/gitea/releases/tag/v28.4.0)
+
+## 2026-11-17 — VulnCheck 单日入库 75 条记录（单 CNA 单日纪录），而这波浪潮的缓解常常是「没有可升级的版本」
+
+NVD 的 11 月 16 日批次带有 **75 条来自 VulnCheck CNA 的 CVE 记录**（约 12:17–15:17 UTC 发布）——当日最大的单一来源浪潮，把旁边的 Samsung 39 条与 GitHub 30 条远远甩开。头条集群是自托管 Web 框架中的认证绕过：**Tensei ≤ 0.11.5** 在 `JWT_SECRET` 未设时回退到硬编码 JWT 签名密钥 `auth-secret-key`（9.8）；**NodePress ≤ 8.5.1** 带两个独立的 9.8 认证绕过；**Prime CMS ≤ 0.4.0-beta.0** 出厂即注释掉 `isAuthenticated()` 守卫、`createAbility()` 把所有角色硬编码为 admin（9.8）。周围还有：Kalmia、REBUILD（四条）、DeepAudit（五条）、thirdweb Dashboard、Contentlayer 8.8 代码注入，外加 SeaweedFS、LimeSurvey、wallabag、GitBucket、PrestaShop、Sandboxie-Plus 与 Axigen。每个评分都是 VulnCheck 自己的（CVSS 3.1，`Secondary` 槽位）。操作性要点——python-jose 教训在浪潮尺度上重演：其中数个的受影响上限*就是*最新版本（Prime CMS 自 2023 年 1 月起无提交；Tensei 最后推送 2026 年 2 月），没有打过补丁的版本可升级；诚实的缓解是停用或分叉。
+
+这波浪潮是对 npm 时代长尾的一次普查：看起来是生产级的框架、陷入休眠、然后被同一家研究机构系统性审计。旁边，达索系统自家 CNA 于 11-16 开出 CVSS **10.0**：`CVE-2026-93664`，3DEXPERIENCE 平台 **Station Launcher App**（R2023x–R2026x 各版本）中不可信数据的反序列化，「可能导致未认证远程代码执行」，外加两个同胞——`CVE-2026-77033` 与 `CVE-2026-19732`，同组件的 9.9 OS 命令注入。公告不列出修复版本；修复存在于达索支持知识库（文档 QA00000522688）之后、客户门户需要登录——Cyrus SASL 形态：当公告把你导向支持门户时，假定修复是服务器端模块安装，而非版本号升级。三条记录在 NVD 仍为 `Received`；每个评分都是厂商 CNA 自己的。
+
+Sources: [VulnCheck 公告：Tensei](https://www.vulncheck.com/advisories/tensei-through-0.11.5-authentication-bypass-via-hard-coded-jwt-secret-in-tensei-auth) ·
+[CVE-2026-93664](https://www.cve.org/CVERecord?id=CVE-2026-93664) ·
+[3DS 公告](https://www.3ds.com/trust-center/security/security-advisories/cve-2026-93664)

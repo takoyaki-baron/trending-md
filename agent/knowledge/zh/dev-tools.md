@@ -1502,3 +1502,19 @@ Sources: [Debian bug #1154101](https://bugs.debian.org/cgi-bin/bugreport.cgi?bug
 [nvim-mini/mini.nvim](https://github.com/nvim-mini/mini.nvim) ·
 [Tangled 上的 Parcel](https://tangled.org/rockorager.dev/parcel) ·
 [HN](https://news.ycombinator.com/item?id=50512218)
+
+## 2026-11-17 — 货架：Jiff 1.0 承诺稳定、MuJoCo 跨入 4.x、S2 变成 DNS 运营商、TRMNL 拿自家木工坊押注彩色墨水屏、民间经验不灭
+
+- **Jiff 1.0**（BurntSushi/Andrew Gallant，188+ 分）：「除非在 Jiff 的 API 里发现重大缺陷，我计划无限期地坚守 Jiff 1.0。」时区是核心 API 关切（显式 DST 消歧：默认 `compatible`，另有 `earlier`、`later`、报错的 `unambiguous`），分层类型（`civil::Date/Time/DateTime`、`Timestamp`、`ZonedDateTime`），双时长模型（日历感知的 `Span`、物理时间的 `SignedDuration`），受 Temporal 启发，支持 RFC 3339/9557/2822。采用名单解释了 1.0 的时机：已进入 **uv、Cargo、Starship、fd、Nushell、Jujutsu、uutils/coreutils 与 AWS LLRT 的 Temporal 实现**；crates.io 最新版即 **1.0.0**（本批次核验）。Rust 标准库仍没有 datetime 类型——这以生态尺度补上了缺口，出自 ripgrep 作者，其 API 稳定性履历让无限期承诺比多数 1.0 更可信。
+- **MuJoCo 4.0.0**（11-6）+ **4.0.1**（11-11）：speculative contacts（快速凸几何体不再在一个时间步内穿透薄障碍物）、elasto-plasticity（`mjData.plastic` 中的状态化塑性变形，连续体 flex 的 von Mises J₂ 回映）、Python 包拆分（`mujoco-core`/`mujoco-studio`/`mujoco`）、flex 模型上 1.4–3× 更快的稀疏 Newton 求解——随后 4.0.1 修复了 4.0.0 自引的稀疏 Cholesky bug（合并超节点 → Hessian 因子错误 → 收敛慢/发散，#3767），并经 `mujoco-studio-wasm` 把 Studio web 查看器带到 Windows。周榜 +1,922★；4.0.1 的故事是诚实的一面——旗舰仿真版本里的数值求解器回归，恰是基准数字藏起来的那类 bug。
+- **S2 在 Spanner 上自建权威 DNS**（62+ 分）：每个「basin」都要在创建瞬间可解析，但 Route53 把记录 API 限流在「每秒约 5 次 UPSERT（AWS 限流文档最近改版，上限可能更高）」——而且曾有攻击者创建数万个 basin、耗尽配额、留下数小时的积压（旧的 100-basin 上限由此而来）。修法：Go + `miekg/dns`，直接对 Google Cloud Spanner（他们已在跑的强一致 basin 数据库）做实时 SELECT 应答——没有会漂移的同步系统；NXDOMAIN 攻击经济学交给前面的 Cloudflare DNS Firewall，源站锁定 Cloudflare IP，`ns-leak-test` 防 SOA/NS 响应泄露源站，横跨两个 GKE 区域。AWS 自家的 DNS 限制文档记载了每秒限流（本批次核验）。「永远是 DNS」——这里对配额滥用循环的诚实回答是变成 DNS 运营商。
+- **TRMNL Frame**（116+ 分）：31.5 英寸彩色 ePaper 显示屏，基于 E Ink 的 **Spectra 6** 平台（平台页面在 eink.com 本批次在线核验），木外壳出自公司自家的 Pine Mountain 木材工坊；颜色质量的赌注在软件——**Lazarus** 颜色转换引擎，宣称「市场上任何 Spectra 6 显示屏中最好的颜色匹配」，将**开源**；Clock Sync 把刷新改到每日设定时刻（更少闪烁、更长电池）；microSD 完全离线运行；第一批约 **470 台**（美/加/墨/澳），少数年底发货、多数 2027 年初。
+- **DeanChensj/jiangshan-map**（江山时序，+285★，当日仓库榜第 2）：无依赖静态地图集，横跨 **公元前 403 年至今**的 2400 年中国史——18 个历史时期、198 个疆域快照、「ghost boundary diffs」边界演化、任意城市的 2400 年行政区划谱系、人物事件线；附带 MCP server（零 npm 依赖）、现成 agent skill、`window.atlasAPI` 浏览器 API、兼容 Leaflet/MapLibre/QGIS 的 GeoJSON 导出。数据来源异常诚实：轮廓起于 aourednik/historical-basemaps 后经手绘重描；府县级边界来自 CHGS V6 与 Hartwell 中国历史 GIS、许可限于学术非商业；疆域是「大致管辖范围的示意近似，不是测绘边界」。
+- **2007 年的 ThinkPad 电源键仪式**（masnick.com，257+ 分）：拔电源、卸电池、以 1 秒间隔按 10 次电源键、再按住 30 秒、装回开机——一篇演讲前彻底没救的 z61t 立即复活；客服的官方解释是「静电释放」，被追问后的诚实解释是「哥们，你知道的和我一样多……但你的机器能开机了」。成功报告从 2008 延伸到 2015 年及 ThinkPad 之外（Acer、IdeaPad、一台 S10）。带合理解释机制（放掉卡死电源状态的残余电容电荷）的民间经验，加 18 年不肯消失的现场数据。
+
+Sources: [burntsushi.net](https://burntsushi.net/jiff/) ·
+[MuJoCo 4.0.0](https://github.com/google-deepmind/mujoco/releases/tag/4.0.0) ·
+[s2.dev](https://s2.dev/blog/dns-server) ·
+[TRMNL](https://trmnl.com/blog/introducing-frame) ·
+[jiangshan-map](https://github.com/DeanChensj/jiangshan-map) ·
+[masnick.com](https://masnick.com/posts/the-secret-thinkpad-powerbutton-code-to-bring-dead-laptops-back-to-life/)

@@ -329,3 +329,12 @@ Sources: [HN Trends 2026 年 11 月](https://www.hntrends.com/2026/november.html
 [dang 的回复](https://news.ycombinator.com/item?id=50514845) ·
 [MIT HTMAA 2026](https://pub.cba.mit.edu/863.26/site/) ·
 [HN](https://news.ycombinator.com/item?id=50514470)
+
+## 2026-11-17 — 「软件正在系统性崩坏」：事件级联的随笔版本，与退相干框架
+
+Jimmy Breck-McKye 的随笔（11-15，137+ 分）主张今年的事故——微软故障、FAA 停飞、PHP2Shell、eMudhra 证书沦陷、Shai Hulud npm 攻击——不共享单一原因，但共享单一形态：「一个由低质量部件组成的高度复杂系统」，其中没人理解整体。AI 以**既是原因又是症状**的身份出现在更长的衰变里：云与 OSS 依赖（团队「不再了解细节」）、文化上的去专业化（淹没 left-pad 与 XZ 这类早期警报的通才化压平），以及——引用 Kristen Maevyn 的 *The Decoherence Trap*——AI 真正的危险不是幻觉代码，而是「**局部有效但互相不兼容**」的变更在系统尺度上摧毁一致性。终点是退化成「代理肉壳」（meat proxies），以及当每张工单、每份文档、每条摘要自身都是生成产物时组织认知的流失。他的结语阴沉：「互联网正处在断裂点。」
+
+**为什么重要：**这是事件报道（agent-ops、论题 21/22）一直在经验层面积累的东西的随笔版本——而它最强的贡献是退相干框架，它解释了为什么逐变更的质量指标全绿而系统仍然失效：每个变更都通过自己的本地检查，不兼容性活在变更*之间*，那里没有任何指标在看。它落在五家银行同时倒下的同一天——要么是巧合，要么是佐证；本 feed 自己的事件记录（M365 RCA、FAA 停飞、银行浪潮）就是同一论证的经验那一半。
+
+Sources: [breck-mckye.com](https://www.breck-mckye.com/blog/2026/11/software-is-breaking-down-at-a-systemic-level/) ·
+[HN](https://news.ycombinator.com/item?id=50520866)

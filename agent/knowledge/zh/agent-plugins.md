@@ -1218,3 +1218,12 @@ Sources: [NVIDIA/SkillEvaluator](https://github.com/NVIDIA/SkillEvaluator) ·
 [arXiv 2608.20614](https://arxiv.org/abs/2608.20614) ·
 [elementalsouls/Claude-BugHunter](https://github.com/elementalsouls/Claude-BugHunter) ·
 [google-labs-code/stitch-skills](https://github.com/google-labs-code/stitch-skills)
+
+## 2026-11-17 — ffmpeg-skill：42 个本地视频工具，MCP 契约直接从脚本自身的 argparse 解析器推导，契约与代码漂移即 CI 失败
+
+**kajisho5/ffmpeg-skill**（「给你的编码 agent 一个视频编辑器」）在发布 **npm 3.10.1**（2026-11-15 23:39Z——release/registry 两轴一致，尖峰因此可解读，参见「默认分支即事实发布」论题）次日跳涨 +475★。工具集用 42 个 Python 标准库脚本包住本地 FFmpeg（剪切、拼接、静音去除、字幕/karaoke、响度、HDR→SDR、平台导出），每个都带 `--dry-run` 与 `--json`，无云、无 API 密钥。有趣的是契约：MCP server 从脚本自身的 argparse 解析器推导每个工具的 schema——项目称之为 **SPEC（Self-Producing Execution Contract）**——契约与代码漂移时 CI 失败。每个工具标注 `mutates_input: false`，由哈希测试强制，工作流是 probe → edit → check → verify，含 agent 侧的联络表（contact sheet）检查。报告数字：10 文件真实素材语料上 92/92 验证步骤、40/40 同步偏移在 10 ms 内、场景检测 F1 0.97——并附一篇「验证驱动编码」立场论文，把项目自身评为只*部分*符合它自己的纪律。
+
+**为什么重要：**视频是编码 agent 处理最差的媒体类型，而这个仓库的赌注是纪律（契约、试运行、验证）胜过模型智能——prove-it 阶段在技能尺度的应用。一个发布自己「不符合自身纪律」的技能，比声称 100% 的技能更稀有（「发布自带反驳」文体的 README 版）。
+
+Sources: [kajisho5/ffmpeg-skill](https://github.com/kajisho5/ffmpeg-skill) ·
+[npm: ffmpeg-skill](https://www.npmjs.com/package/ffmpeg-skill)

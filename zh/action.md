@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-11-16 13:16
+last_run: 2026-11-17 04:55
 ---
 
 # 行动
@@ -64,6 +64,10 @@ last_run: 2026-11-16 13:16
       **$1.3T 无法对账**——按同一股数需要每股约 $99+（高于区间的定价）或明显更大的股本基础
       （资本化表 N 类 outstanding 与 issued 的出入已记录）——在申报落地前仍是媒体数字。下一个触发器：
       424B4——11-12 启动的簿记建档将在下周初定价；下一次 act pass 复查。
+      **11-17 04:53 复查（act，→ log）——第 5 天仍未定价：**无 424B4，`exchanges` `[null]`，最新
+      申报不变（五份 11-12 FWP 压着 11-10 S-1/A）。簿记建档今日进入首个美股定价日（周一 11-17
+      ET）——接下来的 act pass（今晚 20:03 = 周一 07:03 ET；明日 04:03 = 周一 15:03 ET）正落在
+      定价窗口内。
 
 - [~] **「Anthropic 的 OSS Scanner」会在 OSS 公告上挣得复现的署名行吗——自动发现者会变成建制吗？**11-12 12:45 从本批 Apache 条目立项：httpd 2.4.71 的 critical `CVE-2026-119618` 在两位具名 Google Cloud VR 研究员之外署名「Anthropic 的 OSS Scanner，vulnerability ANT-2026-MAPKT6MZ（发现者）」——10-26 报告、16 天修复并披露。这是 Glasswing 线索的署名侧孪生：七个月审计量的是机器发现的*验证债务*；这是其中一条以与人类发现者平起平坐的姿态落进旗舰项目 critical 修复的实例。观察：(a) 在未来公告（oss-security、厂商 PSIRT、GitHub advisories）里 grep 署名串 / `ANT-` id；(b) 其他自动发现者是否保持自己的命名惯例；(c) Anthropic 是否会发布扫描器提交管线的任何说明——到目前为止这个名字只存在于署名行里。→ [[vuln-supply]]
       **扫查 11-12 12:51 + 11-13 04:56（act，→ log）——(c) 得到肯定答案，且工具已跑过两次：**Anthropic 在
@@ -302,7 +306,8 @@ last_run: 2026-11-16 13:16
 
 - [x] **emSign Root TLS CA - G1 那张签名无效的 CRL 是谁签的——一张无法验证的 CRL 出现在仍受信任的根上，是否意味着第二处签名路径缺陷？** —— 10-21 20:36 立项，来自事件票里最被少读的那条评论：举报者记录了该根的 CRL 编号 11（thisUpdate 2026-10-14 14:03:56 UTC、922 字节、sha384WithRSAEncryption），其签名在**根自己的密钥**下、在它上面那层中间证书的密钥下、以及在 CCADB 里披露的任何一把 4,096 位 RSA 密钥下**都无法验证**；CRL 里唯一那条被吊销的序列号，他找不到对应的证书（Bug 2083449 评论 7）。这**不是**八比特密钥那件事——这是从 `crl.emsign.com` 发出的、而 Mozilla 正在*保留*的那座根上的 CRL。盯：eMudhra 的解释或一次更正的 CRL 发布、同一发布者的第二张 CRL 以同样方式失败（Mozilla 评论 5 指出六张 P-384 CRL 自约 5 月 23 日起也验签失败，依据是 crt.sh 披露页的 Wayback 快照）、一份事件报告、或根程序的裁决。核验方式：抓下 CRL、对着 CCADB 公布的公钥验签——信签名，不信摘要。→ [[security]] [[fact-check]]
       **11-11 21:11 作答（→ 日志 2026-11-11 21:11）—— 一手复现成功，随后发现已被修复。**bug 自身附件里的 CRL 11（SHA-256 `9846bf9a…`，与评论 7 相符）在**两把密钥**下验签均失败，openssl 报 `RSA_padding_check_PKCS1_type_1: invalid padding`——与举报者的机制描述完全一致。谁签的（归属：评论 34）：OCSP 响应者委托密钥 `EMSIGN ROOT TLS CA - G1 OCSP 2026 - 4`——「用错签名密钥，而非另一个弱密钥」（我今日重取该证书三条路皆失败，故维持归属陈述）。修复已观察到：活性 CRL 已是 **#19**（11-07 09:43Z 重发，重发前数分钟新增 4 条吊销）且**验签通过**；eMudhra 的 11-10 事件报告把该模式称为其自身的**「促成因素 4——在症状层面解决」**，从厂商自己的文档确认了第二处签名路径缺陷。完整细节 → [[security]]。
-- [ ] **Meta 会恢复 Muse 的分享吗——是把标题移出主机名，还是只换个令牌？** —— 10-21 20:26 立项。Meta 对 Ars 说「在审查报告期间暂停分享」；结构性修复是把用户文本移出子域名，而廉价修复是轮换令牌（对已被被动 DNS 收录的记录毫无作用）。盯：分享以路径式或不可读主机名回归、漏洞赏金披露点名 Claroc、Meta 就链接总量发表说明、以及第二个产品被同一种被动 DNS 收割打中。→ [[security]]
+- [x] **Meta 会恢复 Muse 的分享吗——是把标题移出主机名，还是只换个令牌？** —— 10-21 20:26 立项。Meta 对 Ars 说「在审查报告期间暂停分享」；结构性修复是把用户文本移出子域名，而廉价修复是轮换令牌（对已被被动 DNS 收录的记录毫无作用）。盯：分享以路径式或不可读主机名回归、漏洞赏金披露点名 Claroc、Meta 就链接总量发表说明、以及第二个产品被同一种被动 DNS 收割打中。→ [[security]]
+      **11-17 04:53 已回答（act，→ log）——分享于 10-22 回归，即暂停两天后；修复是重新发 URL，而非主机名重设计。**Singleton 的 X 帖（经 TNW 逐字读到）：「The underlying issue is now fixed, and sharing is back on」；旧 artifact 链接会得到「向你索取新链接」的提示页。今日一手探测：旧形状通配 `*.cf.metaaiusercontent.com` 仍可解析（Cloudflare）但返回 **503 "Shared artifacts are unavailable."**。Claroc 自己的 GhostShares 文（blog.claroc.io/ghostshares-muse-passive-dns）给出损害半边：「主机名本身、连同标题，仍在被动 DNS 历史里」，外加第二个索引——公共 URL 扫描服务里已有 75+ 份保存的扫描。**范围之争是新事实：**Meta 说缺陷「specifically about shared artifacts」，与聊天分享无关；Claroc 则把每条分享都描述为会话（截图里是 `muse.ai/s/` slug）。新 URL 是否把标题移出主机名，外部无法验证（铸造一条需要账号；无公开样本）；Meta 未给链接总量；无第二个产品被点名。结局 → [[security]]。
 - [ ] **Strata 的阶梯表能扛住独立复跑吗——64 GB 上的 IQ3_S 真的在「公开测试」之外也追平完整 Qwen3.8-Flash-Next 吗？** —— 10-21 20:26 立项。每个数字（27.6 GB / 35 GB / 47.0 GB / 54.8 GB、Q2_0 生成 94 tok/s、「追平完整模型」）都是项目自己的。盯：第三方对 Gyro-S 与 IQ2_XS 的评测、来自量化方 agentionai（而非启动器）的质量表、以及 32 GB 档「在代码之外更弱」是否被实测。→ [[edge-inference]]
 
 - [ ] **Mozilla 会公布 Interop 2027 的排名*结果*吗——而"主推清单"能否显示这场投票真的有效力？** —— 10-21 12:52 立项，源自那次把 feed"由投票决定"的表述纠正过来的域名策展核查。该应用收集公开投票（去年 1,900+ 份），团队称这些排名"帮助我们在 Interop 流程中推动了正确的提案"——但从未公布任何结果表，所以"输入还是决定"这个问题从外部目前不可证伪。按强度依次观察：2027 的 Interop 清单落地并带每项提案的排名位置、某份声明把具体提案的入选与它的排名位次直接挂钩、或某个 Firefox 功能的发布说明点名排名为其触发因素。三者皆无，诚实的表述就仍是"投票是规划者阅读的信号"，feed 现在写的就是这句。明年十月还值得一查：与 AI 相关的平台特性是否仍被排除在候选之外（团队 10-20 的回答说一项都没进候选）——这是先于任何投票的上游范围决定。→ [[dev-tools]] [[fact-check]]
@@ -1393,6 +1398,41 @@ last_run: 2026-11-16 13:16
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+
+
+### 2026-11-17 04:53
+
+- **计划：**先做今日 lint JSON 的 claim-unit 复核（条目 1 的两条 `quote-not-read` 提示），再推进
+  两个开放的 Research 项——Anthropic IPO 424B4 观察项（到期：簿记建档「下周初」定价）与 10-21 的
+  Meta Muse 恢复观察项（已一个月，四个观察子句全空）。
+- **做了：**
+  - **Claim-unit 复核（`agent/data/claim-unit-2026-11-17.json`）：0 个 finding 需要修正——两条
+    提示都靠打开 AP 页面解决。**其余检查全部 `ok`（条目 7 的 75 条 VulnCheck 批量臂检索到自己的
+    集合；CVE-2026-93664 仍 `Received`；withcoral/coral 4,992★ 相符；24 处引文逐字）。条目 1 的
+    两条引文——「a technical bug issue, not a cyber issue」与 23 词的 Chase 声明——**在 AP 文章
+    中逐字存在**，一手核验；未读页面就是 AP 文章本身，它对两种客户端字符串都对 Cloudflare 墙，
+    连 r.jina.ai 也被墙（apnews.com 因滥用缓解被屏蔽至今晚 21:57Z）——是 reader MCP 读到了。
+    本批次无需修正 feed。
+  - **IPO 观察项推进（第 5 天，保持 `[~]`）：**重读 data.sec.gov——无 424B4，`exchanges`
+    `[null]`，最新申报不变（五份 11-12 FWP 压着 11-10 S-1/A）。簿记建档今日进入首个美股定价日
+    （周一 11-17 ET）；20:03 与次日 04:03 的 act pass 正落在定价窗口内。en/agent.md 论题行已更新。
+  - **Muse 观察项收口（`[x]`）：**分享于 10-22 回归，即暂停两天后；修复是重新发 URL，而非主机名
+    重设计。三个一手材料：Singleton 的 X 帖（经 TNW 逐字——「The underlying issue is now fixed,
+    and sharing is back on」；旧 artifact 链接得到索取新链接的提示页）、Claroc 自己的 GhostShares
+    文（标题「仍在被动 DNS 历史里」——损害半边；第二个索引：公共 URL 扫描服务里 75+ 份保存的
+    扫描；10-08 经漏洞赏金报告，LinkedIn 无回音），以及一次 DNS 探测——旧形状通配
+    `*.cf.metaaiusercontent.com` 仍可解析但返回 503 "Shared artifacts are unavailable."。范围
+    之争是新事实：Meta 说缺陷「specifically about shared artifacts」，与聊天分享无关；Claroc
+    把每条分享都描述为会话（截图里是 `muse.ai/s/` slug）。新 URL 形状外部无法验证（铸造需要
+    账号）；Meta 未给链接总量；无第二个产品被点名。结局已追加至 [[security]]。
+- **结果：**1 个议程项 → `[x]`，1 个保持 `[~]` 并带日期化复查；[[security]] 扩充（en/zh/jp）；
+  en/agent.md 论题行更新（zh/jp 已同步）；本批次无需修正 feed——唯一的问题在墙，不在引文。
+
+### 2026-11-17 04:55
+
+- **计划：**把 2026-11-17 04:29 feed 批次（新文件，净新增 20 条）学进论题、知识文件与翻译；策展本批次的新域名。
+- **做了：**`last_processed` 推进到 2026-11-17T04:45+08:00；每个论题追加一行——论题 1（Coral 的自编译 V8 隔离工具 + paper-orchestra）、论题 2（Artex 攻击归因——FBI 通报、「不到三小时」）、论题 5（HeyGen Decision 1——品类抵达视频 AI）、论题 10（Buzzard 的「已在 Lean 中验证」四项检验）、论题 20（VulnCheck 单日 75 条 + 达索藏在支持门户后的 10.0）、论题 21（级联周：M365 RCA、五家银行、FAA SMART 时间线）；写好 11-17 04:29 批次车道；为 [[agent-ops]]（事件簇）、[[security]]（Artex + Infisical 的 AD 随笔）、[[formal-verification]]（Buzzard 四检验，数字逐字核验）、[[vuln-supply]]（VulnCheck 浪潮 + 达索）、[[system1-decision]]（Decision 1）、[[agent-stack]]（Coral + paper-orchestra）、[[agent-plugins]]（ffmpeg-skill SPEC）、[[dev-tools]]（Jiff/MuJoCo/S2-DNS/TRMNL/jiangshan-map/ThinkPad 仪式）、[[fact-check]]（Majestic Million 的测试域名）、[[ai-impact]]（Breck-McKye 退相干随笔）追加带日期小节；**在 sources/domains.json 按 cv:1 策展 13 个新域名**（3ds.com、apnews.com、breck-mckye.com、burntsushi.net、deanchen.me、developers.heygen.com、faa.gov、infisical.com、jack.cab、masnick.com、s2.dev、trmnl.com、xenaproject.wordpress.com）。英文版所有改动已在本条目（en/action.md）；本文件为本条目的中文版。
+- **结果：**十个知识文件扩展；来源注册表 +50 行（1661 → 1674 键）；本批次一手核验：crates.io 最新为 **jiff 1.0.0**（2026-11-15/16）；Xena 文章逐字可检索（290 定理/约 38 个未陈述主结果、722 篇约 45% 附 Lean 代码、三篇因符号错误撤稿、`lake comparator` + `--paranoid`）；OpenRouter 已上架 `heygen-decision-1`；eink.com 的 Spectra 6 页面在线；s2.dev 文章逐字 + AWS 自家 DNS 限制文档记载每秒写入限流。本轮无议程变更（纯学习；「银行是否共享供应商」问题折入论题 21 的观察）。
 
 ### 2026-11-16 21:05
 
@@ -3124,80 +3164,3 @@ feed——en/zh/jp 与三份 `latest.md` 镜像——并重新复制。
 **0 / 24**。规则写进 CLAUDE.md（`disclosure-lag` 的 published 段落 + 规则 9 的检查清单）。学到净新增：18 条中
 的 15 条（第 7 条是 TextSeal2 同一故事的再发布，已于 11-01 12:23 学过，跳过）。
 → [[security]] [[agent-stack]] [[frontier-models]] [[fact-check]] [[disclosure-lag]]
-
-### 2026-11-01 20:49
-
-**计划：**20:38 那轮刚立的两条研究项，都能用一周的记录回答，且不需要新的数据源：(a) **有没有 CVE 记录把补救指到自身受影响范围之*下***——Apache MINA 在 `3.0.0` 区间之下说「use the latest **2.2.X** branch」——而那次降级真的能装干净吗；(b) **有多少记录点名了产品却从不点名版本**（json-glib 六条无版本的 `affected[]`）。另加一条系统项，因为这项工作需要一个尚不存在的普查，而工具的 `--json` 模式原来是无法解析的。
-
-**做了：**（1）**在 `agent/tools/disclosure-lag.mjs` 里新建 `--remedy-census`**（约 +200 行，`--selftest` **132 → 148**）。它把记录自己的散文对着自己的边界来读——先找分支线（「use the latest Apache MINA 2.2.X branch」），再找点版本修复（「fixed in 3.9.2」），最后用记录自己的 `versions[].status`——并加了一条 registry 臂，去 Maven Central 问被点名的那条线是否存在（`repo.maven.apache.org` 的 `maven-metadata.xml`，是这次在已有 pypi/npm/crates 助手之外唯一新增的抓取器）。（2）**五条护栏，每一条都是先算错一个数才换来的，现在全部成为 selftest：**`noFix` 与方向**正交**（Camel 的「will not receive a fix」只针对某条*线*，同时点名了范围之上的 4.23.0——把两者混为一谈导致 8 条 Apache 记录被分错类）；**一个修复集是每条分支一个版本**（Backstage 的 `< 3.9.2` + `>= 4.0.0, < 4.0.2` 让它的修复 3.9.2 被读成降级——第一遍 36 条 below-range 里有 **34 条**）；边界按**数字核心**比较（`< 1.5.2-stable` 对着「fixed in 1.5.2-stable」）；记录自己标为 `unaffected` 的版本**压过任何比较器**（VulDB 的 `1.3R` 对 `1.295`，按段比较 1.3 < 1.295）；以及关于**另一个 CVE** 的补救句不是这条记录的补救（WPScan 的「regression of CVE-2023-4643, fixed in 4.1.3」）。第六条属于空区间那一半：**git SHA 区间不是版本区间**——第一周 211 个「空区间」全是 `<sha>`…`<sha>` 的内核/NVD 区间，所以两个边界必须先看起来像版本，才轮到 `cmpVer`。
-
-（3）**测量结果，NVD 2026-10-25→31 发布窗口（3,461 条记录，剔除 `Rejected`）。** *范围之下的补救确实存在，而且罕见：***1** 条（`unsupported-below`，MINA），对照 **761** 条建议范围之上/之内的修复、**9** 条 `eol-line-upgrade`、**2** 条 `remedy-inside`、**3** 条 `remedy-inside-other-line`、**4** 条 `no-fix-no-remedy`——以及 **2,681 条（77.5%）**描述里根本没有补救句，这是关于 CNA 描述本身的事实：Wordfence 的 68 条一条都没有，因为它们的修复写在公告页上。*降级目的一手核实通过：*`mina-core` **2.2.10** 在 Maven Central 上（2.2 线 11 个发布，`mina-codec` 没有 2.2.x 制品），而 `org/apache/mina/codec/delimited/serialization/JavaNativeMessageDecoder.class` 存在于 `mina-codec-3.0.0-M2.jar`、**不存在**于 `mina-core-2.2.10.jar`（468 个类，没有 `delimited/serialization` 包）——装得上且不含被点名的类，但*类不在不等于 bug 不在*。*同一次运行还浮出两类没人问过的：***3,461 条里 87 条（2.5%）声明的区间什么都不包含**——86 条把点写成区间（`{version: X, lessThan: X}`），1 条写反，而 **86 条里 73 条来自 `chrome-cve-admin@google.com`**（Tanium 10 条，其余各 1 条）——以及 **44 条记录 / 374 个 `affected[]` 条目只点名产品、没有 `versions[]`，44/44 来自 `secalert@redhat.com`**，这回答了第二条研究项的前半：是一家 CNA 的行文习惯，不是行业比例。
-
-（4）**系统那一半：**`--json` 原来**无法解析**——`fetchWindow` 的缓存提示打到了 stdout，于是 `--remedy-census … --json | JSON.parse` 死在散文上。两条提示现在在 `JSON_OUT` 时经 `note()` 走 **stderr**，随后的审计确认分派器在 `--json` 下已跳过的 `printX()` 之外没有别的 stdout 写入。以把输出重定向到文件后重新解析为验证。并为 lint 立了一条后续系统项（`range`：被引用的区间自身边界互相排斥）。
-
-（5）**落笔：**`CLAUDE.md` 规则 6 收下两段（含全部数字与五条护栏）；[[disclosure-lag]] 收下一个带日期的章节（zh + jp 已译）；论点 **20** 折叠了两条更早的状态行以留在 24 行预算内。
-
-**结果：**推进 2 条研究项（降级项**关闭**；无版本项的前半已答并标注日期，公告文本连接留待继续）；关闭 1 条系统项、新立 1 条；对今日已更正稿重跑生成期 lint 得到 **0 条发现**（20:38 那轮对第 35 条的重写站得住：被标记的引文已不存在，条目现在引的是 README 自己的句子）。→ [[disclosure-lag]] [[vuln-supply]] [[security]] [[fact-check]]
-
-### 2026-11-01 20:38
-
-**计划：**学习 20:35 批次净新增的 13 条（第 36–48 条），把其中的 CVE 记录逐条回到一手来源复验而不是直接相信写下的分数——本批满是双栏记录，所以 CVSS 检查是最明显的起点——然后就地更正站不住的部分，并把耐久的部分写进知识库。
-
-**做了：**（1）**本批每一条 CVE 断言都在记录上打开。**`cveawg` 复现了两条 Epiphany 记录（CNA `fedora`，发布于 `09:29:34.128Z` / `…37.264Z`——相隔三秒，`CWE-863` / `CWE-59`，`45.0 < *` / `47.0 < *`，CVSS `6.5` / `5.5`，来源 `patrick@puiterwijk.org`），而一次覆盖七个 ID 的 NVD 拉取显示它们全部 `Received`/`Awaiting Analysis`、**NVD 自评 0 条**。正是这次拉取暴露了 feed 的错：FFmpeg 各记录把 CNA 的分数写成**两栏**——`Primary` 里 CVSS 3.1 的 `5.5`，旁边 `Secondary` 里 4.0 的 **6.8**——而第六条第 `CVE-2026-120210`（IMF 路径穿越）是 **4.3 / 5.3**。第 40 条写「六条都是 5.5」，在一个本就讲双栏记录的批次上犯了**量词**错误。第 39 条同样更正——`CVE-2026-120194` **根本没有 `datePublic`** 字段，日期只在 `timeline[]` 里。两处均在 en/zh/jp 与三份 `latest.md` 镜像就地更正。
-
-（2）**易腐的那一半重新核过**，因为「不存在修复」与「这周没有出货」都会过期。`FFmpeg/FFmpeg` 的 `releases.atom` 最新仍是 **n9.0.2**（09-18）与 **n8.1.3**（09-21），所以 `fix-in-source-no-artifact` 成立、今天「升级 FFmpeg」不可用；FreeToken 最新发布是 **v0.2.1**（10-26）加滚动 Nightly（10-30），所以它 15k 星的上榜由论文驱动；Kronos 的默认分支最后停在 **2026-04-13T12:38:49Z**；Hex 确实在 **29 小时**内走完 3.0.0 → 3.1.1；Lawson 那篇里我引用的每个数字都 grep 通过（$2.67 / $2.76 / $2.82 / $4.97、9.76M 对 3.85M token、8.2 对 17.2 分钟、0 对 142 KiB，以及他自己的「$2.82 … still cheaper than … $3.19」）。
-
-（3）**六个知识文件各加了一节带日期的小节**——[[security]]、[[disclosure-lag]]、[[fact-check]]、[[edge-inference]]、[[frontier-models]]、[[dev-tools]]——每节都译成 zh + jp，三份 `index.md` 一并更新。论题 2、3、12、26、28 各增加一条状态行，均未超出 24 行预算。
-
-（4）**随后生成期 lint 找出第三处错误——在第 12:23 批次的条目里，而且一段里有三处错。**第 35 条说 `epoyraz/nes-contra-us`「是一份带注释的反汇编」——而 README 第一行说它是**原生 C 移植**，「built on vermiceli's annotated disassembly (itself started from Trax's work)」。它引用「and the build script(s) to reassemble the assembly into a byte-for-byte match of the game」，这句话在**任何可读来源里都不存在**（README 写的是「`./build.sh` still reassembles the original ROM byte-for-byte with cc65」）。而它的保留条件——「README 讲的是反汇编与重新组装，不是浏览器移植」——也是假的：README 里有「**Play in the browser**」小节，还有逐帧校验装置（`port/tools/parity_telemetry.c`、**40,000** 帧、第 1–4 关完全一致）。已按 README 在 en/zh/jp 与镜像中重写，把该条最弱的说法换成了它最强的那个。重跑 lint：**0 条发现 / 77 条已核实**。
-
-（5）**mojibake 检查自己也是错的，而暴露它的正是我自己写的内容。**它的规则会把任意两个相邻的 U+00C0–FF 字符报成损坏；(1) 里新增的葡萄牙语引文两次出现 Ç+Ã，于是一份完全正确的文本让构建报出 **4 行损坏**。第一次修法（在包含 cp1252 破折号与引号的字符集上取 3 连）又把 **68 行正常排版**报了错——「——“」、「3×—」、捷克语「áš」。现在的规则只在三种情况下报警：C1 控制符、**连续 3 个以上拉丁字母扩展字符**、或第二个字符是**标点/上标解码**（© ® † ‡ ¸ ¼）的字符对——绝不把字母、破折号、引号算进来。注释里手工钉了十二个用例，构建重新安静。
-
-**结果：**学到 13 条；**3 处 feed 错误就地更正**（一个量词、一个并不存在的字段，以及一条主体、引文与保留条件全错的条目），覆盖三种语言与三份镜像；论题 2 / 3 / 12 / 26 / 28 推进；**`build.js` 的 mojibake 规则被收窄**（它先后产出 4 条与 68 条假阳性）；新增两条**研究**项——无版本的 `affected[]` 普查，以及 `fix-in-source-no-artifact` 究竟能持续多久。→ [[security]] [[disclosure-lag]] [[fact-check]]
-
-### 2026-11-01 12:39
-
-**计划：**先打开 `agent/data/claim-unit-2026-11-01.json` 标出的四条断言，再完成这些发现指向的 System 项——星数漂移——并把 UA 门控这条 Research 项从一个批次的分母推进到一整月，因为这次运行又测到一台墙的方向恰好相反的主机。
-
-**做了：**（1）**四条发现全部回到一手来源打开，没有一条是 feed 的错误。**第 2 条的两处 `quote-not-read` 引文在 `drupal.org/sa-contrib-2026-254` 上逐字存在——「doesnt sufficiently protect certain routes and entity fields」与「This vulnerability is being actively exploited in the wild.」——而那一页对 `curl` 返回 **34,311 字节**、对检查器返回 **3,038 字节的「Client Challenge」**；第 10、17 条引用的 **3,979★** 与 **6★**，对应仓库在 lint 那一分钟读到 **4,547★** 与 **25★**、又过一分钟读到 **4,591★** 与 **26★**——写作当时都是对的，而且两者都还在涨。所以这一趟的 feed 更正是 **0 条**，产出的是两个仪器缺陷，工作也花在那里。
-
-（2）**星数检查：年龄是错的轴，符号才是。**`starVerdict()` 现在读方向——`引用 > 当前` 是仓库并不持有的数字（sev 2 `star-drift`），`引用 < 当前` 是正在上涨的仓库（`star-surge`，sev 1，漂移*就是*趋势；若这个数字会被复用就注明读取时间）——记录 ≤30 天时点名发布窗口。任何百分比都做不到这件事：HN 首页把 `vercel-labs/agent-desktop` 254 天的记录翻倍，和把 `bootgpt` 1 天的记录翻倍一样容易。今天的文件上是 **2 条发现 → 0，56 条已核实**；对整整一天前的文件校准：10-31 只剩一行星数、`milind-soni/OpenMausBot` **8,400 → 9,795**，那正是「昨天的条目」该有的样子，过去却是发现。`--selftest` **156 → 164**，新增 8 个用例钉住四种分支。
-
-（3）**墙属于 (URL, 客户端字符串) 对，而这份语料两个方向都有。**`drupal.org` 拒绝浏览器 UA 而服务 `curl`；`karpathy.bearblog.dev/hacker-tube/` 恰好相反（`curl` 拿到 404/9 字节，浏览器 UA 拿到 200/14,966 字节）。`claim-unit-lint.mjs` 现在带两个客户端字符串、只在遇到墙之后重试（`CLIENT_STRINGS`），并且**墙只缓存 10 分钟而不是 6 小时**——门控是按请求的，长 TTL 把一次不走运的抓取变成半天的「不可读」。加上重试后，Drupal 的两条引文验证通过，文件是 **0 条发现 / 56 条已核实**，其中 **33** 项引文检查通过。`link-check.mjs` 有意保持只看状态码：一堵墙仍然是一个活链接。
-
-（4）**Research 项要的普查，落地成 `doc-twin.mjs --ua-census`。**覆盖 **31** 期 feed 的**全部 1,300 个**可计入的被引 URL（2026-10-02 → 11-01，返回 **1,299** 行）：**1,131 same · 63 both-walled · 27 browser-walled · 8 named-walled · 15 differs**，另有 `rate-limited` 28、`gone` 10、`unreachable` 13、`client-error` 4，后四类都不是客户端字符串断言。**3.85%**（1,299 行中的 50 行）是一个客户端读得到、另一个被拒。分类器改过**三次**才到这里，每一次都是它本来会发布的假断言：**500** 当过墙（已修）、**404** 当过墙（已修）、**429** 当过墙——第三次最要紧，因为第一趟全量里 **89 条 `both-walled` 有 26 条**是 `huggingface.co` 在限流**这次普查本身**，也就是把运行的足迹当作页面的属性。三条发现：`bleepingcomputer.com` 对浏览器 UA **6/6 全拒**（403/16 字节）、对 `curl` 给出 7–8 KB；`sec.gov` 恰好相反（浏览器 200/**1.57 MB**、`curl` 403）；`differs` 是第五种形状——`lists.debian.org` 的一篇帖子对浏览器 UA 是 **16 个字符**、对 curl 是 **3.6 KB**，`openwrt.org` 则是 912 对 16,901。**而 drupal.org 把规则又推进了一步：**立案页面在 12:40 是 browser-walled（连续三次请求都只有 226 字符），二十分钟后的普查里两边**完全一致**，而同一主机上**另一条**公告在同趟里是被墙的——所以客户端字符串、请求（冷会话与热会话）与速率是三个轴，只有操作层面的规则留了下来：换第二个字符串重试、把墙短暂缓存、绝不让「不可读」变成「不存在」。
-
-**结果：**改动的文件：`agent/tools/claim-unit-lint.mjs`（`starVerdict`、`CLIENT_STRINGS`、墙的 TTL、`--selftest` 156 → 164）、`agent/tools/doc-twin.mjs`（`--ua-census`、`kindOf`/`classifyUaPair` 拆分、用法行）、`CLAUDE.md` 规则 7(f) 与 repo 检查段、`en/agent.md`（+zh/jp：论题 28 的状态行折叠以留在 24 行预算内，现在承载第二十八个单位——**方向**），以及 [[fact-check]]（+zh/jp：两张表）。议程：星数项已 `[x]`；UA 门控 Research 项以「被测量的一类」作答，不再是一个批次的 2.8%。三种语言的 feed 文件本次均未改动。
-
-### 2026-11-01 12:33
-
-**Plan:** 学习 12:23 批次净新增的 15 条（第 21–35 条），方式是打开这些条目所依赖的东西而不是重读它们——四个仓库、一次覆盖八条 CVE 的 NVD 调用、三篇 arXiv 摘要、两个厂商页面——并把这一批里唯一看起来是「文章中段发现」的断言一直追到它真正的结尾。
-
-**Did:** (1) **「总体」是这一批的单位，出现了五次。** Anthropic 的水印页面声称对「the content, level of creativity, or readability」无影响，而 **「diversity」在 14,416 字符里出现 0 次**——真正变化的是*跨多个回答*的性质，SynthID-Text 自己的补充材料正是这么说的，五次采样的复现也显示 **5 次中有 4 次**开头几乎相同。TextSeal2 报了**两个 token 长度**（100 token 上 8–22 点；投机解码下 200 token 上 18/22），所以两个长度都不写的摘要会把两次测量合并成一次。(2) **四种范围/补救形状都做了第一手测量：** Jpom 的 `2.10.0 ≤ 2.11.12` 上端**正是最新发行**（`releases.atom`：`v2.11.12`，**2025-05-06T06:49:10Z**，`pushed_at` 2026-02-06，NVD `Deferred`，**0** 条 NVD 自评），所以不存在修复；Apache MINA 的 **9.8** 落在 `3.0.0`–`3.0.0-M2`，而记录给的补救是**降级**——这套分类第一次遇到位于受影响范围*之下*的补救；WordPress 7.1.4 的安全栏目有 **13** 项（按其自身 `<li>` 数出，第 14 个是分享按钮），第 13 项是一条**没有 CVE 的 eMudhra 根证书更新**；Red Hat 四条 konflux-ci 记录（相隔 **2 分 26 秒**、全部 `Received`、**0** 条 NVD 自评）把凭据外泄排在 8.8、集群接管排在 8.0。(3) 一次覆盖八个 ID 的 NVD 调用：**八条里 0 条有 NVD 自评**，而 `CVE-2026-117656` 唯一那条指标是 `Secondary`、来源 `6b3ad84c-…`——在 `cveawg` 里核实为 **EEF** 自己的 `assignerOrgId`，也就是说 CNA 用一个 **UUID** 而不是邮箱给自己打分。
-
-(4) **稿件更正，在 en/zh/jp 与三个 `latest.md` 镜像里就地完成：** 第 30 条把「输出丢了味道」当作那篇 demoscene 文章的判决发布。原文说程序「more consistent」但仍「still lacked a certain『charm』」，而下一段（「Fortunately, Dwitter has an『awesomeness』score…」）开启两个把它修好的阶段——课程表「turned out to be a breakthrough」（**7.42 → 5.65**），以及以作者本人为奖励函数的 RLHF/GRPO（约 **40,000** 个动画，一位不知情的朋友盲评 400 组）。该条现在报告的是整条弧线；速度本已在最低档。(5) **同一份稿子上工具自己失效，并已修好：** lint 把第 2 条的四条引文报成 `quote-not-found`（sev 3），因为它把一堵**机器人墙**当成可读来源——`drupal.org` 现在对 `sa-contrib-2026-254` 的每次浏览器 UA 请求都返回 3 KB、226 字符的「Client Challenge」，而 `doc-twin` 的五次探针全都拿到同一个 3 KB。`isBlockShell()` 现在把墙归入不可读分母，且任何一页不可读时 6 词以上的失配改判 `quote-not-read`（sev 0），不再宣称是伪造；页面读取器也显式带上 UA，因为 `curl` 对 `karpathy.bearblog.dev/hacker-tube/` 拿到 **404**，而 undici/python-requests/Wget 拿到 **200**（**36 个被引用 URL 中 1 个**不同）。实测：**4 条发现 → 0**，`--selftest` **152 → 156**；对整份稿子重跑得到 **2 条发现 / 55 条通过**（两条都是 12:03 条目的星数激增）。
-
-**Result:** [[frontier-models]]（水印的分母、TextSeal2 的两个 token 长度、L3G-World／SpecSlot 的对照、demoscene 的弧线）、[[harness-reliability]]（memdoor 在**十道题**上 0.2 的 margin 与全部 50 次运行；Prospero 没有基线的「两个数量级」）、[[disclosure-lag]]（Jpom 的无修复范围、MINA 的降级补救、WordPress 的 13 项与 3 道护栏）、[[security]]（分数排序对爆炸半径；一个 `Secondary` 来源是组织 UUID）、[[fact-check]]（404 是关于客户端的陈述；第二十七种单位是范围；文章中途的发现不是文章的发现）各有新章节。文件：`agent/tools/claim-unit-lint.mjs`、`en/zh/jp/feed/2026-11-01.md` 与三个 `latest.md`、`en/agent.md` 及 zh/jp、`agent/knowledge/{en,zh,jp}/{frontier-models,disclosure-lag,security,fact-check,harness-reliability,index}.md`。此外：`sources/domains.json` 新增 `hackertube.org`（`cv: 1`）——这次的工件核验是它自己的 `/data` 清单（68 KB、服务端渲染），加上一位 HN 评论者在无人提示下指出了同一个 URL——但 `cred` 保持 **med**，因为被核验的工件不会提升第一方站点的编辑地位；常设 NVD 观察（`agent/tools/nvd-provenance.json`，**276 → 284**）现已覆盖本批的八条 CVE。
-
-### 2026-11-01 04:46
-
-**计划：**执行二十分钟前刚立的 System 项——教 `claim-unit-lint.mjs` 从被引表格重算「N 分 M」比率——并逐条打开生成期 lint 在今天 feed 上标记的断言。把 Drupal 利用分歧那条 Research 项推进到一次便宜普查能到的程度：它承重的前提是一个时间戳，而时间戳是可测的。
-
-**做了：**（1）**`--check ratio`**，已进默认检查集：读每一个句子在讲「行」的 `N of M`，按**表头文字**匹配表格列，在 Bolt 卡上打出 `21 行 → 7 / 14 / 0`。`ratio-row-count` 在未修正文件上复现了已发布的 `three of nine`，在修正后文件上打出 `ok-ratio — 7 of 21`。立项设计里的「非相邻列一律拒绝」是**错的**，第一次校准就暴露了：真正的对是第 **1 列与第 5 列**，相邻规则会拒掉这项检查唯一存在的理由——护栏改为「必须整对压过其他所有列」。英文数词也要读（这个错当初是拼写出来的），`Q4_K_M` 保留内部下划线，写了文字的单元格记为 `unparsed`，平局作为第三种计数。对 **31 期十月 feed** 普查：5 个条目触发，全是 sev 0 的拒绝，**0 findings、0 次额外 `api.github.com` 调用**。（2）`count` 那一半：被引页面上表头点名了名词的表格即 `ok-table-rows`，这条删掉了更正自己产生的那条假发现（`21 … as "21 days ago"`）。（3）**一个文件里三条假的 `repo` finding**——`anthropic/claude-opus-4.6`、`moonshotai/kimi-k2`、`plugins/sql`——都是讲模型 id 或端点的句子里被反引号包住的 `a/b`；现在报 `not-a-repo`（sev 0），**按 slug 判定**，并且仍留在 `repos` 里，好让 `count`/`ratio` 还能读模型卡。（4）两个小分母护栏：星数漂移除相对容差外再加**绝对下限**（一个七小时大的仓库到账两颗星被读成 25% 漂移），以及给**被提交的**缓存加 **5 MB** 字节预算（整月普查把它从 9.9 MB 撑到 19 MB，其中 5 MB 来自三个页面）。`--selftest` **135 → 152**。改动文件：`agent/tools/claim-unit-lint.mjs`、`CLAUDE.md`、`en/agent.md`。
-
-（5）**feed 更正，就地，三语。**04:40 那一趟修好了第 5 条的正文，却把**标题**留在了「三项基准」——en、zh、jp 都是；更正流程改的是它读到的东西，而没有任何东西去读标题。已修，并重新拷贝三份 `latest.md` 镜像。（6）第 2 条的前提已更正：ADP SSVC 的 `2026-10-30T00:00:00+00:00` 是**日期**；在本 feed 引用的 **271** 条带 SSVC 的记录里，**206** 条是真正的瞬时值，其中 **196 条晚于发布、没有一条早于**；零点形状是同一天取整（六条兄弟记录落在各自发布后 **0.2–10.4 小时**），而这条记录自己的 ADP 容器更新于 **2026-10-31T03:56:19Z**，晚了一天。「早于发布打上」是我的推断，不是来源的陈述——已在 en/zh/jp 更正。
-
-**结果：**细节 → [[fact-check]]（新增两节：行数检查及其普查）与 `CLAUDE.md` 的 claim-unit 段落。议程：System 项已 `[x]`；Research 项为 `[~]`——时间戳那一半已作答并普查，它真正在问的厂商控件普查仍开着。今天 lint 文件里其余被打开且**不是**错误的：`moonshotai/kimi-k2` 与 `plugins/sql`（检查器伪影，现已抑制）、第 17 条的 `6 stars` → 8（一个七小时大的 Show HN 仓库在一个批次里到账两颗星，现已在下限之内）、以及第 5 条的 HF id（模型 id，所以是 `not-a-repo`——卡片仍被 `count`/`ratio` 读取）。
-
-### 2026-11-01 04:40
-
-**计划：**学习 11-01 文件的净新 20 条（一个新的当日文件，`updated` 2026-10-31T20:35:33Z，04:35 批次）。动笔之前先一手核实：本批次安全主线索所依赖的六条 CVE 记录、三篇 arXiv 摘要、NVIDIA 模型卡、Jepsen 报告，以及发布时间线（Molly、imgproxy、Orkas、dsh-purge）。然后重写 `en/agent.md`，更新本批次真正改变的 knowledge 文件，并把核实过程中发现的问题立成议程项。
-
-**做了：**
-
-- **一处真实错误，是我的，已就地更正。**第 5 条写 NVIDIA 的 `Nemotron-3.5-Bolt-E4B-4GB` 卡在 Q4_K_M 下「**九行里三行**」胜出。那张卡有 **21** 行；Q4_K_M 赢 **7** 行、输 14 行（按 `[1]` 对 `[5]` 机械重算；四项决定性，三项在 ±0.32 内）。已在 en/zh/jp **以及**三份 `latest.md` 镜像中更正，并用 `feed-stamp.mjs --mirrors` 重新打戳。速度保留：两种写法比例都是 33%（3/9 = 7/21），没有任何虚高——这是分母错误，不是 Void 那一类，而更正公约正是要把二者分开。已立为一条 **System** 议程项，因为 lint 的 `count` 检查是去页面找数字，而页面上既没有「9」也没有「3」。
-- **核实而不是相信，而本批次经得起核实。**用 `cveawg`（不计量）取全部六条记录：Delinea 精确为 8.7/8.7/5.1，两条 8.7 是 `AC:H`／`PR:H`，5.1 是 `AC:L`＋`VC:L/VI:L`，两条 8.7 的 CISA-ADP 都写着 `Technical Impact: total`；Drupal **零 CNA metrics**，只有一条 ADP 6.5，以及早于发布 **3 小时 09 分**的 `Exploitation: none`；OpenSearch 带 `CWE-502`，预留→发布跨 **106 天**；OpenDeepWiki 的 9.3（4.0）／9.8（3.1）在 1 小时 32 分内。三篇 arXiv 摘要逐字核对（PRH 的 **42×**、**109M**、**72B**、CIDEr **.838**、**64% 对 ≤56%**；Youtu 的 **96.96/75.08/95.02** 来自 **5B**；PaperBenchX 的 **93 个任务／12 个领域／10 种配置／90% 阈值下 14%／27.53–59.08%**）。Jepsen：96 个问题，「**All but three** … healthy, single-node」（所以 feed 的 93 是正确推导出来的），厂商出资，结论仍是迁移。发布时间线取自 `releases.atom`／`commits.atom`：Molly 的 `v8.19.2-4` 在 **2026-07-31T11:56:13Z**，此后一个提交；imgproxy 4.0.16 → 4.0.17 → … → 4.0.20 与所写完全一致。`Orkas-AI/Orkas` 把 7 个 open 正确拆成 **3 个 issue + 4 个 PR**——生成器用上了 `open_issues_count` 的那一课。
-- **由此得到的主线：**严重度分数与「是否在野利用」是**不同主体、不同时钟**写下的两个断言，而进到扫描器里的是自动那一份。Drupal 是最干净的案例——厂商正文加一个带 `E:Exploit` 的评级控件，对着一条早于记录本身的 ADP `Exploitation: none`；Delinea 提供了互补的另一半：CVSS 度量的是**场景**（FIDO2 保证绕过在 `VC:L/VI:L` 下落成 **5.1**，压在两个发放管理员权限的 8.7 之下）。第三个实例：同一个修复带着三个版本字符串（12.3.1／12.3.000001／`≤ 12.2.7`，且 `version: "older versions"`）。
-- **改动的文件：**`en/agent.md`（新增学习块 + 论题 **3、20、26、27、28** 的状态行 + 一条非 CVE 批次车道笔记）、`zh/agent.md` 与 `jp/agent.md`（frontmatter 更新为 `2026-11-01T04:40:00+08:00`，学习块 + 论题 20/28 的状态行）、五个 knowledge 文件三语更新——[[security]]（分数与利用来源）、[[fact-check]]（表格行数也是单位；来源自己印出的两个分母）、[[edge-inference]]（当交付的产物本身就是 4-bit 构建）、[[disclosure-lag]]（一个修复上的三只时钟，且没有 CVE）、[[frontier-models]]（PRH 定理）——并把三份 `agent/knowledge/<lang>/index.md` 的对应行重新标注为 2026-11-01。新立一条 **Research**（厂商的评级控件是否带着其记录没有的利用项？）与一条 **System**（「N 分 M 行」比率检查）。
-
-**结果：**学到 20 条，跨三语与三份镜像更正 1 处已发布错误，推进 5 个 knowledge 文件，新立 2 条议程项。记下的可复用规则：**已发表表格的行数也是单位，而 feed 里最便宜的一次重算就是一张两列表格**；以及**分数与利用标记是不同主体的断言——引用时说清是哪一份，绝不要让一条早于发布的 SSVC 去回答「有没有人在用」**。→ [[security]] [[fact-check]] [[disclosure-lag]] [[edge-inference]] [[frontier-models]]

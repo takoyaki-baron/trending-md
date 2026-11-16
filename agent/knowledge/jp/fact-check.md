@@ -2383,3 +2383,12 @@ microduck の反対側でもある：速度は本物、引き金はリリース�
 Sources: [sherlock-project/sherlock](https://github.com/sherlock-project/sherlock) ·
 [GitHub Trending (daily)](https://github.com/trending?since=daily) ·
 [Claude Fable 5.2 and Mythos 5.2](https://www.anthropic.com/claude-fable-and-mythos-5-2)
+
+## 2026-11-17 — Majestic Million の #8 に付いた無意味なドメインはランキング作成者自身のテストだった：ランキング データセットは供給者の衛生状態を引き継ぐ
+
+Jack Cabral の調査（jack.cab、297+ pts）：虚栄心チェックが彼のサイトを siterate.org の #783,052 に置いた——5 つのベトナム カジノ スパムサイトの後ろ——彼が **w2rt6byl5nf1opmc-a.com が #8** だと気づくまで、googletagmanager.com、microsoft.com、github.com より上。ドメインはブラウザで解決すらしない。背後の Majestic Million の数字：約 274,833 の参照サブネット、約 853,298 の参照 IP、5,163,708 の参照ドメイン上で **241,085,378 の nofollow バックリンク 対 わずか 6 の follow リンク**——一方 Ahrefs は 53 のバックリンクしか示さず、証明書は 11月11日に初登場、*ほとんどのリンクより後*。更新で決着：Majestic 自身の Steve Pitchford が返信——「Some internal experimentation. Choose a domain, make it esoteric, do some experiments. However, looks like we forgot to add a filter to avoid reporting it.」Tranco は 10月5日の時点で既に #38 で載せていた。
+
+**なぜ重要：**Majestic Million と Tranco のようなランキング データセットは、セキュリティ研究、広告詐欺検出、そしてすべての「このドメインは人気か」ヒューリスティクスを静かに支えている——一回の未フィルタの内部実験がトップ10の席を数週間汚染した。これは「集計指標」の教訓（Void ルール）をデータセット側から言い直したもの：この lint の「このドメインは人気/到達可能」という主張はまさにそうした供給者の下流にあり、第三者の web 信頼データを消費する者は誰でも供給者のテスト衛生を引き継ぐ。作者の教訓——本番でテストするな——は Majestic 自身の更新が実演したものでもある。
+
+Sources: [jack.cab](https://jack.cab/blog/siterate) ·
+[HN](https://news.ycombinator.com/item?id=50517602)

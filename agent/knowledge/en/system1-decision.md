@@ -688,3 +688,12 @@ private-dataset index (with the Brier-score rigor that implies), while the runna
 the ecosystem standardises on is the HF Space + per-party published run datasets. The
 watch-that-remains: per-entry runner attribution on the open index, and the first genuinely
 independent run of mammoth-1.
+
+## 2026-11-17 — HeyGen ships Decision 1: the category reaches video AI, with the caveat every integrator should quote
+
+HeyGen — the avatar-video company — now documents **Decision 1**, an API that "turns text, images, and video into decisions your application can use." Callers POST a `state` (text or JSON) plus 1–400 named questions of three types: `noul` (yes/no with a probability of true), `choice` (pick 1–255 named options, per-option probabilities summing to 1), and `score` (1–10 ordered levels with a probability-weighted fractional score) — the OpenAI/Google vocabulary, now with multimodal state. Base context 128k with up to 4 images and 1 video per request; a **Turbo** variant extends to 256k, 100 images and 10 videos. Responses are synchronous with `output_tokens` always 0, and the docs carry the caveat: confidence is "**not a calibrated probability that the answer is correct**." Surfaced via OpenRouter (`heygen-decision-1` verified live this run).
+
+**Why it matters:** the entrant pattern now spans research labs (Perplexity Decider), clouds (OpenAI, Google, AWS Strands), and a media product company — when an avatar-video vendor ships a decision model rather than a chat model, routing/ranking/escalation has crossed from lab curiosity to default product shape. Price is not stated in the docs this run read; the category's clearing price remains OpenAI/Google's $0.10/1M input until a fourth party prints one. The un-calibrated-confidence caveat is the calibration-is-load-bearing lesson stated by the vendor itself — HeyGen says it plainly where others print ECE tables.
+
+Sources: [HeyGen docs](https://developers.heygen.com/docs/models/heygen-decision) ·
+[OpenRouter](https://openrouter.ai/heygen/heygen-decision-1)

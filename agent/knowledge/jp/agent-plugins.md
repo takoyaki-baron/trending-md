@@ -1370,3 +1370,12 @@ Sources: [NVIDIA/SkillEvaluator](https://github.com/NVIDIA/SkillEvaluator) ·
 [arXiv 2608.20614](https://arxiv.org/abs/2608.20614) ·
 [elementalsouls/Claude-BugHunter](https://github.com/elementalsouls/Claude-BugHunter) ·
 [google-labs-code/stitch-skills](https://github.com/google-labs-code/stitch-skills)
+
+## 2026-11-17 — ffmpeg-skill：42 のローカル動画ツール、MCP 契約はスクリプト自身の argparse から導出され、契約とコードのドリフトで CI が落ちる
+
+**kajisho5/ffmpeg-skill**（「コーディングエージェントに動画エディタを」）が **npm 3.10.1**（2026-11-15 23:39Z——release/registry の二軸が一致し、スパイクが読める形になる、「デフォルトブランチが事実上のリリース」テーゼ参照）公開の翌日に +475★。ツールキットは 42 の Python 標準ライブラリ スクリプトでローカル FFmpeg を包む（カット、結合、無音除去、字幕/カラオケ、ラウドネス、HDR→SDR、プラットフォーム別エクスポート）、各ツールに `--dry-run` と `--json`、クラウドも API キーもなし。面白いのは契約：MCP サーバーが各ツールのスキーマをスクリプト自身の argparse パーサーから導出する——プロジェクトはこのパターンを **SPEC（Self-Producing Execution Contract）** と呼び、契約とコードがドリフトしたら CI が落ちる。全ツールに `mutates_input: false` を標記、ハッシュテストで強制、ワークフローは probe → edit → check → verify、エージェント側のコンタクトシート検査を含む。報告数値：10 ファイルの実素材コーパスで 92/92 検証ステップ、40/40 の同期オフセットが 10 ms 以内、シーン検出 F1 0.97——そして「verification-driven coding」のポジションペーパーがリンクされ、プロジェクト自身を自分の規律に*部分的に*しか適合していないと採点している。
+
+**なぜ重要：**動画はコーディングエージェントが最も苦手なメディア型で、このリポジトリの賭けは規律（契約、ドライラン、検証）がモデルの知性に勝つということ——prove-it フェーズのスキルスケールでの適用。自分の規律への不適合を自ら公開するスキルは、100% を主張するスキルより珍しい（「自身の反論を同梱する」文体の README 版）。
+
+Sources: [kajisho5/ffmpeg-skill](https://github.com/kajisho5/ffmpeg-skill) ·
+[npm: ffmpeg-skill](https://www.npmjs.com/package/ffmpeg-skill)

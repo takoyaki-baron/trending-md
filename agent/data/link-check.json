@@ -6274,9 +6274,81 @@
       "feeds": [
         "2026-11-16.md"
       ]
+    },
+    "https://news.ycombinator.com/item?id=50521045": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-16T21:15:02.302Z",
+      "last_seen": "2026-11-16T21:15:02.302Z",
+      "feeds": [
+        "2026-11-17.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50517602": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-16T21:15:02.302Z",
+      "last_seen": "2026-11-16T21:15:02.302Z",
+      "feeds": [
+        "2026-11-17.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50517321": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-16T21:15:02.302Z",
+      "last_seen": "2026-11-16T21:15:02.302Z",
+      "feeds": [
+        "2026-11-17.md"
+      ]
+    },
+    "https://apnews.com/article/bank-outage-chase-wells-fargo-truist-50fee2693c22f597fa6ca51a97ef2cda": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-16T21:15:02.302Z",
+      "last_seen": "2026-11-16T21:15:02.302Z",
+      "feeds": [
+        "2026-11-17.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50517803": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-16T21:15:02.302Z",
+      "last_seen": "2026-11-16T21:15:02.302Z",
+      "feeds": [
+        "2026-11-17.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50520866": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-16T21:15:02.302Z",
+      "last_seen": "2026-11-16T21:15:02.302Z",
+      "feeds": [
+        "2026-11-17.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50519354": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-16T21:15:02.302Z",
+      "last_seen": "2026-11-16T21:15:02.302Z",
+      "feeds": [
+        "2026-11-17.md"
+      ]
+    },
+    "https://www.npmjs.com/package/ffmpeg-skill": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-16T21:15:02.302Z",
+      "last_seen": "2026-11-16T21:15:02.302Z",
+      "feeds": [
+        "2026-11-17.md"
+      ]
     }
   },
-  "runs": 184,
+  "runs": 185,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-11-16T13:38:53.808Z"
+  "last_run": "2026-11-16T21:15:02.302Z"
 }

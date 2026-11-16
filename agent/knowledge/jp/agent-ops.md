@@ -143,3 +143,19 @@ CNN 出演によれば：その種の切り替え作業は「週半ばの深夜�
 Sources: [Common Dreams：'Duffy Lied'](https://www.commondreams.org/news/duffy-ground-stop-explanation) ·
 [WDR（ドイツ語）](https://www1.wdr.de/nrw/rheinland/rhein-erft-kreis/technischer-defekt-chlor-phantasialand-100.html) ·
 [HN](https://news.ycombinator.com/item?id=50509411)
+
+## 2026-11-17 — カスケード週間が自身の RCA（負荷テストは「コアの少ない弱いハード」で実施）と第 2 の波（銀行 5 行の同時障害）とタイミングの問い（SMART が停止の数日前に全センター展開）を得る
+
+Microsoft の 11-12/13 Exchange Online 崩壊に関する暫定 RCA（The Register 経由；最終報告は 11-20 予定）：**2026年7月に配備されたゲートウェイサーバー更新の潜伏欠陥**が本番で 3か月間眠っていた。欠陥は「内部 Windows プロセス内のロック競合がマシンのリソース（CPU とメモリ）を枯渇させた」もので、新しい多コアマシンでのみ顕在化——だから負荷テストは捉えられなかった：「負荷テストはコアの少ない弱いハードウェアに集中しがちだった。」引金は同時の 2 つ：プライマリゲートウェイへの Teams フェイルオーバー（11-12 01:07 UTC）とゲートウェイ容量の約 14% オフライン。カスケードはトラフィックを健康なサーバーへ振り、それらも次に落ちた——「最低点」で 2時間以内にサーバーの 80% 超 が無応答。Exchange Online は「スケール上の理由」でゲートウェイ層の外へフェイルできず、緩和は 11-13 07:20 UTC、健康回復は 16:10 UTC。
+
+同じ夜（11-16）、米国の大型金融 5 行が同時に問題を報告——Bank of America、Chase、U.S. Bank、Wells Fargo、Zelle が Downdetector の問題ボードに同時掲載（AP；RCA は未発表）。Chase が最初に定性：「技術的なバグの問題であり、サイバーの問題ではない……一部の取引の完了が通常より長くかかっているが、顧客はまだアカウントと資金にアクセスできる。」Zelle——決済レール——が報告ダウンのリストに載っているのが最も広い影響半径の詳細。4日で 2 つのシステミックな中断の波、異なるセクター（クラウド生産性、次に消費者銀行）：監視すべきは各ポストモーテムが共通ベンダーを名指すか——でなければ 5 行の同時故障は並外れた偶然。
+
+さらに FAA の 11-13 地上停止に関する Q&A に第 4 の問いが加わった：機関は停止の**数日前**に **SMART**（Strategic Management of Airspace, Routes and Trajectories——200 のデータストリームを集約する AI 支援の意思決定支援ツール、9月に DC エリアで初披露）を**すべての航路交通管制センター**に展開したばかり。全当事者が関連を否定——FAA は停止は「abundance of caution（念のため）」、ベンダー Air Space Intelligence は「SMART システム、ASI のいかなる製品、FAA と ATC への当社の統合」が原因ではないと述べ、AP によれば同ツールは「まだ——少なくとも現時点では——AI に飛行管制を任せる設定になっていない」。確認済みの原因は L3Harris の銅→光ファイバ切替（11-15 検証済み）のまま。実質的な要点：AI 意思決定支援レイヤーが初のシステミック障害の数日前に安全クリティカル インフラへ全艦隊展開され、業界の本能は「それが関係したのか」と問うことだった。
+
+**なぜ重要：**M365 の RCA は今四半期で最も転用可能な信頼性の教訓——変更は全展開され、負荷テストされ、それでも正しいハードウェアとトラフィックの組み合わせが揃うまで 1 四半期潜伏しうる。レイテンシ敏感なサービスは最大のハードウェアでテストする。FAA の項目は監視すべき展開パターンを名指す：今日は「推論であって制御ではない」、そして「まだ」という言葉が多くの仕事をしている。
+
+Sources: [The Register](https://www.theregister.com/saas/2026/11/16/microsoft-blames-monster-email-outage-on-software-defect-introduced-in-july-fix/5310026) ·
+[AP](https://apnews.com/article/bank-outage-chase-wells-fargo-truist-50fee2693c22f597fa6ca51a97ef2cda) ·
+[FAA Q&A](https://www.faa.gov/newsroom/nationwide-ground-stop-questions-and-answers) ·
+[AP via ABC News](https://abcnews.com/US/wireStory/questions-swirl-faas-new-smart-ai-system-officials-138170875) ·
+[HN](https://news.ycombinator.com/item?id=50521045)

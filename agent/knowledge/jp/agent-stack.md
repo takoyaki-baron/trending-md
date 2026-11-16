@@ -2881,3 +2881,14 @@ branch」——さらに PR ごと／CI 実行ごとの TTL 付きデータベ�
 
 Sources: [db-branch/db-branch](https://github.com/db-branch/db-branch) ·
 [HN](https://news.ycombinator.com/item?id=50506940)
+
+## 2026-11-17 — Coral：エージェントがプリミティブから自前でツールをコンパイル、論文執筆は検視可能な 5 エージェント パイプラインで着地
+
+**withcoral/coral**（Show HN、50+ pts、Apache-2.0、5.0k★）はセルフホスト ゲートウェイ（「エージェントの実行レール」）で、エージェントは単にツールを呼ぶだけではない——複数のツール呼び出しを連ねる短い **TypeScript プログラム**を書き、まっさらな **V8 isolate** で実行する：ネットワークアクセスなし、資格情報なし、import なし。各ツール呼び出しは資格情報が接続する前にワークスペースポリシーゲート（Allow / Ask / Block）を通る；実行は人間の承認で一時停止し、開始者に帰属。成功したプログラムは再利用可能なカスタムツールとして `coral.private` か `coral.shared` の下に永続化され、任意の MCP クライアントから到達できる（`claude mcp add --transport http coral <url>`）。README 自身のベンチマーク：GitHub/Linear/Slack の 34 タスクで、カスタムツールは **token 37%、コスト 31%、時間 29%** を削減、「Opus 5.5 の精度を Haiku 5.5 のコストで」と謳う。Enterprise Edition ディレクトリ（SSO/SCIM、RBAC、監査ログ）は別ライセンスで「coming soon」。これは OpenCode の Code Mode 形態がスタンドアローンゲートウェイに到達したもの——ツールのスプロールは MCP エコシステムのスケーリング税であり、エージェントにポリシーゲートの下でプリミティブからツールを*コンパイル*させるのがそれに対する最も具体的な答え、隔離はそのための正しい信頼境界だ。
+
+**google-research/paper-orchestra**（Yiwen Song、Yale Song、Tomas Pfister、Jinsung Yoon；+306★ 初日、計 1.3k、8 コミット）は「制約のない執筆前素材（アイデアと実験ログ）」を投稿可能な LaTeX 原稿へ変換する。5 つの専門エージェントが分業——Outline、Literature Review（関連論文の検索・優先順位付け・統合）、Section Writing、Content Refinement、Plotting（コードからの図生成と概念図）——バンドルされた CVPR 2025 などの会議テンプレートを狙い、自動評価用の `autoraters/` ディレクトリを備える。README は率直：「**This is not an officially supported Google product**」、評価データセットは別途公開、自分の Semantic Scholar/OpenAI/Vertex キーが必要。引用は arXiv:2604.05018。自動化された論文*執筆*は、エージェント波のインセンティブと出版のインセンティブが衝突する場所——このリポジトリは地味な部分（文献トリアージ、図生成、テンプレート適合）をデモではなく検視可能なパイプラインとして出荷する。
+
+Sources: [withcoral/coral](https://github.com/withcoral/coral) ·
+[Show HN](https://news.ycombinator.com/item?id=50517803) ·
+[paper-orchestra](https://github.com/google-research/paper-orchestra) ·
+[arXiv:2604.05018](https://arxiv.org/abs/2604.05018)

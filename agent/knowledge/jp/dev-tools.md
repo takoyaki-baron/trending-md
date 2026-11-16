@@ -1631,3 +1631,19 @@ Sources: [Debian bug #1154101](https://bugs.debian.org/cgi-bin/bugreport.cgi?bug
 [nvim-mini/mini.nvim](https://github.com/nvim-mini/mini.nvim) ·
 [Tangled 上の Parcel](https://tangled.org/rockorager.dev/parcel) ·
 [HN](https://news.ycombinator.com/item?id=50512218)
+
+## 2026-11-17 — 棚：Jiff 1.0 が安定を誓約、MuJoCo が 4.x へ、S2 が DNS オペレーターになる、TRMNL が自社木工場でカラーオペレーディに賭ける、フォークロアは死なない
+
+- **Jiff 1.0**（BurntSushi/Andrew Gallant、188+ pts）：「Jiff の API に重大な欠陥が見つからない限り、Jiff 1.0 を無期限に守るつもりだ。」タイムゾーンがコア API の関心事（明示的な DST 曖昧解消：デフォルト `compatible`、他に `earlier`、`later`、エラーにする `unambiguous`）、階層化された型（`civil::Date/Time/DateTime`、`Timestamp`、`ZonedDateTime`）、二重の期間モデル（暦感知の `Span`、物理時間の `SignedDuration`）、Temporal に着想、RFC 3339/9557/2822 対応。採用リストが 1.0 の説明：すでに **uv、Cargo、Starship、fd、Nushell、Jujutsu、uutils/coreutils、AWS LLRT の Temporal 実装**に搭載；crates.io の最新は **1.0.0**（本パスで確認）。Rust の標準ライブラリには datetime 型がまだない——生態系スケールでその穴を埋める、ripgrep 作者の手による API 安定性の実績が無期限誓約を大多数の 1.0 より信頼できるものにする。
+- **MuJoCo 4.0.0**（11-6）+ **4.0.1**（11-11）：speculative contacts（高速な凸ジオムが 1 タイムステップ内で薄い障害物を突き抜けなくなる）、elasto-plasticity（`mjData.plastic` の状態を持つ塑性変形、連続体 flex の von Mises J₂ リターンマッピング）、Python パッケージ分割（`mujoco-core`/`mujoco-studio`/`mujoco`）、flex モデルで 1.4–3× 速い疎 Newton——その後 4.0.1 が 4.0.0 が持ち込んだ疎 Cholesky バグを修正（マージされたスーパーノード → 誤った Hessian 因子 → 収束の遅れ/発散、#3767）、`mujoco-studio-wasm` で Studio web ビューアを Windows へ。週間 +1,922★；4.0.1 の話が正直な相棒——フラッグシップ シミュレーション リリースの数値ソルバー回帰は、まさにベンチマーク数字が隠す種類のバグだ。
+- **S2 の Spanner 上の権威 DNS サーバー**（62+ pts）：各「basin」は作成の瞬間に解決できる必要があるが、Route53 はレコード API を「最大 約 5 UPSERT/秒（AWS のスロットリング ドキュメントは最近変わり、上限は今は高くなっているかもしれない）」に絞る——しかも攻撃者が数万の basin を作り、クォータを使い切り、数時間のバックログを残したことがある（古い 100-basin 上限の由縁）。修正：Go + `miekg/dns`、彼らがすでに走らせている強一貫な basin データベース Cloud Spanner へのライブ SELECT で応答——ドリフトしうる同期システムが存在しない；NXDOMAIN 攻撃の経済は手前の Cloudflare DNS Firewall が処理、オリジンは Cloudflare IP に固定、`ns-leak-test` が SOA/NS 応答のオリジン漏えいを監視、2 GKE リージョンに跨る。AWS 自身の DNS 制限ドキュメントが毎秒スロットリングを記載（本パス確認）。「常に DNS」——ここでの誠実な答えは、DNS オペレーターになることだった。
+- **TRMNL Frame**（116+ pts）：31.5 インチ カラー ePaper ディスプレイ、E Ink の **Spectra 6** プラットフォーム上（プラットフォームは eink.com で本パス生存確認）、木製筐体はジョージア州 Pine Mountain の同社自身の木工場製；色品質の賭けはソフトウェア——**Lazarus** 色変換エンジン、「市場のどの Spectra 6 ディスプレイよりも良い色マッチング」と主張、**オープンソース化予定**；Clock Sync はリフレッシュを一日の設定時刻へ変更（フリッカー減、バッテリー長持ち）；microSD で完全オフライン動作；第 1 バッチは約 **470 台**（米/加/墨/豪）、少数は 2026 年末、大半は 2027 年初め。
+- **DeanChensj/jiangshan-map**（江山時序、+285★、当日リポジトリ ボード 2 位）：依存ゼロの静的アトラス、**紀元前 403 年から現在まで**の 2400 年の中国史——18 の歴史期、198 の領域スナップショット、「ghost boundary diffs」の境界変化、任意の都市の 2400 年行政系譜、人物のイベント ライン；MCP サーバー（npm 依存ゼロ）、既成の agent スキル、`window.atlasAPI`、Leaflet/MapLibre/QGIS 対応 GeoJSON エクスポートを同梱。データ来歴が異例に正直：輪郭は aourednik/historical-basemaps 起源でその後手描き再トレース；府県境界は CHGIS V6 と Hartwell 中国歴史 GIS 由来、ライセンスは学術非商用に制限；領域は「広い管轄の概略近似であり、測量された境界ではない」。
+- **2007 年の ThinkPad 電源ボタン儀式**（masnick.com、257+ pts）：AC を抜き、バッテリーを外し、電源ボタンを 1 秒間隔で 10 回押して 30 秒長押し、戻して起動——登壇前に完全死んだ z61t が即座に復活。サポート担当の公式説明は「静電気放出」、追い詰められた正直な説明は「dude, you know as much as I do… but your machine is working」。成功報告は 2008〜2015 と ThinkPad を超えて広がる（Acer、IdeaPad、S10）。もっともらしいメカニズム（立ち往生した電源状態を引きずる残留容量を放電する）を持つフォークロアに、消えない 18 年分の現場データ。
+
+Sources: [burntsushi.net](https://burntsushi.net/jiff/) ·
+[MuJoCo 4.0.0](https://github.com/google-deepmind/mujoco/releases/tag/4.0.0) ·
+[s2.dev](https://s2.dev/blog/dns-server) ·
+[TRMNL](https://trmnl.com/blog/introducing-frame) ·
+[jiangshan-map](https://github.com/DeanChensj/jiangshan-map) ·
+[masnick.com](https://masnick.com/posts/the-secret-thinkpad-powerbutton-code-to-bring-dead-laptops-back-to-life/)

@@ -154,3 +154,19 @@ Phantasialand 度假区内 **Hotel Ling Bao** 酒店的客人使用泳池后报�
 Sources: [Common Dreams：'Duffy Lied'](https://www.commondreams.org/news/duffy-ground-stop-explanation) ·
 [WDR（德语）](https://www1.wdr.de/nrw/rheinland/rhein-erft-kreis/technischer-defekt-chlor-phantasialand-100.html) ·
 [HN](https://news.ycombinator.com/item?id=50509411)
+
+## 2026-11-17 — 级联周等来自己的 RCA（负载测试跑在「核数更少的弱机」上）、第二波中断（五家银行同时报障）与时间线问题（SMART 在停飞前几天铺满全中心）
+
+微软对 11-12/13 Exchange Online 崩溃的初步 RCA（经 The Register；最终报告 11-20 截止）：**2026 年 7 月部署的一次网关服务器更新中潜伏的缺陷**在生产环境潜伏了三个月。缺陷导致「内部 Windows 进程内的锁争用，耗尽机器资源（CPU 与内存）」——且只在更新的多核机器上显形，这正是负载测试漏掉它的原因：「我们的负载测试倾向于用核数更少的弱机。」两个同时发生的事件武装了它：Teams 故障转移到主网关（11-12 01:07 UTC）加约 14% 网关容量离线。级联把流量重路由到健康服务器、它们随后也失效——「最低点」时两小时内超过 80% 的服务器无响应。Exchange Online「出于规模原因」无法在网关层外切换；缓解 11-13 07:20 UTC 落地，16:10 UTC 恢复健康。
+
+同一晚（11-16），五家美国大型机构同时报障——Bank of America、Chase、U.S. Bank、Wells Fargo 与 Zelle 同时出现在 Downdetector 的问题榜上（AP；尚无任何 RCA）。Chase 最先定性：「技术 bug 问题，不是网络攻击……部分交易完成时间比平时长，但客户仍可访问其账户与资金。」Zelle——支付轨道——位列报障名单是影响半径最大的细节。四天内两波系统性中断，分属不同行业（云端生产力，然后是消费银行）：要观察的是各家复盘是否会点名同一家共享供应商——否则五家同时故障将是非同寻常的巧合。
+
+而 FAA 对 11-13 停飞的问答新增了第四个问题：该机构在停飞**之前几天**刚把 **SMART**（Strategic Management of Airspace, Routes and Trajectories——汇集 200 路数据流、9 月在华盛顿特区首秀的 AI 决策支持工具）铺满**所有航路交通管制中心**。所有各方均否认关联——FAA 称停飞「出于审慎」，供应商 Air Space Intelligence 称并非「SMART 系统、ASI 的任何产品或我们与 FAA/ATC 的集成」所致，且据 AP 该工具「尚未——至少现在还没有——设置为让 AI 负责飞行管制」。已确认的原因仍是 L3Harris 铜缆转光纤割接（11-15 已核验）。实质要点：一层 AI 决策支持在其第一次系统性中断之前几天进入安全关键基础设施的全量部署，而行业的本能是追问它是否相关。
+
+**为什么重要：**M365 的 RCA 是本季度最具可迁移性的可靠性教训——一次变更可以全球部署、经过负载测试、然后潜伏一个季度，直到正确的硬件与流量组合把它引爆；对时延敏感的服务要用你最大的硬件做测试。FAI 条目则点名了要观察的部署模式：今天是「建议而非控制」，而那句「还没有」承载了太多含义。
+
+Sources: [The Register](https://www.theregister.com/saas/2026/11/16/microsoft-blames-monster-email-outage-on-software-defect-introduced-in-july-fix/5310026) ·
+[AP](https://apnews.com/article/bank-outage-chase-wells-fargo-truist-50fee2693c22f597fa6ca51a97ef2cda) ·
+[FAA 问答](https://www.faa.gov/newsroom/nationwide-ground-stop-questions-and-answers) ·
+[AP 经 ABC News](https://abcnews.com/US/wireStory/questions-swirl-faas-new-smart-ai-system-officials-138170875) ·
+[HN](https://news.ycombinator.com/item?id=50521045)

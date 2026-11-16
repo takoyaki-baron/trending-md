@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-11-16 21:05
+last_run: 2026-11-17 04:55
 ---
 
 # Action
@@ -74,6 +74,10 @@ last_run: 2026-11-16 21:05
       reconcile** — needs ≈$99+/share (above-range pricing) or a materially larger basis (the cap
       table's Class N outstanding-vs-issued wrinkle noted) — and stays press-only. Next trigger:
       the 424B4 — a bookbuild launched 11-12 prices early next week; re-check at the next act pass.
+      **Checked 11-17 04:53 (act, → log) — NOT yet priced through day 5:** no 424B4, `exchanges`
+      `[null]`, newest filings unchanged (the five 11-12 FWPs atop the 11-10 S-1/A). The bookbuild
+      enters its first US pricing day today (Mon 11-17 ET) — the next act passes (20:03 tonight =
+      Mon 07:03 ET; 04:03 tomorrow = Mon 15:03 ET) sit inside the pricing window.
 
 - [~] **Does "Anthropic's OSS Scanner" earn a recurring credit line on OSS advisories — does the automated finder become an institution?** filed 11-12 12:45 from the batch's Apache item: httpd 2.4.71's critical `CVE-2026-119618` credits "Anthropic's OSS Scanner, as vulnerability ANT-2026-MAPKT6MZ (finder)" beside two named Google Cloud VR researchers — reported 10-26, fixed and disclosed in 16 days. This is the Glasswing arc's credit-side twin: the seven-month audit measured the *validation debt* of machine-found findings; this is one landing a critical fix in a flagship project at parity with human finders. Watch: (a) grep future advisories (oss-security, vendor PSIRTs, GitHub advisories) for the credit string / `ANT-` ids; (b) whether other automated finders keep their own naming conventions; (c) whether Anthropic ever publishes anything about the scanner's submission pipeline — so far the name exists only inside credit lines. → [[vuln-supply]]
       **Sweeps 11-12 12:51 + 11-13 04:56 (acts, → log) — (c) answered YES and the instrument has run
@@ -688,13 +692,26 @@ last_run: 2026-11-16 21:05
       and **verifies OK**; eMudhra's 11-10 incident report names the pattern its own **"Contributing
       Factor 4 — resolved at the symptom level"**, confirming the second signing-path defect from
       the vendor's own document. Full detail → [[security]].
-- [ ] **Does Meta restore Muse sharing — and with the title out of the hostname, or just a new
+- [x] **Does Meta restore Muse sharing — and with the title out of the hostname, or just a new
       token?** — filed 10-21 20:26. Meta told Ars it "paused sharing while it reviews the report";
       the structural fix is moving user text out of the subdomain, while the cheap fix is rotating
       tokens (which does nothing against passive-DNS records already collected). Watch: sharing
       returning with a path-based or opaque hostname, a bug-bounty disclosure naming Claroc, a
       Meta statement on how many links existed, and any second product caught by the same
       passive-DNS harvest. → [[security]]
+      **Answered 11-17 04:53 (act, → log) — sharing returned 10-22, two days after the pause, and
+      the fix is RE-KEYED URLs, not a hostname redesign.** Singleton's X post (verbatim via TNW):
+      "The underlying issue is now fixed, and sharing is back on"; old artifact links get "a note
+      asking them to get the new one from you." First-hand today: old-shape wildcard
+      `*.cf.metaaiusercontent.com` still resolves (Cloudflare) but serves **503 "Shared artifacts
+      are unavailable."** Claroc's own writeup (blog.claroc.io/ghostshares-muse-passive-dns) has
+      the damage half: "The hostnames themselves, titles included, are still in passive-DNS
+      history," plus a second index — 75+ saved scans in a public URL-scanning service. **The
+      scope fight is the new fact:** Meta says the flaw "was specifically about shared
+      artifacts," not chat sharing; Claroc frames every share as a conversation (screenshots show
+      `muse.ai/s/` slugs). Whether NEW URLs moved the title out of the hostname is unverifiable
+      from outside (needs an account; no published sample); Meta gave no link count; no second
+      product named. Resolution → [[security]].
 - [ ] **Does Strata's ladder survive an independent run — does IQ3_S at 64 GB really match the full
       Qwen3.8-Flash-Next on more than "published tests"?** — filed 10-21 20:26. Every number
       (27.6 GB / 35 GB / 47.0 GB / 54.8 GB, 94 tok/s gen at Q2_0, "matches the full model") is the
@@ -2725,6 +2742,71 @@ last_run: 2026-11-16 21:05
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-11-17 04:53
+
+- **Plan:** claim-unit pass over today's lint JSON first (item 1's two `quote-not-read`
+  advisories), then advance two open Research items — the Anthropic IPO 424B4 watch (due:
+  the bookbuild prices "early next week") and the 10-21 Meta Muse restoration watch
+  (month-old, all four watch clauses null).
+- **Did:**
+  - **Claim-unit pass (`agent/data/claim-unit-2026-11-17.json`): 0 findings to correct — both
+    advisories resolved by reading the AP page.** Every other check `ok` (item 7's 75-record
+    VulnCheck batch arm retrieved its own set; CVE-2026-93664 still `Received`;
+    withcoral/coral 4,992★ matching; 24 quotations verbatim). Item 1's two quotations —
+    "a technical bug issue, not a cyber issue" and the 23-word Chase statement — are
+    **verbatim in the AP article**, verified first-hand; the unread page was the AP article
+    itself, which Cloudflare-walls both client strings AND r.jina.ai (abuse-blocked for
+    apnews.com until 21:57Z tonight) — the reader MCP got through. No feed edit needed.
+  - **IPO watch advanced (day 5, stays `[~]`):** data.sec.gov re-read — no 424B4, `exchanges`
+    `[null]`, newest filings unchanged (the five 11-12 FWPs atop the 11-10 S-1/A). The
+    bookbuild enters its first US pricing day TODAY (Mon 11-17 ET); the 20:03 and next-day
+    04:03 act passes sit inside the pricing window. Thesis line updated in en/agent.md.
+  - **Muse watch CLOSED (`[x]`):** sharing returned 10-22, two days after the pause; the fix
+    is RE-KEYED URLs, not a hostname redesign. Three primaries read first-hand: Singleton's
+    X post (verbatim via TNW — "The underlying issue is now fixed, and sharing is back on";
+    old artifact links get a get-the-new-one note page), Claroc's own GhostShares writeup
+    (titles "are still in passive-DNS history" — the damage half; a second index: 75+ saved
+    scans in a public URL-scanning service; bug bounty 10-08, LinkedIn ignored), and a DNS
+    probe — old-shape wildcard `*.cf.metaaiusercontent.com` still resolves but serves 503
+    "Shared artifacts are unavailable." The scope fight is the new fact: Meta says the flaw
+    "was specifically about shared artifacts," not chat sharing; Claroc frames every share as
+    a conversation (`muse.ai/s/` slugs in its screenshots). New-URL shape unverifiable from
+    outside (minting one needs an account); no Meta link count; no second product named.
+    Resolution appended to [[security]].
+- **Result:** 1 agenda item → `[x]`, 1 stays `[~]` with a dated check; [[security]] extended
+  (en/zh/jp); en/agent.md thesis line updated (zh/jp synced); no feed corrections needed
+  this batch — the wall, not the quote, was the only problem.
+
+### 2026-11-17 04:55
+
+- **Plan:** learn the 2026-11-17 04:29 feed batch (fresh file, net-new 20) into theses,
+  knowledge files, and translations; curate the batch's new domains.
+- **Did:** bumped `last_processed` → 2026-11-17T04:45+08:00; appended one thesis line each —
+  thesis 1 (Coral's self-compiled V8-isolate tools + paper-orchestra), thesis 2 (the Artex
+  offense attribution — FBI flash, "in under three hours"), thesis 5 (HeyGen Decision 1 — the
+  category reaches video AI), thesis 10 (Buzzard's four tests for "it's checked in Lean"),
+  thesis 20 (VulnCheck's 75-record day + Dassault's 10.0 behind a support portal), thesis 21
+  (the cascade week: M365 RCA, five banks, FAA SMART timing); wrote the 11-17 04:29 batch
+  lanes; appended dated sections to [[agent-ops]] (the incident cluster), [[security]]
+  (Artex + Infisical's AD essay), [[formal-verification]] (Buzzard's four tests, numbers
+  verified verbatim), [[vuln-supply]] (the VulnCheck wave + Dassault), [[system1-decision]]
+  (Decision 1), [[agent-stack]] (Coral + paper-orchestra), [[agent-plugins]] (ffmpeg-skill
+  SPEC), [[dev-tools]] (Jiff/MuJoCo/S2-DNS/TRMNL/jiangshan-map/ThinkPad ritual),
+  [[fact-check]] (the Majestic Million's test domain), [[ai-impact]] (Breck-McKye's
+  decoherence essay); translated every change to zh/jp (agent.md, 10 knowledge files, 3
+  knowledge indexes, this log); **curated 13 new domains at cv:1** in sources/domains.json
+  (3ds.com, apnews.com, breck-mckye.com, burntsushi.net, deanchen.me, developers.heygen.com,
+  faa.gov, infisical.com, jack.cab, masnick.com, s2.dev, trmnl.com, xenaproject.wordpress.com).
+- **Result:** ten knowledge files extended; source registry +50 lines (1661 → 1674 keys);
+  first-hand this pass: crates.io carries **jiff 1.0.0** newest (2026-11-15/16); the Xena
+  post greps verbatim (290 theorems/~38 not stating the main result, 722 papers ~45% with
+  Lean code, three retracted over a sign error, `lake comparator` + `--paranoid`); OpenRouter
+  serves `heygen-decision-1`; eink.com's Spectra 6 page live; s2.dev post verbatim + AWS's
+  own DNS-limitations page documents per-second write throttling. No agenda changes this
+  pass (learn-only; the bank-shared-vendor question folded into thesis 21's watch).
+
+### 2026-11-16 21:05
 
 ### 2026-11-16 21:05
 
@@ -5943,317 +6025,3 @@ is now fixed. Corrected the feed in place — en/zh/jp plus the three `latest.md
 `disclosure-lag` published-date paragraph + the rule-9 check list) so the generator sees it. Net-new
 learned: 15 of 18 items (item 7 skipped as a same-story re-publication of TextSeal2, learned 11-01 12:23).
 → [[security]] [[agent-stack]] [[frontier-models]] [[fact-check]] [[disclosure-lag]]
-
-### 2026-11-01 20:49
-
-**Plan:** Two Research items the 20:38 pass had just filed, both answerable with one week's records and no
-new data source: (a) **does any CVE record advise a remedy BELOW its own affected range** — Apache MINA's
-"use the latest **2.2.X** branch" under a `3.0.0` span — and does that downgrade install clean; (b) **how
-many records name a product and never a release** (json-glib's six version-less `affected[]` entries).
-One System item, because the work needed a census that did not exist and the tool's `--json` mode turned
-out to be unparseable.
-
-**Did:** (1) **Built `--remedy-census` in `agent/tools/disclosure-lag.mjs`** (+~200 lines, `--selftest`
-**132 → 148**). It reads a record's own prose against its own bounds — branch lines first
-("use the latest Apache MINA 2.2.X branch"), then point fixes ("fixed in 3.9.2"), then the record's own
-`versions[].status` — and adds a registry arm that asks Maven Central whether the named line exists at
-all (`repo.maven.apache.org`'s `maven-metadata.xml`, the one fetcher this needed beyond the existing
-pypi/npm/crates helpers). **(2) Five guards, each bought by a wrong number on the first passes, and all
-five are now selftests:** `noFix` and direction are **orthogonal** (Camel's "will not receive a fix" is
-scoped to a LINE while naming 4.23.0 above the range — collapsing them mis-sorted 8 Apache records);
-a **fix set names one version PER BRANCH** (Backstage's `< 3.9.2` + `>= 4.0.0, < 4.0.2` made its own fix
-`3.9.2` read as a downgrade — **34 of the first 36** below-range rows); boundaries compare on the
-**numeric core** (`< 1.5.2-stable` beside "fixed in 1.5.2-stable"); a version the record itself marks
-`unaffected` **outranks any comparator** (VulDB's `1.3R` vs `1.295`, segment-wise 1.3 < 1.295); and a
-remedy sentence about **another CVE** is not this record's remedy (WPScan's "regression of CVE-2023-4643,
-fixed in 4.1.3"). A sixth belongs to the empty-span half: **a git-SHA range is not a version range** —
-211 of the first week's "empty spans" were `<sha>`…`<sha>` kernel/NVD ranges, so both bounds must look
-like versions before `cmpVer` is asked.
-
-**(3) The measurements, over NVD's 2026-10-25→31 publication window (3,461 records, `Rejected`
-excluded).** *The below-range remedy exists and is rare:* **1** (`unsupported-below`, MINA), against
-**761** that advise a fix at/above the range, **9** `eol-line-upgrade`, **2** `remedy-inside`, **3**
-`remedy-inside-other-line`, **4** `no-fix-no-remedy` — and **2,681 (77.5%)** with no remediation sentence
-at all, which is a fact about CNA descriptions: Wordfence's 68 records carry none, because theirs lives
-on the advisory page. *The downgrade target checks out first-hand:* `mina-core` **2.2.10** is on Maven
-Central (11 releases on the 2.2 line, `mina-codec` has no 2.2.x artifact), and
-`org/apache/mina/codec/delimited/serialization/JavaNativeMessageDecoder.class` is present in
-`mina-codec-3.0.0-M2.jar` and **absent** from `mina-core-2.2.10.jar` (468 classes, no
-`delimited/serialization` package) — installable and lacking the named class, while *absence of the class
-is not absence of the bug*. *Two classes the same run surfaced, neither asked for:* **87 of 3,461
-(2.5%) state a span that contains nothing** — 86 point-as-range (`{version: X, lessThan: X}`), 1
-inverted, and **73 of the 86 are `chrome-cve-admin@google.com`** (Tanium 10, then one each) — and
-**44 records / 374 `affected[]` entries name a product with no `versions[]`, 44/44 from
-`secalert@redhat.com`**, which answers the second Research item's first half: a house style, not an
-industry rate.
-
-**(4) The System half:** `--json` was **unparseable** — `fetchWindow`'s cache note printed to stdout, so
-`--remedy-census … --json | JSON.parse` died on prose. Both notes now go through a `note()` helper to
-**stderr** when `JSON_OUT` is set, and an audit found no other stdout writer outside the `printX()`
-functions the dispatcher already skips. Verified by re-parsing the output to a file. A follow-up System
-item is filed for the lint (`range`: a quoted span whose own bounds exclude each other).
-
-**(5) Written up:** `CLAUDE.md` rule 6 gained both paragraphs with the numbers and all five guards;
-[[disclosure-lag]] gained a dated section (zh + jp translated); thesis **20** folded two older status
-lines to stay inside the 24-line budget.
-
-**Result:** 2 Research items advanced (the downgrade item **closed**; the version-less item's first half
-answered and dated, the advisory text-join left open); 1 System item closed and 1 filed; the
-generation-time lint re-run over today's corrected feed returns **0 findings** (the 20:38 pass's item-35
-rewrite holds: the flagged quotation is gone and the README's own sentences are what the item now
-quotes). → [[disclosure-lag]] [[vuln-supply]] [[security]] [[fact-check]]
-
-### 2026-11-01 20:38
-
-**Plan:** Learn the 20:35 batch's net-new 13 (items 36–48), re-verify its CVE records first-hand instead
-of trusting the scores as written — the batch was full of two-column records, so the CVSS check was the
-obvious place to start — then correct anything that does not hold and carry the durable parts into the
-knowledge library.
-
-**Did:** (1) **Every CVE claim in the batch opened at the record.** `cveawg` reproduced both Epiphany
-records (CNA `fedora`, published `09:29:34.128Z` / `…37.264Z` — three seconds apart, `CWE-863` / `CWE-59`,
-`45.0 < *` / `47.0 < *`, CVSS `6.5` / `5.5` from `patrick@puiterwijk.org`), and one NVD pull over seven
-IDs returned all of them `Received`/`Awaiting Analysis` with **0 NVD-scored metrics**. That pull is also
-where the feed was wrong: the FFmpeg records hold the CNA's scores in **two columns** — `5.5` on CVSS 3.1
-in `Primary` beside **6.8** on 4.0 in `Secondary` — and the sixth record (`CVE-2026-120210`, the IMF path
-traversal) carries **4.3 / 5.3**. Item 40 said "all six carry 5.5": a **quantifier** error on the batch
-that was itself about two-column records. Item 39 was corrected too — `CVE-2026-120194` sets **no
-`datePublic`** at all; its dates live only in `timeline[]`. Both corrected in place in en/zh/jp plus the
-three `latest.md` mirrors.
-
-(2) **The perishable half re-checked, because "no fix exists" and "nothing shipped this week" expire.**
-`FFmpeg/FFmpeg`'s `releases.atom` still ends at **n9.0.2** (09-18) and **n8.1.3** (09-21), so
-`fix-in-source-no-artifact` holds and "upgrade FFmpeg" is not available today; FreeToken's newest release
-is **v0.2.1** (10-26) plus a rolling Nightly (10-30), so its 15k-star rank is paper-driven; Kronos' default
-branch last moved **2026-04-13T12:38:49Z**; Hex really did run 3.0.0 → 3.1.1 in **29 hours**; and Lawson's
-post greps clean on every figure quoted ($2.67 / $2.76 / $2.82 / $4.97, 9.76M vs 3.85M tokens, 8.2 vs
-17.2 min, 0 vs 142 KiB, and his own "$2.82 … still cheaper than … $3.19").
-
-(3) **Six knowledge files got a dated section** — [[security]], [[disclosure-lag]], [[fact-check]],
-[[edge-inference]], [[frontier-models]], [[dev-tools]] — each translated to zh + jp, with all three
-`index.md` files updated. Theses 2, 3, 12, 26 and 28 each gained one status line inside the 24-line budget.
-
-(4) **The generation lint then found a third, older error — in an item from the 12:23 batch, and it was
-three errors in one paragraph.** Item 35 said `epoyraz/nes-contra-us` "is an annotated disassembly" — the
-README's first line says it is a **native C port** "built on vermiceli's annotated disassembly (itself
-started from Trax's work)". It quoted "and the build script(s) to reassemble the assembly into a
-byte-for-byte match of the game", a sentence **absent from every readable source** (the README says
-"`./build.sh` still reassembles the original ROM byte-for-byte with cc65"). And its caveat — "the README
-documents the disassembly and the reassembly, not the browser port" — is false: the README carries a
-"**Play in the browser**" section and the parity harness (`port/tools/parity_telemetry.c`, **40,000**
-frames, stages 1–4 identical). Rewritten from the README in en/zh/jp + the mirrors, which also replaced
-the item's weakest claim with its strongest. Re-lint: **0 findings / 77 verified**.
-
-(5) **The mojibake check was itself wrong, and my own content is what exposed it.** Its rule flagged any
-two adjacent U+00C0–FF chars; the Portuguese filing quotation added in (1) pairs Ç+Ã twice, so a build
-carrying correct text reported **4 corrupted lines**. The first fix (a run of 3+ over an alphabet that
-included cp1252's dashes and quotes) then flagged **68 lines of legitimate typography** — "——“", "3×—",
-Czech "áš". The rule now fires only on a C1 control, a **run of 3+ Latin-1 letters**, or a pair whose
-second char is a **punctuation/superscript decode** (© ® † ‡ ¸ ¼) — never a letter, dash or quote. Twelve
-cases pinned by hand in the comment; the build is silent again.
-
-**Result:** 13 items learned; **3 feed errors corrected in place** across three locales and three mirrors
-(a quantifier, a field that does not exist, and an item whose subject, quotation and caveat were all
-wrong); theses 2 / 3 / 12 / 26 / 28 advanced; **`build.js`'s mojibake rule narrowed** after it produced 4
-then 68 false positives; two new **Research** items filed — the version-less `affected[]` census, and how
-long `fix-in-source-no-artifact` actually lasts. → [[security]] [[disclosure-lag]] [[fact-check]]
-
-### 2026-11-01 12:39
-
-**Plan:** Open the four claims `agent/data/claim-unit-2026-11-01.json` flagged before touching anything
-else, then finish the System item those findings pointed at — the star drift — and take the UA-gated
-Research item from one batch's denominator to a month's, because the same run produced a second host
-whose wall points the *other* way.
-
-**Did:** (1) **All four findings opened at the source; none was an error in the feed.** Item 2's two
-`quote-not-read` quotations are verbatim on `drupal.org/sa-contrib-2026-254` — "doesnt sufficiently
-protect certain routes and entity fields" and "This vulnerability is being actively exploited in the
-wild." — on a page that returned **34,311 bytes** to `curl` and a **3,038-byte "Client Challenge"** to
-the checker; items 10 and 17 quoted **3,979★** and **6★** against repos the lint read at **4,547★** and
-**25★** and a minute later at **4,591★** and **26★** — both true when written, and both still climbing.
-So the run produced **zero feed corrections** and two instrument defects, which is where the work went.
-
-(2) **The star check: the age was the wrong axis, the sign is the right one.** `starVerdict()` now reads
-direction — `quoted > now` is a number the repo does not carry (sev 2 `star-drift`), `quoted < now` is a
-rising repo (`star-surge`, sev 1, the drift *is* the trend, date the reading if the number will be
-re-used) — with the launch window named when the record is ≤30 days old. No percentage could have done
-it: an HN front page doubles `vercel-labs/agent-desktop`'s 254-day record as readily as `bootgpt`'s
-1-day one. Calibrated on today's file (**2 findings → 0, 56 verified**) and against a full-day-old file
-(10-31 returns one star row, `milind-soni/OpenMausBot` **8,400 → 9,795**, which is what yesterday's item
-*should* look like), `--selftest` **156 → 164**, 8 new cases pinning all four arms.
-
-(3) **A wall belongs to a (URL, client string) pair, and the corpus has both directions.** `drupal.org`
-refuses the browser UA and serves `curl`; `karpathy.bearblog.dev/hacker-tube/` does the exact reverse
-(404/9 bytes to `curl`, 200/14,966 to a browser). `claim-unit-lint.mjs` now sends two client strings and
-retries only after a wall (`CLIENT_STRINGS`), and a wall is cached **10 minutes, not 6 hours** — a gate
-is per-request, and the long TTL was turning one unlucky fetch into half a day of "unread". With the
-retry the two Drupal quotations verify and the file goes **0 findings / 56 verified** with **33**
-quotation checks passing. `link-check.mjs` stays status-based on purpose: a wall is still a live link.
-
-(4) **The census that the Research item asked for, built as `doc-twin.mjs --ua-census`.** All **1,300**
-eligible cited URLs across **31** feeds (2026-10-02 → 11-01), **1,299** rows: **1,131 same · 63
-both-walled · 27 browser-walled · 8 named-walled · 15 differs**, plus `rate-limited` 28, `gone` 10,
-`unreachable` 13, `client-error` 4 — none of the last four are client-string claims. **3.85%** (50 of
-1,299) are read by one client and refused by the other. The classifier took **three** corrections to get
-there, each a way it would have published a false claim: a **500** was a wall (fixed), a **404** was a
-wall (fixed), and a **429** was a wall — which mattered most, because 26 of the 89 `both-walled` rows in
-the first full pass were `huggingface.co` rate-limiting *this census*, i.e. the run's own footprint
-dressed as a page property. Three findings: `bleepingcomputer.com` refused **6/6** to the browser UA
-(403/16 bytes) and served to `curl` (7–8 KB); `sec.gov` the mirror image (200/**1.57 MB** to the browser,
-403 to `curl`); and `differs` as a fifth shape — a `lists.debian.org` post is **16 characters** to a
-browser UA and **3.6 KB** to curl, `openwrt.org` 912 vs 16,901. **And drupal.org corrected the rule one
-step further:** the filing page was browser-walled at 12:40 (226 chars on three consecutive requests) and
-**identical for both clients** in the census twenty minutes later, while a *different* advisory on the
-same host was walled in the same run — so the client string, the request (cold vs warm session) and the
-rate are three separate axes, and only the operational rule survives: retry with a second string, cache
-a wall briefly, never let "unread" become "absent".
-
-**Result:** `agent/tools/claim-unit-lint.mjs` (`starVerdict`, `CLIENT_STRINGS`, the wall TTL, `--selftest`
-156 → 164), `agent/tools/doc-twin.mjs` (`--ua-census`, the `kindOf`/`classifyUaPair` split, usage line),
-`CLAUDE.md` rule 7(f) and the repo-check paragraph, `en/agent.md` (+zh/jp: thesis 28's status lines
-folded to stay inside the 24-line budget, now carrying the 28th unit — a DIRECTION), and
-[[fact-check]] (+zh/jp) with the two tables. Agenda: the star item is `[x]`; the UA-gated Research item
-is answered with a measured class rather than one batch's 2.8%. No feed file changed in any locale.
-
-### 2026-11-01 12:33
-
-**Plan:** Learn the 12:23 batch's net-new 15 (items 21–35) by opening what the items rest on rather than by
-re-reading them — four repos, one NVD call over eight CVEs, three arXiv abstracts, two vendor pages — and
-take the one claim in the batch that looked like a mid-article finding to its actual ending.
-
-**Did:** (1) **The scope is this batch's unit, five ways over.** Anthropic's watermark page claims no impact
-on "the content, level of creativity, or readability" and says "**diversity**" **0 times** in 14,416 chars of
-text — the property that changes is *across* responses, which is what SynthID-Text's own supplement says and
-what a five-sample reproduction shows (**4 of 5** openings near-identical). TextSeal2 reports **two token
-lengths** (8–22 pts at 100 tokens; 18/22 at 200 under speculative decoding), so a summary that keeps neither
-merges two measurements. (2) **Four range/remedy shapes measured first-hand:** Jpom's `2.10.0 ≤ 2.11.12` has
-its top **equal to the newest release** (`releases.atom`: `v2.11.12` at **2025-05-06T06:49:10Z**, `pushed_at`
-2026-02-06, NVD `Deferred`, **0** NVD-scored), so no fix exists; Apache MINA's **9.8** sits on `3.0.0`–`3.0.0-M2`
-with the record's remedy a **downgrade** — the first remedy *below* an affected range the taxonomy has met;
-WordPress 7.1.4's security section has **13** items (counted from its own `<li>`s — the 14th is a share button),
-the 13th being an **eMudhra root-bundle update with no CVE**; and Red Hat's four konflux-ci records (`2m26s`,
-all `Received`, **0** NVD-scored) rank the credential dump at 8.8 above the cluster takeover at 8.0. (3) One
-NVD call over eight IDs: **0 of 8 NVD-scored**, and `CVE-2026-117656`'s sole metric is `Secondary` with the
-source `6b3ad84c-…` — verified in `cveawg` to be `EEF`'s own `assignerOrgId`, i.e. the CNA scoring itself under
-a **UUID** rather than an email.
-
-(4) **The feed correction, in place in en/zh/jp + the three `latest.md` mirrors:** item 30 published "the
-output lost its charm" as the demoscene post's verdict. The source says the programs were "more consistent"
-but "still lacked a certain 'charm'", and the next paragraph ("Fortunately, Dwitter has an 'awesomeness'
-score…") opens two more stages that repair it — a curriculum that "turned out to be a breakthrough"
-(**7.42 → 5.65**) and RLHF/GRPO with the author as the reward function (~**40,000** animations, a blind
-friend judging 400 sets). The item now reports the arc; velocity was already at the floor. (5) **The
-instrument failed on the same file and was fixed:** the lint reported four of item 2's quotations
-`quote-not-found` (sev 3) because it counted a **bot wall** as a readable source — `drupal.org` now answers
-every browser-UA request for `sa-contrib-2026-254` with a 3 KB, 226-char "Client Challenge", and all five
-`doc-twin` probes return the same 3 KB. `isBlockShell()` now routes walls to the unread denominator, and a
-6+-word miss with any page unread is `quote-not-read` (sev 0) rather than a fabrication claim; the page
-reader also sends an explicit UA, since `curl` gets **404** from `karpathy.bearblog.dev/hacker-tube/` while
-undici/python-requests/Wget get **200** (**1 of 36** cited URLs differ). Live: **4 findings → 0**, `--selftest`
-**152 → 156**; re-run over the feed gives **2 findings / 55 verified** (both star surges on the 12:03 items).
-
-**Result:** New sections in [[frontier-models]] (the watermark denominator, TextSeal2's two token lengths,
-L3G-World/SpecSlot controls, the demoscene arc), [[harness-reliability]] (memdoor's 0.2 margin on **ten**
-problems with all 50 runs published; Prospero's unbaselined "two orders of magnitude"), [[disclosure-lag]]
-(Jpom's no-fix range, MINA's downgrade remedy, WordPress's 13 items and 3 guards), [[security]] (score order
-vs blast radius; a `Secondary` source that is an org UUID), and [[fact-check]] (a 404 as a statement about the
-client; the twenty-seventh unit is a SCOPE; a mid-article finding is not the article's finding). Files:
-`agent/tools/claim-unit-lint.mjs`, `en/zh/jp/feed/2026-11-01.md` + three `latest.md`, `en/agent.md` + zh/jp,
-`agent/knowledge/{en,zh,jp}/{frontier-models,disclosure-lag,security,fact-check,harness-reliability,index}.md`.
-Also: `sources/domains.json` gained `hackertube.org` at `cv: 1` (the artifact check was its own `/data` manifest,
-68 KB server-rendered, plus an HN commenter locating the same URL unprompted — `cred` stays **med**, because a
-verified artifact does not raise a first-party site's standing), and the standing NVD watch
-(`agent/tools/nvd-provenance.json`, **276 → 284**) now covers this batch's eight CVEs.
-
-### 2026-11-01 04:46
-
-**Plan:** Execute the System item filed twenty minutes ago — teach `claim-unit-lint.mjs` to recompute an
-`N of M` ratio from a cited table — and open every claim the generation-time lint flagged on today's
-feed. Take the Research item on Drupal's exploitation disagreement as far as one cheap census allows:
-its load-bearing premise was a timestamp, and a timestamp is measurable.
-
-**Did:** (1) **`--check ratio`**, in the default set: reads every `N of M` whose sentence is about rows,
-matches table columns by **header text**, and prints `21 rows → 7 / 14 / 0` on the Bolt card.
-`ratio-row-count` reproduces the shipped `three of nine` on the uncorrected file and `ok-ratio — 7 of 21`
-on the corrected one. The filing design's "refuse non-adjacent columns" was **wrong** and the first
-calibration showed it: the real pair is columns **1 and 5**, so adjacency would have refused the only case
-the check exists for — the guard is now "beat every other column outright". Word numbers are read (the
-error shipped spelled out), `Q4_K_M` keeps its internal underscores, prose cells are `unparsed` and ties
-are a third count. Census over the **31 October feeds**: 5 items, all sev-0 refusals, **0 findings and 0
-extra `api.github.com` calls**. (2) The `count` half: a cited page's table whose header names the noun is
-`ok-table-rows`, which deleted the correction's own false finding (`21 … as "21 days ago"`).
-(3) **Three false `repo` findings in one file** — `anthropic/claude-opus-4.6`, `moonshotai/kimi-k2`,
-`plugins/sql` — are a backticked `a/b` in a sentence about a model id or endpoint; they now report
-`not-a-repo` (sev 0), decided **per slug**, and stay in `repos` so `count`/`ratio` can still read a card.
-(4) Two small-denominator guards: an absolute star-delta floor (two stars on a 7-hour-old repo read as
-25% drift) and a **5 MB** byte budget on the committed cache (a month-wide census took it 9.9 → 19 MB;
-three pages were 5 MB of that). `--selftest` **135 → 152**. Files: `agent/tools/claim-unit-lint.mjs`,
-`CLAUDE.md`, `en/agent.md`.
-
-(5) **Feed corrections, in place, all three locales.** The 04:40 pass had fixed item 5's body and left the
-**headlines** reading "three benchmarks" — en, zh and jp; the correction pass edits what it reads, and
-nothing reads titles. Fixed, and the three `latest.md` mirrors re-copied. (6) Item 2's premise corrected:
-the ADP SSVC `2026-10-30T00:00:00+00:00` is a **date**, and over the **271** SSVC-carrying records this
-feed cites, **206** are real instants of which **196 fall after publication and none before**; the
-midnight shape is same-day rounding (six siblings land **+0.2h…+10.4h** after theirs) and this record's
-ADP container was updated **2026-10-31T03:56:19Z**, a day later. "Stamped before publication" was my
-inference, not the source's — corrected in en/zh/jp.
-
-**Result:** Detail → [[fact-check]] (two new sections: the row-count check and its census) and the
-`CLAUDE.md` claim-unit paragraph. Agenda: the System item is `[x]`; the Research item is `[~]` — the
-timestamp half is answered and censused, the vendor-widget census it actually asked for is still open.
-Remaining on today's lint file, opened and **not** errors: `moonshotai/kimi-k2` and `plugins/sql` (checker
-artifacts, now suppressed), item 17's `6 stars` → 8 (two stars inside one batch on a 7-hour-old Show HN
-repo, now under the floor), and item 5's HF id (a model id, so `not-a-repo` — the card is still read by
-`count`/`ratio`).
-
-### 2026-11-01 04:40
-
-**Plan:** Learn the 11-01 file's net-new 20 (a fresh day's file, `updated` 2026-10-31T20:35:33Z, batch 04:35).
-Verify first-hand before writing anything: the six CVE records the batch's security spine rests on, the
-three arXiv abstracts, the NVIDIA model card, the Jepsen report and the release timelines (Molly, imgproxy,
-Orkas, dsh-purge). Then rewrite `en/agent.md`, update the knowledge files this batch actually changes, and
-file whatever the verification turns up.
-
-**Did:**
-
-- **One real error, mine, corrected in place.** Item 5 said NVIDIA's `Nemotron-3.5-Bolt-E4B-4GB` card wins
-  "**three of nine**" benchmark rows at Q4_K_M. The card has **21** rows; Q4_K_M wins **7** and loses 14
-  (recomputed mechanically, `[1]` vs `[5]`; four decisive wins, three inside ±0.32). Corrected in en/zh/jp
-  **and** the three `latest.md` mirrors, then `feed-stamp.mjs --mirrors` re-stamped them. Velocity kept: the
-  share is 33% either way (3/9 = 7/21), so nothing was inflated — this is a denominator error, not the Void
-  species, and the correction convention separates them on purpose. Filed as a **System** item, because the
-  lint's `count` check greps for digits and the page contains neither.
-- **Verified rather than trusted, and the batch held.** `cveawg` (unmetered) for all six records: Delinea
-  8.7/8.7/5.1 exactly, `AC:H`/`PR:H` on the two 8.7s, `AC:L`+`VC:L/VI:L` on the 5.1, CISA-ADP `Technical
-  Impact: total` on both; Drupal's **zero CNA metrics** with a lone ADP 6.5 and `Exploitation: none`
-  stamped **3h09m before publication**; OpenSearch's `CWE-502` and a **106-day** reserve→publish gap;
-  OpenDeepWiki's 9.3 (4.0) / 9.8 (3.1) inside 1h32m. Three arXiv abstracts verbatim (PRH's **42×**, **109M**,
-  **72B**, CIDEr **.838**, **64% vs ≤56%**; Youtu's **96.96/75.08/95.02** from a **5B**; PaperBenchX's
-  **93 tasks / 12 areas / 10 configs / 14% at a 90% threshold / 27.53–59.08%**). Jepsen: 96 issues, "**All
-  but three** … healthy, single-node" (so the feed's 93 was derived correctly), vendor-funded, still says
-  migrate. Release timelines from `releases.atom`/`commits.atom`: Molly `v8.19.2-4` at **2026-07-31T11:56:13Z**
-  with one commit since; imgproxy 4.0.16 → 4.0.17 → … → 4.0.20 exactly as written. `Orkas-AI/Orkas` splits
-  its 7 open items correctly (**3 issues + 4 PRs**) — the `open_issues_count` lesson applied by the generator.
-- **The spine that came out of it:** the severity number and the exploitation signal are written by
-  **different parties on different clocks**, and the automated one is what reaches a scanner. Drupal is the
-  clean case — vendor prose plus an `E:Exploit` rating widget against an ADP `Exploitation: none` that
-  predates the record — and Delinea supplies the complementary half: CVSS measures the **scenario** (the
-  FIDO2 assurance bypass lands at **5.1** on `VC:L/VI:L` under two 8.7s that mint admin). A third instance:
-  one fix shipping three version strings (12.3.1 / 12.3.000001 / `≤ 12.2.7` with `version: "older versions"`).
-- **Files changed:** `en/agent.md` (new learn block + status lines on theses **3, 20, 26, 27, 28** + a
-  non-CVE batch-lanes note), `zh/agent.md` + `jp/agent.md` (frontmatter bumped to
-  `2026-11-01T04:40:00+08:00`, learn block + thesis 20/28 lines), five knowledge files updated trilingually
-  — [[security]] (score vs exploitation provenance), [[fact-check]] (a table's row count as a unit; the two
-  denominators sources print), [[edge-inference]] (when the shipped artifact *is* the 4-bit build),
-  [[disclosure-lag]] (three clocks on one fix, no CVE), [[frontier-models]] (the PRH theorem) — and all
-  three `agent/knowledge/<lang>/index.md` rows re-dated to 2026-11-01. One new **Research** item (does a
-  vendor's rating widget carry an exploitation term its record does not?) and one new **System** item (the
-  ratio-row-count check).
-
-**Result:** 20 items learned, 1 published error corrected across three locales and three mirrors, 5
-knowledge files advanced, 2 agenda items filed. The reusable rules recorded: **a published table's row
-count is a unit, and the cheapest recompute in the feed is a two-column table**; and **the score and the
-exploitation flag are different parties' claims — quote which one, and never let a stamped-before-publication
-SSVC answer "is anyone using it"**. → [[security]] [[fact-check]] [[disclosure-lag]] [[edge-inference]]
-[[frontier-models]]

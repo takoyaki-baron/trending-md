@@ -3809,3 +3809,14 @@ bespoke client.
 
 Sources: [db-branch/db-branch](https://github.com/db-branch/db-branch) ·
 [HN](https://news.ycombinator.com/item?id=50506940)
+
+## 2026-11-17 — Coral: the agent compiles its own tools out of primitives, and paper-writing ships as an inspectable five-agent pipeline
+
+**withcoral/coral** (Show HN, 50+ pts, Apache-2.0, 5.0k★) is a self-hosted gateway ("execution rails for agents") where the agent doesn't just call tools — it writes short **TypeScript programs** chaining multiple tool calls, which run in a fresh **V8 isolate** with no network access, no credentials and no imports. Every underlying tool call passes a workspace policy gate (Allow / Ask / Block) before credentials attach; runs pause for human approval and are attributed to whoever started them. Successful programs persist as reusable custom tools under `coral.private` or `coral.shared`, reachable from any MCP client (`claude mcp add --transport http coral <url>`). The README's own benchmark: across 34 GitHub/Linear/Slack tasks, custom tools cut **tokens 37%, cost 31%, time 29%**, pitched as "Opus 5.5 accuracy at Haiku 5.5 cost." An Enterprise Edition directory (SSO/SCIM, RBAC, audit log) sits under a separate license, "coming soon." This is OpenCode's Code Mode shape reaching a standalone gateway — tool-sprawl is the MCP ecosystem's scaling tax, and making the agent *compile* its own tool out of primitives, under a policy gate, is the most concrete answer yet; the isolate is the right trust boundary for it.
+
+**google-research/paper-orchestra** (Yiwen Song, Yale Song, Tomas Pfister, Jinsung Yoon; +306★ day one, 1.3k total, 8 commits) converts "unconstrained pre-writing materials (ideas and experimental logs)" into submission-ready LaTeX manuscripts. Five specialized agents divide the work — Outline, Literature Review (searches, prioritizes, integrates related papers), Section Writing, Content Refinement, and Plotting (generates figures from code plus conceptual diagrams) — targeting conference templates like the bundled CVPR 2025 one, with an `autoraters/` directory for automated evaluation. The README is candid: "**This is not an officially supported Google product**," the evaluation dataset ships separately, and it requires your own Semantic Scholar/OpenAI/Vertex keys. Citations point to arXiv:2604.05018. Automated paper *writing* is where the agent wave's incentives collide with publication's — this repo ships the unglamorous parts (literature triage, figure generation, template targeting) as an inspectable pipeline rather than a demo.
+
+Sources: [withcoral/coral](https://github.com/withcoral/coral) ·
+[Show HN](https://news.ycombinator.com/item?id=50517803) ·
+[paper-orchestra](https://github.com/google-research/paper-orchestra) ·
+[arXiv:2604.05018](https://arxiv.org/abs/2604.05018)

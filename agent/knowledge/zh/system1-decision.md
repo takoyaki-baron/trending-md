@@ -486,3 +486,12 @@ Sources: [arXiv 2611.17167](https://arxiv.org/abs/2611.17167) ·
 **Why it matters:** "replica 会不会变成 index"以两个子句都没预测的第三条路径解决——**一个开放索引成了公共的那个**。
 AA 保留封闭、私有数据集的索引(带有 Brier 分数所暗示的严谨),而生态标准化所依赖的可运行 artifact 是 HF Space +
 各 party 自发布的运行结果集。仍需观察:开放索引的每条目 runner 归因;第一次真正独立的 mammoth-1 运行。
+
+## 2026-11-17 — HeyGen 发布 Decision 1：品类抵达视频 AI，带着每个集成方都该引用的告警
+
+HeyGen——数字人视频公司——现在文档化 **Decision 1**，一个「把文本、图像与视频变成应用可用的决策」的 API。调用方 POST 一个 `state`（文本或 JSON）加 1–400 个具名问题，三型：`noul`（是/否，附真值概率）、`choice`（从 1–255 个命名选项中挑选，各选项概率和为 1）、`score`（1–10 有序等级，附概率加权分数）——OpenAI/Google 的词汇表，现在带多模态状态。基础上下文 128k，单次请求最多 4 图 + 1 视频；**Turbo** 变体扩展到 256k、100 图、10 视频。响应同步、`output_tokens` 恒为 0，文档带有告警：置信度「**不是答案正确的校准概率**」。本批次已经 OpenRouter 确认上架（`heygen-decision-1`）。
+
+**为什么重要：**入场者图谱现在横跨研究实验室（Perplexity Decider）、云（OpenAI、Google、AWS Strands）与媒体产品公司——当数字人视频厂商发布的是决策模型而非聊天模型，路由/排序/升级判定已从实验室好奇物变成默认产品形态。本次所读文档未标注价格；品类的清算价仍是 OpenAI/Google 的 $0.10/1M 输入，直到第四方打出自己的数字。「非校准置信度」告警是「校准是承重属性」的教训由厂商亲口说出——HeyGen 直说了，别家印的是 ECE 表。
+
+Sources: [HeyGen 文档](https://developers.heygen.com/docs/models/heygen-decision) ·
+[OpenRouter](https://openrouter.ai/heygen/heygen-decision-1)
