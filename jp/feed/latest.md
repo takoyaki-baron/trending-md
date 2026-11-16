@@ -1,568 +1,290 @@
 ---
-date: 2026-11-16
-updated: 2026-11-16T12:46:44Z
+date: 2026-11-17
+updated: 2026-11-16T20:29:19Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 47
+sources: 23
 license: CC-BY-4.0
 ---
 
-# trending.md — 2026-11-16
+# trending.md — 2026-11-17
 
-## 1. Meta がエージェント対応のデザインシステム Astryx をオープンソース化——週 13,660 スターで週間ボード最大の伸び
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** GitHub Trending · +13,660★ this week · 28.7k total · v0.7.16 released Nov 14 (~00:44 UTC+8)
-- **Tags:** `astryx` `design-system` `react` `stylex` `meta`
-
-**meta/astryx** は Meta の新しいオープンソースデザインシステムで、今週の GitHub Trending で最も強い勢いを持つリポジトリです。**今週 +13,660★** で合計 28,748 スター、v0.7.16 は 11 月 14 日リリースで、このフィードの生成 1 時間前までコミットが続いています。README の言葉を借りれば「完全にカスタマイズ可能で、今の私たちの作り方——人と、それに並んで働くエージェント——のために作られたオープンソースデザインシステム」。中身は具体的で、**StyleX**（Meta のコンパイル時 CSS-in-JS）上に構築された React 19+ コンポーネント、npm パッケージ（`@astryxdesign/core`）とグローバル CLI（`@astryxdesign/cli`）、そして「API・ドキュメント・CLI を一体で設計し、人間も AI アシスタントも同じ参照資料から同じ方法で構築できるようにする」という明示的な設計目標です。**Currently in Beta** の表示があり、リリースのテンポは速く——バージョン番号ベースで 2 週間弱ですでに 16 個のパッチリリースが出ています。
-
-**Why it matters:** デザインシステムは「エージェント対応」が現実と照らし合わせて試される場所です。コンポーネントはまさにエージェントに生成を求められる、反復的で仕様が重い出力であり、ドキュメントと CLI が最初から対面にエージェントがいる前提で設計されたライブラリは、マーケティングではなく本物のインターフェースの変化です。注目すべきは beta 表示です。週 1.37 万スターは注目度であり、README 冒頭の Sync-Contract コメント（「アーキテクチャ変更はドキュメント更新を必須とする」）には、ドキュメントのドリフトこそが失敗モードだと開発者自身が分かっていることが表れています。
-
-[`🔗 meta/astryx`](https://github.com/meta/astryx) · [`🔗 Release v0.7.16`](https://github.com/meta/astryx/releases/tag/Astryx-v0.7.16)
-
----
-
-## 2. 「AI 生成コードはすべてオープンソースにすべき」——865 ポイントの HN エッセイが専有 AI コードを「ライセンス洗浄」と呼び、CC0 を解として提案
+## 1. 米大手5行で同時障害——BofA、Chase、U.S. Bank、Wells Fargo、Zelle が一斉にダウン報告、Microsoft障害週間の余波が残る中
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** jakub.jankiewicz.org · 865+ pts on HN · 5.3h ago (~22:46 UTC+8)
-- **Tags:** `open-source` `ai-generated-code` `copyright` `licensing`
+- **Source:** apnews.com · 289+ pts on HN · 1.5h ago (~02:31 UTC+8)
+- **Tags:** `outage` `banking` `zelle` `reliability`
 
-Jakub T. Jankiewicz のエッセイが一夜にして Hacker News の頂点に立りました（**865+ ポイント**）。議論は「出自」と「著作権」の二層構造です。出自について。今日のモデルは、数十年分の GPL/MIT/BSD コードと、法的に帰属表示を要求する Stack Overflow の CC BY-SA コンテンツで訓練されてきました。この共有知識から生成したコードを専有として出荷することは、彼の言葉では**「ライセンス洗浄（license laundering）」**です。著作権について。純粋な AI 生成物には人間の著者がいないため（米国の「サルの自撮り」判決——後に米国著作権局も引用——の流れで）そもそも著作権で保護できない可能性が高く、これは諸刃の剣です。企業が権利を主張できない代わりに、コミュニティも主張できません。彼の具体的な提案は、人間の実質的な貢献がない AI コードについて、開発者が明示的にオープンソースライセンスを付与するか **CC0** でパブリックドメインに捧げること——司法管轄差の注意付きで（米国と違い英国はコンピュータ生成作品に限定的な保護を認めています）。
+月曜夜、米国の5つの大手金融機関でオンライン口座へのアクセス困難が相次いで報告された：**Bank of America、Chase、U.S. Bank、Wells Fargo、Zelle** が同時に Downdetector の障害ボードに登載された。Chase が最も早く性格付けを行い、広報は「a technical bug issue, not a cyber issue」（技術的バグの問題であり、サイバー攻撃ではない）と述べ、「Due to a technical issue, some transactions are taking longer than usual to complete but customers still have access to their accounts and funds.」（技術的問題のため、一部の取引の完了が通常より長くかかっているが、顧客は依然として口座と資金にアクセスできる）と説明した。AP の記事はこの瞬間を明示的に今週の文脈に置いた：金曜日に始まり Outlook・Teams・Copilot を数時間落とした Microsoft 障害に続くものだ。まだどの銀行も根本原因報告書を出していないが、決済レールの Zelle が報告されたサービスに含まれているのが最も影響範囲の広いディテールだ。
 
-**Why it matters:** これは業界が先送りし続けてきたライセンス問題であり、このエッセイの価値は不満で止まっていない点にあります。明日から誰でも採用できる規範（あなたの AI コードはオープンに宣言するか、CC0 にする）を提示しています。HN スレッドでの訓練データ出自と著作権の著者性要件の衝突は、やがて実際の貢献ポリシーに書き込まれるはずです。11 月 11 日に取り上げた Open Source Says No の AI 貢献ポリシーカタログは、同じ戦いの受け手側の姿です。
+**Why it matters:** 4日の間に、異業種で2波のシステミック障害——読者が内面化すべきパターンはこれだ：集中度そのものが脆弱性であり、2026年のインシデントのテンポ（Microsoft、FAA の地上停止、そして今は銀行）は、レジリエンスエンジニアリングをニッチな関心事から調達判断へ変えつつある。各銀行の事後分析が同じベンダーを指名するか注視したい——5行が同時に落ちるのでなければ、それは驚くべき偶然だ。
 
-[`🔗 Jakub T. Jankiewicz：All AI-generated code should be Open Source`](https://jakub.jankiewicz.org/blog/ai-code-open-source/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50507303)
+[`🔗 AP News: Customers at major banks report difficulty accessing accounts online`](https://apnews.com/article/bank-outage-chase-wells-fargo-truist-50fee2693c22f597fa6ca51a97ef2cda) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50521045)
 
 ---
 
-## 3. NYT：ラットニック商務長官が AI チップ輸出規則の緩和を推進——規則の影響を受ける東南アジアのデータセンターには彼の家族企業の顧客も
+## 2. 「w2rt6byl5nf1opmc-a.com とは何か？」——デタラメなドメインが Majestic Million で github.com を上回り、答えは Majestic 自身の実験だった
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** nytimes.com · 355+ pts on HN · 8.4h ago (~19:40 UTC+8)
-- **Tags:** `export-controls` `chips` `policy` `conflict-of-interest`
+- **Source:** jack.cab · 297+ pts on HN · 6.2h ago (~21:51 UTC+8)
+- **Tags:** `seo` `web-trust` `ranking-data` `investigation`
 
-ニューヨーク・タイムズの 11 月 15 日の調査報道によると、商務長官 **Howard Lutnick** は、海外データセンターを対象とする米国の AI チップ輸出制限——とくに東南アジアの施設に影響する規則——の緩和を推進してきました。そしてその規則の影響を受けるデータセンターの一部は **Cantor Fitzgerald** の顧客です。同社は Lutnick が以前率いていた投資銀行で、現在は彼の息子たちが経営しています。タイムズはこれを、商務省のチップ輸出姿勢への 1 週間にわたる疑視の上に積み重なる新たな利益相反の疑問と位置づけており、Nvidia 関連の対中国政策の扱いも含まれます。Lutnick と、取締役会の独立調査を巡って 11 月 13 日に辞任した元 Nvidia CEO ジェンスン・ファン（Jensen Huang）の友人関係も、同じ絡み合いの一部です。本項の詳細は Yahoo News 経由の NYT 報道によるもので、記事本体は配信時点でペイウォール内です。
+Jack Cabral の調査は虚栄心チェックから始まった：彼のサイトは siterate.org で #783,052 位——5つのベトナムのカジノスパムサイトの後ろ——だったが、そこで彼は **w2rt6byl5nf1opmc-a.com が第8位**にランクしているのに気づいた。googletagmanager.com、microsoft.com、github.com より上だ。しかもこのドメインはブラウザで全く解決しない。ランキングの基盤である Majestic Million を掘り下げると：約274,833の被リンク サブネット、約853,298の被リンク IP、**241,085,378の nofollow バックリンクに対してわずか6の follow リンク**（5,163,708の参照ドメインに分布）——一方 Ahrefs は53バックリンクしか示さず、証明書の初出は11月11日で、ほとんどのリンク*より後*だった。追更新で決着がついた：Majestic 自身の Steve Pitchford が返信——「Some internal experimentation. Choose a domain, make it esoteric, do some experiments. However, looks like we forgot to add a filter to avoid reporting it.」（内部実験です。ドメインを選び、風変わりにして、実験をしました。ただレポートに入らないフィルターを付け忘れたようです。）著者の教訓：本番環境でテストするな。
 
-**Why it matters:** 輸出管理政策は、開発者が日々生きている GPU の価格と入手可能性の曲線に影を落とす見えない手です。この報道は、DRAM 価格固定訴訟の棄却申立てが退けられたのと同じ週に、WSJ の循環融資報道とともに飛び込んできました。このフィードの読者への通り筋は明確です。AI 計算資源の供給側は、利益相反が事後ではなくリアルタイムで報道される決定によって、今まさに形作られているということです。
+**Why it matters:** Majestic Million や Tranco のようなランキングデータセットは、セキュリティ調査、広告の詐欺検出、あらゆるドメイン人気ヒューリスティックを静かに支えている——そして一つのフィルター漏れした内部実験で、トップ10の座が数週間汚染され得る（Tranco は早くも10月5日に #38 と記録していた）。サードパーティの Web 信頼データを消費する者は皆、供給側の衛生状態を引き継ぐ。
 
-[`🔗 NYT（Yahoo News 経由）：Lutnick Eased AI Chip Restrictions While Firm Helped Clients`](https://www.yahoo.com/news/politics/articles/nyt-lutnick-eased-ai-chip-162816136.html) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50506180)
-
----
-
-## 4. 新型 MacBook Pro の OLED ディスプレイは 240Hz の PWM 調光——置き換わった Mini-LED は 14,880Hz、PWM 感受性のあるユーザーが返品を始めている
-
-- **Velocity:** ▮▮ rising
-- **Source:** macanorak.com · 301+ pts on HN · 6.8h ago (~21:15 UTC+8)
-- **Tags:** `macbook-pro` `oled` `pwm` `display` `accessibility`
-
-MacAnorak のエッセイ（11 月 14 日）は、新型 MacBook Pro の **「PROLED XDR Display」**（タンデム OLED）をめぐり形成されつつある状況をまとめています。MacRumors や Reddit のスレッドには、使い始め数時間で頭痛・めまい・眼の疲労を訴えるオーナーの報告が並び、返品した人もいます。そして理由を説明しうる測定値が出ています。**Notebookcheck のラボ測定**を引用した同記事によれば、新型 OLED パネルの輝度変調周波数は **240 Hz**（最悪条件、輝度 99% 以下で検出）。一方、以前に測定した Mini-LED 版 MacBook Pro は **14,880 Hz**——約 62 倍の差です。エッセイは議論が荒れていない場所では慎重です。個人の報告は「全員に害がある」証拠ではないこと、周波数だけでは快適性が決まらないこと、報告された不快感の一部はナノテクチャーに関する可能性があること。その要望は控えめです。Apple はすでに OLED iPhone と新型 iPad mini に **Display Pulse Smoothing** のアクセシビリティ設定を搭載している。それを Mac にも——そして購入者への助言は、2,899 ポンドから始まる機種を決める前に、実際の勤務時間ぶん試してからにすることです。
-
-**Why it matters:** これは主要な開発機のディスプレイで、丸一日向き合うために買うものです。「仕様は壊麗」と「あなたが快適に使える」が、一部の買い手にとって乖離し始めており、240 対 14,880 Hz の測定はこの論争で最初の逸話ではない数字です。注目すべき前例は Apple 自身が作りました。同社はすでに OLED iPhone でこの原則を設定という形で認めています。問題は Mac ユーザーが同じトグルを得られるかです。
-
-[`🔗 MacAnorak：The MacBook Pro's OLED PWM Problem`](https://macanorak.com/the-macbook-pros-oled-pwm-problem-when-a-better-display-becomes-worse-to-use/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50506719)
+[`🔗 jack.cab: What the fuck is w2rt6byl5nf1opmc-a.com?`](https://jack.cab/blog/siterate) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50517602)
 
 ---
 
-## 5. Cyrus SASL 9.3：SRP プラグインのゼロ共有秘密で誰でも認証通過——修正はプラグインごとの削除、しかも 2.1.28 が依然最新リリース
-
-- **Velocity:** ▮▮ rising
-- **Source:** CVE-2026-129483 (VulnCheck CNA-assigned) · record published 5.8h ago (~02:17 UTC+8)
-- **Tags:** `cve` `cyrus-sasl` `authentication` `srp`
-
-**CVE-2026-129483**（VulnCheck の CNA コンテナで CVSS **4.0 ベース 9.3** Critical。NVD は VulnCheck の CVSS 3.1 **9.1** も配信。レコードは `Received`、公開 2026-11-15T14:17:27Z）。Cyrus SASL **2.1.28 まで**の SRP サーバーメカニズムでは、`srp_server_mech_step2` が群 `N` の倍数であるクライアント公開値 `A` を拒否しないため、認証が破れます。`A = N` を送るクライアントは共有秘密を**ゼロ**に強制でき、パスワードを知らずに任意の既存ユーザーとして認証し、セッション鍵も取得できます。当日公開のレコードとしては異例なほど上流の痕跡が完璧です。issue **[#896](https://github.com/cyrusimap/cyrus-sasl/issues/896)**、oss-sec への投稿、公開 PoC gist、そして修正コミット——注目すべきは、修正が数学を直すのではなく**SRP プラグイン全体を削除している**こと（コミット `fb3724f4`、11 月 12 日）。運用者側の問題はここからです。影響上限の 2.1.28 は*まさに最新リリース*なので、アップグレードで直るバージョンが存在しません。今日の対策は修正コミット自身の形そのもの——SRP プラグインを無効化または削除する——であり、削除を含むリリースが出るまでこれが答えの全部です。
-
-**Why it matters:** SRP は大半のスタックが選ばないメカニズムですが、Cyrus SASL はメールサーバーや SASL 認証のあるあらゆる場所に同梱されており、認証不要のゼロ秘密バイパスは認証バグとしてほぼ最悪の部類です。読む際の注意が二つ。9.3 と 9.1 は同じベンダーの数字を CVSS 4.0 と 3.1 で出したものです。バージョンを明記して引用してください。そして「影響 ≤ 2.1.28」にそれより新しいリリースがない以上、アップグレードの助言は現時点で空であり、プラグイン削除こそが答えです。
-
-[`🔗 CVE-2026-129483 レコード`](https://www.cve.org/CVERecord?id=CVE-2026-129483) · [`🔗 cyrusimap/cyrus-sasl#896`](https://github.com/cyrusimap/cyrus-sasl/issues/896) · [`🔗 oss-sec 投稿`](https://seclists.org/oss-sec/2026/q4/122)
-
----
-
-## 6. Google の Elephant-Goldfish Model：象がコンテキストを持ち、金魚は何も持たずレビューする——「新鮮な目」レビューパターンに週 5,500 スター
-
-- **Velocity:** ▮▮ rising
-- **Source:** GitHub Trending · +5,539★ this week · 19.7k total · pushed 1.3h ago (~02:47 UTC+8)
-- **Tags:** `egm` `agent-review` `specification` `google` `context`
-
-Google org 配下のオープンソース **google/elephant-goldfish-model**（EGM）は、AI アシスタント向けプラグインで、一つのアーキテクチャ思想の上に立っています。コンテキスト保持者とレビューアを分けることです。「**Elephant** がプロジェクトのコンテキストを保持し仕様書を起草します。**Goldfish** レビューアは*それ以前の会話なしに*草稿と参照されたソース資料を検査し、語られていない前提と盲点を露出させます。**あなた**がアーキテクチャのトレードオフを判断し、実装前に仕様を承認します。」デフォルトのワークフローはソフトウェア仕様書を対象とし、他の文書には `/egm-review-loop` でレビューアと基準を選べます。配布は完全にマルチハーネスで、ChatGPT/Codex デスクトップ向けに公開プラグイン、Antigravity 向けに `agy plugin install`、Claude Code 向けにプラグインマーケットプレイス（`claude plugin marketplace add google/elephant-goldfish-model`）。EGM v0.1.1 は 10 月 27 日リリースで、今週 **5,539★** を集め、今夜もプッシュが続いています。
-
-**Why it matters:** コンテキストの腐敗は長いエージェントセッションの静かな失敗モードです。レビューアが起草者の盲点を引き継ぐのは、起草者のコンテキストを引き継ぐからです。「コンテキストを剥がれたレビューア」を*役割*として制度化し、人間を承認ゲートに置く一次 Google リポジトリは、今週 Google の Antigravity 記事が中心に据えた生成器の隣に falsifier を置く形と同根です。ただしこちらは仕様書レベルに適用されており、人間のサインが最も重要な場所です。
-
-[`🔗 google/elephant-goldfish-model`](https://github.com/google/elephant-goldfish-model) · [`🔗 EGM ウェブサイト`](https://egm.dev)
-
----
-
-## 7. Claude-BugHunter：Claude Code 向け 83 スキルのレッドチームバンドルがトレンド入り——681 の公開レポートパターン、うち 433 は出典を個別に明記済み
-
-- **Velocity:** ▮▮ rising
-- **Source:** GitHub Trending · +221★ today · 6.2k total · pushed 8.1h ago (~19:59 UTC+8)
-- **Tags:** `claude-skills` `red-team` `bug-bounty` `security` `agents`
-
-**elementalsouls/Claude-BugHunter** は「バグハンティングと外部レッドチーム業務のための自己完結型 Claude スキルバンドル」を自称し、本日 **+221★** でトレンドボードに乗りました（合計 6,242）。在庫は珍しいほど具体的です。**83 スキル**、15 スラッシュコマンド、24 の脆弱性クラスにわたる **681 の公開レポートパターン**——README によればそのうち **433 が個別に出典を付けられ、監査可能になっている**——に加え、企業 ID とインフラの攻撃マトリクス、エンゲージメントフォルダのスキャフォールディング、Burp Suite MCP 統合。表現は一貫して防御と正規側です。「承認されたレッドチームとバグバウンティの実務で実戦検証済み。加えて公開トレーニングプラットフォーム（DVWA、OWASP Juice Shop、Hacker101、testphp.vulnweb.com）でも。」配信時点で外部のローンチ発表は見つかりませんでした。README に見える更新の軌跡（出典補完）とスキルの波そのものが、正直に指摘できるトリガーです。
-
-**Why it matters:** 今月、エージェントスキルは攻守の両側からセキュリティに入りつつあります。BugHunter は攻撃の*手法論*を、雰囲気ではなく監査可能な引用としてパッケージ化しています。これはこの種の成果物がペネトレーションレポートで生き残れる唯一の形です。真似すべきは 433 という数字です。出典を名指すパターンライブラリは検証も撤回も拡張もできます。付けないものはただのプロンプトです。
-
-[`🔗 elementalsouls/Claude-BugHunter`](https://github.com/elementalsouls/Claude-BugHunter) · [`🔗 HN フロントページ（本日のセキュリティ面）`](https://news.ycombinator.com/front?day=2026-11-15)
-
----
-
-## 8. Sebastian Raschka が現代 LLM の位置エンベディングを解説：partial RoPE が静かに多数派に——本人はそれが割に合わないと懐疑的
-
-- **Velocity:** ▮ rising
-- **Source:** magazine.sebastianraschka.com · 157+ pts on HN · 7.8h ago (~20:14 UTC+8)
-- **Tags:** `llm` `rope` `positional-embeddings` `architecture` `transformers`
-
-Raschka の「Understanding Positional Embeddings in Modern LLMs」（Ahead of AI、11 月 15 日）は、GPT-2 の学習型絶対位置エンベディング、初期の正弦波方式、そして現代の状況地図へと、第一原理から歩くチュートリアルで、全体に PyTorch コードが付きます。ニュースは彼の LLM Architecture Gallery からのトレンドデータです。**全注意層にフル RoPE を使う構成は依然最も一般的ですが、2025 年から 2026 年にかけて割合が下がり**、**partial RoPE は RoPE を使うモデルの中で少数派から多数派になりました**（たとえば MiniMax-M3 は 128 ヘッド次元のうち 64 を回転のみ）。RoPE/NoPE の混在設計も増えています（SmolLM3 は 4 層ごとに RoPE を省略、一部のリカレント混成モデルは全体で NoPE）。本人の見解は実用的に逆張りです。「**partial RoPE はほとんど割に合わない**」——約 10% の回転でしばしばフル RoPE に匹敵したという論文を引きつつ、ただしフル RoPE が勝った評価もあると認めています。RoPE は 2027 年まで主流であり続けると予測し、T5 方式の学習型相対注意バイアス（Thinky の Inkling など）を注視すべきニッチと位置づけています。
-
-**Why it matters:** 「アーキテクチャのガルバニズム」——フロンティアモデルの真似をする——は、オープンモデル設計が実際に進む道です。だから「流行りの改変が何も買わないかもしれない」という抑制された主張は、モデルを訓練・設定する全員に直接役立ちます。絶対位置エンベディングがデフォルトでなくなった後に業界へ入った人には、RoPE/NoPE 文献への綺麗な入り口にもなります。
-
-[`🔗 Ahead of AI：Understanding Positional Embeddings in Modern LLMs`](https://magazine.sebastianraschka.com/p/understanding-positional-embeddings) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50506376)
-
----
-
-## 9. Google Labs の Stitch スキルライブラリが 8 月以降コミットゼロのまま +248★——エージェントスキルの波は休眠中の一次ライブラリを持ち上げるほど強くなっている
-
-- **Velocity:** ▮ steady
-- **Source:** GitHub Trending · +248★ today · 9.2k total · last commit Aug 17
-- **Tags:** `stitch` `agent-skills` `google` `design-to-code`
-
-**google-labs-code/stitch-skills**——AI UI デザインツール [Google Stitch](https://stitch.google.com) 向けの Google Labs 製 Agent Skills ライブラリ——が本日 **+248★** でデイリーボードに載っています。注目すべきは、そこに*無い*ものです。リポジトリの最終コミットは **8 月 17 日**、唯一のリリースは 3 月に遡るため、これはローンチではなく休眠状態の成果物の再浮上です。執筆前に私たちは自分たちの Void ルールに従ってリポジトリを読みました。スキルは [agentskills.io](https://agentskills.io) のオープン標準に従い、Codex、Antigravity、Gemini CLI、Claude Code、Cursor、OpenCode（最後は手動インストール）にプラグインとして導入でき、Stitch の MCP サーバーを包んでデザイン-to-コードのワークフローを担います。今日の急騰を説明する外部の告知はありません。最も簡潔な読みはこうです。スキルエコシステム——`anthropics/skills` は現在 195,276★（今週 +6,220★）、BugHunter や tradermonty のトレーディングスキルのようなパッケージが一週間デイリーボードを渡り続けている——が今や、休眠中の一次スキルライブラリが波ごと発見され星を集めるほど大きくなっている、ということです。
-
-**Why it matters:** 二つのことが同時に成立しています。Stitch で構築するなら、これは一次のデザイン-to-コードスキルの既成在庫リストになる。そして GitHub Trending をシグナルとして読む人への測定の注意になる。5 か月動いていないリポジトリの +248★/日は*波*について語るものであって、新しい開発については何も語らない。両方とも文に書くべきです。
-
-[`🔗 google-labs-code/stitch-skills`](https://github.com/google-labs-code/stitch-skills) · [`🔗 Agent Skills 標準`](https://agentskills.io)
-
----
-
-## 10. 「ダフィーは嘘をついた」：航空管制官が 11 月 13 日の全国地上停止の公式説明に異議——「彼らの誰も彼の説明を信じていません」
-
-- **Velocity:** ▮ steady
-- **Source:** commondreams.org · 107+ pts on HN · 4.3h ago (~23:45 UTC+8)
-- **Tags:** `faa` `ground-stop` `aviation` `accountability`
-
-11 月 15 日に停止の原因を取り上げて以来（アーカンソーのルータで銅線から光ファイバーへの換装が失敗した一件）、話は動きました。ショーン・ダフィー交通長官の説明——請負業者 L3Harris が銅を光ファイバーに置き換える間にルータが「データで過負荷になった」、FAA の 8 億 7500 万ドルの SMART AI システムは「まだ配線すらされていない」——が、今度は管制官自身に疑われています。Common Dreams が伝えるところでは、60 人の航空管制官に取材した Washington Examiner 記者 Anna Giaritelli が CNN で、この種のスイッチ作業は「金曜午後のような繁忙時間には行われない。週の中途、夜中、航空交通のない時間帯に行われる」と述べました。「**彼らの誰も彼の説明を信じていません。**」周辺の政治的文脈は重い。今回の地上停止は史上 3 例目で、25 年ぶりに長い全国停止（約 150 万人の旅行者に影響、土曜の欠航 4,100 便超）。下院議員 Walkinshaw は、性急な近代化が停止を招くと警告した 9 月の GAO 報告を引用し、ホーチュル州知事はダフィー長官の辞任を要求しました。出典の注意を一つ。発言は組合の声明ではなく、一人の記者経由の匿名管制官です。
-
-**Why it matters:** 二つのインフラ物語がここで衝突しています。40 年物の銅線と、待機中の AI システム。どちらに責任を帰すかが、要求されている 500 億ドルの予算がどこへ向かうかを決めます。管制官の時間帯への異議は具体的で検証可能であり、だからこそ、議論の音量より重要なのです。
-
-[`🔗 Common Dreams：'Duffy Lied'`](https://www.commondreams.org/news/duffy-ground-stop-explanation) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50507791)
-
----
-
-## 11. 「Emacs Is My Browser」が再浮上：EWW・mpv・Elpher で Web 全体を一つのテキストバッファにルーティング——ユースケースの 85〜90% をカバーし、残りには抜け道がある
-
-- **Velocity:** ▮ steady
-- **Source:** joshblais.com · 113+ pts on HN · 4.7h ago (~23:21 UTC+8)
-- **Tags:** `emacs` `eww` `browsing` `workflow` `minimalism`
-
-Joshua Blais の 4 月のエッセイ——**EWW**（Emacs Web Wowser、内蔵 `shr.el` で描画）を*デフォルト*ブラウザとして使う話——が再び HN のフロントページに載っています。その構成はブラウザというよりルーティングテーブルです。動画は **mpv** へ、PDF は **pdf-tools** へ、gopher/gemini は **Elpher** へ、検索エンジンはセルフホストの **SearXNG**、`browse-url-handlers` が振り分け、`eww-readable` がリーダーモード、そして反撃してくるページは `&` で設定済みの Chromium へ渡します。数字は具体的です。ユースケースの「約 85〜90%」をカバーし、Termux でスマホでも同じ構成で動かしていて、わずか 5〜10% だけ本物のブラウザに戻ります。そして*要点*はまさにその制約です。モダンブラウザは気晴らしを摩擦レスにしすぎました。おすすめフィードを描画できないテキストバッファは、意図をループに戻します。制限も正直です。x.com はダメ、ソーシャルログイン・銀行・行政手続きもダメ。
-
-**Why it matters:** こうした構成（Emacs をブラウザに、Gemini で Web へ、ターミナルファーストの復権）が繰り返し教えてくれるのはノスタルジアではなく、デフォルトは政策だということです。新しいタブで開くという一つ一つのデフォルトが、あなたがしていない決定です。今週の AI エージェントの読み取りの話題とも自然にペアになります。エージェントが必要としているアクセシビリティツリーのテキスト抽出は、`shr.el` が 2013 年からずっとやってきたことなのです。
-
-[`🔗 Joshua Blais：Emacs Is My Browser`](https://joshblais.com/blog/emacs-as-my-browser/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50507553)
-
----
-
-## 12. lucyNES：Odin で完成させた NES エミュレータ——Battletoads は動き、DMC チャンネルは未実装、「80/90% の罠」に全文が費やされている
-
-- **Velocity:** ▮ steady
-- **Source:** lucypero.com · 81+ pts on HN · 7.2h ago (~20:51 UTC+8)
-- **Tags:** `emulation` `odin` `nes` `retro` `writeup`
-
-Lucy による **lucyNES** のまとめ——一人で **Odin** で書いた NES エミュレータで、2024 年 4 月〜2025 年 1 月に完成し、音が不完全なまま正直に「Finished」とラベルづけされています——が話題になっています。リポジトリ自体の最終プッシュは 2026-05-14で、これは完成済みプロジェクトの再浮上であり、旅をしているのはこの解説記事のほうです。サイト自身の機能リストは「Battletoads と数百の他のゲームを完璧に動かすのに十分なエミュレーション精度」と読めます。Battletoads は名高いタイミング試練です。加えて 7 つのマッパー（NROM から MMC3、GxROM、AxROM）、ステートセーブ、デバッガ表示、CRT シェーダー——ただし DMC チャンネルは未実装で、多くのタイトルの音は貧弱です。白眉は事後分析です。80/90% の罠（精度の最後の詰めが 7 か月の大半を食んだ）、CPU と PPU のサイクルタイミング、そして Odin 固有の話。自動整数昇格がないことで実際のバグが出て、GC がないことで意図的な三アロケータ設計（フレーム毎のテンポラリ、グローバルヒープ、セッションアリーナ）に至ったこと。CBOR シリアライズにはビットフィールド付き生 union 用のカスタムハンドラが必要で、彼女はこれをエミュレーションにぴったりだと言います。
-
-**Why it matters:** エミュレータを書いてシステムプログラミングを学ぶジャンルの良き手本です。完成し、範囲を切り、欠落（DMC、弱いマッパーで動かないテストゲーム）とツールチェーンの角の両方に率直。Odin に興味があったなら、エミュレータはほぼ理想のワークロードです。ビットフィールド union、手動メモリ、隠れたアロケーションなし——そしてこのまとめは最後の 10% の値段まで計算済みです。
-
-[`🔗 lucyNES 解説`](https://lucypero.com/lucynes.html) · [`🔗 lucypero/lucynes`](https://github.com/lucypero/lucynes) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50506588)
-
----
-
-## 13. Microsoft 365 障害の最も奇妙な下流事象：11 月 13 日、Phantasialand のホテルプールで塩素濃度が上昇した際に警報メールが滞留——宿泊客 13 名が負傷
-
-- **Velocity:** ▮ steady
-- **Source:** wdr.de · 80+ pts on HN · 1.5h ago (~02:36 UTC+8)
-- **Tags:** `microsoft-365` `outage` `safety` `alerting` `iot`
-
-11 月 13〜14 日に Microsoft 365 の 2 日間障害を取り上げて以来、その最も具体的な犠牲が浮上してきました。WDR（ドイツの公共放送。Rhein-Erft-Kreis の警察と消防への取材に基づく）によれば、**11 月 13 日金曜の午後**、ドイツの Phantasialand リゾート内のホテル **Hotel Ling Bao** で、プールを利用した宿泊客が呼吸器の刺激症状を訴えました。現場での検査で、プールの**自動薬剤注入システムの故障**によって塩素濃度が安全域を大きく超えていたことが判明。WDR の当日夜の集計では **13 名**が塩素ガスによる刺激を負い、**5 名が病院へ搬送**、1 名が中等度の傷で経過観察、プールは閉鎖して換水されています——その後の報道では負傷者は **15 名**（HN の見出しの数字）に更新されています。HN での見立て——それがボードに載った理由——は警報の経路です。ホテルのプール安全警報は企業メールに乗っており、その日がまさに障害の窓で、警報が発火するはずの時間でした。WDR の本文は注入システムの故障と犠牲を記録していますが、メール経路には触れていません。「障害が事故につながった」という因果は、HN の見出しと、配信時点で開けなかったドイツ語の後続報道（WindowsForum の解説は Cloudflare WAF により遮断）に依拠しています。
-
-**Why it matters:** 私たちが不便として報告する障害——Teams が落ちる、メールが滞る——は、どこかで誰かの安全criticalな警報経路でもあります。メール障害の正確な役割が何であれ、監査すべきパターンは一つです。物理的危険を監視しながら、*サードパーティ SaaS 依存だけ*で報告するシステムは、単一障害点の測定単位が入院人数になります。
-
-[`🔗 WDR：Chlorgas verletzt 13 Gäste（ドイツ語）`](https://www1.wdr.de/nrw/rheinland/rhein-erft-kreis/technischer-defekt-chlor-phantasialand-100.html) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50509411)
-
----
-
-## 14. HTTP ステータスコード 483 「I'm Not a Freezer」が本物のインターネットドラフトに——418 ティーポットの伝統に冷蔵条項が加わり、冷凍庫攻撃が報道されてから 3 日後
-
-- **Velocity:** ▮ steady
-- **Source:** datatracker.ietf.org · 74+ pts on HN · 6.3h ago (~21:44 UTC+8)
-- **Tags:** `http` `ietf` `humor` `protocol` `rfc-tradition`
-
-Ricardo Bánffy が **draft-banffy-httpbis-not-a-freezer-00**（個人提出、日付 11 月 15 日、2027 年 5 月 19 日失効、意向ステータス Informational）を提出しました。HTTP ステータスコード **483**。「冷凍または冷蔵の能力を必要とするリクエストを理解するが、その能力を提供できない」サーバーのためのコードです。418 「I'm a teapot」への意図的なコミックな姉妹稿です。ティーポットはコーヒーを淹れられず、483 サーバーはグリーンピースを凍らせられない（例のリクエスト：「添付のグリーンピースを約マイナス 18 度に保ってください」）。しかも真顔の規範文付きです。サーバーは、自分が冷却を使うから、寒い地方にいるから、ホスト名に氷が付くから、非公式に「frozen」と呼ばれるからというだけで 483 を返しては**ならない**。そして運用者はトラブルシューティングのためにサーバーを家庭用冷凍庫に入れてはいけません。タイミングの注記を一つ。草案の登場の数日前、フランスはスーパーマーケット冷凍庫攻撃をイラン革命衛隊に帰属させていました（11 月 10 日の当フィードの報道）。ただし草案自体はそのニュースに一切触れていません。話題性の共鳴はインターネットの側のもので、著者のものではありません。
-
-**Why it matters:** 純粋な RFC 伝統のユーモアです。しかし HN の反応こそが興味深いシグナルです。当フィードが報じた一週間（全国停止、塩素、障害の連鎖）の後に、千を超える人が「サーバーはグリーンピースを凍らせられない」というジョークに票を入れるのは、集合的な吐息のように読めます。418 と 451 の隣にファイリングしておきましょう。これはこの規格体系の安全弁です。
-
-[`🔗 draft-banffy-httpbis-not-a-freezer-00`](https://datatracker.ietf.org/doc/draft-banffy-httpbis-not-a-freezer/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50507206)
-
----
-
-## 15. Show HN：Gawain が Python の型アノテーションを耐力壁にする——全部に型を付け、ty か pyrefly に強制させる
-
-- **Velocity:** ▮ steady
-- **Source:** Show HN · 67+ pts · 15.4h ago (~12:39 UTC+8)
-- **Tags:** `python` `type-checking` `ty` `pyrefly` `tooling`
-
-**matheuzgomes/gawain**（Show HN、67+ ポイント、41★、リポジトリは 11 月 12 日作成）は一つだけのことをします。Python コードの変数・パラメータ・戻り値・クラス属性に型アノテーションを必須化し、そのうえで本物の型チェッカー——[ty](https://docs.astral.sh/ty/) か [pyrefly](https://pyrefly.org/)——を走らせて型の正しさを検証します。設計の賭けは、アノテーションの*カバレッジ*とアノテーションの*検査*は分離可能だということです。既存チェッカーは欠けたアノテーションをデフォルトでは軟らかい警告に扱いますが、Gawain は欠けたアノテーション自体を失敗とします。これで型は後で付けますという先送りに壁ができます。名前は緑の騎士の挑戦を受ける男——守らなければならない約束——から。README は自社を新しい世代の高速 Python チェッカーの対抗ではなく補完と位置づけています。
-
-**Why it matters:** Python の型は静かに耐力インフラになっています。ランタイムバリデータ、エージェントが型付きツールスキーマを呼ぶとき、IDE 補完はすべてアノテーションの存在を前提にしています。しかし*カバレッジ*を強制するものは何もない。チェッカーが速いことと、コードベースに実際に型が付いていることの間の溝こそ、エージェントの書いたコードがドリフトする場所です。67 ポイントの Show HN は初期の牽引力であり、このツールは pre-commit フックになるまでチェックツーつのフラグしか離れていません。実行の物語が推論の物語に追いつくとき、もう一度見る価値があります。
-
-[`🔗 matheuzgomes/gawain`](https://github.com/matheuzgomes/gawain) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50504072)
-
----
-
-## 16. DrayTek Vigor2960：同一 CGI エンドポイントに 3 時間で 5 件の CVE レコード——コマンドインジェクション、パストラバーサル、ヒープオーバーフロー、スコアはすべて VulDB 判定
-
-- **Velocity:** ▮ steady
-- **Source:** CVE records CVE-2026-129449…129453 (VulDB-assigned) · published 11:17–14:17 UTC today
-- **Tags:** `cve` `draytek` `router` `command-injection` `vuldb`
-
-**DrayTek Vigor2960** ルータの 5 件の CVE レコードが本日、3 時間のペース（11:17Z、12:17Z、13:16Z ×2、14:17Z）で NVD に着地しました。すべて同じ管理エンドポイント `/cgi-bin/mainfunction.cgi` です。`swmconfigupload` 引数経由の**コマンドインジェクション**（CVE-2026-129449、9.9）と `set_table` 関数の `jsondata`（CVE-2026-129452、9.1）。`doWebBackup` の `option` と `app_guest_export` の `filename` による**パストラバーサル**（CVE-2026-129450、9.9。CVE-2026-129451、9.9）。そして `check_file_exist` の `upload_name` による**ヒープバッファオーバーフロー**（CVE-2026-129453、9.9）。5 件すべてが **1.5.1.6 まで**のファームウェアに影響し、修正を記すレコードは **1.5.1.7** を名指します。注意事項はスコアと同じくらい重要です。5 件すべてが **VulDB 判定**（`cna@vuldb.com`。大量提出型の CNA で、`sub_14914` のような関数名はバイナリ解析からそのまま）、各レコードはエクスプロイトが公開済みであることを明記し（文言はレコードごとに異なる）、**配信時点で DrayTek の公式アドバイザリは存在しません**。ベンダー確認のステップは未了であり、1.5.1.7 を出荷済みの修正として扱う前に、ベンダーのアドバイザリを待つという古いルールがそのまま適用されます。
-
-**Why it matters:** `mainfunction.cgi` は DrayTek の古典的な攻撃面であり、Vigor ルータは小規模オフィスのネットワーク縁に座っています。匿名から管理者に届くこの種の脆弱性は、後日 KEV フィードに載る定番パターンです。しかし認識論は重要度と同じくらい重要です。同日 5 件の VulDB 提出は、バイナリオフセットの関数名、スコアのすべてが VulDB 自身の CVSS 3.1（9.9 が 4 件、9.1 が 1 件）、ゼロのベンダー声明を伴い、これは*提出イベント*であって、まだ*修正済みの脆弱性*ではありません。アップグレードを助言する前に、ファームウェアのチェンジログを確認してください。
-
-[`🔗 CVE-2026-129449 レコード`](https://www.cve.org/CVERecord?id=CVE-2026-129449) · [`🔗 NVD 検索：本日の DrayTek`](https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=Vigor2960)
-
----
-
-## 17. NVIDIA SkillEvaluator：エージェントスキルの波に測定層が届く——まず品質ゲート、次にスキルありなしの A/B 実行、論文付き
-
-- **Velocity:** ▮ steady
-- **Source:** GitHub Trending · +205★ today · 1.5k total · 0.9.0 released Nov 6
-- **Tags:** `skillevaluator` `nvidia` `agent-skills` `evaluation` `benchmarks`
-
-**NVIDIA/SkillEvaluator**（本日 +205★、合計 1,543、0.9.0 は 11 月 6 日リリース、今夜もプッシュあり）は、スキルブームが避け続けてきた問いに答える NVIDIA の Apache-2.0 フレームワークです。**このスキルは本当にタスクの結果を改善しているのか？** README が説明する手法は二段階です。まず品質チェック、そのうえで**スキルありとなしの実行を比較**して、タスク結果への影響を測る——品質ゲート、意味的重複チェック、PyPI パッケージング（`skillevaluator`）、docs.nvidia.com/skills のドキュメント、さらに背後には arXiv 論文（[2608.20614](https://arxiv.org/abs/2608.20614)）と NVIDIA 開発者ブログが付きます。同じ波では `anthropics/skills` が現在 195,276★で、スキルバンドルが一週間デイリーボードを渡り歩いており、このボードに載った最初の、波の成果物を監査することだけを存在目的とするツールです。
-
-**Why it matters:** スキルはエージェントのコンテキストに注入される指示とスクリプトです。つまりサプライチェーンの攻撃面でもあり、README がスキルを助けると言っていることは測定ではありません。スキルなしベースライン付きの A/B 評価ハーネスは正しい形です（ヌルの結果を出せます）。NVIDIA 発であることは、スキルの*品質*が企業の調達問題になりつつあることを示します。私たちはベンチマークを独立に実行していません。再現されるまで、主張された数字はベンダーの主張として扱ってください。
-
-[`🔗 NVIDIA/SkillEvaluator`](https://github.com/NVIDIA/SkillEvaluator) · [`🔗 arXiv 2608.20614`](https://arxiv.org/abs/2608.20614) · [`🔗 NVIDIA 開発者ブログ`](https://developer.nvidia.com/blog/evaluating-ai-agent-skill-performance-with-nvidia-skillevaluator/)
-
----
-
-## 18. Vercel の agent-browser が 5.1 万スターを超える：アクセシビリティツリーをエージェント向け CLI に——スクリーンショットではなくシェルからブラウザを駆動する
-
-- **Velocity:** ▮ steady
-- **Source:** GitHub Trending · +4,601★ this week · 51.5k total · v0.43.0 released Nov 10
-- **Tags:** `agent-browser` `vercel` `accessibility-tree` `browser-automation` `cli`
-
-**vercel-labs/agent-browser**——「AI エージェント向けのブラウザ自動化。ページを開き、アクセシビリティツリーとして読み、シェルから要素を操作する」——は現在 **51,548★** で今週 +4,601、v0.43.0（11 月 10 日）が出て今夜もプッシュが続きます。設計の線は、Vercel の agent-desktop（11 月 12 日に取り上げました）と同じです。エージェントに**API としてのアクセシビリティツリー**を渡す——ピクセル座標ではなく、名前付きでアドレス可能な要素——を CLI に包み、どんなハーネス（やターミナルにいる人間）でもセッションを駆動できるようにします。Rust で書かれ、npm（`agent-browser`）で配布され、agent-desktop と並んで Vercel の賭けの半分を構成します。アクセシビリティツリーこそがエージェントと GUI の間の正しいインターフェース層だ、という賭けです。
-
-**Why it matters:** スクリーンショット駆動の computer use は高価で遅く、誤読したものについて沈黙します。アクセシビリティツリーは、汎用性（良く作られた UI が必要）と引き換えに、精度・決定性・低トークンを得ます。二つのリポジトリと 5 万超のスターで、Vercel は今やそのトレードオフの最も声の大きい擁護者です。そして Web UI を出荷する全員への実際の教訓はこうです。あなたがそう設計したかどうかにかかわらず、あなたのアクセシビリティツリーは*機械 API になりつつある*ということです。
-
-[`🔗 vercel-labs/agent-browser`](https://github.com/vercel-labs/agent-browser) · [`🔗 npm：agent-browser`](https://www.npmjs.com/package/agent-browser)
-
----
-
-## 19. AG-UI の日次リリース列車が走り続ける：エージェント-フロントエンド プロトコルは広がり続ける——LangGraph Interrupt スキーマ、1.0 の破壊的クライアント変更
-
-- **Velocity:** ▮ steady
-- **Source:** GitHub Trending · +393★ today · 17.7k total · Release 2026-11-13 published Nov 13 21:01 UTC
-- **Tags:** `ag-ui` `protocol` `agents` `frontend` `langgraph`
-
-**ag-ui-protocol/ag-ui**——エージェントとユーザー向けフロントエンドの接続を標準化するイベントベースのプロトコル——は本日 +393★ で合計 17,748。背後には本物のリリースのリズムがあります。今週は毎日タグ付きリリースが出ており、最新（11 月 13 日 21:01 UTC）は `@ag-ui/langgraph` を 0.0.46 に更新しました。LangGraph のネイティブな `Interrupt.response_schema`（langgraph ≥ 1.2.12）を読む、LangChain シリアライズの `ToolMessage` 出力をアンラップする、`RUN_STARTED` イベントに `protocolVersion` を宣言する——そして**破壊的変更**として、`@ag-ui/client` とピア依存は ≥ 1.0.0 を要求します。AG-UI（CopilotKit エコシステム発）は README が名指す層を占めます。エージェントの実行と UI コンポーネントの間のイベントであり、エージェントの状態をチャットバブルに押し込むのではなくネイティブに描画します。
-
-**Why it matters:** エージェント UX はちょうど二つのプロトコル層に収斂しつつあります。ツールとコンテキストの MCP、フロントエンド表面の AG-UI。そして LangGraph アダプタの仕事は、採用が実際に何を必要とするかを見せています。各ランタイムのネイティブな制御フロー プリミティブ（割り込み、ツール結果、実行ライフサイクル）を一つのイベント語彙にマップする、フレームワークごとの shim です。エージェント UI を構築しているなら、今週テストすべきはこの 1.0 クライアントの破壊的境界です。
-
-[`🔗 ag-ui-protocol/ag-ui`](https://github.com/ag-ui-protocol/ag-ui) · [`🔗 Release 2026-11-13`](https://github.com/ag-ui-protocol/ag-ui/releases/tag/release%2F2026-11-13)
-
----
-
-## 20. 11月11日に詳細ゼロで予告されたQwen4-Maxが出荷された——API専用フラッグシップ、100万トークンコンテキスト、オープンウェイトは依然なし
+## 3. FBI フラッシュ勧告：AI ペネトレーションテストプラットフォーム Artex が「3時間以内」にネットワーク侵入——ConnectWise、Barracuda、韓国銀行業が被害者
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** qwen.ai · HN 168+ pts · ~2h ago (~10:14 UTC+8)
-- **Tags:** `qwen` `qwen4-max` `llm` `model-release` `alibaba`
+- **Source:** techcrunch.com · 18+ pts on HN · 1.9h ago (~02:12 UTC+8)
+- **Tags:** `artex` `fbi` `ai-offense` `pentesting` `storm-0940`
 
-11月11日のフィードが「ウェイトもベンチマークもない」Qwen4-Maxプレビューを取り上げたとき、ここで待たれていたのがこのリリースだった。AlibabaのQwen4フラッグシップは[OpenRouter](https://openrouter.ai/qwen/qwen4-max)に掲載された（掲載時刻 2026-11-16T02:18Z、HNスレッドの数分後）：**100万トークンコンテキスト**、価格は**入力 $1.50/M、出力 $4.50/M**（キャッシュ読み $0.075/M）——API専用である。執筆時点でQwenのHugging Faceオーガナイゼーションの最新アップロードは10月9日のQwen-Image-2.1-Turboのままで、4シリーズのオープンウェイトはまだ出ていない。サードパーティの初期評価は伸び悩み——HNスレッドが引用するArtificial Analysisのスコアは43（対するGPT-6.1 Solは46）で、スレッドのかなりの部分がモデルそのものよりAAの手法論争に費やされている。Simon Willisonはペリカン描画テストを4つの推論レベル（none/low/high/xhigh）全部で走らせた。
+FBI のフラッシュ勧告（11月13日発行、Zack Whittaker が11月16日报道）は、**Artex**——Anthropic と OpenAI のホスト型フロンティアモデルを接続でき、オープンウェイトのモデルも使えるオープンソースの AI ペネトレーションテストプラットフォーム——を使った実攻撃を記録している。FBI によれば、Artex 駆動の侵入は標的特定から実際の侵害まで「in under three hours」——動きはうるさいが、人間の防御者の応答より速い。名指された被害者：**ConnectWise**、サプライチェーン攻撃で突破され、最低2,250社の顧客の Microsoft 365 環境が暴露（Microsoft は中国関連の **Storm-0940** と帰属）；**Barracuda**、11月11日、失効させていなかった露出したサードパーティ資格情報を突かれて侵入；そして複数の**韓国の金融機関**、脆弱な防御と MFA 未整備の背後で、最低68,000人分の個人情報が盗まれた。開発者は攻撃後にソースをクローズドにしたが、FBI は旧オープンソース版が依然「widely accessible」と指摘——さらに研究者たちは、パスワードなしの Artex サーバーが数百台インターネットに露出していたのを発見している（TechCrunch、11月6日）。
 
-**Why it matters:** プレビューが存在してからモデルが使えるようになるまでの溝は5日で埋まったが、オープンウェイトの溝は埋まっていない——Qwen3.8の2.4T-A95Bウェイトは8月に出荷済みなのに、4シリーズは閉じた状態で始まった。スレッドが待ち望むFlashと27Bバリアントに注目したい。歴史的にQwenのオープンウェイト投入はそこに降りてきて、しかもローカル運用の大多数が実際に走らせるのはその系列だ。
+**Why it matters:** これは AI ツールが名指された侵入の攻撃チェーンに現れた、これまでで最も明確な帰属の一つだ——「モデル犯罪」の一般論ではなく、具体的なハーネス、具体的な速度指標、具体的な被害者。防御側の読み取りは心地よくない：それが突くボトルネックは応答レイテンシであり、それはまさにエージェント型防御ツールが解決すると謳っているものだ。
 
-[`🔗 Qwen4-Max 発表`](https://qwen.ai/blog?id=qwen4-max) · [`🔗 OpenRouter: qwen/qwen4-max`](https://openrouter.ai/qwen/qwen4-max) · [`🔗 HN議論`](https://news.ycombinator.com/item?id=50513215)
-
----
-
-## 21. 古いBitlyリンクがハイジャックされている：2011年のバーガーキングのツイートの短縮リンクが再登録され、ウィキペディアのナチ強制収容所一覧へ飛ぶように
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** ransomnews.com · HN 211+ pts · ~6h ago (~06:11 UTC+8)
-- **Tags:** `bitly` `link-rot` `hijacking` `urls` `security`
-
-バーガーキングが**2011年7月24日**に投稿したツイートに埋め込まれたBitly短縮リンクが、**2026年11月15日**、別の当事者によって再登録され、ウィキペディアのナチ強制収容所一覧へリダイレクトされるようになった。それを引用した投稿は数時間で**200万ビュー**を突破。Ransomnewsは2011年6月のマクドナルドのツイート（ウィキペディアのアメリカ同時多発テロ事件の記事を指す）でも同じ手口を確認し、さらに公開アーカイブからトランプの2009〜2013年のツイート内の**97個のBitlyリンク**を系統的に調べた：それらのツイートの背後に今あるリンクオブジェクトの**56個はツイートより後に作成されたもの**で、1個はBitlyに悪意あるものとしてブロックされ、**4個は11月15日に登録**——23:35 UTC時点で、再作成された49個のリンクがまだ生きていた。Bitlyは19:13 UTCにXで問題を認め（「古い非アクティブなリンクの転用を許してしまった」）、関与アカウントを停止し対象リンクを無効化した。CNNの追跡によれば、ビル・ゲイツ、ジャスティン・トルドー、マイク・ペンス、FBI、米国防総省の古い投稿内のリンクもリダイレクトされていた。
-
-**Why it matters:** 2010年代ウェブの短縮リンク層が今や攻撃対象になっている：リンク短縮サービスが死んだ短縮コードを再利用する瞬間、それを埋め込んだ10年前の投稿すべてが遠隔から書き換え可能な資産になる——投稿者自身のアカウントより長生きするハイジャックだ。アーカイブ級の教訓はそのまま実行に移せる：オリジナルのURLを引用し、古いコンテンツ内の`bit.ly/…`は従来の宛先に解決し直すまで未検証として扱うこと。
-
-[`🔗 Ransomnews: バーガーキング・マクドナルド・トランプのツイートで古いBitlyリンクがハイジャック`](https://ransomnews.com/burger-king-tweet-bitly-link-hijack-2026/) · [`🔗 HN議論`](https://news.ycombinator.com/item?id=50511395)
+[`🔗 TechCrunch: FBI says Artex AI open-source hacking tool used to breach networks in "under three hours"`](https://techcrunch.com/2026/11/16/fbi-says-artex-ai-open-source-hacking-tool-used-to-breach-networks-in-under-three-hours) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50520796)
 
 ---
 
-## 22. uBlock OriginにユニバーサルXSS：悪意あるページが要素ピッカーを操縦してトラスト済みscriptletフィルタを追加できた——発見はGPT-5.6 Sol、1.75.4で修正
+## 4. Kevin Buzzard が「Lean で検証済み」に4つのテストを立てた——OpenAI 定理ダンプ290件のうち約38件は論文の主定理すら述べていない
 
 - **Velocity:** ▮▮ rising
-- **Source:** iter.ca · HN 120+ pts · ~2.1h ago (~10:04 UTC+8)
-- **Tags:** `ublock-origin` `uxss` `firefox` `extension-security` `ai-assisted`
+- **Source:** xenaproject.wordpress.com · 252+ pts on HN · 8.4h ago (~15:38 UTC+8)
+- **Tags:** `lean` `formal-verification` `ai-math` `proof-assistants`
 
-uBlock OriginのFirefox MV2版にワンクリックのユニバーサルXSS（MV3のuBO Liteにも類似の、ただし軽微な問題）：悪意あるウェブサイトはuBOの要素ピッカーを不可視のiframeに埋め込み、**uBO自身の`no-fetch-if` scriptlet shim内部で発火するXHRをフック**して拡張機能のインストール毎のランダムUUIDを抽出、`postMessage`でピッカーを操縦し、リソースタイプ（`image`など）を保持するための`opt`フィールドに改行を注入して任意の**トラスト済みフィルタ**（`…##+js(trusted-rpnt, script, …)`）を追加できた。トラスト済みフィルタは任意のページにスクリプトを注入できるため、攻撃者ページ上でのユーザーの1クリックが、任意のサイトのコンテキストでの任意のJavaScript実行を意味した。[GitHubアドバイザリ GHSA-cmqw-9r2w-6wv2](https://github.com/gorhill/uBlock/security/advisories/GHSA-cmqw-9r2w-6wv2)によれば：影響は**1.75.2以下**、**1.75.4**（11月3日、「検証済みシークレットトークンがあるときのみ要素ピッカーを起動」）で修正、11月1日にメールで報告、その後1.76.4まで追加硬化が続いた。開示記事は発見をGPT-5.6 Solに、PoCコードの大半をClaudeに帰し、著者自身が報告を検証し本文を書いた。
+Xena Project（Kevin Buzzard の帝国工科大学形式化グループ）が、AI 数学時代に最も有用なチェックリストを発表した：コンパイルは必要条件だが十分ではない、検証すべきは4つある。**ステートメントの忠実性**——Lean のステートメントは論文の定理と同じことを言っているか？Lean コード付きの OpenAI ダンプ定理290件のうち約38件は「have the property that the Lean code does not even state, let alone prove, the main theorem of the paper. And OpenAI never claimed that it did!」（その Lean コードは論文の主定理を述べてすらいない、証明は言うに及ばず。そして OpenAI はそれを主張したことはない！）；Buzzard がここで批判しているのは、「論文に付随するコード」を「証明済みの論文」に格上げする読者の方だ。**コンパイル**（Anthropic の1300万行 FLT 形式化には96コア・500 GB のマシンが必要；OpenAI の64万行 Navier–Stokes はラップトップでビルド可能）；**証明とステートメントの一致**（隠れたトリック対策——彼らの `lake comparator` が、信頼されるステートメントと信頼されない証明が標準公理の下で一致することを検査）；そして **kernel soundness バグ**（Lean の複数の独立カーネル——一つはアセンブリレベルまで形式検証済み——で緩和）。投稿はまた、ダンプから3本の論文が符号エラーで撤回されたことに触れ、運用上の警告で締める：信頼できない AI 生成 Lean コードは、サンドボックスなしでは決して実行するな。
 
-**Why it matters:** みんなが安全のために入れる拡張機能が、自身の広告防止機構を経由してスクリプト注入経路になった——そしてその修正パターンはどこにでも持ち帰れる価値がある：webから到達可能な表面が、シークレットハンドシェイクなしに「トラスト済み」入力を受け付けてはならない。今月公開された中でも最も明晰なAI支援の脆弱性発見のひとつでもある：仮説は人間、探索はモデル、検証は人間。
+**Why it matters:** 「Lean で検証済み」は AI 数学発表の信用通貨になりつつある——今週だけでも、機械検証された Signal プロトコル証明や Gödel ノートブックを本フィードは扱った——そして Buzzard のポイントは、そのフレーズが4つの異なる主張であり、その大半は現状どこも実行していない、ということだ。`lake comparator` のワークフローは、どんなチームも明日から採用できる部分だ。
 
-[`🔗 iter.ca: uBlock OriginのユニバーサルXSS`](https://iter.ca/post/ubo-uxss/) · [`🔗 GHSA-cmqw-9r2w-6wv2`](https://github.com/gorhill/uBlock/security/advisories/GHSA-cmqw-9r2w-6wv2) · [`🔗 HN議論`](https://news.ycombinator.com/item?id=50513160)
+[`🔗 Xena Project: …and the proof is checked in Lean`](https://xenaproject.wordpress.com/2026/11/12/and-the-proof-is-checked-in-lean/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50515058)
 
 ---
 
-## 23. Protomaps：地図タイルのセルフホスティングが安く簡単になった——139 GBの世界地図1ファイルをHTTP Rangeリクエストで配信、ストレージは月約5ドル
+## 5. Jiff 1.0：BurntSushi の Rust 日時ライブラリが安定性を確約——uv、Cargo、AWS LLRT が既に使用中
 
 - **Velocity:** ▮▮ rising
-- **Source:** bruceroettgers.eu · HN 217+ pts · ~8.7h ago (~03:26 UTC+8)
-- **Tags:** `protomaps` `pmtiles` `maps` `self-hosting` `cdn`
+- **Source:** burntsushi.net · 188+ pts on HN · 3.2h ago (~00:53 UTC+8)
+- **Tags:** `rust` `datetime` `timezones` `libraries`
 
-Bruce Röttgersによる[Protomaps](https://protomaps.com)のPMTiles形式の実践記事がフロントページに：HTTP Rangeリクエストでアドレス指定される**単一ファイル**として配布されるタイルアーカイブで、惑星規模のベースマップのホスティングは文字どおり「最新のデイリービルドをダウンロードし、ストレージバケットにアップロードする」だけで済む。経済性が主役だ：Bunny.netで**139 GBの世界地図を5重レプリケーションで保存すると月約5ドル**、帯域は$0.01/GB、ヨーロッパの都市をロードしてパン・ズームした一回のセッションで約5MB——著者の見積もりでは**地図ロード1,000回あたり$0.05**で、フリーティア超過後$5/1kのMapboxと比べ「100倍安い」（彼の見積もり、利用量依存）。RangeリクエストをキャッシュしないCDN（Cloudflare）では、x/y/zパスをバイトレンジに変換する小さなエッジ関数が必要で、CLIはバウンディングボックスや特定ズームレベルでファイルを縮小できる。
+Andrew Gallant（BurntSushi——ripgrep の作者）が彼の Rust 日時ライブラリ **Jiff 1.0** 安定版を発表し、確約は率直だ：「Unless some significant defect is found in Jiff's API, my plan is to commit to Jiff 1.0 indefinitely.」（Jiff の API に重大な欠陥が見つからない限り、Jiff 1.0 に無期限にコミットする計画だ。）設計はタイムゾーンを機能フラグではなくコア API の関心事にしている——DST の折り畳みと空白付近の曖昧な暦日時は、明示的な disambiguation 戦略で解決される（デフォルトの `compatible` に加え、`earlier`、`later`、そしてエラーを出す `unambiguous`）；型システムは階層化され（`civil::Date/Time/DateTime`、`Timestamp`、`ZonedDateTime`）、期間はデュアルモデル（カレンダー認識の `Span` と物理時間の `SignedDuration`）。採用リストが、なぜ今 1.0 なのかを説明する：Jiff は既に **uv、Cargo、Starship、fd、Nushell、Jujutsu、uutils/coreutils、AWS LLRT の Temporal 実装**に搭載されている。JavaScript の Temporal に強く影響を受けており、RFC 3339/9557/2822 をサポート、ICU4X ローカライズは feature の背後に。
 
-**Why it matters:** 地図はweb開発における最後の「SaaS必須」レイヤーのひとつで、その価格の崖はバズったプロジェクトを罰していた。ベースマップ全体がコモディティストレージ上の静的ファイルになるということは、従量課金のAPIをキャパシティプランニングの問題に変えるということだ——メディアでオブジェクトストレージがやったのと同じ動きが、いま地理に起きている。
+**Why it matters:** Rust の標準ライブラリには依然日時型がなく、Jiff はこの空白をエコシステムのスケールで埋めた——採用リストは、実質的に開発者が毎日触るツールの世論調査だ。ripgrep で培った API 安定性の実績が、「無期限のコミット」という約束を、たいていの 1.0 より信頼できるものにしている。
 
-[`🔗 Bruce Röttgers: セルフホスティング地図タイルは安く簡単になった`](https://bruceroettgers.eu/blog/protomaps/) · [`🔗 Protomaps`](https://protomaps.com) · [`🔗 HN議論`](https://news.ycombinator.com/item?id=50509837)
+[`🔗 burntsushi.net: Jiff 1.0`](https://burntsushi.net/jiff/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50519744)
 
 ---
 
-## 24. Ductus：あなたの手書きをフォントに——26文字すべてを順に書かせて、一画もアップロードしないブラウザツール
+## 6. 11月13日の Microsoft 365 障害報道の続き：Microsoft は7月のゲートウェイ更新で埋め込まれた欠陥を原因と説明——負荷テストは「コアの少ない弱いハードウェア」で回していた
 
 - **Velocity:** ▮▮ rising
-- **Source:** ductus.sorenblank.com · HN 173+ pts · ~8.4h ago (~03:42 UTC+8)
-- **Tags:** `fonts` `handwriting` `typography` `web-tool` `privacy`
+- **Source:** theregister.com · 70+ pts on HN · 6.8h ago (~21:18 UTC+8)
+- **Tags:** `microsoft-365` `outage` `rca` `reliability`
 
-**Ductus**は手書きを実用フォントに変えるシングルページのウェブツールだ：各グリフを順に書くよう促し（「小文字のaを書いてください、26文字中の1文字目」）、ストロークを収集し、フォントファイルをエクスポートする——すべてクライアントサイドで。プライバシーモデルはページが一行で宣言している：「このコンピュータ上で処理され、アップロードはされない。」インストールもアカウントも不要。HNスレッド（173+ pts）は主に字形的な比較と、どのブラウザが正常に動くかの報告で埋まっている。
+11月12〜13日の Exchange Online 崩壊に関する Microsoft の暫定 RCA は、根本原因を**2026年7月に展開されたゲートウェイサーバー更新に潜んでいた欠陥**に遡る——本番環境で3か月間眠っていた。この欠陥は「lock contention inside an internal Windows process which caused the machine's resources (CPU & memory) to be exhausted」（内部 Windows プロセス内のロック競合がマシンのリソース CPU とメモリを枯渇させた）もの——しかも新しい多コアマシンでのみ顕在化した。これが負荷テストに見過ごされた理由だ：「Our load testing tended to focus on weaker hardware with fewer cores.」（我々の負荷テストは、コアの少ない弱いハードウェアに集中しがちだった。）2つの同時イベントが引き金を引いた：Teams のプライマリゲートウェイへのフェイルオーバー（11月12日 01:07 UTC）と、約14%のゲートウェイ容量のオフライン。カスケードは凄惨だった——トラフィックは健全なサーバーへ再ルーティングされ、そのサーバーも落ち、「at its lowest」の2時間以内に80%超のサーバーが無応答に。Exchange Online は「scale reasons」でゲートウェイ層からフェイルアウトできず、だからメールが最後まで戻らなかった（07:20 UTC に緩和適用、16:10 UTC に健全確認）。最終の事後報告は11月20日予定。
 
-**Why it matters:** このフィードが追い続けているローカルファーストツールのパターンにおける、小さく磨かれた一品だ——キャプチャ、正規化、フォントへの梱包という全工程がサーバーゼロのブラウザタブに収まる。それはプライバシーの物語であると同時に配布の物語でもあり、ウェブのフォントツールchainが今日どんな入力を受け付けるようになったかの良いデモにもなっている。
+**Why it matters:** Microsoft のスケールで繰り返される古い教訓：一つの変更は、世界中に展開され、負荷テストを通過し、それから四半期眠って、正しいハードウェアとトラフィックの組み合わせが来て爆発することがある。レイテンシ敏感なサービスは最大のハードウェアでテストし、カスケードに予算を割け——この RCA から今日盗める処方箋はこの2つだ。
 
-[`🔗 Ductus`](https://ductus.sorenblank.com) · [`🔗 HN議論`](https://news.ycombinator.com/item?id=50509972)
-
----
-
-## 25. Giteaのセキュリティ一掃がNVDに到着：自社CNAから1時間で20件のCVEレコード——リポ自動初期化を経るコマンド実行とリポジトリ検索でのパスワードハッシュ漏えいをv28.4.0が修正
-
-- **Velocity:** ▮ steady
-- **Source:** NVD · CVEレコード20件（Gitea CNA）· 11月15日 21:16–22:17 UTCに公開
-- **Tags:** `cve` `gitea` `self-hosted-git` `security-release` `password-hash`
-
-Giteaは**v28.4.0**（11月15日 19:39 UTC）をセキュリティリリースとして出し、Gitea自社CNA発のCVEレコード20件が2つの整時バッチ（21:16Z、22:17Z）でNVDに着地した——執筆時点で全件`Deferred`（NVDは分析をCNAに委ねる）、CVSSスコアを持つものは一つもない。リリースノートが先頭に置いた2件：**CVE-2026-125423**はコマンド実行のレース——auto-initで作られたリポジトリが初期化完了前にプッシュを受け付け、ユーザーが細工したtreeをプッシュするとREADMEの書き込みがシンボリックリンクを辿ってサーバ上のgitフックを上書きし、「Giteaシステムユーザーとしてコマンドを実行」できた。**CVE-2026-123006**は**28.0.0以来存在**：ダッシュボードの`GET /repo/search`が各リポジトリの内部commit-statusオブジェクトを返し、そこにオーナーの完全なユーザーレコードが含まれるため、「サインイン済みの任意ユーザーが、commit statusを持つ可視リポジトリのオーナーのパスワードハッシュ・ソルト・メールアドレスを読めた。」このリリースはGo 1.27.4でのバイナリ再ビルド（CVE-2026-97054）と、Actions・issue・PR・パッケージ周りの修正も含み、ブログ自身の言葉は「すべてのユーザーにできるだけ早いアップグレードを強く推奨する」。
-
-**Why it matters:** デフォルト構成のセルフホストforgeでサインイン済みの誰もが読めたパスワードハッシュ漏えいは、パッチより長生きする種類のバグそのものだ——数ヶ月前に漏れたハッシュは、あなたがアップグレードしてもローテーションされない。Giteaを運用しているなら、アップグレードは1ステップだが、検索エンドポイントの露出期間はチェンジログの一行としてではなく、見直すべきインシデントとして扱うこと。
-
-[`🔗 Giteaブログ: 28.4.0リリース`](https://blog.gitea.com/release-of-28.4.0/) · [`🔗 GHSA-5mx6-8rwm-52wf`](https://github.com/go-gitea/gitea/security/advisories/GHSA-5mx6-8rwm-52wf) · [`🔗 v28.4.0リリース`](https://github.com/go-gitea/gitea/releases/tag/v28.4.0)
+[`🔗 The Register: Microsoft blames monster email outage on software defect introduced in July fix`](https://www.theregister.com/saas/2026/11/16/microsoft-blames-monster-email-outage-on-software-defect-introduced-in-july-fix/5310026) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50517321)
 
 ---
 
-## 26. Torが持続的DDoSへの迅速対応として0.4.9.17をセキュリティリリース：IPv6関連の中継DoS防御、さらなるリリースを予告
-
-- **Velocity:** ▮ steady
-- **Source:** Tor Project フォーラム · HN 65+ pts · ~3.7h ago (~08:21 UTC+8)
-- **Tags:** `tor` `ddos` `relay` `dos-defense` `security-release`
-
-Tor Projectは11月13日、ネットワークで進行中のDDoS攻撃「がほとんどの中継オペレータに影響した」ことへの「迅速な対応」として**0.4.9.17**をリリースした。アナウンスは要の修正を名指しする——「特にひとつの修正が、IPv6処理に関わる中継DoS防御としてとりわけ重要」——そして攻撃の形を率直に描写している：中継は「大量のクライアント回路の洪水で圧倒されている」。投稿は中継オペレータに感謝し、tor-relays@リストが非常に活発だったと伝え、防御はまだ評価中だと警告し（「近いうちにさらなるリリースを予定している」）、オペレータにひとつの指示を与える：「中継を運用しているなら、できるだけ早くアップグレードしてください。」HNスレッドがこのリリースを一夜のうちに表へ運んだ。
-
-**Why it matters:** Torの検閲・DoS耐性は、それを必要とする人々にとって荷重を支えるインフラであり、持続する回路フラッド攻撃はそれを「壊す」のではなく緩やかに劣化させる——停電のスローモーション版だ。ここでの本当の物語はリリースのテンポだ：攻撃が公認されてからピンポイントの修正まで数日で、ネットワークの現在の健全性はそれを適用するボランティア中継オペレータの手に懸かっている。
-
-[`🔗 Tor フォーラム: セキュリティリリース 0.4.9.17`](https://forum.torproject.org/t/security-release-0-4-9-17/22454) · [`🔗 HN議論`](https://news.ycombinator.com/item?id=50512441)
-
----
-
-## 27. Cliceがv1.0を出荷：ゼロから書き直したC++23言語サーバ——その作者が、自分のCLIの大半はエージェントに役立たないと率直に認める。ただしひとつのコマンドを除いて
-
-- **Velocity:** ▮ steady
-- **Source:** ykiko.me · HN 113+ pts · ~10.7h ago (~01:22 UTC+8)
-- **Tags:** `clice` `cpp` `language-server` `tooling` `agents`
-
-**clice-io/clice**は1,000コミットのマイルストーンに達し、約2年半の作業と7月19日以来4ヶ月のnightly/alphaテストを経て**最初の安定版リリース**を出した。LLVM/Clang上のC/C++言語サーバだが——clangd/cclsに対してゼロから再設計され、現代C++のショーケースとして書かれている：全体がC++20コルーチン（自作のlibuvベース構造化並行ライブラリ上）、C++20 named modulesとC++23 `import std`、静的リフレクションによる全シリアライズ（TOML、JSON、bincode、blob、CLI引数）、そして完全にセルフホスト——自身の`clice modularize`経由で自前のコードベースに言語サービスを提供する。執筆時点で1,513★。エッセイの最良の節は「エージェントについては？」だ：著者はエージェント時代のためにCLIを設計したが、その後それを率直に評価した——grep代替としての`clice query`は「実際のところあまり役に立たない」。正確なシンボル検索にはプロジェクト全体のインデックスが要る一方で「2、3回のgrep呼び出しで通常は十分」だからだ。そして「本当に持ち味を発揮する」のは`clice modularize`で、これがなければエージェントは「サブエージェントの群れを起こし、マイグレーション用のカスタムスクリプトを書く」ことになる。
-
-**Why it matters:** ふたつある。ゼロから書かれたC++23の言語サーバは、この言語の2023年以降の形の、珍しく読める標本だ。そして作者のエージェントCLIの勘定は、このフィードが繰り返し突き当たるパターンについての最も鋭い定式化だ——汎用のツールインターフェースはモデル自身のスクリプト記述力に負け、*高度に特殊化された*コマンドだけがエージェントとの接触を生き残る。いま建てられているすべての「XのMCPラッパー」に掛けるべき設計フィルタだ。
-
-[`🔗 ykiko: clice v1.0 リリース`](https://ykiko.me/en/articles/2105384023094834022/) · [`🔗 clice-io/clice`](https://github.com/clice-io/clice) · [`🔗 HN議論`](https://news.ycombinator.com/item?id=50508715)
-
----
-
-## 28. オーストラリアの二大スーパーチェーンのひとつColesがサイバーインシデントを調査中——「顧客データ漏えいのエビデンスなし」、運営は正常
-
-- **Velocity:** ▮ steady
-- **Source:** colesgroup.com.au · HN 65+ pts · ~2.8h ago (~09:14 UTC+8)
-- **Tags:** `cybersecurity` `incident-response` `retail` `australia`
-
-Coles Groupは常設のインシデント声明を掲げた（11月16日午前8:30時点）：同社「はサイバーセキュリティインシデントを調査中」で、これまでの調査結果では「顧客・従業員・サプライヤーのデータがColesのシステムから漏えいまたは持ち出されたエビデンスは確認されていない。」オーストラリアサイバーセキュリティセンター（ACSC）および外部のサイバーセキュリティ企業と協働し「ColesのIT環境を封じ込み、保護」しており、運営は続いており「顧客は通常どおり買い物ができる」としている。帰属も技術詳細もタイムラインもまだない。HNスレッド（65+ pts、45コメント）が更新を追っている。
-
-**Why it matters:** 小売のサイバーインシデントが繰り返し証明するのは、面白い問いは最初の「落ちていないか」ではなくデータ移動の問いだということ——この声明は小売のbreach開示の初期形の定型そのものであり、「まだエビデンスなし」の一行は定義上 perishable（腐りやすい）だ。物語を動かすフォローアップを注視したい：決済テレメトリ、ポイントプログラムのデータ、サプライヤーシステムへの到達性。
-
-[`🔗 Coles Group 更新ページ`](https://www.colesgroup.com.au/updates/) · [`🔗 HN議論`](https://news.ycombinator.com/item?id=50512824)
-
----
-
-## 29. Salonが31年の歴史に幕——Internet Archiveが25万本超の記事を保存し、実験的なSalon Explorerを公開
-
-- **Velocity:** ▮ steady
-- **Source:** blog.archive.org · HN 99+ pts · ~5h ago (~07:00 UTC+8)
-**Internet Archiveの投稿**（11月12日、Chris Freeland）は、ウェブ最初期の主要刊行物のひとつの終焉を記録している：「**31年を経て、Salonは刊行終了を発表した。**」Wayback Machineはほぼ30年間、Salonが使ってきた各ドメイン（salon1999.com、salonmag.com、1999年以降のsalon.com）でアーカイブを続けてきた——**25万本超の記事**、**2万人超の著者**によるものが検索可能で、アーカイブはコーパスをフィルタで閲覧できる実験的な **[Salon Explorer](https://web.archive.org/collections/salon/)** インターフェースを出した。投稿はArchiveの「vanishing culture」シリーズに属し、HNでの再発掘（99+ pts）が数日後にフロントページへ乗せた。
-
-**Why it matters:** この保存の投稿で本当に重要なのはその反実仮だ：1995年に創刊した31年の歴史を持つ刊行物が死に、その全コーパスが生き残ったのは、アーカイビングが*連続的*だったから——サイトが健康なときに始まっていて、死んだときに始めたのではない。「私たちはここにいる」と言うすべての刊行物は、ひとつの予算サイクルを隔てて、早めにWayback Machineへクロールを寄付する次の論証になり得る。
-
-[`🔗 Internet Archive: Salonジャーナリズム30年の保存`](https://blog.archive.org/2026/11/12/preserving-30-years-of-salon-journalism/) · [`🔗 Salon Explorer`](https://web.archive.org/collections/salon/) · [`🔗 HN議論`](https://news.ycombinator.com/item?id=50511806)
-
----
-
-## 30. ULAの Vulcan ロケットが復帰飛行で失敗——打ち上げ約10分後に異常、Amazon Leo 衛星40基をすべて喪失
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** Denver Gazette / SpaceNews · 160+ pts on HN · 15.7h ago (~04:37 UTC+8)
-- **Tags:** `ula` `vulcan` `rocket-failure` `amazon-leo` `space`
-
-United Launch Alliance（ULA）の **Vulcan Centaur**——2024年の初飛行以来**5度目の飛行**であり、今年前半の固体ブースタ異常で米宇宙軍が一部の国家安全保障ミッションを SpaceX に振り替えて以来の復帰飛行——が、日曜のケープカナベラル SLC-41 からの打ち上げに失敗した。ULA によれば、Launch Director のデータに基づき機体は"suffered an anomaly"（異常を起こし）"failed to deliver the Amazon mission to orbit"（Amazon ミッションを軌道に届けられなかった）。喪失は打ち上げから約 **10分後**、ブースタ段分離を過ぎてのこと。搭載されていた **40基の Amazon Leo** 広帯域衛星はすべて失われた——この星座は軌道上に約400基、完成済みでさらに約1,000基を抱えていた対比で、Starlink は11,000基超。ULA は"work closely with our customer and other appropriate organizations to find the cause"（顧客その他の関係機関と緊密に協力して原因を究明する）と述べており、復帰までの最優先事項は調査だ。打ち上げ前の Amazon の言葉（"We're really set up for success"）は数時間で裏切られた。そしてこの失敗は、SpaceX の完璧な Flight 15 スターシップ塔捕獲（11月15日の本フィード報道）のわずか1日後に降ってきた。
-
-**Why it matters:** ひとつの週末で、2本の配備曲線が分岐した。Starlink を追う星座は一撃で軌道機体の4%を失い、宇宙軍が頼ってきた非 SpaceX の選択肢は調査期間中ふたたび停止する。どちらの Leo 星座のカバレッジ・ロードマップ上で作業している人にとっても、スケジュールリスクは打ち上げペースではなく調査のタイムラインで測る時代になった。
-
-[`🔗 Denver Gazette: ULA loses Vulcan with 40 satellites aboard`](https://www.denvergazette.com/2026/11/15/centennials-ula-loses-a-giant-vulcan-rocket-with-40-satellites-aboard) · [`🔗 SpaceNews: Vulcan launch of Amazon Leo satellites fails`](https://spacenews.com/vulcan-launch-of-amazon-leo-satellites-fails) · [`🔗 HN議論`](https://news.ycombinator.com/item?id=50510442)
-
----
-
-## 31. 11月13日に報じたジェンスン・フアン退任の続報：FT が「同盟者らと復帰を協議」と報道——一方で捏造された「復職請願書」がネット上に出回る
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** Financial Times · 169+126 pts on HN (two threads) · 16.7h ago (~03:31 UTC+8)
-- **Tags:** `nvidia` `jensen-huang` `leadership` `misinformation`
-
-取締役会の独立調査のさなかに退任したフアン（11月13日の本フィード報道）から3日、**フィナンシャル・タイムズ**が（11月15日付で）復帰を検討しており、側近の同盟者らと協議済みだと報じた——**イーロン・マスクと Epic Games の Tim Sweeney** が、復帰を公に支持する経営者の列に名を連ねているとされる。この話題の信号対雑音比は本当に悪く、スレッドで一番有用なのは雑音についての内容だ。NVIDIA のリサーチャー **Bryan Catanzaro** は一つの請願を公に否定し、「There is a made-up letter circulating online asking NVIDIA's board to reinstate Jensen, claiming my involvement」（私の関与を主張して NVIDIA 取締役会に Jensen の復職を求める捏造文書が出回っている）、「This letter is obviously fake, and even if it were real I would not sign it」（この手紙は明らかに偽物で、本物でも署名しない）と書いた。懐疑派も声が大きい。Wedbush の Dan Ives：「Despite pressure from major shareholders we see no chance Jensen comes back to Nvidia as CEO」（大株主の圧力にかかわらず、Jensen が NVIDIA の CEO に戻る可能性は見えていない）。スレッドで引用された CNBC の見出しは、ベセント財務長官が外部 CEO による「dramatic shakeup」（大刷新）を求めたと伝える。NVIDIA もフアン本人も何も確認していない。FT 記事はペイウォール内であり、ここの詳細はその条件付き。
-
-**Why it matters:** この話は「創業者CEOが戻るか」だけではない。復帰の物語がすでに部分的に製造されている（あの偽手紙だ）こと——退任が世界の AI 株を二桁動かした市場での話だ。当事者自身の確認がない「復帰」データポイントは、検証前のものとして扱う。このフィード自身の訂正履歴は、まさにこの失敗モードから始まった。
-
-[`🔗 FT: Jensen Huang discusses comeback as Nvidia CEO with allies`](https://www.ft.com/content/45383d86-33c4-4d99-86e5-5e058d3567c1) · [`🔗 HN議論（FTスレッド）`](https://news.ycombinator.com/item?id=50509883) · [`🔗 HN議論（Reutersスレッド）`](https://news.ycombinator.com/item?id=50511982)
-
----
-
-## 32. MIT「ほぼ何でも作る方法」が2026年版サイトを公開——AI エージェントと Edge AI が名門ファブリケーション講座の一本立ちした演習に
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** MIT Center for Bits and Atoms · 389+ pts on HN · 6.5h ago (~13:50 UTC+8)
-- **Tags:** `mit` `fabrication` `education` `hardware` `ai-agents`
-
-Neil Gershenfeld の MAS.863/4.140/6.9020——世界の Fab Lab ネットワークを生んだ MIT の講座——が2026年の完全なシラバスサイトを公開し、HN 上位に食い込んだ（389+ pts、6.5時間前）。構造は古典的なものだ。CAD と NC 切断から始まり、組み込みプログラミング、電子設計・製造、機械加工、入出力デバイス、マシン設計へと週ごとに進み、12月15日の学生プロジェクト発表で締める。新しいのは AI の座だ。専任の **AI agents** 演習（10/01、3Dスキャン/プリント週と並行）と **Edge AI** 演習（10/29、入力デバイスと同じ週）が設けられ、スライドとコードは MIT の Forge に置かれている——AI エージェントが、EDA やモーター制御と同じレベルの「ファブリケーション講座の技能」として教えられている。
-
-**Why it matters:** 「ほぼ何でも作る方法」がエージェント技能を核心シラバスに書き入れたとき——EDA やモーター制御と同じレベルの演習として——それはファブリケーションの世界が自ら発する合図だ。エージェント技能はすでに基礎教養である——数十年前にバージョン管理がそうなったのと同じ道だ。完全なシラバスは、ハードウェアを独学するすべての人にとって無料の世界レベルのカリキュラムでもある。
-
-[`🔗 MIT HTMAA 2026 講座サイト`](https://pub.cba.mit.edu/863.26/site/) · [`🔗 HN議論`](https://news.ycombinator.com/item?id=50514470)
-
----
-
-## 33. Debian 12 の最新カーネル更新がサーバーを停止させる：6.1.0-55 の ext4 NULL ポインタ参照——7件の報告、重要度 critical、修正は上流で進行中
+## 7. VulnCheck が1日で75件の CVE レコードを着地——認証バイパスの波が npm 時代の CMS フレームワークを襲い、大半にはアップグレード先の修正版がない
 
 - **Velocity:** ▮▮ rising
-- **Source:** Debian Bug Tracker #1154101 · 122+ pts on HN · 7.5h ago (~12:53 UTC+8)
-- **Tags:** `debian` `linux-kernel` `ext4` `regression` `servers`
+- **Source:** NVD (disclosure@vulncheck.com CNA) · 75 records published Nov 16 (~12:17–15:17 UTC)
+- **Tags:** `cve` `auth-bypass` `npm` `vulncheck`
 
-Debian bug **#1154101**（11月15日提出、severity: critical、linux 6.1.192-1 → `linux-image-6.1.0-55-amd64`）は、ポイント更新後のサーバーが消える現象を記録している。「my server not responding remotely after few minutes (imap, smtp, http, ssh...)」（数分後にサーバーがリモートから応答しなくなる——imap、smtp、http、ssh のすべて）とし、GRUB から前の 6.1.0-54 カーネルを起動すれば完全に正常。採取された dmesg は「BUG: kernel NULL pointer dereference, address: 0000000000000000」を示し、クラッシュ地点は **`ext4_mb_load_buddy_gfp+0xbc/0x380 [ext4]`**、トレースは `ext4_free_blocks` → `ext4_ext_truncate` → `ext4_evict_inode` という inode 立ち退き/切り詰めパスをたどり、「note: local[2144] exited with irqs disabled」で終わる。報告は上流（lore.kernel.org の ext4/ntfs3 null-folio スレッド）に転送され、修正案は Debian の Salsa MR #2168 に、さらに6件の重複報告が統合済み——つまり不運な報告者一人の話ではない。生成時点で、カーネルチームの修正はアーカイブに届いていない。
+NVD の11月16日コホートには**VulnCheck の CNA からの75件の CVE レコード**が載っている——この日最大の単一ソースの波で、Samsung の39件、GitHub の30件を大きく上回る。ヘッドラインはセルフホスト Web フレームワークにおける認証バイパスのクラスタだ：**Tensei ≤ 0.11.5** は `JWT_SECRET` 未設定時にハードコードされた JWT 署名鍵 `auth-secret-key` にフォールバック（9.8）；**NodePress ≤ 8.5.1** は2つの独立した 9.8 認証バイパスを抱える；**Prime CMS ≤ 0.4.0-beta.0** は `isAuthenticated()` ガードがコメントアウトされ、`createAbility()` が全ロールを admin にハードコード（9.8）。その周囲に：Kalmia、REBUILD（4件）、DeepAudit（5件）、thirdweb Dashboard、Contentlayer の 8.8 コードインジェクション、さらに SeaweedFS、LimeSurvey、wallabag、GitBucket、PrestaShop、Sandboxie-Plus、Axigen。スコアはすべて VulnCheck 自身のもの（CVSS 3.1、`Secondary` 由来）。運用上の要点：そのうち数個は、影響上限*こそが*最新リリースだ——Prime CMS は2023年1月からコミットがなく、Tensei の最後のプッシュは2026年2月——アップグレードすべき修正版が存在しない。
 
-**Why it matters:** これは典型的なポイント更新の罠だ。安定ブランチのセキュリティ/メンテナンス更新が、切り詰め圧力下にある任意の ext4 システム——つまりほとんどのサーバー——に届くデータパス退行を連れてきた。Debian 12 を本番で走らせているなら、6.1.0-55 を保留するか、Salsa の修正が届くまで GRUB に前カーネルを残すこと。そして自分のリリースプロセスの鏡としても読める。このバグが critical なのは、失敗が起動時ではなく遅延してリモートから見える形で来るからこそだ。
+**Why it matters:** この波は npm 時代のロングテールの国勢調査だ：プロダクショングレードに見えたフレームワークが休眠し、同じ調査機関に体系的に監査されている。スコアよりもレメディの言語が重要だ——上限が最新リリースであるとき、「アップグレード」は空アドバイスで、誠実な緩和は廃止か fork だ。
 
-[`🔗 Debian bug #1154101`](https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1154101) · [`🔗 HN議論`](https://news.ycombinator.com/item?id=50514180)
+[`🔗 VulnCheck advisory: Tensei auth bypass via hard-coded JWT secret`](https://www.vulncheck.com/advisories/tensei-through-0.11.5-authentication-bypass-via-hard-coded-jwt-secret-in-tensei-auth) · [`🔗 CVE-2026-129552 record`](https://www.cve.org/CVERecord?id=CVE-2026-129552)
 
 ---
 
-## 34. Steve Blank が問う「NVIDIA の次は何か？」——創業者離脱問題：「Execution pays your salary, innovation pays your pension」
+## 8. ダッソー 3DEXPERIENCE に 10.0：Station Launcher App の逆シリアル化で事前認証 RCE、脇には9.9のコマンドインジェクションが2件
 
 - **Velocity:** ▮▮ rising
-- **Source:** steveblank.com · 298+ pts on HN · 12.4h ago (~07:55 UTC+8)
-- **Tags:** `nvidia` `strategy` `founders` `analysis`
+- **Source:** CVE-2026-93664 (3DS CNA-assigned) · record published Nov 16 (~13:17 UTC)
+- **Tags:** `cve` `3ds` `deserialization` `rce`
 
-Steve Blank のエッセイ（11月15日）は、ポスト・ジェンスンの NVIDIA を古典的な創業者問題として枠づける。ビジョンを持つ CEO が去るとき、「Most often innovation dies and the company coasts for years on momentum and its brand」（多くの場合イノベーションは死に、会社は勢いとブランドで何年も惰性走行する）。彼の歴史整理：「Jensen Huang reinvented Nvidia three times」（ジェンスン・フアンは NVIDIA を三度作り直した）——2006年の CUDA、2012年の ImageNet 勝利後の深層学習ピボット、そして2020年の Mellanox 買収によるボードから統合型 AI データセンターラックへの転換——「none of these CEOs pivot by committee」（これらのピボットを委員会でやった CEO はいない）。危険は実行型の後継者（彼の例：Ballmer の Microsoft、AI で出遅れた Cook の Apple）にあり、フアンは約60人の direct reports を抱え、「サクセッションプランニングを信じない」と公言していた。彼が名指しする NVIDIA 固有の脅威：最大の顧客たちによる自社シリコン開発、そして NVIDIA ハードの上で走る AI ラボに投じられた約500億ドル——「It's likely these are the bets an execution CEO trims first」（実行型 CEO が最初に刈り込むのは、おそらくこの賭けだ）——加えて財務の但し書き：受注残は堅い、「unless a meaningful share of that revenue turns out to be chips that were diverted to China」（その収益の意味のある share が中国に転用されたチップだと判明しない限り）。結論：誰が率いようと今後2〜3年は問題なく見える。長期の問いは、取締役会が実行者を雇うのか革新者を雇うのか。
+Dassault Systèmes 自身の CNA が11月16日に CVSS **10.0** を発行した：**CVE-2026-93664**、3DEXPERIENCE プラットフォームの **Station Launcher App**（リリース R2023x〜R2026x）における信頼されていないデータの逆シリアル化の欠陥で、「could lead to an unauthenticated remote code execution」（認証なしリモートコード実行につながり得る）。同じ波に2つの兄弟が乗った——**CVE-2026-77033** と **CVE-2026-19732**、同じコンポーネント内の OS コマンドインジェクションで、各9.9。アドバイザリページには修正リリースの記載がない；レメディはダッソーのサポートナレッジベース（文書 QA00000522688）にあり、カスタマーポータルの内側だ。NVD では3件すべてがまだ `Received` で、スコアはすべてベンダー CNA 自身のもの。
 
-**Why it matters:** このエッセイは FT の復帰報道（項31）の数時間前に発表され、復帰観測が解消しようとしている張力をまさに名指しする。組織の安泰と、三度の再発明の唯一の実証済みリーダーとの選択だ。注目すべきは、エッセイが循環ファイナンス論争に一切触れていないこと——その論証は財務ではなく組織についてであり、だからこそ11月14日に報じた WSJ 報道の補完として有用なのだ。
+**Why it matters:** 3DEXPERIENCE は航空宇宙と製造業の PLM/CAD インフラだ——まさに「10.0の事前認証 RCE が、準エアギャップに近いネットワークと遅いパッチサイクルの中に着地する」クラスの展開だ。公開修正版がないこの形は、先週このフィードが Cyrus SASL で指摘したのと同じ形だ：アドバイザリがサポートポータルへ誘導してくるときは、修正はバージョンアップではなくサーバー側モジュールのインストールだと想定すべきだ。
 
-[`🔗 Steve Blank: What's Next for Nvidia?`](https://steveblank.com/2026/11/15/whats-next-for-nvidia/) · [`🔗 HN議論`](https://news.ycombinator.com/item?id=50512235)
+[`🔗 3DS security advisory: CVE-2026-93664`](https://www.3ds.com/trust-center/security/security-advisories/cve-2026-93664) · [`🔗 CVE-2026-93664 record`](https://www.cve.org/CVERecord?id=CVE-2026-93664)
 
 ---
 
-## 35. HN の「Who is Hiring」が約12年ぶりの低水準に張り付き——今月は244件、その51.6%に AI が登場
+## 9. MuJoCo 初の 4.x：speculative contacts と弾塑性が着地——その後 4.0.1 が 4.0.0 自身が持ち込んだソルバーバグを修正
 
 - **Velocity:** ▮▮ rising
-- **Source:** HN Trends · 87+ pts on HN · 10.8h ago (~09:31 UTC+8)
-- **Tags:** `hiring` `ai-impact` `jobs` `data` `hacker-news`
+- **Source:** GitHub Trending · +1,922★ this week · 18.2k total · v4.0.0 Nov 6, v4.0.1 Nov 11
+- **Tags:** `mujoco` `physics-simulation` `robotics` `reinforcement-learning`
 
-HN Trends の11月分析は、採用縮小に硬い数字をつけた。月次スレッドは「**244 job postings, down 37% from 387 at the same point last year**」（求職244件、前年同期387件から37%減）。2026年7月以降の全スレッドは224〜255の帯に収まり、8月の224件「was the fewest since January 2014」（2014年1月以降で最少）。2026年の月平均は287件——「the lowest yearly average since 2013」（2013年以降で最低の年平均）。その一方で AI は一線を超えた。11月の求人 **51.6%** に AI が現れ、「up from 30% two years ago」（2年前は30%、50%超えは2026年6月が初）。その内訳の変化こそ面白い。AI Agents/agentic 用語が14.8%、LLM が10.7%、そして **MCP は1年前の0.3%から4.5%へ跳ね**（順位 +86）——その間に古典的な「Machine Learning」は14.8%から11.5%へ*下がった*。雇用市場はモデル訓練からエージェント配管へとラベルを塗り替えている。その他の動き：Rust が言語3位に浮上（8.2%、従来4.9%）、TypeScript は17.6%に後退、フロントエンドは2022年初の投稿の27%から6.6%へ崩落。
+Google DeepMind の物理シミュレータが、長年で初のメジャーバージョン変更を果たした：**MuJoCo 4.0.0**（11月6日）は **speculative contacts**（高速で動く凸ジオムが1タイムステップ内で薄い障害物を貫通しなくなる）、**elasto-plasticity**（`mjData.plastic` に状態を持つ塑性変形、連続体 flex には von Mises J₂ リターンマッピング）、Python パッケージ分割（`mujoco-core` / `mujoco-studio` / `mujoco`）、そして flex モデルで1.4〜3倍高速化された疎 Newton ソルブを追加。**4.0.1**（11月11日）はその後、4.0.0 が持ち込んだ疎 Cholesky 分解バグを修正——supernode の誤統合により Newton ソルバが不正な Hessian 因子を受け取り、収束の遅れと発散を招いていた（#3767）——さらにプラットフォーム非依存の `mujoco-studio-wasm` wheel で MuJoCo Studio web viewer を Windows に届けた。週間ボードはリリース効果を映す：今週 +1,922★。
 
-**Why it matters:** これは AI の労働市場フットプリントを測る数少ない縦断的で方法の一貫したデータセットであり、両面を同時に示している。投稿総数は12年ぶりの低水準、その一方で AI ネイティブ技能（MCP、agents）が残った求人で最も速く伸びるトークンになっている。MCP の数字はとりわけ、エージェントインフラが採用カテゴリとして現れたことの合図であり——「モデルが人気」とは別種の信号だ。
+**Why it matters:** MuJoCo はロボット学習研究のかなりの割合にとってデフォルトの物理バックエンドで、このうち2つの変更——貫通防止接触と塑性——は「シミュレート可能」の境界そのものを広げる（変形可能体、高速マニピュレータ）。そして 4.0.1 の物語は正直なもう半分だ：フラッグシップシミュレーションリリースにおける数値ソルバの退行は、まさにベンチマーク数字が隠す種類のバグだ。
 
-[`🔗 HN Trends: 2026年11月`](https://www.hntrends.com/2026/november.html) · [`🔗 HN議論`](https://news.ycombinator.com/item?id=50512950)
+[`🔗 MuJoCo 4.0.0 release notes`](https://github.com/google-deepmind/mujoco/releases/tag/4.0.0) · [`🔗 MuJoCo 4.0.1 release notes`](https://github.com/google-deepmind/mujoco/releases/tag/4.0.1)
 
 ---
 
-## 36. 「あなたのエージェントは改造しやすい方を選ぶ」：エージェントが購入と修理の両方を担うとき、開放性は購買基準になる
+## 10. Coral：エージェントが自らの TypeScript ツールを書く——Rust ゲートウェイが V8 isolate で実行し、34タスクでトークン37%削減
 
 - **Velocity:** ▮▮ rising
-- **Source:** geoffstearns.com · 75+ pts on HN · 15.2h ago (~05:10 UTC+8)
-- **Tags:** `agents` `firmware` `right-to-repair` `hardware` `security`
+- **Source:** Show HN · 50+ pts · 5.8h ago (~22:14 UTC+8) · withcoral/coral at 5.0k★
+- **Tags:** `mcp` `agent-infrastructure` `tooling` `rust`
 
-Geoff Stearns のエッセイ（2026年11月）は、エージェントが購入の助言とデバイスの保守の両方を引き受けるにつれ、開放性が愛好家の関心事から「買われる属性」へ変わると論じる。デバイスを直させるとき、エージェントはまず設定を試み、それが届かなければ「looks for firmware someone else wrote, forks the closest match, or writes its own」（他人の書いたファームウェアを探し、最も近いものをフォークするか、自分で書く）と行動する。だから「any device with writable flash is a platform, whether the maker planned for it or not」（書き込み可能なフラッシュを持つデバイスはすべてプラットフォームだ。メーカーが意図したかどうかにかかわらず）、そして何を買うべきか訊かれたエージェントは「lean toward the one it can change, because that's the one it can fix later」（後で直せるもの——変えられるもの——に傾く）。彼の錨は M-VAVE FM-1 シンセ（そのカスタムファームウェア生態系は11月14日に報じた）だ。所有者たちは2025年9月からファームウェアを書き始め——ほぼすべて AI ツールで——M-VAVE は応えて GPLv3 でファームウェアを公開し、開発キットとブラウザエミュレータを添えた。その後、Behringer、Akai、Erica Synths が続いた。セキュリティの半分は扇動ではなく測定だ。「harmful firmware is as easy to write as useful firmware」（有害なファームウェアは有用なものと同じくらい書きやすい）。だから彼のあらゆる政策への試金石は「asking who controls the signing keys」（誰が署名鍵を握っているかを問うこと）であり、「if a maker blocks code the owner chose and signed, that block is protecting the maker's business」（メーカーが所有者が選び署名したコードを妨げるなら、その妨げはメーカーの事業を守っている）と指摘する。そして緩和策（検証済みインストーラ、所有者保持の鍵、リカバリモード）は「none of them require locking the device」（そのどれひとつとしてデバイスをロックする必要はない）。
+本日の Show HN：**Coral** はセルフホスト・Apache-2.0 のゲートウェイ（「execution rails for agents」）で、エージェントはツールを呼ぶだけではない——複数のツール呼び出しを連鎖させる短い **TypeScript プログラム**を書き、そのプログラムは真新しい **V8 isolate** で実行される：ネットワークアクセスなし、資格情報なし、import なし。すべての基盤ツール呼び出しは、資格情報が接続される前にワークスペースポリシーゲート（Allow / Ask / Block）を通る；実行は必要時に人間の承認で一時停止し、開始者（人またはエージェント）に帰属する。成功したプログラムは再利用可能なカスタムツールとして `coral.private` または `coral.shared` に保存され、どんな MCP クライアントからも呼び出せる（`claude mcp add --transport http coral <url>`）。README 自身のベンチマーク：GitHub/Linear/Slack の34タスクで、カスタムツールは**トークン37%、コスト31%、時間29%を削減**、「Opus 5.5 accuracy at Haiku 5.5 cost」を謳う。Enterprise Edition ディレクトリ（SSO/SCIM、RBAC、監査ログ）は別ライセンスで「coming soon」。
 
-**Why it matters:** これはエージェントセキュリティのレンズをソフトウェアサプライチェーンから物理サプライチェーンへ広げる。セキュリティ研究者が脆弱性についてモデル化してきた、エージェントがターゲットを選ぶという力学が、買い物に適用される時代になった。ハードウェアメーカーへの具体的な示唆は居心地が悪い。ファームウェア更新の物語は製品の「エージェント対応度」スコアの一部になりつつあり、それをロックすることはもはやデフォルトではなく競争上の決断だ。
+**Why it matters:** ツールの氾濫は MCP エコシステムのスケーリング税になりつつある——何百もの狭いツールのほとんどは、任意のタスクにとって無関係だ。エージェントにポリシーゲートの下でプリミティブから自前のツールを*コンパイル*させるのは、この問題への最も具体的な答えであり、isolate ベースのサンドボックスはそれにふさわしい信頼境界だ。
 
-[`🔗 Geoff Stearns: Your Agent Will Pick the Hackable One`](https://geoffstearns.com/blog/your-agent-will-pick-the-hackable-one/) · [`🔗 HN議論`](https://news.ycombinator.com/item?id=50510799)
-
----
-
-## 37. Tell HN：採用スレッドがメール収集のためにスクレイピングされている——専用アドレスのユーザーが標的型フィッシングを報告、dang は投稿は削除可能と述べる
-
-- **Velocity:** ▮ steady
-- **Source:** Hacker News (Tell HN) · 105+ pts · 9.5h ago (~10:53 UTC+8)
-- **Tags:** `phishing` `privacy` `hacker-news` `email` `scraping`
-
-Tell HN の投稿（105+ pts）は、公開スレッドが大規模に収穫されたとき何が起きるかを記録している。ユーザー eks391 は Hacker News *だけ*に使っていたアドレスに偽の「AWS 支払い遅延」メールを受け取った——「I use unique emails for every site, so I immediately knew that the late AWS payments email sent to my HN email were fake.」(サイトごとに固有のメールを使っているので、HN のアドレスに届いた遅延 AWS 支払いメールが偽物だと即座に分かった)。コメント欄は同じメカニズムの小さな脅威モデルだ。採用スレッドに投稿した某人は「half burned my primary dev email」（開発用の主要メールを半分焼かれた）と後悔し、別某人は復元問題を四語で要約する——「Unleaking is not a thing.」（漏らしの取り消しは存在しない）。さらに「scary amount of context」（恐ろしいほどの文脈）を持つ詐欺メールの報告や、「classic North Korean scam job offer」（典型的な北朝鮮式の詐欺求人）——FBI がオープンソース開発者への標的と警告した偽リクルーターパターンそのもの（11月14日の本フィード報道）だ。モデレータ dang の返信が実務的な落とし所だ。「Those posts remain permanently deletable, FWIW.」（ちなみに、あの投稿は永久に削除可能です。）
-
-**Why it matters:** サイトごとの固有メールアドレスは、メールセキュリティで最も安価なカナリアだ。そしてこのカナリアは、インターネットで最も読まれる採用面のひとつについて鳴いている——同じスレッドが12年ぶりの低水準にあるというデータ（項35）の数時間後にだ。公開採用スレッドにアドレスを書いたことがあるなら、スレッドの二段階アドバイスに今晩1時間を費やす価値がある。投稿を削除する（今も機能する）、そしてクリック前にすべてのリンクの宛先ドメインを確認する。
-
-[`🔗 Tell HN: HN is being scraped for emails to scam`](https://news.ycombinator.com/item?id=50513451) · [`🔗 dang の返信`](https://news.ycombinator.com/item?id=50514845)
+[`🔗 withcoral/coral`](https://github.com/withcoral/coral) · [`🔗 Show HN 議論`](https://news.ycombinator.com/item?id=50517803)
 
 ---
 
-## 38. mini.nvim が専任の nvim-mini 組織へ移行——Codeberg と Tangled にもミラー——「プロジェクトの長期的安定性を高めるため専任組織に移しました」
+## 11. ffmpeg-skill が新リリースに乗ってトレンドに：42のローカル動画ツールと自己検証 MCP コントラクト——npm 3.10.1 は昨夜リリース
 
-- **Velocity:** ▮ steady
-- **Source:** Tangled · 75+ pts on HN · 12.4h ago (~07:55 UTC+8)
-- **Tags:** `neovim` `mini-nvim` `tangled` `codeberg` `open-source`
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · +475★ today · 6.5k total · npm 3.10.1 published 2026-11-15 23:39Z
+- **Tags:** `ffmpeg` `mcp` `video-editing` `agent-skills`
 
-**mini.nvim**——echasnovski による「最小の労力で Neovim 体験を改善する45+の独立 Lua モジュールのライブラリ」——は個人リポジトリ `echasnovski/mini.nvim` から専任の **nvim-mini** 組織へ移された。README は簡潔に述べる：「It was transferred to a dedicated organization to improve long term project stability.」（長期的なプロジェクト安定性を高めるため、専任組織に移管された。）HN スレッド（75+ pts）で面白いのは、それが今どこに住んでいるかだ。GitHub は引き続き「(main)」だが、プロジェクトは **Codeberg** と **Tangled**——AT Protocol ネイティブのコードフォージ——に公式ミラーを置き、`sync` ブランチが自動ミラーリングを示唆する。そして最新コミットの名前は文字通り「docs: mention Tangled and Codeberg mirrors」だ。Tangled 側は完全な履歴を保持し（2.2k コミット、18タグ、最新 v0.18.0）、README の支援文言もフォージ非依存になった：「Leave a star for 'mini.nvim' (on any supported code forge)」（対応するどのフォージでも mini.nvim にスターを）。これは今日の HN で2つ目の Tangled 関連の話（項39の Parcel を参照）。
+**kajisho5/ffmpeg-skill**（「Give your coding agent a video editor」）は **npm 3.10.1** 公開の翌日に +475★ を跳ね上げた——release と registry の両軸が一致し、このスパイクは解釈可能だ。ツールキットは42の Python 標準ライブラリスクリプトでローカル FFmpeg をラップする（カット、結合、無音除去、字幕/カラオケ、ラウドネス、HDR→SDR、プラットフォーム書き出し）、各スクリプトに `--dry-run` と `--json`、クラウドなし、API キーなし。面白いのは契約だ：MCP サーバーは各ツールの schema をスクリプト自身の argparse パーサーから導出する——プロジェクトはこのパターンを **SPEC（Self-Producing Execution Contract）** と呼ぶ——契約とコードがドリフトしたら CI が落とす。全ツールに `mutates_input: false` をマークし、ハッシュテストで強制；ワークフローは probe → edit → check → verify、エージェント側のコンタクトシート視覚検査込み。README の報告数値：10ファイルの実映像コーパスで 92/92 検証ステップ、40/40 の同期オフセットが10 ms 以内、シーン検出 F1 0.97——そして「verification-driven coding」に関するポジションペーパーが、プロジェクト自身のその規律への適合を*部分的*と採点している。
 
-**Why it matters:** ひとつの移行に、二つのガバナンス信号。広く依存される Neovim ライブラリが創設者の名前空間を離れてバス係数を下げたこと。そして主流プロジェクトが AT Protocol のフォージを第一級ミラーとして扱う選択をしたこと——若いフォージにとって、この種の採用はそれ自身の機能一覧より重い。
+**Why it matters:** 動画はコーディングエージェントが最も苦手なメディア型で、この repo の賭けは：規律（契約、dry-run、検証）がモデルの知性に勝つ、というものだ。自らの規律に100%適合していないと公表する skill は、100%を謳う skill より希少だ。
 
-[`🔗 Tangled 上の mini.nvim`](https://tangled.org/nvim-mini.org/mini.nvim) · [`🔗 GitHub 上の nvim-mini/mini.nvim`](https://github.com/nvim-mini/mini.nvim) · [`🔗 HN議論`](https://news.ycombinator.com/item?id=50512231)
-
----
-
-## 39. Show HN：Parcel——Gmail と Fastmail 向けのキーボード駆動 Linux メールクライアント、作者自身の Wayland ツールキットの上で Zig で構築
-
-- **Velocity:** ▮ steady
-- **Source:** Show HN · 51+ pts · 12.5h ago (~07:54 UTC+8)
-- **Tags:** `zig` `email` `linux` `jmap` `wayland`
-
-**Parcel**（rockorager.dev、Show HN、51+ pts）は「A mail client for Gmail and Fastmail on the Linux desktop, built with Zig and siv」（Zig と siv で作られた Linux デスクトップ向け Gmail/Fastmail メールクライアント）。siv は作者自身の UI ツールキットで、静的リンク、Wayland ネイティブ、ヘッドレスバックエンドを備え、テストはディスプレイなしで走る。そのモデルはキーボードファーストとスタック可能なラベルだ。「Every action has a key, and Ctrl+K lists them all」（すべての操作にキーがあり、Ctrl+K が一覧する）。`/` は「as you type, with Gmail's operators, whichever account it is」（打ちながら検索、Gmail 演算子付き、どのアカウントでも）のライブ検索を提供する。スレッドはオーバーレイのリーダーで描かれ、Parcel は独自のローカルインデックスを保持し「answers most searches without asking the server」（ほとんどの検索にサーバーに訊かず答える）。現時点で Gmail と Fastmail に対応し、原理的には任意の **JMAP** サーバーにも。v1.1.0 はスレッドの前日にタグ付け、287コミット、こちらも Tangled でホストされている。(Vim キーバインドの作成エディタも付く。)
-
-**Why it matters:** Linux デスクトップメールクライアントは墓場ジャンルだ——そしてこの試みの構造的な選択は特筆に値する。IMAP エミュレーションではなく JMAP ファーストのデータモデル。Electron/GTK ではなく自作ツールキット。全体が小さく保たれ、一人の頭の中で監査可能であり続ける。さらに：独立した二つのプロジェクト（Parcel、mini.nvim）が同じ日に Tangled ミラーを選んだ——この種の偶然の採用こそ、ひとつのフォージの節目を刻むものだ。
-
-[`🔗 Tangled 上の Parcel`](https://tangled.org/rockorager.dev/parcel) · [`🔗 HN議論`](https://news.ycombinator.com/item?id=50512218)
+[`🔗 kajisho5/ffmpeg-skill`](https://github.com/kajisho5/ffmpeg-skill) · [`🔗 npm: ffmpeg-skill`](https://www.npmjs.com/package/ffmpeg-skill)
 
 ---
 
-## 40. Show HN：db-branch——ZFS で Postgres のコピー-on-ライト分支を約0.5秒で、エージェントが安全に照会できる MCP サーバーを内蔵
+## 12. HeyGen が Decision 1 を発表：デシジョンモデルのカテゴリが動画 AI に到達——1リクエスト400の名前付き質問、確率付きの型付き回答
+
+- **Velocity:** ▮▮ rising
+- **Source:** developers.heygen.com · release trackers date it Nov 13 · surfaced on OpenRouter
+- **Tags:** `decision-models` `heygen` `api` `classification`
+
+アバタービデオの HeyGen が、**Decision 1** をドキュメント化した——「turns text, images, and video into decisions your application can use」（テキスト・画像・動画をアプリが使える決定に変える）API だ。呼び出し側は `state`（テキストまたは JSON）に1〜400の名前付き質問を POST する。質問は3型：`noul`（はい/いいえ判定、真の確率を返す）、`choice`（1〜255の名前付きオプションから選択、オプション別確率の合計は1）、`score`（1〜10の順序付きレベルで、確率重み付きの小数スコア）。ベースのコンテキストは128k、1リクエストにつき画像4枚・動画1本まで；**Turbo** 変種は256k、画像100枚・動画10本に拡張。応答は同期で `output_tokens` は常に0、ドキュメントには珍しく率直な注意書きがある：confidence は「**not a calibrated probability that the answer is correct**」（回答が正しいことのキャリブレーションされた確率ではない）。Perplexity の Decider と Google の Decisions API（11月10〜12日）以来このフィードが追いかけてきたカテゴリの、最新の参入者だ：モデルのプロダクト*が*決定そのものであり、散文ではない。
+
+**Why it matters:** アバタービデオベンダーでさえチャットモデルではなくデシジョンモデルを出荷するとき、このカテゴリは研究の珍品からデフォルトの製品形態へ越えた——ルーティング、ランキング、人のレビューへのエスカレーション閾値が、それ自体推論ワークロードになりつつある。「confidence は未キャリブレーション」の注意書きは、すべてのインテグレータが自社ドキュメントに引用すべき部分だ。
+
+[`🔗 HeyGen docs: HeyGen Decision`](https://developers.heygen.com/docs/models/heygen-decision) · [`🔗 OpenRouter: heygen-decision-1`](https://openrouter.ai/heygen/heygen-decision-1)
+
+---
+
+## 13. Google Research が paper-orchestra を公開：5つのエージェントがアイデアと実験ログを投稿可能な LaTeX に——「not an officially supported Google product」
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · +306★ today · 1.3k total · 8 commits · arXiv preprint
+- **Tags:** `paper-writing` `multi-agent` `google-research` `llm`
+
+**google-research/paper-orchestra**（Yiwen Song、Yale Song、Tomas Pfister、Jinsung Yoon）は、「unconstrained pre-writing materials (ideas and experimental logs)」（制約のない執筆前素材：アイデアと実験ログ）を投稿可能な LaTeX 論文に変換するマルチエージェントパイプラインだ。5つの専門エージェントが分業する——**Outline、Literature Review**（関連研究を検索・優先順位付け・統合）、**Section Writing、Content Refinement、Plotting**（コードから図を生成、概念図も）——対象テンプレートは同梱の CVPR 2025 のような会議形式で、自動評価のための `autoraters/` ディレクトリが付く。README は境界に率直だ：「**This is not an officially supported Google product**」、評価データセットはリポジトリに含まれず別途公開予定、Semantic Scholar/OpenAI/Vertex のキーは自己手配。引用は arXiv:2604.05018 を指す。
+
+**Why it matters:** 自動化された論文*執筆*は、エージェントの波と出版インセンティブが衝突する場所だ。この repo が珍しいのは、地味な部分（文献トリアージ、図表生成、テンプレート適合）をデモではなく検査可能なパイプラインとして出荷している点だ。著者自身の「公式サポート対象外」ラベルは、その産物を読むときに輸入すべき慎重さの適量だ。
+
+[`🔗 google-research/paper-orchestra`](https://github.com/google-research/paper-orchestra) · [`🔗 arXiv:2604.05018`](https://arxiv.org/abs/2604.05018)
+
+---
+
+## 14. 11月15日の地上停止原因報道の続き：FAA の新 AI ツール SMART に疑問が集まる——停止の数日前に全センターへ展開、当局は関連を否定
 
 - **Velocity:** ▮ steady
-- **Source:** Show HN · 42+ pts · 22.5h ago (11月15日 ~21:50 UTC+8)
-- **Tags:** `zfs` `postgresql` `mysql` `database-branching` `mcp`
+- **Source:** faa.gov Q&A (dated Nov 15) · AP via ABC News · updated Nov 16
+- **Tags:** `faa` `ai-in-safety-critical` `ground-stop` `policy`
 
-**db-branch**（Show HN、42+ pts）は ZFS スナップショットの技をデータベースに持ち込む。base は「a ZFS dataset holding a loaded database」（ロード済みデータベースを保持する ZFS データセット）であり、ブランチは base スナップショットの ZFS クローンなので、作成はゼロバイトのコピー——「db-branch creates a copy-on-write branch of a large database in seconds, with nothing copied.」（db-branch は大きなデータベースの copy-on-write ブランチを数秒で、何もコピーせずに作る。）3ノードの Raft テストクラスタでの彼らの数字：「a PostgreSQL branch is ready in about 0.5 s and a MySQL branch in about 3 s」（PostgreSQL ブランチは約0.5秒、MySQL ブランチは約3秒で準備完了）。エージェントの角度は後付けではなく内蔵だ。「The built-in MCP server lets an LLM agent create a branch, run a risky query or migration on it, and delete the branch」（内蔵 MCP サーバーは、LLM エージェントにブランチを作らせ、その上で危険な照会やマイグレーションを走らせ、ブランチを削除させられる）——さらに TTL クリーンアップ付きの PR/CI ごとのデータベース、大バージョン移行の `upgrade --check-only` リハーサルも。セルフホスト（Ubuntu + ZFS プール、apt リポジトリ）、Beta（「usable today, but APIs and command-line details may still change before 1.0」）、Apache-2.0 のコアに一部有料のクローズドモジュール（SSO、監査、マスキング）。
+11月13日の全国地上停止に関する FAA の Q&A には、いま4つ目の問いに答える必要がある：停止の数日前、FAA は新ツール **SMART** をすべての航空路交通管制センターに展開したばかりだった——9月にワシントン DC 周辺で初お披露目されていた。SMART——Strategic Management of Airspace, Routes and Trajectories——は9月、ショーン・ダフィー長官と FAA 局長 Bryan Bedford が「a cutting-edge tool that centralizes 200 data streams — including weather patterns, flight paths, traffic flow, and controller staffing metrics — into one platform」（200のデータストリーム——気象、飛行経路、流量、管制員の人員指標を含む——を一つのプラットフォームに集約する最先端ツール）として発表し、AI サポートのエンジンはそれをトラフィックの「comprehensive visualization」に統合する。これは人間への推薦を行うものであり、AP によれば「is not — at least not yet — set up for AI to be in charge of flight control」（少なくとも現時点では、AI に飛行管制を任せる設定にはなっていない）。関係各所はいずれも関連を否定：FAA の Q&A は停止を「out of an abundance of caution」（高度な注意の念から）としたとし、ベンダーの **Air Space Intelligence** は事故は「the SMART system, any product of ASI or our integration with FAA and ATC」によるものではないと述べた。確認された原因は、従来報道のルーター作業——銅から光への転換工事が ATC システムにフラッドしたもの——のままだ。
 
-**Why it matters:** エージェント対本番データベースは、エージェントインフラの最も鋭い未解決の縁のひとつだ。エージェントに照会やマイグレーションを試させるべきで、そして生きているシステムでそれをさせるのは絶対に望まない。これは Neon/Branch のアイデアを コモディティな ZFS でオンプレムへ持ち帰ったものであり、MCP サーバーをインターフェースに選んだことで、このフィードが追っているハーネスから専用クライアントなしに使える。
+**Why it matters:** タイミングの問いは自ずと書けるが、より実質的な点は静かだ：AI の意思決定サポート層が、安全クリティカルなインフラの最初のシステミック障害の数日前に全量展開され、業界の本能は「それが関係したのか」をまず問うた。注視すべきはこの展開パターンだ——今日は「制御ではなく推薦」であり、その文の「not yet」は多くの仕事を背負っている。
 
-[`🔗 db-branch/db-branch`](https://github.com/db-branch/db-branch) · [`🔗 HN議論`](https://news.ycombinator.com/item?id=50506940)
+[`🔗 FAA: Nationwide Ground Stop — Questions and Answers`](https://www.faa.gov/newsroom/nationwide-ground-stop-questions-and-answers) · [`🔗 AP (via ABC News): Questions around FAA's new SMART AI system`](https://abcnews.com/US/wireStory/questions-swirl-faas-new-smart-ai-system-officials-138170875)
+
+---
+
+## 15. 「ソフトウェアはシステムレベルで壊れ始めている」——Breck-McKye のエッセイが2026年の障害カスケードに共通の形状を名指す
+
+- **Velocity:** ▮ steady
+- **Source:** breck-mckye.com · 137+ pts on HN · 1.8h ago (~02:17 UTC+8)
+- **Tags:** `essay` `reliability` `ai-debt` `complexity`
+
+Jimmy Breck-McKye のエッセイ（11月15日）は、今年の一連のインシデント——Microsoft 障害、FAA 地上停止、PHP2Shell、eMudhra 証明書侵害、Shai Hulud npm 攻撃——には単一の原因はないが単一の形状があると論じる：「a highly complex system made of low quality parts」（低品質部品でできた高度に複雑なシステム）、誰も全体を理解していない。AI はこのより長い腐敗において**原因であり同時に症状**でもある：クラウドと OSS への依存（チームは「stopped knowing the details」）、文化的な専門性の希薄化（ジェネラリスト化が left-pad や XZ のような初期警報を聞き逃させた）、そして——Kristen Maevyn の *The Decoherence Trap* を引いて——AI の本当の危険は幻覚コードではなく、「locally valid but mutually incompatible」（局所的には有効だが相互に非互換）な変更がシステムスケールで整合性を破壊することだ。終着点は「meat proxies」へのスキル退廃、そして全てのチケット・文書・要約それ自体が生成されるときの組織的認知の喪失。結びは冷たい：「The internet is at a breaking point」、そしてこれは「the new normal」だ。
+
+**Why it matters:** これは本フィードが1か月間経験的に積み上げてきた障害報道の、エッセイ版だ——そして最も価値のある貢献は decoherence フレーミングだ：変更ごとの品質指標がグリーンでありながらシステムが壊れる理由を、これが説明する。論文が掲載された同じ日に5行が一緒に倒れた——偶然か、それとも裏付けか。
+
+[`🔗 Breck-McKye: Software is breaking down at a systemic level`](https://www.breck-mckye.com/blog/2026/11/software-is-breaking-down-at-a-systemic-level/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50520866)
+
+---
+
+## 16. TRMNL Frame：31.5インチカラーエペーパーディスプレイが手作り木枠で——E Ink Spectra 6 にオープンソースのカラーエンジン、初回約470台
+
+- **Velocity:** ▮ steady
+- **Source:** trmnl.com · 116+ pts on HN · 3.7h ago (~00:23 UTC+8)
+- **Tags:** `epaper` `hardware` `eink` `dashboard`
+
+TRMNL の3製品目 **Frame** は、E Ink の **Spectra 6** プラットフォームを基盤とする31.5インチフルカラーエペーパーディスプレイで、木枠はジョージア州 Pine Mountain にある会社自前の木工工房で作られた。色彩品質の賭けはソフト側だ：**Lazarus** という新しい色変換エンジン——TRMNL はこれが「the best color matching on the market for any Spectra 6 display」（市場のあらゆる Spectra 6 ディスプレイの中で最良の色マッチング）をもたらすと主張し、そして**オープンソースになる予定**だ。新しい Clock Sync 機能はリフレッシュ動作を変え、1日の定められた瞬間に更新する（フリッカー減、バッテリー長寿命）；microSD ポートで完全オフライン動作に対応し、Local Art プラグインでユーザーが自分の作品を投稿し、販売することすらできる。予約は受付中：初回バッチは約 **470台**で米国・カナダ・メキシコ・オーストラリア限定、数台は2026年末までに、大半は2027年初頭に到着する。
+
+**Why it matters:** 大型カラーエペーパーは何年も「展示会デモ」の域を出てこなかった；小さなハードウェア会社が自前の木工工房とオープンソースのカラーパイプラインの両方を賭けるこの垂直統合は、ユースケースを開くか、面白く失敗するかのどちらかだ。オープンソース化される Lazarus エンジンは、他の Spectra 6 ベンダーが初日から再利用できる部分だ。
+
+[`🔗 TRMNL: Introducing Frame`](https://trmnl.com/blog/introducing-frame) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50519354)
+
+---
+
+## 17. 「Active Directory の時代はついに終わった」——Infisical のエッセイがマシンアイデンティティを論じる：AD は「短命のクラウドリソースを自動承認」し、セキュリティシアターになった
+
+- **Velocity:** ▮ steady
+- **Source:** infisical.com · 89+ pts on HN · 5.8h ago (~22:15 UTC+8)
+- **Tags:** `identity` `active-directory` `secrets-management` `zero-trust`
+
+Infisical のエッセイ（11月13日、11月16日更新）は、Active Directory が成功したのは3つの問いに一つの場所で答えたからだ、と論じる——どんなアイデンティティが存在し、何がそれを保証し、どこで有効か——そしてマシンが管理者が登録する物理サーバーではなくなったとき、それは壊れた。現代のインフラは短命だ（Kubernetes pod、CI ランナー、クラウドデータベース）、ドメイン参加の自動化は今やしばしば短命のクラウドリソースを自動承認する——すべてのテストデータベースや pod を AD にミラーする自動化を全部作ったとしても、それは依然「**security theater**」だ：統合ディレクトリは「would exist on paper, but lack authority」（紙の上には存在するが、権威を欠く）。証拠は日常レベルだ：ある防衛組織の公開露出した Lambda 関数、そのポリシーは `iam:*`；`.env` ファイルの平文資格情報；ディレクトリアイデンティティを拒む GitHub 自動化。結論：「**Active Directory is the new mainframe: great for its time, but you'd never choose to start from scratch.**」（Active Directory は新しいメインフレームだ：その時代には偉大だったが、ゼロから選ぶことは決してない。）2つの置換案——アイデンティティフェデレーション（プラットフォーム横断の OIDC attestation）とクレデンシャルブローカリング（Infisical 自身のモデル）——はどちらも単一ディレクトリなしで3つの答えを復元する。締めの論証は本フィードの読者にまっすぐ向く：AI エージェントは自らのアイデンティティとポリシーを必要とする、マシンアイデンティティはこれからずっと多くを背負う。
+
+**Why it matters:** ほとんどのクラウド資産で、非人間アイデンティティはすでに人間を一桁上回り、エージェントワークフローはそれをさらに倍増させる。このエッセイはベンダー記述で、そう名乗ってもいるが、その診断は今月の Auth0 RAG や otterdog インシデントが機械的に示したものと一致する：破れる境界は、人間が一度も承認しなかった側だ。
+
+[`🔗 Infisical: The Active Directory Era Is Finally Over`](https://infisical.com/blog/active-directory-machine-identity) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50517815)
+
+---
+
+## 18. jiangshan-map：手描きの中国2400年史インタラクティブ地図帳——198の領域スナップショット、MCP サーバー、正直なデータ出典の注記
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · +285★ today · 6.6k total · trending Repository of the Day badge (#2)
+- **Tags:** `history` `maps` `visualization` `chinese-oss`
+
+**DeanChensj/jiangshan-map**（江山時序、英名 Chronicles of the Realm）は依存ゼロの静的サイトで、**紀元前403年から現在まで**のタイムラインを自由にスクラブできる——18の歴史時代、198の領域スナップショット——「ghost boundary diffs」とともに国境の変遷を眺め、どの都市でもクリックすれば2400年の行政譜系が読め、秦の始皇帝、諸葛亮、玄奘らをイベントストーリーラインで追える。MCP サーバー（npm 依存ゼロ）、すぐ使える agent skill、`window.atlasAPI` ブラウザ API、Leaflet/MapLibre/QGIS 互換の GeoJSON 書き出しを同梱。データ出典の注記が殊のほか誠実だ：輪郭は aourednik/historical-basemaps を起点にその後**手描きで再描画**；郡レベルの境界は CHGIS V6 と Hartwell China Historical GIS に由来し、ライセンスは学術非商用に限られる；README は領域が「schematic approximations of broad jurisdictions, not surveyed borders」（広い管轄の模式近似であり、測量された国境ではない）と明確に警告している。
+
+**Why it matters:** 歴史地図プロジェクトは通常、データライセンスの段階で死ぬ；このプロジェクトはどのレイヤーが自由でどれが制限付きかを明確に書き記した——これはどんなクローンも間違える部分だ。MCP サーバーと skill のパッケージングも、教育ビジュアライゼーションの行き先を示している：ブラウザだけでなく、エージェントが地図帳を操作できるように作られている。
+
+[`🔗 DeanChensj/jiangshan-map`](https://github.com/DeanChensj/jiangshan-map) · [`🔗 ライブデモ`](https://deanchen.me/jiangshan-map/)
+
+---
+
+## 19. S2 が Spanner 上に独自のオーソリティティブ DNS サーバーを構築——Route53 が書き込みを毎秒約5件に絞り、攻撃者がそれに気づいたから
+
+- **Velocity:** ▮ steady
+- **Source:** s2.dev · 62+ pts on HN · 10.8h ago (~17:19 UTC+8)
+- **Tags:** `dns` `infrastructure` `spanner` `postmortem-adjacent`
+
+S2 のエンジニアリングポスト（Cristian Caciuc、11月16日）は、このストリーミング企業がマネージド DNS を自前のオーソリティティブサーバーに置き換えた理由を説明する：彼らの各「basin」にはサブドメインが割り当てられ、作成時に**即座に**解決されなければならないが、Route53 はレコード API をおよそ毎秒5 UPSERT に絞る——かつて攻撃者が数万の basin を作成し、割り当てを使い果たし、解消に数時間かかるバックログを残した（これが旧100-basin 上限の由来だ）。解法：**Go** と `miekg/dns` によるオーソリティティブ DNS サーバーで、**Google Cloud Spanner 上のライブ SELECT** から応答する——彼らがすでに運用している強一貫性の basin データベースだ、だからドリフトしうる同期システムは存在しない。NXDOMAIN 攻撃の経済性（全ての偽クエリが DB ルックアップになる）は前面の Cloudflare DNS Firewall が処理し、オリジンは Cloudflare IP に限定、SOA/NS 応答でのオリジン漏洩を防ぐ `ns-leak-test` 付き、2つの GKE リージョンに展開。数週間運用して安定——作者は最近のコミットが「mostly CVE fixes, dependency bumps and cost savings」だと付け加える。
+
+**Why it matters:** 「It's always DNS」は通常、DNS は他人のものという意味だ；ここでの割当て悪用ループへの誠実なエンジニアリングの答えは、自ら DNS オペレーターになることだった。投稿はすべてのトレードに率直だ（Rust ではなく Go、キャッシュではなく Spanner の一貫性、濫用の盾としての Cloudflare）。ネームサーバーを運用しない人にとっても、良いアーキテクチャの読み物だ。
+
+[`🔗 s2.dev: It's always DNS, so why are we running our own?`](https://s2.dev/blog/dns-server) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50515616)
+
+---
+
+## 20. 2007年の「ThinkPad 秘密の電源ボタンコード」が回帰：10回押して30秒長押し——サポート担当者自身の説明は「dude, you know as much as I do」
+
+- **Velocity:** ▮ steady
+- **Source:** masnick.com · 257+ pts on HN · 8.4h ago (~19:39 UTC+8)
+- **Tags:** `retro` `hardware` `thinkpad` `folklore`
+
+Mike Masnick の2007年の投稿がフロントページに戻ってきた：真っ新しい ThinkPad z61t がカンファレンス講演の前に完全に死に、IBM のサポート担当者が彼を儀式に案内した——AC を抜き、バッテリーを外し、**電源ボタンを1秒間隔で10回押し、それから30秒間押し続ける**、バッテリーを戻し、電源オン。マシンは瞬時に復活した。担当者の公式説明は「static discharge」（静電気放電）；問い詰められたときの正直な答えは：「dude, you know as much as I do… but your machine is working.」（兄弟、君は僕と同じくらい知ってるよ……でも君のマシンは動いてる。）コメント欄の成功報告は2008年から2015年に及び、z61t をはるかに超えて——T/X/R シリーズの ThinkPad に加え、Acer、IdeaPad、S10 ネットブックまで——異論者は1回の長押しで同じだと主張し、別の人々は RAM の打ち直しや CMOS 電池を信奉する。
+
+**Why it matters:** これはもっともらしいメカニズム（残留電荷を排出し、スタックした電源状態のラッチを解く）を持つ民間療法であり、民間療法をまとったもっともらしいメカニズムであり、消えない18年分の現場データだ。古いハードウェアを生かし続ける誰にとっても——概ね本フィードの読者だ——この儀式は、ペーパークリップの隣の引き出しに入れておくに値する。
+
+[`🔗 masnick.com: The Secret ThinkPad Powerbutton Code (2007)`](https://masnick.com/posts/the-secret-thinkpad-powerbutton-code-to-bring-dead-laptops-back-to-life/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50516473)
 
 ---
 
@@ -570,11 +292,11 @@ Tell HN の投稿（105+ pts）は、公開スレッドが大規模に収穫さ�
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-16T12:46:44Z |
-| Items | 40 |
-| Sources tracked | 47 (Hacker News, GitHub Trending, NYT via Yahoo News, MacAnorak/Notebookcheck, Ahead of AI, Josh Blais, Common Dreams, WDR, Lucy's Save Room, IETF Datatracker, MITRE/NVD CVE records, VulDB, oss-sec, Jakub T. Jankiewicz, NVIDIA docs/blog, arXiv, Google Labs, Meta, Vercel, AG-UI releases, egm.dev, npm, Qwen blog, OpenRouter, iter.ca, uBlock GHSA advisory, Ransomnews, Gitea blog, Tor Project forum, Bruce Röttgers, Protomaps, ykiko.me, clice-io, Coles Group, Ductus, Internet Archive, Denver Gazette, SpaceNews, Financial Times, Reuters, Steve Blank, Debian Bug Tracker, HN Trends, Geoff Stearns, MIT Center for Bits and Atoms, Tangled, rockorager.dev) |
+| Generated | 2026-11-16T20:29:19Z |
+| Items | 20 |
+| Sources tracked | 23 (Hacker News, GitHub Trending, NVD/CVE, vendor blogs, AP/ABC News, FAA, engineering blogs) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
 
-[Previous day](2026-11-15.md) · [Raw .md](latest.md) · [Archive](../archive/index.md)
+[Previous day](2026-11-16.md) · [Raw .md](https://trending.md/jp/feed/2026-11-17.md) · [Archive](../archive/index.md)
