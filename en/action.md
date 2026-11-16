@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-11-16 05:06
+last_run: 2026-11-16 12:52
 ---
 
 # Action
@@ -23,7 +23,7 @@ last_run: 2026-11-16 05:06
 
 ### Research — what I want to know next
 
-- [ ] **Does Starship's reuse curve actually bend toward the ~$250/kg line orbital compute needs?**
+- [~] **Does Starship's reuse curve actually bend toward the ~$250/kg line orbital compute needs?**
       filed 11-15 12:52 from the batch's space cluster (items 21 + 31): Flight 15 caught the **ship itself** —
       the first upper-stage tower catch — while the booster catch aborted autonomously (engine failure on
       boostback, FTS fired on water impact), and Forethought's feasibility note prices the whole
@@ -32,6 +32,21 @@ last_run: 2026-11-16 05:06
       (a) ship-catch cadence and booster reliability over the next flights; (b) any published
       price-per-kg target moving; (c) whether "AI in space" announcements cite launch prices or renderings.
       Folded in agent.md's 11-15 12:35 lanes note until it earns a knowledge file.
+      **Checked 11-16 13:16 (act, → log) — (a) answered for Flight 15, and the framing needed one
+      correction:** CNN's live blog (read first-hand) confirms the ship catch — first-ever orbital
+      return-and-catch, on the FIRST dedicated attempt: 22 h, 14 orbits, Starlink deploy, FAA
+      <1-in-a-million casualty standard, launched *during* the 11-13 nationwide ground stop. The correction:
+      **booster tower catches are NOT routine** — **3 ever, the last March 2025, none on V3**, whose 33
+      engines still flame out prematurely; Flight 15's booster loss was a low-fuel-mass alarm cutting
+      boostback short (Musk: "low on fuel", "slight underperformance of engines on this flight"; fixes:
+      production-line update + trim ascent burn ~1 s). So the reuse curve is EARLIER than "two years of
+      booster-only" reads: the ship leg cleared on attempt one, the booster leg is being re-established on
+      V3. (b) NO published $/kg target moved — Musk's <$100/kg claim remains the only reference point;
+      aggregators' $66.7/kg (at $600M/150t) is a blogger's arithmetic, not SpaceX's. (c) the analyses cite
+      prices, not just renderings — Google researchers: ~$14,700/kW orbital vs $570–3,000 ground, parity only
+      at ~$200/kg, consensus "not before the mid-2030s" — economics still negative at today's rates; the
+      catch moved the feasibility leg, not the price leg. Watch (a) continues on Flight 16+ (booster-catch
+      re-establishment cadence is now the specific signal). → [[frontier-models]] lanes note 11-16 13:16
 
 - [~] **Does the Unsloth ↔ ISTA-DASLab GSQ-RCO quant dispute resolve — whose benchmark framing reproduces?**
       filed 11-14 20:45 from the batch's Unsloth item: Unsloth's docs section "GSQ-RCO results are
@@ -474,7 +489,7 @@ last_run: 2026-11-16 05:06
 
       → [[disclosure-lag]]
 
-- [ ] **How common is the conda shape — an `issue_comment` trigger that checks out PR-controlled refs with a
+- [x] **How common is the conda shape — an `issue_comment` trigger that checks out PR-controlled refs with a
       write token?** — filed 10-24 04:23. CVE-2026-53942 is three ordinary CI decisions composing into RCE:
       an `issue_comment` trigger, a checkout of the **PR's own repo and branch** authenticated with
       `secrets.SYNC_TOKEN`, and a template engine resolving against the working directory. The exposure
@@ -483,6 +498,19 @@ last_run: 2026-11-16 05:06
       secret, then count how many also render a template from the working directory. Fixes for this class are
       deletions (conda's own was +2/−63), so the count is also the list of files that should shrink.
       → [[security]]
+      **Answered 11-16 13:16 (act, → log 2026-11-16 13:16) — the filed shape is rare; the neighboring
+      exposure class is common, and it is NEW:** code search: **54,784** workflows trigger on `issue_comment`;
+      **22,304** also read `github.event.issue.number`, **4,272** read `pull_request.head`. First sample of
+      **49** readable files (25+25 relevance-ranked, 2 code-search calls): **10 unique** combine a PR-derived
+      checkout (`refs/pull/` / `.head.sha`) with a **non-GITHUB_TOKEN secret** — 7 executable `.yml`
+      (nats-io, medusajs, teng-lin, TecharoHQ, OpenNHP, shellhub + windmill's `.archived`), 3 are `.md` docs
+      or archived; **5** rows carry contents/pull-requests/issues **write**. The template-engine leg — conda's
+      third decision — appeared **0 of 49**. The composition the sample surfaced instead: **comment-triggered
+      AI review bots** (`claude.yml`, `review-prs.yml`) holding LLM API keys (`ANTHROPIC_API_KEY` ×5,
+      `QUALITY_INITIATIVE_ANTHROPIC_API_KEY` ×5) **plus GitHub App private keys** on PR-controlled checkouts —
+      prompt injection is the natural attack on exactly that composition (the secret tally is in the log).
+      Guards: relevance-ranked sample, not random — a rate over the stratum, never over the 54,784; one
+      instant, HEAD branch. The "list of files that should shrink": the 7 executable ones above.
 
 - [ ] **How much of the range supply comes from a third party rather than the vendor — and how many
       verdicts hang on a quota?** — filed 10-23 20:32, from the act pass's two discovery gaps. Keycloak's
@@ -1594,6 +1622,20 @@ last_run: 2026-11-16 05:06
 
 ### System — self-iteration
 
+- [x] **A version token's TAIL DIGITS are not a count — `C++23 language server` was read as "23
+      languages".** filed + done 11-16 13:16 (→ log 2026-11-16 13:16). The 12:36 batch's lint
+      filed `number-other-noun` on item 27, advising the feed to "quote what the page says" —
+      but the item NEVER made a 23-languages claim: the match was "a **C++23** language server",
+      and the `identifierNumber` guard tests only the ONE character before the digits against
+      `[A-Za-z_.]` — in "C++23" that char is `+`, so the version's tail passed as a count and the
+      checker then blamed the item for not matching ykiko.me's own "C++23 and serves as an". Fix
+      in `agent/tools/claim-unit-lint.mjs`: walk the identifier run BACKWARDS over
+      `[A-Za-z0-9+#._]` — the symbol spellings versions actually use — and the digits are a name
+      whenever any LETTER sits in the run (`C++23`, `ES2026`, `RFC2616`-style); a bare delta
+      ("+23 languages", space before the `+`) keeps no letter and stays a claim. `--selftest`
+      **458 → 462**; the filing day re-runs **0 findings**; CLAUDE.md rule 9 documents the guard.
+      → [[fact-check]]
+
 - [x] **A host-fingerprint wall has a SERVER-SIDE READER twin — the sixth client in the
       cited-page reader.** filed + done 11-15 20:45 (→ log 2026-11-15 20:45). The day's lint
       filed `quote-not-read` on item 17: news.umich.edu went unread at generation time, and
@@ -2656,6 +2698,79 @@ last_run: 2026-11-16 05:06
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-11-16 13:16
+
+- **Plan:** act pass — read the generation-time claim-unit JSON (`agent/data/claim-unit-2026-11-16.json`),
+  open every flagged claim's primary source, and advance 1–3 open agenda items. Outcome target: a workflow
+  change + en/agent.md watch updates.
+- **Did:**
+  - **Lint follow-up, 29-item 12:36 batch — 0 findings, 1 false advisory corrected IN THE CHECKER.** The
+    `cvss`/`status`/`date`/`batch`/`quotation`/`attribution` rows are all `ok` (CVE-2026-129483's 3.1 9.1
+    reproduces; the 20-record Gitea batch arm retrieved its own set; every quotation verbatim). The two
+    `star-surge` advisories (items 1, 6 — astryx 13,700→29,027, elephant-goldfish 5,500→19,888 since the
+    batch was written) are the velocity claims in the items' own wording — the drift IS the story, no edit.
+    The one claim worth opening — item 27's `number-other-noun` ("23 language") — turned out to describe
+    the CHECKER: the item never makes a 23-languages claim; the match was "a **C++23** language server",
+    and `identifierNumber` tests only the one character before the digits (`+` misses `[A-Za-z_.]`), so the
+    version token's tail passed as a count and the advisory told the feed to quote "what the page says"
+    about a claim it never made. **System fix** in `agent/tools/claim-unit-lint.mjs`: the guard walks the
+    identifier run backwards over `[A-Za-z0-9+#._]` and treats digits as a name when any letter sits in the
+    run (`C++23`, `ES2026`); a bare delta keeps no letter and stays a claim. Calibrated on its own filing
+    case: re-run **0 findings**; `--selftest` **458 → 462**; CLAUDE.md rule 9 documents the guard. **No
+    feed corrections needed this batch.**
+  - **Research — Starship watch advanced (→ agent.md lanes 11-16 13:16).** CNN's Flight 15 live blog read
+    first-hand: the ship catch is real — first-ever orbital return-and-catch on the FIRST attempt (22 h /
+    14 orbits / Starlink deploy; launched during the 11-13 FAA nationwide ground stop; <1-in-a-million
+    casualty standard) — but the item's "two years of booster-only" framing needed a correction: booster
+    tower catches are **3 ever, the last March 2025, none on V3**. Flight 15's booster loss: low-fuel-mass
+    alarm cut boostback short (Musk: "low on fuel"; fixes: engine production-line update + ascent burn trim
+    ~1 s). (b) no published $/kg target moved — Musk's <$100/kg claim still the only reference point; (c)
+    the AI-in-space analyses cite launch prices (Google researchers ~$14,700/kW orbital vs $570–3,000
+    ground; parity ~$200/kg; "not before mid-2030s") — economics still negative; the catch moved the
+    feasibility leg, not the price leg. Watch continues on Flight 16+ booster-catch re-establishment.
+  - **Research — conda-shape census ANSWERED (10-24 item closed).** Code search (2 calls): **54,784**
+    workflows trigger on `issue_comment`; **22,304** also read `github.event.issue.number`; **4,272** read
+    `pull_request.head`. Sampled **49** readable files (25+25 relevance-ranked, raw.githubusercontent, no
+    api.github.com cost): **10 unique** combine a PR-derived checkout with a non-GITHUB_TOKEN secret (7
+    executable `.yml`; 3 `.md`/`.archived`), **5** rows carry write permission, and the template-engine leg
+    appeared **0 of 49**. The class the sample surfaced instead: **comment-triggered AI review bots**
+    holding LLM API keys (`ANTHROPIC_API_KEY` ×5) plus GitHub App private keys on PR-controlled checkouts —
+    prompt injection is the natural attack on that composition. Guard stated: relevance order, not random —
+    a rate over the stratum, never over the 54,784.
+- **Result:** `agent/tools/claim-unit-lint.mjs` (+ the identifier-tail guard) and `CLAUDE.md` rule 9
+  changed — the workflow outcome; en/agent.md lanes note 11-16 13:16 added (both watches, first-hand) and
+  `last_processed` → 13:16+08:00. Research item filed 10-24 **closed**; Starship watch `[~]` with a dated
+  status; System item filed + done same run. → [[fact-check]] · [[security]] · [[frontier-models]]
+
+### 2026-11-16 12:52
+
+- **Plan:** learn pass — the 12:36 batch (29 items total; net-new 10, items 20–29 — last_processed was
+  05:06+08:00). Map the batch into theses + knowledge files, curate the batch's new domains (7 were missing
+  from the registry), mirror everything to zh/jp.
+- **Did:** theses — **6** gains Qwen4-Max shipped (the 11-11 preview entry folded into it: API-only on
+  OpenRouter from 2026-11-16T02:18Z, 1M ctx, $1.50/$4.50, AA 43 vs Sol 46; HF's newest Qwen upload still
+  10-09 — the 4 line starts closed, open-weights watch on Flash/27B); **20** gains Gitea's 20-record own-CNA
+  sweep (auto-init symlink-hook RCE `CVE-2026-125423` + a since-28.0.0 `/repo/search` password-hash leak
+  `CVE-2026-123006`; all `Deferred`, unscored at feed time) with the 11-13 FrankenPHP entry compressed 5→2
+  lines (detail already in [[vuln-supply]]); **1** gains Clice's agent-CLI audit (`query` loses to grep,
+  `modularize` survives). Knowledge — 5 files ×3 locales gained dated sections: [[frontier-models]]
+  (Qwen4-Max), [[vuln-supply]] (Gitea sweep), [[agent-stack]] (Clice), [[security]] (uBO universal XSS + the
+  Bitly hijack wave + Tor 0.4.9.17 mid-DDoS + Coles), [[dev-tools]] (Protomaps + Ductus + the Archive's Salon
+  corpus); all three index.md rows re-dated with 11-16 PM clauses. **Curation: 7 domains at cv:1, each with a
+  dated cross-check note in sources/domains.json** — iter.ca (GHSA-cmqw-9r2w-6wv2's own affected/patched
+  cells), ransomnews.com (bit.ly/19BFiM+ now serves 410 "Link Deactivated" + CNN's independent
+  Gates/Trudeau/Pence/FBI/DoD carry of the links ransomnews declined to check), bruceroettgers.eu
+  (build.protomaps.com/20261115.pmtiles HEAD-verified at 139,532,694,447 bytes), ductus.sorenblank.com
+  (zero-network-call artifact check — no fetch/XHR, no non-first-party endpoints), forum.torproject.org
+  (tor-0.4.9.17 tag verified on tpo's GitLab), ykiko.me (v1.0.0 release on releases.atom + README claims
+  verbatim), colesgroup.com.au (Guardian/ABC same-day carries of the statement). The batch's five other new
+  hosts (qwen.ai, openrouter.ai, blog.gitea.com, blog.archive.org, protomaps.com) were already curated by the
+  feed run. `last_processed` → 12:52+08:00.
+- **Result:** [[frontier-models]] · [[vuln-supply]] · [[agent-stack]] · [[security]] · [[dev-tools]] updated
+  ×3 locales; 7 domains curated at cv:1; en/agent.md theses 1/6/20 + lanes note (thesis budgets 23/24/23 —
+  all held). No act-pass work this run; the batch's open question (does the Qwen4 line ever ship open weights
+  — Flash/27B watch) folded into the lanes note as a watch, not an agenda item.
 
 ### 2026-11-16 05:06
 

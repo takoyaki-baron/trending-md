@@ -5375,3 +5375,22 @@ Sources: [Osservatorio Nessuno](https://osservatorionessuno.org/blog/2026/05/dem
 Sources: [CVE-2026-129483](https://www.cve.org/CVERecord?id=CVE-2026-129483) ·
 [cyrusimap/cyrus-sasl#896](https://github.com/cyrusimap/cyrus-sasl/issues/896) ·
 [oss-sec 投稿](https://seclists.org/oss-sec/2026/q4/122)
+
+## 2026-11-16 PM — 拡張そのものが注入ベクトルに；死んだ短縮リンクが再武装；DDoS さなかに出荷された Tor；Coles の腐りやすい「エビデンスなし」
+
+**uBlock Origin ユニバーサル XSS（`GHSA-cmqw-9r2w-6wv2`、1.75.4 で修正）。**uBO の Firefox MV2 拡張におけるワンクリックのユニバーサル XSS（MV3 の uBO Lite にも類似だがより軽い問題）：悪意あるウェブサイトが uBO の要素ピッカーを不可視 iframe に埋め込み、**uBO 自身の `no-fetch-if` スクリプトレット shim 内で発火する XHR をフックして**拡張のインストール毎ランダム UUID を抽出、`postMessage` でピッカーを操り、ピッカーの `opt` フィールド——本来 `image` のようなリソース型を入れる場所——に改行を注入して任意の **trusted フィルター**（`…##+js(trusted-rpnt, script, …)`）を追記する。trusted フィルターは任意のページにスクリプトを注入できるので、攻撃者ページ上の 1 クリックが任意サイトの文脈での任意 JavaScript を意味した。影響は 1.75.2 以下；1.75.4 で修正（11-03、「launch element picker only with a verified secret token」；強化は 1.76.4 まで継続）。今回アドバイザリに対して検証済み。二つの教訓：修正パターンはどこでも真似する価値がある——ウェブ到達可能な表面に秘密のハンドシェイクなしで「trusted」入力を受けさせてはいけない；そしてこれは今月発表された中で最も明確な AI 支援の脆弱性発見の一つだ——仮説は人間（iter.ca）、検索はモデル（GPT-5.6 Sol）、PoC の大部分は Claude、検証と文章は人間。安全の*ために*全員が入れる拡張が、自身の広告除去機構を通って注入ベクトルになった。
+
+**Bitly 乗っ取り——プラットフォーム規模の broken-link hijacking。**Burger King の 2011-07-24 ツイートに埋め込まれた Bitly 短縮リンクが 2026-11-15 に再登録され、ウィキペディアのナチス強制収容所一覧へリダイレクト（McDonald's の 2011 年 6 月のリンク → 9.11 の記事、18 分早い）；引用する投稿は数時間で 200 万閲覧を超えた。Ransomnews は **Trump の 2009–2013 ツイート内の 97 の Bitly リンク**を体系的に確認：それらのツイートの背後にあるリンクオブジェクトのうち **56** はツイートより後に作成され、1 つは悪意あるものとしてブロックされ、**4 つ**は 11-15 に登録（07:49–09:57 UTC）、2 つは暗号サービス名を模したドメインへ——その一つ（dappradars.website）の WHOIS 登録はリンク作成**より後**、つまりドメイン登録とリンク再利用は同じ芝居の分離された二幕。Bitly 自身のヘルプページはバックハーフは「再利用できない」と言う；作成タイムスタンプはこのポリシー主張を反証し、同クラスへの 2025-02 の修正（memecoin の波）も持ちこたえなかった。Bitly は 19:13 UTC に X で確認、関与アカウントを停止、影響リンクを無効化——今回検証：`bit.ly/19BFiM+` は現在 410「Link Deactivated」を返す；CNN は Gates、Trudeau、Pence、FBI、国防総省の古い投稿のリダイレクトされたリンクを独自に報じた。このクラス：短縮サービスが死んだコードを再利用すると、それを埋め込んだ十年物の投稿すべてが遠隔で書き換え可能になる——それを書いたアカウントより長生きするハイジャック。元の URL を引用する；古いコンテンツ内の `bit.ly/…` は元の場所に解決するまで未検証として扱う；`+` 接尾辞で訪問せずに宛先と作成日をプレビューできる。
+
+**Tor 0.4.9.17、DDoS の最中に出荷。**11-13 リリース、「ネットワークで進行中の DDoS 攻撃への迅速な対応として、ほとんどのリレーオペレーターに影響」——リレーは「大量のクライアント回路のフラッドで圧倒されている」。要の修正：「**特に一つの修正が、IPv6 ハンドリングに関連するリレー DoS 防御にとって特に重要**」、「今後もリリースを期待せよ」と約束。今回検証：`tor-0.4.9.17` タグが gitlab.torproject.org に存在。アウテージのスローモーション版：検閲/DoS 耐性は「壊れる」ことなく劣化し、ネットワークの健康はボランティアのリレーオペレーターが数日以内に的を絞った修正を適用できるかにかかる。
+
+**Coles——腐りやすい欠如。**Coles Group（オーストラリアの二大スーパーチェーンの一つ）は「サイバーセキュリティインシデントを調査中」：帰属なし、手法なし、タイムラインなし、かつ「顧客・従業員・サプライヤーのデータが漏洩または持ち出された証拠はまだ確認していない」——すべての小売漏洩開示の初期形態で、ACSC と外部企業が対応し、株価はほぼ横ばい（+0.36%）。「エビデンスなし」の行は定義上腐りやすい；話を動かすフォローアップは決済テレメトリ、ロイヤリティプログラムのデータ、サプライヤーシステムの到達範囲。今回 Guardian/ABC の同日報道に対して検証済み。
+
+Sources: [iter.ca: Universal XSS in uBlock Origin](https://iter.ca/post/ubo-uxss/) ·
+[GHSA-cmqw-9r2w-6wv2](https://github.com/gorhill/uBlock/security/advisories/GHSA-cmqw-9r2w-6wv2) ·
+[Ransomnews：旧 Bitly リンク乗っ取り](https://ransomnews.com/burger-king-tweet-bitly-link-hijack-2026/) ·
+[Bitly 情報ページ（現在 410）](https://bit.ly/19BFiM+) ·
+[Tor フォーラム：Security Release 0.4.9.17](https://forum.torproject.org/t/security-release-0-4-9-17/22454) ·
+[tor-0.4.9.17 タグ](https://gitlab.torproject.org/tpo/core/tor/-/tags) ·
+[Coles Group 更新](https://www.colesgroup.com.au/updates/) ·
+[Guardian：Coles investigates cyber-attack](https://www.theguardian.com/business/2026/nov/16/coles-cyber-attack-incident-data)

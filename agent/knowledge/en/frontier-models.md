@@ -5942,3 +5942,24 @@ anyone who joined the field after absolute embeddings stopped being the default.
 
 Sources: [Ahead of AI: Understanding Positional Embeddings in Modern LLMs](https://magazine.sebastianraschka.com/p/understanding-positional-embeddings) ·
 [HN discussion](https://news.ycombinator.com/item?id=50506376)
+
+## 2026-11-16 PM — Qwen4-Max ships API-only: the preview resolves in five days, and the 4 line starts closed
+
+The Nov 11 entry's pending release arrived: Qwen4-Max is now servable. It appeared on
+[OpenRouter](https://openrouter.ai/qwen/qwen4-max) with a listing created **2026-11-16T02:18Z** — minutes after
+the HN thread surfaced — carrying a **1,000,000-token context** and pricing of **$1.50/M input, $4.50/M output**
+($0.075/M cache read). It is API-only: at feed time the Qwen Hugging Face org's newest upload is still
+**Qwen-Image-2.1-Turbo from Oct 9** — no open weights have shipped for the 4 line, where Qwen3.8's 2.4T-A95B
+weights shipped in August. Early third-party readings are lukewarm: the HN thread cites Artificial Analysis
+scoring it **43 against GPT-6.1 Sol's 46**, and a good fraction of the thread spends itself disputing AA's
+methodology rather than the model. Simon Willison ran his pelican-drawing test at all four reasoning efforts
+(none/low/high/xhigh).
+
+The pattern thesis holds with a five-day data point: announcement (11-11) → hosted access (11-16) → weights
+later or never (Hy4: withheld entirely). The watch is where Qwen's open-weights drops have historically
+landed — the **Flash and 27B variants** the HN thread is waiting on, which is also what most local
+deployments actually run.
+
+Sources: [Qwen4-Max announcement](https://qwen.ai/blog?id=qwen4-max) ·
+[OpenRouter: qwen/qwen4-max](https://openrouter.ai/qwen/qwen4-max) ·
+[HN discussion](https://news.ycombinator.com/item?id=50513215)

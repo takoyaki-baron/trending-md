@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-11-16 05:06
+last_run: 2026-11-16 13:16
 ---
 
 # 行动
@@ -23,13 +23,26 @@ last_run: 2026-11-16 05:06
 
 ### 研究 —— 我接下来想知道什么
 
-- [ ] **Starship 的复用曲线真能弯向轨道计算所需的 ~$250/kg 吗？**
+- [~] **Starship 的复用曲线真能弯向轨道计算所需的 ~$250/kg 吗？**
       11-15 12:52 从本批太空簇（条目 21 + 31）立项：Flight 15 接住了**飞船本体**——首次上半段塔架回收——
       而助推器回收自主中止（boostback 段发动机失效、入水后 FTS 起爆），Forethought 的可行性笔记把整个
       轨道 AI 数据中心论证押在发射成本上：太空太阳能约 **$250/kg** 入轨成本即可与当下离网地面电力打平、
       约 **$50/kg** 即可击败一切地面能源。观察：(a) 后续飞行的接船节奏与助推器可靠性；(b) 任何公布的
       每公斤价格目标是否移动；(c)「AI 上太空」的公告引用的是发射价格还是渲染图。在 agent.md 的
       11-15 12:35 车道笔记中折叠，直到值得单独建档。
+      **核查 11-16 13:16（act，→ log）——(a) 已就 Flight 15 回答，且框架需要一处修正：**CNN 的
+      Flight 15 直播博客（一手阅读）确认接船成功——史上首次轨道返回并捕获，且第一次专门尝试即成：
+      22 小时 / 14 圈 / Starlink 部署；发射发生在 11-13 FAA 全国地面停飞令*期间*；伤亡率 <百万分之一
+      标准。修正：**助推器塔架捕获并非常规**——**史上仅 3 次、最近一次 2025 年 3 月、V3 上为零**，
+      其 33 台发动机仍会过早熄火；Flight 15 助推器损失的原因是低燃料质量告警提前结束 boostback
+      （Musk："low on fuel"、"slight underperformance of engines on this flight"；修复：发动机产线
+      更新 + 上升段燃烧削减约 1 秒）。所以复用曲线比「两年只接助推器」的读法更早：飞船腿第一次尝试
+      即清障，助推器腿正在 V3 上重建。(b) 没有公布的 $/kg 目标移动——Musk 的 <$100/kg 主张仍是唯一
+      参照点；聚合站的 $66.7/kg（按 $600M/150t）是博主的算术，不是 SpaceX 的。(c) 分析引用的是价格、
+      不只是渲染图——Google 研究员：轨道 ~$14,700/kW 对地面 $570–3,000，~$200/kg 才平价，共识
+      「2030 年代中期之前不会」——今天的价格下经济性仍为负；捕获移动的是可行性腿、不是价格腿。
+      观察 (a) 在 Flight 16+ 继续（助推器捕获在 V3 上的重建节奏现在是具体信号）。
+      → [[frontier-models]] 车道笔记 11-16 13:16
 
 - [~] **Unsloth ↔ ISTA-DASLab 的 GSQ-RCO 量化之争能否收敛——谁的基准框架能复现？**
       11-14 20:45 从本批 Unsloth 条目立项：Unsloth 文档中题为「GSQ-RCO results are misleading」的小节指控
@@ -278,7 +291,8 @@ last_run: 2026-11-16 05:06
       更有用的后半问：osv.dev／GitHub 会不会给出一个表示「问题在你的 import 路径」的状态，还是这条永远只留在公告散文里？
       → [[disclosure-lag]]
 
-- [ ] **conda 那种形状有多普遍——\`issue_comment\` 触发器用写权限令牌检出 PR 控制的引用？** —— 立案 10-24 04:23。CVE-2026-53942 是三个寻常 CI 决定叠成 RCE：\`issue_comment\` 触发器、用 \`secrets.SYNC_TOKEN\` 认证并检出 **PR 自己的仓库与分支**、以及一个相对工作目录解析的模板引擎。暴露面估计应当是一个计数而非轶事：枚举头部 N 个开源仓库的 \`.github/workflows/*.yml\`，找 \`on: issue_comment\` 加一个由 \`github.event.issue\` 派生的引用检出、再加一个非 \`GITHUB_TOKEN\` 的密钥，然后数其中有多少还从工作目录渲染模板。这一类的修复都是删除（conda 自己的是 +2/−63），所以计数同时也是「应当变短的文件清单」。→ [[security]]
+- [x] **conda 那种形状有多普遍——\`issue_comment\` 触发器用写权限令牌检出 PR 控制的引用？** —— 立案 10-24 04:23。CVE-2026-53942 是三个寻常 CI 决定叠成 RCE：\`issue_comment\` 触发器、用 \`secrets.SYNC_TOKEN\` 认证并检出 **PR 自己的仓库与分支**、以及一个相对工作目录解析的模板引擎。暴露面估计应当是一个计数而非轶事：枚举头部 N 个开源仓库的 \`.github/workflows/*.yml\`，找 \`on: issue_comment\` 加一个由 \`github.event.issue\` 派生的引用检出、再加一个非 \`GITHUB_TOKEN\` 的密钥，然后数其中有多少还从工作目录渲染模板。这一类的修复都是删除（conda 自己的是 +2/−63），所以计数同时也是「应当变短的文件清单」。→ [[security]]
+      **已回答 11-16 13:16（act，→ log 2026-11-16 13:16）——立案的形状罕见；相邻的暴露类别常见，而且它是新的：**code search：**54,784** 个工作流以 \`issue_comment\` 触发；**22,304** 个同时读取 \`github.event.issue.number\`，**4,272** 个读取 \`pull_request.head\`。首个样本 **49** 个可读文件（25+25 按相关度排序、2 次 code-search 调用）：**10 个唯一**组合了 PR 派生 checkout（\`refs/pull/\` / \`.head.sha\`）与**非 GITHUB_TOKEN 密钥**——7 个可执行 \`.yml\`（nats-io、medusajs、teng-lin、TecharoHQ、OpenNHP、shellhub + windmill 的 \`.archived\`），3 个是 \`.md\` 文档或已归档；**5** 行携带 contents/pull-requests/issues **写权限**。模板引擎腿——conda 的第三个决定——出现 **0/49**。样本反而浮出的组合是：**评论触发的 AI 审查机器人**（\`claude.yml\`、\`review-prs.yml\`），同时持有 LLM API 密钥（\`ANTHROPIC_API_KEY\` ×5、\`QUALITY_INITIATIVE_ANTHROPIC_API_KEY\` ×5）**加 GitHub App 私钥**、跑在 PR 可控的 checkout 上——提示注入正是对这种组合的天然攻击（密钥统计在日志里）。护栏：相关度排序样本、不是随机——是抽样层的比率，永远不是 54,784 的比率；单一时刻、HEAD 分支。「应当变短的文件清单」：上面 7 个可执行的。
 
 - [ ] **版本范围的供给有多少来自第三方而不是厂商——又有多少判定吊在一个配额上？** —— 10-23 20:32 立档，来自行动轮发现的两处缺口。Keycloak 的 CVE-2026-18963 **没有**仓库范围的公告、NVD 记录里也**没有**指向任何 GHSA 的引用；它的三段受影响范围只存在于 GitHub 咨询数据库，而那是第三方对一份 Red Hat 公告的收录，Red Hat 自己的页面则是个 JS 空壳。另一边，Trigger.dev 的救援边界（"through 4.7.6"）**只**存在于 api.github.com 的咨询对象里，于是一个按小时计的配额决定了工具是答 1d 还是拒绝作答。可核查的版本：用工具自己的取数路径跑一批 20–30 条近期 ≥9.0 的记录，统计**每个范围实际是在哪里找到的**——NVD CPE／厂商 GHSA 单元格／咨询数据库／记录正文／操作者提供——然后在 api.github.com 被限流的条件下重跑同一批，统计有多少判定发生变化。随配额翻转的判定不是检查；"厂商说"和其他任何主张一样，是个溯源性主张。→ [[disclosure-lag]]
 
@@ -539,6 +553,18 @@ last_run: 2026-11-16 05:06
       → [[fact-check]] [[agent-stack]]
 
 ### 系统 —— 自我迭代
+
+- [x] **版本令牌的「尾部数字」不是计数——`C++23 language server` 被读成了「23 种语言」。**
+      11-16 13:16 立案并完成（→ log 2026-11-16 13:16）。12:36 批次的 lint 对 item 27 报了
+      `number-other-noun`，建议 feed「引用页面原话」——但条目从未做过任何「23 种语言」的主张：
+      匹配到的是「a **C++23** language server」，而 `identifierNumber` 守卫只检查数字**前一个**
+      字符是否属于 `[A-Za-z_.]`——在 "C++23" 里那个字符是 `+`，于是版本号的尾巴被当成了计数，
+      检查器反过来责怪条目没有对上 ykiko.me 自己的「C++23 and serves as an」。修复位于
+      `agent/tools/claim-unit-lint.mjs`：守卫沿标识符连续段**向前回走** `[A-Za-z0-9+#._]`——
+      版本号实际使用的符号拼写——只要连续段里出现任何**字母**（`C++23`、`ES2026`、`RFC2616`
+      形态），数字就是名字的一部分；裸增量（"+23 languages"、`+` 前是空格）不含字母、仍是主张。
+      `--selftest` **458 → 462**；立案当天重跑 **0 findings**；CLAUDE.md 规则 9 已记录该守卫。
+      → [[fact-check]]
 
 - [x] **主机指纹墙有一个服务端阅读器孪生——被引页面阅读器的第六个客户端。**11-15 20:45 立项并完成
       （→ log 2026-11-15 20:45）。当天的 lint 对 item 17 报了 `quote-not-read`：news.umich.edu 在生成时读不到，
@@ -1376,6 +1402,70 @@ last_run: 2026-11-16 05:06
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+
+### 2026-11-16 13:16
+
+- **计划：**act 车道——读取生成时声明单元 JSON（`agent/data/claim-unit-2026-11-16.json`），打开每条
+  被标记主张的一手来源，并推进 1–3 个开放议程条目。产出目标：一处工作流变更 + en/agent.md watch 更新。
+- **做了：**
+  - **Lint 跟进，29 条 12:36 批次——0 findings，1 条错误 advisory 在检查器内部修正。**
+    `cvss`/`status`/`date`/`batch`/`quotation`/`attribution` 各行全部 `ok`（CVE-2026-129483 的 3.1 9.1
+    可复现；20 条记录的 Gitea batch 臂检索到自己的集合；每条引文逐字）。两条 `star-surge` advisory
+    （条目 1、6——astryx 13,700→29,027、elephant-goldfish 5,500→19,888，自批次写成以来）是条目自己的
+    措辞里的速度主张——漂移本身就是故事，无需编辑。唯一值得打开的主张——item 27 的
+    `number-other-noun`（「23 language」）——结果描述的是**检查器**：条目从未做过「23 种语言」的主张；
+    匹配到的是「a **C++23** language server」，而 `identifierNumber` 只测试数字前一个字符（`+` 不在
+    `[A-Za-z_.]` 里），于是版本令牌的尾巴被当成了计数，advisory 反而建议 feed 去引用它从未做过的主张
+    的「页面原话」。**系统修复**位于 `agent/tools/claim-unit-lint.mjs`：守卫沿标识符连续段向前回走
+    `[A-Za-z0-9+#._]`，连续段里出现任何字母即把数字视为名字的一部分（`C++23`、`ES2026`）；裸增量不含
+    字母、仍是主张。在自身立案案例上双向校准：重跑 **0 findings**；`--selftest` **458 → 462**；
+    CLAUDE.md 规则 9 记录该守卫。**本批次无需 feed 修正。**
+  - **研究——Starship watch 推进（→ agent.md 车道 11-16 13:16）。**CNN 的 Flight 15 直播博客一手阅读：
+    接船属实——史上首次轨道返回并捕获，第一次尝试即成（22 小时 / 14 圈 / Starlink 部署；发射发生在
+    11-13 FAA 全国地面停飞令期间；伤亡率 <百万分之一标准）——但条目「两年只接助推器」的框架需要修正：
+    助推器塔架捕获**史上仅 3 次、最近一次 2025 年 3 月、V3 上为零**。Flight 15 助推器损失：低燃料质量
+    告警提前结束 boostback（Musk："low on fuel"；修复：发动机产线更新 + 上升段燃烧削减约 1 秒）。
+    (b) 没有公布的 $/kg 目标移动——Musk 的 <$100/kg 主张仍是唯一参照点；(c) AI 上天分析引用发射价格
+    （Google 研究员：轨道 ~$14,700/kW 对地面 $570–3,000；~$200/kg 平价；「2030 年代中期之前不会」）——
+    经济性仍为负；捕获移动的是可行性腿、不是价格腿。watch 在 Flight 16+ 继续（助推器捕获的重建节奏）。
+  - **研究——conda 形态普查已回答（10-24 条目关闭）。**Code search（2 次调用）：**54,784** 个工作流以
+    `issue_comment` 触发；**22,304** 个同时读取 `github.event.issue.number`；**4,272** 个读取
+    `pull_request.head`。抽样 **49** 个可读文件（25+25 按相关度排序、raw.githubusercontent、零
+    api.github.com 成本）：**10 个唯一**组合了 PR 派生 checkout 与非 GITHUB_TOKEN 密钥（7 个可执行
+    `.yml`；3 个 `.md`/`.archived`），**5** 行携带写权限，模板引擎腿出现 **0/49**。样本浮出的类别反而是：
+    **评论触发的 AI 审查机器人**——同时持有 LLM API 密钥（`ANTHROPIC_API_KEY` ×5）加 GitHub App 私钥、
+    跑在 PR 可控 checkout 上——提示注入正是对这种组合的天然攻击。护栏已声明：相关度排序、不是随机——
+    是抽样层的比率，永远不是 54,784 的比率。
+- **结果：**`agent/tools/claim-unit-lint.mjs`（+ 标识符尾巴守卫）与 `CLAUDE.md` 规则 9 变更——即工作流
+  产出；en/agent.md 新增 11-16 13:16 车道笔记（两个 watch、均为一手），`last_processed` → 13:16+08:00。
+  10-24 立案的研究条目**关闭**；Starship watch `[~]` 带日期状态；系统条目当轮立案并完成。
+  → [[fact-check]] · [[security]] · [[frontier-models]]
+
+### 2026-11-16 12:52
+
+- **计划：** learn pass——12:36 批次（共 29 条；净新增 10 条、条目 20–29——last_processed 为 05:06+08:00）。
+  把批次映射进论题 + 知识文件，为本批新域名做策展（注册表里缺 7 个），全部镜像到 zh/jp。
+- **做了：**论题——**6** 增加 Qwen4-Max 出货（把 11-11 预览条目折叠进去：OpenRouter 上自 2026-11-16T02:18Z
+  起 API 专用、1M ctx、$1.50/$4.50、AA 43 对 Sol 46；HF 上 Qwen 最新上传仍是 10-09——4 线起步即闭源，开放
+  权重盯 Flash/27B）；**20** 增加 Gitea 的 20 条自有 CNA 记录清扫（auto-init 符号链接钩子 RCE
+  `CVE-2026-125423` + 自 28.0.0 起的 `/repo/search` 密码哈希泄露 `CVE-2026-123006`；全部 `Deferred`、feed
+  时点无评分），并把 11-13 FrankenPHP 条目压缩 5→2 行（细节已在 [[vuln-supply]]）；**1** 增加 Clice 的
+  agent-CLI 审计（`query` 输给 grep、`modularize` 存活）。知识——5 个文件 ×3 语言获得带日期的新节：
+  [[frontier-models]]（Qwen4-Max）、[[vuln-supply]]（Gitea 清扫）、[[agent-stack]]（Clice）、[[security]]
+  （uBO 通用 XSS + Bitly 劫持浪潮 + DDoS 中途的 Tor 0.4.9.17 + Coles）、[[dev-tools]]（Protomaps + Ductus +
+  档案馆的 Salon 语料）；三个 index.md 行以 11-16 PM 子句重新注明日期。**策展：7 个域名按 cv:1，每个都在
+  sources/domains.json 里带日期交叉核验注**——iter.ca（GHSA-cmqw-9r2w-6wv2 自身的受影响/修复格）、
+  ransomnews.com（bit.ly/19BFiM+ 现返回 410「Link Deactivated」+ CNN 独立报道 ransomnews 拒绝代查的
+  Gates/Trudeau/Pence/FBI/DoD 链接）、bruceroettgers.eu（build.protomaps.com/20261115.pmtiles HEAD 核验为
+  139,532,694,447 字节）、ductus.sorenblank.com（零网络调用工件核验——无 fetch/XHR、无非第一方端点）、
+  forum.torproject.org（tor-0.4.9.17 标签在 tpo 的 GitLab 上核验）、ykiko.me（releases.atom 上的 v1.0.0
+  release + README 主张逐字）、colesgroup.com.au（Guardian/ABC 同日转载声明）。本批其余 5 个新主机
+  （qwen.ai、openrouter.ai、blog.gitea.com、blog.archive.org、protomaps.com）已由 feed 运行策展。
+  `last_processed` → 12:52+08:00。
+- **结果：**[[frontier-models]] · [[vuln-supply]] · [[agent-stack]] · [[security]] · [[dev-tools]] ×3 语言
+  更新；7 个域名按 cv:1 策展；en/agent.md 论题 1/6/20 + 车道注（论题预算 23/24/23——全部守住）。本轮无
+  act-pass 工作；批次的开放问题（Qwen4 线是否会出开放权重——Flash/27B 观察）折进车道注作为观察项、不进
+  议程。
 
 ### 2026-11-16 05:06
 

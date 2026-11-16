@@ -2248,3 +2248,30 @@ operator-spelled bound (`{version: "< 0.57.13"}`) is invisible to a `lessThan`-o
 
 Sources: [CVE-2026-129449](https://www.cve.org/CVERecord?id=CVE-2026-129449) ·
 [NVD search: DrayTek today](https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=Vigor2960)
+
+## 2026-11-16 PM — Gitea's sweep lands as a CNA wave: 20 records in two hourly tranches against v28.4.0
+
+Gitea released **v28.4.0** (2026-11-15 19:39 UTC) as a security release, and twenty CVE records from **Gitea's
+own CNA** landed on NVD in two hourly tranches (21:16Z, 22:17Z) — all `Deferred` (NVD deferring analysis to the
+CNA), none carrying a CVSS score at feed time. The same-day pattern as DrayTek's morning: the records are a
+*filing event* measured against a release that already shipped, not a disclosure wave.
+
+The two the release notes lead with:
+
+- **CVE-2026-125423** — a command-execution race: a repo created with auto-init accepted pushes before
+  initialization finished, so a user could push a crafted tree making the README write follow a symlink and
+  overwrite a git hook, "and ran commands as the Gitea system user".
+- **CVE-2026-123006** — present **since 28.0.0**: the dashboard's `GET /repo/search` returned each repository's
+  internal commit-status object including the owner's **full user record**, so "any signed-in user could read
+  the password hash, salt and email address of the owner of any visible repository that has a commit status."
+
+The release also rebuilds binaries with Go 1.27.4 (`CVE-2026-97054`) and fixes issues across Actions, issues,
+PRs and packages; the blog's own line is "We strongly recommend that all users upgrade as soon as possible."
+The part that outlives the patch: hashes leaked months ago don't rotate when you upgrade — the search
+endpoint's exposure window is an incident to review, not a changelog line. A password-hash disclosure readable
+by any signed-in user on a default-configured self-hosted forge is exactly the bug class that survives its own
+advisory.
+
+Sources: [Gitea blog: 28.4.0 release](https://blog.gitea.com/release-of-28.4.0/) ·
+[GHSA-5mx6-8rwm-52wf](https://github.com/go-gitea/gitea/security/advisories/GHSA-5mx6-8rwm-52wf) ·
+[v28.4.0 release](https://github.com/go-gitea/gitea/releases/tag/v28.4.0)

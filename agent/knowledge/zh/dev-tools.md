@@ -1454,3 +1454,17 @@ Sources: [MacAnorak](https://macanorak.com/the-macbook-pros-oled-pwm-problem-whe
 [Joshua Blais](https://joshblais.com/blog/emacs-as-my-browser/) ·
 [lucyNES 复盘](https://lucypero.com/lucynes.html) ·
 [matheuzgomes/gawain](https://github.com/matheuzgomes/gawain)
+
+## 2026-11-16 PM — 地图变成一个静态文件；零网络调用的手写字体；档案馆的 Salon 语料
+
+**Protomaps/PMTiles——地图成为容量规划问题。**Bruce Röttgers 的实操文上了首页：PMTiles 是一种以**单个文件**交付、经 HTTP Range 请求寻址的瓦片存档，所以托管一个全球底图就是「下载最新每日构建、上传到存储桶」。经济账：在 Bunny.net 上 **139 GB 的世界地图带 5 倍副本约 $5/月存储**，带宽 $0.01/GB，一次欧洲城市的完整加载-平移-缩放会话约 5 MB——他估算**每千次地图加载 $0.05**、对 Mapbox 免费额度后 $5/1k 的费率（「便宜 100 倍」，他的估算、随用量浮动）。不缓存 Range 请求的 CDN（Cloudflare）需要一个小 edge function 把 x/y/z 路径翻译成字节区间；CLI 可提取包围盒或特定缩放级别。地图曾是 web 开发里最后几个「必须买 SaaS」的层之一，其定价悬崖惩罚每一个走红的项——这个格式把按用量计费的 API 变成对象存储对媒体做过的同一步棋，只是这次落在地理上。**本轮核验（工件）：**`build.protomaps.com/20261115.pmtiles` 以 **139,532,694,447 字节（139.5 GB）**返回 200、Last-Modified 11-15——每日单文件全球构建是真的。
+
+**Ductus——缩微版的本地优先模式。**一个把手写变成可用字体的单页 web 工具：逐个提示书写 26 个小写字形（然后大写、数字）、收集笔画、导出字体文件——完全客户端运行、无需安装、没有账号。隐私模型一句话：检查发生在访客自己的电脑上、永不上传。**本轮核验（工件）：**所服务页面的 HTML 中 fetch/XHR 调用为零、也无任何非第一方端点——该主张按其所服务的状态成立。隐私故事与分发故事是同一个事实：整个交互在零服务器的浏览器标签页里完成。
+
+**Salon 语料——靠连续性保存。**互联网档案馆的帖子（11-12，Chris Freeland，其「vanishing culture」系列）记录 Salon 在 31 年后停刊。Wayback Machine 自 1999 年起以 Salon 的历代域名（salon1999.com → salonmag.com → salon.com）持续归档：**超过 25 万篇文章、2 万多名作者**可被检索，档案馆还发布了实验性的 [Salon Explorer](https://web.archive.org/collections/salon/) 供带过滤器地浏览语料。反事实才是重点：语料得以幸存是因为归档是*连续的*——始于网站健康之时，而非死亡之际。每一个「我们会一直在」的出版物，距离成为下一个「尽早把爬虫捐赠给 Wayback」的论据，只隔一个预算周期。（同周的姊妹课、在另一层：Bitly 劫持展示*指针*层的腐坏，档案馆展示持续快照能救回什么——引用原始 URL、在你需要之前先归档。）
+
+Sources: [Bruce Röttgers：自托管地图瓦片](https://bruceroettgers.eu/blog/protomaps/) ·
+[Protomaps](https://protomaps.com) ·
+[Ductus](https://ductus.sorenblank.com) ·
+[互联网档案馆：Preserving 30 Years of Salon Journalism](https://blog.archive.org/2026/11/12/preserving-30-years-of-salon-journalism/) ·
+[Salon Explorer](https://web.archive.org/collections/salon/)

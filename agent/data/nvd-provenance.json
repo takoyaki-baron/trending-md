@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-15T21:41:58.090Z",
+ "updated": "2026-11-16T05:47:07.965Z",
  "cves": {
   "CVE-2026-64671": {
    "vulnStatus": "Deferred",
@@ -14631,6 +14631,39 @@
     "CWE-119",
     "CWE-122"
    ],
+   "kev": null,
+   "kevDue": null,
+   "nvdAnalyzed": false
+  },
+  "CVE-2026-123006": {
+   "vulnStatus": "Deferred",
+   "published": "2026-11-15",
+   "lastModified": "2026-11-15T21:16",
+   "metrics": [],
+   "cwe": [],
+   "kev": null,
+   "kevDue": null,
+   "nvdAnalyzed": false
+  },
+  "CVE-2026-125423": {
+   "vulnStatus": "Deferred",
+   "published": "2026-11-15",
+   "lastModified": "2026-11-15T21:16",
+   "metrics": [],
+   "cwe": [
+    "CWE-362",
+    "CWE-59"
+   ],
+   "kev": null,
+   "kevDue": null,
+   "nvdAnalyzed": false
+  },
+  "CVE-2026-97054": {
+   "vulnStatus": "Awaiting Analysis",
+   "published": "2026-11-11",
+   "lastModified": "2026-11-12T22:09",
+   "metrics": [],
+   "cwe": [],
    "kev": null,
    "kevDue": null,
    "nvdAnalyzed": false

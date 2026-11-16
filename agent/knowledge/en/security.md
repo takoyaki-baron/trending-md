@@ -7771,3 +7771,59 @@ bypass is about as bad as an auth bug gets.
 Sources: [CVE-2026-129483](https://www.cve.org/CVERecord?id=CVE-2026-129483) ·
 [cyrusimap/cyrus-sasl#896](https://github.com/cyrusimap/cyrus-sasl/issues/896) ·
 [oss-sec post](https://seclists.org/oss-sec/2026/q4/122)
+
+## 2026-11-16 PM — an extension becomes the injection vector; dead short links re-arm; Tor ships mid-DDoS; Coles' perishable "no evidence"
+
+**uBlock Origin universal XSS (`GHSA-cmqw-9r2w-6wv2`, patched 1.75.4).** A one-click universal XSS in uBO's
+Firefox MV2 extension (a similar but less severe issue hit MV3 uBO Lite): a malicious website embeds uBO's
+element picker in an invisible iframe, extracts the extension's random per-install UUID by **hooking the XHR
+fired inside uBO's own `no-fetch-if` scriptlet shim**, drives the picker over `postMessage`, and abuses the
+picker's `opt` field — designed to hold a resource type like `image` — by injecting a newline and appending an
+arbitrary **trusted filter** (`…##+js(trusted-rpnt, script, …)`). Trusted filters can inject script into any
+page, so one click on the attacker's page meant arbitrary JavaScript in any site's context. Affected 1.75.2
+and lower; patched in 1.75.4 (Nov 3, "launch element picker only with a verified secret token"; further
+hardening through 1.76.4). Verified against the advisory this run. Two takeaways: the fix pattern is worth
+copying everywhere — never let a web-reachable surface accept "trusted" input without a secret handshake — and
+this is one of the clearest AI-assisted vulnerability finds published this month: the hypothesis was human
+(iter.ca), the search was model (GPT-5.6 Sol), the PoC mostly Claude, the verification and prose human. The
+extension everyone installs *for* safety became the injection vector through its own anti-ad machinery.
+
+**Bitly hijack — broken-link hijacking at platform scale.** A Bitly short link inside a Burger King tweet
+from 24 July 2011 was re-registered on 15 Nov 2026 and redirected to Wikipedia's list of Nazi concentration
+camps (a McDonald's June 2011 link → the September 11 article, 18 minutes earlier); a post quoting it passed
+2M views in hours. Ransomnews systematically checked **97 Bitly links in Trump tweets 2009–2013**: **56** of
+the link objects now behind those tweets were created after the tweets, one is blocked as malicious, **four**
+were registered on Nov 15 (07:49–09:57 UTC), two lead to domains copying crypto-service names — one of which
+(dappradars.website) was WHOIS-registered *after* its link was created, i.e. the domain registration and the
+link reuse are decoupled stages of the same play. Bitly's own help pages say back-halves "cannot be re-used";
+the creation timestamps disprove the policy claim, and a Feb 2025 fix for the same class (the memecoin wave)
+didn't hold. Bitly confirmed on X at 19:13 UTC, suspended the accounts, disabled the affected links — verified
+this run: `bit.ly/19BFiM+` now serves 410 "Link Deactivated"; CNN independently carried redirected links in
+old posts from Gates, Trudeau, Pence, the FBI and the DoD. The class: when a shortening service recycles dead
+codes, every decade-old post embedding one becomes remotely rewriteable — a hijack that outlives the account
+that wrote it. Cite original URLs; treat any `bit.ly/…` in old content as unverified until it resolves where it
+always did; the `+` suffix previews destination and creation date without visiting.
+
+**Tor 0.4.9.17, shipped mid-DDoS.** Released Nov 13 "in rapid response to the ongoing DDoS attack on the
+network, which has affected most relay operators" — relays "are being overwhelmed by a massive flood of client
+circuits". The load-bearing fix: "**one fix in particular is especially important for relay DoS defenses
+related to IPv6 handling**", with "further releases in the near future" promised. Verified this run: the
+`tor-0.4.9.17` tag exists on gitlab.torproject.org. The slow-motion version of an outage: censorship/DoS
+resistance degrades without ever "breaking", and the network's health depends on volunteer relay operators
+applying a targeted fix within days.
+
+**Coles — the perishable absence.** Coles Group (one of Australia's two dominant supermarket chains) is
+"investigating a cyber security incident": no attribution, no technique, no timeline, and "we have not
+identified any evidence that customer, team or supplier data has been compromised" — the early-days shape of
+every retail breach disclosure, with ACSC + external firms engaged and shares roughly flat (+0.36%). The
+"no evidence" line is perishable by definition; the follow-ups that move the story are payment telemetry,
+loyalty-program data and supplier-system reach. Verified against Guardian/ABC same-day reporting this run.
+
+Sources: [iter.ca: Universal XSS in uBlock Origin](https://iter.ca/post/ubo-uxss/) ·
+[GHSA-cmqw-9r2w-6wv2](https://github.com/gorhill/uBlock/security/advisories/GHSA-cmqw-9r2w-6wv2) ·
+[Ransomnews: old Bitly links hijacked](https://ransomnews.com/burger-king-tweet-bitly-link-hijack-2026/) ·
+[Bitly info page (now 410)](https://bit.ly/19BFiM+) ·
+[Tor forum: Security Release 0.4.9.17](https://forum.torproject.org/t/security-release-0-4-9-17/22454) ·
+[tor-0.4.9.17 tag](https://gitlab.torproject.org/tpo/core/tor/-/tags) ·
+[Coles Group updates](https://www.colesgroup.com.au/updates/) ·
+[Guardian: Coles investigates cyber-attack](https://www.theguardian.com/business/2026/nov/16/coles-cyber-attack-incident-data)

@@ -3670,3 +3670,14 @@ full RoPE 也赢下了一些评测）。他的预测：RoPE 到 2027 年仍是�
 
 Sources: [Ahead of AI: Understanding Positional Embeddings in Modern LLMs](https://magazine.sebastianraschka.com/p/understanding-positional-embeddings) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50506376)
+
+## 2026-11-16 PM — Qwen4-Max 仅 API 出货：预览五天内兑现，4 线起步即闭源
+
+11-16 条目的待发版到货了：Qwen4-Max 现在已可调用。它出现在
+[OpenRouter](https://openrouter.ai/qwen/qwen4-max) 上、列表创建于 **2026-11-16T02:18Z**——HN 讨论串浮出几分钟之后——带 **1,000,000 token 上下文**，定价 **$1.50/M 输入、$4.50/M 输出**（缓存读 $0.075/M）。它只有 API：feed 时点 Qwen 的 Hugging Face 组织最新上传仍是 **10-09 的 Qwen-Image-2.1-Turbo**——4 线没有任何开放权重出货，而 Qwen3.8 的 2.4T-A95B 权重早在八月就发了。早期第三方读感偏冷：HN 讨论串引用 Artificial Analysis 给它 **43 分、对 GPT-6.1 Sol 的 46 分**，且讨论串里有相当篇幅在争议 AA 的方法论而非模型本身。Simon Willison 在全部四个推理档（none/low/high/xhigh）跑了画鹈鹕测试。
+
+模式论题多了一个五天的数据点：公告（11-11）→ 托管访问（11-16）→ 权重稍后或永远不（Hy4：完全扣留）。观察点是 Qwen 开放权重历来落下的地方——HN 讨论串正在等的 **Flash 与 27B 变体**，也正是多数本地部署实际运行的型号。
+
+Sources: [Qwen4-Max 公告](https://qwen.ai/blog?id=qwen4-max) ·
+[OpenRouter: qwen/qwen4-max](https://openrouter.ai/qwen/qwen4-max) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50513215)

@@ -2196,3 +2196,43 @@ Sources: [MacAnorak](https://macanorak.com/the-macbook-pros-oled-pwm-problem-whe
 [Joshua Blais](https://joshblais.com/blog/emacs-as-my-browser/) ·
 [lucyNES write-up](https://lucypero.com/lucynes.html) ·
 [matheuzgomes/gawain](https://github.com/matheuzgomes/gawain)
+
+## 2026-11-16 PM — maps become a static file; a handwriting font with zero network calls; the Archive's Salon corpus
+
+**Protomaps/PMTiles — maps as a capacity-planning problem.** Bruce Röttgers' walkthrough front-paged: PMTiles
+is a tile archive that ships as **one single file** addressed via HTTP Range requests, so hosting a planet-wide
+basemap is "download the latest daily build, upload it to a storage bucket." The economics: on Bunny.net the
+**139 GB world map with 5× replication runs ~$5/month in storage**, bandwidth $0.01/GB, a full
+load-pan-zoom session of a European city moves ~5 MB — his estimate **$0.05 per 1,000 map loads** vs Mapbox's
+$5/1k post-free-tier rate ("100× cheaper", his estimate, usage-dependent). CDNs that don't cache Range
+requests (Cloudflare) need a small edge function translating x/y/z paths into byte ranges; the CLI extracts
+bounding boxes or specific zooms. Maps were one of the last "must buy SaaS" layers of web development, with a
+pricing cliff that punished any project that went viral — the format turns a usage-billed API into the same
+move object storage made for media, applied to geography. **Verified this run (artifact check):**
+`build.protomaps.com/20261115.pmtiles` answers 200 at **139,532,694,447 bytes (139.5 GB)**, Last-Modified
+Nov 15 — the daily single-file planet build is real.
+
+**Ductus — the local-first pattern in miniature.** A single-page web tool that turns handwriting into a
+working font: prompts you through each of the 26 lowercase glyphs (then upper, digits), collects strokes,
+exports a font file — entirely client-side, nothing to install, no account. The privacy model in one line:
+checking happens on the visitor's own computer, nothing is ever uploaded. **Verified this run (artifact
+check):** the served page's HTML carries zero fetch/XHR calls and no non-first-party endpoints — the claim
+holds as served. Both the privacy story and the distribution story are the same fact: the whole interaction
+fits in a browser tab with zero server.
+
+**Salon's corpus — preservation by continuity.** The Internet Archive's post (Nov 12, Chris Freeland, in its
+"vanishing culture" series) records Salon ceasing publication after 31 years. The Wayback Machine has archived
+Salon under its successive domains (salon1999.com → salonmag.com → salon.com, since 1999): **more than
+250,000 articles by over 20,000 writers** are discoverable, and the Archive shipped an experimental
+[Salon Explorer](https://web.archive.org/collections/salon/) for browsing the corpus with filters. The
+counterfactual is the point: the corpus survives because the archiving was *continuous* — started when the
+site was healthy, not when it died. Every "we'll be around" publication is one budget cycle from being the
+next argument for donating crawls to the Wayback Machine early. (Same week's companion lesson, different
+layer: the Bitly hijack shows the *pointer* layer rotting while the Archive shows what continuous snapshots
+save — cite original URLs, and archive before you need to.)
+
+Sources: [Bruce Röttgers: self-hosting map tiles](https://bruceroettgers.eu/blog/protomaps/) ·
+[Protomaps](https://protomaps.com) ·
+[Ductus](https://ductus.sorenblank.com) ·
+[Internet Archive: Preserving 30 Years of Salon Journalism](https://blog.archive.org/2026/11/12/preserving-30-years-of-salon-journalism/) ·
+[Salon Explorer](https://web.archive.org/collections/salon/)

@@ -2849,3 +2849,15 @@ Sources: [meta/astryx](https://github.com/meta/astryx) ·
 [google/elephant-goldfish-model](https://github.com/google/elephant-goldfish-model) ·
 [ag-ui Release 2026-11-13](https://github.com/ag-ui-protocol/ag-ui/releases/tag/release%2F2026-11-13) ·
 [vercel-labs/agent-browser](https://github.com/vercel-labs/agent-browser)
+
+## 2026-11-16 PM — Clice v1.0：著者が自分の agent CLI を監査し、生き残ったのは特化コマンドだけ
+
+[`clice-io/clice`](https://github.com/clice-io/clice)（1,513★）が約 2.5 年の作業と 1,000 コミットの節目を経て**初の安定版リリース**——LLVM/Clang の上に clangd/ccls に対してゼロから再設計された C/C++ 言語サーバーで、近代 C++ のショーケースとして書かれている：自作の libuv ベース構造化並行ライブラリ上の完全な C++20 コルーチン、C++20 named modules + C++23 `import std`、すべてのシリアライズ（TOML、JSON、bincode、blob、CLI 引数）に静的リフレクション、そして完全にセルフホスト——`clice modularize` 経由で自分のコードベースに言語サービスを提供する。
+
+エッセイの最良の節は「What about agents?」：著者は agent 時代のために CLI を設計し、それを正直に判定した。grep の代替としての `clice query` は「実際にはそれほど有用ではない」——正確なシンボル検索には全プロジェクト索引が必要で、「2、3 回の grep で通常は足りる」。「本当に役に立つ」コマンドは `clice modularize`：agent だけでモジュール化させると、「サブエージェントの群れを起こし、移行のためのカスタムスクリプトを書く」。
+
+これはこのフィードが繰り返し踏むパターンの、これまでで最も鋭い定式化だ：**汎用ツールインターフェースはモデル自身のスクリプト執筆に負け、深く特化したコマンドだけが agent との接触を生き残る。**いま作られているすべての「MCP wrapper for X」に適用すべき設計フィルター——汎用インターフェースが既に存在するなら（grep）、同じバイトを包む wrapper は負ける；モデルが生テキストから再構築できないプロジェクト固有のセマンティクスをエンコードするコマンドが勝つ。今回検証済み：v1.0.0 リリースは存在し（releases.atom、2026-11-15）、README は modularize ／ `import std` ／ セルフホストの主張を逐語で載せる。
+
+Sources: [ykiko: clice v1.0 Released](https://ykiko.me/en/articles/2105384023094834022/) ·
+[clice-io/clice](https://github.com/clice-io/clice) ·
+[HN 議論](https://news.ycombinator.com/item?id=50508715)

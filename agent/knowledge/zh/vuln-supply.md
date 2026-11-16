@@ -1543,3 +1543,18 @@ DrayTek 公告**——厂商确认步骤仍未完成，所以在把 1.5.1.7 当�
 
 Sources: [CVE-2026-129449](https://www.cve.org/CVERecord?id=CVE-2026-129449) ·
 [NVD 搜索：今日 DrayTek](https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=Vigor2960)
+
+## 2026-11-16 PM — Gitea 的清扫以 CNA 浪潮落地：对 v28.4.0 在两个整点梯队落下 20 条记录
+
+Gitea 于 **2026-11-15 19:39 UTC** 发布 **v28.4.0** 安全版本，来自 **Gitea 自家 CNA** 的二十条 CVE 记录分两个整点梯队（21:16Z、22:17Z）落在 NVD——全部 `Deferred`（NVD 把分析交给 CNA）、feed 时点无一携带 CVSS 分数。与 DrayTek 的早晨同一模式：记录是对照一个**已出货** release 测得的*申报事件*，不是披露浪潮。
+
+release notes 领头的两条：
+
+- **CVE-2026-125423** —— 命令执行竞态：以 auto-init 创建的仓库在初始化完成前就接受 push，用户可以推一棵构造好的树、让 README 写入跟随符号链接并覆盖 git 钩子，「并以 Gitea 系统用户身份执行了命令」。
+- **CVE-2026-123006** —— **自 28.0.0 起存在**：仪表盘的 `GET /repo/search` 返回每个仓库的内部提交状态对象、内含所有者的**完整用户记录**，于是「任何已登录用户都能读取任何带提交状态的可见仓库之所有者的密码哈希、盐与邮箱地址」。
+
+该 release 还以 Go 1.27.4 重建二进制（`CVE-2026-97054`）、修复 Actions、issues、PR 与 packages 各处的问题；博客自己的话是「We strongly recommend that all users upgrade as soon as possible。」比补丁活得更久的那部分：数月前泄露的哈希不会在你升级时轮换——search 端点的暴露窗口是要复盘的事件，不是 changelog 里的一行。默认配置的自托管 forge 上、任何已登录用户可读的密码哈希泄露，正是能活过自己公告的那类 bug。
+
+Sources: [Gitea 博客：28.4.0 release](https://blog.gitea.com/release-of-28.4.0/) ·
+[GHSA-5mx6-8rwm-52wf](https://github.com/go-gitea/gitea/security/advisories/GHSA-5mx6-8rwm-52wf) ·
+[v28.4.0 release](https://github.com/go-gitea/gitea/releases/tag/v28.4.0)

@@ -2506,3 +2506,15 @@ Sources: [meta/astryx](https://github.com/meta/astryx) ·
 [google/elephant-goldfish-model](https://github.com/google/elephant-goldfish-model) ·
 [ag-ui Release 2026-11-13](https://github.com/ag-ui-protocol/ag-ui/releases/tag/release%2F2026-11-13) ·
 [vercel-labs/agent-browser](https://github.com/vercel-labs/agent-browser)
+
+## 2026-11-16 PM — Clice v1.0：作者审计了自己的 agent CLI，只有特化命令存活
+
+[`clice-io/clice`](https://github.com/clice-io/clice)（1,513★）在约 2.5 年工作与 1,000 提交里程碑后发布**首个稳定版**——一个构建在 LLVM/Clang 之上、从零对标 clangd/ccls 重写的 C/C++ 语言服务器，同时是现代 C++ 的展示品：完全的 C++20 协程（跑在自研的基于 libuv 的结构化并发库上）、C++20 命名模块加 C++23 `import std`、所有序列化（TOML、JSON、bincode、blob、CLI 参数）都用静态反射，且完全自托管——它经自己的 `clice modularize` 为自己的代码库提供语言服务。
+
+文章最好的小节是「What about agents?」：作者为 agent 时代设计了一个 CLI，然后诚实地评价它。作为 grep 替代品的 `clice query`「其实没有那么有用」——精确符号查找需要全项目索引，而「2 或 3 次 grep 通常就够了」。真正「earns its keep」的命令是 `clice modularize`：让 agent 单独做模块化时，它会「拉起一群 subagent、写自定义脚本来完成迁移」。
+
+这是本 feed 反复撞见的模式迄今最锋利的表述：**通用工具接口输给模型自己写脚本，只有深度特化的命令能在与 agent 的接触中存活。**这是一条值得套用在当下每一个「MCP wrapper for X」上的设计过滤器——如果通用接口已存在（grep），包同一层字节的 wrapper 就会输；编码了模型无法从原始文本重建的项目特有语义的命令才会赢。本轮已核验：v1.0.0 release 存在（releases.atom、2026-11-15），README 逐字载有 modularize / `import std` / 自托管主张。
+
+Sources: [ykiko: clice v1.0 Released](https://ykiko.me/en/articles/2105384023094834022/) ·
+[clice-io/clice](https://github.com/clice-io/clice) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50508715)

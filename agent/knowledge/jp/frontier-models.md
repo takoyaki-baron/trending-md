@@ -4005,3 +4005,14 @@ RoPE をスキップ；一部のリカレントハイブリッドは全体が No
 
 Sources: [Ahead of AI: Understanding Positional Embeddings in Modern LLMs](https://magazine.sebastianraschka.com/p/understanding-positional-embeddings) ·
 [HN 議論](https://news.ycombinator.com/item?id=50506376)
+
+## 2026-11-16 PM — Qwen4-Max が API 専用で出荷：プレビューは 5 日で決着、4 系はクローズで始まる
+
+11-11 の項目が待っていたリリースが到着した：Qwen4-Max が呼び出し可能になった。
+[OpenRouter](https://openrouter.ai/qwen/qwen4-max) にリスティング作成 **2026-11-16T02:18Z**——HN スレッドが浮上した数分後——で現れ、**1,000,000 トークンのコンテキスト**、価格は **$1.50/M 入力、$4.50/M 出力**（キャッシュ読み $0.075/M）。API 専用：フィード時点で Qwen の Hugging Face 組織の最新アップロードは依然 **10-09 の Qwen-Image-2.1-Turbo**——4 系は公開重みを一切出荷しておらず、Qwen3.8 の 2.4T-A95B 重みは 8 月に既に出ている。初期のサードパーティ評価は手厳しくない：HN スレッドが引用するのは Artificial Analysis の **43 点、対 GPT-6.1 Sol の 46 点**で、スレッドのかなりの部分がモデルではなく AA の手法を疑うのに使われている。Simon Willison は 4 つの推論レベルすべて（none/low/high/xhigh）でペリカン描画テストを走らせた。
+
+パターンのテーゼに 5 日のデータポイントが加わる：告知（11-11）→ ホストされたアクセス（11-16）→ 重みは後日または決して（Hy4：完全保留）。ウォッチは Qwen の公開重みが歴史的に落ちてきた場所——HN スレッドが待っている **Flash と 27B の変体**、そしてそれはほとんどのローカルデプロイが実際に走らせる型でもある。
+
+Sources: [Qwen4-Max 発表](https://qwen.ai/blog?id=qwen4-max) ·
+[OpenRouter: qwen/qwen4-max](https://openrouter.ai/qwen/qwen4-max) ·
+[HN 議論](https://news.ycombinator.com/item?id=50513215)

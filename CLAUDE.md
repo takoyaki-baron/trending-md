@@ -1303,7 +1303,15 @@ underlying pages — this produced a two-layer false signal in a single item.
    batch produced *no* `count` finding, silence rather than a pass. A hyphenated-modifier arm fixes
    it and must **start with a letter**, or `4-bit models` becomes a count of four. Prevalence, so the
    class is not oversold: **1 of the 40** texts in the lint's page cache carries a delimiter, and
-   `--selftest` **210 → 220**.
+   `--selftest` **210 → 220**. And a version token's **tail digits** are not a count either
+   (added 2026-11-16 13:16, the `C++23` lesson): the `identifierNumber` guard tested only the ONE
+   character before the digits against `[A-Za-z_.]`, so "a **C++23** language server" read as
+   "23 languages" and item 27 of that day's feed was advised to "quote what the page says" about a
+   claim it never made (ykiko.me's own text is "C++23 and serves as an" — the checker was matching
+   its own misreading on both sides). The guard now walks the identifier run backwards over
+   `[A-Za-z0-9+#._]` and treats the digits as a name whenever any letter sits in the run
+   (`C++23`, `ES2026`); a bare delta ("+23 languages", space before the `+`) keeps no letter and
+   stays a claim. `--selftest` **458 → 462**; the filing day re-runs **0 findings**.
    **A count over a SET of records is its own unit, and `--check batch` is the only arm that reads
    it** (added 2026-11-10 04:53, the FFmpeg item turned into a check). Item 7 of that batch shipped
    **three** wrong numbers under one true story: "**102** FFmpeg CVE records", "**96 of the 102**

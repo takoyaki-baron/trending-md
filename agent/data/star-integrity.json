@@ -1,51 +1,51 @@
 {
   "repos": {
     "zhaoxuya520/reverse-skill": {
-      "stars": 44688,
+      "stars": 44727,
       "commits": 281,
       "ratio": 159,
       "forks_pct": 14.9,
-      "subs_pct": 0.33,
+      "subs_pct": 0.34,
       "first_commit": "2026-08-08T10:32:33Z",
       "created_at": "2026-05-13T14:37:57Z",
       "verdict": "FLAG(ratio≥100; history starts +87d after created_at)",
-      "checked": "2026-11-15T21:34:13.052Z"
+      "checked": "2026-11-16T05:39:01.616Z"
     },
     "browser-use/jev-ultrafast": {
-      "stars": 24519,
+      "stars": 24528,
       "commits": 5,
-      "ratio": 4904,
+      "ratio": 4906,
       "forks_pct": 7.7,
       "subs_pct": 0.23,
       "first_commit": "2026-09-17T01:44:17Z",
       "created_at": "2026-09-16T21:30:12Z",
       "verdict": "FLAG(ratio≥100)",
-      "checked": "2026-11-15T21:34:13.052Z"
+      "checked": "2026-11-16T05:39:01.616Z"
     },
     "paperclipai/paperclip": {
-      "stars": 114122,
-      "commits": 8125,
+      "stars": 114181,
+      "commits": 8133,
       "ratio": 14,
       "forks_pct": 16.6,
       "subs_pct": 0.43,
       "first_commit": "2026-02-16T19:31:35Z",
       "created_at": "2026-03-02T15:01:51Z",
       "verdict": "ok",
-      "checked": "2026-11-15T21:34:13.052Z"
+      "checked": "2026-11-16T05:39:01.616Z"
     },
     "davila7/claude-code-templates": {
-      "stars": 33754,
-      "commits": 2130,
+      "stars": 33783,
+      "commits": 2134,
       "ratio": 16,
       "forks_pct": 11.8,
       "subs_pct": 0.57,
       "first_commit": "2025-07-04T01:35:24Z",
       "created_at": "2025-07-04T01:26:26Z",
       "verdict": "control",
-      "checked": "2026-11-15T21:34:13.052Z"
+      "checked": "2026-11-16T05:39:01.616Z"
     }
   },
-  "runs": 112,
+  "runs": 113,
   "first_run": "2026-09-26T13:06:44.830Z",
-  "last_run": "2026-11-15T21:34:13.052Z"
+  "last_run": "2026-11-16T05:39:01.616Z"
 }

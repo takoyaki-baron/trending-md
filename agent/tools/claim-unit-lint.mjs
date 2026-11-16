@@ -3603,7 +3603,22 @@ let readmeCalls = 0;
 function identifierNumber(text, index, raw) {
   const before = index > 0 ? text[index - 1] : '';
   const after = text[index + raw.length] ?? '';
-  return /[A-Za-z_.]/.test(before) || /[A-Za-z]/.test(after);
+  if (/[A-Za-z_.]/.test(before) || /[A-Za-z]/.test(after)) return true;
+  /* A VERSION TOKEN'S TAIL DIGITS are not a count either, and the one-char before-test misses
+   * every spelling where the digits are glued to a symbol: "C++23 language server" read as
+   * "23 languages" (measured 2026-11-16 on that day's feed item 27 — the lint filed
+   * `number-other-noun` against ykiko.me's own "C++23 and serves as an", advising the feed to
+   * quote a claim the item never made). Walk the identifier run BACKWARDS over
+   * `[A-Za-z0-9+#._]` — the symbol spellings versions actually use — and the digits are part of
+   * a name whenever any LETTER sits in the run (`C++23`, `ES2026`, `RFC2616`-shaped); a bare
+   * delta ("+23 languages", a space before the `+`) keeps no letter and stays a claim. */
+  let i = index - 1;
+  let sawLetter = false;
+  while (i >= 0 && /[A-Za-z0-9+#._]/.test(text[i])) {
+    if (/[A-Za-z]/.test(text[i])) sawLetter = true;
+    i -= 1;
+  }
+  return sawLetter;
 }
 
 /* A card's `language:` block IS the count — but it is a YAML list, not a sentence, so
@@ -6369,6 +6384,11 @@ if (SELFTEST) {
   t('count: "36 language tags" is a real count',
     identifierNumber('and 36 language tags over one pair', 4, '36'), false);
   t('count: a dotted version is part of a name', identifierNumber('upgraded to 3.16.2 models here', 14, '16'), true);
+  // a version token's tail digits glued to a SYMBOL are a name too (measured 2026-11-16, item 27)
+  t('count: "C++23 language server" is a name, not 23 languages', identifierNumber('a C++23 language server rewritten from scratch', 4, '23'), true);
+  t('count: ES2026-style tail digits are a name', identifierNumber('written against ES2026 language features', 17, '2026'), true);
+  t('count: a bare "+23 languages" delta keeps no letter and stays a claim', identifierNumber('added +23 languages this cycle', 6, '23'), false);
+  t('count: digits standing alone are still a claim', identifierNumber('supports 23 languages out of the box', 9, '23'), false);
   // a YAML block is a count written as data (measured 2026-10-29 on the Hy-SimulMT card)
   const cardFixture = '---\nlanguage:\n- zh\n- en\n- ug\nlicense: apache-2.0\n---\n\n# Model\n';
 

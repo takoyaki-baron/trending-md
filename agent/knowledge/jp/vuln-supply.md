@@ -1674,3 +1674,18 @@ NVD の 2026-10-29→11-04 ウィンドウの **303/3,069** レコードが、�
 
 Sources: [CVE-2026-129449](https://www.cve.org/CVERecord?id=CVE-2026-129449) ·
 [NVD 検索：今日の DrayTek](https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=Vigor2960)
+
+## 2026-11-16 PM — Gitea の一掃が CNA の波として着地：v28.4.0 対して 2 つの整正刻トランシェで 20 レコード
+
+Gitea は **2026-11-15 19:39 UTC** に **v28.4.0** をセキュリティリリースとして出し、**Gitea 自身の CNA** からの 20 件の CVE レコードが 2 つの整正刻トランシェ（21:16Z、22:17Z）で NVD に着地した——すべて `Deferred`（NVD は分析を CNA に委ねる）、フィード時点で CVSS スコアを携えるものはゼロ。DrayTek の朝と同じ当日パターン：レコードは**既に出荷済み**のリリースに対して測られた*ファイルリングイベント*であり、開示の波ではない。
+
+リリースノートが先頭に置く 2 件：
+
+- **CVE-2026-125423** —— コマンド実行の競合：auto-init 付きで作成されたリポジトリは初期化が終わる前に push を受け付け、ユーザーは細工したツリーを push して README 書き込みをシムリンクに追わせ、git フックを上書きでき、「Gitea システムユーザーとしてコマンドを実行した」。
+- **CVE-2026-123006** —— **28.0.0 から存在**：ダッシュボードの `GET /repo/search` が各リポジトリの内部コミットステータスオブジェクトを返し、そこには所有者の**完全なユーザーレコード**が含まれ、「コミットステータスを持つ可視リポジトリの所有者のパスワードハッシュ、ソルト、メールアドレスを、サインイン済みの任意のユーザーが読めた」。
+
+リリースはさらに Go 1.27.4 でバイナリを再ビルドし（`CVE-2026-97054`）、Actions・issues・PR・packages 全域の問題を修正；ブログ自身の言葉は「We strongly recommend that all users upgrade as soon as possible。」パッチより長生きする部分：数か月前に漏れたハッシュはアップグレードしてもローテートしない——search エンドポイントの露出窗口は changelog の一行ではなく、見直すべきインシデント。デフォルト設定のセルフホスト forge でサインイン済み全ユーザーが読めるパスワードハッシュ漏洩は、自分のアドバイザリを生き延びるバグクラスそのものだ。
+
+Sources: [Gitea ブログ：28.4.0 リリース](https://blog.gitea.com/release-of-28.4.0/) ·
+[GHSA-5mx6-8rwm-52wf](https://github.com/go-gitea/gitea/security/advisories/GHSA-5mx6-8rwm-52wf) ·
+[v28.4.0 リリース](https://github.com/go-gitea/gitea/releases/tag/v28.4.0)

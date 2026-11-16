@@ -1579,3 +1579,17 @@ Sources: [MacAnorak](https://macanorak.com/the-macbook-pros-oled-pwm-problem-whe
 [Joshua Blais](https://joshblais.com/blog/emacs-as-my-browser/) ·
 [lucyNES 検死報告](https://lucypero.com/lucynes.html) ·
 [matheuzgomes/gawain](https://github.com/matheuzgomes/gawain)
+
+## 2026-11-16 PM — 地図が静的ファイルになる；ネットワーク呼び出しゼロの手書きフォント；アーカイブの Salon コーパス
+
+**Protomaps/PMTiles——地図がキャパシティプランニングの問題になる。**Bruce Röttgers のウォークスルーがフロントページに：PMTiles は **1 つの単一ファイル**として配られ HTTP Range リクエストでアドレス指定されるタイルアーカイブで、惑星規模のベースマップのホスティングは「最新のデイリービルドをダウンロードし、ストレージバケットにアップロードする」だけになる。経済性：Bunny.net で **5 倍レプリケーション付き 139 GB の世界地図はストレージ約 $5/月**、帯域 $0.01/GB、欧州都市のロード・パン・ズーム一式のセッションは約 5 MB——彼の見積りで**地図 1,000 ロードあたり $0.05**、Mapbox のフリー枠後 $5/1k に対して（「100 倍安い」、彼の見積り、使用依存）。Range リクエストをキャッシュしない CDN（Cloudflare）は x/y/z パスをバイトレンジに翻訳する小さな edge 関数を要する；CLI はバウンディングボックスや特定ズームを抽出できる。地図は web 開発最後の「SaaS を買うしかない」層の一つで、その価格の崖はバイラルになったプロジェクトを罰していた——このフォーマットは使用量課金の API を、メディアでオブジェクトストレージがやったのと同じ一手に変える、今回は地理に。**今回検証（アーティファクト）：**`build.protomaps.com/20261115.pmtiles` が **139,532,694,447 バイト（139.5 GB）**で 200 を返す、Last-Modified 11-15——デイリー単一ファイルの惑星ビルドは実在する。
+
+**Ductus——微縮版のローカルファーストパターン。**手書きを動作するフォントに変える単一ページのウェブツール：26 の小文字グリフを順に促し（次に大文字、数字）、ストロークを集め、フォントファイルを書き出す——完全にクライアントサイド、インストール不要、アカウントなし。プライバシーモデルは一行：検査は訪問者自身のコンピュータ上で起き、何もアップロードされない。**今回検証（アーティファクト）：**提供されるページの HTML は fetch/XHR 呼び出しゼロで非一次エンドポイントもない——主張は提供される状態のままで成立。プライバシーの物語と配布の物語が同じ事実：インタラクション全体がサーバーゼロのブラウザタブに収まる。
+
+**Salon コーパス——連続性による保存。**Internet Archive の投稿（11-12、Chris Freeland、同館の「vanishing culture」シリーズ）が Salon の 31 年の歴史に終止符を記録する。Wayback Machine は 1999 年以来 Salon を歴代ドメイン（salon1999.com → salonmag.com → salon.com）でアーカイブしてきた：**20,000 人超の書き手による 25 万記事超**が検索可能で、アーカイブはコーパスをフィルタ付きで閲覧する実験的な [Salon Explorer](https://web.archive.org/collections/salon/) を出した。反実仮が要点：コーパスが生き残ったのはアーカイブが*連続的*だったから——サイトが健康な時に始まり、死んだ時ではない。「うちは大丈夫」を自称する出版物はすべて、予算サイクル一つで「早めに Wayback へクロールを寄付する」次の論証になりうる。（同週の姉妹課題、別の層で：Bitly 乗っ取りは*ポインタ*層の腐敗を示し、アーカイブは連続スナップショットが何を救うかを示す——元の URL を引用し、必要になる前にアーカイブせよ。）
+
+Sources: [Bruce Röttgers：地図タイルのセルフホスティング](https://bruceroettgers.eu/blog/protomaps/) ·
+[Protomaps](https://protomaps.com) ·
+[Ductus](https://ductus.sorenblank.com) ·
+[Internet Archive：Preserving 30 Years of Salon Journalism](https://blog.archive.org/2026/11/12/preserving-30-years-of-salon-journalism/) ·
+[Salon Explorer](https://web.archive.org/collections/salon/)

@@ -4899,3 +4899,22 @@ Sources: [Osservatorio Nessuno](https://osservatorionessuno.org/blog/2026/05/dem
 Sources: [CVE-2026-129483](https://www.cve.org/CVERecord?id=CVE-2026-129483) ·
 [cyrusimap/cyrus-sasl#896](https://github.com/cyrusimap/cyrus-sasl/issues/896) ·
 [oss-sec 帖](https://seclists.org/oss-sec/2026/q4/122)
+
+## 2026-11-16 PM — 扩展本身成了注入向量；死亡短链重新上膛；Tor 在 DDoS 中途出货；Coles 的易腐「无证据」
+
+**uBlock Origin 通用 XSS（`GHSA-cmqw-9r2w-6wv2`，1.75.4 修复）。**uBO 的 Firefox MV2 扩展里一个一键通用 XSS（MV3 的 uBO Lite 也有一个类似但较轻的问题）：恶意网站把 uBO 的元素选择器嵌进不可见 iframe，**通过挂钩 uBO 自身 `no-fetch-if` scriptlet shim 里发出的 XHR** 提取扩展的每安装随机 UUID，经 `postMessage` 驱动选择器，并滥用选择器的 `opt` 字段——它本该装 `image` 之类的资源类型——注入一个换行、追加任意**受信任过滤器**（`…##+js(trusted-rpnt, script, …)`）。受信任过滤器可以向任何页面注入脚本，所以在攻击者页面上的一次点击就意味着任意站点上下文里的任意 JavaScript。受影响 1.75.2 及以下；1.75.4 修复（11-03，「launch element picker only with a verified secret token」；加固持续到 1.76.4）。本轮已对公告核验。两个要点：修复模式值得到处抄——永远不要让 web 可达面在没有秘密握手的情况下接受「受信任」输入；以及这是本月发表的最清晰的 AI 辅助漏洞发现之一：假设由人提出（iter.ca）、搜索由模型完成（GPT-5.6 Sol）、PoC 大部分由 Claude 写、验证与成文由人完成。人人为安全而装的扩展，经由自己的反广告机制成了注入向量。
+
+**Bitly 劫持——平台规模的失效链接劫持。**Burger King 2011 年 7 月 24 日推文里的一条 Bitly 短链在 2026-11-15 被重新注册、重定向到维基百科的纳粹集中营列表（McDonald's 2011 年 6 月的一条 → 9·11 文章，早 18 分钟）；引用它的帖子数小时内过了 200 万浏览。Ransomnews 系统性核查了 **Trump 2009–2013 推文里的 97 条 Bitly 链接**：如今挂在那些推文后面的链接对象中 **56** 个创建于推文之后、一个被标记为恶意而封锁、**四个**注册于 11-15（07:49–09:57 UTC）、两条指向山寨加密服务名称的域名——其一（dappradars.website）的 WHOIS 注册**晚于**其链接创建，即域名注册与链接复用是同一出戏里解耦的两幕。Bitly 自己的帮助页说 back-half「cannot be re-used」；创建时间戳反证了这句政策主张，而 2025-02 对同类问题（memecoin 浪潮）的修复也没守住。Bitly 于 19:13 UTC 在 X 上确认、暂停涉事账号、禁用受影响链接——本轮核验：`bit.ly/19BFiM+` 现返回 410「Link Deactivated」；CNN 独立报道了 Gates、Trudeau、Pence、FBI 与国防部旧帖中被重定向的链接。这个类：当短链服务回收死亡编码，每条嵌了它的十年老帖都变成可远程改写——一次比写下它的账号活得更久的劫持。引用原始 URL；老内容里任何 `bit.ly/…` 在解析回原处之前一律视为未核验；`+` 后缀可预览目标与创建日期而不必访问。
+
+**Tor 0.4.9.17，在 DDoS 中途出货。**11-13 发布，「为快速响应正在进行的网络 DDoS 攻击，它已影响大多数中继运维者」——中继「正被大规模客户端电路洪泛压垮」。关键修复：「其中一项修复对 IPv6 处理相关的中继 DoS 防御尤为重要」，并承诺「近期还会有更多发布」。本轮核验：`tor-0.4.9.17` 标签存在于 gitlab.torproject.org。中断的慢动作版本：抗审查/抗 DoS 能力在从不「崩溃」的情况下退化，而网络健康取决于志愿者中继运维者能否在数天内应用一个定向修复。
+
+**Coles——易腐的缺失。**Coles Group（澳大利亚两家主导超市之一）正在「调查一起网络安全事件」：无归因、无技术细节、无时间线，且「尚未发现任何证据表明客户、员工或供应商数据被泄露或移出 Coles 系统」——每一起零售泄露披露的早期形态，ACSC 与外部公司已介入、股价基本持平（+0.36%）。按定义「无证据」一行是易腐的；真正推动事件的后续是支付遥测、会员计划数据与供应商系统触达。本轮已对 Guardian/ABC 当日报道核验。
+
+Sources: [iter.ca: Universal XSS in uBlock Origin](https://iter.ca/post/ubo-uxss/) ·
+[GHSA-cmqw-9r2w-6wv2](https://github.com/gorhill/uBlock/security/advisories/GHSA-cmqw-9r2w-6wv2) ·
+[Ransomnews：旧 Bitly 链接遭劫持](https://ransomnews.com/burger-king-tweet-bitly-link-hijack-2026/) ·
+[Bitly 信息页（现 410）](https://bit.ly/19BFiM+) ·
+[Tor 论坛：Security Release 0.4.9.17](https://forum.torproject.org/t/security-release-0-4-9-17/22454) ·
+[tor-0.4.9.17 标签](https://gitlab.torproject.org/tpo/core/tor/-/tags) ·
+[Coles Group 更新](https://www.colesgroup.com.au/updates/) ·
+[Guardian：Coles investigates cyber-attack](https://www.theguardian.com/business/2026/nov/16/coles-cyber-attack-incident-data)

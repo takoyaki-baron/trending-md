@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-11-16T05:06:00+08:00
+last_processed: 2026-11-16T13:16:00+08:00
 ---
 
 # Learnt Agent
@@ -50,6 +50,7 @@ patterns, and turn them into insights and actionable todos.
    - **11-15 — human gates become delivery-graph nodes, the browser never takes focus, skills enforce a decision process:** `Tencent/LoopForge` (self-hosted MIT; SOP graphs of Agent/Script/**Human-gate**/sub-SOP nodes with send-back-to-step semantics; ten executors CodeBuddy→ZCode); `paul-nameless/agweb` (WebKit macOS, **no window ever takes focus**, `fill --secret-cmd`, five idle pages **590 MB**); `tradermonty/claude-trading-skills` (**+556★**, day's biggest gain — five YAML workflows with decision gates, emphatically not a signal service); `dream-num/univer` v1.5.0 dated update (+495★). → [[agent-stack]]
    - **11-15 PM — the orchestrator arrives native, and the skill channel publishes its accountability repo:** Claude Code Projects (beta rollout, 98 HN pts; Cherny: "Projects are how I write pretty much all my code these days") — scope → delegate → parallel threads → review → assemble, steerable by phone, with quota burn as the first user-visible failure mode (one trivial question spawned **7** sub-agents, 10 min of quota); `GoogleChrome/modern-web-guidance-src` (**+1,220★**/day) opens the eval harness + public dashboard + `GOVERNANCE.md` behind the skill. → [[agent-stack]] [[agent-plugins]]
    - **11-16 — the design-system layer goes agent-ready, the context-stripped reviewer becomes a first-party Google role, and the frontend protocol trains daily:** `meta/astryx` (**+13,660★**/week, 28.7k, "Currently in Beta") — React 19 + StyleX, npm package + global CLI, "the API, docs, and CLI are designed together so a person and an AI assistant build the same way, from the same reference", with a Sync-Contract header naming docs-drift as the guarded failure mode; `google/elephant-goldfish-model` (**5,539★**/week): Elephant holds context and drafts the spec, Goldfish reviewers read it **without the earlier conversation**, the human approves before implementation — falsifier-beside-generator at the specification layer, distributed multi-harness (ChatGPT/Codex plugin, Antigravity, Claude Code marketplace); AG-UI ships a tagged release **every day this week**, mapping LangGraph's native `Interrupt.response_schema` onto one event vocabulary, with a breaking ≥1.0 client boundary. → [[agent-stack]] [[agent-plugins]]
+   - **11-16 PM — the agent-CLI audit arrives from a v1.0 language server:** `clice-io/clice` (C++23, self-hosted; v1.0.0 Nov 15) — its author judged his own agent-era CLI: `clice query` as a grep replacement "isn't actually all that useful" ("2 or 3 grep calls are usually enough"), while `clice modularize` "really earns its keep" — asked to modularize alone, an agent "spins up a swarm of subagents and writes custom scripts": generic tool interfaces lose to the model's own script-writing, and only deeply specialized commands survive contact with agents — a design filter for every "MCP wrapper for X." → [[agent-stack]]
 2. **Agent security is the immediate attack surface — and every named class ends up enforced by
    nobody.** ~50+ CVSS≥9 entries since Aug 12 resolve into sixteen recurring shapes (full map in
    [[security]]); four cases show the class named, the mitigation converged, nobody enforcing it.
@@ -164,8 +165,7 @@ patterns, and turn them into insights and actionable todos.
    - **11-09 — the comparison-set claim ships with zero weights:** WeChat's WeLM-Image (2611.07392, 31.7B MoT /
      ~5.4B active) "ranks first among the evaluated open-source models" — a set the authors chose — with **0**
      artifacts on the Hub, no release plan; Turbo's 4.98 s/H20 is a paper number too. → [[frontier-models]] [[fact-check]]
-   - **11-11 PM — the pattern gets a generation number:** Qwen4-Max enters preview on Alibaba's Token Plan — **no
-     parameters, no benchmark card, no weights, no pricing**; announcement → hosted access → weights later (Hy4: withheld entirely). → [[frontier-models]]
+   - **11-16 — the 11-11 preview resolves API-only, and the 4 line starts closed:** Qwen4-Max ships (OpenRouter listing 2026-11-16T02:18Z, five days after the preview) at **1M ctx, $1.50/$4.50** per M ($0.075/M cache read), AA **43** vs GPT-6.1 Sol 46 with the thread disputing AA's methodology — while HF's newest Qwen upload is still Qwen-Image-2.1-Turbo (10-09): announcement → hosted → weights later (Hy4 path); open weights historically land at Flash/27B — that's the watch. → [[frontier-models]]
    - **11-13 — the everyday tier ships with its own hedge and an audited-turn count:** Gemini 4 Hydrogen — 1M ctx flat **$1.50/$7.50**, a fourth thinking level (**xhigh**), AA 51/54 vs Argon 50, Orchestrator near-Carbon at −24% quota — "matches or outperforms **some** of the competing models in its class", 2.5× from partner "early testing", safety table (overreach up to −81%, misaligned 12×, **96.7%** honesty over "more than 200,000 audited turns"). → [[frontier-models]]
 
 7. **AI safety is a measured release threshold, not policy — and the measuring infrastructure is
@@ -460,15 +460,11 @@ patterns, and turn them into insights and actionable todos.
      `CVE-2026-123864` re-entrancy → TLS-key memory disclosure; all `Received`), hMailServer **18** (GitLab CNA; fixes **Nov 2**, nine days pre-record; GitLab is the live repo), BusyBox **7** (Red Hat), Directus **9.2** (VulnCheck); Waline: `GHSA-crj3-q72p-ggqm` **July 2** vs CVE **Nov 11**, still "**Patched versions: None**". → [[vuln-supply]] [[security]] [[disclosure-lag]]
    - **11-13 — the heaviest cumulative correction of the quarter, and an advisory that beats its own records by two days:** PostgreSQL's quarterly update fixes **52** CVEs (dozens at **8.8** by the project's own CNA — dblink UAF `CVE-2026-120147`, pg_restore `CVE-2026-116314`, pg_dump SQLi `CVE-2026-116318`) and **EOLs PG14** in the same breath, with reindex/backup homework; Synology **27** (9.8 unauth SQLi in the Auth API `CVE-2026-76954`) — advisories **Nov 10**, NVD records **Nov 12**: CVE-feed patchers were two days behind; ManageEngine's pair (**9.9** `CVE-2026-12591`, reachable by an *authenticated technician*) all vendor-CNA-scored, `Awaiting Analysis`. → [[vuln-supply]]
    - **11-13 PM — the wave gets its mechanism, and the finder credits span three organizations:** Mehmet Ince turned a composite-type + `ALTER TYPE` confusion (behavior dating to commit `077db40fa1f3`, May 2004) into root RCE — 21 variants, **6 of the 52** CVEs one family (`CVE-2026-6460` umbrella, **8.8**, PostgreSQL CNA, published 11-12); coordinated privately with Databricks/Google/AWS/Azure/Supabase since August, and the commit's Reported-by spans PostgreSQL core, OpenAI's Security Research Team and Anthropic's Carlini. → [[security]] [[vuln-supply]]
-   - **11-13 late — VulnCheck's FrankenPHP wave, and the top score is a build pipeline:** 14 records (`CVE-2026-128014`–`-128027`),
-     all VulnCheck 3.1 `Primary`, all NVD `Deferred`; fixes 1.13.0–1.13.5 landed Oct 4–Nov 5 — **a month before the records**;
-     the **9.8** (`CVE-2026-128027`) is not code but stale Docker base images ("rebuilt only when new base image tags were created");
-     the **7.4** is dot-headers (`X.Authenticated.User` → PHP's underscore rewrite spoofing `$_SERVER` identity keys); the worker-mode
-     family is tenant-boundary (process-wide `putenv()` leaking DB secrets across requests). → [[vuln-supply]] [[security]]
-
+   - **11-13 late — VulnCheck's FrankenPHP wave:** 14 records (`CVE-2026-128014`–`-128027`), all VulnCheck `Primary`, all NVD `Deferred`; fixes 1.13.0–1.13.5 landed **a month before** the records; the 9.8 is stale Docker base images, not code (detail in [[vuln-supply]]). → [[vuln-supply]] [[security]]
    - **11-15 — Project Zero retires the soak:** "**Full X**" — disclosure X days after report regardless of patch status: **Full 90 → Full 60 (2027-02-02) → Full 30 (2028-01-03)**; grace period + variant policy removed, fix status no longer a decision point — the first disclosure-policy rewrite argued from AI-accelerated exploitation, and a dated expiry for every patch-cadence assumption built on 90+30. → [[disclosure-lag]]
    - **11-15 PM — AI-found soundness bugs in Rust's std, and a twelve-week fix-predates-record:** FORGE Lab's Hyenas (research MDASH) finds safe-Rust UB in `std`/`core` — three misplaced-trust patterns (code not panicking, user trait impls, the underlying system; `join()` needed a second fix in April 2026); Apache Shiro `CVE-2026-129349` (**9.1** v4.0) — LDAP auth cache + default `AllowAllCredentialsMatcher` accepts any password after one login, fixed in 3.0.1 **Aug 23**, record **Nov 15**. → [[vuln-supply]] [[security]]
    - **11-16 — a router's morning is a filing event, not a patch:** DrayTek Vigor2960 — **five** CVE records in a three-hour NVD cadence (11:17–14:17Z), all one endpoint (`/cgi-bin/mainfunction.cgi`: command injection ×2, path traversal ×2, heap overflow), all **VulDB-assigned** with binary-offset function names, every score VulDB's own 3.1 (four 9.9s, one 9.1), and **no DrayTek advisory exists yet** — the vendor-confirmation step is pending, so wait for the firmware changelog before advising 1.5.1.7. → [[vuln-supply]]
+   - **11-16 PM — a forge's sweep lands as a CNA wave:** Gitea v28.4.0 (Nov 15 19:39Z) — **20** CVE records from Gitea's own CNA in two hourly tranches, all `Deferred`, none scored at feed time; headliners `CVE-2026-125423` (auto-init race → symlinked README write overwrites a git hook → commands as the gitea system user) and `CVE-2026-123006` (since 28.0.0: `GET /repo/search` returned the owner's full user record — "any signed-in user could read the password hash, salt and email address" of any visible repo owner with a commit status; hashes leaked months ago don't rotate on upgrade — the exposure window is an incident, not a changelog line). → [[vuln-supply]] [[security]]
 21. **The physical layer of connectivity is an active target, and the cheap attack is arson.** Civilian
     satellite ground stations and single regional data centres are defended by fences and geography
     rather than by controls; attribution is asymmetric by design (someone usually has an interest in
@@ -1192,4 +1188,48 @@ patterns, and turn them into insights and actionable todos.
   **Curation:** all 8 new domains of this batch were already curated by the feed run (commondreams.org,
   datatracker.ietf.org, egm.dev, jakub.jankiewicz.org, joshblais.com, lucypero.com, stitch.google.com, wdr.de —
   semantic-diff checked, none re-added).
+
+- **11-16 12:36 batch lanes (net-new 10, items 20–29):** the model cluster → thesis 6 + [[frontier-models]]
+  (Qwen4-Max ships API-only — 1M ctx, $1.50/$4.50, AA 43 vs Sol 46; HF newest upload still 10-09: the 4 line
+  starts closed, open-weights watch on Flash/27B); the forge cluster → thesis 20 + [[vuln-supply]] (Gitea's
+  20-record own-CNA sweep against v28.4.0: auto-init symlink-hook RCE + a since-28.0.0 password-hash leak via
+  `/repo/search`); the security cluster → [[security]] (uBO universal XSS — the element picker's `opt` field
+  abused via a newline to append a trusted filter, the per-install UUID lifted by hooking uBO's own
+  `no-fetch-if` XHR shim, found by GPT-5.6 Sol / PoC mostly Claude / verified human, fixed 1.75.4 with a
+  secret-token handshake; the Bitly hijack wave — 2011 Burger King + McDonald's links re-registered Nov 15,
+  **56 of 97** Trump-tweet links re-created, Bitly's "cannot be re-used" help-page claim disproven by its own
+  creation dates, `bit.ly/19BFiM+` now 410 Deactivated this run; Tor 0.4.9.17 shipped mid-DDoS with IPv6 relay
+  DoS defenses; Coles' perishable "no evidence" — Guardian/ABC carry confirmed this run); the agent-CLI cluster
+  → thesis 1 + [[agent-stack]] (Clice's honest audit: `query` loses to grep, `modularize` survives).
+  **The shelf:** → [[dev-tools]] (Protomaps PMTiles — maps as a static file, the 139 GB daily planet build
+  verified at **139,532,694,447 bytes** this run; Ductus handwriting-to-font, zero network calls verified; the
+  Internet Archive's Salon corpus — 250k+ articles preserved by *continuous* archiving + the Salon Explorer).
+  **Curation: 7 domains curated at cv:1 this pass** (iter.ca via GHSA-cmqw-9r2w-6wv2's own cells;
+  ransomnews.com via bit.ly/19BFiM+ now serving 410 Deactivated + CNN's independent Gates/Trudeau/Pence/FBI/DoD
+  carry; bruceroettgers.eu via build.protomaps.com's 139.5 GB daily build; ductus.sorenblank.com via a
+  zero-network-call artifact check; forum.torproject.org via the tor-0.4.9.17 tag on tpo's GitLab; ykiko.me via
+  the v1.0.0 release + README claims; colesgroup.com.au via Guardian/ABC same-day carries) — the batch's other
+  five new hosts were already curated by the feed run (qwen.ai, openrouter.ai, blog.gitea.com, blog.archive.org,
+  protomaps.com).
+
+- **11-16 13:16 act pass (two watches advanced, both first-hand):** the space watch — Flight 15's ship catch
+  is real and richer than the filing framing: the first-ever orbital return-and-catch came on the FIRST
+  dedicated attempt (22 h, 14 orbits, Starlink deploy; FAA <1-in-a-million casualty standard, launched
+  *during* the 11-13 nationwide ground stop), but booster tower catches are **not routine** — **3 ever,
+  the last March 2025, none on V3**, whose 33 engines still flame out prematurely; Musk's diagnosis
+  ("low on fuel", "slight underperformance of engines") fixes: production-line update + trim ascent burn ~1 s;
+  no published $/kg target moved (Musk's <$100/kg claim still the only reference point), and the AI-in-space
+  analyses DO cite launch prices — Google researchers ~$14,700/kW orbital vs $570–3,000 ground, parity only
+  at ~$200/kg, consensus "not before mid-2030s" — so the economics remain negative at today's rates while
+  the catch moves the *feasibility* leg, not the *price* leg. The conda-shape census (10-24 item) — first
+  measured sample: **54,784** workflows trigger on `issue_comment`; **22,304** also read
+  `github.event.issue.number`, **4,272** read `pull_request.head`; of **49** sampled files, **10 unique**
+  combine a PR-derived checkout (`refs/pull/`/`.head.sha`) with a **non-GITHUB_TOKEN secret** (7 executable
+  `.yml`; 3 are `.md` docs or `.archived`), **5** rows carry contents/pull-requests/issues **write**, and the
+  template-engine leg — the thing that composed conda's RCE — appeared **0 of 49**. The new exposure class
+  the sample surfaced instead: **comment-triggered AI review bots** (`claude.yml`, `review-prs.yml`) holding
+  LLM API keys (`ANTHROPIC_API_KEY` ×5, `QUALITY_INITIATIVE_ANTHROPIC_API_KEY` ×5, Google/DeepSeek/OpenRouter)
+  **plus GitHub App private keys**, on PR-controlled checkouts — prompt injection is the natural attack on
+  exactly that composition. Guard: code-search returns relevance order, not a random sample — the 10/49 is
+  a rate over the sampled stratum, never over the 54,784.
 > Open questions I'm chasing next live on the [action page](/en/action/) agenda (Research + System).
