@@ -1,8 +1,8 @@
 ---
 date: 2026-11-16
-updated: 2026-11-16T04:35:38Z
+updated: 2026-11-16T12:46:44Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 37
+sources: 47
 license: CC-BY-4.0
 ---
 
@@ -414,13 +414,167 @@ Coles Group 发布了一份常设事件声明（截至 11 月 16 日上午 8:30�
 
 ---
 
+## 30. ULA 火神火箭复飞失败——升空约 10 分钟后出现异常，40 颗 Amazon Leo 卫星全部损失
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Denver Gazette / SpaceNews · 160+ pts on HN · 15.7h ago (~04:37 UTC+8)
+- **Tags:** `ula` `vulcan` `rocket-failure` `amazon-leo` `space`
+
+联合发射联盟（ULA）的**火神半人马座**火箭——自 2024 年首飞以来的**第五次飞行**，也是今年早些时候固体助推器异常促使太空军把部分国家安全任务转给 SpaceX 之后的首次复飞——在周日从卡纳维拉尔角 SLC-41 的发射中失败。据 ULA 称，基于发射总监的数据，飞行器"suffered an anomaly"（出现异常）且"failed to deliver the Amazon mission to orbit"（未能将 Amazon 任务送入轨道）；损失发生在升空约 **10 分钟后**，远在助推级分离之后。机上 **40 颗 Amazon Leo** 宽带卫星全部损毁——该星座此前在轨约 400 颗、另有约 1,000 颗已造好，而 Starlink 已超过 11,000 颗。ULA 表示将"work closely with our customer and other appropriate organizations to find the cause"（与客户及其他相关机构密切合作查明原因）——调查现在是复飞前的头等大事。Amazon 赛前的表态（"We're really set up for success"）在数小时内就被打脸；而这次失败，恰好落在 SpaceX Flight 15 星舰完美塔架捕获（我们 11 月 15 日的报道）的一天之后。
+
+**Why it matters:** 一个周末之内，两条部署曲线就此分岔：追赶 Starlink 的星座一击损失在轨机队的 4%，而太空军原本倚重的非 SpaceX 选项在调查期间再度停飞。对任何在这两个 Leo 星座覆盖路线图上做规划的人来说，进度风险现在以调查时间线计，而不是发射节奏。
+
+[`🔗 Denver Gazette：ULA 火神火箭连同 40 颗卫星一同损失`](https://www.denvergazette.com/2026/11/15/centennials-ula-loses-a-giant-vulcan-rocket-with-40-satellites-aboard) · [`🔗 SpaceNews：Vulcan launch of Amazon Leo satellites fails`](https://spacenews.com/vulcan-launch-of-amazon-leo-satellites-fails) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50510442)
+
+---
+
+## 31. 继我们 11 月 13 日报道黄仁勋辞职之后：FT 报道他正与盟友商讨回归——而一封伪造的"复职请愿信"正在网上流传
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Financial Times · 169+126 pts on HN (two threads) · 16.7h ago (~03:31 UTC+8)
+- **Tags:** `nvidia` `jensen-huang` `leadership` `misinformation`
+
+在黄仁勋于董事会独立调查中辞职（我们 11 月 13 日的报道）三天后，**金融时报**报道（11 月 15 日）他正在考虑回归，并已与亲密盟友商讨——据报道 **马斯克与 Epic Games 的 Tim Sweeney** 是公开支持他回归的高管之列。这件事的信噪比真的很差，而讨论帖里最有用的内容恰恰是关于噪声的部分：英伟达研究员 **Bryan Catanzaro** 公开否认了一封请愿信，写道"There is a made-up letter circulating online asking NVIDIA's board to reinstate Jensen, claiming my involvement"（网上一封要求英伟达董事会让 Jensen 复职、并声称有我参与的信是编造的），以及"This letter is obviously fake, and even if it were real I would not sign it"（这封信显然是假的，即便它是真的我也不会签）。质疑声同样响亮——Wedbush 的 Dan Ives："Despite pressure from major shareholders we see no chance Jensen comes back to Nvidia as CEO"（尽管有主要股东施压，我们看不出 Jensen 回归英伟达 CEO 的任何可能）；帖中引用的 CNBC 标题则显示财长 Bessent 呼吁英伟达"dramatic shakeup"（大换血）并起用外部 CEO。英伟达与黄本人均未确认任何事项；FT 原文在付费墙内，本文细节附带这一限制。
+
+**Why it matters:** 这条新闻不只是"创始人 CEO 是否回归"——而是回归叙事已经部分被制造出来（那封假信），在一个他的辞职曾令全球 AI 股票两位数波动的市场里。在每个"回归"数据点获得当事方自己确认之前，一律当作未验证处理；本信息流自己的纠错史正是从这种失败模式开始的。
+
+[`🔗 FT：Jensen Huang discusses comeback as Nvidia CEO with allies`](https://www.ft.com/content/45383d86-33c4-4d99-86e5-5e058d3567c1) · [`🔗 HN 讨论（FT 帖）`](https://news.ycombinator.com/item?id=50509883) · [`🔗 HN 讨论（Reuters 帖）`](https://news.ycombinator.com/item?id=50511982)
+
+---
+
+## 32. MIT"如何制造（几乎）任何东西"公开 2026 年度站点——AI 智能体与边缘 AI 成为这门著名制造课程的一等公民研讨课
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** MIT Center for Bits and Atoms · 389+ pts on HN · 6.5h ago (~13:50 UTC+8)
+- **Tags:** `mit` `fabrication` `education` `hardware` `ai-agents`
+
+Neil Gershenfeld 的 MAS.863/4.140/6.9020——这门催生了全球 Fab Lab 网络的 MIT 课程——发布了完整的 2026 年度课程站点，并冲上 HN 前列（389+ 分，6.5 小时前）。结构仍是经典路径：从 CAD、数控切割到嵌入式编程、电子设计与制造、机械加工、输入/输出设备与机器设计的每周主题，最终以 12 月 15 日的学生项目展示收尾。新东西是 AI 的位置：专门的 **AI agents** 研讨课（10/01，与 3D 扫描/打印周并列）和 **Edge AI** 研讨课（10/29，与输入设备同周），讲义与代码都放在 MIT 的 Forge 上——AI 智能体作为制造课程的一项技能来教，与 EDA、电机控制同级。
+
+**Why it matters:** 当"如何制造几乎任何东西"把智能体技能写进核心大纲——以一节与 EDA、电机控制同级的研讨课的形式——这就是制造界自己发出的信号：智能体技能已是基础素养，正如几十年前版本控制变成基础素养一样。这份完整大纲对任何自学硬件的人也是一份免费的世界级课程。
+
+[`🔗 MIT HTMAA 2026 课程站点`](https://pub.cba.mit.edu/863.26/site/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50514470)
+
+---
+
+## 33. Debian 12 最新内核更新可致服务器假死：6.1.0-55 中的 ext4 空指针解引用——七份报告、严重级别、修复在上游进行中
+
+- **Velocity:** ▮▮ rising
+- **Source:** Debian Bug Tracker #1154101 · 122+ pts on HN · 7.5h ago (~12:53 UTC+8)
+- **Tags:** `debian` `linux-kernel` `ext4` `regression` `servers`
+
+Debian bug **#1154101**（11 月 15 日提交，severity: critical，linux 6.1.192-1 → `linux-image-6.1.0-55-amd64`）描述了点版本更新后的服务器失联："my server not responding remotely after few minutes (imap, smtp, http, ssh...)"（几分钟后我的服务器远程无响应——imap、smtp、http、ssh 全部如此），而通过 GRUB 引导上一个 6.1.0-54 内核则完全正常。捕获的 dmesg 显示"BUG: kernel NULL pointer dereference, address: 0000000000000000"，崩溃点在 **`ext4_mb_load_buddy_gfp+0xbc/0x380 [ext4]`**，调用链穿过 `ext4_free_blocks` → `ext4_ext_truncate` → `ext4_evict_inode`——一条 inode 驱逐/截断路径——并以"note: local[2144] exited with irqs disabled"结束。该报告已转发上游（lore.kernel.org 上的 ext4/ntfs3 null-folio 线程），修复建议在 Debian 的 Salsa MR #2168，并已合并六份重复报告——所以这不是一个倒霉的提交者。截至生成时，内核团队的修复尚未进入软件源。
+
+**Why it matters:** 这是经典点版本更新陷阱：一次稳定分支的安全/维护推送夹带了影响截断路径上任意 ext4 系统的数据通路回归——也就是大多数服务器。如果你在生产环境跑 Debian 12，暂缓 6.1.0-55 或在 GRUB 里保留上一个内核直到 Salsa 修复发布；同时把它当作自己发布流程的镜鉴：这个 bug 之所以是 critical，恰恰因为故障是延迟出现、远程可见的，而不是启动失败。
+
+[`🔗 Debian bug #1154101`](https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1154101) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50514180)
+
+---
+
+## 34. Steve Blank 追问"英伟达的下一步是什么？"——创始人离场问题："Execution pays your salary, innovation pays your pension"
+
+- **Velocity:** ▮▮ rising
+- **Source:** steveblank.com · 298+ pts on HN · 12.4h ago (~07:55 UTC+8)
+- **Tags:** `nvidia` `strategy` `founders` `analysis`
+
+Steve Blank 11 月 15 日的文章把英伟达的后黄仁勋时刻定义为经典的创始人问题：当一位远见型 CEO 离开，"Most often innovation dies and the company coasts for years on momentum and its brand"（多数时候创新会死去，公司靠惯性和品牌滑行多年）。他梳理的历史："Jensen Huang reinvented Nvidia three times"（黄仁勋三次重塑英伟达）——2006 年的 CUDA、2012 年 ImageNet 之后的深度学习转向、以及 2020 年把 Mellanox 收入囊中、从板卡变成整体式 AI 数据中心机柜——"none of these CEOs pivot by committee"（这些转型没有一个是由委员会完成的）。危险在于执行型 CEO 继任者（他的例子：Ballmer 的微软、Cook 的苹果错失 AI），而黄仁勋管理着一个约 60 人的直接汇报组织，并说过自己"不相信接班人计划"。他点名的英伟达特有威胁：最大的客户们自研芯片，以及投进那些跑在英伟达硬件上的 AI 实验室的约 500 亿美元——"It's likely these are the bets an execution CEO trims first"（执行型 CEO 首先砍掉的大概就是这些下注）——外加一条财务警告：订单在手，"unless a meaningful share of that revenue turns out to be chips that were diverted to China"（除非相当份额的收入最终被证明是被转用于中国的芯片）。他的结论：无论谁执掌，未来两三年看起来都没问题；长期问题在于董事会雇的是一个执行者还是创新者。
+
+**Why it matters:** 本文发表在 FT 回归报道（第 31 条）之前数小时，恰好点破了回归传闻所化解的那个张力：董事会是在机构安稳与三次重塑的唯一已验证领导者之间做选择。值得注意的是，本文完全未触及循环融资争议——它的论证是组织性的而非财务性的，这正是它与我们在 11 月 14 日报道的 WSJ 报道形成互补的原因。
+
+[`🔗 Steve Blank：What's Next for Nvidia?`](https://steveblank.com/2026/11/15/whats-next-for-nvidia/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50512235)
+
+---
+
+## 35. HN"谁在招人"困在 12 年低点附近——本月 244 条招聘帖，而 AI 出现在其中的 51.6%
+
+- **Velocity:** ▮▮ rising
+- **Source:** HN Trends · 87+ pts on HN · 10.8h ago (~09:31 UTC+8)
+- **Tags:** `hiring` `ai-impact` `jobs` `data` `hacker-news`
+
+HN Trends 11 月的分析给招聘收缩标上了硬数字：月度帖子只有"**244 job postings, down 37% from 387 at the same point last year**"（244 条招聘帖，比去年同期 387 条下降 37%）；2026 年 7 月以来每期都落在 224–255 区间，8 月的 224 条"was the fewest since January 2014"（是 2014 年 1 月以来最少）。2026 年月均 287 条——"the lowest yearly average since 2013"（2013 年以来最低年均值）。与此同时 AI 越过一条线：11 月 **51.6%** 的招聘帖提到 AI，"up from 30% two years ago"（两年前是 30%，2026 年 6 月首次过半）。更有意思的是其中的构成变化：AI Agents/agentic 词条 14.8%、LLM 10.7%，而 **MCP 从一年前的 0.3% 跳到 4.5%**（排名 +86），与此同时经典"Machine Learning"从 14.8% *跌*到 11.5%——就业市场正在从模型训练改标为智能体管道。其他变动：Rust 升至语言榜第 3（8.2%，此前 4.9%）、TypeScript 滑落到 17.6%，前端从 2022 年初占帖量 27% 崩到 6.6%。
+
+**Why it matters:** 这是少数几个纵向、方法一致的 AI 劳动力市场足迹数据集——而且它同时呈现了两面：总帖量 12 年低点，同时 AI 原生技能（MCP、agents）成为剩余帖子里增长最快的词条。MCP 那个数字尤其是智能体基础设施以招聘类目形式显现的信号——这与"模型很受欢迎"是两种不同的信号。
+
+[`🔗 HN Trends：2026 年 11 月`](https://www.hntrends.com/2026/november.html) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50512950)
+
+---
+
+## 36. "你的智能体会挑那个可被魔改的"：当智能体既管购买又管修复，开放性就变成了购买标准
+
+- **Velocity:** ▮▮ rising
+- **Source:** geoffstearns.com · 75+ pts on HN · 15.2h ago (~05:10 UTC+8)
+- **Tags:** `agents` `firmware` `right-to-repair` `hardware` `security`
+
+Geoff Stearns 的文章（2026 年 11 月）论证：随着智能体接管购买建议与设备维护，开放性不再是发烧友的关切，而成为被买下的那个属性。让智能体修设备时，它会先试设置，失败之后便"looks for firmware someone else wrote, forks the closest match, or writes its own"（去找别人写好的固件、fork 最接近的、或者自己写）——所以"any device with writable flash is a platform, whether the maker planned for it or not"（任何带可写闪存的设备都是平台，无论厂商是否计划如此），而被问"买哪个"的智能体会"lean toward the one it can change, because that's the one it can fix later"（偏向它日后能改的那台，因为那才是它能修的）。他的锚点是 M-VAVE FM-1 合成器（其自定义固件生态我们在 11 月 14 日报道过）：用户自 2025 年 9 月起开始写固件——几乎全用 AI 工具——M-VAVE 随之以 GPLv3 开源固件并附带开发套件与浏览器模拟器，此后 Behringer、Akai、Erica Synths 跟进。安全的一半是克制的而非耸动的："harmful firmware is as easy to write as useful firmware"（有害固件与有用固件一样好写），因此他对任何政策的检验是"asking who controls the signing keys"（问谁控制签名密钥）——并指出"if a maker blocks code the owner chose and signed, that block is protecting the maker's business"（如果厂商拦截所有者自选并签名的代码，这道拦截保护的是厂商的生意），而那些缓解手段（经过验证的安装器、所有者持有的密钥、恢复模式）"none of them require locking the device"（没有一个要求锁死设备）。
+
+**Why it matters:** 这把智能体安全的透镜从软件供应链延伸到了物理供应链：安全研究者为漏洞建模的智能体挑选目标动力学，如今适用于购物。给硬件厂商的具体启示并不舒服——你的固件更新策略正在成为产品"智能体就绪度"评分的一部分，而锁死它现在是一个竞争决策，不再是一个默认动作。
+
+[`🔗 Geoff Stearns：Your Agent Will Pick the Hackable One`](https://geoffstearns.com/blog/your-agent-will-pick-the-hackable-one/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50510799)
+
+---
+
+## 37. Tell HN：招聘帖正被爬虫收割邮箱——使用唯一地址的用户报告定向钓鱼，dang 提醒帖子仍可删除
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News (Tell HN) · 105+ pts · 9.5h ago (~10:53 UTC+8)
+- **Tags:** `phishing` `privacy` `hacker-news` `email` `scraping`
+
+一篇 Tell HN 帖子（105+ 分）记录了公开帖子被规模化收割之后发生的事：用户 eks391 在*只*用于 Hacker News 的邮箱里收到了伪造的"逾期 AWS 付款"邮件——"I use unique emails for every site, so I immediately knew that the late AWS payments email sent to my HN email were fake."（我给每个网站用唯一邮箱，所以立刻知道发到我 HN 邮箱的逾期 AWS 付款邮件是假的。）评论区本身就是同一机制的威胁模型：有人发招聘帖后"half burned my primary dev email"（半毁了我的主开发邮箱）；有人用四个字概括恢复问题——"Unleaking is not a thing."（泄露无法撤销）；有人收到带"scary amount of context"（吓人多的上下文）的诈骗邮件；还有"classic North Korean scam job offer"（典型的朝鲜式诈骗工作邀约）——正是 FBI 警告过、针对开源维护者的假招聘模式（我们 11 月 14 日的报道）。管理员 dang 的回复是最实用的落点："Those posts remain permanently deletable, FWIW."（顺带一提，那些帖子永远可以删除。）
+
+**Why it matters:** 每站唯一的邮箱地址是邮件安全里最便宜的金丝雀，而这只金丝雀正在为互联网上读者最多的招聘界面之一鸣叫——就在数据显示这些帖子跌到 12 年低点（第 35 条）的几个小时后。如果你曾在公开招聘帖里留过邮箱，帖中两步建议值得占用你今晚一小时：删帖（仍然有效），以及点击前核对每个链接的目标域名。
+
+[`🔗 Tell HN：HN is being scraped for emails to scam`](https://news.ycombinator.com/item?id=50513451) · [`🔗 dang 的回复`](https://news.ycombinator.com/item?id=50514845)
+
+---
+
+## 38. mini.nvim 迁入独立的 nvim-mini 组织——并在 Codeberg 与 Tangled 提供镜像——"转移到专门组织以改善项目长期稳定性"
+
+- **Velocity:** ▮ steady
+- **Source:** Tangled · 75+ pts on HN · 12.4h ago (~07:55 UTC+8)
+- **Tags:** `neovim` `mini-nvim` `tangled` `codeberg` `open-source`
+
+**mini.nvim**——echasnovski 的"由 45+ 个独立 Lua 模块组成的库，以最小成本改善 Neovim 体验"——已从个人仓库 `echasnovski/mini.nvim` 转入专门的 **nvim-mini** 组织，README 直白陈述："It was transferred to a dedicated organization to improve long term project stability."（它被转移到专门组织，以改善项目的长期稳定性。）HN 帖子（75+ 分）里有趣的部分是它如今住在哪里：GitHub 仍是"(main)"，但项目现在官方镜像于 **Codeberg** 与 **Tangled**——那个以 AT Protocol 为基础的代码托管平台——一个 `sync` 分支暗示镜像为自动化同步，而最新提交的名字就叫"docs: mention Tangled and Codeberg mirrors"。Tangled 副本带着完整历史（2.2k 提交、18 个标签、最新 v0.18.0），README 的支持语也改为平台无关："Leave a star for 'mini.nvim' (on any supported code forge)"（在任何受支持的平台上给 mini.nvim 留个星）。这是今天 HN 上第二个 Tangled 相关的故事（见第 39 条 Parcel）。
+
+**Why it matters:** 一次迁移，两个治理信号：一个被大量依赖的 Neovim 库离开创始人命名空间以降低巴士系数；一个主流项目选择把 AT Protocol 托管平台当作一等镜像——对一个年轻的托管平台而言，这种采用比它自己的功能清单更有分量。
+
+[`🔗 Tangled 上的 mini.nvim`](https://tangled.org/nvim-mini.org/mini.nvim) · [`🔗 GitHub 上的 nvim-mini/mini.nvim`](https://github.com/nvim-mini/mini.nvim) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50512231)
+
+---
+
+## 39. Show HN：Parcel——为 Gmail 与 Fastmail 打造的键盘驱动 Linux 邮件客户端，用 Zig 基于作者自己的 Wayland 工具包构建
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 51+ pts · 12.5h ago (~07:54 UTC+8)
+- **Tags:** `zig` `email` `linux` `jmap` `wayland`
+
+**Parcel**（rockorager.dev，Show HN，51+ 分）是"A mail client for Gmail and Fastmail on the Linux desktop, built with Zig and siv"（一款用 Zig 与 siv 构建的 Linux 桌面 Gmail/Fastmail 邮件客户端）——siv 是作者自己的 UI 工具包，静态链接、Wayland 原生，带无头后端，测试无需显示器。它的模型是键盘优先加可堆叠标签："Every action has a key, and Ctrl+K lists them all"（每个操作都有键，Ctrl+K 列出全部）；`/` 提供实时搜索"as you type, with Gmail's operators, whichever account it is"（边打边搜，带 Gmail 操作符，无论哪个账户）；线程在浮层阅读器中渲染；Parcel 维护自己的本地索引，"answers most searches without asking the server"（多数搜索无需询问服务器即可回答）。它今天支持 Gmail 与 Fastmail，原则上支持任意 **JMAP** 服务器；v1.1.0 在发帖前一天打标，287 个提交，同样托管在 Tangled。（Vim 键位的撰写编辑器也在。）
+
+**Why it matters:** Linux 桌面邮件客户端是一片坟场题材——而这台尝试的结构选择值得一提：JMAP 优先的数据模型（而非模拟 IMAP），加上自建工具包而非 Electron/GTK，让整个东西保持小巧、可被一个人的头脑完整审计。另外：两个独立项目（Parcel、mini.nvim）在同一天选择 Tangled 镜像——这种巧合的采用正是一个托管平台时代节点的标志。
+
+[`🔗 Tangled 上的 Parcel`](https://tangled.org/rockorager.dev/parcel) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50512218)
+
+---
+
+## 40. Show HN：db-branch——用 ZFS 实现约 0.5 秒的 Postgres 写时复制分支，内置 MCP 服务器让智能体安全查询
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 42+ pts · 22.5h ago (11 月 15 日 ~21:50 UTC+8)
+- **Tags:** `zfs` `postgresql` `mysql` `database-branching` `mcp`
+
+**db-branch**（Show HN，42+ 分）把 ZFS 快照技巧搬进数据库：base 是"a ZFS dataset holding a loaded database"（一个装着已加载数据库的 ZFS 数据集），分支是 base 快照的 ZFS 克隆，创建时复制零字节——"db-branch creates a copy-on-write branch of a large database in seconds, with nothing copied."（db-branch 在几秒内创建大数据库的写时复制分支，不复制任何东西。）其三节点 Raft 测试集群的声明数字："a PostgreSQL branch is ready in about 0.5 s and a MySQL branch in about 3 s"（Postgres 分支约 0.5 秒就绪，MySQL 约 3 秒）。智能体角度是内建而非外挂："The built-in MCP server lets an LLM agent create a branch, run a risky query or migration on it, and delete the branch"（内建 MCP 服务器让 LLM 智能体创建分支、在上面跑高风险查询或迁移、然后删掉分支）——外加带 TTL 清理的每 PR/每 CI 数据库，以及大版本迁移的 `upgrade --check-only` 预演。它自托管（Ubuntu + ZFS 池，apt 仓库）、Beta（"usable today, but APIs and command-line details may still change before 1.0"）、Apache-2.0 核心，部分付费闭源模块（SSO、审计、脱敏）。
+
+**Why it matters:** 智能体对生产数据库是智能体基础设施最锋利的未解边缘之一——你希望智能体能测试查询与迁移，又绝对不希望它对着活系统这么做。这是把 Neon/Branch 的想法用通用 ZFS 搬回本地部署，而"以 MCP 服务器为接口"的选择让它能被本信息流追踪的这些 harness 直接使用，不必另写专用客户端。
+
+[`🔗 db-branch/db-branch`](https://github.com/db-branch/db-branch) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50506940)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-16T04:35:38Z |
-| Items | 29 |
-| Sources tracked | 37 (Hacker News, GitHub Trending, NYT via Yahoo News, MacAnorak/Notebookcheck, Ahead of AI, Josh Blais, Common Dreams, WDR, Lucy's Save Room, IETF Datatracker, MITRE/NVD CVE records, VulDB, oss-sec, Jakub T. Jankiewicz, NVIDIA docs/blog, arXiv, Google Labs, Meta, Vercel, AG-UI releases, egm.dev, npm, Qwen blog, OpenRouter, iter.ca, uBlock GHSA advisory, Ransomnews, Gitea blog, Tor Project forum, Bruce Röttgers, Protomaps, ykiko.me, clice-io, Coles Group, Ductus, Internet Archive) |
+| Generated | 2026-11-16T12:46:44Z |
+| Items | 40 |
+| Sources tracked | 47 (Hacker News, GitHub Trending, NYT via Yahoo News, MacAnorak/Notebookcheck, Ahead of AI, Josh Blais, Common Dreams, WDR, Lucy's Save Room, IETF Datatracker, MITRE/NVD CVE records, VulDB, oss-sec, Jakub T. Jankiewicz, NVIDIA docs/blog, arXiv, Google Labs, Meta, Vercel, AG-UI releases, egm.dev, npm, Qwen blog, OpenRouter, iter.ca, uBlock GHSA advisory, Ransomnews, Gitea blog, Tor Project forum, Bruce Röttgers, Protomaps, ykiko.me, clice-io, Coles Group, Ductus, Internet Archive, Denver Gazette, SpaceNews, Financial Times, Reuters, Steve Blank, Debian Bug Tracker, HN Trends, Geoff Stearns, MIT Center for Bits and Atoms, Tangled, rockorager.dev) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

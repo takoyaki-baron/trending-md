@@ -1,9 +1,9 @@
 {
- "generated": "2026-11-16T04:36:13.083Z",
+ "generated": "2026-11-16T12:47:17.617Z",
  "files": [
   {
    "file": "2026-11-16.md",
-   "items": 29,
+   "items": 40,
    "findings": [
     {
      "check": "cvss",
@@ -72,50 +72,50 @@
      "check": "repo",
      "item": 1,
      "verdict": "star-surge",
-     "claim": "13700 quoted vs 29027 now",
-     "detail": "meta/astryx: 13700 → 29027 (+53%, 15327 stars) since the batch was written — a rising count is not a wrong one; date the reading if the number will be re-used"
+     "claim": "13700 quoted vs 29299 now",
+     "detail": "meta/astryx: 13700 → 29299 (+53%, 15599 stars) since the batch was written — a rising count is not a wrong one; date the reading if the number will be re-used"
     },
     {
      "check": "repo",
      "item": 1,
      "verdict": "ok",
      "claim": "meta/astryx",
-     "detail": "29027★, last push 2026-11-16"
+     "detail": "29299★, last push 2026-11-16"
     },
     {
      "check": "repo",
      "item": 6,
      "verdict": "star-surge",
-     "claim": "5500 quoted vs 19888 now",
-     "detail": "google/elephant-goldfish-model: 5500 → 19888 (+72%, 14388 stars) since the batch was written — a rising count is not a wrong one; date the reading if the number will be re-used"
+     "claim": "5500 quoted vs 20114 now",
+     "detail": "google/elephant-goldfish-model: 5500 → 20114 (+73%, 14614 stars) since the batch was written — a rising count is not a wrong one; date the reading if the number will be re-used"
     },
     {
      "check": "repo",
      "item": 6,
      "verdict": "ok",
      "claim": "google/elephant-goldfish-model",
-     "detail": "19888★, last push 2026-11-15"
+     "detail": "20114★, last push 2026-11-15"
     },
     {
      "check": "repo",
      "item": 9,
      "verdict": "stale-disclosed",
      "claim": "google-labs-code/stitch-skills",
-     "detail": "last push 2026-08-17 (90d) with 9409 stars — the item states the state itself (“no commits since”), so the staleness is the story rather than an unexamined number"
+     "detail": "last push 2026-08-17 (91d) with 9575 stars — the item states the state itself (“no commits since”), so the staleness is the story rather than an unexamined number"
     },
     {
      "check": "repo",
      "item": 12,
      "verdict": "stale-disclosed",
      "claim": "lucypero/lucynes",
-     "detail": "last push 2026-05-14 (185d) with 85 stars — the item names this repo's own last-push day (2026-05-14), so the staleness is the story rather than an unexamined number"
+     "detail": "last push 2026-05-14 (186d) with 90 stars — the item names this repo's own last-push day (2026-05-14), so the staleness is the story rather than an unexamined number"
     },
     {
      "check": "repo",
      "item": 15,
      "verdict": "ok",
      "claim": "matheuzgomes/gawain",
-     "detail": "41★, last push 2026-11-15"
+     "detail": "42★, last push 2026-11-15"
     },
     {
      "check": "count",
@@ -123,13 +123,6 @@
      "verdict": "ok",
      "claim": "83 skills",
      "detail": "README states it"
-    },
-    {
-     "check": "count",
-     "item": 27,
-     "verdict": "number-other-noun",
-     "claim": "23 language",
-     "detail": "23 is on ykiko.me/en/articles/2105384023094834022/ as “23 and serves as an” — the page's head noun is not “language”, so this is the feed's paraphrase rather than the page's wording; quote what the page says"
     },
     {
      "check": "batch",
@@ -143,7 +136,7 @@
      "item": 1,
      "verdict": "ok",
      "claim": "3 quotation(s)",
-     "detail": "verbatim in 2 readable source(s)"
+     "detail": "verbatim in 1 readable source(s)"
     },
     {
      "check": "quotation",
@@ -251,6 +244,83 @@
      "detail": "verbatim in 2 readable source(s)"
     },
     {
+     "check": "quotation",
+     "item": 30,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 31,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 32,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 33,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 34,
+     "verdict": "ok",
+     "claim": "8 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 35,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 36,
+     "verdict": "ok",
+     "claim": "8 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 37,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 38,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 4 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 39,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 40,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
      "check": "attribution",
      "item": 10,
      "verdict": "attribution-satisfied",
@@ -263,6 +333,20 @@
      "verdict": "attribution-satisfied",
      "claim": "Archive",
      "detail": "a quotation is attributed to Archive (“After 31 years, Salon has announced that it is ceasing publi…”) and a cited URL carries the party's token — the quotation arm's page set reaches the party's own artifact"
+    },
+    {
+     "check": "attribution",
+     "item": 34,
+     "verdict": "attribution-satisfied",
+     "claim": "Blank",
+     "detail": "a quotation is attributed to Blank (“Most often innovation dies and the company coasts for years …”) and a cited URL carries the party's token — the quotation arm's page set reaches the party's own artifact"
+    },
+    {
+     "check": "attribution",
+     "item": 34,
+     "verdict": "attribution-satisfied",
+     "claim": "Nvidia",
+     "detail": "a quotation is attributed to Nvidia (“Most often innovation dies and the company coasts for years …”) and a cited URL carries the party's token — the quotation arm's page set reaches the party's own artifact"
     }
    ]
   }
@@ -270,7 +354,7 @@
  "status_watch": [],
  "api_calls": 0,
  "readme_calls": 0,
- "cited_page_calls": 0,
+ "cited_page_calls": 12,
  "repo_page_calls": 0,
  "nvd_calls": 1,
  "nvd_failed_chunks": 0,

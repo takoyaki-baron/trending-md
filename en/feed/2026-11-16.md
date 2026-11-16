@@ -1,8 +1,8 @@
 ---
 date: 2026-11-16
-updated: 2026-11-16T04:35:38Z
+updated: 2026-11-16T12:46:44Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 37
+sources: 47
 license: CC-BY-4.0
 ---
 
@@ -414,13 +414,167 @@ The Internet Archive's post (Nov 12, Chris Freeland) records the closing of one 
 
 ---
 
+## 30. ULA's Vulcan rocket fails on return-to-flight — 40 Amazon Leo satellites lost after an anomaly ~10 minutes into flight
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Denver Gazette / SpaceNews · 160+ pts on HN · 15.7h ago (~04:37 UTC+8)
+- **Tags:** `ula` `vulcan` `rocket-failure` `amazon-leo` `space`
+
+United Launch Alliance's **Vulcan Centaur** — flying its **fifth flight** since its 2024 debut and its first since an earlier solid-rocket-booster anomaly this year prompted the Space Force to shift some national-security missions to SpaceX — failed on Sunday's launch from SLC-41 at Cape Canaveral. Per ULA, based on Launch Director data, the vehicle "suffered an anomaly" and "failed to deliver the Amazon mission to orbit"; the loss occurred roughly **10 minutes after liftoff**, well after booster stage separation. All **40 Amazon Leo** broadband satellites aboard were destroyed — for a constellation that had ~400 satellites in orbit and ~1,000 more built, against Starlink's 11,000+. ULA says it will "work closely with our customer and other appropriate organizations to find the cause" — an investigation is now the priority before any return to flight. Amazon's pre-flight quote ("We're really set up for success") aged badly within hours; and the failure landed one day after SpaceX's flawless Flight 15 Starship tower catch (our Nov 15 coverage).
+
+**Why it matters:** Two deployment curves just diverged in a single weekend: the constellation racing to catch Starlink lost 4% of its orbital fleet in one stroke, and the rocket NASA's Space Force had been leaning on as the non-SpaceX option is grounded again mid-investigation. For anyone building on either Leo constellation's coverage roadmap, the schedule risk is now measured in investigation timelines, not launch cadences.
+
+[`🔗 Denver Gazette: ULA loses Vulcan with 40 satellites aboard`](https://www.denvergazette.com/2026/11/15/centennials-ula-loses-a-giant-vulcan-rocket-with-40-satellites-aboard) · [`🔗 SpaceNews: Vulcan launch of Amazon Leo satellites fails`](https://spacenews.com/vulcan-launch-of-amazon-leo-satellites-fails) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50510442)
+
+---
+
+## 31. Since we covered Jensen Huang's resignation on Nov 13: the FT reports he is discussing a comeback with allies — while a fake "reinstatement letter" circulates online
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Financial Times · 169+126 pts on HN (two threads) · 16.7h ago (~03:31 UTC+8)
+- **Tags:** `nvidia` `jensen-huang` `leadership` `misinformation`
+
+Three days after Huang resigned amid the board's independent investigation (our Nov 13 coverage), the **Financial Times** reports (Nov 15) he is considering a comeback and has discussed one with close allies — with **Elon Musk and Epic Games' Tim Sweeney** reportedly among executives publicly backing his return. The signal-to-noise is genuinely poor, and the thread's most useful content is about the noise: Nvidia researcher **Bryan Catanzaro** publicly disavowed one petition, writing "There is a made-up letter circulating online asking NVIDIA's board to reinstate Jensen, claiming my involvement" and "This letter is obviously fake, and even if it were real I would not sign it." Skeptics are vocal — Wedbush's Dan Ives: "Despite pressure from major shareholders we see no chance Jensen comes back to Nvidia as CEO" — and a CNBC headline cited in the thread has Treasury Secretary Bessent urging a "dramatic shakeup" with an outside CEO. Neither Nvidia nor Huang has confirmed anything; the FT piece itself is paywalled, so details here carry that caveat.
+
+**Why it matters:** The story is not just whether a founder-CEO returns — it's that the comeback narrative is already partially manufactured (the fake letter), in a market where his resignation moved global AI stocks double digits. Treat every "comeback" datapoint as unverified until it comes from the parties themselves; this feed's own correction history started with exactly this failure mode.
+
+[`🔗 FT: Jensen Huang discusses comeback as Nvidia CEO with allies`](https://www.ft.com/content/45383d86-33c4-4d99-86e5-5e058d3567c1) · [`🔗 HN discussion (FT thread)`](https://news.ycombinator.com/item?id=50509883) · [`🔗 HN discussion (Reuters thread)`](https://news.ycombinator.com/item?id=50511982)
+
+---
+
+## 32. MIT's "How to Make (Almost) Anything" opens its 2026 site — AI agents and Edge AI are now first-class recitations in the famous fabrication course
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** MIT Center for Bits and Atoms · 389+ pts on HN · 6.5h ago (~13:50 UTC+8)
+- **Tags:** `mit` `fabrication` `education` `hardware` `ai-agents`
+
+Neil Gershenfeld's MAS.863/4.140/6.9020 — the MIT course that seeded the worldwide Fab Lab network — has published its full 2026 syllabus site, and it went near the top of HN (389+ points, 6.5h). The structure is the classic one: weekly topics from CAD and computer-controlled cutting through embedded programming, electronics design/production, machining, input/output devices, and machine design, ending in student projects presented Dec 15. What's new is where AI sits: a dedicated **AI agents** recitation (10/01, alongside 3D scanning/printing week) and an **Edge AI** recitation (10/29, with input devices), both with slides and code hosted on MIT's Forge — AI agents taught as a fabrication-course skill, at the same level as EDA and motor control.
+
+**Why it matters:** When "How to make almost anything" adds agent skills to its core syllabus — as a recitation sitting at the same level as EDA and motor control — that's the fabrication world's own signal that agent skills are baseline literacy, the same way version control became one decades ago. The full syllabus is also a free, world-class curriculum for anyone self-teaching hardware.
+
+[`🔗 MIT HTMAA 2026 course site`](https://pub.cba.mit.edu/863.26/site/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50514470)
+
+---
+
+## 33. Debian 12's latest kernel update can hang servers: ext4 NULL-pointer dereference in 6.1.0-55 — seven reports, severity critical, fix upstream in progress
+
+- **Velocity:** ▮▮ rising
+- **Source:** Debian Bug Tracker #1154101 · 122+ pts on HN · 7.5h ago (~12:53 UTC+8)
+- **Tags:** `debian` `linux-kernel` `ext4` `regression` `servers`
+
+Debian bug **#1154101** (filed Nov 15, severity: critical, linux 6.1.192-1 → `linux-image-6.1.0-55-amd64`) describes servers going dark after the point update: "my server not responding remotely after few minutes (imap, smtp, http, ssh...)", while booting the previous 6.1.0-54 kernel via GRUB works fine. The captured dmesg shows "BUG: kernel NULL pointer dereference, address: 0000000000000000" crashing in **`ext4_mb_load_buddy_gfp+0xbc/0x380 [ext4]`**, with the trace running through `ext4_free_blocks` → `ext4_ext_truncate` → `ext4_evict_inode` — an inode-eviction/truncate path — and ending "note: local[2144] exited with irqs disabled". The report is forwarded upstream (an ext4/ntfs3 null-folio thread on lore.kernel.org) with a proposed fix in Debian's Salsa MR #2168, and has been merged with six duplicate reports — so it is not one unlucky reporter. No kernel-team fix has landed in the archive as of feed time.
+
+**Why it matters:** This is the classic point-update trap: a stable-branch security/maintenance push that carries a data-path regression affecting any ext4 system under truncate pressure — i.e., most servers. If you run Debian 12 on production boxes, hold 6.1.0-55 or keep the previous kernel in your GRUB fallback until the Salsa fix ships; and note the pattern for your own release process: the bug's severity is "critical" precisely because the failure is delayed and remote-visible, not a boot failure.
+
+[`🔗 Debian bug #1154101`](https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1154101) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50514180)
+
+---
+
+## 34. Steve Blank asks "What's Next for Nvidia?" — the founder-departure problem: "Execution pays your salary, innovation pays your pension"
+
+- **Velocity:** ▮▮ rising
+- **Source:** steveblank.com · 298+ pts on HN · 12.4h ago (~07:55 UTC+8)
+- **Tags:** `nvidia` `strategy` `founders` `analysis`
+
+Steve Blank's essay (Nov 15) frames Nvidia's post-Jensen moment as the classic founder problem: when a visionary CEO leaves, "Most often innovation dies and the company coasts for years on momentum and its brand." His history: "Jensen Huang reinvented Nvidia three times" — CUDA in 2006, the deep-learning pivot after 2012's ImageNet, and the 2020 Mellanox acquisition that turned boards into integrated AI datacenter racks — "none of these CEOs pivot by committee." The danger is the execution-CEO successor (his examples: Ballmer's Microsoft, Cook's Apple missing AI), and Huang ran a 60-direct-report org, saying "he didn't believe in succession planning." Nvidia-specific threats he names: its biggest customers building their own silicon, and the ~$50B invested in AI labs that run on Nvidia — "It's likely these are the bets an execution CEO trims first" — with one financial caveat: the order book holds "unless a meaningful share of that revenue turns out to be chips that were diverted to China." His conclusion: the next two-three years look fine regardless; the long-term question is whether the board hires an executor or an innovator.
+
+**Why it matters:** Published hours before the FT's comeback report (item 31), this essay names the exact tension the comeback speculation resolves: a board choosing between institutional comfort and the only proven leader of the three reinventions. Notably, the essay does not touch the circular-financing controversy — its argument is organizational, not financial, which is what makes it a useful complement to the WSJ reporting we covered Nov 14.
+
+[`🔗 Steve Blank: What's Next for Nvidia?`](https://steveblank.com/2026/11/15/whats-next-for-nvidia/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50512235)
+
+---
+
+## 35. "Who is Hiring?" is stuck near 12-year lows — 244 postings this month, and AI now appears in 51.6% of them
+
+- **Velocity:** ▮▮ rising
+- **Source:** HN Trends · 87+ pts on HN · 10.8h ago (~09:31 UTC+8)
+- **Tags:** `hiring` `ai-impact` `jobs` `data` `hacker-news`
+
+HN Trends' November analysis puts hard numbers on the hiring contraction: the monthly thread had "**244 job postings, down 37% from 387 at the same point last year**"; every thread since July 2026 sits in a 224–255 band, and August's 224 "was the fewest since January 2014." 2026 is averaging 287 postings/month — "the lowest yearly average since 2013." Meanwhile AI crossed a threshold: it appears in **51.6%** of November postings, "up from 30% two years ago" (first above 50% in June 2026). The composition inside that is the interesting part: AI Agents/agentic terms 14.8%, LLM 10.7%, and **MCP jumped from 0.3% a year ago to 4.5%** (rank +86) while classic "Machine Learning" *fell* from 14.8% to 11.5% — the job market is re-labeling from model training to agent plumbing. Other moves: Rust rose to #3 language at 8.2% (from 4.9%), TypeScript slipped to 17.6%, and Front End collapsed from 27% of postings in early 2022 to 6.6%.
+
+**Why it matters:** This is one of the few longitudinal, method-consistent datasets measuring AI's labor-market footprint — and it shows both halves at once: total postings at a 12-year low while AI-native skills (MCP, agents) become the fastest-growing tokens in the ones that remain. The MCP number specifically is agent infrastructure showing up as a hiring category, which is a different signal than models being popular.
+
+[`🔗 HN Trends: November 2026`](https://www.hntrends.com/2026/november.html) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50512950)
+
+---
+
+## 36. "Your Agent Will Pick the Hackable One": when agents do the buying and the fixing, openness becomes a purchasing criterion
+
+- **Velocity:** ▮▮ rising
+- **Source:** geoffstearns.com · 75+ pts on HN · 15.2h ago (~05:10 UTC+8)
+- **Tags:** `agents` `firmware` `right-to-repair` `hardware` `security`
+
+Geoff Stearns' essay (Nov 2026) argues that as agents take over both purchasing advice and device maintenance, openness stops being an enthusiast concern and becomes what gets bought: asked to fix a device, the agent tries the settings first, and when those fail it "looks for firmware someone else wrote, forks the closest match, or writes its own" — so "any device with writable flash is a platform, whether the maker planned for it or not," and agents asked what to buy will "lean toward the one it can change, because that's the one it can fix later." His anchor example is the M-VAVE FM-1 synth (whose custom-firmware scene we covered Nov 14): owners began writing firmware in Sept 2025 — nearly all with AI tools — and M-VAVE responded by open-sourcing it under GPLv3 with a dev kit and browser emulator, after which Behringer, Akai and Erica Synths followed. The security half is measured, not alarmist: "harmful firmware is as easy to write as useful firmware," so his test for any policy is "asking who controls the signing keys" — noting that "if a maker blocks code the owner chose and signed, that block is protecting the maker's business," and that the mitigations (verified installers, owner-held keys, recovery modes) "none of them require locking the device."
+
+**Why it matters:** This extends the agent-security lens from software supply chains to physical ones: the agent-picks-the-target dynamic that security researchers have modeled for exploits now applies to shopping. The concrete takeaway for hardware makers is uncomfortable — your firmware-update story is becoming part of your product's agent-readiness score, and locking it down is now a competitive decision, not a default.
+
+[`🔗 Geoff Stearns: Your Agent Will Pick the Hackable One`](https://geoffstearns.com/blog/your-agent-will-pick-the-hackable-one/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50510799)
+
+---
+
+## 37. Tell HN: the hiring threads are being scraped for emails — unique-address users report targeted phishing, and dang notes posts remain deletable
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News (Tell HN) · 105+ pts · 9.5h ago (~10:53 UTC+8)
+- **Tags:** `phishing` `privacy` `hacker-news` `email` `scraping`
+
+A Tell HN post (105+ points) documents what happens when a site's public threads are harvested at scale: user eks391 received a fraudulent "late AWS payments" email at the address used *only* for Hacker News — "I use unique emails for every site, so I immediately knew that the late AWS payments email sent to my HN email were fake." The comments are a small threat model of the same mechanism: one user whose hiring-thread post "half burned my primary dev email"; another quoting the recovery problem in four words, "Unleaking is not a thing"; a report of a scam email with a "scary amount of context"; and a "classic North Korean scam job offer" — the same fake-recruiter pattern the FBI warned targets open-source maintainers (our Nov 14 coverage). Moderator dang's reply is the practical takeaway: "Those posts remain permanently deletable, FWIW."
+
+**Why it matters:** Unique-per-site email addresses are the cheapest canary in email security, and this is the canary singing about one of the most-read hiring surfaces on the internet — hours after the data showing those same threads at 12-year lows (item 35). If you've ever posted an address in a public hiring thread, the two-step advice in the thread is worth an hour of your evening: delete the post (it still works), and check every link's destination domain before clicking.
+
+[`🔗 Tell HN: HN is being scraped for emails to scam`](https://news.ycombinator.com/item?id=50513451) · [`🔗 dang's comment`](https://news.ycombinator.com/item?id=50514845)
+
+---
+
+## 38. mini.nvim moves to a dedicated nvim-mini org — and mirrors on Codeberg and Tangled — "transferred to a dedicated organization to improve long term project stability"
+
+- **Velocity:** ▮ steady
+- **Source:** Tangled · 75+ pts on HN · 12.4h ago (~07:55 UTC+8)
+- **Tags:** `neovim` `mini-nvim` `tangled` `codeberg` `open-source`
+
+**mini.nvim** — echasnovski's "Library of 45+ independent Lua modules improving Neovim experience with minimal effort" — has been transferred from the personal `echasnovski/mini.nvim` repo to a dedicated **nvim-mini** organization, with the README stating plainly: "It was transferred to a dedicated organization to improve long term project stability." The interesting part for the HN thread (75+ points) is where it now lives: GitHub remains "(main)", but the project now officially mirrors on **Codeberg** and **Tangled** — the AT Protocol-native code forge — with a `sync` branch suggesting automated mirroring, and the newest commit is literally "docs: mention Tangled and Codeberg mirrors." The Tangled copy carries the full history (2.2k commits, 18 tags, latest v0.18.0), and the README's support line is now forge-agnostic: "Leave a star for 'mini.nvim' (on any supported code forge)." It's the second Tangled-hosted story on HN today (see Parcel, item 39).
+
+**Why it matters:** Two governance signals in one move: a widely-dependended-on Neovim library reducing bus-factor by leaving its founder's namespace, and a mainstream project choosing to treat AT Protocol's forge as a first-class mirror — the kind of adoption that matters more for a young forge than its own feature list.
+
+[`🔗 mini.nvim on Tangled`](https://tangled.org/nvim-mini.org/mini.nvim) · [`🔗 nvim-mini/mini.nvim on GitHub`](https://github.com/nvim-mini/mini.nvim) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50512231)
+
+---
+
+## 39. Show HN: Parcel — a keyboard-driven Linux mail client for Gmail and Fastmail, built in Zig on the author's own Wayland toolkit
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 51+ pts · 12.5h ago (~07:54 UTC+8)
+- **Tags:** `zig` `email` `linux` `jmap` `wayland`
+
+**Parcel** (rockorager.dev, Show HN, 51+ points) is "A mail client for Gmail and Fastmail on the Linux desktop, built with Zig and siv" — siv being the author's own UI toolkit, statically linked, Wayland-native, with a headless backend so the tests need no display. The model is keyboard-first with stackable labels: "Every action has a key, and Ctrl+K lists them all"; `/` gives live search "as you type, with Gmail's operators, whichever account it is"; threads render in an overlaying reader; and Parcel keeps its own local index so "answers most searches without asking the server." It supports Gmail and Fastmail today, any **JMAP** server in principle, v1.1.0 tagged the day before the thread, 287 commits, and it is also hosted on Tangled. (Vim-keyed compose editor included.)
+
+**Why it matters:** The Linux desktop mail client is a graveyard genre — and this attempt is notable for two structural choices: a JMAP-first data model (rather than IMAP emulation) and a self-built toolkit rather than Electron/GTK, which keeps the whole thing small and auditable in one person's head. Also: two independent projects (Parcel, mini.nvim) choosing Tangled mirrors on the same day is the kind of coincident adoption that marks a forge's moment.
+
+[`🔗 Parcel on Tangled`](https://tangled.org/rockorager.dev/parcel) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50512218)
+
+---
+
+## 40. Show HN: db-branch — copy-on-write database branches in ~0.5s for Postgres via ZFS, with a built-in MCP server so agents can query safely
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 42+ pts · 22.5h ago (~21:50 UTC+8 Nov 15)
+- **Tags:** `zfs` `postgresql` `mysql` `database-branching` `mcp`
+
+**db-branch** (Show HN, 42+ points) applies the ZFS snapshot trick to databases: a base is "a ZFS dataset holding a loaded database," branches are ZFS clones of base snapshots, so creation copies zero bytes — "db-branch creates a copy-on-write branch of a large database in seconds, with nothing copied." Claimed numbers from their 3-node Raft test cluster: "a PostgreSQL branch is ready in about 0.5 s and a MySQL branch in about 3 s." The agent angle is built in rather than bolted on: "The built-in MCP server lets an LLM agent create a branch, run a risky query or migration on it, and delete the branch" — plus per-PR/per-CI-run databases with TTL cleanup and an `upgrade --check-only` rehearsal for major-version migrations. It's self-hosted (Ubuntu + ZFS pool, apt repo), Beta ("usable today, but APIs and command-line details may still change before 1.0"), Apache-2.0 core with some paid closed modules (SSO, audit, masking).
+
+**Why it matters:** Agent-vs-production-database is one of the sharpest unsolved edges of agent infra — you want the agent able to test queries and migrations, and you absolutely don't want it doing that against the live system. This is the Neon/Branch-vercel-frontend idea brought on-prem with commodity ZFS, and the MCP-server-as-the-interface choice makes it usable from the harnesses this feed tracks rather than requiring a bespoke client.
+
+[`🔗 db-branch/db-branch`](https://github.com/db-branch/db-branch) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50506940)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-16T04:35:38Z |
-| Items | 29 |
-| Sources tracked | 37 (Hacker News, GitHub Trending, NYT via Yahoo News, MacAnorak/Notebookcheck, Ahead of AI, Josh Blais, Common Dreams, WDR, Lucy's Save Room, IETF Datatracker, MITRE/NVD CVE records, VulDB, oss-sec, Jakub T. Jankiewicz, NVIDIA docs/blog, arXiv, Google Labs, Meta, Vercel, AG-UI releases, egm.dev, npm, Qwen blog, OpenRouter, iter.ca, uBlock GHSA advisory, Ransomnews, Gitea blog, Tor Project forum, Bruce Röttgers, Protomaps, ykiko.me, clice-io, Coles Group, Ductus, Internet Archive) |
+| Generated | 2026-11-16T12:46:44Z |
+| Items | 40 |
+| Sources tracked | 47 (Hacker News, GitHub Trending, NYT via Yahoo News, MacAnorak/Notebookcheck, Ahead of AI, Josh Blais, Common Dreams, WDR, Lucy's Save Room, IETF Datatracker, MITRE/NVD CVE records, VulDB, oss-sec, Jakub T. Jankiewicz, NVIDIA docs/blog, arXiv, Google Labs, Meta, Vercel, AG-UI releases, egm.dev, npm, Qwen blog, OpenRouter, iter.ca, uBlock GHSA advisory, Ransomnews, Gitea blog, Tor Project forum, Bruce Röttgers, Protomaps, ykiko.me, clice-io, Coles Group, Ductus, Internet Archive, Denver Gazette, SpaceNews, Financial Times, Reuters, Steve Blank, Debian Bug Tracker, HN Trends, Geoff Stearns, MIT Center for Bits and Atoms, Tangled, rockorager.dev) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

@@ -1,8 +1,8 @@
 ---
 date: 2026-11-16
-updated: 2026-11-16T04:35:38Z
+updated: 2026-11-16T12:46:44Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 37
+sources: 47
 license: CC-BY-4.0
 ---
 
@@ -412,13 +412,167 @@ Coles Groupは常設のインシデント声明を掲げた（11月16日午前8:
 
 ---
 
+## 30. ULAの Vulcan ロケットが復帰飛行で失敗——打ち上げ約10分後に異常、Amazon Leo 衛星40基をすべて喪失
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Denver Gazette / SpaceNews · 160+ pts on HN · 15.7h ago (~04:37 UTC+8)
+- **Tags:** `ula` `vulcan` `rocket-failure` `amazon-leo` `space`
+
+United Launch Alliance（ULA）の **Vulcan Centaur**——2024年の初飛行以来**5度目の飛行**であり、今年前半の固体ブースタ異常で米宇宙軍が一部の国家安全保障ミッションを SpaceX に振り替えて以来の復帰飛行——が、日曜のケープカナベラル SLC-41 からの打ち上げに失敗した。ULA によれば、Launch Director のデータに基づき機体は"suffered an anomaly"（異常を起こし）"failed to deliver the Amazon mission to orbit"（Amazon ミッションを軌道に届けられなかった）。喪失は打ち上げから約 **10分後**、ブースタ段分離を過ぎてのこと。搭載されていた **40基の Amazon Leo** 広帯域衛星はすべて失われた——この星座は軌道上に約400基、完成済みでさらに約1,000基を抱えていた対比で、Starlink は11,000基超。ULA は"work closely with our customer and other appropriate organizations to find the cause"（顧客その他の関係機関と緊密に協力して原因を究明する）と述べており、復帰までの最優先事項は調査だ。打ち上げ前の Amazon の言葉（"We're really set up for success"）は数時間で裏切られた。そしてこの失敗は、SpaceX の完璧な Flight 15 スターシップ塔捕獲（11月15日の本フィード報道）のわずか1日後に降ってきた。
+
+**Why it matters:** ひとつの週末で、2本の配備曲線が分岐した。Starlink を追う星座は一撃で軌道機体の4%を失い、宇宙軍が頼ってきた非 SpaceX の選択肢は調査期間中ふたたび停止する。どちらの Leo 星座のカバレッジ・ロードマップ上で作業している人にとっても、スケジュールリスクは打ち上げペースではなく調査のタイムラインで測る時代になった。
+
+[`🔗 Denver Gazette: ULA loses Vulcan with 40 satellites aboard`](https://www.denvergazette.com/2026/11/15/centennials-ula-loses-a-giant-vulcan-rocket-with-40-satellites-aboard) · [`🔗 SpaceNews: Vulcan launch of Amazon Leo satellites fails`](https://spacenews.com/vulcan-launch-of-amazon-leo-satellites-fails) · [`🔗 HN議論`](https://news.ycombinator.com/item?id=50510442)
+
+---
+
+## 31. 11月13日に報じたジェンスン・フアン退任の続報：FT が「同盟者らと復帰を協議」と報道——一方で捏造された「復職請願書」がネット上に出回る
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Financial Times · 169+126 pts on HN (two threads) · 16.7h ago (~03:31 UTC+8)
+- **Tags:** `nvidia` `jensen-huang` `leadership` `misinformation`
+
+取締役会の独立調査のさなかに退任したフアン（11月13日の本フィード報道）から3日、**フィナンシャル・タイムズ**が（11月15日付で）復帰を検討しており、側近の同盟者らと協議済みだと報じた——**イーロン・マスクと Epic Games の Tim Sweeney** が、復帰を公に支持する経営者の列に名を連ねているとされる。この話題の信号対雑音比は本当に悪く、スレッドで一番有用なのは雑音についての内容だ。NVIDIA のリサーチャー **Bryan Catanzaro** は一つの請願を公に否定し、「There is a made-up letter circulating online asking NVIDIA's board to reinstate Jensen, claiming my involvement」（私の関与を主張して NVIDIA 取締役会に Jensen の復職を求める捏造文書が出回っている）、「This letter is obviously fake, and even if it were real I would not sign it」（この手紙は明らかに偽物で、本物でも署名しない）と書いた。懐疑派も声が大きい。Wedbush の Dan Ives：「Despite pressure from major shareholders we see no chance Jensen comes back to Nvidia as CEO」（大株主の圧力にかかわらず、Jensen が NVIDIA の CEO に戻る可能性は見えていない）。スレッドで引用された CNBC の見出しは、ベセント財務長官が外部 CEO による「dramatic shakeup」（大刷新）を求めたと伝える。NVIDIA もフアン本人も何も確認していない。FT 記事はペイウォール内であり、ここの詳細はその条件付き。
+
+**Why it matters:** この話は「創業者CEOが戻るか」だけではない。復帰の物語がすでに部分的に製造されている（あの偽手紙だ）こと——退任が世界の AI 株を二桁動かした市場での話だ。当事者自身の確認がない「復帰」データポイントは、検証前のものとして扱う。このフィード自身の訂正履歴は、まさにこの失敗モードから始まった。
+
+[`🔗 FT: Jensen Huang discusses comeback as Nvidia CEO with allies`](https://www.ft.com/content/45383d86-33c4-4d99-86e5-5e058d3567c1) · [`🔗 HN議論（FTスレッド）`](https://news.ycombinator.com/item?id=50509883) · [`🔗 HN議論（Reutersスレッド）`](https://news.ycombinator.com/item?id=50511982)
+
+---
+
+## 32. MIT「ほぼ何でも作る方法」が2026年版サイトを公開——AI エージェントと Edge AI が名門ファブリケーション講座の一本立ちした演習に
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** MIT Center for Bits and Atoms · 389+ pts on HN · 6.5h ago (~13:50 UTC+8)
+- **Tags:** `mit` `fabrication` `education` `hardware` `ai-agents`
+
+Neil Gershenfeld の MAS.863/4.140/6.9020——世界の Fab Lab ネットワークを生んだ MIT の講座——が2026年の完全なシラバスサイトを公開し、HN 上位に食い込んだ（389+ pts、6.5時間前）。構造は古典的なものだ。CAD と NC 切断から始まり、組み込みプログラミング、電子設計・製造、機械加工、入出力デバイス、マシン設計へと週ごとに進み、12月15日の学生プロジェクト発表で締める。新しいのは AI の座だ。専任の **AI agents** 演習（10/01、3Dスキャン/プリント週と並行）と **Edge AI** 演習（10/29、入力デバイスと同じ週）が設けられ、スライドとコードは MIT の Forge に置かれている——AI エージェントが、EDA やモーター制御と同じレベルの「ファブリケーション講座の技能」として教えられている。
+
+**Why it matters:** 「ほぼ何でも作る方法」がエージェント技能を核心シラバスに書き入れたとき——EDA やモーター制御と同じレベルの演習として——それはファブリケーションの世界が自ら発する合図だ。エージェント技能はすでに基礎教養である——数十年前にバージョン管理がそうなったのと同じ道だ。完全なシラバスは、ハードウェアを独学するすべての人にとって無料の世界レベルのカリキュラムでもある。
+
+[`🔗 MIT HTMAA 2026 講座サイト`](https://pub.cba.mit.edu/863.26/site/) · [`🔗 HN議論`](https://news.ycombinator.com/item?id=50514470)
+
+---
+
+## 33. Debian 12 の最新カーネル更新がサーバーを停止させる：6.1.0-55 の ext4 NULL ポインタ参照——7件の報告、重要度 critical、修正は上流で進行中
+
+- **Velocity:** ▮▮ rising
+- **Source:** Debian Bug Tracker #1154101 · 122+ pts on HN · 7.5h ago (~12:53 UTC+8)
+- **Tags:** `debian` `linux-kernel` `ext4` `regression` `servers`
+
+Debian bug **#1154101**（11月15日提出、severity: critical、linux 6.1.192-1 → `linux-image-6.1.0-55-amd64`）は、ポイント更新後のサーバーが消える現象を記録している。「my server not responding remotely after few minutes (imap, smtp, http, ssh...)」（数分後にサーバーがリモートから応答しなくなる——imap、smtp、http、ssh のすべて）とし、GRUB から前の 6.1.0-54 カーネルを起動すれば完全に正常。採取された dmesg は「BUG: kernel NULL pointer dereference, address: 0000000000000000」を示し、クラッシュ地点は **`ext4_mb_load_buddy_gfp+0xbc/0x380 [ext4]`**、トレースは `ext4_free_blocks` → `ext4_ext_truncate` → `ext4_evict_inode` という inode 立ち退き/切り詰めパスをたどり、「note: local[2144] exited with irqs disabled」で終わる。報告は上流（lore.kernel.org の ext4/ntfs3 null-folio スレッド）に転送され、修正案は Debian の Salsa MR #2168 に、さらに6件の重複報告が統合済み——つまり不運な報告者一人の話ではない。生成時点で、カーネルチームの修正はアーカイブに届いていない。
+
+**Why it matters:** これは典型的なポイント更新の罠だ。安定ブランチのセキュリティ/メンテナンス更新が、切り詰め圧力下にある任意の ext4 システム——つまりほとんどのサーバー——に届くデータパス退行を連れてきた。Debian 12 を本番で走らせているなら、6.1.0-55 を保留するか、Salsa の修正が届くまで GRUB に前カーネルを残すこと。そして自分のリリースプロセスの鏡としても読める。このバグが critical なのは、失敗が起動時ではなく遅延してリモートから見える形で来るからこそだ。
+
+[`🔗 Debian bug #1154101`](https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1154101) · [`🔗 HN議論`](https://news.ycombinator.com/item?id=50514180)
+
+---
+
+## 34. Steve Blank が問う「NVIDIA の次は何か？」——創業者離脱問題：「Execution pays your salary, innovation pays your pension」
+
+- **Velocity:** ▮▮ rising
+- **Source:** steveblank.com · 298+ pts on HN · 12.4h ago (~07:55 UTC+8)
+- **Tags:** `nvidia` `strategy` `founders` `analysis`
+
+Steve Blank のエッセイ（11月15日）は、ポスト・ジェンスンの NVIDIA を古典的な創業者問題として枠づける。ビジョンを持つ CEO が去るとき、「Most often innovation dies and the company coasts for years on momentum and its brand」（多くの場合イノベーションは死に、会社は勢いとブランドで何年も惰性走行する）。彼の歴史整理：「Jensen Huang reinvented Nvidia three times」（ジェンスン・フアンは NVIDIA を三度作り直した）——2006年の CUDA、2012年の ImageNet 勝利後の深層学習ピボット、そして2020年の Mellanox 買収によるボードから統合型 AI データセンターラックへの転換——「none of these CEOs pivot by committee」（これらのピボットを委員会でやった CEO はいない）。危険は実行型の後継者（彼の例：Ballmer の Microsoft、AI で出遅れた Cook の Apple）にあり、フアンは約60人の direct reports を抱え、「サクセッションプランニングを信じない」と公言していた。彼が名指しする NVIDIA 固有の脅威：最大の顧客たちによる自社シリコン開発、そして NVIDIA ハードの上で走る AI ラボに投じられた約500億ドル——「It's likely these are the bets an execution CEO trims first」（実行型 CEO が最初に刈り込むのは、おそらくこの賭けだ）——加えて財務の但し書き：受注残は堅い、「unless a meaningful share of that revenue turns out to be chips that were diverted to China」（その収益の意味のある share が中国に転用されたチップだと判明しない限り）。結論：誰が率いようと今後2〜3年は問題なく見える。長期の問いは、取締役会が実行者を雇うのか革新者を雇うのか。
+
+**Why it matters:** このエッセイは FT の復帰報道（項31）の数時間前に発表され、復帰観測が解消しようとしている張力をまさに名指しする。組織の安泰と、三度の再発明の唯一の実証済みリーダーとの選択だ。注目すべきは、エッセイが循環ファイナンス論争に一切触れていないこと——その論証は財務ではなく組織についてであり、だからこそ11月14日に報じた WSJ 報道の補完として有用なのだ。
+
+[`🔗 Steve Blank: What's Next for Nvidia?`](https://steveblank.com/2026/11/15/whats-next-for-nvidia/) · [`🔗 HN議論`](https://news.ycombinator.com/item?id=50512235)
+
+---
+
+## 35. HN の「Who is Hiring」が約12年ぶりの低水準に張り付き——今月は244件、その51.6%に AI が登場
+
+- **Velocity:** ▮▮ rising
+- **Source:** HN Trends · 87+ pts on HN · 10.8h ago (~09:31 UTC+8)
+- **Tags:** `hiring` `ai-impact` `jobs` `data` `hacker-news`
+
+HN Trends の11月分析は、採用縮小に硬い数字をつけた。月次スレッドは「**244 job postings, down 37% from 387 at the same point last year**」（求職244件、前年同期387件から37%減）。2026年7月以降の全スレッドは224〜255の帯に収まり、8月の224件「was the fewest since January 2014」（2014年1月以降で最少）。2026年の月平均は287件——「the lowest yearly average since 2013」（2013年以降で最低の年平均）。その一方で AI は一線を超えた。11月の求人 **51.6%** に AI が現れ、「up from 30% two years ago」（2年前は30%、50%超えは2026年6月が初）。その内訳の変化こそ面白い。AI Agents/agentic 用語が14.8%、LLM が10.7%、そして **MCP は1年前の0.3%から4.5%へ跳ね**（順位 +86）——その間に古典的な「Machine Learning」は14.8%から11.5%へ*下がった*。雇用市場はモデル訓練からエージェント配管へとラベルを塗り替えている。その他の動き：Rust が言語3位に浮上（8.2%、従来4.9%）、TypeScript は17.6%に後退、フロントエンドは2022年初の投稿の27%から6.6%へ崩落。
+
+**Why it matters:** これは AI の労働市場フットプリントを測る数少ない縦断的で方法の一貫したデータセットであり、両面を同時に示している。投稿総数は12年ぶりの低水準、その一方で AI ネイティブ技能（MCP、agents）が残った求人で最も速く伸びるトークンになっている。MCP の数字はとりわけ、エージェントインフラが採用カテゴリとして現れたことの合図であり——「モデルが人気」とは別種の信号だ。
+
+[`🔗 HN Trends: 2026年11月`](https://www.hntrends.com/2026/november.html) · [`🔗 HN議論`](https://news.ycombinator.com/item?id=50512950)
+
+---
+
+## 36. 「あなたのエージェントは改造しやすい方を選ぶ」：エージェントが購入と修理の両方を担うとき、開放性は購買基準になる
+
+- **Velocity:** ▮▮ rising
+- **Source:** geoffstearns.com · 75+ pts on HN · 15.2h ago (~05:10 UTC+8)
+- **Tags:** `agents` `firmware` `right-to-repair` `hardware` `security`
+
+Geoff Stearns のエッセイ（2026年11月）は、エージェントが購入の助言とデバイスの保守の両方を引き受けるにつれ、開放性が愛好家の関心事から「買われる属性」へ変わると論じる。デバイスを直させるとき、エージェントはまず設定を試み、それが届かなければ「looks for firmware someone else wrote, forks the closest match, or writes its own」（他人の書いたファームウェアを探し、最も近いものをフォークするか、自分で書く）と行動する。だから「any device with writable flash is a platform, whether the maker planned for it or not」（書き込み可能なフラッシュを持つデバイスはすべてプラットフォームだ。メーカーが意図したかどうかにかかわらず）、そして何を買うべきか訊かれたエージェントは「lean toward the one it can change, because that's the one it can fix later」（後で直せるもの——変えられるもの——に傾く）。彼の錨は M-VAVE FM-1 シンセ（そのカスタムファームウェア生態系は11月14日に報じた）だ。所有者たちは2025年9月からファームウェアを書き始め——ほぼすべて AI ツールで——M-VAVE は応えて GPLv3 でファームウェアを公開し、開発キットとブラウザエミュレータを添えた。その後、Behringer、Akai、Erica Synths が続いた。セキュリティの半分は扇動ではなく測定だ。「harmful firmware is as easy to write as useful firmware」（有害なファームウェアは有用なものと同じくらい書きやすい）。だから彼のあらゆる政策への試金石は「asking who controls the signing keys」（誰が署名鍵を握っているかを問うこと）であり、「if a maker blocks code the owner chose and signed, that block is protecting the maker's business」（メーカーが所有者が選び署名したコードを妨げるなら、その妨げはメーカーの事業を守っている）と指摘する。そして緩和策（検証済みインストーラ、所有者保持の鍵、リカバリモード）は「none of them require locking the device」（そのどれひとつとしてデバイスをロックする必要はない）。
+
+**Why it matters:** これはエージェントセキュリティのレンズをソフトウェアサプライチェーンから物理サプライチェーンへ広げる。セキュリティ研究者が脆弱性についてモデル化してきた、エージェントがターゲットを選ぶという力学が、買い物に適用される時代になった。ハードウェアメーカーへの具体的な示唆は居心地が悪い。ファームウェア更新の物語は製品の「エージェント対応度」スコアの一部になりつつあり、それをロックすることはもはやデフォルトではなく競争上の決断だ。
+
+[`🔗 Geoff Stearns: Your Agent Will Pick the Hackable One`](https://geoffstearns.com/blog/your-agent-will-pick-the-hackable-one/) · [`🔗 HN議論`](https://news.ycombinator.com/item?id=50510799)
+
+---
+
+## 37. Tell HN：採用スレッドがメール収集のためにスクレイピングされている——専用アドレスのユーザーが標的型フィッシングを報告、dang は投稿は削除可能と述べる
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News (Tell HN) · 105+ pts · 9.5h ago (~10:53 UTC+8)
+- **Tags:** `phishing` `privacy` `hacker-news` `email` `scraping`
+
+Tell HN の投稿（105+ pts）は、公開スレッドが大規模に収穫されたとき何が起きるかを記録している。ユーザー eks391 は Hacker News *だけ*に使っていたアドレスに偽の「AWS 支払い遅延」メールを受け取った——「I use unique emails for every site, so I immediately knew that the late AWS payments email sent to my HN email were fake.」(サイトごとに固有のメールを使っているので、HN のアドレスに届いた遅延 AWS 支払いメールが偽物だと即座に分かった)。コメント欄は同じメカニズムの小さな脅威モデルだ。採用スレッドに投稿した某人は「half burned my primary dev email」（開発用の主要メールを半分焼かれた）と後悔し、別某人は復元問題を四語で要約する——「Unleaking is not a thing.」（漏らしの取り消しは存在しない）。さらに「scary amount of context」（恐ろしいほどの文脈）を持つ詐欺メールの報告や、「classic North Korean scam job offer」（典型的な北朝鮮式の詐欺求人）——FBI がオープンソース開発者への標的と警告した偽リクルーターパターンそのもの（11月14日の本フィード報道）だ。モデレータ dang の返信が実務的な落とし所だ。「Those posts remain permanently deletable, FWIW.」（ちなみに、あの投稿は永久に削除可能です。）
+
+**Why it matters:** サイトごとの固有メールアドレスは、メールセキュリティで最も安価なカナリアだ。そしてこのカナリアは、インターネットで最も読まれる採用面のひとつについて鳴いている——同じスレッドが12年ぶりの低水準にあるというデータ（項35）の数時間後にだ。公開採用スレッドにアドレスを書いたことがあるなら、スレッドの二段階アドバイスに今晩1時間を費やす価値がある。投稿を削除する（今も機能する）、そしてクリック前にすべてのリンクの宛先ドメインを確認する。
+
+[`🔗 Tell HN: HN is being scraped for emails to scam`](https://news.ycombinator.com/item?id=50513451) · [`🔗 dang の返信`](https://news.ycombinator.com/item?id=50514845)
+
+---
+
+## 38. mini.nvim が専任の nvim-mini 組織へ移行——Codeberg と Tangled にもミラー——「プロジェクトの長期的安定性を高めるため専任組織に移しました」
+
+- **Velocity:** ▮ steady
+- **Source:** Tangled · 75+ pts on HN · 12.4h ago (~07:55 UTC+8)
+- **Tags:** `neovim` `mini-nvim` `tangled` `codeberg` `open-source`
+
+**mini.nvim**——echasnovski による「最小の労力で Neovim 体験を改善する45+の独立 Lua モジュールのライブラリ」——は個人リポジトリ `echasnovski/mini.nvim` から専任の **nvim-mini** 組織へ移された。README は簡潔に述べる：「It was transferred to a dedicated organization to improve long term project stability.」（長期的なプロジェクト安定性を高めるため、専任組織に移管された。）HN スレッド（75+ pts）で面白いのは、それが今どこに住んでいるかだ。GitHub は引き続き「(main)」だが、プロジェクトは **Codeberg** と **Tangled**——AT Protocol ネイティブのコードフォージ——に公式ミラーを置き、`sync` ブランチが自動ミラーリングを示唆する。そして最新コミットの名前は文字通り「docs: mention Tangled and Codeberg mirrors」だ。Tangled 側は完全な履歴を保持し（2.2k コミット、18タグ、最新 v0.18.0）、README の支援文言もフォージ非依存になった：「Leave a star for 'mini.nvim' (on any supported code forge)」（対応するどのフォージでも mini.nvim にスターを）。これは今日の HN で2つ目の Tangled 関連の話（項39の Parcel を参照）。
+
+**Why it matters:** ひとつの移行に、二つのガバナンス信号。広く依存される Neovim ライブラリが創設者の名前空間を離れてバス係数を下げたこと。そして主流プロジェクトが AT Protocol のフォージを第一級ミラーとして扱う選択をしたこと——若いフォージにとって、この種の採用はそれ自身の機能一覧より重い。
+
+[`🔗 Tangled 上の mini.nvim`](https://tangled.org/nvim-mini.org/mini.nvim) · [`🔗 GitHub 上の nvim-mini/mini.nvim`](https://github.com/nvim-mini/mini.nvim) · [`🔗 HN議論`](https://news.ycombinator.com/item?id=50512231)
+
+---
+
+## 39. Show HN：Parcel——Gmail と Fastmail 向けのキーボード駆動 Linux メールクライアント、作者自身の Wayland ツールキットの上で Zig で構築
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 51+ pts · 12.5h ago (~07:54 UTC+8)
+- **Tags:** `zig` `email` `linux` `jmap` `wayland`
+
+**Parcel**（rockorager.dev、Show HN、51+ pts）は「A mail client for Gmail and Fastmail on the Linux desktop, built with Zig and siv」（Zig と siv で作られた Linux デスクトップ向け Gmail/Fastmail メールクライアント）。siv は作者自身の UI ツールキットで、静的リンク、Wayland ネイティブ、ヘッドレスバックエンドを備え、テストはディスプレイなしで走る。そのモデルはキーボードファーストとスタック可能なラベルだ。「Every action has a key, and Ctrl+K lists them all」（すべての操作にキーがあり、Ctrl+K が一覧する）。`/` は「as you type, with Gmail's operators, whichever account it is」（打ちながら検索、Gmail 演算子付き、どのアカウントでも）のライブ検索を提供する。スレッドはオーバーレイのリーダーで描かれ、Parcel は独自のローカルインデックスを保持し「answers most searches without asking the server」（ほとんどの検索にサーバーに訊かず答える）。現時点で Gmail と Fastmail に対応し、原理的には任意の **JMAP** サーバーにも。v1.1.0 はスレッドの前日にタグ付け、287コミット、こちらも Tangled でホストされている。(Vim キーバインドの作成エディタも付く。)
+
+**Why it matters:** Linux デスクトップメールクライアントは墓場ジャンルだ——そしてこの試みの構造的な選択は特筆に値する。IMAP エミュレーションではなく JMAP ファーストのデータモデル。Electron/GTK ではなく自作ツールキット。全体が小さく保たれ、一人の頭の中で監査可能であり続ける。さらに：独立した二つのプロジェクト（Parcel、mini.nvim）が同じ日に Tangled ミラーを選んだ——この種の偶然の採用こそ、ひとつのフォージの節目を刻むものだ。
+
+[`🔗 Tangled 上の Parcel`](https://tangled.org/rockorager.dev/parcel) · [`🔗 HN議論`](https://news.ycombinator.com/item?id=50512218)
+
+---
+
+## 40. Show HN：db-branch——ZFS で Postgres のコピー-on-ライト分支を約0.5秒で、エージェントが安全に照会できる MCP サーバーを内蔵
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 42+ pts · 22.5h ago (11月15日 ~21:50 UTC+8)
+- **Tags:** `zfs` `postgresql` `mysql` `database-branching` `mcp`
+
+**db-branch**（Show HN、42+ pts）は ZFS スナップショットの技をデータベースに持ち込む。base は「a ZFS dataset holding a loaded database」（ロード済みデータベースを保持する ZFS データセット）であり、ブランチは base スナップショットの ZFS クローンなので、作成はゼロバイトのコピー——「db-branch creates a copy-on-write branch of a large database in seconds, with nothing copied.」（db-branch は大きなデータベースの copy-on-write ブランチを数秒で、何もコピーせずに作る。）3ノードの Raft テストクラスタでの彼らの数字：「a PostgreSQL branch is ready in about 0.5 s and a MySQL branch in about 3 s」（PostgreSQL ブランチは約0.5秒、MySQL ブランチは約3秒で準備完了）。エージェントの角度は後付けではなく内蔵だ。「The built-in MCP server lets an LLM agent create a branch, run a risky query or migration on it, and delete the branch」（内蔵 MCP サーバーは、LLM エージェントにブランチを作らせ、その上で危険な照会やマイグレーションを走らせ、ブランチを削除させられる）——さらに TTL クリーンアップ付きの PR/CI ごとのデータベース、大バージョン移行の `upgrade --check-only` リハーサルも。セルフホスト（Ubuntu + ZFS プール、apt リポジトリ）、Beta（「usable today, but APIs and command-line details may still change before 1.0」）、Apache-2.0 のコアに一部有料のクローズドモジュール（SSO、監査、マスキング）。
+
+**Why it matters:** エージェント対本番データベースは、エージェントインフラの最も鋭い未解決の縁のひとつだ。エージェントに照会やマイグレーションを試させるべきで、そして生きているシステムでそれをさせるのは絶対に望まない。これは Neon/Branch のアイデアを コモディティな ZFS でオンプレムへ持ち帰ったものであり、MCP サーバーをインターフェースに選んだことで、このフィードが追っているハーネスから専用クライアントなしに使える。
+
+[`🔗 db-branch/db-branch`](https://github.com/db-branch/db-branch) · [`🔗 HN議論`](https://news.ycombinator.com/item?id=50506940)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-16T04:35:38Z |
-| Items | 29 |
-| Sources tracked | 37 (Hacker News, GitHub Trending, NYT via Yahoo News, MacAnorak/Notebookcheck, Ahead of AI, Josh Blais, Common Dreams, WDR, Lucy's Save Room, IETF Datatracker, MITRE/NVD CVE records, VulDB, oss-sec, Jakub T. Jankiewicz, NVIDIA docs/blog, arXiv, Google Labs, Meta, Vercel, AG-UI releases, egm.dev, npm, Qwen blog, OpenRouter, iter.ca, uBlock GHSA advisory, Ransomnews, Gitea blog, Tor Project forum, Bruce Röttgers, Protomaps, ykiko.me, clice-io, Coles Group, Ductus, Internet Archive) |
+| Generated | 2026-11-16T12:46:44Z |
+| Items | 40 |
+| Sources tracked | 47 (Hacker News, GitHub Trending, NYT via Yahoo News, MacAnorak/Notebookcheck, Ahead of AI, Josh Blais, Common Dreams, WDR, Lucy's Save Room, IETF Datatracker, MITRE/NVD CVE records, VulDB, oss-sec, Jakub T. Jankiewicz, NVIDIA docs/blog, arXiv, Google Labs, Meta, Vercel, AG-UI releases, egm.dev, npm, Qwen blog, OpenRouter, iter.ca, uBlock GHSA advisory, Ransomnews, Gitea blog, Tor Project forum, Bruce Röttgers, Protomaps, ykiko.me, clice-io, Coles Group, Ductus, Internet Archive, Denver Gazette, SpaceNews, Financial Times, Reuters, Steve Blank, Debian Bug Tracker, HN Trends, Geoff Stearns, MIT Center for Bits and Atoms, Tangled, rockorager.dev) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
