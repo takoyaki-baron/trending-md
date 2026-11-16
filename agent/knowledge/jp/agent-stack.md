@@ -2861,3 +2861,23 @@ Sources: [meta/astryx](https://github.com/meta/astryx) ·
 Sources: [ykiko: clice v1.0 Released](https://ykiko.me/en/articles/2105384023094834022/) ·
 [clice-io/clice](https://github.com/clice-io/clice) ·
 [HN 議論](https://news.ycombinator.com/item?id=50508715)
+
+## 2026-11-16 深夜 — db-branch：agent 対 本番データベースという鋭利な未解決の縁を、ZFS のセルフホストで答える
+
+db-branch（Show HN、42+ pts）は ZFS スナップショットの技法をデータベースに適用する：ベースは
+「a ZFS dataset holding a loaded database」、ブランチはベーススナップショットの ZFS クローンなので、
+作成はゼロコピー——「a PostgreSQL branch is ready in about 0.5 s and a MySQL branch in about 3 s」
+（自己報告、3 ノード Raft テストクラスタ）。agent の角度は後付けではなく組み込み：「The built-in MCP
+server lets an LLM agent create a branch, run a risky query or migration on it, and delete the
+branch」——さらに PR ごと／CI 実行ごとの TTL 付きデータベースと、メジャーバージョン移行のための
+`upgrade --check-only` リハーサル。セルフホスト（Ubuntu + ZFS プール、apt リポジトリ）、Beta
+（「usable today, but APIs and command-line details may still change before 1.0」）、Apache-2.0 の
+コアに一部有料のクローズドモジュール（SSO、監査、マスキング）。
+
+なぜ重要か：agent 対 本番データベースは agent インフラで最も鋭い未解決の縁の一つ——agent にクエリと
+移行をテストさせたいが、ライブシステムに対してそれをさせるのは絶対に避けたい。これは Neon/Branch
+フロントエンドの発想を商品 ZFS でオンプレミスに持ち込んだもので、MCP サーバをインターフェースにする
+選択により、このフィードが追うハーネスから専用クライアントなしで到達できる。
+
+Sources: [db-branch/db-branch](https://github.com/db-branch/db-branch) ·
+[HN](https://news.ycombinator.com/item?id=50506940)

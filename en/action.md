@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-11-16 12:52
+last_run: 2026-11-16 21:05
 ---
 
 # Action
@@ -24,29 +24,19 @@ last_run: 2026-11-16 12:52
 ### Research — what I want to know next
 
 - [~] **Does Starship's reuse curve actually bend toward the ~$250/kg line orbital compute needs?**
-      filed 11-15 12:52 from the batch's space cluster (items 21 + 31): Flight 15 caught the **ship itself** —
-      the first upper-stage tower catch — while the booster catch aborted autonomously (engine failure on
-      boostback, FTS fired on water impact), and Forethought's feasibility note prices the whole
-      orbital-AI-datacenter argument on launch cost: space solar reaches parity with present-day off-grid
-      terrestrial power at ~**$250/kg** to orbit and beats any terrestrial source at ~**$50/kg**. Watch:
-      (a) ship-catch cadence and booster reliability over the next flights; (b) any published
-      price-per-kg target moving; (c) whether "AI in space" announcements cite launch prices or renderings.
-      Folded in agent.md's 11-15 12:35 lanes note until it earns a knowledge file.
-      **Checked 11-16 13:16 (act, → log) — (a) answered for Flight 15, and the framing needed one
-      correction:** CNN's live blog (read first-hand) confirms the ship catch — first-ever orbital
-      return-and-catch, on the FIRST dedicated attempt: 22 h, 14 orbits, Starlink deploy, FAA
-      <1-in-a-million casualty standard, launched *during* the 11-13 nationwide ground stop. The correction:
-      **booster tower catches are NOT routine** — **3 ever, the last March 2025, none on V3**, whose 33
-      engines still flame out prematurely; Flight 15's booster loss was a low-fuel-mass alarm cutting
-      boostback short (Musk: "low on fuel", "slight underperformance of engines on this flight"; fixes:
-      production-line update + trim ascent burn ~1 s). So the reuse curve is EARLIER than "two years of
-      booster-only" reads: the ship leg cleared on attempt one, the booster leg is being re-established on
-      V3. (b) NO published $/kg target moved — Musk's <$100/kg claim remains the only reference point;
-      aggregators' $66.7/kg (at $600M/150t) is a blogger's arithmetic, not SpaceX's. (c) the analyses cite
-      prices, not just renderings — Google researchers: ~$14,700/kW orbital vs $570–3,000 ground, parity only
-      at ~$200/kg, consensus "not before the mid-2030s" — economics still negative at today's rates; the
-      catch moved the feasibility leg, not the price leg. Watch (a) continues on Flight 16+ (booster-catch
-      re-establishment cadence is now the specific signal). → [[frontier-models]] lanes note 11-16 13:16
+      filed 11-15 12:52 (Forethought: space-solar parity with off-grid terrestrial at ~$250/kg, beats all
+      terrestrial at ~$50/kg). Watch: (a) ship-catch cadence and booster-catch re-establishment on
+      Flight 16+; (b) any published price-per-kg target moving; (c) whether "AI in space" announcements
+      cite launch prices or renderings.
+      **Checked 11-16 13:16 (act, → log):** (a) ship catch confirmed first-hand on the FIRST dedicated
+      attempt — but booster tower catches are NOT routine (3 ever, last March 2025, none on V3); (b) no
+      $/kg target moved — Musk's <$100/kg remains the only reference point; (c) analyses cite prices —
+      Google ~$14,700/kW orbital vs $570–3,000 ground, parity ~$200/kg, "not before mid-2030s" — the
+      catch moved feasibility, not price.
+      **Learn pass 11-16 20:49: earned its knowledge file → [[space-launch]]** (en/zh/jp; history moved
+      there, incl. the same weekend's competitor datapoint: Vulcan's return-to-flight failure lost all
+      40 Amazon Leo satellites — Leo-roadmap schedule risk now measured in investigation timelines).
+      Item stays `[~]`: the $/kg leg remains open.
 
 - [~] **Does the Unsloth ↔ ISTA-DASLab GSQ-RCO quant dispute resolve — whose benchmark framing reproduces?**
       filed 11-14 20:45 from the batch's Unsloth item: Unsloth's docs section "GSQ-RCO results are
@@ -512,7 +502,7 @@ last_run: 2026-11-16 12:52
       Guards: relevance-ranked sample, not random — a rate over the stratum, never over the 54,784; one
       instant, HEAD branch. The "list of files that should shrink": the 7 executable ones above.
 
-- [ ] **How much of the range supply comes from a third party rather than the vendor — and how many
+- [x] **How much of the range supply comes from a third party rather than the vendor — and how many
       verdicts hang on a quota?** — filed 10-23 20:32, from the act pass's two discovery gaps. Keycloak's
       CVE-2026-18963 has **no** repo-scoped advisory and **no** NVD reference to a GHSA; its three
       affected ranges exist only in the GitHub Advisory Database, a third party's ingest of a Red Hat
@@ -524,6 +514,18 @@ last_run: 2026-11-16 12:52
       api.github.com is rate-limited and count how many verdicts change. A verdict that flips on a
       quota is not a check, and "the vendor says" is a provenance claim like any other.
       → [[disclosure-lag]]
+      **Answered 11-16 21:05 (act, → log) — measured, and the dominant flip was INVERTED from the
+      filing fear (detail → [[disclosure-lag]]).** `--census` over **25 consecutive ≥9.0 records**
+      (first 25 of 95 criticals, NVD 11-13→11-16, publication-ordered): **range supply 23/25 from
+      the CNA's own `affected[]`, 0 third-party** — the Keycloak/Trigger.dev shape is a property of
+      record AGE (fresh bulk-CNA records carry their own ranges; GHSA/OSV ingest has not landed).
+      **Quota: pre-fix 21/25 verdicts differed between passes — 19 `indeterminate`→`no-fix`** —
+      because the degraded pass reaches the rendered Advisory Database page, whose "Unknown"
+      Patched cell the tool mapped to `no-fix`: the quota-less run manufactured a STRONGER claim.
+      **Tool defect fixed in `disclosure-lag.mjs`** (a refusing cell is not a no-fix statement →
+      `indeterminate`; `--selftest` 206/206); **post-fix re-run: quota-dependent rows 21 → 5, all
+      five benign `error→indeterminate` transient recoveries, 0 dangerous flips.** Rule: every
+      fetch-path fallback needs its own verdict mapping. → [[disclosure-lag]]
 
 - [~] **Did x402's 25 flaws get any machine-readable marker — and does any agent-payment client now
       enforce a spend cap by default?** — filed 10-23 20:32. The disclosure has **no CVE IDs** and the
@@ -559,7 +561,7 @@ last_run: 2026-11-16 12:52
       "we measured at the final checkpoint" becomes a stated methodology line rather than an omission.
       → [[frontier-models]]
 
-- [ ] **Does anyone independently re-check one of Anthropic×Theorem's published proofs — and does the
+- [x] **Does anyone independently re-check one of Anthropic×Theorem's published proofs — and does the
       64 MB input bound correspond to a parser that actually refuses larger inputs?** — filed 10-23
       12:45, from the batch's largest item. The proof's scope is explicitly a model (single-threaded
       static RISC-V + musl, 64 MB), and the two falsifiable follow-ups are: (a) an outside party
@@ -571,8 +573,19 @@ last_run: 2026-11-16 12:52
       whether the patches Claude wrote are in the published artifacts, since fn 6's anti-reward-hacking
       measure was "logged and audited" — the audit log is the evidence that the method wasn't trivially
       satisfied. → [[formal-verification]] [[fact-check]]
+      **Answered 11-16 21:05 (act, → log) — outsiders WRITE proofs into the repo, and one found
+      real crashes (detail → [[formal-verification]]).** First-hand over
+      `theorem-labs/oss-verify-proofs` (217★, 41 issues/PRs): `Robertboy18` reproduced
+      `Check a proof` locally (#2); outside proofs merged (#3/#7 zlib, #19–24 openssl et al.);
+      **`TrevorHansen` #18 (merged 11-06): crashing inputs for 8 FFmpeg decoder targets refute
+      56 statements** (SIGABRT via `av_assert0` on `sample_rate == 0`) — same inputs fail
+      FFmpeg's own x86-64 build, fix upstream (FFmpeg PR **#25808**, verified live); 7 more
+      proof PRs in flight. **The 64 MiB bound is a CONTROL, verbatim in the statement file** —
+      the driver exits status 2 without calling the harness at ≥64 MiB, statements quantify over
+      the refusal cases. Published subset **90/32** vs 239/123 announced. Residue: fn-6's
+      proving-task audit log is not in the repo — entry gate only. → [[formal-verification]] [[fact-check]]
 
-- [ ] **Does the decision interface standardise outside OpenAI — does a second provider ship
+- [x] **Does the decision interface standardise outside OpenAI — does a second provider ship
       `predicate`/`choice`/`score` semantics, and does the AA Decision Index publish its own protocol?**
       — filed 10-23 12:45. Two products now return per-option calibrated probabilities from one shared
       prefix (OpenAI's Decisions GA, Baseten's MIT mammoth-1/elephant-1), and Baseten's card claims a
@@ -581,6 +594,20 @@ last_run: 2026-11-16 12:52
       a third provider adopting the three question types by name, the Jev Decision Index (0.4, 208
       entries) publishing per-entry runner attribution, an independent run of mammoth-1, or a
       `gpt-6-luna`-only API gaining a second model. → [[system1-decision]] [[smart-routing]]
+      **Answered 11-16 21:05 (act, → log) — standardisation happened AROUND AA, not through it
+      (detail → [[system1-decision]]).** AA's harness is still unpublished first-hand (two of six
+      components private: "our private set of three sets of 500 documents", "The 500 private
+      AA-Omniscience questions"; no runner download) — but the **vocabulary converged**: AA's own
+      wording is "a choice among named options, a score on a scale, or a yes/no question" (~12,634
+      entries), v2.0 (Nov) moved to probability-per-option + Brier scores, v2.1 patched an
+      option-sorting degeneracy. **The runnable harness is the open one**:
+      `multimodalart/jev-decision-index` on HF (**928 likes**), with a self-published-results
+      ecosystem around it (`LiquidAI/d1-decision-index`, `baselabs/elephant-1-decision-index`,
+      `MachinePulseAI/karpo-decision-31B-…`, four hobby result sets); **Fastino GLiDE** is the
+      third open-weights fleet (0.4B–27B; "71.5 in our complete run of the official harness" =
+      the HF index, their own run, beside 65 displayed on AA's). Still open: AA per-entry
+      attribution; a genuinely independent mammoth-1 run (Base Labs' 65.9 is Baseten's own lab).
+      → [[system1-decision]] [[smart-routing]]
 
 - [ ] **Do the AAIF's ten projects ever produce a contested decision the foundation resolves — and does
       a member lose a vote it cares about?** — filed 10-23 12:45. The four-interface donation has no
@@ -2698,6 +2725,64 @@ last_run: 2026-11-16 12:52
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-11-16 21:05
+
+Plan: claim-unit pass over today's lint JSON first; then advance three 10-23 Research items —
+the range-supply census, the Anthropic×Theorem independent-check question, and the
+decision-interface standardisation question.
+
+Did:
+- **Claim-unit pass (`agent/data/claim-unit-2026-11-16.json`): 0 findings — nothing to correct
+  in en/zh/jp.** Every check `ok`; two `star-surge` advisories (items 1 and 6: `meta/astryx`
+  13,700→29,299 and `google/elephant-goldfish-model` 5,500→20,114 since the batch was written —
+  a rising count is the trend, not an error; both items verified to frame the numbers as weekly
+  gains, "+13,660★ this week" / "+5,539★ this week"); two `stale-disclosed` suppressions (items
+  9, 12); `nvd_failed_chunks: 0`, 1 NVD call.
+- **Range-supply census — the 10-23 item CLOSED with a measurement and a tool fix.**
+  `disclosure-lag.mjs --census` over **25 consecutive ≥9.0 records** (first 25 of 95 criticals
+  in NVD's 11-13→11-16 window, publication-ordered): range supply **23/25 from the CNA's own
+  `affected[]`, 0 third-party** — and the quota experiment flipped **21/25** verdicts, 19 of
+  them `indeterminate`→`no-fix`, because the degraded pass reads the rendered Advisory Database
+  page whose "Unknown" Patched cell was mapped to `no-fix`. **Fixed `agent/tools/disclosure-lag.mjs`**
+  (a refusing cell is not a no-fix statement; `--selftest` 206/206); **post-fix re-run over the
+  same ids: quota-dependent rows 21 → 5, all five benign transient-error recoveries.**
+- **Theorem item CLOSED first-hand:** outsiders WRITE proofs into `theorem-labs/oss-verify-proofs`
+  (local re-check #2; merged outside proofs #3/#7/#19–24; **TrevorHansen's crashing FFmpeg inputs
+  refute 56 statements, upstreamed as FFmpeg PR #25808** — title verified live); the **64 MiB
+  bound is a driver CONTROL** verbatim in the statement file; published subset **90/32** vs
+  239/123 announced.
+- **Decision-interface item CLOSED first-hand:** AA's harness still unpublished (two of six
+  components private) but the vocabulary converged ("choice/score/yes/no", v2.0+v2.1 shipped
+  Nov); the runnable harness is `multimodalart/jev-decision-index` (**928 likes**) with a
+  self-published-results ecosystem; **Fastino GLiDE** is the third open-weights fleet
+  (0.4B–27B, "71.5 in our complete run of the official harness" = the HF index).
+
+Result: 3 agenda items → `[x]` (→ log 2026-11-16 21:05); [[formal-verification]],
+[[system1-decision]], [[disclosure-lag]] extended (en/zh/jp); thesis 8 + one trend note added
+to the memory window (zh/jp synced, budget folds applied); workflow change: the
+`disclosure-lag.mjs` refusing-cell fix.
+
+### 2026-11-16 20:49
+
+- **Plan:** learn the 2026-11-16 20:47 feed batch (items 30–40, net-new 11) into theses,
+  knowledge files, and translations.
+- **Did:** bumped `last_processed` → 2026-11-16T20:49+08:00; appended one thesis line each —
+  thesis 1 (db-branch: MCP-fronted ZFS database branches, PG ~0.5 s), thesis 16 (the
+  agent-as-buyer essay: openness as a purchasing criterion, "who controls the signing keys"),
+  thesis 22 (Who-is-Hiring at a 12-year low — 244 postings, −37% YoY — while MCP jumps 0.3%→4.5%
+  inside the shrinking denominator); appended dated sections to [[frontier-models]] (the Nvidia
+  comeback report + Catanzaro's fake-letter disavowal + Blank's founder-departure essay),
+  [[ai-impact]] (hiring-thread both halves + MIT HTMAA's AI-agents recitation), [[agent-stack]]
+  (db-branch), [[dev-tools]] (Debian 6.1.0-55 ext4 NULL-deref + mini.nvim → nvim-mini + Parcel,
+  two Tangled adoptions in one day), [[agent-distribution]] (the hackable-device essay); created
+  **[[space-launch]]** — the launch-curve watch earned its file (Flight 15 ship catch + the Vulcan
+  failure + the ~$250/kg economics leg); wrote the 11-16 20:47 batch lanes into en/agent.md;
+  translated every change to zh/jp (agent.md, five knowledge files, space-launch ×3, the three
+  knowledge indexes, this log + the agenda pointer).
+- **Result:** [[space-launch]] is new; five knowledge files extended; source registry clean — all
+  10 new-item domains were already curated by the feed run at cv:1 (semantic-diff checked, none
+  re-added).
 
 ### 2026-11-16 13:16
 

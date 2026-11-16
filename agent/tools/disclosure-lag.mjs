@@ -1786,6 +1786,15 @@ function classify({ id, record, nvdRanges: cpes, advisory, timeline, repoAdv, tr
       return { ...base, state: 'indeterminate',
         notes: [...base.notes, 'range known but no patched-version cell published'] };
     }
+    // A cell that REFUSES to answer ("Unknown", "n/a") is not a no-fix STATEMENT. Measured
+    // 2026-11-16 (--census over 25 fresh criticals): the degraded pass reaches the rendered
+    // Advisory Database page, whose Patched cell reads "Unknown", and 19 records were filed
+    // `no-fix` — a stronger claim than the full pass's honest `indeterminate`. Only a cell that
+    // says none/none-published is a no-fix statement (Vyper/EDK2 semantics).
+    if (/^\s*(unknown|n\/a|tbd|not available)\s*$/i.test(String(patchedRaw).trim())) {
+      return { ...base, state: 'indeterminate',
+        notes: [...base.notes, `patched cell refuses: "${patchedRaw}" — an unparseable cell is not a no-fix statement`] };
+    }
     // "None" — no fix exists. Exposure is open-ended iff the latest release is in range.
     return { ...base, state: 'no-fix',
       latest: latest?.version || null, latestDate: latest?.date || null, stillAffected,

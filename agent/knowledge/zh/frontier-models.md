@@ -3681,3 +3681,32 @@ Sources: [Ahead of AI: Understanding Positional Embeddings in Modern LLMs](https
 Sources: [Qwen4-Max 公告](https://qwen.ai/blog?id=qwen4-max) ·
 [OpenRouter: qwen/qwen4-max](https://openrouter.ai/qwen/qwen4-max) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50513215)
+
+## 2026-11-16 晚 — Nvidia 领导层弧线：一份回任报道、一封假信，和创始人离任论文
+
+辞职三天后（11-12；Kress 任临时 CEO 且*保留 CFO*、Harvey C. Jones 成首位董事长），**Financial
+Times** 报道（11-15，付费墙）黄仁勋正与盟友讨论回任，Elon Musk 与 Epic Games 的 Tim Sweeney
+在公开支持回任的高管之列。讨论串里最承重的内容恰是关于噪音的：Nvidia 研究员 **Bryan
+Catanzaro** 公开否认了一份请愿——「There is a made-up letter circulating online asking NVIDIA's
+board to reinstate Jensen, claiming my involvement」以及「This letter is obviously fake, and even
+if it were real I would not sign it.」Wedbush 的 Dan Ives：「Despite pressure from major
+shareholders we see no chance Jensen comes back to Nvidia as CEO」；串内引用的 CNBC 标题称财政部长
+Bessent 敦促以外部 CEO 进行「dramatic shakeup」。Nvidia 与黄本人均未确认任何事；回任叙事已被部分
+伪造——在消息来自当事方本人之前，把每一条「回任」数据点当作未证实处理。
+
+FT 报道数小时前，Steve Blank 从组织一侧框定了同一张力（"What's Next for Nvidia?"，298+ 分）：
+愿景型 CEO 离开时「Most often innovation dies and the company coasts for years on momentum and
+its brand.」他的历史——黄三次重塑 Nvidia（2006 年 CUDA、2012 年 ImageNet 之后转向深度学习、2020
+年收购 Mellanox 把板卡变成一体化 AI 数据中心机架）——以及「none of these CEOs pivot by
+committee.」危险是执行型 CEO 继任者（他的例子：Ballmer 的微软、错过 AI 的 Cook 苹果）；黄管理 60
+个直属汇报、且「didn't believe in succession planning.」他点名的 Nvidia 特有威胁：最大客户自研
+芯片，以及投入约 **$50B** 在跑在 Nvidia 上的 AI 实验室——「It's likely these are the bets an
+execution CEO trims first」——附带一条财务警告：订单簿保得住，「unless a meaningful share of that
+revenue turns out to be chips that were diverted to China.」他的结论：未来两三年无论怎样都还行；
+长期问题在于董事会雇的是执行者还是创新者。值得注意的是这篇不碰循环融资争议——是组织论，不是财务论。
+常设观察：**11-17 财报 + 感恩节前的国会作证**仍是临时体制的连续性测试。
+
+Sources: [FT via HN](https://news.ycombinator.com/item?id=50509883) ·
+[Reuters 讨论串](https://news.ycombinator.com/item?id=50511982) ·
+[Steve Blank: What's Next for Nvidia?](https://steveblank.com/2026/11/15/whats-next-for-nvidia/) ·
+[Blank HN](https://news.ycombinator.com/item?id=50512235)

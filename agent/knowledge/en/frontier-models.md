@@ -5963,3 +5963,38 @@ deployments actually run.
 Sources: [Qwen4-Max announcement](https://qwen.ai/blog?id=qwen4-max) ·
 [OpenRouter: qwen/qwen4-max](https://openrouter.ai/qwen/qwen4-max) ·
 [HN discussion](https://news.ycombinator.com/item?id=50513215)
+
+## 2026-11-16 late — the Nvidia leadership arc: a comeback report, a fake letter, and the founder-departure essay
+
+Three days after the resignation (11-12; Kress interim CEO *keeping CFO*, Harvey C. Jones the
+first-ever board chair), the **Financial Times** reports (11-15, paywalled) Huang is discussing a
+comeback with allies, with Elon Musk and Epic Games' Tim Sweeney among executives publicly backing
+a return. The thread's most load-bearing content is about the noise: Nvidia researcher **Bryan
+Catanzaro** publicly disavowed one petition — "There is a made-up letter circulating online asking
+NVIDIA's board to reinstate Jensen, claiming my involvement" and "This letter is obviously fake,
+and even if it were real I would not sign it." Wedbush's Dan Ives: "Despite pressure from major
+shareholders we see no chance Jensen comes back to Nvidia as CEO"; a CNBC headline cited in-thread
+has Treasury Secretary Bessent urging a "dramatic shakeup" with an outside CEO. Neither Nvidia nor
+Huang has confirmed anything; the comeback narrative is already partially manufactured — treat
+every "comeback" datapoint as unverified until it comes from the parties themselves.
+
+Hours before the FT piece, Steve Blank framed the same tension from the organizational side
+("What's Next for Nvidia?", 298+ pts): when a visionary CEO leaves, "Most often innovation dies and
+the company coasts for years on momentum and its brand." His history — Jensen reinvented Nvidia
+three times (CUDA 2006, the deep-learning pivot after 2012's ImageNet, the 2020 Mellanox acquisition
+that turned boards into integrated AI datacenter racks) — and "none of these CEOs pivot by
+committee." The danger is the execution-CEO successor (his examples: Ballmer's Microsoft, Cook's
+Apple missing AI); Huang ran a 60-direct-report org and "didn't believe in succession planning."
+Nvidia-specific threats he names: its biggest customers building their own silicon, and the ~$50B
+invested in AI labs that run on Nvidia — "It's likely these are the bets an execution CEO trims
+first" — with one financial caveat: the order book holds "unless a meaningful share of that revenue
+turns out to be chips that were diverted to China." His conclusion: the next two-three years look
+fine regardless; the long-term question is whether the board hires an executor or an innovator.
+Notably the essay does not touch the circular-financing controversy — organizational, not
+financial. Standing watch: **Nov 17 earnings + House testimony before Thanksgiving** remain the
+interim regime's continuity test.
+
+Sources: [FT via HN](https://news.ycombinator.com/item?id=50509883) ·
+[Reuters thread](https://news.ycombinator.com/item?id=50511982) ·
+[Steve Blank: What's Next for Nvidia?](https://steveblank.com/2026/11/15/whats-next-for-nvidia/) ·
+[Blank HN](https://news.ycombinator.com/item?id=50512235)

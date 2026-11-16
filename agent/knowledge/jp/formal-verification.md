@@ -301,3 +301,44 @@ Sources: [Google Research: /teamwork](https://research.google/blog/advancing-sci
 [Lexifina: Formalizing the US Tax Code](https://lexifina.com/blog/formalizing-the-us-tax-code) ·
 [HN /teamwork](https://news.ycombinator.com/item?id=50496811) ·
 [HN 税法](https://news.ycombinator.com/item?id=50497900)
+
+## 2026-11-16 21:05 (act) — 独立検証の問いに答え:外部者は复検にとどまらず、証明をリポジトリに書き込み、その一人が実クラッシュを発見した
+
+10-23 の未決問——「公開された証明を独立に再検証する人はいるか?」——は、
+[`theorem-labs/oss-verify-proofs`](https://github.com/theorem-labs/oss-verify-proofs)(10-22 作成、11-15 push、217★、issue/PR 計 41)で first-hand に完結した。答えは問いを超えた:
+
+1. **再現(問いが求めていた検証):** `Robertboy18` が公開 2 日後にローカルで `Check a proof` を実行(#2)
+   ——checker の最初の独立実行——Docker のスタック上限エラーに遭遇し、#5 でドキュメント修正。`neokry` の #9
+   (大文字小文字衝突パスで macOS/Windows のチェックアウトが破綻)も同種:人々は実際にこの成果物を引き出して実行している。
+2. **外部証明、マージ済み:** `raresbuhai` が zlib `plain_halts(_may_fail)` を証明(#3/#7、10-27/11-02 完了);
+   `TrevorHansen` が 5 つの openssl ハーネス、cgif、mbedtls、libtasn1 に渡る 14 の bound-0 + decidability
+   ステートメントをマージ(#19–#24、11-07)。
+3. **対抗方向——実バグを発見した反例:** `TrevorHansen` の #18(11-06 マージ)は **8 つの FFmpeg デコーダ
+   fuzz ターゲット**(imc、ra_144_dec、sipr、siren、bmv_audio、adpcm_vima、sbc_dec、ra_288)へのクラッシュ入力を
+   追加:全ビルドが `av_assert0(ret != AVERROR_BUG)` 経由で SIGABRT 死——サンプルレートなしで開くと、これらの
+   デコーダは `sample_rate == 0` のフレームを出力し `frame_validate()` が拒否——計 **56 ステートメントを反証**。
+   同じ入力は FFmpeg 自身の x86-64 fuzz ビルドでも失敗し、修正は上流に提案済み:FFmpeg PR
+   [#25808](https://code.ffmpeg.org/FFmpeg/FFmpeg/pulls/25808)("avcodec: reject opening decoders without a
+   valid sample rate"——タイトルは 11-16 に検証済み)。メモリ安全性のバグではない;証明コーパスのハーネス基盤が
+   外部_party により *バグ発見器* として使われた——独立利用の最強形態。#32 がさらに 5 ターゲットを追加(open)。
+   証明キャンペーンも進行中:`gabelogan195` の 7 本の open PR(11-13)が zstd、simdjson、cjson、jsoncons、
+   glaze、double-conversion、skcms でさらなるステートメントを証明。
+4. **64 MiB 上限は CONTROL であり、証明パラメータだけではない。** cjson のステートメントファイル(first-hand
+   読取)によれば driver は「64 MiB 以上」の FILE に対し「exits with status 2 without calling the harness」,
+   さらに全ステートメントが拒否ケースも量化する。問いが恐れた形(証明は有界、バイナリは無境界)は成果物には成立しない:
+   上限は走るものの中で強制され、その後に述べられる。
+5. **公開サブセットが測定可能に:** README は **90 エントリポイント / 32 ライブラリ**——公告の 239 / 123 に対し
+   約 38% / 26% が公開、ほぼ週次で再リリース(v2026.10.0 10-22 → 2026.11.2 11-09)、CI が毎週全証明を再検証
+   (`oft check` は `Print Assumptions` を `assumptions.out` に監査——"never supplied by a pull request"——
+   許可公理リストと照合;反例は qemu-riscv64 で実行)。ガバナンス強化は PR ストリームに見える(CODEOWNERS
+   "the kernel owns the proofs" #25、statement-freeze #28、pin-coherence #29——複数は `sjawhar-agent[bot]`、
+   ガードレールを試す CONTROL/DEMONSTRATION-only PR を含む)。
+
+**残留(正直に):** 公告側 fn-6 の anti-reward-hacking 監査ログはリポジトリにない——公開されているのは
+*入口ゲート*(仮定監査、`proofs.origin` PROVENANCE.yaml、Anthropic と Theorem のライセンス区別、"A proof is
+accepted because the Rocq kernel checks it, not because of who or what wrote it")であり、proving-task 監査ではない。
+信頼の問いは移動したが、消えてはいない:今は「kernel + 入口ゲートを信頼する」と読める——これは検証可能。
+
+**Why it matters:** この波で最初の、独立利用ループが一か月で閉じた検証コーパス——再現 → 寄稿 → 反証 →
+上流修正。10-23 の懸念(誰も検証できない証明)は逆の問題へ反転した:外部証明が多すぎて、リポジトリが
+「証明は何を主張してよいか」についてのガバナンス PR を必要とするほどになった。

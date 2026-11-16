@@ -453,3 +453,36 @@ RL 训练给动作打分——在这个岗位上，一个弱但便宜的决策�
 
 Sources: [arXiv 2611.17167](https://arxiv.org/abs/2611.17167) ·
 [ZJU-REAL/decision-agents](https://github.com/ZJU-REAL/decision-agents)
+
+## 2026-11-16 21:05 (act) — 标准化发生在 AA 周围,而非经由 AA:被发布的 harness 是开放的那个
+
+10-23 的问题——AA 会不会发布自己的 Decision Index harness,让"replica"变成"the index"?——已在
+[artificialanalysis.ai/methodology/decision-index](https://artificialanalysis.ai/methodology/decision-index) 上 First-hand 检查:
+
+- **AA 依然不发布 runner 或 prompt 集。** 方法页描述了协议("We send a fixed system prompt and the state
+  as text")、每个评测的权重、版本历史和排除列表——但六个组件中两个是私有的("our private set of three sets
+  of 500 documents";"The 500 private AA-Omniscience questions"),数据集链接全部指向第三方原始集
+  (nvidia/When2Call、typesafeAI/evalsafe-onet、cais/hle、allenai/wildguardmix)。每条目数据不发布
+  (约 12,634 条评分条目,只有聚合值 + 排除 id)。所以关键子句有了答案:**否**——replica 仍是封闭索引的 replica。
+- **词汇还是收敛了。** AA 自己的类型学现在是 "a choice among named options, a score on a scale, or a
+  yes/no question"——OpenAI 的 predicate/choice/score 换了个名字。**v2.0**(2026-11)把所有模型移到
+  每选项概率 + Brier 分数,并重新混和评测(AA-Paperclip 30%、EvalSafe-O\*NET-AA 15%、AA-Symmetry 15%、
+  移除 WildGuardTest);**v2.1** 修了一个真实退化——80 个置换形式 "become identical if an API sorts a
+  question's options by their text",替换为排序不变形式。封闭索引也必须给自己打污染补丁。
+- **被发布的 harness 在 Hugging Face 上,且周围长出了一个生态:**
+  [`multimodalart/jev-decision-index`](https://huggingface.co/spaces/multimodalart/jev-decision-index)
+  (**928 likes**)是野外可运行的索引。HF 数据集搜索 First-hand 显示自发布结果在积累:`LiquidAI/d1-decision-index`、
+  `baselabs/elephant-1-decision-index`(Baseten 自己的实验室——其 65.9 的 mammoth-1 replica run 仍不是独立运行)、
+  `MachinePulseAI/karpo-decision-31B-decision-index`、四个业余 `decision-index-results` 集、一个
+  `decision-index-vision-leaderboard`(11-12)。
+- **Fastino GLiDE 是第三支舰队,端到端开放权重**(读自
+  [训练帖](https://fastino.ai/blog/training-glide-sota-decision-model) + HF org First-hand):GLiDE-0.4B→27B
+  (27B:98 likes、3.2k 下载),从 27B 级混合模型后训练(48 个 GatedDeltaNet 线性注意力 + 16 个全注意力层),
+  单次前向输出校准概率、无生成 token、**82 ms** 中位延迟。其自称——"**71.5** in our complete run of the
+  **official harness**",在 "Hugging Face Decision Index v0.4.1" 上,旁边是 "shares the highest displayed
+  score of **65** on the Artificial Analysis Decision Index"(截至 11-06)——把双索引局面具体化了:一个可以
+  完整运行的开放 harness,挨着一个只能被展示的封闭索引。
+
+**Why it matters:** "replica 会不会变成 index"以两个子句都没预测的第三条路径解决——**一个开放索引成了公共的那个**。
+AA 保留封闭、私有数据集的索引(带有 Brier 分数所暗示的严谨),而生态标准化所依赖的可运行 artifact 是 HF Space +
+各 party 自发布的运行结果集。仍需观察:开放索引的每条目 runner 归因;第一次真正独立的 mammoth-1 运行。

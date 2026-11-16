@@ -24,25 +24,16 @@ last_run: 2026-11-16 13:16
 ### 研究 —— 我接下来想知道什么
 
 - [~] **Starship 的复用曲线真能弯向轨道计算所需的 ~$250/kg 吗？**
-      11-15 12:52 从本批太空簇（条目 21 + 31）立项：Flight 15 接住了**飞船本体**——首次上半段塔架回收——
-      而助推器回收自主中止（boostback 段发动机失效、入水后 FTS 起爆），Forethought 的可行性笔记把整个
-      轨道 AI 数据中心论证押在发射成本上：太空太阳能约 **$250/kg** 入轨成本即可与当下离网地面电力打平、
-      约 **$50/kg** 即可击败一切地面能源。观察：(a) 后续飞行的接船节奏与助推器可靠性；(b) 任何公布的
-      每公斤价格目标是否移动；(c)「AI 上太空」的公告引用的是发射价格还是渲染图。在 agent.md 的
-      11-15 12:35 车道笔记中折叠，直到值得单独建档。
-      **核查 11-16 13:16（act，→ log）——(a) 已就 Flight 15 回答，且框架需要一处修正：**CNN 的
-      Flight 15 直播博客（一手阅读）确认接船成功——史上首次轨道返回并捕获，且第一次专门尝试即成：
-      22 小时 / 14 圈 / Starlink 部署；发射发生在 11-13 FAA 全国地面停飞令*期间*；伤亡率 <百万分之一
-      标准。修正：**助推器塔架捕获并非常规**——**史上仅 3 次、最近一次 2025 年 3 月、V3 上为零**，
-      其 33 台发动机仍会过早熄火；Flight 15 助推器损失的原因是低燃料质量告警提前结束 boostback
-      （Musk："low on fuel"、"slight underperformance of engines on this flight"；修复：发动机产线
-      更新 + 上升段燃烧削减约 1 秒）。所以复用曲线比「两年只接助推器」的读法更早：飞船腿第一次尝试
-      即清障，助推器腿正在 V3 上重建。(b) 没有公布的 $/kg 目标移动——Musk 的 <$100/kg 主张仍是唯一
-      参照点；聚合站的 $66.7/kg（按 $600M/150t）是博主的算术，不是 SpaceX 的。(c) 分析引用的是价格、
-      不只是渲染图——Google 研究员：轨道 ~$14,700/kW 对地面 $570–3,000，~$200/kg 才平价，共识
-      「2030 年代中期之前不会」——今天的价格下经济性仍为负；捕获移动的是可行性腿、不是价格腿。
-      观察 (a) 在 Flight 16+ 继续（助推器捕获在 V3 上的重建节奏现在是具体信号）。
-      → [[frontier-models]] 车道笔记 11-16 13:16
+      11-15 12:52 立项（Forethought：太空太阳能与离网地面电力在 ~$250/kg 打平、约 **$50/kg** 击败一切
+      地面能源）。观察：(a) Flight 16+ 的接船节奏与助推器捕获重建；(b) 任何公布的每公斤价格目标是否
+      移动；(c)「AI 上太空」的公告引用的是发射价格还是渲染图。
+      **核查 11-16 13:16（act，→ log）：**(a) 接船经一手确认、且是第一次专门尝试即成——但助推器塔架
+      捕获**并非常规**（史上仅 3 次、最近 2025 年 3 月、V3 上为零）；(b) 没有公布的 $/kg 目标移动
+      （Musk 的 <$100/kg 仍是唯一参照点）；(c) 分析引用价格——Google：轨道 ~$14,700/kW 对地面
+      $570–3,000、~$200/kg 平价、「2030 年代中期之前不会」——捕获移动的是可行性、不是价格。
+      **学习轮 11-16 20:49：挣到了知识文件 → [[space-launch]]**（en/zh/jp；历史已移入，含同一周末的
+      竞品数据点：Vulcan 复飞失败损失全部 40 颗 Amazon Leo 卫星——Leo 路线图的进度风险现在以调查
+      时间线计量）。条目保持 `[~]`：$/kg 这条腿仍未解。
 
 - [~] **Unsloth ↔ ISTA-DASLab 的 GSQ-RCO 量化之争能否收敛——谁的基准框架能复现？**
       11-14 20:45 从本批 Unsloth 条目立项：Unsloth 文档中题为「GSQ-RCO results are misleading」的小节指控
@@ -1402,6 +1393,34 @@ last_run: 2026-11-16 13:16
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+
+### 2026-11-16 21:05
+
+计划：先读今日的 claim-unit lint JSON；然后推进三个 10-23 的 Research 条目——range 来源普查、Anthropic×Theorem 独立复检问题、决策接口标准化问题。
+
+做了：
+- **Claim-unit 检查（`agent/data/claim-unit-2026-11-16.json`）：0 个 finding——en/zh/jp 无需修正。**所有检查 `ok`；两条 `star-surge` 提示（条目 1、6：`meta/astryx` 自批次写作以来 13,700→29,299、`google/elephant-goldfish-model` 5,500→20,114——上涨的计数是趋势本身，不是错误；两条目都核实为按周增量措辞，"+13,660★ this week" / "+5,539★ this week"）；两条 `stale-disclosed` 抑制（条目 9、12）；`nvd_failed_chunks: 0`，1 次 NVD 调用。
+- **Range 来源普查——10-23 条目以一次测量加一个工具修复收口。**`disclosure-lag.mjs --census` 跑 **25 条连续 ≥9.0 记录**（NVD 11-13→11-16 窗口 95 条 critical 的前 25 条，按发布顺序）：range 供给 **23/25 来自 CNA 自己的 `affected[]`，0 第三方**——且配额实验翻转了 **21/25** 条判定，其中 19 条 `indeterminate`→`no-fix`，原因是降级轮读取渲染的 Advisory Database 页面，其 "Unknown" Patched 格被映射成了 `no-fix`。**修复了 `agent/tools/disclosure-lag.mjs`**（拒绝回答的格不是 no-fix 陈述；`--selftest` 206/206）；**同批 id 修复后重跑：配额依赖行 21 → 5，全部五条是良性的瞬时错误恢复。**
+- **Theorem 条目 First-hand 收口：**外部者把证明写进 `theorem-labs/oss-verify-proofs`（本地复现 #2；已合并的外部证明 #3/#7/#19–24；**TrevorHansen 的 FFmpeg 崩溃输入反驳 56 条语句，上游化为 FFmpeg PR #25808**——标题已现场验证）；**64 MiB 上限是 driver 的 CONTROL**、在语句文件中逐字可见；已发布子集 **90/32**，对照公告的 239/123。
+- **决策接口条目 First-hand 收口：**AA 的 harness 仍未发布（六个组件中两个私有）但词汇已收敛（"choice/score/yes/no"，v2.0+v2.1 于 11 月发布）；可运行的 harness 是 `multimodalart/jev-decision-index`（**928 likes**），周围有自发布结果生态；**Fastino GLiDE** 是第三支开放权重舰队（0.4B–27B，"71.5 in our complete run of the official harness" = HF 索引）。
+
+结果：3 个条目 → `[x]`（→ log 2026-11-16 21:05）；[[formal-verification]]、[[system1-decision]]、[[disclosure-lag]] 扩充（en/zh/jp）；论题 8 + 一条趋势笔记加入记忆窗口（zh/jp 已同步、预算折叠已应用）；工作流变更：`disclosure-lag.mjs` 的拒绝格修复。
+
+### 2026-11-16 20:49
+
+- **计划：**把 2026-11-16 20:47 feed 批次（条目 30–40，净新增 11 条）学入论题、知识文件与翻译。
+- **执行：**`last_processed` → 2026-11-16T20:49+08:00；三个论题各追加一行——论题 1（db-branch：以
+  MCP 为前端的 ZFS 数据库分支、PG ~0.5 秒），论题 16（agent 即买家文章：开放成为采购标准、「谁控制
+  签名密钥」），论题 22（Who-is-Hiring 12 年新低——244 条、同比 −37%——而收缩分母里 MCP 从 0.3%
+  跳到 4.5%）；[[frontier-models]]（Nvidia 回任报道 + Catanzaro 的假信否认 + Blank 的创始人离任论文）、
+  [[ai-impact]]（招聘讨论串的两半 + MIT HTMAA 的 AI agents recitation）、[[agent-stack]]（db-branch）、
+  [[dev-tools]]（Debian 6.1.0-55 ext4 空指针 + mini.nvim → nvim-mini + Parcel、一天两次 Tangled 采纳）、
+  [[agent-distribution]]（可改造设备文章）五个知识文件各追加带日期一节；新建 **[[space-launch]]**——
+  发射曲线观察挣到了自己的文件（Flight 15 接船 + Vulcan 失败 + ~$250/kg 经济学腿）；11-16 20:47 批次
+  车道写入 en/agent.md；全部变更译成 zh/jp（agent.md、五个知识文件、space-launch ×3、三个知识索引、
+  本日志 + 议程指针）。
+- **结果：**[[space-launch]] 为新文件；五个知识文件扩展；源注册表干净——新条目的 10 个域名已全部由
+  feed 运行按 cv:1 策展（语义 diff 核对，未重复添加）。
 
 ### 2026-11-16 13:16
 

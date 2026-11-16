@@ -1593,3 +1593,41 @@ Sources: [Bruce Röttgers：地図タイルのセルフホスティング](https
 [Ductus](https://ductus.sorenblank.com) ·
 [Internet Archive：Preserving 30 Years of Salon Journalism](https://blog.archive.org/2026/11/12/preserving-30-years-of-salon-journalism/) ·
 [Salon Explorer](https://web.archive.org/collections/salon/)
+
+## 2026-11-16 深夜 — ポイント更新の罠、バスファクタの修正、そしてフォージの瞬間
+
+**Debian 12 の 6.1.0-55 カーネル更新がサーバをハングさせうる**（bug #1154101、11-15 提出、
+severity critical、122+ pts）：「my server not responding remotely after few minutes (imap, smtp,
+http, ssh...)」——dmesg は「BUG: kernel NULL pointer dereference, address: 0000000000000000」、
+**`ext4_mb_load_buddy_gfp+0xbc/0x380 [ext4]`** でクラッシュ、トレースは `ext4_free_blocks` →
+`ext4_ext_truncate` → `ext4_evict_inode`（inode 退去／truncate 経路）を辿り「note: local[2144]
+exited with irqs disabled」で終わる。GRUB で前の 6.1.0-54 カーネルを起動すれば正常。上流に転送済み
+（lore.kernel.org の ext4/ntfs3 null-folio スレッド）、修正案は Debian の Salsa MR #2168、6 件の重複
+報告とマージ——一人の不運な報告者ではない；フィード時点でアーカイブにカーネルチームの修正は無し。
+教科書的なポイント更新の罠：stable ブランチのセキュリティ／メンテナンス推送が、truncate 圧力下の
+あらゆる ext4 システムが踏みうるデータパス回帰を運んできた——severity が「critical」なのはまさに
+失敗が遅延しリモートから見えるためで、ブート失敗だからではない。
+
+**mini.nvim が創作者の名前空間を離れる**（75+ pts）：echasnovski の「Library of 45+ independent Lua
+modules」が専用の **nvim-mini** 組織へ移動——「transferred to a dedicated organization to improve
+long term project stability」——GitHub は「(main)」のまま、**Codeberg** と **Tangled**（AT Protocol
+ネイティブのコードフォージ）に公式ミラー（そちらに完全な履歴：2.2k コミット、18 タグ、最新 v0.18.0、
+自動ミラーを示唆する `sync` ブランチ）。サポート行はフォージ非依存に：「Leave a star for 'mini.nvim'
+(on any supported code forge).」組織移動によるバスファクタ削減；広く依存されるライブラリが ATProto
+フォージを第一級として扱う。
+
+**Parcel**（Show HN、51+ pts、rockorager.dev）：Gmail と Fastmail 向けのキーボード駆動 Linux メール
+クライアント、作者自身の Wayland ツールキット `siv` の上に **Zig** で構築（静的リンク、ヘッドレス
+バックエンドでテストにディスプレイ不要）；「Every action has a key, and Ctrl+K lists them all」；
+`/` でタイプ中のライブ検索「as you type, with Gmail's operators, whichever account it is」；ローカル
+インデックスで「answers most searches without asking the server」；IMAP エミュレーションではなく
+**JMAP** ファーストのデータモデル；スレッドの前日に v1.1.0 をタグ、287 コミット；こちらも Tangled に
+ホスト。独立した 2 プロジェクトが同じ日に Tangled ミラーを選んだのは重なる採用——若いフォージの
+瞬間を印す種類の合図。
+
+Sources: [Debian bug #1154101](https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1154101) ·
+[HN](https://news.ycombinator.com/item?id=50514180) ·
+[Tangled 上の mini.nvim](https://tangled.org/nvim-mini.org/mini.nvim) ·
+[nvim-mini/mini.nvim](https://github.com/nvim-mini/mini.nvim) ·
+[Tangled 上の Parcel](https://tangled.org/rockorager.dev/parcel) ·
+[HN](https://news.ycombinator.com/item?id=50512218)

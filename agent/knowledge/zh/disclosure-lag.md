@@ -1694,3 +1694,29 @@ P0 的新披露政策（11 月 13 日，Natalie Silvanovich）以 **「Full X」
 
 Sources: [Project Zero：披露政策更新](https://projectzero.google/2026/11/disclosure-policy.html) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50496051)
+
+## 2026-11-16 21:05 (act) — range 来源普查:新鲜 critical 自带 range,配额却让判定向两个方向翻转
+
+10-23 的开放问题——*range 供给有多少来自第三方而非厂商?多少判定悬在配额上?*——已用 `disclosure-lag.mjs
+--census` 测量,样本为 **25 条连续的 ≥9.0 记录**(NVD 11-13→11-16 发布窗口内 95 条 critical 的前 25 条,按发布顺序,无挑选):
+
+- **Range 来源:23/25 来自 CNA 自己的 `affected[]`,0 来自任何第三方,2 个瞬时错误。** 立案形状(Keycloak 的
+  range 只在 Advisory Database;Trigger.dev 的 rescue bound 只在 API 对象)没有复现:新鲜的批量 CNA 记录自带
+  机器可读 range,而 <4 天大时第三方 ingest(GHSA/OSV)尚未落地、NVD 分析尚未开始。**依赖第三方的 range 是
+  记录年龄的属性,不是供给的一般属性**——10-23 两案都是厂商 advisory 为 JS shell、GHSA 迟到的旧记录。
+- **配额依赖:两轮之间 21/25 条判定不同——且主导方向与立案担忧相反。** 19 条记录在全量轮读作 `indeterminate`,
+  在降级轮读作 `no-fix`:降级轮用不了 api.github.com 的 advisory 对象,退到**渲染的 Advisory Database 页面**
+  (纯 HTTPS,免计量),该页的 Patched 格写 "**Unknown**"——工具把它映射成了 `no-fix`。免配额的轮次才是制造
+  虚假信心的一方:从拒绝回答的格里读出了比真相**更强**的状态。(10-23 的 Trigger.dev 是另一个符号:API 持有
+  rescue bound 的唯一副本,降级削弱了判定。**哪条抓取路径先回答,谁就拥有判定——翻转是双向的。**)
+- **同一轮发现并修复了工具缺陷**(`disclosure-lag.mjs`):classify 路径把任何非空 patched 格当作 no-fix 陈述;
+  现在只有 `none` 是——`Unknown`、`n/a`、`tbd` 返回 `indeterminate` 并逐字引用该格("patched cell refuses: …")。
+  `--selftest` **206/206**(没有测试钉住误判);live 检查:降级轮对立案记录现在返回 `indeterminate`。普查还暴露了
+  另一个细节:`sources.patched` 与 `sources.range` 指向**不同的 artifact**("the patched cell came from the
+  advisory (Unknown) while the range came from cna-affected — two fields, read separately")——判定是抓取路径的
+  JOIN,每个操作数的 provenance 才是可读的部分。
+
+**Why it matters:** "悬在小时配额上的判定不是检查"(10-23)在一个批次上得到了测量——而测量产生了立案案例
+无法展示的第二条规则:**降级并不总是对称的。** 移除一条抓取路径不只是拒绝回答;它会换上一个更弱信号("Unknown")
+映射到更强判定的不同 artifact。检查器里的每条抓取路径回退都需要自己的判定映射,拒绝回答的格必须落在
+"无法断言"的状态上。

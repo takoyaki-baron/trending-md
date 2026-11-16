@@ -4016,3 +4016,36 @@ Sources: [Ahead of AI: Understanding Positional Embeddings in Modern LLMs](https
 Sources: [Qwen4-Max 発表](https://qwen.ai/blog?id=qwen4-max) ·
 [OpenRouter: qwen/qwen4-max](https://openrouter.ai/qwen/qwen4-max) ·
 [HN 議論](https://news.ycombinator.com/item?id=50513215)
+
+## 2026-11-16 深夜 — Nvidia 経営アーク：復帰報道、偽の手紙、そして創業者退任論
+
+辞任から 3 日後（11-12、Kress が暫定 CEO に*CFO 兼任*、Harvey C. Jones が初の会長）、
+**Financial Times** が（11-15、有料壁）黄仁勲（Jensen Huang）が盟友と復帰を協議していると報じ、
+Elon Musk や Epic Games の Tim Sweeney が公に復帰を支持する経営者の一人に名を連ねる。スレッドで
+最も重要なのはノイズについての部分だ：Nvidia のリサーチャー **Bryan Catanzaro** が one petition を
+公に否定——「There is a made-up letter circulating online asking NVIDIA's board to reinstate
+Jensen, claiming my involvement」、そして「This letter is obviously fake, and even if it were real
+I would not sign it.」Wedbush の Dan Ives：「Despite pressure from major shareholders we see no
+chance Jensen comes back to Nvidia as CEO」；スレッドで引用された CNBC の見出しでは財務長官 Bessent
+が外部 CEO による「dramatic shakeup」を促すと報じられる。Nvidia 側も黄氏本人も何も確認していない；
+復帰の物語はすでに部分的に捏造されている——各「復帰」データポイントは、当事者自身から出るまで未検証
+として扱うべき。
+
+FT 記事の数時間前、Steve Blank が同じ緊張を組織の側から枠付けた（"What's Next for Nvidia?"、
+298+ pts）： visionary CEO が去るとき「Most often innovation dies and the company coasts for years
+on momentum and its brand.」彼の歴史——黄氏は Nvidia を 3 回再発明した（2006 年の CUDA、2012 年
+ImageNet 後の深層学習ピボット、ボードを統合 AI データセンターラックに変えた 2020 年の Mellanox
+買収）——そして「none of these CEOs pivot by committee.」危険は実行型（execution）CEO の後継
+（彼の例：Ballmer の Microsoft、AI を取り逃した Cook の Apple）；黄氏は 60 人の直接報告組織を運営し、
+「didn't believe in succession planning.」彼が名指しする Nvidia 固有の脅威：最大顧客による自社
+シリコン、そして Nvidia 上で走る AI ラボに投じられた約 **$50B**——「It's likely these are the bets
+an execution CEO trims first」——ただし財務の留保付き：受注残は「unless a meaningful share of that
+revenue turns out to be chips that were diverted to China」なければ保つ。彼の結論：今後 2〜3 年は
+どのみち大丈夫、長期の問いは取締役会が executioner を雇うか innovator を雇うか。注目すべきはこの
+エッセイが循環融資疑惑に触れていないこと——組織論であって財務論ではない。常設ウォッチ：**11-17 の
+決算 + 感謝祭前の議会証言**が暫定体制の連続性テストであり続ける。
+
+Sources: [FT via HN](https://news.ycombinator.com/item?id=50509883) ·
+[Reuters スレッド](https://news.ycombinator.com/item?id=50511982) ·
+[Steve Blank: What's Next for Nvidia?](https://steveblank.com/2026/11/15/whats-next-for-nvidia/) ·
+[Blank HN](https://news.ycombinator.com/item?id=50512235)

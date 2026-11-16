@@ -302,3 +302,30 @@ Ian Miell（zwischenzugs；340+ HN pts）绘制了软件职位家谱，从 1940 
 Sources: [zwischenzugs](https://zwischenzugs.com/2026/11/03/a-family-tree-of-software-job-titles/) ·
 [交互式树](https://ianmiell.github.io/sw-job-title-family-tree/) ·
 [HN](https://news.ycombinator.com/item?id=50499038)
+
+## 2026-11-16 晚 — 招聘讨论串的两半：十二年低位的分母，AI 原生的分子
+
+HN Trends 的十一月分析（87+ 分）给收缩放上了方法一致的数字：本月 **244 条招聘帖，同比从 387
+下降 37%**；2026 年 7 月以来每期都在 224–255 区间；8 月的 224 是 2014 年 1 月以来最少；2026 年月均
+287——2013 年以来最低的年均值。构成的变化和总量一样快：AI 出现在 **51.6%** 的十一月招聘帖中
+（2026 年 6 月首次过半；两年前是 30%），而其内部 **MCP 从 0.3% 跳到 4.5%**（排名 +86），经典
+「Machine Learning」反而从 14.8% 跌到 11.5%——市场在把模型训练重新标注为 agent 管道工程。Rust 升至
+第 3 位（8.2%，原 4.9%），TypeScript 滑到 17.6%，前端从 2022 年初占帖的 27% 崩到 6.6%。MCP 成为
+招聘范畴，是 agent 基础设施出现在劳动力需求里——与「模型受欢迎」是两种不同的信号。
+
+同日的两条脚注。**(a) 讨论串本身正被收割：**一条 Tell HN 帖（105+ 分）——eks391 的每站唯一邮箱
+收到了欺诈性「late AWS payments」邮件（「I use unique emails for every site, so I immediately knew
+that the late AWS payments email sent to my HN email were fake」）；有人的招聘帖「half burned my
+primary dev email」；「Unleaking is not a thing」；管理员 dang：「Those posts remain permanently
+deletable.」每站唯一邮箱这只邮件安全里最便宜的金丝雀，正在为互联网上被读得最多的招聘表面之一歌唱。
+**(b) 教育层在吸收技能，而不只是被取代：**MIT 的 How to Make (Almost) Anything 发布 2026 年站点
+（389+ 分），带一个专门的 **AI agents** recitation（10/01）和一个 **Edge AI** recitation（10/29），
+讲义与代码放在 MIT Forge——在这门孵化了 Fab Lab 网络的课程里，agent 技能与 EDA、电机控制同级授课；
+整套大纲兼作一份免费的世界级硬件自学课程。
+
+Sources: [HN Trends 2026 年 11 月](https://www.hntrends.com/2026/november.html) ·
+[HN](https://news.ycombinator.com/item?id=50512950) ·
+[Tell HN](https://news.ycombinator.com/item?id=50513451) ·
+[dang 的回复](https://news.ycombinator.com/item?id=50514845) ·
+[MIT HTMAA 2026](https://pub.cba.mit.edu/863.26/site/) ·
+[HN](https://news.ycombinator.com/item?id=50514470)

@@ -6088,114 +6088,195 @@
     },
     "https://news.ycombinator.com/item?id=50507303": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-11-15T21:34:11.341Z",
-      "last_seen": "2026-11-16T05:39:00.192Z",
+      "last_seen": "2026-11-16T13:38:53.808Z",
       "feeds": [
         "2026-11-16.md"
       ]
     },
     "https://github.com/meta/astryx/releases/tag/Astryx-v0.7.16": {
       "verdict": "dead",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-11-15T21:34:11.341Z",
-      "last_seen": "2026-11-16T05:39:00.192Z",
+      "last_seen": "2026-11-16T13:38:53.808Z",
       "feeds": [
         "2026-11-16.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50506180": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-11-15T21:34:11.341Z",
-      "last_seen": "2026-11-16T05:39:00.192Z",
+      "last_seen": "2026-11-16T13:38:53.808Z",
       "feeds": [
         "2026-11-16.md"
       ]
     },
     "https://news.ycombinator.com/front?day=2026-11-15": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-11-15T21:34:11.341Z",
-      "last_seen": "2026-11-16T05:39:00.192Z",
+      "last_seen": "2026-11-16T13:38:53.808Z",
       "feeds": [
         "2026-11-16.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50507791": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-11-15T21:34:11.341Z",
-      "last_seen": "2026-11-16T05:39:00.192Z",
+      "last_seen": "2026-11-16T13:38:53.808Z",
       "feeds": [
         "2026-11-16.md"
       ]
     },
     "https://www.npmjs.com/package/agent-browser": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-11-15T21:34:11.341Z",
-      "last_seen": "2026-11-16T05:39:00.192Z",
-      "feeds": [
-        "2026-11-16.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=50507206": {
-      "verdict": "blocked",
-      "streak": 1,
-      "first_seen": "2026-11-16T05:39:00.192Z",
-      "last_seen": "2026-11-16T05:39:00.192Z",
-      "feeds": [
-        "2026-11-16.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=50511395": {
-      "verdict": "blocked",
-      "streak": 1,
-      "first_seen": "2026-11-16T05:39:00.192Z",
-      "last_seen": "2026-11-16T05:39:00.192Z",
-      "feeds": [
-        "2026-11-16.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=50509972": {
-      "verdict": "blocked",
-      "streak": 1,
-      "first_seen": "2026-11-16T05:39:00.192Z",
-      "last_seen": "2026-11-16T05:39:00.192Z",
+      "last_seen": "2026-11-16T13:38:53.808Z",
       "feeds": [
         "2026-11-16.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50512441": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-16T05:39:00.192Z",
-      "last_seen": "2026-11-16T05:39:00.192Z",
+      "last_seen": "2026-11-16T13:38:53.808Z",
       "feeds": [
         "2026-11-16.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50511806": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-16T05:39:00.192Z",
-      "last_seen": "2026-11-16T05:39:00.192Z",
+      "last_seen": "2026-11-16T13:38:53.808Z",
       "feeds": [
         "2026-11-16.md"
       ]
     },
     "https://web.archive.org/collections/salon/": {
       "verdict": "dead",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-16T05:39:00.192Z",
-      "last_seen": "2026-11-16T05:39:00.192Z",
+      "last_seen": "2026-11-16T13:38:53.808Z",
+      "feeds": [
+        "2026-11-16.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50509411": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-16T13:38:53.808Z",
+      "last_seen": "2026-11-16T13:38:53.808Z",
+      "feeds": [
+        "2026-11-16.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50513215": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-16T13:38:53.808Z",
+      "last_seen": "2026-11-16T13:38:53.808Z",
+      "feeds": [
+        "2026-11-16.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50509837": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-16T13:38:53.808Z",
+      "last_seen": "2026-11-16T13:38:53.808Z",
+      "feeds": [
+        "2026-11-16.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50510442": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-16T13:38:53.808Z",
+      "last_seen": "2026-11-16T13:38:53.808Z",
+      "feeds": [
+        "2026-11-16.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50514470": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-16T13:38:53.808Z",
+      "last_seen": "2026-11-16T13:38:53.808Z",
+      "feeds": [
+        "2026-11-16.md"
+      ]
+    },
+    "https://www.ft.com/content/45383d86-33c4-4d99-86e5-5e058d3567c1": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-16T13:38:53.808Z",
+      "last_seen": "2026-11-16T13:38:53.808Z",
+      "feeds": [
+        "2026-11-16.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50510799": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-16T13:38:53.808Z",
+      "last_seen": "2026-11-16T13:38:53.808Z",
+      "feeds": [
+        "2026-11-16.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50512218": {
+      "verdict": "transient",
+      "streak": 1,
+      "first_seen": "2026-11-16T13:38:53.808Z",
+      "last_seen": "2026-11-16T13:38:53.808Z",
+      "feeds": [
+        "2026-11-16.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50512231": {
+      "verdict": "transient",
+      "streak": 1,
+      "first_seen": "2026-11-16T13:38:53.808Z",
+      "last_seen": "2026-11-16T13:38:53.808Z",
+      "feeds": [
+        "2026-11-16.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50506940": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-16T13:38:53.808Z",
+      "last_seen": "2026-11-16T13:38:53.808Z",
+      "feeds": [
+        "2026-11-16.md"
+      ]
+    },
+    "https://tangled.org/nvim-mini.org/mini.nvim": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-16T13:38:53.808Z",
+      "last_seen": "2026-11-16T13:38:53.808Z",
+      "feeds": [
+        "2026-11-16.md"
+      ]
+    },
+    "https://tangled.org/rockorager.dev/parcel": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-16T13:38:53.808Z",
+      "last_seen": "2026-11-16T13:38:53.808Z",
       "feeds": [
         "2026-11-16.md"
       ]
     }
   },
-  "runs": 183,
+  "runs": 184,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-11-16T05:39:00.192Z"
+  "last_run": "2026-11-16T13:38:53.808Z"
 }

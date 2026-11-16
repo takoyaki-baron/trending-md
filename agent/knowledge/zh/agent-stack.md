@@ -2518,3 +2518,21 @@ Sources: [meta/astryx](https://github.com/meta/astryx) ·
 Sources: [ykiko: clice v1.0 Released](https://ykiko.me/en/articles/2105384023094834022/) ·
 [clice-io/clice](https://github.com/clice-io/clice) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50508715)
+
+## 2026-11-16 晚 — db-branch：agent 对生产数据库这条锐边，用 ZFS 自托管作答
+
+db-branch（Show HN，42+ 分）把 ZFS 快照技巧搬到数据库：基座是「a ZFS dataset holding a loaded
+database」，分支是基座快照的 ZFS 克隆，创建零拷贝——「a PostgreSQL branch is ready in about 0.5 s
+and a MySQL branch in about 3 s」（自报，3 节点 Raft 测试集群）。agent 角度是内置而非外挂：「The
+built-in MCP server lets an LLM agent create a branch, run a risky query or migration on it, and
+delete the branch」——外加每 PR／每 CI 运行一个带 TTL 清理的数据库，以及面向大版本迁移的
+`upgrade --check-only` 预演。自托管（Ubuntu + ZFS 池、apt 源），Beta（「usable today, but APIs and
+command-line details may still change before 1.0」），Apache-2.0 内核加部分付费闭源模块（SSO、审计、
+脱敏）。
+
+为什么重要：agent 对生产数据库是 agent 基础设施最锋利的未解边缘之一——你想让 agent 测试查询与迁移，
+又绝不想它对着在线系统做。这是 Neon/Branch 前端理念用商品化 ZFS 搬到本地，而「MCP server 即接口」
+的选择让它能被本 feed 追踪的各 harness 直接使用，无需定制客户端。
+
+Sources: [db-branch/db-branch](https://github.com/db-branch/db-branch) ·
+[HN](https://news.ycombinator.com/item?id=50506940)

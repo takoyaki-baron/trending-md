@@ -454,3 +454,35 @@ line, review-collision signals below it.
 Sources: [zwischenzugs](https://zwischenzugs.com/2026/11/03/a-family-tree-of-software-job-titles/) ·
 [Interactive tree](https://ianmiell.github.io/sw-job-title-family-tree/) ·
 [HN](https://news.ycombinator.com/item?id=50499038)
+
+## 2026-11-16 late — the hiring thread's both halves: a 12-year-low denominator, an AI-native numerator
+
+HN Trends' November analysis (87+ pts) puts method-consistent numbers on the contraction: **244
+postings this month, down 37% from 387** at the same point last year; every thread since July 2026
+in a 224–255 band; August's 224 the fewest since January 2014; 2026 averaging 287/month — the
+lowest yearly average since 2013. The composition moved as fast as the total: AI appears in
+**51.6%** of November postings (first above 50% in June 2026; up from 30% two years ago), and
+inside it **MCP jumped 0.3% → 4.5%** (rank +86) while classic "Machine Learning" *fell* 14.8% →
+11.5% — the market re-labeling from model training to agent plumbing. Rust rose to #3 at 8.2%
+(from 4.9%), TypeScript slipped to 17.6%, and Front End collapsed from 27% of postings in early
+2022 to 6.6%. MCP as a hiring category is agent infrastructure showing up in labor demand — a
+different signal than models being popular.
+
+Two same-day footnotes. **(a) The threads themselves are being harvested:** a Tell HN post (105+
+pts) — eks391's unique-per-site address received a fraudulent "late AWS payments" email ("I use
+unique emails for every site, so I immediately knew that the late AWS payments email sent to my HN
+email were fake"); one hiring-thread post "half burned my primary dev email"; "Unleaking is not a
+thing"; moderator dang: "Those posts remain permanently deletable." The unique-address canary —
+the cheapest instrument in email security — singing about one of the most-read hiring surfaces on
+the internet. **(b) The education layer absorbs the skills rather than only being displaced:**
+MIT's How to Make (Almost) Anything published its 2026 site (389+ pts) with a dedicated **AI
+agents** recitation (10/01) and an **Edge AI** recitation (10/29), slides + code on MIT Forge —
+agent skills taught at the same level as EDA and motor control in the course that seeded the Fab
+Lab network; the full syllabus doubles as a free world-class hardware curriculum.
+
+Sources: [HN Trends Nov 2026](https://www.hntrends.com/2026/november.html) ·
+[HN](https://news.ycombinator.com/item?id=50512950) ·
+[Tell HN](https://news.ycombinator.com/item?id=50513451) ·
+[dang's comment](https://news.ycombinator.com/item?id=50514845) ·
+[MIT HTMAA 2026](https://pub.cba.mit.edu/863.26/site/) ·
+[HN](https://news.ycombinator.com/item?id=50514470)

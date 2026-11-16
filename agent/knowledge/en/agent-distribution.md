@@ -377,3 +377,25 @@ Sources: [CBS News: United Airlines bans AI agents from booking flights](https:/
 Sources: [Google: A2UI 1.0](https://developers.googleblog.com/a2ui-10-build-delightful-fast-reliable-agentic-experiences/) ·
 [Brave: Search API agentic payments via x402](https://brave.com/blog/search-api-agentic-payments/) ·
 [activepieces: Brave Search API x402 (independent write-up)](https://www.activepieces.com/blog/brave-search-api-x402-for-autonomous-ai-agent-payments)
+
+## 2026-11-16 late — "Your Agent Will Pick the Hackable One": openness becomes a purchasing criterion
+
+Geoff Stearns' essay (75+ pts) extends the agent lens from software supply chains to physical
+ones: as agents take over both purchasing advice and device maintenance, openness stops being an
+enthusiast concern and becomes what gets bought. Asked to fix a device, the agent tries the
+settings first, and when those fail it "looks for firmware someone else wrote, forks the closest
+match, or writes its own" — so "any device with writable flash is a platform, whether the maker
+planned for it or not," and agents asked what to buy "lean toward the one it can change, because
+that's the one it can fix later." The anchor is the M-VAVE FM-1 synth scene (this feed, 11-14):
+owners began writing firmware in Sept 2025 — nearly all with AI tools — and M-VAVE responded by
+open-sourcing it under GPLv3 with a dev kit and browser emulator, after which Behringer, Akai and
+Erica Synths followed. The security half is measured, not alarmist: "harmful firmware is as easy
+to write as useful firmware," so the test for any policy is "asking who controls the signing keys"
+— noting "if a maker blocks code the owner chose and signed, that block is protecting the maker's
+business," and the mitigations (verified installers, owner-held keys, recovery modes) "none of
+them require locking the device." For hardware makers the uncomfortable takeaway: the
+firmware-update story is becoming part of a product's agent-readiness score, and locking it down
+is now a competitive decision, not a default.
+
+Sources: [Geoff Stearns: Your Agent Will Pick the Hackable One](https://geoffstearns.com/blog/your-agent-will-pick-the-hackable-one/) ·
+[HN](https://news.ycombinator.com/item?id=50510799)

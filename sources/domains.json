@@ -14887,5 +14887,77 @@
   "en": "Open-source mapping system (BSD/ODbL): PMTiles single-file tile archive addressed via HTTP Range requests, plus basemap builds and a cost calculator. Docs are technically precise. Curation cross-check (2026-11-16): the Range-request format claim confirmed against maplibre.org's MapLibre GL JS docs (independent ecosystem support) and npm's registry (pmtiles at 2,330,884 downloads for 2026-11-08→14). First cited via a third-party self-hosting walkthrough; its pricing/economics claims belong to bruceroettgers.eu, not this domain.",
   "zh": "开源地图系统（BSD/ODbL）：PMTiles 单文件瓦片存档、经 HTTP Range 请求寻址，外加底图构建与成本计算器。文档技术上精确；2026-11-16 经第三方自托管实操文章（bruceroettgers.eu）首次引用。",
   "jp": "オープンソースの地図システム（BSD/ODbL）：PMTiles単一ファイルタイルアーカイブをHTTP Rangeリクエストでアドレス指定し、ベースマップビルドとコスト計算機を伴う。ドキュメントは技術的に正確。2026-11-16にサードパーティのセルフホスティング解説（bruceroettgers.eu）経由で初引用。"
+ },
+ "spacenews.com": {
+  "cat": "news",
+  "cred": "high",
+  "density": "high",
+  "cv": 1,
+  "en": "Space trade press (Jeff Foust); its Vulcan-failure numbers (40 Amazon Leo satellites, anomaly ~10 minutes into flight, ULA statement) matched the Denver Gazette's and ULA's own wording point-for-point.",
+  "zh": "航天行业媒体（Jeff Foust）；其对火神失败的数字（40 颗 Amazon Leo 卫星、约 10 分钟异常、ULA 声明）与 Denver Gazette 及 ULA 原话逐点一致。",
+  "jp": "宇宙業界紙（Jeff Foust）。Vulcan 失敗の数値（Amazon Leo 40基、約10分で異常、ULA声明）が Denver Gazette と ULA の表現と点単位で一致した。"
+ },
+ "denvergazette.com": {
+  "cat": "news",
+  "cred": "med",
+  "density": "med",
+  "cv": 1,
+  "en": "Denver regional daily, home turf of ULA's HQ; its Vulcan-failure report carried ULA's verbatim statements and the fifth-flight/SRB-anomaly history, corroborated by SpaceNews.",
+  "zh": "丹佛地方日报（ULA 总部所在地）；其火神失败报道含 ULA 原话与第五飞/固体助推器异常史，经 SpaceNews 互证。",
+  "jp": "デンバーの地方紙（ULA 本社の地元）。Vulcan 失敗報道は ULA の言葉と5度目の飛行/固体ブースタ異常の履歴を含み、SpaceNews と裏取りできた。"
+ },
+ "steveblank.com": {
+  "cat": "news",
+  "cred": "high",
+  "density": "med",
+  "cv": 1,
+  "en": "Steve Blank's personal essay blog — first-hand analysis, not reporting; the Nvidia founder-departure essay's quotes matched what the HN thread discussed, and its argument is organizational, not the WSJ's financing claims.",
+  "zh": "Steve Blank 的个人文章博客——一手分析而非报道；英伟达创始人离场一文的引文与 HN 讨论一致，其论证是组织性的，不是 WSJ 的融资指控。",
+  "jp": "Steve Blank の個人エッセイブログ——一次の分析であり報道ではない。NVIDIA 創業者離脱論の引用は HN スレッドの議論と一致し、その論証は WSJ の資金主張ではなく組織に関するもの。"
+ },
+ "bugs.debian.org": {
+  "cat": "code",
+  "cred": "high",
+  "density": "high",
+  "cv": 1,
+  "en": "Debian's official bug tracker — primary for distro regressions; bug #1154101's ext4 trace (ext4_mb_load_buddy_gfp NULL deref, 6.1.0-55) matched HN discussion and the upstream lore forward.",
+  "zh": "Debian 官方缺陷跟踪器——发行版回归问题的第一手来源；bug #1154101 的 ext4 调用链（ext4_mb_load_buddy_gfp 空指针、6.1.0-55）与 HN 讨论及上游 lore 转发一致。",
+  "jp": "Debian 公式バグトラッカー——ディストロ退行の一次資料。bug #1154101 の ext4 トレース（ext4_mb_load_buddy_gfp の NULL 参照、6.1.0-55）は HN 議論および上流 lore の転送と一致した。"
+ },
+ "hntrends.com": {
+  "cat": "data",
+  "cred": "med",
+  "density": "high",
+  "cv": 1,
+  "en": "Third-party longitudinal analysis of HN's Who-is-Hiring threads (method stated on-site); its November numbers (244 postings, AI 51.6%, MCP 0.3%→4.5%) were the thread's own subject and not disputed in discussion — unofficial, so treat as one analyst's method, not HN-official data.",
+  "zh": "对 HN 招聘帖的第三方纵向分析（方法在站内说明）；其 11 月数字（244 帖、AI 51.6%、MCP 0.3%→4.5%）正是 HN 讨论的主题且未被质疑——非官方，应视为单一分析者的方法而非 HN 官方数据。",
+  "jp": "HN の Who-is-Hiring スレッドのサードパーティ縦断分析（手法はサイト内で説明）。11月の数字（244件、AI 51.6%、MCP 0.3%→4.5%）がスレッド自身の主題で議論で異論なし——非公式ゆえ、HN 公式データではなく一人の分析者の手法として扱う。"
+ },
+ "geoffstearns.com": {
+  "cat": "community",
+  "cred": "med",
+  "density": "med",
+  "cv": 1,
+  "en": "Web developer's personal essay blog; the agent-and-firmware essay's M-VAVE FM-1 facts checked against this feed's own Nov 14 coverage of the FM-1 open workbench (independent artifact).",
+  "zh": "Web 开发者的个人文章博客；其智能体与固件一文中的 M-VAVE FM-1 事实与本信息流 11 月 14 日对 FM-1 开源工作台的报道（独立工件）相互印证。",
+  "jp": "Web デベロッパーの個人エッセイブログ。エージェントとファームウェアのエッセイの M-VAVE FM-1 の事実は、本フィードの11月14日の FM-1 オープンワークベンチ報道（独立アーティファクト）と突き合わせた。"
+ },
+ "pub.cba.mit.edu": {
+  "cat": "research",
+  "cred": "high",
+  "density": "high",
+  "cv": 1,
+  "en": "MIT Center for Bits and Atoms' course-publication host — first-party primary for HTMAA/MAS.863; its 2026 syllabus (AI agents and Edge AI recitations) is the artifact itself, linked from the HN thread discussion.",
+  "zh": "MIT 比特与原子中心课程发布主机——HTMAA/MAS.863 的一手来源；其 2026 年大纲（AI agents 与 Edge AI 研讨课）即工件本身，由 HN 讨论关联。",
+  "jp": "MIT Center for Bits and Atoms の講義公開ホスト——HTMAA/MAS.863 の一次資料。2026年シラバス（AI agents と Edge AI の演習）はアーティファクトそのもので、HN スレッドからリンクされる。"
+ },
+ "rockorager.dev": {
+  "cat": "community",
+  "cred": "med",
+  "density": "med",
+  "cv": 1,
+  "en": "Developer's personal domain hosting the Parcel mail client on Tangled; repo facts (Zig 99%, siv toolkit, v1.1.0, 287 commits) matched the Show HN thread's claims.",
+  "zh": "开发者个人域名，在 Tangled 上托管 Parcel 邮件客户端；仓库事实（Zig 99%、siv 工具包、v1.1.0、287 提交）与 Show HN 讨论的表述一致。",
+  "jp": "開発者の個人ドメイン。Tangled 上で Parcel メールクライアントをホストし、リポジトリの事実（Zig 99%、siv ツールキット、v1.1.0、287コミット）が Show HN スレッドの記述と一致した。"
  }
 }

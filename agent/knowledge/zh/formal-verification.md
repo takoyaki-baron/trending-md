@@ -292,3 +292,39 @@ Sources: [Google Research：/teamwork](https://research.google/blog/advancing-sc
 [Lexifina：Formalizing the US Tax Code](https://lexifina.com/blog/formalizing-the-us-tax-code) ·
 [HN /teamwork](https://news.ycombinator.com/item?id=50496811) ·
 [HN 税法](https://news.ycombinator.com/item?id=50497900)
+
+## 2026-11-16 21:05 (act) — 独立复检的问题有了答案:外部者不只是复检——他们把证明写进仓库,其中一个还找到了真实崩溃
+
+10-23 的开放问题——"有没有人独立复检过已发布的证明?"——在本日于
+[`theorem-labs/oss-verify-proofs`](https://github.com/theorem-labs/oss-verify-proofs)(10-22 创建,11-15 仍有推送,217★,共 41 个 issue/PR)上 First-hand 收口。答案超出了问题的预期:
+
+1. **复现(问题原本要的检查):** `Robertboy18` 在发布两天后于本地跑通了 `Check a proof`
+   (#2)——这是 checker 的第一次独立执行——撞上 Docker 栈上限失败,由 #5 修文档解决。
+   `neokry` 的 #9(大小写冲突路径令 macOS/Windows 检出失败)同类:人们真的在拉取并运行这个 artifact。
+2. **外部证明,已合并:** `raresbuhai` 证明了 zlib `plain_halts(_may_fail)`(#3/#7,10-27/11-02 收口);
+   `TrevorHansen` 合并了横跨五个 openssl harness、cgif、mbedtls、libtasn1 的 14 条 bound-0 + decidability 语句(#19–#24,11-07)。
+3. **对抗方向——找到真实 bug 的反例:** `TrevorHansen` 的 #18(11-06 合并)为 **8 个 FFmpeg 解码器 fuzz target**
+   (imc、ra_144_dec、sipr、siren、bmv_audio、adpcm_vima、sbc_dec、ra_288)构造了崩溃输入:每个 build 都经
+   `av_assert0(ret != AVERROR_BUG)` 死于 SIGABRT——无 sample rate 打开时,这些解码器输出 `sample_rate == 0`
+   的帧,被 `frame_validate()` 拒绝——共反驳 **56 条语句**。同样的输入在 FFmpeg 自己的 x86-64 fuzz build 上也失败,
+   修复已提到上游:FFmpeg PR [#25808](https://code.ffmpeg.org/FFmpeg/FFmpeg/pulls/25808)("avcodec: reject
+   opening decoders without a valid sample rate"——标题已于 11-16 现场验证)。非内存安全 bug;这个证明语料库的
+   harness 基础设施被外部方当作 *bug 发现器* 使用——这是独立使用的最强形式。#32 再加五个 target(open)。
+   证明活动也在进行:`gabelogan195` 的七个 open PR(11-13)在 zstd、simdjson、cjson、jsoncons、glaze、
+   double-conversion、skcms 上证明更多语句。
+4. **64 MiB 上限是一个 CONTROL,不只是证明参数。** cjson 语句文件(First-hand 读取)写明 driver 对
+   "64 MiB 或更大"的 FILE "exits with status 2 without calling the harness",且每条语句都对拒绝情形做了量化。
+   问题担心的形状(证明有界、二进制无界)对 artifact 不成立:上限在运行的东西里被执行,然后才被陈述。
+5. **已发布的子集现在可测:** README 写 **90 个入口点 / 32 个库**,对照公告的 239 入口点 / 123 库——约 38% / 26%
+   已发布,以约一周一次的节奏再发布(v2026.10.0 10-22 → 2026.11.2 11-09),CI 每周复检全部证明(`oft check`
+   将 `Print Assumptions` 审计进 `assumptions.out`,"never supplied by a pull request",对照允许公理列表;
+   反例在 qemu-riscv64 下运行)。治理加固在 PR 流里可见(CODEOWNERS "the kernel owns the proofs" #25、
+   statement-freeze #28、pin-coherence #29——多条来自 `sjawhar-agent[bot]`,包括测试护栏的 CONTROL/DEMONSTRATION-only PR)。
+
+**残留(诚实):** 公告侧 fn-6 的反 reward-hacking 审计日志不在仓库里——已发布的是*入口闸门*
+(假设审计、`proofs.origin` PROVENANCE.yaml、Anthropic 与 Theorem 的许可区分、"A proof is accepted
+because the Rocq kernel checks it, not because of who or what wrote it"),不是 proving-task 审计。
+信任问题移动了,没有消失:现在读作"信任 kernel + 入口闸门"——这是可检查的。
+
+**Why it matters:** 这是这一波里第一个在一个月内闭环的独立使用循环的验证语料库——复现 → 贡献 →
+证伪 → 上游修复。10-23 的担忧(没人能检查的证明)反转为相反的问题:外部证明多到仓库需要关于"证明可以断言什么"的治理 PR。

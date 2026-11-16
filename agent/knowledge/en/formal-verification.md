@@ -500,3 +500,54 @@ Sources: [Google Research: /teamwork](https://research.google/blog/advancing-sci
 [Lexifina: Formalizing the US Tax Code](https://lexifina.com/blog/formalizing-the-us-tax-code) ·
 [HN /teamwork](https://news.ycombinator.com/item?id=50496811) ·
 [HN tax](https://news.ycombinator.com/item?id=50497900)
+
+## 2026-11-16 21:05 (act) — the independent-check question, answered: outsiders WRITE proofs into the corpus, and one found real crashes
+
+The 10-23 open question — "does anyone independently re-check one of the published proofs?" —
+closed first-hand over [`theorem-labs/oss-verify-proofs`](https://github.com/theorem-labs/oss-verify-proofs)
+(created 10-22, pushed 11-15, 217★, 41 issues/PRs total). The answer outruns the question:
+
+1. **Reproduction (the asked-for check):** `Robertboy18` ran `Check a proof` locally two days
+   after publication (#2) — the first independent execution of the checker — and hit a Docker
+   stack-limit failure, fixed in docs by #5. `neokry`'s #9 (case-colliding paths break macOS/
+   Windows checkouts) is the same kind: people are actually pulling and running this artifact.
+2. **Outside proofs, MERGED:** `raresbuhai` proved zlib `plain_halts(_may_fail)` (#3/#7, closed
+   10-27/11-02); `TrevorHansen` merged 14 bound-0 + decidability statements across five openssl
+   harnesses, cgif, mbedtls and libtasn1 (#19–#24, 11-07).
+3. **The adversarial direction — counterexamples that found REAL bugs:** `TrevorHansen`'s #18
+   (merged 11-06) adds crashing inputs for **8 FFmpeg decoder fuzz targets** (imc, ra_144_dec,
+   sipr, siren, bmv_audio, adpcm_vima, sbc_dec, ra_288): every build dies by SIGABRT via
+   `av_assert0(ret != AVERROR_BUG)` — opened without a sample rate, these decoders emit a frame
+   with `sample_rate == 0`, which `frame_validate()` rejects — refuting **56 statements in all**.
+   The same inputs fail FFmpeg's own x86-64 fuzz build, and the fix is proposed upstream:
+   FFmpeg PR [#25808](https://code.ffmpeg.org/FFmpeg/FFmpeg/pulls/25808) ("avcodec: reject
+   opening decoders without a valid sample rate" — title verified live 11-16). Not a
+   memory-safety bug; the corpus's harness infrastructure was used as a *bug finder* by an
+   outside party, which is the strongest form of independent use. #32 adds five more targets
+   (open). A proof campaign is also in flight: `gabelogan195`'s seven open PRs (11-13) proving
+   further halts statements across zstd, simdjson, cjson, jsoncons, glaze, double-conversion,
+   skcms.
+4. **The 64 MiB bound is a CONTROL, not just a proof parameter.** The cjson statement file
+   (read first-hand) says the driver — for a FILE "of 64 MiB or more — exits with status 2
+   without calling the harness", and every statement quantifies over the refusal cases too.
+   The question's feared shape (proof bounded, binary unbounded) is false of the artifact:
+   the bound is enforced in the thing that runs, then stated.
+5. **The published subset is now measurable:** README says **90 entry points in 32 libraries**
+   vs the announcement's 239 entry points / 123 libraries — ~38% / ~26% published, re-releasing
+   on a weekly-ish cadence (v2026.10.0 10-22 → 2026.11.2 11-09), CI re-checking every proof
+   weekly (`oft check` audits `Print Assumptions` into `assumptions.out`, "never supplied by a
+   pull request", against an allowed-axiom list; counterexamples run under qemu-riscv64).
+   Governance hardening is visible in the PR stream itself (CODEOWNERS "the kernel owns the
+   proofs" #25, statement-freeze #28, pin-coherence #29 — several by `sjawhar-agent[bot]`,
+   including CONTROL/DEMONSTRATION-only PRs testing the guardrails).
+
+**Residue (honest):** the announcement-side fn-6 anti-reward-hacking audit log is NOT in the
+repo — what's published is the *entry gate* (assumption audit, `proofs.origin` PROVENANCE.yaml,
+the Anthropic-vs-Theorem licence split, "A proof is accepted because the Rocq kernel checks it,
+not because of who or what wrote it"), not the proving-task audit. The trust question moved,
+not disappeared: it now reads "trust the kernel + the entry gate", which is checkable.
+
+**Why it matters:** this is the first verification corpus of the wave where the independent-use
+loop closed inside one month — reproduce → contribute → falsify → upstream the fix. The 10-23
+fear (a proof nobody can check) inverted into the opposite problem: so many outside proofs
+arriving that the repo needed governance PRs about what a proof may assert.

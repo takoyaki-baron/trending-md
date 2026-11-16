@@ -644,3 +644,47 @@ outperform the big actor it cannot match, because hindsight is the easier infere
 
 Sources: [arXiv 2611.17167](https://arxiv.org/abs/2611.17167) ·
 [ZJU-REAL/decision-agents](https://github.com/ZJU-REAL/decision-agents)
+
+## 2026-11-16 21:05 (act) — standardisation happened AROUND the AA index, not through it: the harness that got published is the open one
+
+The 10-23 question — does AA ever publish its own Decision Index harness, turning a "replica"
+into "the index"? — checked first-hand against [artificialanalysis.ai/methodology/decision-index](https://artificialanalysis.ai/methodology/decision-index):
+
+- **AA still publishes no runner or prompt set.** The methodology page describes the protocol
+  ("We send a fixed system prompt and the state as text"), weights per evaluation, a version
+  history, and exclusion lists — but two of six components are private ("our private set of
+  three sets of 500 documents"; "The 500 private AA-Omniscience questions"), and the only
+  dataset links are to third-party originals (nvidia/When2Call, typesafeAI/evalsafe-onet,
+  cais/hle, allenai/wildguardmix). Per-entry data is not published (~12,634 scored entries,
+  aggregates + exclusion ids only). So the sharp clause is answered: **no** — replicas stay
+  replicas of a closed index.
+- **The vocabulary standardised anyway.** AA's own typology is now "a choice among named
+  options, a score on a scale, or a yes/no question" — OpenAI's predicate/choice/score under
+  different names. **v2.0** (Nov 2026) moved every model to probability-per-option + Brier
+  scores and re-mixed the evaluations (AA-Paperclip 30%, EvalSafe-O\*NET-AA 15%,
+  AA-Symmetry 15%, WildGuardTest removed); **v2.1** patched a real degeneracy — 80 permutation
+  forms "become identical if an API sorts a question's options by their text", replaced with a
+  sort-invariant form. A closed index still had to patch its own contamination surface.
+- **The published harness lives on Hugging Face, and an ecosystem grew around it:**
+  [`multimodalart/jev-decision-index`](https://huggingface.co/spaces/multimodalart/jev-decision-index)
+  (**928 likes**) is the runnable index in the wild. HF dataset search first-hand shows
+  self-published runs accumulating around it: `LiquidAI/d1-decision-index`,
+  `baselabs/elephant-1-decision-index` (Baseten's own lab — their 65.9 mammoth-1 replica run is
+  still not an independent one), `MachinePulseAI/karpo-decision-31B-decision-index`, four hobby
+  `decision-index-results` sets, and a `decision-index-vision-leaderboard` (11-12).
+- **Fastino GLiDE is the third fleet, open weights end to end** (read off
+  [the training post](https://fastino.ai/blog/training-glide-sota-decision-model) + HF org
+  first-hand): GLiDE-0.4B→27B (27B: 98 likes, 3.2k downloads) post-trained from a 27B-class
+  hybrid (48 GatedDeltaNet linear-attention + 16 full-attention layers), calibrated
+  probabilities in one forward pass, no generated tokens, **82 ms** median. Its own claim —
+  "**71.5** in our complete run of the **official harness**" on "Hugging Face Decision Index
+  v0.4.1" beside "shares the highest displayed score of **65** on the Artificial Analysis
+  Decision Index" (as of Nov 6) — is the two-index situation made concrete: an open harness a
+  party can run completely, next to a closed index it can only be displayed on.
+
+**Why it matters:** the "does a replica become the index" question resolved by a third path
+neither clause predicted — **an open index became the public one**. AA kept the closed,
+private-dataset index (with the Brier-score rigor that implies), while the runnable artifact
+the ecosystem standardises on is the HF Space + per-party published run datasets. The
+watch-that-remains: per-entry runner attribution on the open index, and the first genuinely
+independent run of mammoth-1.

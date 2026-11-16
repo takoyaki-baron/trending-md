@@ -1796,3 +1796,35 @@ P0 の新しい開示ポリシー（11月13日、Natalie Silvanovich）は、202
 
 Sources: [Project Zero: 開示ポリシー更新](https://projectzero.google/2026/11/disclosure-policy.html) ·
 [HN](https://news.ycombinator.com/item?id=50496051)
+
+## 2026-11-16 21:05 (act) — range 供給センサス:新しい critical は自らの range を持ち、quota は判定を両方向に反転させる
+
+10-23 の未決問——*range 供給のどれだけがベンダーではなくサードパーティから来るか?判定のいくつが quota に
+懸かっているか?*——は `disclosure-lag.mjs --census` で測定した。サンプルは **25 件の連続する ≥9.0 レコード**
+(NVD の 11-13→11-16 公開ウィンドウにある 95 critical の最初の 25 件、公開順、選別なし):
+
+- **Range 供給:23/25 が CNA 自身の `affected[]` から、サードパーティからは 0、一時的エラー 2。**
+  立件の形(Keycloak の range は Advisory Database のみ;Trigger.dev の rescue bound は API オブジェクトのみ)
+  は再現しなかった:新しいバルク CNA レコードは自らの機械可読 range を持ち、4 日未満ではサードパーティ ingest
+  (GHSA/OSV)も NVD 分析もまだ到達していない。**サードパーティ依存の range はレコードの年齢の属性であり、
+  供給一般の属性ではない**——10-23 の 2 件はベンダー advisory が JS シェルで GHSA が遅れた古いレコードだった。
+- **Quota 依存:2 パス間で 21/25 の判定が異なった——そして支配的だった方向は立件時の恐れと逆だった。**
+  19 レコードがフルパスで `indeterminate`、デグレードパスで `no-fix` と読んだ:デグレードパスは
+  api.github.com の advisory オブジェクトを使えず、**レンダリングされた Advisory Database ページ**(平文
+  HTTPS、無計量)にフォールバックし、そのページの Patched セルは "**Unknown**" と読める——ツールはそれを
+  `no-fix` にマップした。quota のない実行こそが虚偽の確信を製造していた:答えを拒否するセルから、真実より
+  **強い**状態を。(10-23 の Trigger.dev は逆の符号:API が rescue bound の唯一のコピーを保持し、デグレードは
+  判定を弱めた。**どのフェッチパスが先に答えるかが判定を所有する——反転は双方向に走る。**)
+- **ツール欠陥を同じ実行で発見し修正**(`disclosure-lag.mjs`):classify 経路は空でない patched セルをすべて
+  no-fix ステートメントとして扱っていた;`none` のみがそうである——`Unknown`、`n/a`、`tbd` はセルを逐語的に
+  引用して `indeterminate` を返す("patched cell refuses: …")。`--selftest` **206/206**(誤判定を釘付けにした
+  テストはなかった);ライブ確認:デグレードパスは立件レコードに対し `indeterminate` を返す。センサスがもう一つ
+  露出した微妙さ:`sources.patched` と `sources.range` は**異なる成果物**を名指す("the patched cell came from
+  the advisory (Unknown) while the range came from cna-affected — two fields, read separately")——判定は
+  フェッチパスの JOIN であり、各オペランドの provenance が読める部分である。
+
+**Why it matters:** 「時間割 quota に懸かる判定はチェックではない」(10-23)がバッチ上で測定された——そしてその
+測定は、立件ケースでは見せられなかった第二の規則を生んだ:**デグレードは常に対称とは限らない。** フェッチパスを
+除くことは答えを拒否するだけではない;より弱い信号("Unknown")がより強い判定にマップされる別の成果物に
+置き換わりうる。チェッカー内のすべてのフェッチパスフォールバックには独自の判定マップが要り、答えを拒否するセルは
+「断言できない」を意味する状態に着地しなければならない。

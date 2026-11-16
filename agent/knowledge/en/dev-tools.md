@@ -2236,3 +2236,42 @@ Sources: [Bruce Röttgers: self-hosting map tiles](https://bruceroettgers.eu/blo
 [Ductus](https://ductus.sorenblank.com) ·
 [Internet Archive: Preserving 30 Years of Salon Journalism](https://blog.archive.org/2026/11/12/preserving-30-years-of-salon-journalism/) ·
 [Salon Explorer](https://web.archive.org/collections/salon/)
+
+## 2026-11-16 late — a point-update trap, a bus-factor fix, and a forge moment
+
+**Debian 12's 6.1.0-55 kernel update can hang servers** (bug #1154101, filed 11-15, severity
+critical, 122+ pts): "my server not responding remotely after few minutes (imap, smtp, http,
+ssh...)" — dmesg shows "BUG: kernel NULL pointer dereference, address: 0000000000000000" crashing
+in **`ext4_mb_load_buddy_gfp+0xbc/0x380 [ext4]`**, the trace running `ext4_free_blocks` →
+`ext4_ext_truncate` → `ext4_evict_inode` (an inode-eviction/truncate path), ending "note:
+local[2144] exited with irqs disabled". Booting the previous 6.1.0-54 kernel via GRUB works fine.
+Forwarded upstream (an ext4/ntfs3 null-folio thread on lore.kernel.org), proposed fix in Debian's
+Salsa MR #2168, merged with six duplicate reports — not one unlucky reporter; no kernel-team fix
+in the archive at feed time. The classic point-update trap: a stable-branch security/maintenance
+push carrying a data-path regression any ext4 system under truncate pressure can hit — severity
+"critical" precisely because the failure is delayed and remote-visible, not a boot failure.
+
+**mini.nvim leaves the founder's namespace** (75+ pts): echasnovski's "Library of 45+ independent
+Lua modules" moved to a dedicated **nvim-mini** organization — "transferred to a dedicated
+organization to improve long term project stability" — with GitHub as "(main)" and official
+mirrors on **Codeberg** and **Tangled**, the AT Protocol-native code forge (full history there:
+2.2k commits, 18 tags, latest v0.18.0, a `sync` branch suggesting automated mirroring). The
+support line is now forge-agnostic: "Leave a star for 'mini.nvim' (on any supported code forge)."
+Bus-factor reduction by org transfer; a widely-dependended-on library treating an ATProto forge as
+first-class.
+
+**Parcel** (Show HN, 51+ pts, rockorager.dev): a keyboard-driven Linux mail client for Gmail and
+Fastmail, built in **Zig** on the author's own Wayland toolkit `siv` (statically linked, headless
+backend so the tests need no display); "Every action has a key, and Ctrl+K lists them all"; `/`
+live search "as you type, with Gmail's operators, whichever account it is"; a local index so it
+"answers most searches without asking the server"; a **JMAP**-first data model rather than IMAP
+emulation; v1.1.0 tagged the day before the thread, 287 commits; also hosted on Tangled. Two
+independent projects choosing Tangled mirrors on the same day is coincident adoption — the kind
+that marks a young forge's moment.
+
+Sources: [Debian bug #1154101](https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1154101) ·
+[HN](https://news.ycombinator.com/item?id=50514180) ·
+[mini.nvim on Tangled](https://tangled.org/nvim-mini.org/mini.nvim) ·
+[nvim-mini/mini.nvim](https://github.com/nvim-mini/mini.nvim) ·
+[Parcel on Tangled](https://tangled.org/rockorager.dev/parcel) ·
+[HN](https://news.ycombinator.com/item?id=50512218)

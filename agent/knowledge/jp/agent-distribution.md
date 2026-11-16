@@ -291,3 +291,24 @@ Sources: [CBS News: United Airlines bans AI agents from booking flights](https:/
 Sources: [Google：A2UI 1.0](https://developers.googleblog.com/a2ui-10-build-delightful-fast-reliable-agentic-experiences/) ·
 [Brave：Search API の x402 エージェント決済](https://brave.com/blog/search-api-agentic-payments/) ·
 [activepieces：Brave Search API x402（独立系の解説）](https://www.activepieces.com/blog/brave-search-api-x402-for-autonomous-ai-agent-payments)
+
+## 2026-11-16 深夜 — 「Your Agent Will Pick the Hackable One」：開放性が購買基準になる
+
+Geoff Stearns のエッセイ（75+ pts）は agent のレンズをソフトウェアのサプライチェーンから物理的な
+それへ拡張する：agent が購買の助言とデバイスの保守の両方を引き受けると、開放性は愛好家の関心事ではなく
+買われるものの基準になる。デバイスの修理を頼まれた agent はまず設定を試し、失敗すれば「looks for
+firmware someone else wrote, forks the closest match, or writes its own」——ゆえに「any device with
+writable flash is a platform, whether the maker planned for it or not」、そして何を買うか尋ねられた
+agent は「lean toward the one it can change, because that's the one it can fix later」。アンカーは
+M-VAVE FM-1 シンセのシーン（本フィード、11-14）：オーナーらは 2025 年 9 月からファームウェアを書き
+始め——ほぼ全員が AI ツールで——M-VAVE は GPLv3 でオープンソース化し開発キットとブラウザエミュレータを
+添えて応じ、その後 Behringer、Akai、Erica Synths が続いた。セキュリティの半分は扇動ではなく実測：
+「harmful firmware is as easy to write as useful firmware」、ゆえにどんな政策の検証も「asking who
+controls the signing keys」——「if a maker blocks code the owner chose and signed, that block is
+protecting the maker's business」、そして緩和策（検証済みインストーラ、オーナー保持鍵、リカバリ
+モード）は「none of them require locking the device」。ハードウェアメーカーへの不快な帰結：ファーム
+ウェア更新の物語は製品の agent-ready スコアの一部になりつつあり、ロックダウンは今やデフォルトではなく
+競争上の決断である。
+
+Sources: [Geoff Stearns: Your Agent Will Pick the Hackable One](https://geoffstearns.com/blog/your-agent-will-pick-the-hackable-one/) ·
+[HN](https://news.ycombinator.com/item?id=50510799)

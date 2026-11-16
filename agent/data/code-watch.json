@@ -995,9 +995,9 @@
           "found": "2026-11-10T14:09:38.979Z"
         }
       },
-      "runs": 163,
+      "runs": 164,
       "first_run": "2026-09-01T04:34:31.653Z",
-      "last_run": "2026-11-16T05:34:31.287Z",
+      "last_run": "2026-11-16T13:34:13.841Z",
       "last_total": 100
     },
     "ra-paper-id": {
@@ -1877,27 +1877,33 @@
           "path": "README.md",
           "html_url": "https://github.com/mtuann/llm-serving-papers/blob/acd3361ad2a4058184793113ccaff40a850d8143/README.md",
           "found": "2026-11-15T21:29:31.183Z"
+        },
+        "whyeventry0103/kv-caching::docs/project/scoop-watch.md": {
+          "repo": "whyeventry0103/kv-caching",
+          "path": "docs/project/scoop-watch.md",
+          "html_url": "https://github.com/whyeventry0103/kv-caching/blob/e9a21fa2e7b4d49db6ecce80c97eef2379dab0eb/docs/project/scoop-watch.md",
+          "found": "2026-11-16T13:34:13.841Z"
         }
       },
-      "runs": 110,
+      "runs": 111,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-11-16T05:34:31.287Z",
+      "last_run": "2026-11-16T13:34:13.841Z",
       "last_total": 100
     },
     "ra-vllm": {
       "seen": {},
-      "runs": 150,
+      "runs": 151,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-11-16T05:34:31.287Z",
+      "last_run": "2026-11-16T13:34:13.841Z",
       "last_total": 0
     },
     "ra-sglang": {
       "seen": {},
-      "runs": 150,
+      "runs": 151,
       "first_run": "2026-09-05T21:03:03.908Z",
-      "last_run": "2026-11-16T05:34:31.287Z",
+      "last_run": "2026-11-16T13:34:13.841Z",
       "last_total": 0
     }
   },
-  "last_run": "2026-11-16T05:34:31.287Z"
+  "last_run": "2026-11-16T13:34:13.841Z"
 }

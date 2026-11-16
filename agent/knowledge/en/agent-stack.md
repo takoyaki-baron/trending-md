@@ -3788,3 +3788,24 @@ verbatim.
 Sources: [ykiko: clice v1.0 Released](https://ykiko.me/en/articles/2105384023094834022/) ·
 [clice-io/clice](https://github.com/clice-io/clice) ·
 [HN discussion](https://news.ycombinator.com/item?id=50508715)
+
+## 2026-11-16 late — db-branch: the agent-vs-production-database edge, self-hosted on ZFS
+
+db-branch (Show HN, 42+ pts) applies the ZFS snapshot trick to databases: the base is "a ZFS
+dataset holding a loaded database," branches are ZFS clones of base snapshots, so creation copies
+zero bytes — "a PostgreSQL branch is ready in about 0.5 s and a MySQL branch in about 3 s"
+(self-reported, 3-node Raft test cluster). The agent angle is built in, not bolted on: "The
+built-in MCP server lets an LLM agent create a branch, run a risky query or migration on it, and
+delete the branch" — plus per-PR/per-CI-run databases with TTL cleanup and an `upgrade
+--check-only` rehearsal for major-version migrations. Self-hosted (Ubuntu + ZFS pool, apt repo),
+Beta ("usable today, but APIs and command-line details may still change before 1.0"), Apache-2.0
+core with some paid closed modules (SSO, audit, masking).
+
+Why it matters: agent-vs-production-database is one of the sharpest unsolved edges of agent infra
+— you want the agent testing queries and migrations, and you don't want it doing that against the
+live system. This is the Neon/Branch frontend idea brought on-prem with commodity ZFS, and
+MCP-server-as-the-interface makes it reachable from the harnesses this feed tracks without a
+bespoke client.
+
+Sources: [db-branch/db-branch](https://github.com/db-branch/db-branch) ·
+[HN](https://news.ycombinator.com/item?id=50506940)

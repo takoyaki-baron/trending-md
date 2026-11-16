@@ -324,3 +324,34 @@ Kiri の Show HN スレッドが、em-dash の痕跡から 2 週間で現れた�
 Sources: [zwischenzugs](https://zwischenzugs.com/2026/11/03/a-family-tree-of-software-job-titles/) ·
 [インタラクティブ樹](https://ianmiell.github.io/sw-job-title-family-tree/) ·
 [HN](https://news.ycombinator.com/item?id=50499038)
+
+## 2026-11-16 深夜 — 採用スレッドの両半分：12 年ぶりの低い分母、AI ネイティブな分子
+
+HN Trends の 11 月分析（87+ pts）が収縮に方法論の一貫した数字を与えた：今月 **244 件の投稿、
+昨年同時点の 387 から 37% 減**；2026 年 7 月以降の全スレッドは 224〜255 の帯に収まる；8 月の 224 は
+2014 年 1 月以来の最少；2026 年の月平均 287——2013 年以来の低い年平均。構成は総量と同じ速さで動いた：
+AI は 11 月の投稿の **51.6%** に現れる（50% 超えは 2026 年 6 月が初；2 年前は 30%）、その内側で
+**MCP は 0.3% → 4.5% に跳ね**（順位 +86）、古典的な「Machine Learning」は逆に 14.8% → 11.5% に下落
+——市場はモデル訓練からエージェント配管へと再ラベリングしている。Rust は 3 位に上昇（8.2%、
+4.9% から）、TypeScript は 17.6% に後退、フロントエンドは 2022 年初の投稿の 27% から 6.6% へ崩落。
+採用カテゴリとしての MCP は、agent インフラが労働需要に現れたこと——モデルが人気であることとは別の
+信号だ。
+
+同日の脚注 2 つ。**(a) スレッド自体が収穫されている：** Tell HN の投稿（105+ pts）——eks391 の
+サイトごとの固有アドレスに偽の「late AWS payments」メールが届く（「I use unique emails for every
+site, so I immediately knew that the late AWS payments email sent to my HN email were fake」）；
+ある採用スレッド投稿は「half burned my primary dev email」；「Unleaking is not a thing」；モデレータ
+の dang：「Those posts remain permanently deletable.」メールセキュリティで最も安いカナリアである
+サイトごとの固有アドレスが、インターネットで最も読まれる採用サーフェスの一つについて歌っている。
+**(b) 教育層は置き換えられるだけでなく技能を吸収している：** MIT の How to Make (Almost) Anything
+が 2026 年サイトを公開（389+ pts）、専任の **AI agents** recitation（10/01）と **Edge AI**
+recitation（10/29）を置き、スライドとコードを MIT Forge に——Fab Lab ネットワークを生んだこの
+コースで、agent の技能が EDA やモーター制御と同じレベルで教えられている；全シラバスは無料の世界級
+ハードウェア自習カリキュラムでもある。
+
+Sources: [HN Trends 2026 年 11 月](https://www.hntrends.com/2026/november.html) ·
+[HN](https://news.ycombinator.com/item?id=50512950) ·
+[Tell HN](https://news.ycombinator.com/item?id=50513451) ·
+[dang の返信](https://news.ycombinator.com/item?id=50514845) ·
+[MIT HTMAA 2026](https://pub.cba.mit.edu/863.26/site/) ·
+[HN](https://news.ycombinator.com/item?id=50514470)

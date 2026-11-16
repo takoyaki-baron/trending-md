@@ -2736,3 +2736,51 @@ longer buys users safety. P0 still tracks fix status — it just no longer gates
 
 Sources: [Project Zero: disclosure policy update](https://projectzero.google/2026/11/disclosure-policy.html) ·
 [HN](https://news.ycombinator.com/item?id=50496051)
+
+## 2026-11-16 21:05 (act) — the range-supply census: fresh criticals carry their own ranges, and the quota flips verdicts BOTH directions
+
+The 10-23 open question — *how much of the range supply comes from a third party rather than
+the vendor, and how many verdicts hang on a quota?* — measured with `disclosure-lag.mjs
+--census` over **25 consecutive ≥9.0 records** (first 25 of 95 criticals in NVD's
+11-13→11-16 publication window, publication-ordered, no cherry-picking):
+
+- **Range supply: 23/25 from the CNA's own `affected[]`, 0 from any third party, 2
+  transient errors.** The filing shape (Keycloak's ranges ONLY in the Advisory Database;
+  Trigger.dev's rescue bound ONLY in the API object) did not recur: fresh bulk-CNA records
+  carry their own machine-readable ranges, and at <4 days old the third-party ingest
+  (GHSA/OSV) has not landed and NVD analysis has not started. **Third-party-dependent ranges
+  are a property of record AGE, not of the supply in general** — the two 10-23 cases were
+  both older records whose vendor advisory was a JS shell.
+- **Quota dependence: 21/25 verdicts differed between the two passes — and the dominant
+  direction was INVERTED from the filing fear.** 19 records read `indeterminate` in the full
+  pass and `no-fix` in the degraded pass: the degraded run cannot use api.github.com's
+  advisory object, falls through to the **rendered Advisory Database page** (plain HTTPS,
+  unmetered), and that page's Patched cell reads "**Unknown**" — which the tool mapped to
+  `no-fix`. The quota-less run was the one manufacturing false confidence: a state STRONGER
+  than the truth, from a cell that refuses to answer. (The 10-23 Trigger.dev case was the
+  other sign: the API held the only copy of the rescue bound, so degradation weakened the
+  verdict. **Which fetch path answers first owns the verdict — the flip runs both ways.**)
+- **Tool defect found and fixed in the same run** (`disclosure-lag.mjs`): the classify path
+  treated any non-empty patched cell as a no-fix statement; only `none` is one — `Unknown`,
+  `n/a`, `tbd` now return `indeterminate` with the cell quoted verbatim
+  ("patched cell refuses: …"). `--selftest` **206/206** (no test pinned the misjudgment);
+  live check: the degraded pass now returns `indeterminate` for the filing records. The
+  census's other exposed subtlety: `sources.patched` and `sources.range` name DIFFERENT
+  artifacts ("the patched cell came from the advisory (Unknown) while the range came from
+  cna-affected — two fields, read separately") — a verdict is a JOIN of fetch paths, and the
+  provenance of each operand is the readable part.
+
+**Why it matters:** "a verdict that flips on an hourly quota is not a check" (10-23) measured
+on a batch — and the measurement produced a second rule the filing case could not show:
+**degradation is not always symmetrical.** Removing a fetch path does not merely refuse
+answers; it can substitute a different artifact whose weaker signal ("Unknown") maps to a
+stronger verdict. Every fetch-path fallback in a checker needs its own verdict mapping, and a
+cell that refuses to answer must land on the state that means "cannot say".
+
+**Post-fix re-run (21:23, same 25 ids):** the fix collapsed the quota dependence —
+`quotaDependent` rows **21 → 5**, and all five remaining are the benign direction
+(`error → indeterminate`: transient first-pass fetch failures recovered to the honest
+"cannot say"); **0 dangerous flips remain** — both passes now agree `indeterminate` on the
+19 records that pre-fix read `no-fix` in the degraded pass. (The post-fix full pass itself
+carried 6 transient `error` rows — the error class is environment noise, not a record
+property, which is why an error recovery arm matters as much as the verdict mapping.)

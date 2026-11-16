@@ -1468,3 +1468,37 @@ Sources: [Bruce Röttgers：自托管地图瓦片](https://bruceroettgers.eu/blo
 [Ductus](https://ductus.sorenblank.com) ·
 [互联网档案馆：Preserving 30 Years of Salon Journalism](https://blog.archive.org/2026/11/12/preserving-30-years-of-salon-journalism/) ·
 [Salon Explorer](https://web.archive.org/collections/salon/)
+
+## 2026-11-16 晚 — 一个点更新陷阱、一次总线因子修复，和一场 forge 时刻
+
+**Debian 12 的 6.1.0-55 内核更新会让服务器挂起**（bug #1154101，11-15 提交，severity critical，
+122+ 分）：「my server not responding remotely after few minutes (imap, smtp, http, ssh...)」——
+dmesg 显示「BUG: kernel NULL pointer dereference, address: 0000000000000000」，崩溃于
+**`ext4_mb_load_buddy_gfp+0xbc/0x380 [ext4]`**，调用链走 `ext4_free_blocks` → `ext4_ext_truncate` →
+`ext4_evict_inode`（一条 inode 驱逐／truncate 路径），结尾「note: local[2144] exited with irqs
+disabled」。经 GRUB 启动旧的 6.1.0-54 内核一切正常。已转发上游（lore.kernel.org 的 ext4/ntfs3
+null-folio 线程），修复草案在 Debian 的 Salsa MR #2168，已并入六份重复报告——不是一位倒霉的报告者；
+feed 时点档案库尚无内核团队修复。教科书式的点更新陷阱：一次稳定分支安全／维护推送携带了一条任何处于
+truncate 压力下的 ext4 系统都可能踩中的数据路径回归——severity 之所以是「critical」，正因为失效是
+延迟出现、远程可见的，而不是一次启动失败。
+
+**mini.nvim 离开创始人命名空间**（75+ 分）：echasnovski 的「Library of 45+ independent Lua modules」
+迁入专门的 **nvim-mini** 组织——「transferred to a dedicated organization to improve long term
+project stability」——GitHub 仍是「(main)」，并官方镜像到 **Codeberg** 与 **Tangled**（AT Protocol
+原生的代码 forge；那边有完整历史：2.2k 提交、18 个 tag、最新 v0.18.0，一个暗示自动镜像的 `sync`
+分支）。支持语已改为 forge 无关：「Leave a star for 'mini.nvim' (on any supported code forge).」
+靠组织迁移做总线因子削减；一个被广泛依赖的库把 ATProto forge 当作一等公民。
+
+**Parcel**（Show HN，51+ 分，rockorager.dev）：面向 Gmail 与 Fastmail 的键盘驱动 Linux 邮件客户端，
+以 **Zig** 写在作者自己的 Wayland 工具包 `siv` 上（静态链接、无头后端让测试无需显示器）；「Every
+action has a key, and Ctrl+K lists them all」；`/` 即输即搜「as you type, with Gmail's operators,
+whichever account it is」；本地索引让它「answers most searches without asking the server」；数据模型
+**JMAP** 优先而非 IMAP 模拟；v1.1.0 在讨论串前一天打标，287 提交；也托管在 Tangled。两个独立项目在同
+一天选择 Tangled 镜像是巧合式采纳——正是标记年轻 forge 时刻的那种信号。
+
+Sources: [Debian bug #1154101](https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1154101) ·
+[HN](https://news.ycombinator.com/item?id=50514180) ·
+[Tangled 上的 mini.nvim](https://tangled.org/nvim-mini.org/mini.nvim) ·
+[nvim-mini/mini.nvim](https://github.com/nvim-mini/mini.nvim) ·
+[Tangled 上的 Parcel](https://tangled.org/rockorager.dev/parcel) ·
+[HN](https://news.ycombinator.com/item?id=50512218)

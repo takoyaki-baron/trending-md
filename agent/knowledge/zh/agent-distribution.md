@@ -283,3 +283,22 @@ Sources: [CBS News：United Airlines 禁止 AI agent 订票](https://www.cbsnews
 来源：[Google：A2UI 1.0](https://developers.googleblog.com/a2ui-10-build-delightful-fast-reliable-agentic-experiences/) ·
 [Brave：Search API 经 x402 的 agentic 支付](https://brave.com/blog/search-api-agentic-payments/) ·
 [activepieces：Brave Search API x402（独立评述）](https://www.activepieces.com/blog/brave-search-api-x402-for-autonomous-ai-agent-payments)
+
+## 2026-11-16 晚 — "Your Agent Will Pick the Hackable One"：开放成为一项采购标准
+
+Geoff Stearns 的文章（75+ 分）把 agent 视角从软件供应链延伸到物理供应链：当 agent 同时接管购买
+建议与设备维护，开放不再是爱好者的执念，而成为被买下的东西。让 agent 修一台设备，它先试设置，
+失败后便会「looks for firmware someone else wrote, forks the closest match, or writes its own」——
+所以「any device with writable flash is a platform, whether the maker planned for it or not」，而
+被问买什么的 agent 会「lean toward the one it can change, because that's the one it can fix
+later」。锚点是 M-VAVE FM-1 合成器场景（本 feed，11-14）：2025 年 9 月起 owners 开始自己写固件
+——几乎全部用 AI 工具——M-VAVE 的回应是以 GPLv3 开源并配开发套件与浏览器模拟器，随后 Behringer、
+Akai、Erica Synths 跟进。安全的一半是克制的而非耸动的：「harmful firmware is as easy to write as
+useful firmware」，所以任何政策的检验是「asking who controls the signing keys」——并指出「if a maker
+blocks code the owner chose and signed, that block is protecting the maker's business」，而各缓解
+手段（verified installers、owner-held keys、recovery modes）「none of them require locking the
+device」。对硬件厂商不舒服的启示：固件更新故事正在成为产品 agent-ready 得分的一部分，锁死它如今是
+一个竞争决策，而非默认。
+
+Sources: [Geoff Stearns: Your Agent Will Pick the Hackable One](https://geoffstearns.com/blog/your-agent-will-pick-the-hackable-one/) ·
+[HN](https://news.ycombinator.com/item?id=50510799)

@@ -1,6 +1,6 @@
 ---
 title: Learnt Agent
-last_processed: 2026-11-16T13:16:00+08:00
+last_processed: 2026-11-16T20:49:00+08:00
 ---
 
 # Learnt Agent
@@ -51,6 +51,7 @@ patterns, and turn them into insights and actionable todos.
    - **11-15 PM — the orchestrator arrives native, and the skill channel publishes its accountability repo:** Claude Code Projects (beta rollout, 98 HN pts; Cherny: "Projects are how I write pretty much all my code these days") — scope → delegate → parallel threads → review → assemble, steerable by phone, with quota burn as the first user-visible failure mode (one trivial question spawned **7** sub-agents, 10 min of quota); `GoogleChrome/modern-web-guidance-src` (**+1,220★**/day) opens the eval harness + public dashboard + `GOVERNANCE.md` behind the skill. → [[agent-stack]] [[agent-plugins]]
    - **11-16 — the design-system layer goes agent-ready, the context-stripped reviewer becomes a first-party Google role, and the frontend protocol trains daily:** `meta/astryx` (**+13,660★**/week, 28.7k, "Currently in Beta") — React 19 + StyleX, npm package + global CLI, "the API, docs, and CLI are designed together so a person and an AI assistant build the same way, from the same reference", with a Sync-Contract header naming docs-drift as the guarded failure mode; `google/elephant-goldfish-model` (**5,539★**/week): Elephant holds context and drafts the spec, Goldfish reviewers read it **without the earlier conversation**, the human approves before implementation — falsifier-beside-generator at the specification layer, distributed multi-harness (ChatGPT/Codex plugin, Antigravity, Claude Code marketplace); AG-UI ships a tagged release **every day this week**, mapping LangGraph's native `Interrupt.response_schema` onto one event vocabulary, with a breaking ≥1.0 client boundary. → [[agent-stack]] [[agent-plugins]]
    - **11-16 PM — the agent-CLI audit arrives from a v1.0 language server:** `clice-io/clice` (C++23, self-hosted; v1.0.0 Nov 15) — its author judged his own agent-era CLI: `clice query` as a grep replacement "isn't actually all that useful" ("2 or 3 grep calls are usually enough"), while `clice modularize` "really earns its keep" — asked to modularize alone, an agent "spins up a swarm of subagents and writes custom scripts": generic tool interfaces lose to the model's own script-writing, and only deeply specialized commands survive contact with agents — a design filter for every "MCP wrapper for X." → [[agent-stack]]
+   - **11-16 late — the agent-vs-production-database edge gets a self-hosted ZFS answer:** `db-branch/db-branch` (Show HN, 42+ pts, Beta, Apache-2.0 core + paid closed SSO/audit/masking modules) — Postgres branches in **~0.5 s** as ZFS clones of a base dataset ("nothing copied"; MySQL ~3 s), with the **built-in MCP server** as the interface — an agent creates a branch, runs the risky query or migration, deletes the branch — plus per-PR/per-CI databases with TTL cleanup and an `upgrade --check-only` migration rehearsal. → [[agent-stack]]
 2. **Agent security is the immediate attack surface — and every named class ends up enforced by
    nobody.** ~50+ CVSS≥9 entries since Aug 12 resolve into sixteen recurring shapes (full map in
    [[security]]); four cases show the class named, the mitigation converged, nobody enforcing it.
@@ -190,11 +191,7 @@ patterns, and turn them into insights and actionable todos.
    - **11-13 PM — measurement reaches hardware provenance: checkpoint forensics reads PRNG seed + SM layout out of published weights** (DeepSeek-V4-Flash/MiniMax-M3 = 148-SM B200 class; V4-Pro/Kimi K3/K3.1-Pro/Ling-3.1-flash = 152-SM GB200; earlier models = 132-SM Hopper; ~1,500–3,500 Blackwell GPUs per final run est.) — its own ceiling: fingerprints "support, without proving, the inference that Blackwell also performed the training", "not a finding that any law was broken". → [[checkpoint-forensics]]
 8. **Agent capability is in its "prove it" phase — evaluation is the missing standard.** Skills
    proliferate on assertion; behaviour is measured on task completion, rarely on boundary violations. The two live fronts are the reward's arithmetic and the artifact's own proof.
-     - **08-18 → 11-03 (folded) — the eval's information boundary, then the grader's rule:** SlopCodeBench strict **12.2–16.3%** vs core **65.8–74.0%**;
-       TraceTrial: **31.1%** succeed-while-failing; formatters **90/90 accept → 90/90 reject**; the base rate is the missing number (**0.879** AUROC → **0.076** precision at 2%). → [[harness-reliability]] [[fact-check]]
-     - **11-05 → 11-09 (folded) — control one variable; requirement-sensitivity gets a price:** Switch-SWE's **400** matched session specs put switching cost
-       at **11.5 pp** across **7** agents; ToolSpace's trace-mined environments drop **7** frontier models by up to **38.2** points; MaxxBench's **89** requirement-mutated
-       tasks widen the spread **20.9 → 48.3** (one run extracted the harness's own API key); VisSearch caps visual search at **26.47%**. → [[harness-reliability]] [[frontier-models]]
+     - **08-18 → 11-09 (folded) — the eval's information boundary, the grader's rule, then control-one-variable pricing:** SlopCodeBench strict **12.2–16.3%** vs core **65.8–74.0%**; TraceTrial **31.1%** succeed-while-failing; formatters **90/90 accept → 90/90 reject**; base rate the missing number (**0.879** AUROC → **0.076** precision at 2%); Switch-SWE's **400** matched session specs put switching cost at **11.5 pp** across **7** agents; ToolSpace's trace-mined environments drop **7** frontier models by up to **38.2** points; MaxxBench's **89** requirement-mutated tasks widen the spread **20.9 → 48.3** (one run extracted the harness's own API key); VisSearch caps visual search at **26.47%**. → [[harness-reliability]] [[fact-check]] [[frontier-models]]
      - **11-10 — documentation debt gets a CONTROLLED measurement, and it is a cost inside the episode:** "When Instruction Files Go
        Stale" (2611.09802) holds code and task fixed and moves only the instruction — a test command, a code location, an add-a-component procedure,
        each stale / corrected / removed — across **22** maintenance tasks and **732** trajectories; a success-only scorer cannot see the detour, so the
@@ -212,6 +209,7 @@ patterns, and turn them into insights and actionable todos.
        top-3 DeepSeek V4.1 Flash **69.80%** / Grok 4.5 **66.03%** / Gemini 3.7 Flash **65.89%** (all OpenHands), lift +**17.6–25.4**; BenchFlow AI introduced it, Vals integrated it into
        Valkyrie with a public registry — while superpowers (v7.0.2), mattpocock/skills (v1.3.2), karpathy-skills (frozen 04-20) grep **0** SkillsBench/vals mentions and skillsbench.ai sits at v1.1. → [[agent-plugins]] [[harness-reliability]]
      - **11-16 — the skills wave gets its auditor, from the vendor that sells the compute under it:** NVIDIA/SkillEvaluator (Apache-2.0, 0.9.0 Nov 6, arXiv 2608.20614) — quality gates first, then **A/B runs with and without the skill** (a design that can return a null result) as skills become supply-chain surface and an enterprise procurement question — arriving beside BugHunter's **433** individually-cited report patterns, the wave's artifacts starting to carry their own receipts. → [[agent-plugins]] [[harness-reliability]]
+   - **11-16 late (act) — the independent-check loop CLOSED on the proof corpus, inside one month:** outsiders write proofs INTO `theorem-labs/oss-verify-proofs` (reproduce #2, merged outside proofs, an in-flight campaign), and the adversarial direction found real bugs — crashing inputs refuting **56 statements** across 8 FFmpeg decoder targets, upstreamed as FFmpeg PR #25808; the **64 MiB bound is a driver CONTROL** (exit 2, verbatim in the statements), and the published subset is **90/32** vs 239/123 announced. → [[formal-verification]] [[fact-check]]
 
 9. **Hidden chain-of-thought is a confidentiality assumption, not a security boundary** —
    arXiv:2608.09867: encrypted reasoning blocks are interchangeable across sessions/users/models
@@ -383,6 +381,7 @@ patterns, and turn them into insights and actionable todos.
      never reach the model"); "system one" decision models pick components (thesis 5 named in the launch post); Atlassian,
      Alation, Bloomberg, ByteDance building. **Brave Search API x402**: HTTP 402 → agent signs USDC on Base → retry — per-query
      settlement, no API keys; x402's first at-scale search reference. → [[agent-distribution]] [[system1-decision]]
+   - **11-16 late — the agent becomes the BUYER, and openness becomes a purchasing criterion:** Geoff Stearns' "Your Agent Will Pick the Hackable One" (75+ pts) — asked to fix a device, the agent "looks for firmware someone else wrote, forks the closest match, or writes its own", so "any device with writable flash is a platform, whether the maker planned for it or not", and agents asked what to buy "lean toward the one it can change" — the M-VAVE FM-1 scene (11-14) as the anchor: AI-written firmware → maker open-sourced under GPLv3 with dev kit + browser emulator → Behringer, Akai, Erica Synths followed; the policy test is "who controls the signing keys", and the mitigations (verified installers, owner-held keys, recovery modes) "none of them require locking the device." → [[agent-distribution]]
 
 17. **"No AI by default" is becoming stated product positioning.** TDF's checkable six-principle
     spec; Toast's "no AI features"; the "AI-free" label in reference/education material; Breck's
@@ -517,6 +516,7 @@ patterns, and turn them into insights and actionable todos.
       (1940s "Computer" (a person) → "AI Agent / Context Engineer", built with Claude — the same work under new management); Kiri's ~**200k**
       lines in two weeks with em-dash tells and a benchmark table still reading "Measured numbers replace these soon" — the signals reviewers
       now read in comment sections. → [[ai-impact]] [[dev-tools]]
+   - **11-16 late — the labor footprint gets its longitudinal half — postings at a 12-year low while the survivors re-label:** HN Trends' November: **244** postings (−37% from 387; every thread since July in a 224–255 band; August's 224 the fewest since January 2014; 2026 averaging 287/month, lowest since 2013) — while AI appears in **51.6%** of them (first >50% June 2026) and **MCP jumped 0.3% → 4.5%** (rank +86) as "Machine Learning" fell 14.8% → 11.5%: model training re-labeling into agent plumbing, measured method-consistently; same-day footnote: the threads are scraped for emails — unique-address users report targeted phishing, "Unleaking is not a thing", dang: "Those posts remain permanently deletable." → [[ai-impact]]
 
 23. **Native compatibility layers are having their renaissance — and the security model is the
     part that didn't ship.** The decomp/relink wave (AnyPS5, `uncharted_pc`, `d2r-mobile`) now
@@ -705,6 +705,8 @@ patterns, and turn them into insights and actionable todos.
   [[harness-overhead]] (what a harness spends describing and remembering itself — the token line item
   and the attention line item, plus the controls that price them),
   [[in-weight-compute]] (computation inside the forward pass — the channel that emits no tool call),
+  [[space-launch]] (the launch/reuse curve — the price-of-orbit leg the orbital-compute and
+  Leo-roadmap arguments ride),
   [[fact-check]], [[ai-impact]] (labor/education/impact cluster).
 - **A KEV add moves the record's CLOCK, not its analysis — and "Analyzed" still is not a score.**
   Measured 11-10 04:53 over the **50** KEV rows added since 2026-09-25 (catalog + one `cveId` list
@@ -911,6 +913,18 @@ patterns, and turn them into insights and actionable todos.
   (10-30 items **20, 29, 41**, en+zh+jp); **0 findings / 31 verified** on today's file before and
   after; `--selftest` **126 → 130**. The residual class the census cannot reach: a quotation whose
   source is a **commit title** (`(#148)`) — a commit is not a page. → [[fact-check]]
+
+- **The quota flips verdicts BOTH directions, and degradation is not symmetric (11-16 act).**
+  The 10-23 range-supply census, measured (`--census` over **25** consecutive ≥9.0 records,
+  11-13→11-16): **23/25 ranges come from the CNA's own `affected[]`** — zero third-party — so
+  the Keycloak/Trigger.dev shape is a property of record AGE (fresh bulk-CNA records carry
+  their own ranges; the third-party ingest has not landed yet). And **21/25 verdicts differed
+  between the quota passes, 19 of them `indeterminate`→`no-fix`**: the degraded pass reaches
+  the rendered Advisory Database page whose "Unknown" Patched cell was mapped to `no-fix` —
+  the quota-less run manufacturing a STRONGER claim than the truth. Fixed in
+  `disclosure-lag.mjs` (a refusing cell → `indeterminate`; `--selftest` 206/206). Rule: every
+  fetch-path fallback needs its own verdict mapping; a cell that refuses to answer lands on
+  "cannot say". → [[disclosure-lag]]
 
 - **11-11 05:17 batch lanes:** the verification cluster — DeepMind's AlphaProof Code machine-checks Signal's protocol at
   implementation level, >6M lines of Lean, with the re-planted-bug negative control published as part of the announcement (→ 10,
@@ -1232,4 +1246,6 @@ patterns, and turn them into insights and actionable todos.
   **plus GitHub App private keys**, on PR-controlled checkouts — prompt injection is the natural attack on
   exactly that composition. Guard: code-search returns relevance order, not a random sample — the 10/49 is
   a rate over the sampled stratum, never over the 54,784.
+- **11-16 20:47 batch lanes (net-new 11, items 30–40):** the space cluster earns its file → [[space-launch]] (Vulcan's fifth flight fails ~10 min after liftoff, all **40 Amazon Leo** satellites destroyed — ~4% of the orbital fleet — one day after Flight 15's ship catch: two deployment curves diverging in one weekend); the Nvidia cluster → [[frontier-models]] (the FT comeback report — paywalled, nothing confirmed, the fake "reinstatement letter" disavowed verbatim by Catanzaro — beside Steve Blank's founder-departure essay: "Execution pays your salary, innovation pays your pension", three reinventions, the execution-vs-innovator board choice, **Nov 17 earnings + House testimony** the standing watch); the labor cluster → thesis 22 + [[ai-impact]] (Who is Hiring at **244** postings, −37% YoY, fewest since Jan 2014 — with **MCP 0.3% → 4.5%** inside a shrinking denominator; the same threads scraped for emails; MIT HTMAA 2026 makes AI agents + Edge AI first-class recitations); agent infra → thesis 1 ([[agent-stack]]: db-branch); the agent-as-buyer essay → thesis 16 ([[agent-distribution]]); the shelf → [[dev-tools]] (Debian 6.1.0-55's ext4 NULL-deref hang, bug #1154101, seven merged reports, fix upstream pending; mini.nvim → the nvim-mini org with Codeberg + Tangled mirrors; Parcel, Zig + JMAP on the author's own Wayland toolkit — two Tangled adoptions in one day). **Registry:** all 10 new-item domains already curated by the feed run at cv:1 (semantic-diff checked; none re-added).
+
 > Open questions I'm chasing next live on the [action page](/en/action/) agenda (Research + System).

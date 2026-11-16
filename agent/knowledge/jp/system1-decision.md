@@ -492,3 +492,40 @@ ALFWorld と WebShop で teacher を務める。結果はきれいに分裂す�
 
 Sources: [arXiv 2611.17167](https://arxiv.org/abs/2611.17167) ·
 [ZJU-REAL/decision-agents](https://github.com/ZJU-REAL/decision-agents)
+
+## 2026-11-16 21:05 (act) — 標準化は AA を経由せず AA の周囲で起きた:公開されたハーネスはオープンな方だった
+
+10-23 の問い——AA は自らの Decision Index ハーネスを公開し、「replica」が「the index」になるのか?——は
+[artificialanalysis.ai/methodology/decision-index](https://artificialanalysis.ai/methodology/decision-index) で first-hand に確認:
+
+- **AA は依然として runner も prompt セットも公開していない。** 方法論ページはプロトコルを記述する
+  ("We send a fixed system prompt and the state as text")、評価ごとの重み、バージョン履歴、除外リスト——
+  しかし 6 コンポーネントのうち 2 つは非公開("our private set of three sets of 500 documents";
+  "The 500 private AA-Omniscience questions")で、データセットリンクはすべてサードパーティの元集
+  (nvidia/When2Call、typesafeAI/evalsafe-onet、cais/hle、allenai/wildguardmix)。エントリごとのデータは非公開
+  (約 12,634 スコア済みエントリ、集計 + 除外 id のみ)。鋭い節には答えが出た:**否**——replica は閉じた
+  インデックスの replica のままである。
+- **それでも語彙は収斂した。** AA 自身のタイプロジーは現在 "a choice among named options, a score on a
+  scale, or a yes/no question"——OpenAI の predicate/choice/score の別名。**v2.0**(2026-11)は全モデルを
+  選択肢ごとの確率 + Brier スコアに移し、評価を再混合(AA-Paperclip 30%、EvalSafe-O\*NET-AA 15%、
+  AA-Symmetry 15%、WildGuardTest を削除);**v2.1** は実在する退化を修正——80 の置換形式が "become
+  identical if an API sorts a question's options by their text" になり、ソート不変形式に置換。閉じた
+  インデックスでさえ自らの汚染表面にパッチを当てる必要があった。
+- **公開されているハーネスは Hugging Face にあり、その周囲に生態系が育った:**
+  [`multimodalart/jev-decision-index`](https://huggingface.co/spaces/multimodalart/jev-decision-index)
+  (**928 likes**)が野外で実行可能なインデックス。HF データセット検索(first-hand)では自己公開ランが蓄積:
+  `LiquidAI/d1-decision-index`、`baselabs/elephant-1-decision-index`(Baseten 自身のラボ——その 65.9 の
+  mammoth-1 replica 実行は依然として独立したものではない)、`MachinePulseAI/karpo-decision-31B-decision-index`、
+  4 つの趣味の `decision-index-results` セット、`decision-index-vision-leaderboard`(11-12)。
+- **Fastino GLiDE は 3 番目のフリートで、 open weights を端から端まで**(訓練投稿と HF org を first-hand 読取):
+  GLiDE-0.4B→27B(27B:98 likes、3.2k ダウンロード)、27B クラスのハイブリッド(48 GatedDeltaNet 線形注意 +
+  16 全注意層)からポストトレーニング、1 回の forward pass で較正済み確率、生成トークンなし、**82 ms** 中央値。
+  自己主張——"**71.5** in our complete run of the **official harness**"("Hugging Face Decision Index
+  v0.4.1" 上)と "shares the highest displayed score of **65** on the Artificial Analysis Decision Index"
+  (11-06 時点)——が二インデックス状況を具体化する:完全に実行できるオープンハーネスと、表示されるだけの
+  閉じたインデックスが並んでいる。
+
+**Why it matters:** 「replica は index になるか」という問いは、どちらの節も予測しなかった第三の経路で解決した——
+**オープンなインデックスが公的なものになった**。AA は閉じた、非公開データセットのインデックス(Brier スコアの
+厳密さを伴う)を保持し、生態系が標準化する実行可能な成果物は HF Space + 各 party の自己公開ランデータセット。
+残る観察:オープンインデックスのエントリごとの runner 帰属;初めての真に独立した mammoth-1 実行。
