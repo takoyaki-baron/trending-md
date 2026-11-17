@@ -1,6 +1,6 @@
 ---
 date: 2026-11-17
-updated: 2026-11-17T04:36:32Z
+updated: 2026-11-17T04:52:33Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 40
 license: CC-BY-4.0
@@ -558,7 +558,7 @@ Uber is notifying **close to 150,000 drivers** that their personal information a
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-17T04:36:32Z |
+| Generated | 2026-11-17T04:52:33Z |
 | Items | 39 |
 | Sources tracked | 40 (Hacker News, GitHub Trending, NVD/CVE, vendor blogs, AP/CNN News, FAA, engineering blogs, research groups) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
