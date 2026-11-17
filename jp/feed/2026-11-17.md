@@ -1,8 +1,8 @@
 ---
 date: 2026-11-17
-updated: 2026-11-17T04:52:33Z
+updated: 2026-11-17T12:28:51Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 40
+sources: 47
 license: CC-BY-4.0
 ---
 
@@ -556,13 +556,153 @@ Uber は**約15万人の運転手**に、個人情報と運転手免許データ
 
 ---
 
+## 40. Claude Code チームが「検証」をどう考えているか——コードの約9割がエージェント書きなら、テストこそがマネジメントだ
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** claude.dev · HN 42+ pts · 2h ago (~18:03 UTC+8)
+- **Tags:** `verification` `claude-code` `testing` `agent-infrastructure`
+
+Addy Osmani が Claude Code チームの品質維持の手法を解説した：「当チームの大部分のコード（約90%）は Claude が書き、Claude がレビューしている。この規模では、エージェントに自分の仕事を証拠で検証させる仕組みが極めて重要になる」。投資に値する3種類のテストとは、**E2E**（「ごまかしにくい——機能全体が動くか、動かないかのどちらか」）、**プロパティテスト**（fast-check/Hypothesis/proptest で入力を大量生成し、「人が見落としがちで、エージェントがまさに失敗しやすいエッジケース」を攻める）、そして**差分テスト**。内部データの一つ：「別の grader にルーブリックに沿って Claude の仕事を検査させると、標準的なプロンプトループより最大10ポイントのタスク成功率向上。最も難しい問題で伸びが大きかった」。運用上の詳細も重要である：フレーキーなテストは毒物で、「壊れたコードを直す代わりに、エージェントを『テストの再実行』へ訓練してしまう」。そして検証ループこそ、1、2個ではなく「数十から数百」のエージェントを並列に走らせられる理由だ——誰も個別に手検証していないのだから。
+
+**Why it matters:** ベンダー自身が自社コードベースを約90%機械書きと明かしたのは、本フィードが追い続けてきた主張—— moat は「コードを書くこと」から「仕様と検証」へ移った——に対する最も強いデータポイントだ。本日の Buzzard の4条件（第4項）、Harmonic の Rust 検証器（第30項）と並べると、AI コード時代の QA スタックが公の場で組み上がっていくのが見える。
+
+[`🔗 claude.dev：How the Claude Code team thinks about verification`](https://claude.dev/blog/how-the-claude-code-team-thinks-about-verification/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50529612)
+
+---
+
+## 41. Apple、macOS 27.3 でスコープ付きフルディスクアクセスを実装——「システム保護を迂回する」代わりに「特定の保護フォルダやアプリだけ」を選べる
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** support.apple.com · HN 144+ pts · 10h ago (~02:00 UTC+8)
+- **Tags:** `macos` `privacy` `permissions` `security`
+
+Apple が **macOS 27.3** の静かな変更を説明するサポート文書を公開した：アプリがフルディスクアクセスや**「システム&アプリ保護のオーバーライド」**を要求する際、「そのアプリにアクセスさせる特定の保護フォルダやアプリだけを選ぶ」ことが可能になった。文書は全許可を与えた場合の意味をはっきり書いている：フルディスクアクセスを与えられたアプリは「問い合わせなしでデータを読み取り、変更、削除、書き出せる」——メッセージ、メール、写真、他のユーザーのデータも含む。システム&アプリ保護のオーバーライドは「Mac とアプリを完全に制御でき……すべてのウィンドウとアプリ（バックグラウンドのものを含む）が見え、すべてのキーストロークを取得できる」。プライバシーとセキュリティ設定では、アプリが本当に必要とするフォルダやアプリだけを選ぶよう促すプロンプトが表示される（バックアップツール、ディスククリーナー、ファイルインデクサ、セキュリティアプリが該当例）。「残りのデータについてはシステム保護が維持される」。
+
+**Why it matters:** フルディスクアクセスは macOS で最も乱用されてきた同意画面——ワンクリックでユーティリティを完全監視アプリに変えられる。最も危険な2つの TCC 許可をスコープ化するのは、モバイル OS が何年も前に採った最小権限パターンをデスクトップがようやく追いついた形であり、開発者の前提も変わる：FDA はもはや「全部もらえる」を意味しない。
+
+[`🔗 Apple サポート：アプリがフルディスクアクセスやシステム&アプリ保護オーバーライドを要求する場合`](https://support.apple.com/en-us/149699) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50526560)
+
+---
+
+## 42. Carmack が語る 3dfx Voodoo 1 の色あせの理由：「NeXT と 3DFX はどちらも色空間で『正しいことを』やろうとして、結果的にライバルより悪く見えた」
+
+- **Velocity:** ▮▮ rising
+- **Source:** x.com (id_aa_carmack) · HN 165+ pts · 12h ago (~00:00 UTC+8)
+- **Tags:** `graphics` `retro` `color` `carmack`
+
+HN の質問は「なぜ 3dfx Voodoo 1 の出力は色あせて見えたのか」。John Carmack の答えは二十年の時を経た告白だった：「NeXT と 3DFX はどちらも色空間で『正しいことを』やろうとして、結果的に競合の選択肢より一般に悪く見えることになった。これをきちんと理解できたのは、かなり後になってからだ」。スレッドは彼を囲んでメカニズムを組み立てる——人気コメントの一つが直感に反する点を説明する：sRGB は信号電圧の層を除いてどこでも非線形で、CRT 上では「sRGB の50%は文字通り50%の信号電圧」を意味する。つまり数学的に「正しい」リニアパイプラインは、ユーザーの目の前のガラスに合わせてただ調整した競合より、暗く平坦に見えてしまったのだ。
+
+**Why it matters:** 「正しい」と「合っている」の違いを圧縮した一課だ。両社は数学的に正当な選択に最適化し、人々が所有していたディスプレイでより良く見えるものに市場を奪われた。1996年以降のカラー管理、トーンマッピング、表示応答をめぐるすべてのパイプライン論争は、この取引の下流にある。
+
+[`🔗 John Carmack on X`](https://twitter.com/id_aa_carmack/status/2122478083319992513) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50525575)
+
+---
+
+## 43. K2-Horizon：完全オープンな6つの言語モデルの艦隊、0.9B から 375B-A23B MoE——チェックポイントもログもパイプラインも全公開
+
+- **Velocity:** ▮▮ rising
+- **Source:** arxiv.org · 論文は11月16日投稿 · HF Papers 52+ 賛
+- **Tags:** `open-weights` `llm` `moe` `training-data`
+
+K2 チーム（Zhengzhong Liu、Haonan Li、Xuezhe Ma、Rupesh Kumar Srivastava ら数十名）が「**0.9B のdenseモデルから 375B-A23B の MoE まで、汎用推論とエージェント的作業のために作られた、完全にオープンな6つの言語モデルの艦隊**」を発表した。モデリング側の導入は2つ：**MoVA**（Mixture-of-Value Attention——「attention の value 射影に MoE を適用する」）と **softplus attention gating**。36B-A4B モデルは「同じデータで学習した 32B のdenseモデルに、1/7のアクティブパラメータでほぼ匹敵する」。さらに **Uno**——「独立のドラフトモデルなしでデコードを最大2.2倍に高速化する、ロスレス拡散アダプタ」。リリースは LLM360 のオープンソース定義に従う：完全な開発履歴、全訓練段階の中間チェックポイント、事前学習データ、ログ、そして訓練・評価・インフラコードすべて——xLLM 訓練フレームワークと RL360 強化学習スタックを含む。最も大胆なのはデータの主張だ：約 **10兆の合成事前学習トークン**、「合成データがスケールでの事前学習の主要成分になり得ることを示す」。4モデルが同一の 22T トークンコーパスとレシピを共有する。重みは GGUF 込みで Hugging Face に公開済み。
+
+**Why it matters:** ほとんどの「オープン」リリースは重みと論文だけを配る。これは製造ラインの全部——チェックポイント、データ、ログ、パイプライン——を出すもので、再現性が実際に要求するものはこちらだ。スケールでの合成トークンのデータポイントはほとんどのラボが決して明かさないものであり、4サイズが同一レシピを共有することで、制御されたスケーリング研究が可能になる。
+
+[`🔗 arXiv:2611.21003 — K2-Horizon`](https://arxiv.org/abs/2611.21003) · [`🔗 Hugging Face の IFM/K2-Horizon-MoVA-36B-A4B`](https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B)
+
+---
+
+## 44. Daniel Stenberg が agent による Rust 製 curl リライトを評価：約3週間で C 18.5万行が Rust 34万行に——同じ期間に本家はバグ修正200件をマージ
+
+- **Velocity:** ▮▮ rising
+- **Source:** daniel.haxx.se · HN 18+ pts · 12h ago (~00:00 UTC+8)
+- **Tags:** `curl` `rust` `ai-agents` `maintainers`
+
+curl の生みの親 Daniel Stenberg が、今秋の2つのエージェント製 curl リライト——数ヶ月前の **urlx** と、11月の「curl, rewritten in Rust」（「名前すら変えないという、かなり紛らわしい」、約8,600ドルを費やしたと主張）——に応じた。彼の測定値：「これらのエージェントが185,000行の C を340,000行の Rust に変換したのと同じ期間に（私が数えた）、本物の curl プロジェクトは300以上のコミットをマージした……そのうち200超がバグ修正だ。その200のバグ修正は、あの Rust リライトのどれにもない」。メモリ安全性の主張には具体的数字で応じた：「2026年に curl で確認された81の脆弱性のうち、14は memory-safe な言語（rust など）を使っていれば避けられたはずの過ちによるもの。これは17.3%。つまり Rust 製の curl でも、そのうち67の脆弱性はやはりあったはずだ」。結論：「私はどんな言語へのリライトも信じない。信じるのは絶え間ない磨き、反復、リファクタリングだ」。リライトが可能だったのは「世界のすべての AI が何年も curl のコードで学習してきたから」——数十年のテストとドキュメントこそが仕様なのだ。
+
+**Why it matters:** エージェントが旗艦級 C プロジェクトをリライトすることについての、最初の実質的な縦断データだ。リライトが可能なのはまさに上流が三十年のメンテナンスをやったからであり、メンテナンス速度——1日約11コミット、同期間に200件の修正——はどのベンチマークも測れない部分である。先週の AI生成コードはすべてオープンソースにすべきというエッセイに対する、メンテナの椅子からの答えでもある。
+
+[`🔗 daniel.haxx.se：Actual curl rewrites in rust`](https://daniel.haxx.se/blog/2026/11/17/actual-curl-rewrites-in-rust/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50525713) · [`🔗 Jakub T. Jankiewicz：All AI-generated code should be Open Source`](https://jakub.jankiewicz.org/blog/ai-code-open-source/)
+
+---
+
+## 45. Three.js で AAA ライティングを追う：WebGPU 版 Three.js に今何ができて、何ができないかの段階別監査
+
+- **Velocity:** ▮▮ rising
+- **Source:** ben3d.ca · HN 144+ pts · 15h ago (~05:00 UTC+8)
+- **Tags:** `threejs` `webgpu` `graphics` `rendering`
+
+Ben Houston の5部作（11月9日発表、いま HN で再浮上）は、計算を変えた一言で始まる：「WebGPU はほとんどのデバイスで動くようになり、Three.js にはそれのために作られた新しいレンダラがある。この2つで、初めてWebページ内の屋内シーンを AAA ゲームと同じやり方でライティングできる」。第3部が本丸だ——ゲームグレードのパイプライン（G-buffer、ベイク GI、動的 GI、オクルージョン、SSR/SSGI、リフレクションプローブ、間接 BRDF、TRAA/TAAU の時間的アップスケーリング）を Three.js に対して3列の表で段階ごとに監査する：**Three.js にある**（MRT prepass、lightmap + radiosity ベイカー、GTAO、8倍高速化された LightProbeGrid）、**レビューまたはドラフト中**（DDGI visibility、JPEG XL / KHR_lightmap 拡張）、**まだ作る必要がある**（octahedral normals、ランタイム BC6H、シームステッチング）。各段階にゲーム側の要求が明記され、この表はそのままブラウザ級ゲームライティングの公開ロードマップになる。
+
+**Why it matters:** ブラウザレンダリングは十年間「デモの見世物」と「ただの三角形」の間を行ったり来たりしてきた。これはどちらでもない——具体的な AAA パイプラインに対する実測ギャップ分析であり、欠けている部品はプルリクエストとして名指しされている。ブラウザゲームが本当に来るなら、ここまでの距離の正直な工程台帳がこれだ。
+
+[`🔗 ben3d.ca：Building the AAA Lighting Pipeline in Three.js`](https://ben3d.ca/blog/building-the-aaa-lighting-pipeline-in-threejs) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50523291)
+
+---
+
+## 46. N-able N-central が一晩で10件の CVE レコードを落とす——MSP の RMM で、9.3は誰でもアプライアンスを偽装でき、9.2は更新メタデータを RCE に変える
+
+- **Velocity:** ▮ steady
+- **Source:** NVD（N-able CNA）· 11月17日（UTC 早朝）に CVSS 4.0 の10件を公開
+- **Tags:** `cve` `msp` `rmm` `n-central`
+
+N-able 自身の CNA が、MSP が顧客の端末群を管理するのに使うリモート監視プラットフォーム N-central に対して10件のレコードを公開した。すべて **2026.4.1 HF3** で修正済み、NVD ステータスは依然 `Received`。**CVE-2026-129272（9.3）**：N-central は「agent 向け API へのアプライアンス認証に予測可能なクレデンシャルを使う。アプライアンス識別子を知るか推測できるリモートの未認証攻撃者は、有効なアプライアンストークンとセッションを取得し、アプライアンスを偽装できる」。**CVE-2026-129286（9.2）**：ソフトウェア更新メタデータのバージョン値とダウンロード先が検証されない——「サーバーが受け取る更新メタデータを供給・改変できる攻撃者は、ダウンロードディレクトリの外にファイルを書き、コードを実行できる」。**CVE-2026-129280（9.3）**：複数の ServerUI/ServerUI2 SOAP 操作が「呼び出し元のセッション、権限、顧客スコープを検証せず」、場合によっては認証なしで動く。周辺には：リモート実行結果の偽造（8.7）、閲覧専用権限でのデバイス実行設定変更（8.5）、パッチ管理エンジンの LPE（8.5）、監査エクスポート経由の設定注入（8.6）、メールオプション注入（8.7）。
+
+**Why it matters:** FBI の Artex 告示（第3項）や今年の ConnectWise 型事件が示し続けているのはまさにこの層だ：MSP の RMM は機群全体のマスターキーであり、アプライアンス偽装のバグ1つが、そのアプライアンスが管理する全端末へのアクセスになり得る。N-central を運用していれば HF3 がパッチリストであり、MSP の顧客なら、今週聞くべき質問がこれだ。
+
+[`🔗 CVE-2026-129272 レコード`](https://www.cve.org/CVERecord?id=CVE-2026-129272) · [`🔗 CVE-2026-129286 レコード`](https://www.cve.org/CVERecord?id=CVE-2026-129286)
+
+---
+
+## 47. GitLab が37件のセキュリティ wave を出荷——8.7の保存型 XSS が2件——その横に Apache Roller の9.8 XML-RPC 逆シリアル化 RCE が着地
+
+- **Velocity:** ▮ steady
+- **Source:** NVD（GitLab CNA：37件；Apache CNA：CVE-2026-129448）· 11月17日公開
+- **Tags:** `cve` `gitlab` `roller` `deserialization`
+
+GitLab 自身の CNA が本日 NVD に37件のレコードを置いた。すべて **19.3.9 / 19.4.8 / 19.5.6** で修正済み。目玉は2つの **8.7 保存型 XSS**（CVE-2026-105739、17.2 から存在；CVE-2026-108153、16.1 から）で「特定条件下で認証済みユーザーが他のユーザーのブラウザ内で任意の JavaScript を実行できた可能性がある」。ほかに8.2のプロジェクトアクセス問題、7.6の Kubernetes シークレット読み取り、6.2の EE コード実行、4.3の Duo Workflow「権限昇格」——加えて数十件の2〜6帯域の情報漏えい・権限バグがあり、その一つは「機密性の高いクレデンシャル値」を露出していた（CVE-2026-110990）。その横で、Apache の CNA が **CVE-2026-129448（9.8）** を落とした：**Apache Roller 4.0.0〜6.1.4** の信頼できないデータの逆シリアル化で、「XML-RPC エンドポイントはベンダー拡張型を受け入れ、リクエスターを認証する前にそれを逆シリアル化する」——レコード自身が**「積極的に悪用されている」**と明記しており（CVE-2026-82384 と同一の脆弱性、当初のレコードは 6.1.5 のみを対象としていた）、最古参の Java ブログプラットフォームの一つでの未認証 RCE だ。修正は **Roller 6.1.6 以降**。すぐにアップグレードできない人向けの緩和策には、重要な警告が付いている：「管理 UI で XML-RPC を無効にするだけでは不十分だ。古いバージョンはその設定をチェックする前にリクエストを逆シリアル化する」。
+
+**Why it matters:** 一晩で2つの形状。GitLab の wave の大部分は、全面監査があって初めて浮上する静かな権限マトリクスの腐敗だ——地味な4.x スコアこそ、大規模デプロイが実際に血を流す場所である。そして Roller は、XML-RPC というインターネット最古の RPC 面が、2026年になっても認証の前に逆シリアル化していることの思い出させだ。
+
+[`🔗 CVE-2026-105739 レコード`](https://www.cve.org/CVERecord?id=CVE-2026-105739) · [`🔗 CVE-2026-129448 レコード`](https://www.cve.org/CVERecord?id=CVE-2026-129448)
+
+---
+
+## 48. Nimony.org 公開：Nim 3 のコンパイラ——借用チェック、明示的 nilability、LLM と GCC に依存しないネイティブコード生成
+
+- **Velocity:** ▮ steady
+- **Source:** nimony.org · HN 83+ pts · 35h ago (~09:00 UTC+8、11月16日)
+- **Tags:** `nim` `compilers` `languages` `memory-safety`
+
+Nim の生みの親 Andreas Rumpf（Araq）がコンパイラリライトに専用の居場所を与えた：「**Nimony は Nim の新しいコンパイラであり、Nim 3 言語のホームである：借用チェック、明示的 nilability、sum 型、検証付きジェネリクスなど、インクリメンタルで並列なビルドは最初から組み込まれている**」。訴えは組み込みからWebまで広がる：x86_64、ARM64、ARM32、AVR、RISC-V 向けのネイティブコード生成は「LLVM と GCC から独立」——`nimony n` を使えば C コンパイラすら要らない。ランタイムは「ヒープ枯渇に対して硬化」しており、OOM は「あなたが処理する条件であり、クラッシュではない」。同じコードベースが C、ネイティブ、JavaScript、WebAssembly にコンパイルされる。メモリ安全性は「最適化された自動参照カウントと、理解しやすい借用チェックの変種」から来て、証明可能な境界チェックもある：`staticContracts` 機能の下では「範囲外と証明できるインデックスはコンパイル時エラー」だ。4プラットフォームのナイトリーツールチェーンが毎日ビルドされる。
+
+**Why it matters:** Nimony は、数年分の ORC と借用チェックの研究が動くコンパイラとして着地した場所だ——そして本番言語としては極めて少数派のコード生成が LLVM も C も経由しない例である。組み込みと RISC-V の仕事にとって、C ツールチェーンに隠れた UB が存在しないことはベンチマークスコアではなく、それ自体が機能だ。
+
+[`🔗 Nimony — the road to Nim 3`](https://nimony.org/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50512779)
+
+---
+
+## 49. WINUDF 1.2：DOS と Windows 1.x〜ME 向けの DVD/Blu-ray ファイルシステムドライバ——4パッケージのレトロドライバセットの一つ
+
+- **Velocity:** ▮ steady
+- **Source:** github.com/ages2001/WINUDF · HN 97+ pts · 28h ago (~16:00 UTC+8、11月16日)
+- **Tags:** `retro` `file-systems` `drivers` `windows`
+
+**WINUDF は UDF バージョン 1.02 から 2.60 を読み書きできる**——DVD、Blu-ray ディスク、パケットライト CD、UDF フォーマットの USB メモリが使うファイルシステムだ——それより10〜20年前の仕様しか知らない OS の上で：`WINUDF.EXE` は DOS と Windows 1.0x〜3.11 にドライブレターを与え、`WINUDF.VXD` は Windows 95/98/ME 用のファイルシステムドライバで長いファイル名をサポートする。同じ作者による4つの WINDRV パッケージの一つで、単独でも組み合わせでも使える：**WINDISK**（IDE、SATA AHCI、NVMe ディスク、CD/DVD ドライブ、SD リーダー、eMMC）、**WINUSB**（USB ホストコントローラとデバイス、PS/2、タッチパッド——USB4/Thunderbolt を含む）、**WINAUDIO**（HD Audio、AC'97、General MIDI、Sound Blaster 16 エミュレーション）。HN スレッドでは作者がドライバレベルの質問にリアルタイムで答えている。
+
+**Why it matters:** レトロコンピューティングのシーンは静かに本気のシステムエンジニアリングになっている——Win98 時代のマシンに現代の UDF スタックを載せることは、当時の正しいハードウェアが今日焼かれたディスクや USB メディアを読めることを意味する。そして VxD の下での NVMe プラス USB4 サポートは、誰も金を払っていないのに誰もが恩恵を受ける種類の仕事だ。
+
+[`🔗 ages2001/WINUDF`](https://github.com/ages2001/WINUDF) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50515182)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-17T04:52:33Z |
-| Items | 39 |
-| Sources tracked | 40 (Hacker News, GitHub Trending, NVD/CVE, vendor blogs, AP/CNN News, FAA, engineering blogs, research groups) |
+| Generated | 2026-11-17T12:28:51Z |
+| Items | 49 |
+| Sources tracked | 47 (Hacker News, GitHub Trending, NVD/CVE, vendor blogs, AP/CNN News, FAA, engineering blogs, research groups, Hugging Face) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

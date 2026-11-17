@@ -1,8 +1,8 @@
 ---
 date: 2026-11-17
-updated: 2026-11-17T04:52:33Z
+updated: 2026-11-17T12:28:51Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 40
+sources: 47
 license: CC-BY-4.0
 ---
 
@@ -556,13 +556,153 @@ Uber 正在通知**近 15 万名司机**：他们的个人信息与驾照数据�
 
 ---
 
+## 40. Claude Code 团队如何思考验证——当代码约九成由 agent 写出，测试就是管理层
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** claude.dev · HN 42+ pts · 2h ago (~18:03 UTC+8)
+- **Tags:** `verification` `claude-code` `testing` `agent-infrastructure`
+
+Addy Osmani 撰文阐述 Claude Code 团队维持质量的工程方法："我们绝大部分代码（约 90%）由 Claude 编写并由 Claude 审查。在这种规模下，让 agent 用证据来验证自己的工作就变得极其重要。" 值得投入的三类测试：**端到端**（"很难被糊弄——要么整个功能能用，要么不能用"）、**属性测试**（用 fast-check/Hypothesis/proptest 生成上千个输入，打向"人们容易漏掉、而 agent 恰恰常失手的边缘情况"），以及**差分测试**。一条内部数字："让独立的 grader 按评分细则核查 Claude 的工作，比标准提示循环最多提升 10 个点的任务成功率，越难的问题收益越大。" 操作细节同样关键：flaky 测试是毒药，因为"你会把 agent 训练成重跑测试而不是修复代码"；而验证循环正是让团队并行跑"几十甚至上百个" agent 而不是一两个的前提——因为没有人逐个人工复核。
+
+**Why it matters:** 厂商自述自家代码库约 90% 由机器写成，是本刊连日话题迄今最硬的数据点：护城河已经从"写代码"移到"规格化与验证代码"。这篇文章与今天的 Buzzard 四条检验（第 4 条）、Harmonic 的 Rust 验证器（第 30 条）正好拼出 AI 代码时代的 QA 技术栈。
+
+[`🔗 claude.dev：How the Claude Code team thinks about verification`](https://claude.dev/blog/how-the-claude-code-team-thinks-about-verification/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50529612)
+
+---
+
+## 41. Apple 在 macOS 27.3 上线分级式完全磁盘访问——"只选择特定的受保护文件夹或应用"，而不是绕过系统保护
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** support.apple.com · HN 144+ pts · 10h ago (~02:00 UTC+8)
+- **Tags:** `macos` `privacy` `permissions` `security`
+
+Apple 发布支持文档，披露 **macOS 27.3** 的一项悄然变化：当应用申请"完全磁盘访问"或**"系统与应用保护覆写"**时，"你可以选择只让该应用访问特定的受保护文件夹或应用"。文档对"全有或全无"授权的含义毫不讳言：完全磁盘访问让应用"不经询问即可读取、更改、删除并导出这些数据"——包括信息、邮件、照片和其他用户的数据；而系统与应用保护覆写"可以完全控制你的 Mac 和应用……它还能看到每一个窗口和应用，包括后台运行的那些，并捕获每一次按键"。在"隐私与安全性"设置里，macOS 现在会提示用户只勾选该应用真正需要的文件夹或应用（点名对象包括备份工具、磁盘清理器、文件索引器和安全类应用），"而其余数据的系统保护保持原样"。
+
+**Why it matters:** 完全磁盘访问一直是 macOS 上最常被滥用的授权页——一次点击就能把工具软件变成全监视应用。把两项最危险的 TCC 授权做成分级选择，是桌面端终于补上移动系统多年前就有最小权限模式；对开发者来说假设也变了：应用不能再把 FDA 当成"我什么都拿得到"。
+
+[`🔗 Apple 支持：如果应用申请"完全磁盘访问"或"系统与应用保护覆写"`](https://support.apple.com/en-us/149699) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50526560)
+
+---
+
+## 42. Carmack 谈 3dfx Voodoo 1 为何色彩发灰："NeXT 和 3DFX 都想在色彩空间上'做对的事'，结果通常比竞品看起来更糟"
+
+- **Velocity:** ▮▮ rising
+- **Source:** x.com (id_aa_carmack) · HN 165+ pts · 12h ago (~00:00 UTC+8)
+- **Tags:** `graphics` `retro` `color` `carmack`
+
+HN 的问题是：为什么 3dfx Voodoo 1 显卡输出色彩发灰？John Carmack 的回答是一份迟到二十年的复盘："NeXT 和 3DFX 都想在色彩空间上'做对的事'，结果通常比竞品看起来更糟。很多年后我才真正理解这件事。" 楼里的讨论把机制拼了起来——一条热门评论解释了反直觉之处：sRGB 除信号电压层外处处非线性，而在 CRT 上"50% 的 sRGB 就真的是 50% 的信号电压"，于是在数学上"正确"的线性管线，反而比单纯对着用户面前那块玻璃调参的竞品更暗、更平。
+
+**Why it matters:** 这是"正确"与"合适"之别的一堂压缩课：两家公司都为数学上站得住的选择做了优化，却把市场输给了在用户实际显示器上更好看的东西。1996 年以来关于色彩管理、色调映射与显示响应的每一场管线争论，都是这笔交易的下游。
+
+[`🔗 John Carmack on X`](https://twitter.com/id_aa_carmack/status/2122478083319992513) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50525575)
+
+---
+
+## 43. K2-Horizon：六款全开源语言模型编队，0.9B 到 375B-A23B MoE——检查点、日志、数据管线全数公开
+
+- **Velocity:** ▮▮ rising
+- **Source:** arxiv.org · 论文 11 月 16 日提交 · HF Papers 52+ 赞
+- **Tags:** `open-weights` `llm` `moe` `training-data`
+
+K2 团队（Zhengzhong Liu、Haonan Li、Xuezhe Ma、Rupesh Kumar Srivastava 等数十人）发布"**由六款完全开源的语言模型组成的编队，从 0.9B 稠密模型到 375B-A23B MoE**，面向通用推理与 agentic 工作"。建模侧两个新结构：**MoVA**（Mixture-of-Value Attention——"把 MoE 应用到注意力的 value 投影上"）与 **softplus 注意力门控**；36B-A4B 模型"在相同数据上训练，以七分之一的激活参数逼近 32B 稠密模型"。另有 **Uno**——"无损扩散适配器，无需独立草稿模型即可将解码加速至多 2.2 倍"。发布遵循 LLM360 的开源定义：完整开发史、每个训练阶段的中间检查点、预训练数据、训练日志、全部训练/评测/基础设施代码——包括 xLLM 训练框架与 RL360 强化学习栈。数据主张最大胆：约 **10 万亿合成预训练 token**，"说明合成数据可以成为规模化预训练的主要成分"；四个模型共享同一份 22T token 语料与配方。权重已在 Hugging Face 上线，含 GGUF。
+
+**Why it matters:** 大多数"开源"发布只给权重和论文，这次把整条生产线都交了出来——检查点、数据、日志、管线，这才是可复现性真正需要的东西。10T 合成 token 的规模化数据点是多数实验室从不披露的，而四档尺寸共享同一配方也让受控的 scaling 研究成为可能。
+
+[`🔗 arXiv:2611.21003 — K2-Horizon`](https://arxiv.org/abs/2611.21003) · [`🔗 Hugging Face 上的 IFM/K2-Horizon-MoVA-36B-A4B`](https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B)
+
+---
+
+## 44. Daniel Stenberg 评 agent 用 Rust 重写 curl：三周把 18.5 万行 C 变成 34 万行 Rust——同一窗口里上游合并了 200 个 bugfix
+
+- **Velocity:** ▮▮ rising
+- **Source:** daniel.haxx.se · HN 18+ pts · 12h ago (~00:00 UTC+8)
+- **Tags:** `curl` `rust` `ai-agents` `maintainers`
+
+curl 之父 Daniel Stenberg 回应今秋两个由 agent 写成的 curl 重写版——数月前的 **urlx**，与 11 月的"curl, rewritten in Rust"（"命名上居然毫不避讳"，宣称花费约 8600 美元）。他给出的对照："在这些 agent 把 185,000 行 C 代码转换成 340,000 行 Rust 代码的同一时间（我数过），真正的 curl 项目合并了 300 多个提交……实际上有 200 多个 bugfix。这 200 个 bugfix，那些 Rust 重写版一个都没有。" 谈内存安全他给出具体数字："在 curl 2026 年迄今确认的 81 个漏洞中，14 个最可能源于若用 rust 这类内存安全语言本可避免的错误。这是 17.3%。也就是说 Rust 版 curl 仍会有其中 67 个漏洞。" 结论："我不相信任何语言的重写。我相信持续不断的打磨、迭代与重构。" 他还指出重写之所以可能，"是因为全世界的 AI 都拿 curl 代码训练过多年"——几十年的测试与文档本身就是规格。
+
+**Why it matters:** 这是 agent 驱动重写旗舰级 C 项目这件事的第一份真正纵向数据：重写之所以可行，恰恰因为上游做了三十年的维护；而维护速度——每天约 11 个提交、同期 200 个修复——是任何基准都测不到的部分。这篇文章正好是上周《所有 AI 生成代码都应开源》一文的维护者视角回声。
+
+[`🔗 daniel.haxx.se：Actual curl rewrites in rust`](https://daniel.haxx.se/blog/2026/11/17/actual-curl-rewrites-in-rust/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50525713) · [`🔗 Jakub T. Jankiewicz：All AI-generated code should be Open Source`](https://jakub.jankiewicz.org/blog/ai-code-open-source/)
+
+---
+
+## 45. Three.js 里的 AAA 光照工程：逐阶段审计 WebGPU 版 Three.js 现在能做与不能做什么
+
+- **Velocity:** ▮▮ rising
+- **Source:** ben3d.ca · HN 144+ pts · 15h ago (~05:00 UTC+8)
+- **Tags:** `threejs` `webgpu` `graphics` `rendering`
+
+Ben Houston 的五部曲系列（11 月 9 日发表，现于 HN 回热）以一句改变判断的话开篇："WebGPU 已在多数设备上运行，Three.js 也有了一个为它打造的新渲染器。两者合在一起，首次让网页里的室内场景能以 AAA 游戏的方式打光。" 第三篇是干货——把游戏级管线逐阶段（G-buffer、烘焙 GI、动态 GI、遮蔽、SSR/SSGI、反射探针、间接 BRDF、TRAA/TAAU 时域超分）对着 Three.js 做成三列审计表：**Three.js 已有**（MRT prepass、lightmap + radiosity 烘焙器、GTAO、提速 8 倍的 LightProbeGrid）、**评审或草稿中**（DDGI visibility、JPEG XL / KHR_lightmap 扩展）、**仍待建设**（octahedral normals、运行时 BC6H、接缝缝合）。每个阶段都写明游戏对它的要求，这张表同时就是浏览器级游戏光照的公开路线图。
+
+**Why it matters:** 浏览器渲染这十年在"demo 集锦"和"只是三角形"之间来回摇摆；这篇两者都不是——它是对着一条具体 AAA 管线的实测差距分析，缺口被具名成 pull request。如果浏览器游戏真的要来，这就是它距离还有多远的诚实工程台账。
+
+[`🔗 ben3d.ca：Building the AAA Lighting Pipeline in Three.js`](https://ben3d.ca/blog/building-the-aaa-lighting-pipeline-in-threejs) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50523291)
+
+---
+
+## 46. N-able N-central 一波落下 10 条 CVE 记录——MSP 的 RMM 平台上，9.3 分让任何人可冒充设备，9.2 分把更新元数据变成 RCE
+
+- **Velocity:** ▮ steady
+- **Source:** NVD（N-able CNA）· 11 月 17 日发布 10 条 CVSS 4.0 记录（UTC 凌晨）
+- **Tags:** `cve` `msp` `rmm` `n-central`
+
+N-able 自己的 CNA 对 N-central——MSP 用来管理客户机群的远程监控平台——一口气发布十条记录，全部已在 **2026.4.1 HF3** 修复，NVD 状态均为 `Received`。**CVE-2026-129272（9.3）**：N-central "使用可预测的凭据向 agent 侧 API 认证设备。知道或猜出设备标识的远程未认证攻击者，即可获得有效的设备 token 与会话并冒充该设备"。**CVE-2026-129286（9.2）**：软件更新元数据中的版本值与下载位置不校验——"能够提供或修改服务器所收更新元数据的攻击者，可在下载目录之外写文件并执行代码"。**CVE-2026-129280（9.3）**：多个 ServerUI/ServerUI2 SOAP 操作"不验证调用者的会话、权限或客户范围"，部分情况下无需认证。周围还有：伪造远程执行结果（8.7）、只读权限即可设置设备执行配置（8.5）、补丁管理引擎 LPE（8.5）、经审计导出的配置注入（8.6）、邮件选项注入（8.7）。
+
+**Why it matters:** 这正是 FBI 的 Artex 通报（第 3 条）和今年 ConnectWise 一类事件反复指着的层级：MSP 的 RMM 是打开整个机群的万能钥匙，一个设备冒充漏洞就可能触及该设备管理的所有终端。如果你在运维 N-central，HF3 就是补丁清单；如果你是 MSP 的客户，这就是本周该问的问题。
+
+[`🔗 CVE-2026-129272 记录`](https://www.cve.org/CVERecord?id=CVE-2026-129272) · [`🔗 CVE-2026-129286 记录`](https://www.cve.org/CVERecord?id=CVE-2026-129286)
+
+---
+
+## 47. GitLab 一波 37 条安全记录——两条 8.7 存储型 XSS——旁边还落下 Apache Roller 的 9.8 XML-RPC 反序列化 RCE
+
+- **Velocity:** ▮ steady
+- **Source:** NVD（GitLab CNA：37 条；Apache CNA：CVE-2026-129448）· 11 月 17 日发布
+- **Tags:** `cve` `gitlab` `roller` `deserialization`
+
+GitLab 自己的 CNA 今天在 NVD 放下 37 条记录，全部在 **19.3.9 / 19.4.8 / 19.5.6** 修复：压轴的是两条 **8.7 存储型 XSS**（CVE-2026-105739，17.2 起存在；CVE-2026-108153，16.1 起）"可能在特定条件下让认证用户在其他用户的浏览器中执行任意 JavaScript"；另有 8.2 项目访问问题、7.6 Kubernetes 密钥读取、6.2 EE 代码执行、4.3 Duo Workflow "提权"问题——外加几十条 2–6 分的信息泄露与权限类 bug，其中一条暴露"敏感凭据值"（CVE-2026-110990）。与此同时，Apache 的 CNA 落下 **CVE-2026-129448（9.8）**：**Apache Roller 4.0.0–6.1.4** 的不可信数据反序列化——"XML-RPC 端点接受厂商扩展类型，并在认证请求者之前就将其反序列化"——记录自己写明**"正被积极利用"**（与 CVE-2026-82384 为同一漏洞，早前记录仅列出 6.1.5）。修复版本为 **Roller 6.1.6 或更高**；记录给暂时无法升级者的缓解方案带着一句要紧的警告："仅在管理界面里禁用 XML-RPC 是不够的，因为旧版本会在检查该设置之前就先反序列化请求。"
+
+**Why it matters:** 一夜之间两种形态：GitLab 这波多数是只有全面审计才会浮出水面的权限矩阵慢性腐烂——那些不起眼的 4.x 分数才是规模部署真正流血的地方；而 Roller 提醒我们：XML-RPC，互联网最老的 RPC 面，2026 年仍在认证之前反序列化。
+
+[`🔗 CVE-2026-105739 记录`](https://www.cve.org/CVERecord?id=CVE-2026-105739) · [`🔗 CVE-2026-129448 记录`](https://www.cve.org/CVERecord?id=CVE-2026-129448)
+
+---
+
+## 48. Nimony.org 上线：Nim 3 的编译器——借用检查、显式可空性、不依赖 LLVM 与 GCC 的原生代码生成
+
+- **Velocity:** ▮ steady
+- **Source:** nimony.org · HN 83+ pts · 35h ago (~09:00 UTC+8, 11 月 16 日)
+- **Tags:** `nim` `compilers` `languages` `memory-safety`
+
+Nim 之父 Andreas Rumpf（Araq）为他的编译器重写项目安了新家："**Nimony 是 Nim 的新编译器，也是 Nim 3 语言的家：借用检查、显式可空性、和类型、受检泛型等等，增量与并行构建从一开始就有。**" 卖点横跨嵌入式到 Web：面向 x86_64、ARM64、ARM32、AVR 与 RISC-V 的原生代码生成，"独立于 LLVM 与 GCC"——用 `nimony n` 你甚至不需要 C 编译器；运行时"针对堆耗尽做了加固"，OOM"是你处理的一个条件，而不是一次崩溃"；同一份代码库可编译到 C、原生、JavaScript 与 WebAssembly。内存安全来自"优化过的自动引用计数与一种容易理解的借用检查变体"，并有可证的越界检查：在 `staticContracts` 特性下，"可证越界的索引是编译期错误"。四平台的每夜工具链每日构建。
+
+**Why it matters:** Nimony 是多年 ORC 与借用检查研究落成可用编译器的地方——也是极少数代码生成完全不经过 LLVM 或 C 的生产语言之一。对嵌入式与 RISC-V 工作来说，C 工具链藏起来的未定义行为不再存在，这不是基准分数，而是功能本身。
+
+[`🔗 Nimony — the road to Nim 3`](https://nimony.org/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50512779)
+
+---
+
+## 49. WINUDF 1.2：给 DOS 与 Windows 1.x 至 ME 的 DVD/蓝光文件系统驱动——四件套复古驱动之一
+
+- **Velocity:** ▮ steady
+- **Source:** github.com/ages2001/WINUDF · HN 97+ pts · 28h ago (~16:00 UTC+8, 11 月 16 日)
+- **Tags:** `retro` `file-systems` `drivers` `windows`
+
+**WINUDF 可读写 UDF 1.02 到 2.60**——DVD、蓝光光盘、包刻录 CD 与 UDF 格式化 U 盘所用的文件系统——运行在比该规范早十到二十年的操作系统上：`WINUDF.EXE` 为 DOS 与 Windows 1.0x–3.11 提供盘符，`WINUDF.VXD` 则是 Windows 95/98/ME 的文件系统驱动，支持长文件名。它是同一作者的四个 WINDRV 软件包之一，可单独使用也可组合：**WINDISK**（IDE、SATA AHCI 与 NVMe 硬盘、CD/DVD 驱动器、SD 读卡器、eMMC）、**WINUSB**（USB 主控与设备、PS/2、触控板——含 USB4/Thunderbolt）、**WINAUDIO**（HD Audio、AC'97、General MIDI、Sound Blaster 16 仿真）。HN 帖子里作者正在实时回答驱动层的问题。
+
+**Why it matters:** 复古计算圈正在悄悄变成正经的系统工程——给 Win98 时代的机器装上现代 UDF 栈，意味着那个年代的正确硬件今天也能读新刻的光盘和 U 盘；而 VxD 之下的 NVMe 加 USB4 支持，是没人付钱却人人受益的那种工作。
+
+[`🔗 ages2001/WINUDF`](https://github.com/ages2001/WINUDF) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50515182)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-17T04:52:33Z |
-| Items | 39 |
-| Sources tracked | 40 (Hacker News, GitHub Trending, NVD/CVE, vendor blogs, AP/CNN News, FAA, engineering blogs, research groups) |
+| Generated | 2026-11-17T12:28:51Z |
+| Items | 49 |
+| Sources tracked | 47 (Hacker News, GitHub Trending, NVD/CVE, vendor blogs, AP/CNN News, FAA, engineering blogs, research groups, Hugging Face) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

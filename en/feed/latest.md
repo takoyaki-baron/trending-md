@@ -1,6 +1,6 @@
 ---
 date: 2026-11-17
-updated: 2026-11-17T04:52:33Z
+updated: 2026-11-17T12:28:51Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 40
 license: CC-BY-4.0
@@ -556,13 +556,153 @@ Uber is notifying **close to 150,000 drivers** that their personal information a
 
 ---
 
+## 40. How the Claude Code team thinks about verification — when ~90% of your code is agent-written, the tests are the management
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** claude.dev · 42+ pts on HN · 2h ago (~18:03 UTC+8)
+- **Tags:** `verification` `claude-code` `testing` `agent-infrastructure`
+
+Addy Osmani's engineering post on how the Claude Code team keeps quality as the model writes the code: "the vast majority of our code (~90%) is written and reviewed by Claude. At this scale, how we equip our agents to verify their work with evidence becomes extremely important." The three test types worth investing in: **end-to-end** ("difficult to fool — either the whole feature works or it doesn't"), **property tests** (fast-check/Hypothesis/proptest generating thousands of inputs at "the edge cases that people tend to miss, which is where agents often fail"), and **differential tests**. One internal number: "having a separate grader check Claude's work against a rubric improved task success by up to 10 points over a standard prompting loop, with the largest gains on the hardest problems." The operational details are the useful half: flaky tests are poison because "you'll train the agent to run them again rather than fixing the failing code," and verification loops are what lets a team run "dozens or hundreds" of agents in parallel instead of one or two — because nobody is hand-checking each run.
+
+**Why it matters:** The vendor describing its own codebase as ~90% machine-written is the strongest data point yet for the claim this feed keeps circling: the moat has moved from writing code to specifying and verifying it. The post pairs naturally with today's Buzzard checklist (item 4) and Harmonic's Rust verifier (item 30) — the AI-code era's QA stack is assembling in public.
+
+[`🔗 claude.dev: How the Claude Code team thinks about verification`](https://claude.dev/blog/how-the-claude-code-team-thinks-about-verification/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50529612)
+
+---
+
+## 41. Apple ships scoped Full Disk Access in macOS 27.3 — "choose only specific protected folders or apps" instead of bypassing system protections
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** support.apple.com · 144+ pts on HN · 10h ago (~02:00 UTC+8)
+- **Tags:** `macos` `privacy` `permissions` `security`
+
+Apple published a support document for a quiet change in **macOS 27.3**: when an app asks for Full Disk Access or the **System & App Protection Override**, "you have the option to choose only specific protected folders or apps for the app to access." The doc is blunt about what the all-or-nothing grants mean: Full Disk Access lets an app "read, change, delete, and export this data without asking" — messages, emails, photos, other users' data — and System & App Protection Override "can fully control your Mac and apps… It can also see every window and app, including ones in the background, and capture every keystroke." In Privacy & Security settings, the Mac now prompts users to pick exactly the folders or apps the app needs (backup apps, disk cleaners, file indexers and security apps are the named askers), "while system protections stay in place for the rest of your data."
+
+**Why it matters:** Full Disk Access has been macOS's most-abused consent screen — the one click that turns a utility into a total-surveillance app. Scoping the two most dangerous TCC grants is the desktop finally adopting the least-privilege pattern mobile OSes have had for years, and it changes developer assumptions: an app can no longer treat FDA as "I get everything."
+
+[`🔗 Apple Support: If an app asks for Full Disk Access or System & App Protection Override`](https://support.apple.com/en-us/149699) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50526560)
+
+---
+
+## 42. Carmack on why the 3dfx Voodoo 1 looked washed out: "Both NeXT and 3DFX tried to 'do the right thing' with color spaces, and it wound up generally making them look worse"
+
+- **Velocity:** ▮▮ rising
+- **Source:** x.com (id_aa_carmack) · 165+ pts on HN · 12h ago (~00:00 UTC+8)
+- **Tags:** `graphics` `retro` `color` `carmack`
+
+The HN question was why 3dfx Voodoo 1 cards had such washed-out color output; John Carmack's answer is a two-decade hindsight confession: "Both NeXT and 3DFX tried to 'do the right thing' with color spaces, and it wound up generally making them look worse than competing options. I didn't really understand it properly until years later." The thread assembles the mechanism around him — one popular comment explains the counterintuitive part: sRGB is nonlinear everywhere except at the signal-voltage layer, where "50% of sRGB truly means 50% of signal voltage" on a CRT, so a technically-correct linear pipeline rendered darker and flatter than competitors who simply tuned to what the glass in front of the user actually did.
+
+**Why it matters:** It's a compressed lesson in the difference between correct and right: both companies optimized for the mathematically defensible choice and lost the market to something that looked better on the displays people owned. Every pipeline argument about color management, tone mapping and display response since 1996 is downstream of this exact trade.
+
+[`🔗 John Carmack on X`](https://twitter.com/id_aa_carmack/status/2122478083319992513) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50525575)
+
+---
+
+## 43. K2-Horizon: a fleet of six fully open language models, 0.9B → 375B-A23B MoE — every checkpoint, log, and pipeline released
+
+- **Velocity:** ▮▮ rising
+- **Source:** arxiv.org · paper submitted Nov 16 · 52+ upvotes on HF Papers
+- **Tags:** `open-weights` `llm` `moe` `training-data`
+
+The K2 Team (Zhengzhong Liu, Haonan Li, Xuezhe Ma, Rupesh Kumar Srivastava and dozens more) presents "**a fleet of six fully open language models, from a 0.9B dense model to a 375B-A23B MoE**, built for general-purpose reasoning and agentic work." Two modeling introductions: **MoVA** (Mixture-of-Value Attention — "applying MoE to attention value projections") and **softplus attention gating**; the 36B-A4B model "nearly matches a 32B dense model trained on the same data, with one-seventh the active parameters." Plus **Uno**, "lossless diffusion adapters that speed up decoding by up to 2.2x without a separate draft model." The release follows the LLM360 definition of open source: full development history, intermediate checkpoints from every training stage, pre-training data, logs, and all training/eval/infrastructure code — including the xLLM training framework and RL360 RL stack. The data claim is the boldest: roughly **10T synthetic pre-training tokens**, "showing that synthetic data can be a major ingredient of pre-training at scale," with four models sharing one 22T-token corpus and recipe. Weights are live on Hugging Face, GGUFs included.
+
+**Why it matters:** Most "open" releases ship weights and a paper; this ships the entire manufacturing line — checkpoints, data, logs, pipelines — which is what reproducibility actually requires. The synthetic-tokens-at-scale datapoint is one most labs never disclose, and the consistent recipe across four sizes makes controlled scaling studies possible.
+
+[`🔗 arXiv:2611.21003 — K2-Horizon`](https://arxiv.org/abs/2611.21003) · [`🔗 IFM/K2-Horizon-MoVA-36B-A4B on Hugging Face`](https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B)
+
+---
+
+## 44. Daniel Stenberg sizes up the AI-agent curl rewrites in Rust: 185k lines of C became 340k lines of Rust in ~3 weeks — upstream merged 200 bugfixes in the same window
+
+- **Velocity:** ▮▮ rising
+- **Source:** daniel.haxx.se · 18+ pts on HN · 12h ago (~00:00 UTC+8)
+- **Tags:** `curl` `rust` `ai-agents` `maintainers`
+
+curl's creator Daniel Stenberg responds to this fall's two agent-built curl rewrites — **urlx** (a few months ago) and "curl, rewritten in Rust" (November, "confusingly enough not even using a different name," claiming ~$8,600 spent). His measured counter: "During the time these agents converted 185,000 lines of C code into 340,000 lines of Rust code (I counted), we merged over 300 commits in the actual curl project… A little over 200 bugfixes actually. 200 bugfixes that none of those rust rewrites have." On the memory-safety argument he's specific: "out of the 81 vulnerabilities we have confirmed in curl so far during 2026, 14 were the result of mistakes that most likely would have been avoided had we used a memory-safe language such as rust. That's 17.3%. A Rust implementation of curl would thus still have had 67 of those vulnerabilities." The verdict: "I don't believe in rewrites into any language. I believe in constant and never-ending polishing, iterating and refactoring." He notes the rewrites were only possible "because all the AIs of the world have trained on curl code for years" — the decades of tests and documentation are the specification.
+
+**Why it matters:** This is the first real longitudinal datapoint on the agent-driven rewrite of a flagship C project: the rewrite is achievable precisely because upstream did thirty years of maintenance, and the maintenance velocity — ~11 commits/day, 200 fixes in the same three weeks — is the part no benchmark measures. It lands as the maintainer's-chair answer to last week's All-AI-generated-code-should-be-Open-Source essay.
+
+[`🔗 daniel.haxx.se: Actual curl rewrites in rust`](https://daniel.haxx.se/blog/2026/11/17/actual-curl-rewrites-in-rust/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50525713) · [`🔗 Jakub T. Jankiewicz: All AI-generated code should be Open Source`](https://jakub.jankiewicz.org/blog/ai-code-open-source/)
+
+---
+
+## 45. The quest for AAA lighting in Three.js: a stage-by-stage audit of what WebGPU Three.js can and can't do yet
+
+- **Velocity:** ▮▮ rising
+- **Source:** ben3d.ca · 144+ pts on HN · 15h ago (~05:00 UTC+8)
+- **Tags:** `threejs` `webgpu` `graphics` `rendering`
+
+Ben Houston's five-part series (Nov 9, resurfacing on HN now) opens with the claim that changed the calculus: "WebGPU now runs on most devices, and Three.js has a new renderer built for it. Together they make it possible, for the first time, to light an indoor scene in a web page the way a AAA game does." Part 3 is the substance — a per-stage audit of a game-grade pipeline (G-buffer, baked GI, dynamic GI, occlusion, SSR/SSGI, reflection probes, indirect BRDF, TRAA/TAAU temporal upscaling) against Three.js as a three-column table: **in Three.js** (MRT prepass, lightmaps + radiosity baker, GTAO, LightProbeGrid with 8× faster bakes), **in review or drafted** (DDGI visibility, JPEG XL / KHR_lightmap extensions), **still to build** (octahedral normals, runtime BC6H, seam stitching). Each stage states what games require of it, so the table doubles as a public roadmap for browser-grade game lighting.
+
+**Why it matters:** Browser rendering has spent a decade oscillating between demo reels and "it's just triangles"; this is neither — it's a measured gap analysis against a concrete AAA pipeline, with the missing pieces named as pull requests. If browser games are going to happen, this is the honest engineering ledger of how far away they are.
+
+[`🔗 ben3d.ca: Building the AAA Lighting Pipeline in Three.js`](https://ben3d.ca/blog/building-the-aaa-lighting-pipeline-in-threejs) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50523291)
+
+---
+
+## 46. N-able N-central drops 10 CVE records in one wave — an MSP's RMM where a 9.3 lets anyone impersonate an appliance and 9.2 turns update metadata into RCE
+
+- **Velocity:** ▮ steady
+- **Source:** NVD (N-able CNA) · 10 CVSS-4.0 records published Nov 17 (overnight UTC)
+- **Tags:** `cve` `msp` `rmm` `n-central`
+
+N-able's own CNA published ten records against N-central — the remote-monitoring platform MSPs use to manage customer fleets — all fixed in **2026.4.1 HF3** and all still `Received` at NVD. **CVE-2026-129272 (9.3)**: N-central "uses a predictable credential to authenticate appliances to an agent-facing API. A remote, unauthenticated attacker who knows or guesses an appliance identifier can obtain a valid appliance token and session and impersonate" an appliance. **CVE-2026-129286 (9.2)**: no validation of version values and download locations in software-update metadata — "an attacker able to supply or modify the update metadata received by the server can write files outside the download directory and execute" code. **CVE-2026-129280 (9.3)**: multiple ServerUI/ServerUI2 SOAP operations "do not verify the caller's session, permissions or customer scope," in some cases without authentication. Around them: forged remote-execution results (8.7), view-only permissions that can set device execution config (8.5), patch-management-engine LPE (8.5), configuration injection via audit export (8.6), and mail-option injection (8.7).
+
+**Why it matters:** This is the tier the FBI's Artex advisory (item 3) and this year's ConnectWise-class incidents keep pointing at: an MSP's RMM is a fleet-wide skeleton key, and one appliance-impersonation bug is potential access to every endpoint that appliance manages. If you run N-central, HF3 is the patch list; if you're an MSP's customer, it's the question to ask them this week.
+
+[`🔗 CVE-2026-129272 record`](https://www.cve.org/CVERecord?id=CVE-2026-129272) · [`🔗 CVE-2026-129286 record`](https://www.cve.org/CVERecord?id=CVE-2026-129286)
+
+---
+
+## 47. GitLab ships a 37-record security wave — two 8.7 stored XSS — while Apache Roller's 9.8 XML-RPC deserialization RCE lands beside it
+
+- **Velocity:** ▮ steady
+- **Source:** NVD (GitLab CNA: 37 records; Apache CNA: CVE-2026-129448) · published Nov 17
+- **Tags:** `cve` `gitlab` `roller` `deserialization`
+
+GitLab's own CNA put 37 records on NVD today, everything fixed in **19.3.9 / 19.4.8 / 19.5.6**: the headliners are two **8.7 stored-XSS** bugs (CVE-2026-105739, present since 17.2; CVE-2026-108153, since 16.1) that "could have allowed an authenticated user to execute arbitrary JavaScript in the browser of" other users; an 8.2 project-access issue; a 7.6 Kubernetes-secrets read; a 6.2 EE code-execution bug; and a 4.3 Duo Workflow "elevated privileges" escalation — plus dozens of 2–6 range info-disclosure and permission bugs, including one that exposed "sensitive credential values" (CVE-2026-110990). Beside it, Apache's CNA dropped **CVE-2026-129448 (9.8)**: deserialization of untrusted data in **Apache Roller 4.0.0–6.1.4**, where "The XML-RPC endpoint accepts vendor extension types and deserializes them before authenticating the requester" — unauthenticated RCE that the record itself states "**is being actively exploited**" (the same vulnerability as CVE-2026-82384, earlier filed against 6.1.5 only). The fix is **Roller 6.1.6 or later**; the record's mitigation for those who can't upgrade comes with the warning that matters: "Disabling XML-RPC in the administration UI is not enough, because older versions deserialize the request before checking that setting."
+
+**Why it matters:** Two shapes in one overnight dump: GitLab's wave is mostly the quiet permission-matrix rot that only a full audit surfaces — the unglamorous 4.x scores are where fleet deployments actually bleed — and Roller is a reminder that XML-RPC, the internet's oldest RPC surface, is still deserializing before it authenticates in 2026.
+
+[`🔗 CVE-2026-105739 record`](https://www.cve.org/CVERecord?id=CVE-2026-105739) · [`🔗 CVE-2026-129448 record`](https://www.cve.org/CVERecord?id=CVE-2026-129448)
+
+---
+
+## 48. Nimony.org launches: Nim 3's compiler — borrow checking, explicit nilability, native codegen independent of LLVM and GCC
+
+- **Velocity:** ▮ steady
+- **Source:** nimony.org · 83+ pts on HN · 35h ago (~09:00 UTC+8, Nov 16)
+- **Tags:** `nim` `compilers` `languages` `memory-safety`
+
+Nim creator Andreas Rumpf (Araq) has given his compiler rewrite a dedicated home: "**Nimony is a new compiler for Nim and the home of the Nim 3 language: borrow checking, explicit nilability, sum types, checked generics and more, with incremental and parallel builds from the start.**" The pitch spans embedded to web: native code generation for x86_64, ARM64, ARM32, AVR and RISC-V "independent of LLVM and GCC" — with `nimony n` you don't even need a C compiler — a runtime "hardened against heap exhaustion" where OOM "is a condition you handle, not a crash," and the same codebase compiling to C, native, JavaScript and WebAssembly. Memory safety comes from "optimized automatic reference counting and a variant of borrow checking that is easy to understand," with provable bounds checking: under the `staticContracts` feature regime, "an index that is provably out of range is a compile-time error." Nightly toolchains build daily for all four platforms.
+
+**Why it matters:** Nimony is where years of ORC and borrow-checking research land as a working compiler — and it's one of very few production languages whose codegen doesn't route through LLVM or C at all. For embedded and RISC-V work, the absence of UB hidden by the C toolchain is not a benchmark, it's the feature.
+
+[`🔗 Nimony — the road to Nim 3`](https://nimony.org/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50512779)
+
+---
+
+## 49. WINUDF 1.2: DVD/Blu-ray file-system drivers for DOS and Windows 1.x through ME — one of a four-package retro driver set
+
+- **Velocity:** ▮ steady
+- **Source:** github.com/ages2001/WINUDF · 97+ pts on HN · 28h ago (~16:00 UTC+8, Nov 16)
+- **Tags:** `retro` `file-systems` `drivers` `windows`
+
+**WINUDF reads and writes UDF versions 1.02 to 2.60** — the file system of DVDs, Blu-ray discs, packet-written CDs and UDF-formatted USB sticks — on operating systems that predate the spec by ten to twenty years: `WINUDF.EXE` gives DOS and Windows 1.0x–3.11 drive letters for them, and `WINUDF.VXD` is a file-system driver for Windows 95/98/ME with long filename support. It's one of four WINDRV packages by the same author, each usable alone or together: **WINDISK** (IDE, SATA AHCI and NVMe disks, CD/DVD drives, SD readers, eMMC), **WINUSB** (USB host controllers and devices, PS/2, touchpads — including USB4/Thunderbolt), and **WINAUDIO** (HD Audio, AC'97, General MIDI, Sound Blaster 16 emulation). The HN thread is the author answering driver-level questions in real time.
+
+**Why it matters:** The retro-computing scene has quietly become serious systems engineering — a modern UDF stack for Windows 98-era machines means period-correct hardware can read discs and USB media burned today, and NVMe-plus-USB4 support under a VxD is the kind of work nobody's paying for and everyone benefits from.
+
+[`🔗 ages2001/WINUDF`](https://github.com/ages2001/WINUDF) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50515182)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-17T04:52:33Z |
-| Items | 39 |
-| Sources tracked | 40 (Hacker News, GitHub Trending, NVD/CVE, vendor blogs, AP/CNN News, FAA, engineering blogs, research groups) |
+| Generated | 2026-11-17T12:28:51Z |
+| Items | 49 |
+| Sources tracked | 47 (Hacker News, GitHub Trending, NVD/CVE, vendor blogs, AP/CNN News, FAA, engineering blogs, research groups, Hugging Face) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

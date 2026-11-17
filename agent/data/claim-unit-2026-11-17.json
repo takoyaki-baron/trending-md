@@ -1,9 +1,9 @@
 {
- "generated": "2026-11-17T04:52:47.126Z",
+ "generated": "2026-11-17T12:28:59.927Z",
  "files": [
   {
    "file": "2026-11-17.md",
-   "items": 39,
+   "items": 49,
    "findings": [
     {
      "check": "status",
@@ -48,32 +48,46 @@
      "detail": "NVD published 2026-11-16T22:18:19.097 (2026-11-16 UTC) · cveawg datePublished 2026-11-16T21:35:40.728Z (2026-11-16 UTC) — the two clocks differ; 2026-11-16 is the NVD published day"
     },
     {
+     "check": "status",
+     "item": 46,
+     "verdict": "ok",
+     "claim": "CVE-2026-129272 `Received`",
+     "detail": "Received (lastModified 2026-11-17T12:17:46.800)"
+    },
+    {
      "check": "repo",
      "item": 10,
      "verdict": "ok",
      "claim": "withcoral/coral",
-     "detail": "5001★, last push 2026-11-16"
+     "detail": "5006★, last push 2026-11-17"
     },
     {
      "check": "batch",
      "item": 7,
-     "verdict": "batch-unread",
-     "claim": "75 CVE records",
-     "detail": "no search term derived from the item (VulnCheck, CMS) and not the writer's own sourceIdentifier (disclosure@vulncheck.com) retrieved its own cited CVE-2026-129552 on 2026-11-16 — the set was not read, so nothing is claimed about the count"
+     "verdict": "batch-count-ok",
+     "claim": "105 records (source=disclosure@vulncheck.com, 2026-11-16)",
+     "detail": "105 records from disclosure@vulncheck.com published 2026-11-16 — the claim's own set, retrieved by its own cited id CVE-2026-129552"
     },
     {
      "check": "quotation",
      "item": 1,
-     "verdict": "quote-not-found",
-     "claim": "“a technical bug issue not a cyber issue”",
-     "detail": "6 words, 0 hits in 2 readable source(s); no source carries it (read apnews.com/article/bank-outage-chase-wells-fargo-truist-50fee2693c22f597fa6ca51a97ef2cda, news.ycombinator.com/item?id=50521045) — if this came from somewhere this item does not cite, cite it; otherwise it is the feed's own words and must not wear quotation marks"
+     "verdict": "quote-not-read",
+     "claim": "“other banks may have been impacted by slowness in transactions only to the extent that they were…”",
+     "detail": "22 words, 0 hits in 1 readable source(s), but 2 cited page(s) went unread — unread is not absent, so this is not called a fabrication; open those page(s) before publishing"
     },
     {
      "check": "quotation",
      "item": 1,
-     "verdict": "quote-not-found",
-     "claim": "“due to a technical issue some transactions are taking longer than usual to complete but customer…”",
-     "detail": "23 words, 0 hits in 2 readable source(s); apnews.com/article/bank-outage-chase-wells-fargo-truist-50fee2693c22f597fa6ca51a97ef2cda carries 3 of 24 words (“a technical issue”) and continues “at jpmorgan chase triggers online banking delays for major us banks” — use the source's wording, or drop the quotation marks"
+     "verdict": "quote-not-read",
+     "claim": "“this story has been updated to correct microsoft outage began thursday not friday”",
+     "detail": "13 words, 0 hits in 1 readable source(s), but 2 cited page(s) went unread — unread is not absent, so this is not called a fabrication; open those page(s) before publishing"
+    },
+    {
+     "check": "quotation",
+     "item": 1,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 1 readable source(s)"
     },
     {
      "check": "quotation",
@@ -220,7 +234,7 @@
      "item": 24,
      "verdict": "ok",
      "claim": "1 quotation(s)",
-     "detail": "verbatim in 2 readable source(s)"
+     "detail": "verbatim in 1 readable source(s)"
     },
     {
      "check": "quotation",
@@ -314,6 +328,76 @@
      "detail": "verbatim in 2 readable source(s)"
     },
     {
+     "check": "quotation",
+     "item": 40,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 41,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 42,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 43,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 44,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 45,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 46,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 8 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 47,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 12 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 48,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "attribution",
+     "item": 1,
+     "verdict": "attribution-uncited",
+     "claim": "Evangelisti",
+     "detail": "a quotation is attributed to Evangelisti (“other banks may have been impacted by slowness in transactio…”), but no cited URL names the party — a quotation ABOUT a party is a claim about THAT party's bytes, and the cited page can be a second-hand copy whose figures the party has since corrected (the 11-12 item-41 lesson: the essay quoted the earlier version of Aaronson's dump post). Open Evangelisti's primary artifact before publishing, or drop the quotation marks"
+    },
+    {
      "check": "attribution",
      "item": 14,
      "verdict": "attribution-page-verified",
@@ -340,7 +424,7 @@
  "status_watch": [],
  "api_calls": 0,
  "readme_calls": 0,
- "cited_page_calls": 4,
+ "cited_page_calls": 8,
  "repo_page_calls": 0,
  "nvd_calls": 1,
  "nvd_failed_chunks": 0,
