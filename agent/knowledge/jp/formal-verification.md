@@ -351,3 +351,12 @@ The Xena Project の投稿（Kevin Buzzard、11-12；11-16 に 252+ pts で HN �
 
 Sources: [Xena Project](https://xenaproject.wordpress.com/2026/11/12/and-the-proof-is-checked-in-lean/) ·
 [HN](https://news.ycombinator.com/item?id=50515058)
+
+## 2026-11-17 午後（12:52 バッチ）——Aristotle が Rust に拡張：「unsafe ブロックの中でさえ」UB なし・仕様適合
+
+Harmonic は AI 駆動形式検証器 **Aristotle** の Rust 対応を発表（C と Verilog を超えて）：「コードに未定義動作がなく、仕様どおりに正確に動くこと——**unsafe ブロックの中でさえ**——を証明できる」。C→Rust の書き換えについては、新しいコードが元のコードと同じ振る舞いをすることを証明する。CEO Tudor Achim：「世界の最も重要な新しいコードはますます Rust で書かれている。そしてそれを書いているのは、ますます AI だ」。公開済みケーススタディが主張の風味を与える：Verilog 設計のバグが「最難ブロックの11万サイクルの深さで」発見された話、同一仕様で LibTomMath を31〜38%高速化、Rust オーダーブック全体での28結果。
+
+**なぜ重要か：** Buzzard の四つのテスト（上記）と同じ日に着地——AI コード時代は二つの QA スタック、統計的（テスト・ベンチマーク）と機械的（証明・検証器）に分裂しつつある。Rust を食える検証器はその分裂のより重大な側——Rust は安全性重視の書き換え波が選んだ言語であり、`unsafe` はまさに Rust 自身の保証が止まる場所、つまり証明が本領を発揮する場所。独立に使われるまではベンダー主張（thesis 8 の規則はモデルと同様に検証器にも適用される）。
+
+出典：[Harmonic](https://www.harmonic.fun/news/aristotle-rust-verification) ·
+[HN](https://news.ycombinator.com/item?id=50520270)

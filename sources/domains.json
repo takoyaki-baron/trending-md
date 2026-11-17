@@ -668,6 +668,15 @@
   "jp": "Amix（Amiga SVR4 Unix）復興プロジェクトの公式サイト。詳細かつ異例なほど誠実（信頼度タグ付き grimoire）だが、小規模な自主公開プロジェクトで主張は自己報告。",
   "zh": "Amix（Amiga SVR4 Unix）复兴项目官网；细节丰富且异常坦诚（带置信度标签的 grimoire），但属小型自发布项目，主张均为自报。"
  },
+ "amirulcyber.com": {
+  "cat": "security",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "Independent malware analyst's writeup — named the OPTIMJACK campaign (loader appending track.js, C2 at 1688360[.]cc). Cross-checked (11-17): C2 domain and track.js loader read verbatim on the live post; the 178-site victim list and iOS exploit-kit detail anchor in Report URI's first-party telemetry.",
+  "zh": "独立恶意软件分析师的博文——命名了 OPTIMJACK 行动（注入 track.js 的加载器，C2 位于 1688360[.]cc）。交叉核验（11-17）：C2 域名与 track.js 加载器在原文逐字可读；178 个受害站点名单与 iOS 漏洞利用套件细节锚定在 Report URI 的一手遥测上。",
+  "jp": "独立系マルウェアアナリストの解説——OPTIMJACK キャンペーンを命名（track.js を追加するローダー、C2 は 1688360[.]cc）。クロスチェック（11-17）：C2 ドメインと track.js ローダーを原文で確認。178 サイトの被害リストと iOS 脆弱性キットの詳細は Report URI の一次テレメトリに锚定。"
+ },
  "amosbbatto.wordpress.com": {
   "cat": "community",
   "cred": "high",
@@ -1526,6 +1535,15 @@
   "en": "Alex Ewerlöf's blog — SRE veteran's engineering-culture essays; opinion-heavy by the author's own disclaimer. Cross-checked (09-29): quotes verified first-hand ('You cannot punish AI, therefore it can never be held accountable'; the three-category list personal software/POC/weaponized AI; 'beware of the straw-man fallacy' in the disclaimer). Essay, not data.",
   "jp": "Alex Ewerlöf のブログ——SRE ベテランによるエンジニアリング文化エッセイ。著者自身が「意見中心」と明記。突合済み（09-29）：引用を一次確認（「AI は罰せられない、ゆえに説明責任を負えない」；個人ソフトウェア/POC/weaponized AI の3分類；免責での「beware of the straw-man fallacy」）。データではなく論考。",
   "zh": "Alex Ewerlöf 的博客——SRE 老兵的工程文化随笔，作者自注「观点为主」。已交叉核验（09-29）：引语一手核实（「你无法惩罚 AI，因此它永远无法被问责」；个人软件/POC/武器化 AI 三分类；免责声明中的「当心稻草人谬误」）。属观点文章，非数据。"
+ },
+ "blog.antonio.cx": {
+  "cat": "community",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "antonio's engineering blog (the herdr author) — first-person infrastructure writeups with a candid 'What lend doesn't protect against' section and prior art. Cross-checked (11-17): the lend post serves live with the lease mechanics; the author's herdr repo (50,277★, covered 11-12) anchors the identity.",
+  "zh": "antonio 的工程博客（herdr 作者）——第一人称的基础设施长文，坦率设有“What lend doesn't protect against”一节并列举先前工作。交叉核验（11-17）：lend 文章实时可读、租约机制俱在；作者的 herdr 仓库（50,277★，11-12 已覆盖）锚定身份。",
+  "jp": "antonio のエンジニアリングブログ（herdr 作者）——一人称のインフラ解説で、率直な「What lend doesn't protect against」節と先行事例付き。クロスチェック（11-17）：lend 記事をリース機構ごと生存確認、著者の herdr リポジトリ（50,277★、11-12 取り上げ）が同一性を锚定。"
  },
  "blog.archive.org": {
   "cat": "community",
@@ -3293,6 +3311,15 @@
   "en": "crystl.dev — vendor blog for crystl, a macOS terminal built for Claude Code; guides are practical but end in product pitches. Cross-checked (10-20): the tmux guide's flags and pitfalls (-l for literal send-keys, monitor-silence, capture-pane) match documented tmux behavior, and the guide itself discloses that the 'ceiling' analysis leads into its own recommendation.",
   "zh": "crystl.dev——为 Claude Code 打造的 macOS 终端 crystl 的厂商博客；指南实用但结尾是产品推销。交叉核验（10-20）：tmux 指南中的标志与陷阱（send-keys 字面文本用 -l、monitor-silence、capture-pane）与 tmux 文档行为一致，且指南自己说明了\"天花板\"分析会引向自家的推荐。",
   "jp": "crystl.dev——Claude Code 向けに作られた macOS ターミナル crystl のベンダーブログ。ガイドは実用的だが末尾は製品の売り込み。クロスチェック（10-20）：tmux ガイドのフラグと罠（send-keys のリテラルは -l、monitor-silence、capture-pane）は tmux の文書化された挙動と一致し、ガイド自体が「天井」分析が自社の推奨に繋がることを明示している。"
+ },
+ "cs.cmu.edu": {
+  "cat": "research",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "Carnegie Mellon SCS's open-courseware portal (CS Learn) — first-party for its own course lineup; the free-lectures claim is anchored in the live YouTube premieres. Cross-checked (11-17): the page itself lists 10-605 (Cohen), 15-442 (Chen/Jia) and the 11-768 AI Agents course (Fried/Neubig) beside the 'AI tutoring is coming' roadmap line.",
+  "zh": "卡内基梅隆大学 SCS 的开放课件门户（CS Learn）——课程阵容的一手来源；免费讲座的说法锚定在已上线的 YouTube 首播上。交叉核验（11-17）：页面本身列出 10-605（Cohen）、15-442（Chen/Jia）与 11-768 AI Agents 课程（Fried/Neubig）及“AI tutoring 即将到来”的路线图。",
+  "jp": "カーネギーメロン大学 SCS のオープン教材ポータル（CS Learn）——講義ラインナップの一次情報源。無料講義の主張は公開中の YouTube プレミアに锚定。クロスチェック（11-17）：ページ自体が 10-605（Cohen）、15-442（Chen/Jia）、11-768 AI Agents（Fried/Neubig）と「AI tutoring」ロードマップを掲載。"
  },
  "cs341.cs.illinois.edu": {
   "cat": "research",
@@ -5562,6 +5589,15 @@
   "zh": "Geordie——AI 治理厂商，其公布的 OpenAI dot 智能体测试是“闲置消耗 30 万 token”数字的出处；属利益相关方，应按厂商自测解读。交叉核验（10-14）：其配置（只读、未接入邮箱/Slack）在《The Register》的独立报道中亦有陈述。",
   "jp": "Geordie——AI ガバナンス企業。OpenAI の dot エージェントに関する公表テストが「アイドルで 30 万トークン」の出所。利害関係者でありベンダー実測として読む。相互検証（10-14）：構成（読み取り専用、メール/Slack 非接続）は The Register の独立記事にも記載。"
  },
+ "get.mem.ai": {
+  "cat": "vendor",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "Mem's product blog — the shutdown notice is first-party with a published timeline (read-only Dec 18, service off Jan 15) and a migration guide linking every era's launch post. Cross-checked (11-17): the notice serves live with both dates; the HN thread corroborates the closure.",
+  "zh": "Mem 的产品博客——关停公告为一手来源，附公布的时间线（12 月 18 日转只读、1 月 15 日关停）与迁移指南，并链接每个时代的发布文。交叉核验（11-17）：公告实时可读且两个日期俱在；HN 讨论帖印证关停。",
+  "jp": "Mem の製品ブログ——シャットダウン告知は一次情報源で、公開タイムライン（12月18日に読み取り専用、1月15日に停止）と移行ガイド、各時代のローンチ記事へのリンク付き。クロスチェック（11-17）：告知を両日付きで生存確認、HN スレッドが裏付け。"
+ },
  "getartcraft.com": {
   "cat": "vendor",
   "cred": "med",
@@ -6055,6 +6091,15 @@
   "en": "Hardwareluxx — German hardware/tech-news site; solid on consumer-software and browser news. Cross-checked (08-16): its uBlock Origin Facebook ad-blocking story matches racunalniske-novice.com's report.",
   "jp": "Hardwareluxx——ドイツのハードウェア/テックニュースサイト。コンシューマーソフトとブラウザのニュースに強い。突合済み（08-16）：uBlock OriginのFacebook広告ブロック報道はracunalniske-novice.comの報道と一致。",
   "zh": "Hardwareluxx——德国硬件/科技新闻站；对消费软件与浏览器新闻较扎实。已交叉核验（08-16）：其 uBlock Origin Facebook 广告拦截报道与 racunalniske-novice.com 的报道一致。"
+ },
+ "harmonic.fun": {
+  "cat": "vendor",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "Harmonic's announcement site — first-party for Aristotle's Rust-verification claims (no UB, spec conformance 'even inside unsafe blocks'); case-study numbers are self-reported. Cross-checked (11-17): the announcement page carries the unsafe-block claim and the Achim quote verbatim; the HN thread corroborates the launch.",
+  "zh": "Harmonic 的发布公告站——Aristotle Rust 验证主张（无 UB、规范一致性“甚至包括 unsafe 块内”）的一手来源；案例数字为自报。交叉核验（11-17）：公告页逐字载有 unsafe 块主张与 Achim 引言；HN 讨论帖印证发布。",
+  "jp": "Harmonic のアナウンスサイト——Aristotle の Rust 検証主張（UB なし、「unsafe ブロック内でさえ」仕様適合）の一次情報源。ケーススタディ数値は自己報告。クロスチェック（11-17）：アナウンスページに unsafe ブロックの主張と Achim 発言を原文確認、HN スレッドが裏付け。"
  },
  "harnesstax.github.io": {
   "cat": "research",
@@ -7045,6 +7090,15 @@
   "jp": "個人ブログ（John Hartnup）。09-21 に本文を取得し、帰属事実を確認：AI ポスターの均一化問題、名指しの様式によるプロンプト設計（Bauhaus、Riso、パンク・ファンジン等）、「a whiff of AI about them」という限定表現、Claude/Gemini による HTML/PNG/PDF レイヤー出力。「新しいチャットを立ち上げる」は明示的でなく暗示である点に軽微な揺れ。09-21 に HN スレッド（id 49764791、1,758 pts、本人投稿）とクロス検証済み。",
   "zh": "个人博客（John Hartnup）。09-21 抓取原文确认了所归因的事实：AI 海报同质化论点、具名风格提示法（Bauhaus、Riso、朋克 fanzine 等菜单）、原话 \"a whiff of AI about them\"，以及 Claude/Gemini 输出分层 HTML/PNG/PDF。轻微措辞偏差：『开新对话避免风格污染』是暗示而非原文。09-21 经其 HN 讨论串（id 49764791，1,758 分，作者本人提交）交叉验证。"
  },
+ "jolt-lang.net": {
+  "cat": "code",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "Jolt's language site — a self-hosted Clojure on a portable Scheme layer (Chez native, Gambit→JS), no JVM; the docs' own claims are the artifact (the homepage REPL runs Jolt compiled to JS). Cross-checked (11-17): the Chez/Gambit/defcfn backend story reads on the live page; the HN thread corroborates.",
+  "zh": "Jolt 的语言官网——运行在可移植 Scheme 层上的自托管 Clojure（Chez 原生、Gambit→JS），无 JVM；文档自身的主张即工件（首页 REPL 运行编译为 JS 的 Jolt）。交叉核验（11-17）：Chez/Gambit/defcfn 后端故事在实时页面可读；HN 讨论帖印证。",
+  "jp": "Jolt の言語サイト——移植性のある Scheme レイヤ上で自己ホストされる Clojure（Chez ネイティブ、Gambit→JS）、JVM なし。ドキュメント自身の主張がアーティファクト（トップページ REPL は JS にコンパイルされた Jolt）。クロスチェック（11-17）：Chez/Gambit/defcfn バックエンドの記述を生存確認、HN スレッドが裏付け。"
+ },
  "jorgegarciaherrero.com": {
   "cat": "research",
   "cred": "high",
@@ -7279,6 +7333,15 @@
   "zh": "Moonshot AI 的 Kimi 博客 —— 模型发布与基准的一方来源；会公布自己的能力移除差值（K3.1 Pro 的网络能力回退），但所有分数均为自测。",
   "jp": "Moonshot AI の Kimi ブログ。モデル公開とベンチの一次情報で、能力削除の差分（K3.1 Pro のサイバー能力後退）まで自ら公表するが、スコアはすべて自社測定。",
   "review": "cv 1 — 10-24, narrow: the 'weights not yet released' status is confirmed off-origin by the moonshotai HF org holding zero K3.1 artifacts while Artificial Analysis lists the model as Proprietary. The capability numbers (90.5%→81.0%) have no independent check and should be read as vendor-run."
+ },
+ "klauria.tech": {
+  "cat": "community",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "Kshitij Lauria's personal site — first-party for psychic's own usage numbers (1,450 opens since Oct 2025, 1.6 characters average). Cross-checked (11-17): the numbers read on the live page and the kshitijl/psychic repo exists on GitHub.",
+  "zh": "Kshitij Lauria 的个人站——psychic 自身使用数据（2025 年 10 月以来 1,450 次打开、平均 1.6 个字符）的一手来源。交叉核验（11-17）：数字在实时页面可读，kshitijl/psychic 仓库在 GitHub 存在。",
+  "jp": "Kshitij Lauria の個人サイト——psychic 自身の利用数値（2025年10月以降 1,450 回のオープン、平均 1.6 文字）の一次情報源。クロスチェック（11-17）：数値を生存確認、kshitijl/psychic リポジトリが GitHub に存在。"
  },
  "knownagents.com": {
   "cat": "data",
@@ -9511,6 +9574,15 @@
   "en": "OpenClaw — open-source agent runtime; its docs (SOUL.md/AGENTS.md identity files) were read first-hand on 08-21 for the mind-viruses check, and the OpenClaw 2.0 mega-release (16,000+ merged PRs, 933 contributors) is announced here. Project's own site: vendor-of-record for release claims.",
   "jp": "OpenClaw——オープンソースのエージェントランタイム。ドキュメント（SOUL.md/AGENTS.md のアイデンティティファイル）は 08-21 の mind-viruses 検証で一次読解済み。OpenClaw 2.0 メガリリース（マージ 16,000+ PR、貢献者 933 名）もここで発表。プロジェクト公式サイト：リリース主張の一次情報。",
   "zh": "OpenClaw——开源 agent 运行时；其文档（SOUL.md/AGENTS.md 身份文件）在 08-21 的 mind-viruses 核查中被一手阅读过，OpenClaw 2.0 巨型版本（16,000+ 已合并 PR、933 位贡献者）也在此发布。项目自有站点：发布声明的官方来源。"
+ },
+ "opencode.ai": {
+  "cat": "vendor",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "OpenCode's product site — first-party for its own Browse launch (an MCP server + Chromium extension over the user's real browser, with 2FA handoff and an allowed-sites list). Cross-checked (11-17): the product page serves the handoff and allowed-sites mechanics live; the launch thread (157+ pts) corroborates.",
+  "zh": "OpenCode 的产品站——其 Browse 发布（MCP 服务器 + Chromium 扩展，让 agent 使用用户真实浏览器，带 2FA 交接与允许站点列表）的一手来源。交叉核验（11-17）：产品页实时呈现交接与允许站点机制；发布讨论帖（157+ 分）相互印证。",
+  "jp": "OpenCode の製品サイト——Browse ローンチ（ユーザーの実ブラウザをエージェントに使わせる MCP サーバー＋Chromium 拡張、2FA ハンドオフと許可サイトリスト付き）の一次情報源。クロスチェック（11-17）：製品ページでハンドオフと許可サイトの仕組みを生存確認、ローンチスレッド（157+ pts）が裏付け。"
  },
  "opencut.app": {
   "cat": "code",
@@ -12138,6 +12210,15 @@
   "en": "SpaceX launch pages — the canonical citation for Starship flights, but a JS shell to agents (~3 KB, all scripts, no __NEXT_DATA__, no .md twin). Cross-checked (11-15): Flight 15's first upper-stage catch cross-checked against the HN flight thread (871 pts) — booster GNC abort cause, engine-rich burn, FTS on water impact. Cite the launch page for the outcome, take the mechanics from the flight thread.",
   "zh": "SpaceX 发射页——星舰飞行的规范引用源，但对 agent 是 JS 壳（约 3 KB、全是脚本、无 __NEXT_DATA__、无 .md 孪生）。已交叉核验（11-15）：Flight 15 的首次上级捕获与 HN 飞行讨论串（871 分）互证——助推器 GNC 中止原因、发动机富油喷焰、入水触发 FTS。结果引用发射页，机理取自讨论串。",
   "jp": "SpaceX 発射ページ——Starship 飛行の正規の引用元だが、エージェントには JS シェル（約 3 KB、すべてスクリプト、__NEXT_DATA__ なし、.md ツインなし）。クロスチェック済み（11-15）：Flight 15 の初の上段キャッチを HN 飛行スレッド（871pt）と突き合わせ——ブースター GNC 中断の原因、エンジン・リッチ燃焼、着水時の FTS。結果は発射ページを引用し、メカニズムはスレッドから取る。"
+ },
+ "spamhaus.org": {
+  "cat": "security",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "The Spamhaus Project — a blocklist operator publishing its acceptance criteria as a dated, checkable spec (Sender Guidelines + HELO/DNS checker). Cross-checked (11-17): the 'Starting in November 2026' requirement for valid HELO + reverse DNS (PTR) + matching A record reads verbatim on the live guidelines page.",
+  "zh": "Spamhaus 项目——将接收标准发布为带日期、可核查规范的屏蔽列表运营方（发件人指南 + HELO/DNS 检查器）。交叉核验（11-17）：“Starting in November 2026”起要求有效 HELO + 反向 DNS（PTR）+ 匹配 A 记录的要求在指南页逐字可读。",
+  "jp": "The Spamhaus Project——受入基準を日付付きの検証可能な仕様として公開するブロックリスト運営者（Sender Guidelines ＋ HELO/DNS チェッカー）。クロスチェック（11-17）： 「Starting in November 2026」以降の有効な HELO＋逆引き（PTR）＋一致する A レコード要件をガイドラインページで原文確認。"
  },
  "spatialintelligence.ai": {
   "cat": "community",
@@ -14923,6 +15004,15 @@
   "en": "Steve Blank's personal essay blog — first-hand analysis, not reporting; the Nvidia founder-departure essay's quotes matched what the HN thread discussed, and its argument is organizational, not the WSJ's financing claims.",
   "zh": "Steve Blank 的个人文章博客——一手分析而非报道；英伟达创始人离场一文的引文与 HN 讨论一致，其论证是组织性的，不是 WSJ 的融资指控。",
   "jp": "Steve Blank の個人エッセイブログ——一次の分析であり報道ではない。NVIDIA 創業者離脱論の引用は HN スレッドの議論と一致し、その論証は WSJ の資金主張ではなく組織に関するもの。"
+ },
+ "bugmenot.com": {
+  "cat": "community",
+  "cred": "med",
+  "cv": 1,
+  "density": "low",
+  "en": "The shared-credential service's own farewell page — closed after two decades with no stated reason. Cross-checked (11-17): the farewell text ('BugMeNot has closed. Thanks to everyone who envisioned a better internet') serves live on the homepage, matching the HN thread's reports.",
+  "zh": "共享凭据服务自己的告别页——运行二十年后关闭，未说明原因。交叉核验（11-17）：告别语（“BugMeNot has closed. Thanks to everyone who envisioned a better internet”）在首页实时可见，与 HN 讨论帖一致。",
+  "jp": "共有認証情報サービス自身の別れページ——理由を明示せず二十年の歴史に幕。クロスチェック（11-17）：別れのメッセージ（「BugMeNot has closed. Thanks to everyone who envisioned a better internet」）がホームページで生存確認済み、HN スレッドと一致。"
  },
  "bugs.debian.org": {
   "cat": "code",

@@ -8,17 +8,19 @@ license: CC-BY-4.0
 
 # trending.md — 2026-11-17
 
-## 1. Outages hit five major US banks at once — BofA, Chase, U.S. Bank, Wells Fargo and Zelle all reported down, hours into the week of the Microsoft outage
+## 1. The "five-bank outage" was one bank's bug — Chase's on-prem hardware failure rippled through BofA, U.S. Bank, Wells Fargo and Zelle as transaction slowness
 
 - **Velocity:** ▮▮▮ trending
 - **Source:** apnews.com · 289+ pts on HN · 1.5h ago (~02:31 UTC+8)
 - **Tags:** `outage` `banking` `zelle` `reliability`
 
-Customers at five major US financial institutions reported trouble accessing online accounts Monday evening: **Bank of America, Chase, U.S. Bank, Wells Fargo and Zelle** all appeared on Downdetector's problem boards at the same time. Chase moved fastest to characterize it — a spokesperson said the bank is experiencing "a technical bug issue, not a cyber issue," adding: "Due to a technical issue, some transactions are taking longer than usual to complete but customers still have access to their accounts and funds." The AP story explicitly ties the moment to the week's context: it follows the Microsoft outage that began Friday and took down Outlook, Teams and Copilot for hours. No bank has published an RCA yet, and Zelle — the payments rail — being among the reported-down services is the detail with the widest blast radius.
+Thousands of user reports lit up for **Bank of America, Chase, U.S. Bank, Wells Fargo and Zelle** Monday evening — but AP's reporting shows the incident was **Chase-only**: "JPMorgan Chase has experienced a temporary issue related to a software bug in an on-premise hardware system — it is not cyber-related," said Joe Evangelisti, spokesman for the bank. The other four names appear in the story because their customers transact with Chase: "other banks may have been impacted by slowness in transactions only to the extent that they were a party to a transaction with us," Evangelisti said — Bank of America's and Citigroup's own services had no issues, U.S. Bank reported no direct impact, and the Zelle network itself stayed fully operational. The week's context needs a correction of its own: the Microsoft outage hit **Thursday** (the story carries an in-line correction fixing an earlier Friday claim), the FAA ground stop was Friday, and AP reports officials and companies tie none of the three events together. Chase expects full resolution by end of day Monday.
 
-**Why it matters:** Two systemic-outage waves in four days, in different sectors, is the pattern this feed's readers should internalize: concentration is the vulnerability, and the 2026 incident cadence (Microsoft, FAA ground stop, now banks) is turning resilience engineering from a niche concern into a procurement question. Watch for whether the banks' postmortems name a shared vendor — five simultaneous failures would be a remarkable coincidence otherwise.
+**Why it matters:** The inverted lesson is sharper than the original framing: one bank's on-prem bug **looked** like a sector-wide outage because the detection layer is shared — counterparties' customers see slow transfers, report *their* bank as down, and five names light up at once. Report-board simultaneity is not evidence of a common cause; it is what shared rails (Zelle/Early Warning Services, owned by these same banks) look like from the outside. And the cadence correlation is just cadence: per AP, officials and companies link none of the three events.
 
-[`🔗 AP News: Customers at major banks report difficulty accessing accounts online`](https://apnews.com/article/bank-outage-chase-wells-fargo-truist-50fee2693c22f597fa6ca51a97ef2cda) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50521045)
+> AP's own correction note: "This story has been updated to correct Microsoft outage began Thursday, not Friday." — the aggregation layer had the Friday version first; the primary fixed itself.
+
+[`🔗 AP News: A technical issue at JPMorgan Chase triggers online banking delays for major US banks`](https://apnews.com/article/bank-outage-chase-wells-fargo-truist-50fee2693c22f597fa6ca51a97ef2cda) · [`🔗 AP explainer: A look at online delays that affected major US banks`](https://apnews.com/article/bank-outage-chase-wells-fargo-zelle-aeb4b0d6b6789c8c96bb2520454a6d1e) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50521045)
 
 ---
 
@@ -92,13 +94,13 @@ Microsoft's preliminary RCA on the November 12–13 Exchange Online collapse tra
 
 ---
 
-## 7. VulnCheck lands 75 CVE records in one day — the auth-bypass wave sweeps npm-era CMS frameworks, and most have no fixed version to upgrade to
+## 7. VulnCheck lands 105 CVE records in one day — the auth-bypass wave sweeps npm-era CMS frameworks, and most have no fixed version to upgrade to
 
 - **Velocity:** ▮▮ rising
-- **Source:** NVD (disclosure@vulncheck.com CNA) · 75 records published Nov 16 (~12:17–15:17 UTC)
+- **Source:** NVD (disclosure@vulncheck.com CNA) · 105 records published Nov 16 (01:17–22:18 UTC)
 - **Tags:** `cve` `auth-bypass` `npm` `vulncheck`
 
-NVD's November 16 cohort carries **75 CVE records from VulnCheck's CNA** — the day's largest single-source wave, dwarfing Samsung's 39 and GitHub's 30. The headline cluster is authentication bypasses in self-hosted web frameworks: **Tensei ≤ 0.11.5** falls back to the hard-coded JWT signing key `auth-secret-key` when `JWT_SECRET` is unset (9.8); **NodePress ≤ 8.5.1** carries two separate 9.8 auth bypasses; **Prime CMS ≤ 0.4.0-beta.0** ships with the `isAuthenticated()` guard commented out and `createAbility()` hard-coding every role to admin (9.8). Around them: Kalmia, REBUILD (four records), DeepAudit (five), thirdweb Dashboard, Contentlayer code injection at 8.8, plus SeaweedFS, LimeSurvey, wallabag, GitBucket, PrestaShop, Sandboxie-Plus and Axigen. Every score is VulnCheck's own (CVSS 3.1, `Secondary` provenance). The operational catch: for several of these the affected ceiling *is* the newest release — Prime CMS has had no commits since January 2023 and Tensei's last push was February 2026 — so there is no patched version to upgrade to.
+NVD's November 16 cohort carries **105 CVE records from VulnCheck's CNA** — the day's largest single-source wave, ahead of GitHub's 60 and Samsung's 39 (the morning batch wrote at 75/30/39: GitHub's cohort doubled and a 26-record VulnCheck burst landed at 22:00 UTC after writing). The headline cluster is authentication bypasses in self-hosted web frameworks: **Tensei ≤ 0.11.5** falls back to the hard-coded JWT signing key `auth-secret-key` when `JWT_SECRET` is unset (9.8); **NodePress ≤ 8.5.1** carries two separate 9.8 auth bypasses; **Prime CMS ≤ 0.4.0-beta.0** ships with the `isAuthenticated()` guard commented out and `createAbility()` hard-coding every role to admin (9.8). Around them: Kalmia, REBUILD (four records), DeepAudit (four), thirdweb Dashboard, Contentlayer code injection at 8.8, plus SeaweedFS, LimeSurvey, wallabag, GitBucket, PrestaShop, Sandboxie-Plus and Axigen. Every score is VulnCheck's own (CVSS 3.1, `Secondary` provenance). The operational catch: for several of these the affected ceiling *is* the newest release — Prime CMS has had no commits since January 2023 and Tensei's last push was February 2026 — so there is no patched version to upgrade to.
 
 **Why it matters:** The wave is a census of the npm-era long tail: frameworks that looked production-grade, went dormant, and now get systematically audited by one research shop. The remediation language matters more than the scores — when the ceiling is the latest release, "upgrade" is empty advice, and the honest mitigation is decommission or fork.
 

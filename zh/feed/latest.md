@@ -8,17 +8,19 @@ license: CC-BY-4.0
 
 # trending.md — 2026-11-17
 
-## 1. 美国五大银行同时故障——BofA、Chase、U.S. Bank、Wells Fargo、Zelle 集体被报宕机，微软宕机周尚未走远
+## 1. "五大银行宕机"其实是一家银行的 bug——Chase 本地部署硬件中的软件缺陷通过交易通道波及 BofA、U.S. Bank、Wells Fargo 与 Zelle
 
 - **Velocity:** ▮▮▮ trending
 - **Source:** apnews.com · 289+ pts on HN · 1.5h ago (~02:31 UTC+8)
 - **Tags:** `outage` `banking` `zelle` `reliability`
 
-周一晚间，美国五家大型金融机构的用户同时报告无法访问网上账户：**Bank of America、Chase、U.S. Bank、Wells Fargo 和 Zelle** 齐齐出现在 Downdetector 的故障榜上。Chase 最先给出定性——发言人称银行遇到的是"a technical bug issue, not a cyber issue"（技术缺陷问题，而非网络攻击），并表示："Due to a technical issue, some transactions are taking longer than usual to complete but customers still have access to their accounts and funds."（由于技术问题，部分交易完成时间比平时长，但客户仍可访问其账户与资金。）美联社的报道明确把这一时刻放进本周的语境：它紧随周五开始、拖垮 Outlook、Teams 和 Copilot 数小时的微软大宕机。目前尚无银行发布根因报告，而支付通道 Zelle 也在被报故障的服务之列——这是影响面最广的一个细节。
+周一晚间，**Bank of America、Chase、U.S. Bank、Wells Fargo 和 Zelle** 五个名字同时涌出大量用户报告——但 AP 的报道显示，事件只发生在 **Chase 一家**："JPMorgan Chase has experienced a temporary issue related to a software bug in an on-premise hardware system — it is not cyber-related"（JPMorgan Chase 遇到一个临时性问题，源于本地部署硬件系统中的一个软件缺陷——与网络攻击无关），银行发言人 Joe Evangelisti 说。其他四个名字出现在故事里，只是因为它们的客户与 Chase 有交易往来："other banks may have been impacted by slowness in transactions only to the extent that they were a party to a transaction with us"（其他银行仅在与我们发生交易时，受到交易变慢的影响）——Bank of America 与 Citigroup 自身服务并无故障，U.S. Bank 报告未受直接影响，Zelle 网络本身始终保持完全可用。本周语境也需要一次更正：微软大宕机发生在**周四**（报道自带更正说明，修正了早前的周五说法），FAA 禁飞令在周五，而 AP 报道官员与公司均未把三起事件联系起来。Chase 预计周一当天完成全面恢复。
 
-**Why it matters:** 四天之内、两个行业、两波系统性故障——这是本刊读者应当内化的模式：集中度本身就是脆弱性，2026 年的事故节奏（微软、FAA 禁飞令、现在轮到银行）正在把韧性工程从冷门话题变成采购决策。值得盯的是各行的复盘会不会指向同一家供应商——五家同时倒下，否则就是惊人的巧合。
+**Why it matters:** 反转后的教训比原框架更锋利：一家银行的本地 bug **看起来**像全行业宕机，是因为检测层是共享的——对手方的客户看到转账变慢，报告的是*自己*银行故障，于是五个名字同时亮起。报告榜的同时性不是共同原因的证据；它只是共享通道（Zelle/Early Warning Services，恰由这些银行共同持有）从外部看起来的样子。而节奏上的相关性只是节奏：据 AP，官员与公司没有把三起事件联系起来。
 
-[`🔗 AP News: Customers at major banks report difficulty accessing accounts online`](https://apnews.com/article/bank-outage-chase-wells-fargo-truist-50fee2693c22f597fa6ca51a97ef2cda) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50521045)
+> AP 自己的更正说明："This story has been updated to correct Microsoft outage began Thursday, not Friday."——聚合层先拿到的是周五版本；一手信源自己完成了修正。
+
+[`🔗 AP News: A technical issue at JPMorgan Chase triggers online banking delays for major US banks`](https://apnews.com/article/bank-outage-chase-wells-fargo-truist-50fee2693c22f597fa6ca51a97ef2cda) · [`🔗 AP 解读：A look at online delays that affected major US banks`](https://apnews.com/article/bank-outage-chase-wells-fargo-zelle-aeb4b0d6b6789c8c96bb2520454a6d1e) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50521045)
 
 ---
 
@@ -92,13 +94,13 @@ Andrew Gallant（BurntSushi——ripgrep 的作者）发布了他的 Rust 日期
 
 ---
 
-## 7. VulnCheck 一天落地 75 条 CVE 记录——认证绕过浪潮横扫 npm 时代的 CMS 框架，而多数连可升级的修复版都没有
+## 7. VulnCheck 一天落地 105 条 CVE 记录——认证绕过浪潮横扫 npm 时代的 CMS 框架，而多数连可升级的修复版都没有
 
 - **Velocity:** ▮▮ rising
-- **Source:** NVD (disclosure@vulncheck.com CNA) · 75 records published Nov 16 (~12:17–15:17 UTC)
+- **Source:** NVD (disclosure@vulncheck.com CNA) · 105 records published Nov 16 (01:17–22:18 UTC)
 - **Tags:** `cve` `auth-bypass` `npm` `vulncheck`
 
-NVD 11 月 16 日的批次里有 **75 条来自 VulnCheck CNA 的 CVE 记录**——当日最大的单一来源浪潮，远超三星的 39 条和 GitHub 的 30 条。头条是自托管 Web 框架中的认证绕过集群：**Tensei ≤ 0.11.5** 在 `JWT_SECRET` 未设置时回退到硬编码 JWT 签名密钥 `auth-secret-key`（9.8）；**NodePress ≤ 8.5.1** 带两个独立的 9.8 认证绕过；**Prime CMS ≤ 0.4.0-beta.0** 的 `isAuthenticated()` 守卫被注释掉、`createAbility()` 把所有角色硬编码为 admin（9.8）。围绕它们：Kalmia、REBUILD（4 条）、DeepAudit（5 条）、thirdweb Dashboard、Contentlayer 8.8 代码注入，外加 SeaweedFS、LimeSurvey、wallabag、GitBucket、PrestaShop、Sandboxie-Plus 和 Axigen。每个分数都是 VulnCheck 自己打的（CVSS 3.1，`Secondary` 来源）。操作层面的关键在于：其中几个的受影响上限*就是*最新版本——Prime CMS 自 2023 年 1 月起就没有提交，Tensei 最后一次推送是 2026 年 2 月——根本没有修复版可升级。
+NVD 11 月 16 日的批次里有 **105 条来自 VulnCheck CNA 的 CVE 记录**——当日最大的单一来源浪潮，领先 GitHub 的 60 条和三星的 39 条（早间批次成稿时是 75/30/39：GitHub 的批次翻倍，VulnCheck 在 22:00 UTC 又落地一波 26 条）。头条是自托管 Web 框架中的认证绕过集群：**Tensei ≤ 0.11.5** 在 `JWT_SECRET` 未设置时回退到硬编码 JWT 签名密钥 `auth-secret-key`（9.8）；**NodePress ≤ 8.5.1** 带两个独立的 9.8 认证绕过；**Prime CMS ≤ 0.4.0-beta.0** 的 `isAuthenticated()` 守卫被注释掉、`createAbility()` 把所有角色硬编码为 admin（9.8）。围绕它们：Kalmia、REBUILD（4 条）、DeepAudit（4 条）、thirdweb Dashboard、Contentlayer 8.8 代码注入，外加 SeaweedFS、LimeSurvey、wallabag、GitBucket、PrestaShop、Sandboxie-Plus 和 Axigen。每个分数都是 VulnCheck 自己打的（CVSS 3.1，`Secondary` 来源）。操作层面的关键在于：其中几个的受影响上限*就是*最新版本——Prime CMS 自 2023 年 1 月起就没有提交，Tensei 最后一次推送是 2026 年 2 月——根本没有修复版可升级。
 
 **Why it matters:** 这波浪潮是 npm 时代长尾的一次普查：曾经像生产级的框架，休眠之后被同一家研究机构系统性审计。比分数更重要的是修复语言——当上限就是最新版本时，"升级"是空话，诚实的缓解是下线或 fork。
 

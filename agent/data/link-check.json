@@ -6277,78 +6277,150 @@
     },
     "https://news.ycombinator.com/item?id=50521045": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-16T21:15:02.302Z",
-      "last_seen": "2026-11-16T21:15:02.302Z",
+      "last_seen": "2026-11-17T05:58:56.676Z",
       "feeds": [
         "2026-11-17.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50517602": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-16T21:15:02.302Z",
-      "last_seen": "2026-11-16T21:15:02.302Z",
+      "last_seen": "2026-11-17T05:58:56.676Z",
       "feeds": [
         "2026-11-17.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50517321": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-16T21:15:02.302Z",
-      "last_seen": "2026-11-16T21:15:02.302Z",
+      "last_seen": "2026-11-17T05:58:56.676Z",
       "feeds": [
         "2026-11-17.md"
       ]
     },
     "https://apnews.com/article/bank-outage-chase-wells-fargo-truist-50fee2693c22f597fa6ca51a97ef2cda": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-16T21:15:02.302Z",
-      "last_seen": "2026-11-16T21:15:02.302Z",
+      "last_seen": "2026-11-17T05:58:56.676Z",
       "feeds": [
         "2026-11-17.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50517803": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-16T21:15:02.302Z",
-      "last_seen": "2026-11-16T21:15:02.302Z",
+      "last_seen": "2026-11-17T05:58:56.676Z",
       "feeds": [
         "2026-11-17.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50520866": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-16T21:15:02.302Z",
-      "last_seen": "2026-11-16T21:15:02.302Z",
+      "last_seen": "2026-11-17T05:58:56.676Z",
       "feeds": [
         "2026-11-17.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50519354": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-16T21:15:02.302Z",
-      "last_seen": "2026-11-16T21:15:02.302Z",
+      "last_seen": "2026-11-17T05:58:56.676Z",
       "feeds": [
         "2026-11-17.md"
       ]
     },
     "https://www.npmjs.com/package/ffmpeg-skill": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-16T21:15:02.302Z",
-      "last_seen": "2026-11-16T21:15:02.302Z",
+      "last_seen": "2026-11-17T05:58:56.676Z",
+      "feeds": [
+        "2026-11-17.md"
+      ]
+    },
+    "https://apnews.com/article/bank-outage-chase-wells-fargo-zelle-aeb4b0d6b6789c8c96bb2520454a6d1e": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-17T05:58:56.676Z",
+      "last_seen": "2026-11-17T05:58:56.676Z",
+      "feeds": [
+        "2026-11-17.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50516473": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-17T05:58:56.676Z",
+      "last_seen": "2026-11-17T05:58:56.676Z",
+      "feeds": [
+        "2026-11-17.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50523601": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-17T05:58:56.676Z",
+      "last_seen": "2026-11-17T05:58:56.676Z",
+      "feeds": [
+        "2026-11-17.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50523459": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-17T05:58:56.676Z",
+      "last_seen": "2026-11-17T05:58:56.676Z",
+      "feeds": [
+        "2026-11-17.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50526264": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-17T05:58:56.676Z",
+      "last_seen": "2026-11-17T05:58:56.676Z",
+      "feeds": [
+        "2026-11-17.md"
+      ]
+    },
+    "https://apnews.com/article/united-airlines-outage-5a5e5f75bb07f11ffb8750901f0076ff": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-17T05:58:56.676Z",
+      "last_seen": "2026-11-17T05:58:56.676Z",
+      "feeds": [
+        "2026-11-17.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50526152": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-17T05:58:56.676Z",
+      "last_seen": "2026-11-17T05:58:56.676Z",
+      "feeds": [
+        "2026-11-17.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50525052": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-17T05:58:56.676Z",
+      "last_seen": "2026-11-17T05:58:56.676Z",
       "feeds": [
         "2026-11-17.md"
       ]
     }
   },
-  "runs": 185,
+  "runs": 186,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-11-16T21:15:02.302Z"
+  "last_run": "2026-11-17T05:58:56.676Z"
 }

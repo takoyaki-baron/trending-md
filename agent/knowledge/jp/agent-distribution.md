@@ -312,3 +312,16 @@ protecting the maker's business」、そして緩和策（検証済みインス�
 
 Sources: [Geoff Stearns: Your Agent Will Pick the Hackable One](https://geoffstearns.com/blog/your-agent-will-pick-the-hackable-one/) ·
 [HN](https://news.ycombinator.com/item?id=50510799)
+
+## 2026-11-17 午後（12:52 バッチ）——エージェント利用が OS レベルのテレメトリになり、エージェント決済がカードネットワークのインフラになる
+
+**Windows 11 はどのコーディングエージェントを走らせているかを静かに追跡している**（リバースエンジニア Xusheng Li、332+ pts）：Windows バイナリの未文書化機能を AI に探させると、**MissionControlAggregator.dll** 内にコーディングエージェントのリストが出てきた——CLI エージェント4スロットに `copilot.exe`、`claude.exe`、`codex.exe`、`agy.exe`（WSL 経路では拡張子なしの等価物）、デスクトップエージェント5スロットに `github.exe`、`claude.exe`、`codex.exe`、`cursor.exe`、`antigravity.exe`。これらの名前は機能フラグ **CLICodingAgentUsage**（機能 ID 62580080）の背にある実行ファイル名マッチャに入力され、当該コンポーネントはどのエージェントと開発ツールが使われたかを記録し、ローカルにキャッシュして Windows Diagnostics へ報告する——そして「『オプション』の診断データ（既定で有効）をオプトアウトしない限り、データは Microsoft にアップロードされる」。
+
+**ChatGPT Wallet**（OpenAI、American Express・Chase・Mastercard・Visa と構築）——「エージェントがユーザーの実際のカード情報に触れずに支払え、しかも每一購入にセキュリティチェックを要求する最初のウォレット」：カードは一度だけ追加。每一購入の前にエージェントの商品・合計・選択カードが審査され、承認は生体認証。決済ネットワークがカードの代わりとなる**トークン**を発行し、エージェントも商人も実際のカード情報は見えず、既存のリワードと異議申立て保護はそのまま適用。米国の 18 歳以上 ChatGPT Pro 購読者へ分割ロールアウト中。併せて Commerce Partner Playbook：署名付きエージェントリクエストの Web Bot Auth、不正対策パートナー（Forter、Riskified、Sardine、Signifyd）、PSP 統合（Adyen、Checkout.com、Stripe）、そして最終的には支出上限とカテゴリで縛られた完全委譲購入。
+
+**なぜ重要か：** 一日で二つの「測定される表面」のデータポイント。エージェント採用は OS レベルの instrumentation に値するシグナルになった（開発者がどの AI ツールを走らせているかが診断データストリームに乗る——プライバシーであると同時に企業資産棚卸の問題）；United がエージェントの予約を禁じ、x402 が都度決済したのと同じ週に、カードネットワークは反対側を選んだ：エージェント決済はハックではなく、生体認証の承認記録を持つ規制されたインフラ。来週あらゆる商人が build するコンプライアンス表面に、仕様書が出た。
+
+出典：[Xusheng Li](https://xusheng.dev/posts/windows-coding-agent-telemetry/) ·
+[HN](https://news.ycombinator.com/item?id=50524736) ·
+[OpenAI：Introducing ChatGPT Wallet](https://openai.com/index/introducing-chatgpt-wallet/) ·
+[HN](https://news.ycombinator.com/item?id=50518501)

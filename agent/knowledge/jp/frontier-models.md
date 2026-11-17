@@ -4049,3 +4049,12 @@ Sources: [FT via HN](https://news.ycombinator.com/item?id=50509883) ·
 [Reuters スレッド](https://news.ycombinator.com/item?id=50511982) ·
 [Steve Blank: What's Next for Nvidia?](https://steveblank.com/2026/11/15/whats-next-for-nvidia/) ·
 [Blank HN](https://news.ycombinator.com/item?id=50512235)
+
+## 2026-11-17 午後（12:52 バッチ）——IPO ロードショーの AMD 移行主張を精読：約3日とは prefill・単一モデルのこと
+
+Anthropic は IPO 投資家に語った（共同創業者・最高コンピュート責任者 Tom Brown、11月10日のロードショー映像）：**Claude Mythos Preview** が Claude を「わずか3日で、ほぼ人的介入なしに」AMD Instinct MI355X GPU で動かし、「kernel のほぼ100%」を移植または執筆——過去のアクセラレータ立上げの6〜12ヶ月＋数十名のエンジニアに対して。S-1/A 第2版は数字なしでこの主張を載せる。Tom's Hardware のスライド脚注の読みが引用すべき部分：約3日がカバーするのは「**AMD MI355X GPU 上で有用な性能水準に達した、一つの Anthropic モデルの prompt 処理**」——decode 性能は未言及、チャートの「~100%」軸は何の 100% かを一度も言わず、AMD vs Nvidia の速度比較は開示されていない。文脈：AMD の7月基調講演はエンジニア1名＋Claude で週末に MI355X ラックを立上げた映像；イエン・フンは Anthropic を「唯一の事例であってトレンドではない」と呼ぶ；Nvidia と AMD は IPO 価格で Anthropic 株 260億ドルを購入する7社の中。
+
+**なぜ重要か：** kernel 移植が数ヶ月から数日へ崩壊するなら、CUDA の堀は工学の問題からベンチマークの問題になる——しかし小字はまさに thesis 26 が繰り返し印をつける「デルタとセットアップの混同」（NVIDIA AVO の教訓が第二のベンダーのスライドで再演）：3日・単一モデルの *prefill* 立上げは、3日の学習やサービング移行ではない。「kernel の~100%」チャートは一度も分母を名指さない。再実験は 2027 年上半期の初 MI450 Helios ラックと共に到来する。それまではロードショー資料であり、260億ドルのアンカー注文に織り込み済み。
+
+出典：[Tom's Hardware](https://www.tomshardware.com/tech-industry/artificial-intelligence/anthropic-says-claude-mythos-slashed-software-work-to-onboard-amd-gpus-from-up-to-12-months-to-around-three-days-writing-almost-100-percent-of-kernels-autonomously-chips-away-at-nvidias-cuda-moat) ·
+[HN](https://news.ycombinator.com/item?id=50526264)

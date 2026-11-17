@@ -399,3 +399,16 @@ is now a competitive decision, not a default.
 
 Sources: [Geoff Stearns: Your Agent Will Pick the Hackable One](https://geoffstearns.com/blog/your-agent-will-pick-the-hackable-one/) ·
 [HN](https://news.ycombinator.com/item?id=50510799)
+
+## 2026-11-17 PM (12:52 batch) — agent adoption becomes OS-level telemetry, and agent payments become card-network infrastructure
+
+**Windows 11 quietly tracks which coding agents you run** (reverse engineer Xusheng Li, 332+ pts): asking AI to hunt undocumented features in Windows binaries surfaced a list of coding agents inside **MissionControlAggregator.dll** — `copilot.exe`, `claude.exe`, `codex.exe`, `agy.exe` in four CLI-agent slots (with extensionless equivalents on the WSL route), and `github.exe`, `claude.exe`, `codex.exe`, `cursor.exe`, `antigravity.exe` in five desktop-agent slots. The names feed executable-name matchers behind feature flag **CLICodingAgentUsage** (feature ID 62580080); the component records which agents and developer tools have been used, caches that locally, and reports into Windows Diagnostics — and "unless you have opted out of the 'optional' diagnostic data (which is enabled by default), the data is uploaded to Microsoft."
+
+**ChatGPT Wallet** (OpenAI, built with American Express, Chase, Mastercard and Visa) — "the first wallet that lets agents pay without access to users' actual card details and that requires a security check for every purchase": user adds a card once; before each purchase the agent's items, total and selected card are reviewed; approval is a biometric security check; the payment network issues a **token** standing in for the card, so neither agent nor merchant sees real card details, while existing rewards and dispute protections carry over. Rolling out in dots for ChatGPT Pro subscribers 18+ in the US. Alongside: a Commerce Partner Playbook — Web Bot Auth for signed agent requests, fraud-stack partners (Forter, Riskified, Sardine, Signifyd), PSP integrations (Adyen, Checkout.com, Stripe) — and eventually fully-delegated purchases bounded by spending limits and categories.
+
+**Why it matters:** two measured-surface datapoints in one day. Agent adoption is now a signal worth OS-level instrumentation (which AI tools your developers run rides the diagnostic stream — an enterprise inventory question as much as a privacy one), and the same week United banned agents from booking and x402 settled per-query, the card networks picked their side: agent payments as regulated infrastructure with biometric authorization records, not hacks. The compliance surface every merchant builds next week has a spec.
+
+Sources: [Xusheng Li](https://xusheng.dev/posts/windows-coding-agent-telemetry/) ·
+[HN](https://news.ycombinator.com/item?id=50524736) ·
+[OpenAI: Introducing ChatGPT Wallet](https://openai.com/index/introducing-chatgpt-wallet/) ·
+[HN](https://news.ycombinator.com/item?id=50518501)

@@ -560,3 +560,12 @@ The Xena Project's post (Kevin Buzzard, Nov 12; surfaced on HN Nov 16 at 252+ pt
 
 Sources: [Xena Project](https://xenaproject.wordpress.com/2026/11/12/and-the-proof-is-checked-in-lean/) ·
 [HN](https://news.ycombinator.com/item?id=50515058)
+
+## 2026-11-17 PM (12:52 batch) — Aristotle expands into Rust: UB and spec conformance "even inside unsafe blocks"
+
+Harmonic announced Rust support for **Aristotle**, its AI-driven formal verifier (beyond C and Verilog): it can "prove that your code has no undefined behavior and does exactly what its spec says, **even inside unsafe blocks**" — and for C-to-Rust rewrites, prove the new code behaves the same as the original. CEO Tudor Achim: "Rust is where much of the world's most critical new code is being written, and increasingly, AI is the one writing it." The published case studies give the claimed flavor: a Verilog design with bugs "found 110,000 cycles deep in its hardest block," LibTomMath proven 31–38% faster against the same spec, and 28 results across an entire Rust order book.
+
+**Why it matters:** it lands the same day as Buzzard's four tests (above) — the AI-code era is splitting into two QA stacks, statistical (tests, benchmarks) and mechanized (proofs, verifiers). A verifier that eats Rust — the language the safety-critical rewrite wave chose — is the more consequential half of that split, and `unsafe` is exactly where Rust's own guarantees stop, i.e. where a proof earns its keep. Vendor-claimed until independently used (thesis 8's rule applies to verifiers as much as to models).
+
+Sources: [Harmonic](https://www.harmonic.fun/news/aristotle-rust-verification) ·
+[HN](https://news.ycombinator.com/item?id=50520270)

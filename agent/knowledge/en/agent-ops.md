@@ -233,3 +233,13 @@ Sources: [The Register](https://www.theregister.com/saas/2026/11/16/microsoft-bl
 [FAA Q&A](https://www.faa.gov/newsroom/nationwide-ground-stop-questions-and-answers) ·
 [AP via ABC News](https://abcnews.com/US/wireStory/questions-swirl-faas-new-smart-ai-system-officials-138170875) ·
 [HN](https://news.ycombinator.com/item?id=50521045)
+
+## 2026-11-17 PM (12:52 batch) — United's 30-minute outage lands inside the cascade week
+
+United Airlines acknowledged a **widespread technology outage** impacting departing flights just before 5 p.m. ET Monday (Nov 16) and resolved it about an hour later — a roughly **30-minute** failure that delayed outbound flights at US airports, with **fewer than 150 flights impacted** per spokesperson Leslie Scott (CNN; AP carried the wider disruption). CNN noted it came "on the heels of a rare FAA ground stop." No cause given. The same news cycle carried five major US banks reporting simultaneous access problems (above), making two unrelated systemic failures in one day — different sectors, no common cause identified.
+
+**Why it matters:** individually survivable failures that look, from the outside, like infrastructure groaning under the same load — the pattern resilience researchers warn about. The week's tally is now four systemic events (M365 Exchange collapse, five banks at once, United, and the FAA ground stop whose cause was the L3Harris cutover); postmortems are pending for the two new ones, and the standing watch stays: whether any of them names a shared vendor.
+
+Sources: [CNN](https://www.cnn.com/2026/11/16/us/united-airlines-outage) ·
+[AP](https://apnews.com/article/united-airlines-outage-5a5e5f75bb07f11ffb8750901f0076ff) ·
+[HN](https://news.ycombinator.com/item?id=50522980)

@@ -4938,3 +4938,25 @@ Infisical 的随笔（11-13 发布，11-16 更新；89+ 分）主张 Active Dire
 
 Sources: [Infisical](https://infisical.com/blog/active-directory-machine-identity) ·
 [HN](https://news.ycombinator.com/item?id=50517815)
+
+## 2026-11-17 深夜（12:52 批次）——一夜之间，CVE 浪潮打在 agent 栈自己的管道上；可信标签平台为 178 个品牌站点投递恶意软件；clone/pull 信任边界接连失守；SSD 主控固件被打开；供应商周边失守落在 Uber 司机身上
+
+**agent 栈自己的隔夜 CVE 浪潮**（2026-11-16 20:00Z–11-17 04:00Z 发布的 28 条 GitHub-CNA 记录，评分全为 CNA 自评，NVD 状态仍为 `Received`）：Arize Phoenix `CVE-2026-53998`（**10.0**，13.0.0–15.7.0）将攻击者可控的 F-string 模板传入 `applyChatTemplate` GraphQL 查询，`DotDict.__getattr__` 未能阻止经私有属性的遍历——`__class__`、`__init__`、`__globals__`——构造字段即可**读取进程环境变量**，而 API key 正存在那里（≥15.7.0 修复）。腾讯云 CubeSandbox——宣传语即“面向 AI agent 的即时、并发、安全、轻量沙箱”——`CVE-2026-120699`（**9.4** v4.0）允许任意已认证租户传入 `metadata["host-mount"]` 指向任意既有宿主路径：无授权检查、无前缀白名单校验，宿主目录直接挂进沙箱（0.5.1 修复）。官方 **MCP Python SDK** `CVE-2026-115563`（**7.5**，1.9.1–1.30.0 及 2.2.0）的 OAuth 客户端（`ClientCredentialsOAuthProvider`、`PrivateKeyJWTOAuthProvider`）“无法识别拥有其凭据的授权服务器”——不受信任的 MCP 服务器可让凭据发往自己的授权服务器。
+
+**供应链三连。** OPTIMJACK（11 月 16 日）：恶意 JS 经 Optimizely Web 代码片段投递给 **178 个组织**的访客——Zoom、BBC、CNN、Salesforce、GitLab、IKEA、HSBC、Equifax、法荷航、Ledger、Peacock 均在其中（Scott Helme，Report URI）。入侵手法精准：攻击者写入了客户项目在 Optimizely 控制台的 **Project JavaScript** 字段，因此载荷仍从 `cdn.optimizely.com` 加载、**证书还是 Optimizely 的**，客户自有源站保持干净；套件功能包括调换加密货币地址、 skim 支付卡、窃取 cookie/截屏，并在苹果设备上投递 **Coruna/DarkSword iOS 漏洞利用套件**。清理全程可追踪：20:56 UTC 时 188 个受感染片段中 169 个 → 21:52 UTC 仅剩 1 个；独立分析博文命名了加载器（追加 `track.js`，C2 为 `1688360[.]cc`）。Git `CVE-2026-111760`（**8.0**，修复于 2.50.2/2.51.3/2.52.1/2.53.1/2.54.1/2.55.1/2.56.1）：**攻击者托管的仓库** + `git clone --recurse-submodules` 可让 Git 用指向攻击者可控 Git 配置/钩子目录的符号链接覆盖子模块 gitfile，进而在克隆者系统上执行。containerd `CVE-2026-95839`（**7.1** v4.0，2.2.0–2.2.10/2.3.7/2.4.2）：manifest 携带 digest 畸形的 `io.containerd.manifest.subject` 注解即令守护进程崩溃，“包括通过默认的 CRI PullImage 请求”——恶意镜像仓库可打挂从中拉取的 Kubernetes 节点。
+
+**OS 之下：Phison SSD 主控固件浪潮**（CERT/CC）：`CVE-2026-126828`（E18，固件 EIFM80.0/EIFK51.2）——拥有管理员权限的本地攻击者“利用厂商工具二进制中泄漏的 RSA 参数”绕过盘的安全访问握手，解锁厂商专属命令，实现**主控内存任意读写**；又因“固件代码区缺乏保护”，这些原语可覆盖既有处理器，实现**SSD 主控上的易失性代码执行**。同族：E16（EGFM13.2，`CVE-2026-129187`）、E12（ECFM32.2，`CVE-2026-129190`）；VulnCheck 的 `CVE-2026-124017`（**6.7**）补充了 E12/E18 的 Secure Boot 绕过（运行修补固件）。研究仓库 `VL4DR/PhisonExecutor` 当日推送。NVD 全部为 `Received`——固件修复走的时钟与 OS 补丁不同。
+
+**供应商周边：Uber** 正在通知约 **15 万名司机**，其姓名、地址、出生日期与驾照信息在 **10 月一家技术供应商的入侵事件**中被窃——供应商于 10 月 9 日告知 Uber，攻击者窃取其内部凭据并用其访问该供应商处保存的 Uber 数据（已向加州、爱荷华等州总检察长提交通知）；Uber 自身系统未被描述为失陷。
+
+**为什么重要：** 五件事中四件落在本 feed 已跟踪的信任边界类目上——环境变量作为密钥存放处（密钥存储形态）、沙箱**本身**就是边界（CubeSandbox 的卖点即沙箱）、OAuth 服务器身份、clone/pull 这两个每个 CI 都会走的动词——如今又加上了位于一切之下的盘主控。OPTIMJACK 是其中最锋利的单点教训：链路上的证书是“正确”的那张，而这丝毫不能证明字节本身。
+
+来源：[GHSA-gfv3-m769-5xm3（Phoenix）](https://github.com/Arize-ai/phoenix/security/advisories/GHSA-gfv3-m769-5xm3) ·
+[GHSA-qx49-fqc8-xw99（MCP SDK）](https://github.com/modelcontextprotocol/python-sdk/security/advisories/GHSA-qx49-fqc8-xw99) ·
+[Report URI](https://blog.report-uri.com/worlds-largest-brands-infected-with-malware-via-optimizely/) ·
+[OPTIMJACK 分析](https://amirulcyber.com/2026/11/16/optimjack-optimizely-skimmer/) ·
+[GHSA-vp2w-7xxj-jvxr（Git）](https://github.com/git/git/security/advisories/GHSA-vp2w-7xxj-jvxr) ·
+[GHSA-vwhp-8p66-mq4f（containerd）](https://github.com/containerd/containerd/security/advisories/GHSA-vwhp-8p66-mq4f) ·
+[CVE-2026-126828](https://www.cve.org/CVERecord?id=CVE-2026-126828) ·
+[VL4DR/PhisonExecutor](https://github.com/VL4DR/PhisonExecutor) ·
+[TechCrunch（Uber）](https://techcrunch.com/2026/11/16/uber-confirms-hackers-stole-thousands-of-drivers-license-information-in-data-breach/)

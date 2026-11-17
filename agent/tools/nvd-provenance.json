@@ -3098,6 +3098,51 @@
    "id": "CVE-2026-19732",
    "why": "2026-11-17 — Dassault 3DEXPERIENCE ships a 10.0: pre-auth RCE via deserialization in the Station Launcher App, beside two 9.9 command injections",
    "seeded": "2026-11-16 [Received] 3.1 Secondary/3DS.Information-Security@3ds.com 9.9, CWE-78, published 11-16"
+  },
+  {
+   "id": "CVE-2026-53998",
+   "why": "2026-11-17 — One overnight CVE wave hits the agent stack itself: Phoenix 10.0 (env-var theft), CubeSandbox 9.4 (sandbox escape), MCP Python SDK 7.5 (OAut",
+   "seeded": "2026-11-17 [Received] 3.1 Secondary/security-advisories@github.com 10, CWE-134/CWE-200, published 11-16"
+  },
+  {
+   "id": "CVE-2026-120699",
+   "why": "2026-11-17 — One overnight CVE wave hits the agent stack itself: Phoenix 10.0 (env-var theft), CubeSandbox 9.4 (sandbox escape), MCP Python SDK 7.5 (OAut",
+   "seeded": "2026-11-17 [Received] 4.0 Secondary/security-advisories@github.com 9.4, CWE-22/CWE-269/CWE-284, published 11-16"
+  },
+  {
+   "id": "CVE-2026-115563",
+   "why": "2026-11-17 — One overnight CVE wave hits the agent stack itself: Phoenix 10.0 (env-var theft), CubeSandbox 9.4 (sandbox escape), MCP Python SDK 7.5 (OAut",
+   "seeded": "2026-11-17 [Received] 3.1 Secondary/security-advisories@github.com 7.5, CWE-345/CWE-522, published 11-16"
+  },
+  {
+   "id": "CVE-2026-111760",
+   "why": "2026-11-17 — Git's `clone --recurse-submodules` flaw (8.0) and containerd's manifest panic (7.1) ride the same overnight wave",
+   "seeded": "2026-11-17 [Received] 3.1 Secondary/security-advisories@github.com 8, CWE-59, published 11-16"
+  },
+  {
+   "id": "CVE-2026-95839",
+   "why": "2026-11-17 — Git's `clone --recurse-submodules` flaw (8.0) and containerd's manifest panic (7.1) ride the same overnight wave",
+   "seeded": "2026-11-17 [Received] 4.0 Secondary/security-advisories@github.com 7.1, CWE-248, published 11-16"
+  },
+  {
+   "id": "CVE-2026-126828",
+   "why": "2026-11-17 — Phison SSD controller firmware: leaked RSA parameters unlock vendor commands — arbitrary memory read/write and volatile code execution on th",
+   "seeded": "2026-11-17 [Received] no CVSS published, published 11-16"
+  },
+  {
+   "id": "CVE-2026-129187",
+   "why": "2026-11-17 — Phison SSD controller firmware: leaked RSA parameters unlock vendor commands — arbitrary memory read/write and volatile code execution on th",
+   "seeded": "2026-11-17 [Received] no CVSS published, published 11-16"
+  },
+  {
+   "id": "CVE-2026-129190",
+   "why": "2026-11-17 — Phison SSD controller firmware: leaked RSA parameters unlock vendor commands — arbitrary memory read/write and volatile code execution on th",
+   "seeded": "2026-11-17 [Received] no CVSS published, published 11-16"
+  },
+  {
+   "id": "CVE-2026-124017",
+   "why": "2026-11-17 — Phison SSD controller firmware: leaked RSA parameters unlock vendor commands — arbitrary memory read/write and volatile code execution on th",
+   "seeded": "2026-11-17 [Received] 3.1 Primary/disclosure@vulncheck.com 6.7, 4.0 Secondary/disclosure@vulncheck.com 8.4, CWE-347, published 11-16"
   }
  ]
 }

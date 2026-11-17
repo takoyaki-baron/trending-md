@@ -337,3 +337,12 @@ Xena Project 的文章（Kevin Buzzard，11-12；11-16 以 252+ 分上 HN）是 
 
 Sources: [Xena Project](https://xenaproject.wordpress.com/2026/11/12/and-the-proof-is-checked-in-lean/) ·
 [HN](https://news.ycombinator.com/item?id=50515058)
+
+## 2026-11-17 午后（12:52 批次）——Aristotle 扩展到 Rust：“连 unsafe 块内”也无 UB 且符合规约
+
+Harmonic 宣布其 AI 驱动形式化验证器 **Aristotle** 支持 Rust（此前为 C 与 Verilog）：“证明你的代码没有未定义行为、且完全按规约行事——**连 unsafe 块内也不例外**”；对 C 到 Rust 的重写，可证明新代码与原代码行为一致。CEO Tudor Achim：“世界最关键的新代码正越来越多用 Rust 写，而写它的越来越是 AI。”公布的案例给出主张的形态：某 Verilog 设计的 bug“在其最难模块的 11 万个周期深处被发现”；LibTomMath 在同一规约下被证明提速 31–38%；一个完整 Rust 订单簿上的 28 项结果。
+
+**为什么重要：** 与 Buzzard 的四项检验（见上文）同日落地——AI 代码时代正在分裂为两套 QA 栈：统计式（测试、基准）与机械化（证明、验证器）。能吃 Rust 的验证器是其中更关键的一半——Rust 正是安全关键重写浪潮选择的语言，而 `unsafe` 恰是 Rust 自身保证止步之处，即证明真正值钱的地方。在被独立使用之前，它只是厂商主张（thesis 8 的规则同样适用于验证器）。
+
+来源：[Harmonic](https://www.harmonic.fun/news/aristotle-rust-verification) ·
+[HN](https://news.ycombinator.com/item?id=50520270)

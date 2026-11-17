@@ -364,3 +364,12 @@ Jimmy Breck-McKye のエッセイ（11-15、137+ pts）は、今年のインシ�
 
 Sources: [breck-mckye.com](https://www.breck-mckye.com/blog/2026/11/software-is-breaking-down-at-a-systemic-level/) ·
 [HN](https://news.ycombinator.com/item?id=50520866)
+
+## 2026-11-17 午後（12:52 バッチ）——CMU が CS の教室を YouTube に移し、AI Agents 講義が木曜に初公開
+
+カーネギーメロン大学 SCS が **CS Learn**（cs.cmu.edu/learn）を開設：教員の教室講義の全文を YouTube で無料公開——「無料講義は現在 YouTube にて。無料コースウェアは次に来る。」今月8講義が初公開、**10-605 大規模データセット機械学習**（William Cohen）、**15-442 機械学習システム**（Tianqi Chen と Zhihao Jia）、そして木曜初公開の **11-768 AI Agents**（Daniel Fried と Graham Neubig）、同日に 17-645 Production 機械学習（Kästner と Vasilescu）。1月には Probability and Computing（Harchol-Balter）、マルチモーダル ML など。ロードマップは動画の先へ：即時フィードバックとバッジ付きの自習コースウェアが次で、「AI tutoring がコースウェア体験にやってくる」（915+ pts）。
+
+**なぜ重要か：** MIT は先週コースサイトをエージェントに開放した；CMU は今、講義室の全てを YouTube に移し、ラインナップにエージェント講義、ロードマップに AI tutoring を載せる——トップ CS 校は、自分の教育が人間とエージェント両方の無料訓練コーパスになる競争をしている。thesis 16 のディストリビューションのレンズを教育に向ける：エージェントが学ぶことになる講義は、今選ばれている。
+
+出典：[CMU SCS：CS Learn](https://www.cs.cmu.edu/learn/) ·
+[HN](https://news.ycombinator.com/item?id=50522980)

@@ -1518,3 +1518,22 @@ Sources: [burntsushi.net](https://burntsushi.net/jiff/) ·
 [TRMNL](https://trmnl.com/blog/introducing-frame) ·
 [jiangshan-map](https://github.com/DeanChensj/jiangshan-map) ·
 [masnick.com](https://masnick.com/posts/the-secret-thinkpad-powerbutton-code-to-bring-dead-laptops-back-to-life/)
+
+## 2026-11-17 午后（12:52 批次）——架上新物：Clojure 离开 JVM、fzf 学会你的习惯、Spamhaus 为邮件基线定下日期、两个 Web 时代的谢幕
+
+- **Jolt**（99+ 分，jolt-lang.net）：运行在可移植 Scheme 层上的自托管 Clojure 实现——Chez Scheme 原生、Gambit 出 JavaScript——全程无 JVM。“大多数 Clojure 代码原样运行，任意 C 库原生绑定，`jolt build` 出一个独立可执行文件”；`defcfn` 把 C 函数变成普通 Clojure fn（文档自带示例接 SQLite、Postgres、OpenSSL、zlib）；主张完整 Clojure 语义——持久化数据结构、惰性序列、transducer、multimethod、protocol——配真实 OS 线程并发（`future`、`agent`、`pmap`、`core.async`）。首页 REPL 就是 Gambit 后端编译成 JS 的 Jolt。Clojure 押注 JVM 二十年之后，这门方言的语义证明可以整体脱离它。
+- **psychic**（44+ 分，`kshitijl/psychic`，Rust）：“像 fzf，但会从你的操作中学习”——终端文件浏览器兼 `cd` 替代品，记录你访问的目录与打开的文件，在本地训练轻量 ML 模型并据此排序。作者自己的使用数据：2025 年 10 月以来 1,450 次打开，目标文件置顶平均只需输入 **1.6 个字符**，29% 的时候零输入。每个开发者的自适应浪潮抵达文件系统导航，而“我宁可做 10 次快速搜索……也不要 1 次聪明搜索”是 ML-in-the-loop CLI 的正确约束。
+- **Spamhaus 开始强制 HELO/PTR/A 记录一致，带日期**（77+ 分）：发件人指南新增“**自 2026 年 11 月起，我们将逐步要求每个发信 IP 拥有有效 HELO、反向 DNS（PTR）记录及匹配的 A 记录**”（本次运行已逐字核验），另附 HELO/DNS 检查器；其余标准分六节（基础设施/DNS、SPF/DKIM/DMARC、许可与列表卫生含 spamtrap、发送最佳实践、IP/域名信誉、ESP 义务）。投递力建议多为民间偏方；这是一个屏蔽列表运营方把自己的接收标准写成公开、带日期、可核查的规范——加入“带日期 deadline”清单。
+- **Mem 于 1 月 15 日关停**（21+ 分）：AI 原生笔记先驱——2022 年 embeddings 式“Similar Mems”→ 2022–23 生成式 Smart Write → 2024 Mem Chat → 2026 年 4 月 MCP 连接器与 ChatGPT 应用 → 2026 年 7 月能伸进 iMessage/WhatsApp/Slack 的主动 agent——11 月 16 日宣布关闭：笔记 **12 月 18 日**转只读，服务 **2027 年 1 月 15 日**关停，计费已暂停。创始人 Kevin Moody 的告别信附带迁移指南（Apple Notes、Notion、Obsidian）及串联每个时代发布文的回顾。被前沿厂商逐步吸收的品类；带干净导出路径与公布时间线的关停，是对每一条依赖应有的告别要求。
+- **BugMeNot 关闭**（384+ 分）：运行二十年、帮人绕过“注册免费账号才能读此文”墙的共享凭据服务，如今只剩一句告别——“**BugMeNot has closed. Thanks to everyone who envisioned a better internet**”——未说明原因。前围墙时代的一件文物，在本 feed 报道注册墙的同一周死去；帖子里的诚实悼词：近期可用的登录多半是一次性邮箱（mailinator/yopmail）。
+
+来源：[jolt-lang.net](https://jolt-lang.net/) ·
+[HN](https://news.ycombinator.com/item?id=50519345) ·
+[klauria.tech/psychic](https://klauria.tech/psychic/) ·
+[kshitijl/psychic](https://github.com/kshitijl/psychic) ·
+[Spamhaus 发件人指南](https://www.spamhaus.org/sender-guidelines/) ·
+[HN](https://news.ycombinator.com/item?id=50523784) ·
+[Mem 关停公告](https://get.mem.ai/blog/mem-is-shutting-down) ·
+[HN](https://news.ycombinator.com/item?id=50526537) ·
+[BugMeNot](https://www.bugmenot.com/) ·
+[HN](https://news.ycombinator.com/item?id=50523601)

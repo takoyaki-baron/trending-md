@@ -5414,3 +5414,25 @@ Infisical のエッセイ（11-13 公開、11-16 更新；89+ pts）は、Active
 
 Sources: [Infisical](https://infisical.com/blog/active-directory-machine-identity) ·
 [HN](https://news.ycombinator.com/item?id=50517815)
+
+## 2026-11-17 深夜（12:52 バッチ）——一夜でCVEの波がエージェントスタック自身の配管を直撃。信頼されたタグ基盤が178ブランドにマルウェアを配信。clone/pull の信頼境界が次々に破られ、SSD コントローラファームウェアが開かれ、ベンダー周辺の侵害は Uber のドライバーに着地
+
+**エージェントスタック自身の夜間CVEの波**（2026-11-16 20:00Z〜11-17 04:00Z 公開の GitHub-CNA 記録28件、スコアはすべて CNA 自己採点で NVD は依然 `Received`）：Arize Phoenix `CVE-2026-53998`（**10.0**、13.0.0〜15.7.0）は攻撃者制御の F-string テンプレートを `applyChatTemplate` GraphQL クエリに通し、`DotDict.__getattr__` が私有属性経由のトラバーサル（`__class__`、`__init__`、`__globals__`）を阻止できず、細工したフィールドで**プロセスの環境変数——API キーのありか——を読める**（≥15.7.0 で修正）。Tencent Cloud の CubeSandbox——「AI エージェント向けの高速・並行・安全・軽量サンドボックス」——`CVE-2026-120699`（**9.4** v4.0）は認証済みテナントなら誰でも `metadata["host-mount"]` に任意の既存ホストパスを渡せた。認可チェックなし、許可プレフィックス検証なしで、ホストのディレクトリがサンドボックスにマウントされる（0.5.1 で修正）。公式 **MCP Python SDK** `CVE-2026-115563`（**7.5**、1.9.1〜1.30.0 と 2.2.0）の OAuth クライアント（`ClientCredentialsOAuthProvider`、`PrivateKeyJWTOAuthProvider`）は「自分の認証情報を所有する認可サーバーを特定できない」——信頼できない MCP サーバーが認証情報を自分の認可サーバーへ送らせられた。
+
+**サプライチェーンの三連。** OPTIMJACK（11月16日）：悪意ある JS が Optimizely Web スニペット経由で **178 組織**の訪問者に配信された——Zoom、BBC、CNN、Salesforce、GitLab、IKEA、HSBC、Equifax、エールフランス-KLM、Ledger、Peacock など（Scott Helme、Report URI）。侵入は外科的：攻撃者は Optimizely ダッシュボードの顧客プロジェクトの **Project JavaScript** フィールドに書き込み、ペイロードは `cdn.optimizely.com` から**Optimizely の証明書のまま**配信され、顧客自身のオリジンは無傷だった。キットは暗号アドレス差し替え、カード skim、cookie/スクリーンショット窃取、Apple 端末への **Coruna/DarkSword iOS 脆弱性キット**配信。クリーンアップは追跡可能：20:56 UTC に 188 本中 169 本感染 → 21:52 UTC に 1 本。独立分析ポストはローダーを命名（`track.js` を追加、C2 は `1688360[.]cc`）。Git `CVE-2026-111760`（**8.0**、2.50.2/2.51.3/2.52.1/2.53.1/2.54.1/2.55.1/2.56.1 で修正）：**攻撃者ホストのリポジトリ**＋`git clone --recurse-submodules` で、Git がサブモジュールの gitfile を攻撃者制御の Git 設定/フックへのシンボリックリンクで上書きし、クローンしたユーザーのシステム上で実行される。containerd `CVE-2026-95839`（**7.1** v4.0、2.2.0〜2.2.10/2.3.7/2.4.2）：不正な digest を持つ `io.containerd.manifest.subject` アノテーション付き manifest がデーモンをクラッシュさせ「デフォルトの CRI PullImage リクエスト経由も含む」——敵対的レジストリがそこから pull する Kubernetes ノードを落とせる。
+
+**OS の下で：Phison SSD コントローラファームウェアの波**（CERT/CC）：`CVE-2026-126828`（E18、ファームウェア EIFM80.0/EIFK51.2）——管理者権限のローカル攻撃者が「ベンダーユーティリティバイナリに漏洩した RSA パラメータ」を利用してドライブの Security Access ハンドシェイクを迂回し、ベンダー専用コマンドを解錠して**コントローラのメモリ任意読み書き**を獲得。「ファームウェアのコード領域は保護されていない」ため、そのプリミティブでハンドラを上書きし**SSD コントローラ上での揮発性コード実行**に至る。兄弟：E16（EGFM13.2、`CVE-2026-129187`）、E12（ECFM32.2、`CVE-2026-129190`）；VulnCheck の `CVE-2026-124017`（**6.7**）は E12/E18 の Secure Boot バイパス（修正済みファームウェア実行）を追加。研究リポジトリ `VL4DR/PhisonExecutor` は当日 push。NVD はすべて `Received`——ファームウェア修正は OS パッチと別の時計を走る。
+
+**そしてベンダー周辺：Uber** は約 **15万人のドライバー**に、氏名・住所・生年月日・運転免許情報が**10月のテックプロバイダー侵害**で盗まれたと通知中——プロバイダーは 10月9日に Uber へ「攻撃者が内部認証情報を盗み、そこに保管された Uber データに access した」と伝えた（カリフォルニア・アイオワなど州 AG への通知済み）。Uber 自身のシステムは侵害されたと説明されていない。
+
+**なぜ重要か：** 5件のうち4件が、このフィードがクラスとして追ってきた信頼境界に着地する——鍵の保管場所としての環境変数（シークレットストア形）、境界**そのもの**としてのサンドボックス（CubeSandbox はそれを売りにしている）、OAuth サーバー同一性、あらゆる CI が通る clone/pull の2動詞——さらにその下にあるドライブコントローラ。OPTIMJACK が最も鋭い一つの教訓：回線上の証明書は「正しい」ものだった。そしてそれはバイト列について何も証明しない。
+
+出典：[GHSA-gfv3-m769-5xm3（Phoenix）](https://github.com/Arize-ai/phoenix/security/advisories/GHSA-gfv3-m769-5xm3) ·
+[GHSA-qx49-fqc8-xw99（MCP SDK）](https://github.com/modelcontextprotocol/python-sdk/security/advisories/GHSA-qx49-fqc8-xw99) ·
+[Report URI](https://blog.report-uri.com/worlds-largest-brands-infected-with-malware-via-optimizely/) ·
+[OPTIMJACK 解説](https://amirulcyber.com/2026/11/16/optimjack-optimizely-skimmer/) ·
+[GHSA-vp2w-7xxj-jvxr（Git）](https://github.com/git/git/security/advisories/GHSA-vp2w-7xxj-jvxr) ·
+[GHSA-vwhp-8p66-mq4f（containerd）](https://github.com/containerd/containerd/security/advisories/GHSA-vwhp-8p66-mq4f) ·
+[CVE-2026-126828](https://www.cve.org/CVERecord?id=CVE-2026-126828) ·
+[VL4DR/PhisonExecutor](https://github.com/VL4DR/PhisonExecutor) ·
+[TechCrunch（Uber）](https://techcrunch.com/2026/11/16/uber-confirms-hackers-stole-thousands-of-drivers-license-information-in-data-breach/)

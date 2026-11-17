@@ -5998,3 +5998,12 @@ Sources: [FT via HN](https://news.ycombinator.com/item?id=50509883) ·
 [Reuters thread](https://news.ycombinator.com/item?id=50511982) ·
 [Steve Blank: What's Next for Nvidia?](https://steveblank.com/2026/11/15/whats-next-for-nvidia/) ·
 [Blank HN](https://news.ycombinator.com/item?id=50512235)
+
+## 2026-11-17 PM (12:52 batch) — the IPO roadshow's AMD bring-up claim, read carefully: ~3 days means prefill, one model
+
+Anthropic told IPO investors (co-founder and chief compute officer Tom Brown, Nov 10 roadshow video) that **Claude Mythos Preview** got Claude running on AMD Instinct MI355X GPUs "in just three days with basically no human intervention," porting or writing "almost 100% of the kernels" — against a 6–12-month estimate with dozens of engineers for historical accelerator bring-up. The S-1/A No. 2 carries the claim without the number. Tom's Hardware's reading of the slide footnote is the part to quote: the ~3 days covers "**prompt processing for one Anthropic model on AMD MI355X GPUs at a useful level of performance**" — decode performance unstated, the chart's "~100%" axis never says 100% of what, and no AMD-vs-Nvidia speed comparison was disclosed. Context: AMD's July keynote showed one engineer + Claude bringing up an MI355X rack over a weekend; Jensen Huang calls Anthropic "a unique instance, not a trend"; Nvidia and AMD are among seven companies buying $26.0B of Anthropic's stock at the IPO price.
+
+**Why it matters:** if kernel-porting collapses from months to days, the CUDA moat becomes a benchmark question rather than an engineering one — but the fine print is exactly the delta-vs-setup ambiguity thesis 26 keeps flagging (NVIDIA's AVO lesson restated by a second vendor's slide deck): a three-day *prefill* bring-up on *one* model is not a three-day training or serving port, and the "~100% of kernels" chart never names its denominator. The repeat experiment arrives with the first MI450 Helios racks in H1 2027; until then this stays roadshow material, priced into a $26.0B anchor order.
+
+Sources: [Tom's Hardware](https://www.tomshardware.com/tech-industry/artificial-intelligence/anthropic-says-claude-mythos-slashed-software-work-to-onboard-amd-gpus-from-up-to-12-months-to-around-three-days-writing-almost-100-percent-of-kernels-autonomously-chips-away-at-nvidias-cuda-moat) ·
+[HN](https://news.ycombinator.com/item?id=50526264)

@@ -2547,3 +2547,20 @@ Sources: [withcoral/coral](https://github.com/withcoral/coral) ·
 [Show HN](https://news.ycombinator.com/item?id=50517803) ·
 [paper-orchestra](https://github.com/google-research/paper-orchestra) ·
 [arXiv:2604.05018](https://arxiv.org/abs/2604.05018)
+
+## 2026-11-17 午后（12:52 批次）——凭据边界与治理边界同时落到服务端：Browse 把标签页交还给人，lend 以租约出借笔记本，Sutra-OS 拒绝非提案式写入
+
+**OpenCode Browse**（157+ 分）发布：“一个 MCP 服务器 + Chromium 扩展，让你的 agent 使用你的真实浏览器——你的标签页、你的登录态、你的扩展。”agent 标签页在后台以折叠分组打开，覆盖 Chrome/Edge/Brave/Arc/Helium/Vivaldi/Opera/Chromium；agent 可读页、点击、输入、截屏、录制。关键边界是**交接**：遇到登录、2FA 或支付时，agent 把标签页交还给人，点 Continue 后继续——另有工具栏按钮可将人已打开的标签页“出借”给 agent，允许站点列表可把 agent 标签页钉在指定域名。任何 MCP 客户端可用（OpenCode、Claude Code、Cursor、Codex、Zed）。agent 浏览器此前分裂为无头一次性 profile（无登录态）与截屏式计算机操作（慢、盲）两条路——Browse 押注第三条：以真实已认证浏览器为基底，人恰好在凭据环节介入。（精神上与 11-15 的 `paul-nameless/agweb`“永不夺焦”浏览器、`agent-browser`“遮蔽点击即报错”同族。）
+
+**lend**（52+ 分，blog.antonio.cx）是 herdr 作者 antonio 对 agent 凭据蔓延的回答：agent 跑在一次性 VM 上，笔记本保存王冠明珠（SSH key、1Password 保险库、已登录的 `gh` 与云 CLI）；agent 需要工具时，lend 以**租约**中介请求，“secret 永远不被 agent 看到”，事后可查看 agent 做了什么，甚至能从笔记本代答 agent 的提问。文中专设一节“What lend doesn't protect against”并列出先前工作。别人的解法是把 token 粘进 VM；租约加审批模型与 Browse 在浏览器侧选的是同一条信任边界，独立地出现在终端里。
+
+**Sutra-OS**（Show HN，42+ 分，`0nelight/sutra-os` 51★，AGPL-3.0 beta）——“Scarce Units, Typed, Related, Actionable”——自托管本体平台，把组织数据变成一个自有模型：类型化、互链、只能经服务器强制的规则修改，血缘把每个数字溯源到来源。九项核心功能读起来就是一份 agent 治理清单：每次写入只有一个门（服务器拒绝时会给出理由）、“**决定不是执行**（每个变更在批准前都是提案）”、“**AI agent 只能提案**”、模型与数据在分支上、服务器强制的访问标记、生成式类型化 API 即模型、凭据由独立的出口 agent 保管、Writer/Calc/Visio 风格文档在模型上实时协作。Web 应用、Python SDK、CLI、REST API、agent 与 git 全部遵循同一套规则。
+
+**为什么重要：** OmniAgent 的 `find` 前缀门（11-11 act）展示了 enforcement 住在提示词或首 token 分类器里的下场；这三件工具把 enforcement 移进服务器、租约中介或浏览器交接。本周的趋同：人在恰好在凭据涉及的环节审批，且每次越界事后可审计。
+
+来源：[OpenCode Browse](https://opencode.ai/product/browse) ·
+[HN](https://news.ycombinator.com/item?id=50523459) ·
+[antonio 博客：lend](https://blog.antonio.cx/running-agents-with-lend) ·
+[HN](https://news.ycombinator.com/item?id=50526152) ·
+[0nelight/sutra-os](https://github.com/0nelight/sutra-os) ·
+[Show HN](https://news.ycombinator.com/item?id=50525052)

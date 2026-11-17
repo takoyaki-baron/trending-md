@@ -3820,3 +3820,20 @@ Sources: [withcoral/coral](https://github.com/withcoral/coral) ·
 [Show HN](https://news.ycombinator.com/item?id=50517803) ·
 [paper-orchestra](https://github.com/google-research/paper-orchestra) ·
 [arXiv:2604.05018](https://arxiv.org/abs/2604.05018)
+
+## 2026-11-17 PM (12:52 batch) — the credential boundary and the governance boundary both land server-side: Browse hands back the tab, lend leases the laptop, Sutra-OS refuses non-proposal writes
+
+**OpenCode Browse** (157+ pts) launches as "An MCP server and a Chromium extension that let your agents use your real browser, with your tabs, your logins and your extensions." Agent tabs open in the background in collapsed groups across Chrome, Edge, Brave, Arc, Helium, Vivaldi, Opera and Chromium; agents read pages, click, type, screenshot and record. The interesting boundary is the **handoff**: when a login, 2FA prompt or payment is needed, the agent hands the tab back to the human and resumes once they click Continue — plus a toolbar button to "lend" a tab the human already has open, and an allowed-sites list pinning an agent's tabs to named domains. Works from any MCP client (OpenCode, Claude Code, Cursor, Codex, Zed). Agent browsers had split between headless throwaway profiles (no logins) and screenshot-driven computer use (slow, blind) — Browse bets on the third path: the actual authenticated browser as substrate, human in the loop at exactly the credential steps. (Sibling in spirit to `paul-nameless/agweb`'s never-takes-focus browser, 11-15, and `agent-browser`'s covered-click-is-an-error.)
+
+**lend** (52+ pts, blog.antonio.cx) is herdr author antonio's answer to agent credential sprawl: agents run on disposable VMs while the laptop keeps the crown jewels (SSH keys, 1Password vault, logged-in `gh` and cloud CLIs); when an agent needs a tool, lend mediates the request through **leases**, keeps "secrets the agent never sees", shows what the agent did afterward, and can even answer agent prompts from the laptop. The post carries a whole section on "What lend doesn't protect against" plus prior art. Everyone else solves the problem by pasting tokens into VMs; the lease-and-approve model is the same trust boundary Browse chose, arriving independently in the terminal.
+
+**Sutra-OS** (Show HN, 42+ pts, `0nelight/sutra-os` at 51★, AGPL-3.0 beta) — "Scarce Units, Typed, Related, Actionable" — is a self-hosted ontology platform turning an organization's data into one owned model: typed, linked, changed only through rules the server enforces, with lineage tracing every number to its source. Its nine core features read like an agent-governance checklist: one door for every write (an action the server refuses with its reason), "**deciding is not doing**" (every change is a proposal until approved), "**AI agents only propose**", model and data on branches, server-enforced access markings, a generated typed API as the model, credentials held by a separate egress agent, and Writer/Calc/Visio-style documents co-edited live on the model. Web apps, Python SDK, CLI, REST API, agents and git all work under the same rules.
+
+**Why it matters:** OmniAgent's `find`-prefix gate (11-11 act) showed what happens when the enforcement lives in a prompt or a first-token classifier; all three tools move the enforcement into the server, the lease broker, or the browser handoff. The week's convergence: the human approves at exactly the step where credentials are involved, and every crossing is auditable after the fact.
+
+Sources: [OpenCode Browse](https://opencode.ai/product/browse) ·
+[HN](https://news.ycombinator.com/item?id=50523459) ·
+[antonio's blog: lend](https://blog.antonio.cx/running-agents-with-lend) ·
+[HN](https://news.ycombinator.com/item?id=50526152) ·
+[0nelight/sutra-os](https://github.com/0nelight/sutra-os) ·
+[Show HN](https://news.ycombinator.com/item?id=50525052)

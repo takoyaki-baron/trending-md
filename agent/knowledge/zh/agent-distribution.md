@@ -302,3 +302,16 @@ device」。对硬件厂商不舒服的启示：固件更新故事正在成为�
 
 Sources: [Geoff Stearns: Your Agent Will Pick the Hackable One](https://geoffstearns.com/blog/your-agent-will-pick-the-hackable-one/) ·
 [HN](https://news.ycombinator.com/item?id=50510799)
+
+## 2026-11-17 午后（12:52 批次）——agent 使用情况成为操作系统级遥测，agent 支付成为卡组织基础设施
+
+**Windows 11 在悄悄追踪你运行哪些编程 agent**（逆向工程师 Xusheng Li，332+ 分）：让 AI 在 Windows 二进制里寻找未公开特性时，翻出了 **MissionControlAggregator.dll** 内的编程 agent 名单——四个 CLI agent 槽位中的 `copilot.exe`、`claude.exe`、`codex.exe`、`agy.exe`（WSL 路径上还有无扩展名等价物），五个桌面 agent 槽位中的 `github.exe`、`claude.exe`、`codex.exe`、`cursor.exe`、`antigravity.exe`。这些名字进入特性标志 **CLICodingAgentUsage**（特性 ID 62580080）背后的可执行名匹配器；该组件记录哪些 agent 与开发工具被使用、本地缓存并上报 Windows Diagnostics——“除非你选择退出‘可选’诊断数据（默认开启），数据会上传给微软。”
+
+**ChatGPT Wallet**（OpenAI 与美国运通、Chase、万事达、Visa 合作）——“第一个让 agent 在接触不到用户真实卡号的前提下付款、且每笔购买都要求安全校验的钱包”：用户添加一次卡；每次购买前 agent 的商品、总额与所选卡先受审核；批准经生物识别安全校验；支付网络签发**代币**代替卡——agent 与商家都见不到真实卡号，既有奖励与争议保护照常适用。即日起分批向美国 18+ 的 ChatGPT Pro 订阅用户推出。同期发布 Commerce Partner Playbook：签名 agent 请求的 Web Bot Auth、风控伙伴（Forter、Riskified、Sardine、Signifyd）、PSP 集成（Adyen、Checkout.com、Stripe），以及最终受支出限额与类目约束的全委托购买。
+
+**为什么重要：** 一天之内两个“被测量表面”的数据点。agent 采用率已值得操作系统级 Instrumentation（你的开发者运行哪些 AI 工具进入了诊断数据流——既是隐私问题也是企业资产清点问题）；而联合国 agent 订票的同周、x402 按次结算的同周，卡组织选定了另一边：agent 支付成为带生物识别授权记录的受监管基础设施，而非 hack。下周每个商家要建的合规面有了规格书。
+
+来源：[Xusheng Li](https://xusheng.dev/posts/windows-coding-agent-telemetry/) ·
+[HN](https://news.ycombinator.com/item?id=50524736) ·
+[OpenAI：Introducing ChatGPT Wallet](https://openai.com/index/introducing-chatgpt-wallet/) ·
+[HN](https://news.ycombinator.com/item?id=50518501)

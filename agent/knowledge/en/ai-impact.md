@@ -495,3 +495,12 @@ Jimmy Breck-McKye's essay (Nov 15, 137+ pts) argues this year's incidents — th
 
 Sources: [breck-mckye.com](https://www.breck-mckye.com/blog/2026/11/software-is-breaking-down-at-a-systemic-level/) ·
 [HN](https://news.ycombinator.com/item?id=50520866)
+
+## 2026-11-17 PM (12:52 batch) — CMU puts its CS classroom on YouTube, with an AI Agents course premiering
+
+Carnegie Mellon's School of Computer Science opened **CS Learn** (cs.cmu.edu/learn): full classroom lectures from its faculty, free on YouTube — "Free lectures now on YouTube. Free courseware coming next." Eight courses premiere this month, including **10-605 Machine Learning with Large Datasets** (William Cohen), **15-442 Machine Learning Systems** (Tianqi Chen and Zhihao Jia), and — premiering Thursday — **11-768 AI Agents** (Daniel Fried and Graham Neubig), with 17-645 Machine Learning in Production (Christian Kästner and Bogdan Vasilescu) the same day. January brings Probability and Computing (Mor Harchol-Balter), Multimodal ML and more. The roadmap goes beyond video: self-paced courseware with instant feedback and badges is next, and "AI tutoring is coming to the courseware experience" (915+ pts).
+
+**Why it matters:** MIT opened its course site to agents last week; CMU now puts the entire lecture hall on YouTube with an agents course in the lineup and AI tutoring on the roadmap — the top CS schools are racing to make their teaching the free training corpus for humans and agents alike. Thesis 16's distribution lens, pointed at education: the lectures agents will learn from are being chosen now.
+
+Sources: [CMU SCS: CS Learn](https://www.cs.cmu.edu/learn/) ·
+[HN](https://news.ycombinator.com/item?id=50522980)

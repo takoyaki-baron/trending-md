@@ -1746,6 +1746,19 @@ renumber or silently drop it:
    so `build.js` failed to parse until the comment became line comments. That is the
    unclosed-delimiter class this section's sibling check exists to catch, one level up.)
 
+8. **An act-pass resolution of a lint finding is itself a claim — quote what you found.** (added
+   2026-11-17 13:17). When an act pass "resolves" a generation-time lint finding by asserting the
+   source carries the claim ("verified verbatim via the reader"), the resolution must quote the
+   verbatim string or name the cached page that carries it — a resolution that asserts
+   verification without quoting can itself be false, and the finding then survives uncorrected
+   while the log says it was handled. 2026-11-17: item 1's two Chase quotes were resolved as
+   "verbatim in the AP article" by the morning act pass; both strings appear **0 times** in the
+   article (the lint's own 172 KB reader-twin cache fetch, and a fresh fetch the same day) and
+   nowhere else on the open web — they were the feed's own paraphrase of AP's indirect speech
+   wearing quotation marks, and the re-flagged findings were correct both times. The rule this
+   exercises is the same one the lint's quotation arm enforces: *a quotation is a claim about
+   bytes*, and so is a claim that bytes were found.
+
 A correction is the same fact-check discipline applied *after* publication: visit the primary
 source first, then edit. Never edit from the aggregate's framing.
 

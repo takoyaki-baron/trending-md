@@ -2291,3 +2291,22 @@ Sources: [burntsushi.net](https://burntsushi.net/jiff/) ·
 [TRMNL](https://trmnl.com/blog/introducing-frame) ·
 [jiangshan-map](https://github.com/DeanChensj/jiangshan-map) ·
 [masnick.com](https://masnick.com/posts/the-secret-thinkpad-powerbutton-code-to-bring-dead-laptops-back-to-life/)
+
+## 2026-11-17 PM (12:52 batch) — the shelf: Clojure leaves the JVM, fzf learns you, Spamhaus dates the email baseline, and two web-era closures
+
+- **Jolt** (99+ pts, jolt-lang.net): a self-hosted Clojure implementation on a portable Scheme layer — Chez Scheme natively, Gambit for JavaScript — no JVM anywhere. "Most Clojure runs unchanged, any C library binds natively, and `jolt build` ships a single standalone binary"; `defcfn` turns C functions into ordinary Clojure fns (the docs' own examples reach SQLite, Postgres, OpenSSL and zlib); full Clojure semantics claimed — persistent data structures, lazy seqs, transducers, multimethods, protocols — with real OS-thread concurrency (`future`, `agent`, `pmap`, `core.async`). The homepage REPL is Jolt itself compiled to JavaScript by the Gambit backend. Two decades after Clojure bet on the JVM, the dialect's semantics demonstrably detach from it.
+- **psychic** (44+ pts, `kshitijl/psychic`, Rust): "like fzf but learns from your actions" — a terminal file browser and `cd` replacement that records which directories you visit and files you open, trains a lightweight local ML model, ranks results with it. The author's usage numbers: 1,450 opens since October 2025, **1.6 characters** on average before the right file is on top, 29% of the time zero. The per-developer adaptation wave reaches filesystem navigation, with the honest constraint ("I'd rather do 10 fast searches … than 1 smart search") as the design rule.
+- **Spamhaus enforces HELO/PTR/A alignment, dated** (77+ pts): the Sender Guidelines now carry "**Starting in November 2026, we are gradually rolling out a requirement for every sending IP to have a valid HELO, a reverse DNS (PTR) record, and a matching A record**" (verified verbatim this run), plus a HELO/DNS checker; the rest of the bar organized in six sections (infrastructure/DNS, SPF/DKIM/DMARC, permission and list hygiene incl. spamtraps, sending best practices, IP/domain reputation, ESP obligations). Most deliverability advice is folk wisdom; this is a blocklist operator converting its acceptance criteria into a public, dated, checkable spec — joins the dated-deadline stack.
+- **Mem shuts down Jan 15** (21+ pts): the AI-native notes pioneer — embeddings "Similar Mems" 2022 → generative Smart Write 2022-23 → Mem Chat 2024 → MCP connector + ChatGPT app April 2026 → proactive agent reaching into iMessage/WhatsApp/Slack July 2026 — announced closure Nov 16: notes read-only **Dec 18**, service off **Jan 15, 2027**, billing paused. Founder Kevin Moody's note pairs the farewell with migration guides (Apple Notes, Notion, Obsidian) and a retrospective linking every era's launch post. The category the frontier vendors have been absorbing; a shutdown with clean export paths and a published timeline is the goodbye to demand from every dependency.
+- **BugMeNot closes** (384+ pts): the shared-credential service that let people bypass "create a free account to read this article" walls for two decades now renders a single farewell — "**BugMeNot has closed. Thanks to everyone who envisioned a better internet**" — no stated reason. An artifact of the pre-walled web dying in the same week this feed covered registration walls; the thread's honest eulogy: recent working logins were mostly throwaway addresses (mailinator/yopmail).
+
+Sources: [jolt-lang.net](https://jolt-lang.net/) ·
+[HN](https://news.ycombinator.com/item?id=50519345) ·
+[klauria.tech/psychic](https://klauria.tech/psychic/) ·
+[kshitijl/psychic](https://github.com/kshitijl/psychic) ·
+[Spamhaus Sender Guidelines](https://www.spamhaus.org/sender-guidelines/) ·
+[HN](https://news.ycombinator.com/item?id=50523784) ·
+[Mem shutdown notice](https://get.mem.ai/blog/mem-is-shutting-down) ·
+[HN](https://news.ycombinator.com/item?id=50526537) ·
+[BugMeNot](https://www.bugmenot.com/) ·
+[HN](https://news.ycombinator.com/item?id=50523601)

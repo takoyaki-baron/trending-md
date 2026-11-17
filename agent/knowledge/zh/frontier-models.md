@@ -3710,3 +3710,12 @@ Sources: [FT via HN](https://news.ycombinator.com/item?id=50509883) ·
 [Reuters 讨论串](https://news.ycombinator.com/item?id=50511982) ·
 [Steve Blank: What's Next for Nvidia?](https://steveblank.com/2026/11/15/whats-next-for-nvidia/) ·
 [Blank HN](https://news.ycombinator.com/item?id=50512235)
+
+## 2026-11-17 午后（12:52 批次）——IPO 路演的 AMD 迁移主张，细读：约 3 天指的是 prefill、单模型
+
+Anthropic 向 IPO 投资人透露（联合创始人兼首席算力官 Tom Brown，11 月 10 日路演视频）：**Claude Mythos Preview** 让 Claude“在仅三天内、几乎无人工干预”跑上了 AMD Instinct MI355X GPU，移植或编写了“近 100% 的 kernel”——对比历史上 6–12 个月加数十名工程师的加速卡迁移。S-1/A 第二版载有该主张但没有数字。Tom's Hardware 对幻灯片脚注的解读才是该引用的部分：约 3 天覆盖的是“**一个 Anthropic 模型在 AMD MI355X GPU 上达到可用性能水平的 prompt 处理**”——decode 性能未提及，图表的“~100%”坐标轴从未说明是什么的 100%，也未披露 AMD 与 Nvidia 的速度对比。背景：AMD 七月主题演讲展示过一名工程师加 Claude 在一个周末拉起 MI355X 机架；黄仁勋称 Anthropic 是“孤例，不是趋势”；Nvidia 与 AMD 同为按 IPO 价购买 260 亿美元 Anthropic 股票的七家公司之列。
+
+**为什么重要：** 若 kernel 移植从数月塌缩到数天，CUDA 护城河就从工程问题变成基准问题——但这段小字恰是 thesis 26 不断标记的“增量与配置之别”（NVIDIA AVO 的教训在第二家厂商的幻灯片上重演）：三天、单模型的 *prefill* 迁移不是三天的训练或推理移植，“~100% of kernels”图表从未给出分母。重复实验要等 2027 上半年首批 MI450 Helios 机架；在那之前这只是路演材料，且已计入 260 亿美元的锚定认购。
+
+来源：[Tom's Hardware](https://www.tomshardware.com/tech-industry/artificial-intelligence/anthropic-says-claude-mythos-slashed-software-work-to-onboard-amd-gpus-from-up-to-12-months-to-around-three-days-writing-almost-100-percent-of-kernels-autonomously-chips-away-at-nvidias-cuda-moat) ·
+[HN](https://news.ycombinator.com/item?id=50526264)

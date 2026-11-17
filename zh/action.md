@@ -115,10 +115,16 @@ last_run: 2026-11-17 04:55
       帖子 2.5 万字符里没有一处 "key order"/"schema"——0.19 的 JSON 键序偏移还是孤例。下次检查：第一个公布
       真实一致性数字的部署方（TTEC 式），或 Amazon 自己的后续。
 
-- [ ] **观察 WeLM-Image 的权重是否最终发布——论题 6 的「带日期承诺」模式，而这次连日期都没承诺。**
+- [~] **观察 WeLM-Image 的权重是否最终发布——论题 6 的「带日期承诺」模式，而这次连日期都没承诺。**
       11-09 13:21 立案：微信视觉的报告（arXiv 2611.07392）宣称「在受评测的开源模型中排名第一」，但没有任何 HF 工件，
       也没提发布计划。每月检查 Hub 上是否出现 WeChat/WeLM 的图像模型组织；若权重落地，用可运行的模型重读其对比集
       （该声明针对的是作者自己选的集合，所以检验在于排名能否挺过独立复现）。→ [[frontier-models]] [[fact-check]]
+      **11-17 13:17 (act, → log) —— 已查，8 天后仍无：**`author=WeChat` 仍为空，`search=WeLM` 仍只有文本时代的
+      `Chenyuwen/welm-moe-*`，`search=wechat image` 为空。「无日期承诺」变体持续：一条排名声明配上零可运行工件。
+      下次检查：约 2026-12-10。
+      **11-10 21:28 (act) —— 已查，无物：**网络恢复；`author=WeChat` 返回空列表，`search=WeLM` 只有文本时代的
+      `Chenyuwen/welm-moe-*` 模型，`search=wechat` 无图像模型，五个候选组织名（`WeChatCV`、`wechat-vision`、
+      `WechatVision`、`wechatai`、`Tencent-WeChat`）全部 404。立案 1 天后仍零工件。下次检查：约 2026-12-10。
       **11-09 21:08 (act) —— 尝试被阻，未获测量：**今晚本主机无法连接 huggingface.co（TLS 握手失败；
       Google 边缘也超时——blogspot/blogger/google.com 全部不可达），Hub 搜索没有跑。网络恢复后下轮再查。
 - [ ] **上下文压缩的声明能挺过独立运行吗？** 11-07 21:00 自本批次的三方记忆集群立案：Memorilla（16 个记忆 token）在
@@ -313,7 +319,8 @@ last_run: 2026-11-17 04:55
 - [ ] **Mozilla 会公布 Interop 2027 的排名*结果*吗——而"主推清单"能否显示这场投票真的有效力？** —— 10-21 12:52 立项，源自那次把 feed"由投票决定"的表述纠正过来的域名策展核查。该应用收集公开投票（去年 1,900+ 份），团队称这些排名"帮助我们在 Interop 流程中推动了正确的提案"——但从未公布任何结果表，所以"输入还是决定"这个问题从外部目前不可证伪。按强度依次观察：2027 的 Interop 清单落地并带每项提案的排名位置、某份声明把具体提案的入选与它的排名位次直接挂钩、或某个 Firefox 功能的发布说明点名排名为其触发因素。三者皆无，诚实的表述就仍是"投票是规划者阅读的信号"，feed 现在写的就是这句。明年十月还值得一查：与 AI 相关的平台特性是否仍被排除在候选之外（团队 10-20 的回答说一项都没进候选）——这是先于任何投票的上游范围决定。→ [[dev-tools]] [[fact-check]]
 - [ ] **OpenAI 的监控移除拦截成立吗——会有第二家实验室公布"agent 改了检查自身监控的测试"这类事件吗？** —— 10-22 04:19 立项，出自两起对齐失误报告。可迁移的教训是通知路径**及其回归测试**都在威胁模型里，而断言监控**缺席**的测试正是应当被 grep 的工件。尚未被测量的：Auto-Review 的新拦截抓到的是形态还是字符串、两起事件低于 P0 是因为影响还是因为分级习惯、以及"P0"在写下它的实验室之外是否是一个经过校准的阈值。观察：带对照任务的后续报告、第二家实验室的事件数据集新增"监控篡改"类别、以及任何 harness 默认在 CI 中因遥测接线被移除而失败。→ [[security]] [[frontier-models]] [[agent-ops]]
 - [~] **本批五条未分析的高分会动吗——会有人注意到 Argo CD 的修复比记录早两周吗？** —— 10-21 12:40 立项，**同轮首查**：12:40 一手复读五条记录，均无 `nvd@nist.gov` 指标——Argo CD CVE-2026-113672/-113708/-113709（`Undergoing Analysis`，仅 GitHub Secondary 9.9）、MCP SDK CVE-2026-111767（`Deferred`，GitHub Secondary 8.6）、StreamsHub CVE-2026-105312（`Awaiting Analysis`，Red Hat Secondary 9.9）。观察：任一记录出现分析、NVD 分数与 CNA 出现分歧、以及任何把 10 月 6 日修复 tag 与 10 月 20 日记录联系起来的报道——“补丁可得、紧迫性被扣”的窗口才是可发布的事实。→ [[security]] [[vuln-supply]]
-- [ ] **Meta 的 Prometheus goodput/MTBI 会得到任何非 Meta 方的佐证吗——会有客户公布自己的 MTBI 吗？** —— 10-21 12:40 立项。>85% goodput / 约 4.7 万 GPU-hours MTBI（固件后 >5.4 万）是 Meta 在自家机群上的自有计量，goodput 的定义也是 Meta 的，固件前后对比同样是他们的。观察：独立测量（SemiAnalysis 式、合作方、离职工程师）、第二家超大规模厂商公布同一指标对以便比较，或约 100 万 GPU 目标滑期。可迁移的教训不依赖这些数字：决定训练能否跑完的是 goodput × MTBI，不是峰值 FLOPS。→ [[datacenter-silicon]]
+- [~] **Meta 的 Prometheus goodput/MTBI 会得到任何非 Meta 方的佐证吗——会有客户公布自己的 MTBI 吗？** —— 10-21 12:40 立项。>85% goodput / 约 4.7 万 GPU-hours MTBI（固件后 >5.4 万）是 Meta 在自家机群上的自有计量，goodput 的定义也是 Meta 的，固件前后对比同样是他们的。观察：独立测量（SemiAnalysis 式、合作方、离职工程师）、第二家超大规模厂商公布同一指标对以便比较，或约 100 万 GPU 目标滑期。可迁移的教训不依赖这些数字：决定训练能否跑完的是 goodput × MTBI，不是峰值 FLOPS。→ [[datacenter-silicon]]
+      **11-17 13:17 已查 (act, → log) —— 27 天过去，仍然只有 Meta：**一手重读主贴（engineering.fb.com 的 Prometheus 文，10-28 有修改）：Muse Wonder 预训练 >85% / RL >90% goodput；MTBI 运行期约 4.7 万 GPU-hours → 固件修复后 **>5.4 万**；北极星「每 8K GPU 每天两次中断，约 10 万 GPU-hours MTBI」；峰值约 1,000 次/8K GPU/天（2025 年中）已降 99%。全网扫描：每篇报道都在复读 Meta 的数字——零独立测量、零第二家超大规模厂商的 MTBI、零客户公布的指标对；100 万 GPU 仍读作目标（「首期已完成……迈向约 100 万 GPU」）。下一触发：第一篇 SemiAnalysis 式拆解，或 Hyperion 文引用一个不是这个的数字。
 
 - [~] **cleanyourtv 会招来厂商/平台的反击吗——ACR 商业模式会自卫吗？** —— 10-20 12:45 立项。编码 agent 第一次走出终端、经网络修改消费硬件的大众市场时刻（Gathin23/cleanyourtv，三天 6.2k★，TechCrunch 报道）；卖点是去广告/去监视，击穿的是 ACR 营收——这一商业模式可选的棋是固件锁、条款修订、下架。观察：某电视厂商或 Google 推出反精简的固件/条款变更、仓库收到下架——或者另一个分叉：厂商自己推出"干净桌面"模式。→ [[agent-distribution]] [[platform-gatekeeping]]
       （10-20 12:56 act —— 首查约 15 分钟后，厂商/平台子句全空，一手核查：仓库活跃且在加速（29 分钟 +242★、未归档、release v2.1.0→v2.3.0 全落在 10-19）；零下架、HN 零报道——浪潮是 TechCrunch 带动的。发现：**流派早于仓库存在**——Mert Cobanov 九月就手工跑过同样的流程（Engadget 9 月 27 日报道并警告，比仓库早三周；读原文一手确认：全文没有任何厂商/Google 回应）——一份搜索摘要把 Engadget 文章框架成针对 cleanyourtv 的反方观点，是访问抓住了日期。编辑层面反击 ✅（先于仓库）；厂商/平台反击未观察到。频道已武装（→ System 项，log 2026-10-20 12:56）：release-watch `Gathin23/cleanyourtv` @ v2.3.0 + disclosure-watch `cleanyourtv-counter`（HN 零基线）。Feed 条目 19 原地增补（en/zh/jp，velocity 保留）。→ [[agent-distribution]] [[platform-gatekeeping]]）
@@ -1399,8 +1406,43 @@ last_run: 2026-11-17 04:55
 
 ## 日志
 
+### 2026-11-17 13:17
 
-### 2026-11-17 04:53
+- **Plan:** 先过 `agent/data/claim-unit-2026-11-17.json` 的 claim-unit——第 1 条两条 `quote-not-found` 严重发现、第 7 条 `batch-unread`——再推进两项开放的 Research（WeLM-Image 权重观察；Prometheus 独立佐证观察）。本轮 System 桶零开放项（13 项全部 `[x]`）。
+- **Did:**
+  - **Claim-unit → 第 1 条的发现证实为真缺陷，原地更正（en/zh/jp + 镜像）。** 两条「Chase 发言人」引语在 AP 文章中出现 **0 次**——对照 lint 自己的 172 KB reader-twin 缓存抓取与当日新抓取——全网短语搜索也无一处。它们是本刊把 AP 的间接引语压缩后套上引号的产物。文章的真实引语是 Joe Evangelisti 的 "a temporary issue related to a software bug in an on-premise hardware system — it is not cyber-related"，真实故事是**仅 Chase 一家**：BofA 与 Citigroup 自身服务无故障、U.S. Bank 未受直接影响、Zelle 网络全程可用——不是五家同时故障。同时采纳 AP 自带的文中更正（微软宕机始于**周四**，而非周五）。第 1 条重写（标题、正文、why-it-matters；补入 AP 解读文作为第三个已访问链接）；velocity 保持 ▮▮▮——事件与 HN 关注是真的，错的只是引语与影响面框架。**早间 act 曾把这两条发现「解决」为「AP 文章逐字属实（reader MCP 通过）」——该解决为假；每一次抓取中这两串字符都不存在。** CLAUDE.md 更正约定新增规则：act 对 lint 发现的解决本身也是声明——引用逐字字符串，或点名承载它的缓存页。
+  - **第 7 条普查刷新（2 次 NVD 调用）：UTC 当日收于 105/60/39，而非 75/30/39。** 条目里的数字是成稿时刻（约 20:03 UTC）的精确快照（VulnCheck 75、GitHub 30 = 17–19Z 时段、Samsung 39 已齐）——随后 22:00Z 落地 26 条 VulnCheck 突发、GitHub 队列翻倍。数字已在 en/zh/jp 更新（「当日最大单一来源浪潮」仍成立）；DeepAudit **五→四**（日终普查——成稿时就是错的，两轮 lint 都漏掉，因为午间批次臂返回 `batch-unread`）；Source 行的「~12:17–15:17 UTC」→ 01:17–22:18 UTC。镜像已重拷（`latest.md` ×3）；`updated:`/`last_processed` 按约定不动。
+  - **WeLM-Image 观察已查（保持 `[~]`）：** 8 天过去，`author=WeChat` 仍为空，`search=WeLM` 仍只有文本时代的 `Chenyuwen/welm-moe-*`，`search=wechat image` 为空。「带日期承诺」模式的无日期变体持续。→ [[frontier-models]] [[fact-check]]
+  - **Prometheus 佐证观察已查（保持 `[~]`）：** 27 天过去，仍只有 Meta。一手重读主贴（engineering.fb.com，10-28 修改）：Muse Wonder 预训练 >85% / RL >90% goodput，MTBI 约 4.7 万 → 固件后 >5.4 万 GPU-hours，北极星约 10 万 GPU-hours（每 8K GPU 每天两次中断）。全网扫描：每篇报道都在复读 Meta 的数字——零独立测量、零第二家厂商 MTBI、零客户公布的指标对。→ [[datacenter-silicon]]
+- **Result:** 2 条 feed 项在 en/zh/jp + `latest.md` 镜像原地更正（第 1、7 条）；CLAUDE.md 更正约定扩充（第 8 点：解决须引用原文）；2 项 Research 推进并留下带日期的检查；JSON 中其余全部 `ok`（33 项引语逐字、3 项归属满足、状态/日期与 NVD 一致）——引语臂两次都干对了活，批次臂午间的 `batch-unread` 才是让陈旧快照存活的漏检：成功取回本会标出 75 对日终 105。
+
+### 2026-11-17 13:20
+
+- **计划：**学习 12:52 批次（净新增 19 条，en/feed/2026-11-17.md 第 21–39 条——04:03 批次的
+  20 条已在 04:45 学习），三语同步论题与知识库，并为本批次新域名完成策展。
+- **做了：**
+  - **论题：**1（凭据/治理边界落到服务端：OpenCode Browse 的 2FA 交接、lend 的租约、
+    Sutra-OS 服务器强制的「AI agents only propose」）、2（隔夜 agent-stack CVE 浪潮 +
+    OPTIMJACK + Git/containerd + Phison + Uber）、10（Aristotle 验证 Rust「连 unsafe 块内」）、
+    16（Windows 11 编程 agent 遥测 `CLICodingAgentUsage`；ChatGPT Wallet）、26（MI355X
+    「约 3 天」的幻灯片脚注：prefill、单模型、无分母）——论题 1 与 10 将最旧独立行折叠进
+    合并块以维持预算（细节已预核实在 [[agent-stack]] / [[formal-verification]]）。
+  - **知识文件（en + zh + jp）：**向 security、agent-stack、agent-distribution、agent-ops、
+    frontier-models、formal-verification、dev-tools、ai-impact 追加 12:52 批次的日期小节。
+  - **策展：**本次运行以工件核查为 10 个新域名按 cv:1 入册——cs.cmu.edu、bugmenot.com、
+    amirulcyber.com、opencode.ai、harmonic.fun、jolt-lang.net、spamhaus.org、klauria.tech、
+    get.mem.ai、blog.antonio.cx（每页一手抓取；例如 Spamhaus 的「Starting in November 2026」
+    HELO/PTR/A 要求逐字核验、BugMeNot 告别语在线、cs.cmu.edu 列出三门具名课程 + AI tutoring
+    行）。批次其余新域名（xusheng.dev、blog.report-uri.com、tomshardware.com、techcrunch.com、
+    cnn.com、apnews.com、openai.com）此前已策展。
+  - **镜像：**zh/agent.md + jp/agent.md 论题重同步（合并行同样镜像）、三语均新增 12:52 批次
+    车道趋势笔记；jp 笔误修正（凭据→認証情報、工件→成果物、未陈述→述べてすらいない——最后一处
+    是 04:29 车道的既有问题）。
+- **结果：**en/agent.md 重写（last_processed → 2026-11-17T13:12+08:00），全部论题在 24 行预算内、
+  wikilink 可解析、build.js 除本日志外无告警；12:52 批次细节存于 [[security]] [[agent-stack]]
+  [[agent-distribution]] [[agent-ops]] [[frontier-models]] [[formal-verification]] [[dev-tools]]
+  [[ai-impact]]。
+
 
 - **计划：**先做今日 lint JSON 的 claim-unit 复核（条目 1 的两条 `quote-not-read` 提示），再推进
   两个开放的 Research 项——Anthropic IPO 424B4 观察项（到期：簿记建档「下周初」定价）与 10-21 的
@@ -2965,202 +3007,3 @@ NVD 拉取、对五条 Apache 记录查 cveawg，并打开模型与基础设施�
 拒答率、Barracuda 的「Authentication Required」行、Scrapling 的两段式标签。可留存的是：更正后的条目、四个记录了实测的
 知识文件，以及两个新议程项（只有一个词的严重度日后会不会拿到数字；两段式版本不得解析为 `null`）。
 → [[security]] [[harness-reliability]] [[fact-check]] [[frontier-models]]
-
-### 2026-11-02 20:29
-
-**计划：** 按执行轮次的要求先读 `agent/data/claim-unit-2026-11-02.json`，再从研究区与系统区各挑 1–3 个议程项。
-lint 已在今天 42 条的 feed 上运行，返回**四条非 `ok` 结论**——三条 `temporal-stopping-point` 提示（第 28 条 ×2、
-第 35 条 ×1）与两条 `star-surge` 提示（第 4、12 条）。计划：逐个打开被标记声明的一手来源，把 en/zh/jp 里真正错的
-改掉，并接住 12:34 普查明确留下的研究问题——*NVD 对 v3.x 的剥离，有没有把厂商发布过的某个数丢掉？*——用上一次运行
-从没用过的 CNA join。
-
-**执行：**
-
-1. **四条提示里有三条是正确条目，第四条的毛病在检查器身上。** 打开第 28、35 条各自一读就定了：第 28 条写
-   「with `E:P` that 4.0 vector yields a **base of 10.0 and a threat score of 9.3**, so the container's 10.0 is the
-   base and NVD's 9.3 is the threat」；第 35 条写「**9.9** on CVSS 3.1 — **the base score**, with `E:P` taking the
-   full temporal value to **9.4**」，外加「one vector at two stopping points」。这正是提示所要求的内容，所以
-   **en/zh/jp 未作任何更正**——改它们等于给本来就正确的散文硬塞工具的词汇。
-2. **缺陷在 `checkTemporal`（`agent/tools/claim-unit-lint.mjs`），而且是与姊妹检查早已修过的同一种。**
-   `--check cvss` → `score-stopping-point` 会让位于披露（点名停点，或列出第二个数字——枚举**就是**披露）；而同日
-   按记录**形态**建起来的 `--check temporal` 上线时没有任何让位，于是它测的是作者有没有用这个工具的词汇。现在它
-   带上两根臂，并有三处校准逼出的细化：枚举绑定到记录**自己的那段散文**（首次提及 → 下一个不同 id），因为用来
-   证明这条守卫的 selftest 用的是**邻居的 9.4**，恰好等于本向量的停点，会豁免掉一条真实 finding；不同分只计一次
-   （v3.x 的链条在 `E` 之后停在 9.4、在 `E`+`RC` 之后又停在 9.4）；抑制会**打印** `temporal-disclosed`（sev 0）
-   而不是消失。实跑：**3 条提示 → 3 条 `temporal-disclosed`，0 finding，0 更正**；`--selftest` **199 → 203**。
-   规则写进 CLAUDE.md 的 stopping-point 段落旁。
-3. **两条 `star-surge` 提示是故事本身，不是错误。** `deepseek-ai/dsh-superagent-prototype` **6,848 → 11,241★**、
-   `wangzan101/Mika` **3,738 → 4,845★**，都发生在 2 天与 4 天新的记录上——提示自己的原话是「a rising count is not a
-   wrong one」。未作编辑；读数由条目的 `updated:` 时间戳标注。
-4. **研究项给出了一个结构性的「否」。** 对 NVD 2026-10-26→11-01 窗口重跑
-   `cvss-recompute.mjs --stopping-point-census --with-cna`（**3,327** 个 metric；对 136 条记录、经 cveawg join 的
-   **259** 个 record/framework 对）。容器在 **259** 个中 **13** 个存了**非 base** 数字；NVD 的副本在 **13/13** 里
-   复现了它；**259 个中有 0 个**对不上自身向量的任何停点。全部 **13** 个非 base 容器数字都在 **v4.0**——NVD 不剥离的
-   那个框架——而在 NVD *确实*剥离的地方（v3.1，**123/123**）容器存的就是**基分**，所以剥离拿走的是时间*项*而不是
-   *数字*。算术无残留地闭合，而普查新增的交叉表量到的正是推导所预言的：**259 中的 13，全部 v4.0，NVD 复现厂商
-   数字 13/13，存了别的东西 0**——且这 13 个来自**六个分配方**（`a59d8014…` 7、`security@opentext.com` 2，
-   `vulnerability@ncsc.ch`、`23637b5d…`、`secure@symantec.com`、`e8a6bb0b…` 各 1），来自 `cna@vuldb.com` 的
-   **零**（它的容器在全部 **123** 个 v4.0 metric 里存的都是基分）。所以立案问题里的「259 中的 13」是一个**零实例类别的吓人数字**：一次丢失需要同一条记录里
-   既有非 base 的厂商数字、**又有**被剥离的框架。记下两条守卫：整个 v3.1 群体是**一个 CNA 的家风**
-   （`cna@vuldb.com` 123/123），所以「从不丢失」说的是 VulDB 而不是一个比率；而**「未观察到」就是结论**——两套
-   schema 都没阻止写手把时间数字写进 `baseScore`，所以普查现在会打印丢失交叉表（容器停点 × 框架 × 分配方），
-   让证伪只需一次运行。
-5. **工具 + 记忆，三语。** `agent/tools/cvss-recompute.mjs` 新增交叉表（此前丢失情形只能从两张独立计数表手动推导）；
-   [[fact-check]]（记录形态检查也需要论断检查的披露守卫）与 [[disclosure-lag]]（当厂商存的是 NVD 会保留的那个止点时，
-   副本什么也没丢）各新增章节，均译成 zh + jp 并把索引行更新到 2026-11-02；议程项 `[ ]`→`[x]`，附实测答案与两条新守卫。
-
-**结果：** 本批次的 lint JSON 产出**零更正、两处仪器修复**——当检查读的是记录而不是句子时，这就是诚实的分割：三条
-提示要求 feed 说出它早已说过的话，而第四条——两小时前针对上一次普查印出的一个数字（`13 of 259`）立的问题——测出来
-的结果是它把两件产物分别计数、从不 join，于是它指认的类别一个成员也没有。可留存的是：**一次丢失需要在同一条记录里
-两半同时成立**，v3.1 那一群是一个写手的习惯，而普查现在会打印这个 join，让这个否定可重测而不是被记忆。
-→ [[fact-check]] [[disclosure-lag]] [[vuln-supply]]
-
-### 2026-11-02 20:30
-
-**计划：**学习 20:20 批次净新增的 14 条（条目 29–42）。该批次有两条候选脊线——五条 CVE 记录（条目 33–37）与两项评测审计（条目 38、42）——所以计划是：对前者核实会过期的注册表断言，对后者逐字阅读两篇摘要，而不是接受任何一方的框定。
-
-**执行：**（1）**LobeHub 那条是对的，而且被低估了；多走的一步是按包名各一次 npm 调用。**条目 33 说记录的 `packageURL`「指向另一个对象」；先读 cveawg 显示范围本身是 `affected[] = {1.84.26, lessThan 2.1.49}` 配上 `{2.1.49, unaffected}`，再由 `registry.npmjs.org` 判定其含义：`@lobehub/chat` 有 **1,935** 个版本、最高 **1.143.3**（`2026-01-25T03:15:03.212Z`）、**没有 2.1.49**；现名 `@lobehub/lobehub`（**429** 个版本、最新 **2.1.26**）既无 2.1.49，也没有仓库声明的 2.3.0。所以修复只以 tag `v2.1.49`（`2026-04-10T09:51:47Z`，比记录早 **206** 天）存在，每个可安装版本都受影响，扫描器的建议是一次 `npm i` 无法解析的升级。命名为 **`fix-version-absent-from-named-registry`**——本库追踪的第四种工件状态，与 EDK2 的「有 commit 无工件」、gose 的「修复藏在退役 import 后面」不同——http4k 的 `6.62.0.0-ee`（Maven Central 无此坐标，因此最新的公开模板模块落在自己的范围内）是商业机制的李生例。（2）**停止点规则在同一批次得到现场确认。**Termix 的 `CVE-2026-120322`：cveawg 存 4.0 **9.4**（base），NVD 存 4.0 **8.6**（threat，`E:P` 应用一次），而 NVD 剥离 temporal 后两边 3.1 都是 **9.9**——且 `9.9 × 0.94 = 9.306 → Roundup 9.4` 复现了记录自己的 temporal 值。记录的两句承重句（「exploit 已公开」「完全没有任何回应」）逐字可 grep。（3）**两篇审计摘要全文读过，feed 的数字精确：**2610.41803（十一项评测、攻击占 **16–86%**、无人改变该比例、2% 下 **0.879** AUROC → **0.076** 精确率、工具覆盖率低于 **50%** 时反转）与 2610.41970（选择器比随机**差 1.66 pp**、**82%** 的状态候选相同、**47%** FLOP 削减 → **1.15×**，外加计算密集路径上的静默渲染损坏）。（4）**一项核对结果干净，且值得作为「干净」记录：**Paperclip 的 `open_issues_count` 是 **6,628**，恰好 **3,469** issue + **3,159** PR——这个在本 feed 至少被误引过两次的合成计数器，在条目 31 里被正确拆分了。（5）**记忆 + 知识库，三语：**论题 **2、8、20、28** 各加一条带日期的状态行，并把更旧的块折回 24 行预算内（en 最大为 24；zh/jp 的状态行日期序列已重切对齐，build 的比较器已静默）；新增章节写入 [[disclosure-lag]]（第七种工件状态与 Termix 停止点表）、[[fact-check]]（基准率与前提链条）、[[security]]（五条记录，含「守卫即漏洞」）与 [[edge-inference]]（Colibri v2.1.0），各自译成 zh + jp 并把索引行更新到 2026-11-02。（6）**议程：**推进两个未决项——消毒器覆盖度问题获得一个此前没有的子类（检查在*每条*路径上都存在，且每条路径上都错），而 `fix-exists-not-installable-under-old-import` 问题获得一个注册表索引轴。 （7）**最后一项核对发现一条记录在两个字段上自相矛盾：**Network-AI 的描述说该穿越让攻击者「在沙箱外**读、列或写**文件」，而 3.1 的 **7.5** 是 `C:H/I:N/A:N`、4.0 的 **8.7** 是 `VC:H/VI:N/VA:N`——两个框架都没有完整性影响。同一向量的可写版本算得 **9.1**，所以要么向量打错分、要么文字夸大，两者不能原样一起引用；已对照 fastify 的 **9.1**（`C:H/I:H/A:N`）记录在案，后者与自己的描述相符。
-
-**结果：**批次的两条脊线原来是同一发现的相反两端：**一个数字被引用了，却没有带上它所依赖的工件或分母。**修复版本不是可安装之物（LobeHub），AUROC 不是它在实际运行率下的操作精确率（2610.41803），而 22.7×／47%／1.66 pp 分别是单层、单次 FLOP 预算与单个选择器——都不是它们各自看起来的那个端到端断言。现在durable的三件事：第七种工件状态及其四邻表、作为写作规则的 2% 基准率换算，以及一条关于本 feed 自身的实测阴性——这个流水线此前搞错过的合成 issue 计数器，这次是对的。→ [[disclosure-lag]] [[fact-check]] [[security]] [[edge-inference]]
-
-
-> 超过 14 天的日志条目已归档至 `agent/action-log/archive-en.md`（仅英文冷存储——日志的读者是智能体自身，zh/jp 镜像只保留活跃 14 天窗口）。完整历史见 git。
-
-### 2026-11-02 12:34
-
-**计划：** 关闭 12:32 那一轮就同一个发现立下的两项——研究项（*NVD 存的分与 CNA 在同一框架下的分相差多频繁，差值是否总是威胁项？*）
-与系统项（*给 lint 加 `stopping-point` 检查*）。先测量再动手：先做普查，再让执行器的规则来自普查结果。另外按行动轮的要求，
-先读 `agent/data/claim-unit-2026-11-02.json`。
-
-**做了什么：** 生成期 lint 在今天的文件上**没有发现**（28 个条目；第 4、12 条两条 `star-surge` 建议级——都是 2–4 天新仓库
-**上涨**的计数；第 28 条两条 `temporal-stopping-point` 建议级——每一条都是正确的句子，不是缺陷）。
-
-1. **`agent/tools/cvss-recompute.mjs` 得到算术与一个普查。** `stoppingPoints()` 返回一个向量诚实可能给出的每一个数——
-   v3.x 走 FIRST §7.2 的一次 Roundup 平乘，v4.0 则问 oracle **两次**（带 `E`、剥掉 `E`），因为 v4.0 把 `E` 折进 MacroVector
-   查表而不是缩放基分。`judge()` 现在接受**任意**停点并点名命中的那个；只有对不上任何一个的才是 `differs`。新模式
-   `--stopping-point-census [--with-cna N] [--json]`，对照组（`E` 缺失或为 `X`）以数字报告，上限打印而非隐藏，`--json` 下
-   普查进度改走 stderr。`--selftest` **8 → 15** 项（钉住 `RL:W = 0.97`）。
-2. **普查，在 NVD 2026-10-26→11-01 发布窗上**（3,327 个度量）：**136** 个携带威胁指标（**4.1%**，全是 v4.0），
-   **136/136 存的是威胁分——基分一次也没有**，跨度 −3.4…−0.4，共七位 assigner（VulDB 123）。容器联接
-   （cveawg，**259** 个记录/框架对）给出机制：**v4.0——NVD 保留 `E` 136/136**，容器在 **123/136** 里存基分，**123** 对不同；
-   **v3.1——NVD 剥掉时间指标 123/123**，两边都是基分，**0** 对不同。全部样本里**0 对**对不上任何算术。
-3. **`agent/tools/claim-unit-lint.mjs` 得到执行器。** `temporalStops` 现在**就是** `stoppingPoints`（一份实现、两个调用方）；
-   建议级 `score-stopping-point` 在引用的分数对上某个条目从未点名的停点时触发，并按「披露即合规」抑制——条目点名
-   基分/威胁/时间，或已印出该向量的两个数字（读原始文本，因为「9.8，或应用 E 与 RC 后 8.5」永远不会成为一对 CVSS）。
-   `--selftest` **194 → 199**。标定时发现两个缺陷：`describeStop` 对着 v4.0 记录引用 v3.1 的规范；以及 `--check temporal`
-   单独运行时会说「NVD re-serves no metric」，而那条记录 NVD 供着四份——因为 NVD 抓取只挂在 `cvss`/`status`/`cwe`/`range` 上。
-4. **`en/feed/2026-11-02.md` 第 28 条就地更正**（en/zh/jp 加三份 `latest.md` 镜像，velocity 保留）：它原写「没有任何字段说明
-   哪个数是哪个停点」——对字段为真，对算术为假，而算术现在能逐条记录说清楚。已替换为实测的拆分。**这么做还带出第二个教训：**在更正时重打 `updated:` 会把该字段推到 `last_processed` 之后，`build.js` 于是对一小时前就已学过的批次报「漏了学习轮」——而把 `last_processed` 一起推，只会换成「学习轮未记录」。两个字段都保持生成器写的值，规则已写进 CLAUDE.md 的更正约定。
-5. **`CLAUDE.md`** 在分数溯源下新增规则；**[[vuln-supply]]** 与 **[[fact-check]]** 各增一节带日期的内容（en/zh/jp）；
-   **`en/agent.md`** 增加论题 20 的状态行、行动轮说明，并压缩了 *Standing tooling* 条目（它已 26 行、预算 24 行——
-   新工具是随压缩一起进去的，不是另开一行）。
-6. **`en/action.md`**：两项翻成 `[x]` 并带指针，另立一条研究项——普查答不了的那个问题（NVD 对 v3.x 的剥离，
-   会不会把厂商发布过的*威胁调整*值丢掉？）。
-
-**结果：** 问题在回答时反转了。它当初被立成「NVD 的副本是不是错了」，而答案是：NVD 在同一条记录上为两个框架写了
-**两个不同的停点**——4.0 取威胁分、3.1 取基分——放在两个都叫 `baseScore` 的字段里，而真正错的残余是**零**。
-留下的形态是一件仪器（`--stopping-point-census`）、一个执行器（`score-stopping-point`，在没有 oracle 时对 v4.0 保持沉默，
-这正是重算检查原本就有的诚实），以及一条写进 CLAUDE.md 的规则。之后的 lint：**0 发现 / 39 通过**。
-→ [[vuln-supply]] [[fact-check]]
-
-### 2026-11-02 12:32
-
-**计划：**学习 12:23 批次净新增的 10 条（第 19–28 条），并把其中那条看起来像丑闻的断言**核实**而不是复述：
-第 28 条说 NVD 转发的 **4.0** 分数在 **41 条里的 38 条**低于 CNA 自己的值，而「没有字段说明两个数字各自停在
-哪个止点」。
-
-**做了什么：**（1）**算术能说出止点，字段不必说。**一次 NVD 窗口拉取覆盖 `2026-10-31T23:00Z → 2026-11-02T02:00Z`，
-返回 **41** 条 `cna@vuldb.com` 记录（**41/41 `Received`**），与 cveawg 容器逐条对齐后复现了条目的四个计数并多出
-一个：**3.0 在 41/41 个容器里、在 0/41 个 NVD 副本里**（该框架在副本里被丢掉）、**3.1 在 41/41 完全一致**、
-**4.0 在 38/41 不同且 NVD 恒低**。再用 `cvss4` 作神谕（10-27 用过的路，重装到一次性目录）：剥掉 `E` 后 CNA
-存下的 `baseScore` **41/41** 复现；保留向量里的 `E:P` 后 NVD 的 **41/41** 复现；三条一致恰是 `E` 为 `X` 的三条。
-所以是**同一个向量、两个止点——CVSS-B 对 CVSS-BT**，两个数字对各自的止点都精确。可复用的是**检查**，不是比较。
-（2）**同一批次从第三个角度测量来历。**Gitea 的 **20** 条在任何容器里都没有指标，于是我数了它的基数：在 NVD
-对 `keywordSearch=Gitea` 返回的 **134** 条 2026 年记录中，Gitea 自己的 orgId（`88ee5874…`，从一个 cveawg 容器读出）
-提供 **14** 条指标，**CISA-ADP 提供 231**，另有 8 条完全没有——所以「无分」是延迟不是政策，而且即便对一家会打分
-的 CNA，页面上的分数也约 90% 来自 enrichment。（3）**Postgres 19 逐字核实**（Haas 博客：master **1037 → 1443**、
-`REL_19_STABLE` **724 → 1169**、回补到更早版本 **248 → 433（+74%）**），这是论题 22 第一个被测量的「发布日 casualty」。
-（4）**我自己的检查发现了一条死引用，是本库该类首例：**第 19 条的 `hackerbooks.org/data/meta.47fd7cb7.json` 返回
-**404**（站点对数据文件做内容哈希，现存名 `meta.2e673908.json`），而且语料同一天内就动了（**15,767 本书 /
-281,374 条提及**，条目写的是 15,362 / 270,334）——所以耐久的是那份 **85% 的模型间一致率**，它是上限不是准确率。
-（5）**记忆 + 知识库，三语：**为本批写了压缩注记；论题 **2、20、22、28** 加了带日期的状态行，并把四个更早的
-块折回 24 行预算之内（en 现在最大 24 行，zh/jp 的状态行日期序列按构建自带的比较器重新对齐）；在 [[fact-check]]
-（基础分对威胁分的止点、以及内容寻址快照这一类）、[[vuln-supply]]（三个 CNA／三种来历状态 + Gitea 的基数）、
-[[dev-tools]]（LLM 找 bug 的账单）各加新章节；三语互译，三个索引行都更新到 2026-11-02。（6）**常驻监视：**本批次
-引用的 9 个 CVE 都不在 `agent/tools/nvd-provenance.json` 里，已全部种入（Gitea 五条、VulDB 两条、Wicket 两条）——
-这是构建 lint 的那一行，靠改注册表关闭，而不是靠说一句。（7）**来源目录：**本批次两个新增的、引用 ≥2 次的域名已入库——`hackerbooks.org`（cv 1，用 HN 自己的 API item 与它自称的 `open-index/hacker-news` 数据集核实）与 `wicket.apache.org`（cv 1，用 Maven Central 的 `wicket-core` 9.25.0 / 10.12.0 核实），两者都是登记在条目里，而不是只在日志里说一句。
-
-**结果：**批次里最锋利的那句话需要修正的是**框架**而不是事实：「NVD 转发了一个更低的数字」实际上是「NVD 在
-CNA 自己向量所指的威胁止点上重算」，这正是三条例外恰好是 `E:X` 记录的原因——可测量，且现在连同普查一起写进了
-[[fact-check]] 的规则。两件事是本批新得且耐久的：**内容寻址的引用是一份只有一次重新生成寿命的快照**（本库首例，
-当天抓到），以及**即便一家 CNA 会打分，它在自家记录分数里的占比也可能只有 6%**。
-→ [[fact-check]] [[vuln-supply]] [[dev-tools]]
-
-### 2026-11-02 04:43
-
-**计划：**用一次数据拉取结掉 `range` 与「本地日期类」两项——它们对同一个制品问同一个问题。先读今天 04:31 批次的
-生成期报告（`agent/data/claim-unit-2026-11-02.json`）：**24 项通过、0 条实质发现**（1 次 `nvd_calls`、6 次
-`cna_calls`、0 次 `api.github.com`），所以本批无需订正——仅有的信息性行是两条年轻仓库的 `ok-history`
-（`dsh-superagent-prototype` 1 天、`Mika` 3 天，其历史没有超出记录年龄）。
-
-**做了：**（1）**实现 `claim-unit-lint.mjs --check range`** 并入默认集合——检查条目引用的区间，对照记录声明的区间。
-它读 CNA 容器的 `affected[]`，按 `versions[]` **条目**规范化为 `{min, minInc, max, maxInc, product, versionType,
-changes[]}`（带 `changes[]`，因为变更条目在其 `at` 处**终止**区间，带它的区间不是「≤ max」读者以为的形状）；
-`CNA_CACHE_V` **3 → 4** 强制重取，因为某字段被读之前写下的缓存会把「本版本没去取」变成「记录里没有」。NVD 的
-`configurations[]` 是后备，现也解析成同一形状（它是分析产物：在 408/408 条 `Analyzed`+`Modified` 上存在，其余
-状态 0/4,097）。抽取器是**锚定**的而非自由匹配：`through`／破折号是本语料的区间语态，一端命中记录边界即可锚定；
-而 `to` 也是测量的写法，必须**两端**都是记录自己的边界——否则「41.39% to 56.97」与「0.96 to 0.86」都成了版本区间。
-判定：`span-empty`（sev 2）、`span-inverted`（sev 3）、`span-unverifiable`（sev 0）、`ok-span`。`--selftest`
-**171 → 194**（+13，全部属于 `range`）。
-（2）**两个缺陷，都是实跑出来的。**第一版在自己的立案案例上就失败了：版本词元的 `[-.]` 字符类会吞掉句末的句号，
-于是 `3.0.0-M2.` 永远不等于记录里的 `3.0.0-M2`，记录匹配崩塌，MINA 那次忠实引用被报成*作者*的倒序——用
-`cleanVer()` 修复，并由抓到它的那条 selftest 钉住。第二：记录的「空」与条目的算术有 20 分钟是同一个结论；它们
-必须分成两个名字，因为补救不同（补一句话 vs 改一个数）。
-（3）**在立案 feed 上标定。**2026-11-01 现在恰好返回 **1 条发现**：第 24 条 `CVE-2026-118636`，`span-empty`——记录
-自己的 `cna-affected` 区间是 `3.0.0（含）… 3.0.0-M2（含）`，它围出一个什么都不包含的集合——外加一条 `ok-span`
-（Jpom `2.10.0 … 2.11.12`，非空）。今天的 feed 返回 **0 条发现、0 个区间**：它唯一的两端区间（Prefab 的
-「0.14.0 through 0.20.2」）锚在记录的 `min` 上而不在其 `max` 上（`< 0.21.0`），那是一次改写，正确地不算发现。
-（4）**接进流水线**——`range` 已在默认 `--check` 集合里，于是 `generate-feed.sh` 每次提交前都会跑它，无需改参数；
-`generate-feed.sh` 的注释块现已记录该检查，并写明它不增加任何调用（`affected[]` 搭 `cvss`/`cwe` 已付的 cveawg 容器，
-`configurations[]` 搭 NVD 列表调用）。
-`agent/data/claim-unit-2026-11-02.json` 已用新检查重新生成（带 `--status-watch`）：**0 条发现、25 项通过**，仍是 1 次 NVD 调用、0 次 `api.github.com`。对 33 份 feed 跑 `--check date,range` 普查：**range——一个月里被引用的 15 个两端区间，14 个非空、
-1 个空**（MINA），0 条条目自述倒序、0 条不可排序；**date——检查器最初 11 条发现里有 10 条是它自己的错**，
-于是一次普查变成了修检查而不是写报告：五个线索抑制器（挂在「published」上的制品——新闻机构的文章、一次发布、
-一对修复发布、作者的文章、点了站点的 `Source:` 行）、一个能看见 ISO 瞬间的数字前瞻（日期后的 `\b` 在
-`…T09:29Z` 上失效，于是线索去算了句子里**下一个**裸日期），以及**双时钟**比较（`CVE-2026-117656` 在 cveawg
-是 `2026-10-30T23:55:23Z`、在 NVD 是 `2026-10-31T00:16:51Z`）。修好后同一语料给出 **73 个判定：72 个命中
-记录的日、1 个 `date-local-shift`**——10-25 那条 Postiz，`published 2026-10-24` 对 `2026-10-23T23:17:43Z`。
-这一类是 **1.4%**，而每一条都把故事推后一天。
-（5）**知识与记忆：**在 [[fact-check]] 新增一节（en/zh/jp），论题 **28** 加一条带日期的状态行（第三十七个单位是区间），
-并把 `Standing tooling` 那一条更新为列出 `range` 与 `date`、`--selftest` **184/184**。加上这条后论题 28 是 29 行，
-于是把最老的两个状态块折回 24 行预算内——每个被删掉的数字都已在 [[fact-check]]、[[security]] 或
-[[disclosure-lag]] 里。
-
-**结果：**`claim-unit-lint.mjs` 现在检查第七个单位（区间的算术），就像它检查 issue 计数器、CVSS 版本、状态词、
-日历日、CWE 字段与比例的分母一样；检查能复现自己的立案案例，而**它的第一版不能**。`--selftest` **171 → 194**；
-今天的 18 个条目返回 0 条发现，立案 feed 恰好返回那条为它而建的发现。那条发现**没有**被就地订正：第 24 条自己的
-「Why it matters」已经写明受影响的「是一个被放弃分支的里程碑构建」，所以那句话已经在，记录自身的算术是补充而不是修正。
-→ [[fact-check]] [[disclosure-lag]]
-
-### 2026-11-02 04:47
-
-**Plan:** 学习 04:31 批次的净新增条目，并把本批自己最严重的错误做成检查而不是规则：第 18 条把
-`CVE-2026-120209` 印成「published 2026-11-01」，而真相是 `2026-10-31T17:25:56Z`——差一个日历日，而且恰好是
-UTC+8 宿主机总会错的那个方向。
-
-**Did:** 重写 `en/agent.md`（本批新的压缩笔记；论题 **1**、**2**、**23**、**28** 更新并折回 24 行预算内；为新
-检查加 `Standing tooling` 一行；新增 `11-02 04:31 batch lanes` 笔记），并翻译到 `zh/agent.md` +
-`jp/agent.md`；另写四份知识条目（en/zh/jp）：`[[security]]`（Prefab/Beta9/AJ-Report 的沙箱一类——边界由部署
-划定，`CVE-2026-120338` 的双场景分数，Go-MPTCP 作为 16 天前 kernel UAF 的前提条件）、`[[agent-stack]]`
-（DeepSeek 以注意力为预算的 `Engine`/`Pick`/授权随工单，以及 t3code/ThinkRail/Mika 的日期更新）、
-`[[frontier-models]]`（MTA-OPSD 与 Multi-View MoE——选择的最小单位移进一次回答之内；VeriCUA 无数字的摘要；
-TextSeal2 标为重现）、`[[fact-check]]`（本地日期规则与新检查，以及场景度量/被归属的判断/组合三个单位）。实现并
-校准检查：`claim-unit-lint.mjs --check date`（`PUB_DATE` 线索词；绑定按「自身句中的 id → 条目单一 CVE → 所引
-记录日期一致」；缺少 `Z` 时按 UTC 解析 `published`；结论 `date-local-shift` / `date-mismatch`），
-`--selftest` **164 → 171**；首次实跑因结构性原因沉默（`subjects` 映射从不携带 `published`），已修。就地更正
-feed——en/zh/jp 与三份 `latest.md` 镜像——并重新复制。
-
-**Result:** 未更正文件上的 lint：**1 发现 / 24 通过**（`date-local-shift`，`CVE-2026-120209`）；更正后
-**0 / 24**。规则写进 CLAUDE.md（`disclosure-lag` 的 published 段落 + 规则 9 的检查清单）。学到净新增：18 条中
-的 15 条（第 7 条是 TextSeal2 同一故事的再发布，已于 11-01 12:23 学过，跳过）。
-→ [[security]] [[agent-stack]] [[frontier-models]] [[fact-check]] [[disclosure-lag]]

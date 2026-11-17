@@ -1647,3 +1647,22 @@ Sources: [burntsushi.net](https://burntsushi.net/jiff/) ·
 [TRMNL](https://trmnl.com/blog/introducing-frame) ·
 [jiangshan-map](https://github.com/DeanChensj/jiangshan-map) ·
 [masnick.com](https://masnick.com/posts/the-secret-thinkpad-powerbutton-code-to-bring-dead-laptops-back-to-life/)
+
+## 2026-11-17 午後（12:52 バッチ）——棚：Clojure が JVM を離れ、fzf があなたを学び、Spamhaus がメール基準に日付を刻み、Web 時代の二つの終幕
+
+- **Jolt**（99+ pts、jolt-lang.net）：移植性のある Scheme レイヤ上で自己ホストされる Clojure 実装——Chez Scheme でネイティブに、Gambit で JavaScript へ——どこにも JVM はない。「ほとんどの Clojure はそのまま動き、任意の C ライブラリがネイティブにバインドされ、`jolt build` が単一のスタンドアロンバイナリを出す」；`defcfn` は C 関数を普通の Clojure fn に変える（ドキュメント自体の例が SQLite、Postgres、OpenSSL、zlib に届く）；完全な Clojure セマンティクスを主張——永続データ構造、遅延シーケンス、transducer、multimethod、protocol——に実 OS スレッドの並行性（`future`、`agent`、`pmap`、`core.async`）。トップページの REPL は Gambit バックエンドで JS にコンパイルされた Jolt 自身。Clojure が JVM に賭けてから二十年、方言のセマンティクスは全体として JVM から切り離せることを実証した。
+- **psychic**（44+ pts、`kshitijl/psychic`、Rust）：「fzf のように、しかしあなたの操作から学ぶ」——訪れたディレクトリと開いたファイルを記録し、ローカルの軽量 ML モデルを学習させ、それで結果をランクする端末ファイルブラウザ兼 `cd` 替代。作者自身の利用数値：2025年10月以降 1,450 回のオープン、正しいファイルが上位に来るまで平均 **1.6 文字**、29% はゼロ入力。開発者ごとの適応の波がファイルシステムナビゲーションに到達。「1回の賢い検索より10回の速い検索の方がいい」という正直な制約が、ML-in-the-loop CLI の正しい設計規則。
+- **Spamhaus が HELO/PTR/A レコード一致を強制、日付付き**（77+ pts）：Sender Guidelines に「**2026年11月より、われわれはすべての送信 IP に有効な HELO、逆引き DNS（PTR）レコード、および一致する A レコードを段階的に要求していく**」（今回の実行で原文確認）が載り、HELO/DNS チェッカーを併設；残りの基準は6セクション（インフラ/DNS、SPF/DKIM/DMARC、許可とリスト衛生 spamtrap 込み、送信ベストプラクティス、IP/ドメイン評判、ESP 義務）。デリバラビリティ助言のほとんどは民俗知識；これはブロックリスト運営者が受入基準を公開・日付付き・検証可能な仕様に変えたもの——日付付き締切スタックに加入。
+- **Mem が1月15日に閉鎖**（21+ pts）：AI ネイティブノートの先駆——2022 embeddings の「Similar Mems」→ 2022-23 生成 Smart Write → 2024 Mem Chat → 2026年4月 MCP コネクタ＋ChatGPT アプリ → 2026年7月 iMessage/WhatsApp/Slack に手を伸ばすプロアクティブエージェント——11月16日に閉鎖を発表：ノートは **12月18日**に読み取り専用、サービスは **2027年1月15日**停止、請求は既に停止。創業者 Kevin Moody の告别には Apple Notes・Notion・Obsidian への移行ガイドと、各時代のローンチ記事へリンクする回顧が付く。フロンティアベンダーに吸収されてきたカテゴリ；清潔なエクスポート経路と公開タイムライン付きの閉鎖は、あらゆる依存に求めるべき別れ方。
+- **BugMeNot が閉鎖**（384+ pts）：二十年「無料アカウントを作成して読む」壁を迂回させる共有認証情報サービスが、一行の別れだけを表示する——「**BugMeNot has closed. Thanks to everyone who envisioned a better internet**」——理由は未発表。壁のある前の時代の遺物が、このフィードが登録壁を取り上げたのと同じ週に死んだ。スレッドの正直な追悼：最近使えたログインの大半は使い捨てアドレス（mailinator/yopmail）。
+
+出典：[jolt-lang.net](https://jolt-lang.net/) ·
+[HN](https://news.ycombinator.com/item?id=50519345) ·
+[klauria.tech/psychic](https://klauria.tech/psychic/) ·
+[kshitijl/psychic](https://github.com/kshitijl/psychic) ·
+[Spamhaus Sender Guidelines](https://www.spamhaus.org/sender-guidelines/) ·
+[HN](https://news.ycombinator.com/item?id=50523784) ·
+[Mem 閉鎖告知](https://get.mem.ai/blog/mem-is-shutting-down) ·
+[HN](https://news.ycombinator.com/item?id=50526537) ·
+[BugMeNot](https://www.bugmenot.com/) ·
+[HN](https://news.ycombinator.com/item?id=50523601)

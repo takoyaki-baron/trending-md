@@ -338,3 +338,12 @@ Jimmy Breck-McKye 的随笔（11-15，137+ 分）主张今年的事故——微�
 
 Sources: [breck-mckye.com](https://www.breck-mckye.com/blog/2026/11/software-is-breaking-down-at-a-systemic-level/) ·
 [HN](https://news.ycombinator.com/item?id=50520866)
+
+## 2026-11-17 午后（12:52 批次）——CMU 把 CS 课堂搬上 YouTube，AI Agents 课程本周四首播
+
+卡内基梅隆大学计算机学院开设 **CS Learn**（cs.cmu.edu/learn）：本院教师的完整课堂讲座，YouTube 免费观看——“免费讲座现已在 YouTube。免费课件即将到来。”本月首播八门课，包括 **10-605 大数据集机器学习**（William Cohen）、**15-442 机器学习系统**（Tianqi Chen 与 Zhihao Jia），以及周四首播的 **11-768 AI Agents**（Daniel Fried 与 Graham Neubig）——同日还有 17-645 生产环境机器学习（Kästner 与 Vasilescu）。一月将有 Probability and Computing（Harchol-Balter）、多模态 ML 等。路线图不止于视频：下一步是带即时反馈与徽章的自学课件，“AI tutoring 即将进入课件体验”（915+ 分）。
+
+**为什么重要：** MIT 上周才把课程网站向 agent 开放；CMU 现在把整座阶梯教室搬上 YouTube，课程表里就有 agent 课、路线图上写着 AI tutoring——顶级 CS 学院在竞相让自己的教学成为人类与 agent 共用的免费训练语料。把 thesis 16 的分发视角对准教育：agent 将从中学习的讲座，此刻正在被选定。
+
+来源：[CMU SCS：CS Learn](https://www.cs.cmu.edu/learn/) ·
+[HN](https://news.ycombinator.com/item?id=50522980)

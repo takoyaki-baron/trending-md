@@ -170,3 +170,13 @@ Sources: [The Register](https://www.theregister.com/saas/2026/11/16/microsoft-bl
 [FAA 问答](https://www.faa.gov/newsroom/nationwide-ground-stop-questions-and-answers) ·
 [AP 经 ABC News](https://abcnews.com/US/wireStory/questions-swirl-faas-new-smart-ai-system-officials-138170875) ·
 [HN](https://news.ycombinator.com/item?id=50521045)
+
+## 2026-11-17 午后（12:52 批次）——美联航 30 分钟故障落进“级联周”
+
+美联航承认周一（11 月 16 日）东部时间下午 5 点前出现影响出港航班的**大范围技术故障**，约一小时后解决——时长约 **30 分钟**，据发言人 Leslie Scott 称影响**少于 150 个航班**（CNN；AP 报道了更大范围的延误）。CNN 指出此事发生在“罕见的 FAA 全面地面停飞”之后。未给出原因。同一新闻周期里，五家美国大银行报告同时出现访问故障（见上文）——同一天、不同行业、两起无已知关联的系统性故障。
+
+**为什么重要：** 单独看都能挺过去的故障，从外面看却像基础设施在同一个负载下呻吟——韧性研究者警示的形态。本周的系统级事件累计已达四起（M365 Exchange 崩溃、五银行同倒、美联航、以及成因是 L3Harris 割接的 FAA 停飞）；两起新事件的 postmortem 仍未出，常设观察不变：是否有人点名共同的供应商。
+
+来源：[CNN](https://www.cnn.com/2026/11/16/us/united-airlines-outage) ·
+[AP](https://apnews.com/article/united-airlines-outage-5a5e5f75bb07f11ffb8750901f0076ff) ·
+[HN](https://news.ycombinator.com/item?id=50522980)

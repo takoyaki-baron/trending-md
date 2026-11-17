@@ -2892,3 +2892,20 @@ Sources: [withcoral/coral](https://github.com/withcoral/coral) ·
 [Show HN](https://news.ycombinator.com/item?id=50517803) ·
 [paper-orchestra](https://github.com/google-research/paper-orchestra) ·
 [arXiv:2604.05018](https://arxiv.org/abs/2604.05018)
+
+## 2026-11-17 午後（12:52 バッチ）——認証情報の境界とガバナンス境界がそろってサーバーサイドに着地：Browse はタブを人に手渡し、lend はノートPCをリースし、Sutra-OS は提案でない書き込みを拒む
+
+**OpenCode Browse**（157+ pts）：「あなたのエージェントに、あなたの本物のブラウザ——あなたのタブ、ログイン、拡張——を使わせる MCP サーバー＋Chromium 拡張」。エージェントのタブは Chrome/Edge/Brave/Arc/Helium/Vivaldi/Opera/Chromium のバックグラウンドで折りたたまれたグループとして開く。エージェントはページを読み、クリックし、入力し、スクリーンショットを撮り、録画する。重要な境界は**ハンドオフ**：ログイン・2FA・支払いが必要になった瞬間、エージェントはタブを人に返し、Continue が押されると再開——すでに開いているタブを「貸す」ツールバーボタンと、エージェントのタブを指定ドメインに固定する許可サイトリストも備える。あらゆる MCP クライアントから使える（OpenCode、Claude Code、Cursor、Codex、Zed）。エージェントブラウザはそれまで、ヘッドレスの使い捨てプロファイル（ログインなし）とスクリーンショット駆動の computer use（遅い・盲目）に分裂していた——Browse は第三の道：認証済みの実ブラウザを基体とし、人間をちょうど認証情報の絡む手順に置く。（11-15 の焦点を奪わない `paul-nameless/agweb`、遮蔽クリックをエラーにする `agent-browser` と同族。）
+
+**lend**（52+ pts、blog.antonio.cx）は herdr 作者 antonio のエージェント認証情報の蔓延への答え：エージェントは使い捨て VM で動き、ノートPCが王冠の宝石（SSH 鍵、1Password vault、ログイン済み `gh` とクラウド CLI）を保持する。エージェントがツールを必要としたら、lend は**リース**で要求を仲介し、「エージェントが決して見ない secret」を保ち、後で何をしたかを見せ、さらにはノートPCからエージェントのプロンプトに答えることもできる。ポストには「What lend doesn't protect against」の節と先行事例が載る。他の誰もがトークンを VM に貼ることで解決していた。リース＋承認モデルは Browse がブラウザ側で選んだのと同じ信頼境界が、ターミナルに独立して到着したもの。
+
+**Sutra-OS**（Show HN、42+ pts、`0nelight/sutra-os` 51★、AGPL-3.0 ベータ）——「Scarce Units, Typed, Related, Actionable」——は組織のデータを一つの所有されたモデルに変える自己ホスト型オントロジー基盤：型付き、相互リンク、サーバーが強制する規則を通じてのみ変更可能、すべての数値をその源に遡らせる lineage 付き。9つの中核機能はエージェント・ガバナンスのチェックリストのように読める：あらゆる書き込みに一つの扉（サーバーは理由付きで拒否する）、「**deciding is not doing**（すべての変更は承認まで提案）」、「**AI エージェントは提案のみ**」、モデルとデータはブランチ上、サーバー強制のアクセス標記、生成された型付き API がモデルそのもの、認証情報は独立した egress エージェントが保管、Writer/Calc/Visio 型ドキュメントをモデル上で共同編集。Web アプリ、Python SDK、CLI、REST API、エージェント、git のすべてが同じ規則の下で動く。
+
+**なぜ重要か：** OmniAgent の `find` プレフィックスゲート（11-11 act）が、強制がプロンプトや初トークン分類器に住むとき何が起きるかを示した。3つのツールはいずれも強制をサーバー、リースブローカー、ブラウザのハンドオフへ移した。今週の収束：人はちょうど認証情報の絡む手順で承認し、越境はすべて事後監査できる。
+
+出典：[OpenCode Browse](https://opencode.ai/product/browse) ·
+[HN](https://news.ycombinator.com/item?id=50523459) ·
+[antonio ブログ：lend](https://blog.antonio.cx/running-agents-with-lend) ·
+[HN](https://news.ycombinator.com/item?id=50526152) ·
+[0nelight/sutra-os](https://github.com/0nelight/sutra-os) ·
+[Show HN](https://news.ycombinator.com/item?id=50525052)

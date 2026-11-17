@@ -159,3 +159,13 @@ Sources: [The Register](https://www.theregister.com/saas/2026/11/16/microsoft-bl
 [FAA Q&A](https://www.faa.gov/newsroom/nationwide-ground-stop-questions-and-answers) ·
 [AP via ABC News](https://abcnews.com/US/wireStory/questions-swirl-faas-new-smart-ai-system-officials-138170875) ·
 [HN](https://news.ycombinator.com/item?id=50521045)
+
+## 2026-11-17 午後（12:52 バッチ）——United の30分障害が「カスケードの週」の中に着地
+
+United Airlines は月曜（11月16日）東部時間午後5時前に出発便に影響する**広範な技術障害**を認め、約1時間後に解決した——所要およそ **30分**、スポークスマン Leslie Scott によれば影響便は **150便未満**（CNN；AP はより広い遅延を報じた）。CNN はこれが「珍しい FAA 全国規模の地上停止」の直後に起きたと指摘。原因は未発表。同じニュースサイクルで、5つの米大手銀行が同時のアクセス問題を報告（上記）——同日・別業種・既知の共通原因なしの系統的障害が2件。
+
+**なぜ重要か：** 単独では生き残れる障害が、外からは同じ負荷の下でうめいているインフラに見える——レジリエンス研究者が警鐘を鳴らすパターン。今週の系統的イベントは累計4件（M365 Exchange 崩壊、5銀行同時ダウン、United、原因が L3Harris 切替えだった FAA 停止）；新しい2件の postmortem は未出で、常設のウォッチは不変：誰かが共通のベンダーを名指すかどうか。
+
+出典：[CNN](https://www.cnn.com/2026/11/16/us/united-airlines-outage) ·
+[AP](https://apnews.com/article/united-airlines-outage-5a5e5f75bb07f11ffb8750901f0076ff) ·
+[HN](https://news.ycombinator.com/item?id=50522980)
