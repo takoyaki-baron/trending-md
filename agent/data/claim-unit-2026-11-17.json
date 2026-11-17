@@ -1,9 +1,9 @@
 {
- "generated": "2026-11-16T20:29:29.981Z",
+ "generated": "2026-11-17T04:41:48.087Z",
  "files": [
   {
    "file": "2026-11-17.md",
-   "items": 20,
+   "items": 39,
    "findings": [
     {
      "check": "status",
@@ -13,32 +13,67 @@
      "detail": "Received (lastModified 2026-11-16T15:17:34.640)"
     },
     {
+     "check": "status",
+     "item": 27,
+     "verdict": "ok",
+     "claim": "CVE-2026-53998 `Received`",
+     "detail": "Received (lastModified 2026-11-16T20:19:06.807)"
+    },
+    {
+     "check": "date",
+     "item": 27,
+     "verdict": "ok",
+     "claim": "CVE-2026-53998 published 2026-11-16",
+     "detail": "NVD published 2026-11-16T20:19:06.807 (2026-11-16 UTC) · cveawg datePublished 2026-11-16T19:50:41.983Z (2026-11-16 UTC) — the two clocks differ; 2026-11-16 is the NVD published day"
+    },
+    {
+     "check": "date",
+     "item": 33,
+     "verdict": "ok",
+     "claim": "CVE-2026-111760 published 2026-11-16",
+     "detail": "NVD published 2026-11-16T21:17:18.907 (2026-11-16 UTC) · cveawg datePublished 2026-11-16T20:58:39.543Z (2026-11-16 UTC) — the two clocks differ; 2026-11-16 is the NVD published day"
+    },
+    {
+     "check": "status",
+     "item": 34,
+     "verdict": "ok",
+     "claim": "CVE-2026-126828 `Received`",
+     "detail": "Received (lastModified 2026-11-16T22:18:19.097)"
+    },
+    {
+     "check": "date",
+     "item": 34,
+     "verdict": "ok",
+     "claim": "CVE-2026-126828 published 2026-11-16",
+     "detail": "NVD published 2026-11-16T22:18:19.097 (2026-11-16 UTC) · cveawg datePublished 2026-11-16T21:35:40.728Z (2026-11-16 UTC) — the two clocks differ; 2026-11-16 is the NVD published day"
+    },
+    {
      "check": "repo",
      "item": 10,
      "verdict": "ok",
      "claim": "withcoral/coral",
-     "detail": "4992★, last push 2026-11-16"
+     "detail": "5001★, last push 2026-11-16"
     },
     {
      "check": "batch",
      "item": 7,
-     "verdict": "batch-count-ok",
-     "claim": "75 records (source=disclosure@vulncheck.com, 2026-11-16)",
-     "detail": "75 records from disclosure@vulncheck.com published 2026-11-16 — the claim's own set, retrieved by its own cited id CVE-2026-129552"
+     "verdict": "batch-unread",
+     "claim": "75 CVE records",
+     "detail": "no search term derived from the item (VulnCheck, CMS) and not the writer's own sourceIdentifier (disclosure@vulncheck.com) retrieved its own cited CVE-2026-129552 on 2026-11-16 — the set was not read, so nothing is claimed about the count"
     },
     {
      "check": "quotation",
      "item": 1,
-     "verdict": "quote-not-read",
+     "verdict": "quote-not-found",
      "claim": "“a technical bug issue not a cyber issue”",
-     "detail": "6 words, 0 hits in 1 readable source(s), but 1 cited page(s) went unread — unread is not absent, so this is not called a fabrication; open those page(s) before publishing"
+     "detail": "6 words, 0 hits in 2 readable source(s); no source carries it (read apnews.com/article/bank-outage-chase-wells-fargo-truist-50fee2693c22f597fa6ca51a97ef2cda, news.ycombinator.com/item?id=50521045) — if this came from somewhere this item does not cite, cite it; otherwise it is the feed's own words and must not wear quotation marks"
     },
     {
      "check": "quotation",
      "item": 1,
-     "verdict": "quote-not-read",
+     "verdict": "quote-not-found",
      "claim": "“due to a technical issue some transactions are taking longer than usual to complete but customer…”",
-     "detail": "23 words, 0 hits in 1 readable source(s), but 1 cited page(s) went unread — unread is not absent, so this is not called a fabrication; open those page(s) before publishing"
+     "detail": "23 words, 0 hits in 2 readable source(s); apnews.com/article/bank-outage-chase-wells-fargo-truist-50fee2693c22f597fa6ca51a97ef2cda carries 3 of 24 words (“a technical issue”) and continues “at jpmorgan chase triggers online banking delays for major us banks” — use the source's wording, or drop the quotation marks"
     },
     {
      "check": "quotation",
@@ -160,6 +195,160 @@
      "detail": "verbatim in 2 readable source(s)"
     },
     {
+     "check": "quotation",
+     "item": 21,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 22,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 23,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 24,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 25,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 26,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 27,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 10 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 28,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 29,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 30,
+     "verdict": "quote-paraphrase",
+     "claim": "“its checked in lean”",
+     "detail": "4 words, 0 hits in 2 readable source(s); no source carries it (read harmonic.fun/news/aristotle-rust-verification, news.ycombinator.com/item?id=50520270) — if this came from somewhere this item does not cite, cite it; otherwise it is the feed's own words and must not wear quotation marks"
+    },
+    {
+     "check": "quotation",
+     "item": 30,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 31,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 32,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 33,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 8 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 34,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 10 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 35,
+     "verdict": "quote-not-found",
+     "claim": "“lets remote agents use tools on my laptop with my approval”",
+     "detail": "11 words, 0 hits in 2 readable source(s); blog.antonio.cx/running-agents-with-lend carries 10 of 11 words (“remote agents use tools on my laptop with my approval”) and continues “heres how it fits into my workflow background i use agents” — use the source's wording, or drop the quotation marks"
+    },
+    {
+     "check": "quotation",
+     "item": 35,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 36,
+     "verdict": "quote-not-found",
+     "claim": "“id rather do 10 fast searches than 1 smart search”",
+     "detail": "8 words, 0 hits in 2 readable source(s); klauria.tech/psychic/ carries 6 of 10 words (“id rather do 10 fast searches”) and continues “in the space of a couple seconds than 1 smart search” — use the source's wording, or drop the quotation marks"
+    },
+    {
+     "check": "quotation",
+     "item": 36,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 37,
+     "verdict": "quote-not-found",
+     "claim": "“the agent proposes the human approves”",
+     "detail": "6 words, 0 hits in 2 readable source(s); no source carries it (read 0nelight/sutra-os README, news.ycombinator.com/item?id=50525052) — if this came from somewhere this item does not cite, cite it; otherwise it is the feed's own words and must not wear quotation marks"
+    },
+    {
+     "check": "quotation",
+     "item": 37,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 38,
+     "verdict": "quote-paraphrase",
+     "claim": "“ai that organizes your knowledge”",
+     "detail": "5 words, 0 hits in 2 readable source(s); no source carries it (read get.mem.ai/blog/mem-is-shutting-down, news.ycombinator.com/item?id=50526537) — if this came from somewhere this item does not cite, cite it; otherwise it is the feed's own words and must not wear quotation marks"
+    },
+    {
      "check": "attribution",
      "item": 14,
      "verdict": "attribution-page-verified",
@@ -184,11 +373,11 @@
   }
  ],
  "status_watch": [],
- "api_calls": 0,
- "readme_calls": 0,
- "cited_page_calls": 4,
+ "api_calls": 8,
+ "readme_calls": 13,
+ "cited_page_calls": 121,
  "repo_page_calls": 0,
- "nvd_calls": 1,
+ "nvd_calls": 3,
  "nvd_failed_chunks": 0,
- "cna_calls": 0
+ "cna_calls": 9
 }

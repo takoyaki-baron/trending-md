@@ -1,8 +1,8 @@
 ---
 date: 2026-11-17
-updated: 2026-11-16T20:29:19Z
+updated: 2026-11-17T04:36:32Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 23
+sources: 40
 license: CC-BY-4.0
 ---
 
@@ -288,13 +288,279 @@ Mike Masnick 2007 年的帖子重回首页：他全新的 ThinkPad z61t 在一�
 
 ---
 
+## 21. 卡内基梅隆把 CS 课堂搬上 YouTube——本月 8 门完整课程首播，其中包括一门 AI Agents 课
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** cs.cmu.edu · 915+ pts on HN · 7.8h ago (~04:40 UTC+8)
+- **Tags:** `education` `cmu` `courses` `open-access`
+
+卡内基梅隆大学计算机学院上线了 **CS Learn**（cs.cmu.edu/learn）：由其教师讲授的完整课堂录像，免费放在 YouTube 上——"Free lectures now on YouTube. Free courseware coming next."（免费讲座现已登陆 YouTube，免费课件即将推出。）本月有八门课首播，包括 **10-605 大规模数据集机器学习**（William Cohen）、**15-442 机器学习系统**（Tianqi Chen 与 Zhihao Jia），以及周四首播的 **11-768 AI Agents**（Daniel Fried 与 Graham Neubig）——同日首播的还有 17-645 生产环境中的机器学习（Christian Kästner 与 Bogdan Vasilescu）。一月的阵容包括概率与计算（Mor Harchol-Balter）、多模态机器学习等。路线图不止于视频：下一步是带即时反馈和徽章的自学课件，而且"AI tutoring is coming to the courseware experience"（AI 辅导即将进入课件体验）。
+
+**Why it matters:** 上周 MIT 把课程站点向 agent 开放；如今 CMU 把整个阶梯教室搬上 YouTube，课程表中排进了 AI Agents 课，路线图上写着 AI 辅导——顶尖计算机院校正在竞相让自己的教学成为人类和 agent 共用的免费训练语料。
+
+[`🔗 CMU SCS：CS Learn`](https://www.cs.cmu.edu/learn/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50522980)
+
+---
+
+## 22. Windows 11 在悄悄记录你运行哪些编码 agent——MissionControlAggregator.dll 匹配 claude.exe、codex.exe、cursor.exe 并上报 Diagnostics
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** xusheng.dev · 332+ pts on HN · 5.6h ago (~06:52 UTC+8)
+- **Tags:** `windows` `telemetry` `privacy` `coding-agents`
+
+逆向工程师 Xusheng Li 让 AI 在 Windows 二进制里挖掘未公开功能，结果在 **MissionControlAggregator.dll** 里撞见一份编码 agent 名单：四个 CLI agent 槽位检查 `copilot.exe`、`claude.exe`、`codex.exe`、`agy.exe`（WSL 路径上还有无扩展名版本），五个桌面 agent 槽位检查 `github.exe`、`claude.exe`、`codex.exe`、`cursor.exe`、`antigravity.exe`。这些名字被名为 **CLICodingAgentUsage**（feature ID 62580080）的功能开关后面的可执行文件名匹配器使用；该组件记录哪些 agent 和开发工具被使用过，先在本地缓存，再上报给 Windows Diagnostics——而且"除非你退订了'可选'诊断数据（它默认开启），数据就会上传给微软"。
+
+**Why it matters:** Agent 的采用率已经值得操作系统级埋点——而埋点本身就是隐私故事。如果你管理机器，结论很具体："可选诊断数据"现在包含你的开发者都在用哪些 AI 工具。
+
+[`🔗 Xusheng Li：Windows 11 Is Collecting Data on Which Coding Agents and Developer Tools You Use`](https://xusheng.dev/posts/windows-coding-agent-telemetry/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50524736)
+
+---
+
+## 23. BugMeNot 在运营二十余年后关闭——"Thanks to everyone who envisioned a better internet"
+
+- **Velocity:** ▮▮ rising
+- **Source:** bugmenot.com · 384+ pts on HN · 6.9h ago (~05:35 UTC+8)
+- **Tags:** `internet-history` `privacy` `login-walls`
+
+BugMeNot——那个让人绕过"请注册免费账户以阅读本文"墙的几十年老牌共享账号服务——已关闭。站点现在只剩一页告别："**BugMeNot has closed. Thanks to everyone who envisioned a better internet**"（BugMeNot 已关闭。感谢所有曾设想一个更好互联网的人）——没有说明任何原因，后面跟着一串四字母分组，讨论串里还没人解开。社区的悼词对衰落并不避讳：近期还能用的登录大多是弃用邮箱（bugmenot@mailinator.com、yopmail 账号），有用户"一两个月前"还觉得它有用，今天才发现关站了。
+
+**Why it matters:** 本刊本周刚报道过注册墙、抓取禁令和登录围墙——前围墙时代的老物件正巧在同一周死去。这句告别语读起来像是对那笔交易的评价。
+
+[`🔗 BugMeNot 告别页`](https://www.bugmenot.com/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50523601)
+
+---
+
+## 24. 美联航 30 分钟系统故障延误全国航班——同一天的第二起系统性技术故障
+
+- **Velocity:** ▮▮ rising
+- **Source:** cnn.com · 204+ pts on HN · 6.3h ago (~06:15 UTC+8)
+- **Tags:** `outage` `airlines` `reliability`
+
+美联航周一美东时间下午 5 点前承认一次影响出港航班的**大范围技术故障**，约一小时后解决——这次约 30 分钟的故障延误了全美机场的出港航班，发言人 Leslie Scott 称**受影响航班少于 150 架次**。CNN 指出它发生在"一次罕见 FAA 禁飞令造成大范围混乱之后"。原因未公布。同一天，五家美国大型银行同时报告访问故障（见第 1 条）——不同行业、未见共同原因，对集中度风险而言是非常糟糕的一天。
+
+**Why it matters:** 一个新闻周期里两起互不相关的系统性故障，正是韧性研究者警告的模式：单独看都能挺过去的故障，从外面看却像基础设施在同一负荷下呻吟。两份根因报告都还没出。
+
+[`🔗 CNN：United Airlines says it resolved system outage that delayed flights`](https://www.cnn.com/2026/11/16/us/united-airlines-outage) · [`🔗 AP：United Airlines has a widespread system outage`](https://apnews.com/article/united-airlines-outage-5a5e5f75bb07f11ffb8750901f0076ff)
+
+---
+
+## 25. OPTIMJACK：178 个站点经 Optimizely 自家 CDN 投放恶意代码——攻击者写进客户 Project JavaScript，攻击包还带 iOS 漏洞利用
+
+- **Velocity:** ▮▮ rising
+- **Source:** blog.report-uri.com · 163+ pts on HN · 5.6h ago (~06:55 UTC+8)
+- **Tags:** `supply-chain` `skimware` `magecart` `optimizely`
+
+11 月 16 日，**178 家机构**的访客通过 Optimizely Web 的代码片段收到了恶意 JavaScript——其中包括 Zoom、BBC、CNN、Salesforce、GitLab、IKEA、HSBC、Equifax、Air France-KLM、Ledger 和 Peacock（Scott Helme，Report URI）。入侵手法相当外科：攻击者写进了 Optimizely 后台中客户项目的 **Project JavaScript** 字段，于是带毒代码依然从 `cdn.optimizely.com` 加载、挂着 Optimizely 的证书——客户自己的源站全程干净。攻击包会调换加密货币钱包地址、窃取支付卡信息、偷 cookie 和截屏，并在 iPhone 和 iPad 上投放 **Coruna 与 DarkSword iOS 漏洞利用包**；加密货币已被盗，且交易可验证。清理过程被实时追踪：20:56 UTC 时 188 个受感染片段中有 169 个带毒，21:52 UTC 降到 1 个。独立分析文章将行动命名为 **OPTIMJACK**（Optimizely 包内的加载器追加 `track.js`；C2 位于 `1688360[.]cc` 及两个 `.icu` 域名）。
+
+**Why it matters:** "Trusted JavaScript doesn't always remain trustworthy"（受信任的 JavaScript 不会永远可信）——一个第三方标签平台是所有嵌入它的站点的单点 compromise。如果你的站点加载任何实验或代码片段管理器，今天就审计你的 bundle；report 模式的 CSP 本可暴露此事。
+
+[`🔗 Report URI：World's Largest Brands Infected With Malware Via Optimizely`](https://blog.report-uri.com/worlds-largest-brands-infected-with-malware-via-optimizely/) · [`🔗 Amirul Cyber：OPTIMJACK 分析`](https://amirulcyber.com/2026/11/16/optimjack-optimizely-skimmer/)
+
+---
+
+## 26. OpenCode 发布 Browse：把你真实的浏览器变成 agent 的工具——真实标签页、真实登录态，2FA 时交还控制权
+
+- **Velocity:** ▮▮ rising
+- **Source:** opencode.ai · 157+ pts on HN · 7.2h ago (~05:25 UTC+8)
+- **Tags:** `mcp` `browser` `agent-infrastructure` `opencode`
+
+OpenCode 发布 **Browse**："An MCP server and a Chromium extension that let your agents use your real browser, with your tabs, your logins and your extensions."（一个 MCP server 加一个 Chromium 扩展，让 agent 使用你的真实浏览器，带着你的标签页、登录态和扩展。）Agent 标签页在后台以折叠分组打开，支持 Chrome、Edge、Brave、Arc、Helium、Vivaldi、Opera 与 Chromium；agent 能读页面、点击、输入、截屏和录制标签页。有趣的是那条**交接边界**：遇到登录、2FA 提示或支付时，agent 把标签页交还给你，你点 Continue 后它继续——还有工具栏按钮把当前已打开的标签页"借"给 agent，以及 allowed-sites 列表把 agent 的标签页钉在指定域名上。支持任何 MCP 客户端（OpenCode、Claude Code、Cursor、Codex、Zed）。
+
+**Why it matters:** Agent 浏览器一直两头分裂：无头一次性 profile（没有登录态）与截屏驱动的 computer use（慢且瞎）。Browse 押注第三条路——你真实的已登录浏览器作为底层，在恰好涉及凭据的步骤上让人留在回路里。
+
+[`🔗 OpenCode：Browse`](https://opencode.ai/product/browse) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50523459)
+
+---
+
+## 27. 一波隔夜 CVE 直接打在 agent 技术栈上：Phoenix 10.0（窃取环境变量）、CubeSandbox 9.4（沙箱逃逸）、MCP Python SDK 7.5（OAuth 凭据外泄）
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD（28 条 GitHub CNA 记录，发布于 2026-11-16 20:00Z – 11-17 04:00Z）
+- **Tags:** `cve` `agent-infrastructure` `mcp` `sandbox-escape`
+
+隔夜的 GitHub CNA 记录中有三条落在 agent 技术栈自身的管道上，评分全部为 CNA 自评，NVD 状态仍为 `Received`。**CVE-2026-53998（10.0）**：Arize-Ai 的 Phoenix AI 观测平台（13.0.0 至 15.7.0）把攻击者控制的 F-string 模板传进 `applyChatTemplate` GraphQL 查询，而 `DotDict.__getattr__` 未能阻止对私有属性的遍历——`__class__`、`__init__`、`__globals__`——使构造字段得以**读取进程环境变量**，也就是 API key 的住所。**CVE-2026-120699（9.4，CVSS 4.0）**：腾讯云"为 AI agent 打造的即时、并发、安全、轻量沙箱"CubeSandbox 允许任何已认证租户给 `metadata["host-mount"]` 传入任意已存在的主机路径——没有授权检查也没有前缀白名单——把主机目录挂进沙箱；0.5.1 修复。**CVE-2026-115563（7.5）**：官方 **MCP Python SDK**（1.9.1 至 1.30.0，以及 2.2.0）的 OAuth 客户端会把凭据发给由不受信 MCP server 选定的授权服务器——`ClientCredentialsOAuthProvider` 与 `PrivateKeyJWTOAuthProvider` "cannot identify the authorization server that owns their credentials."（无法识别凭据属于哪个授权服务器。）
+
+**Why it matters:** 环境变量是 key 的住所，沙箱是信任边界，OAuth 是 agent 的认证方式——三个 CVE 正好打在这三个假设上，而且是每个严肃 agent 部署都要站的三层（观测、沙箱、协议 SDK）。补丁清单：Phoenix ≥ 15.7.0，CubeSandbox ≥ 0.5.1，MCP SDK 升出受影响区间。
+
+[`🔗 GHSA-gfv3-m769-5xm3（Phoenix）`](https://github.com/Arize-ai/phoenix/security/advisories/GHSA-gfv3-m769-5xm3) · [`🔗 GHSA-qx49-fqc8-xw99（MCP Python SDK）`](https://github.com/modelcontextprotocol/python-sdk/security/advisories/GHSA-qx49-fqc8-xw99)
+
+---
+
+## 28. ChatGPT Wallet：agent 有了真正的钱包——卡片令牌、逐笔生物识别审批，Amex/Chase/Mastercard/Visa 入场
+
+- **Velocity:** ▮▮ rising
+- **Source:** openai.com · 46+ pts on HN · 13.4h ago (~23:10 UTC+8)
+- **Tags:** `agentic-commerce` `payments` `openai` `chatgpt`
+
+OpenAI 发布 **ChatGPT Wallet**——"the first wallet that lets agents pay without access to users' actual card details and that requires a security check for every purchase"（第一个让 agent 在接触不到用户真实卡号的情况下付款、且每笔交易都要求安全校验的钱包）——与美国运通、Chase、Mastercard、Visa 合作构建。流程：用户录卡一次；每笔购买前复核商品、总额与所选卡片；审批是一次生物识别安全校验；支付网络随后下发**令牌**代替卡片，agent 和商家都看不到真实卡号，而既有积分与争议保护照常适用。**今天起在 dots 中推出**，面向 18 岁以上的美国 ChatGPT Pro 订阅用户及合规的美国发卡。随附 Commerce Partner Playbook：用 Web Bot Auth 识别签名 agent 请求，反欺诈伙伴（Forter、Riskified、Sardine、Signifyd），PSP 集成（Adyen、Checkout.com、Stripe）——并预告最终可在消费限额与品类边界内完全委托购买。
+
+**Why it matters:** 在美联航封禁 agent 订票、x402 试验按次付费之后，卡组织已选边站：agent 支付正在成为带生物识别授权记录的受监管基础设施，而非外挂。每个商家下周要建合规面，规格书已经发下来了。
+
+[`🔗 OpenAI：Introducing ChatGPT Wallet`](https://openai.com/index/introducing-chatgpt-wallet/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50518501)
+
+---
+
+## 29. 细读 Anthropic 的 IPO 路演主张：Mythos 用约 3 天把 Claude 搬上 AMD MI355X——仅限 prefill、仅一个模型
+
+- **Velocity:** ▮▮ rising
+- **Source:** tomshardware.com · 29+ pts on HN · 3.3h ago (~09:10 UTC+8)
+- **Tags:** `anthropic` `claude-mythos` `amd` `cuda`
+
+Anthropic 向 IPO 投资人表示，**Claude Mythos Preview** 在"仅三天、基本无人干预"的情况下完成了让 Claude 跑上 AMD Instinct MI355X GPU 的软件工作，移植或编写了"几乎 100% 的 kernel"——对照的是历史上用数十名工程师、耗时 6 到 12 个月的加速器上线（联合创始人兼首席算力官 Tom Brown，11 月 10 日路演视频；招股书 S-1/A No. 2 也载有此说但无数字）。Tom's Hardware 对幻灯片脚注的解读才是该引用的部分：约 3 天覆盖的是"**prompt processing for one Anthropic model on AMD MI355X GPUs at a useful level of performance**"（一个 Anthropic 模型在 MI355X 上、达到可用性能水平的 prompt 处理）——decode 性能未说明，图表的"~100%"轴从未说明是 100% 的什么，也未公布 AMD 对 Nvidia 的速度对比。背景：AMD 七月主题演讲里是一名工程师加 Claude 在一个周末带起 MI355X 机架；Jensen Huang 称 Anthropic 是"一个孤例，不是趋势"——而 Nvidia 和 AMD 恰是按 IPO 发行价认购 Anthropic 260 亿美元股票的七家公司之二。
+
+**Why it matters:** 如果 kernel 移植从数月缩到数天，CUDA 护城河就从工程问题变成基准问题——但主张的脚注（仅 prefill、单模型、无速度基线）正是本刊反复标记的"增量对不上配置"式模糊。复测机会在 2027 上半年的首批 MI450 Helios 机架。
+
+[`🔗 Tom's Hardware：Anthropic says Claude Mythos slashed software work to onboard AMD GPUs`](https://www.tomshardware.com/tech-industry/artificial-intelligence/anthropic-says-claude-mythos-slashed-software-work-to-onboard-amd-gpus-from-up-to-12-months-to-around-three-days-writing-almost-100-percent-of-kernels-autonomously-chips-away-at-nvidias-cuda-moat) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50526264)
+
+---
+
+## 30. Harmonic 的 Aristotle 支持 Rust：证明无未定义行为、符合规约——"even inside unsafe blocks"
+
+- **Velocity:** ▮ steady
+- **Source:** harmonic.fun · 110+ pts on HN · 11.1h ago (~01:30 UTC+8)
+- **Tags:** `formal-verification` `rust` `ai` `harmonic`
+
+Harmonic 宣布 **Aristotle 现已验证 Rust**，把其 AI 驱动的形式化验证从 C 与 Verilog 扩展开来。支持 Rust 后，它能"prove that your code has no undefined behavior and does exactly what its spec says, **even inside unsafe blocks**"（证明你的代码没有未定义行为、完全符合规约——即便在 unsafe block 内），对 C 改写为 Rust 的代码，还能证明新代码与原实现行为一致。CEO Tudor Achim："Rust is where much of the world's most critical new code is being written, and increasingly, AI is the one writing it."（世界最关键的新代码正写于 Rust，而写得越来越多的正是 AI。）其公开案例给出了它声称能抓到的东西的质感：某个 Verilog 设计的 bug"found 110,000 cycles deep in its hardest block"（在最难的模块深处 11 万个周期才显形）、LibTomMath 在同一规约下被证明提速 31–38%，以及整个 Rust 订单簿上的 28 条发现。
+
+**Why it matters:** 它与今天第 4 条 Buzzard 的 Lean 验证主张四项检验落在同一天——AI 代码时代正在裂成两条 QA 路线：统计式（测试、基准）与机械化（证明、验证器），而吃下 Rust 的验证器——安全攸关改写浪潮选定的语言——是两者中分量更重的那一个。
+
+[`🔗 Harmonic：Aristotle Expands Into Rust`](https://www.harmonic.fun/news/aristotle-rust-verification) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50520270)
+
+---
+
+## 31. Jolt：会说 C 的 Clojure——自举于 Scheme 层之上，无 JVM，单二进制构建加原生 C 互操作
+
+- **Velocity:** ▮ steady
+- **Source:** jolt-lang.net · 99+ pts on HN · 12.2h ago (~00:20 UTC+8)
+- **Tags:** `clojure` `lisp` `languages` `compilers`
+
+**Jolt** 是一个自举的 Clojure 实现，运行在支持多后端的可移植 Scheme 层上——原生走 Chez Scheme，JavaScript 走 Gambit——全程不见 JVM。它的自述："Most Clojure runs unchanged, any C library binds natively, and `jolt build` ships a single standalone binary."（多数 Clojure 代码原样可跑，任何 C 库原生绑定，`jolt build` 出货单个独立二进制。）`defcfn` 把 C 函数变成普通 Clojure fn（文档自带示例这样够到 SQLite、Postgres、OpenSSL 和 zlib）；`jolt build` 提前编译运行时、标准库、应用和依赖为单个自包含可执行文件，C 依赖静态链接。宣称完整 Clojure 语义——持久化数据结构、惰性序列、transducer、multimethod、protocol——加上真实的 OS 线程并发（`future`、`agent`、`pmap`、`core.async`）。首页那个 REPL 就是 Gambit 后端编译成 JavaScript 的 Jolt 本体，在浏览器里实时求值。
+
+**Why it matters:** Clojure 押注 JVM 二十年后，Jolt 证明这门方言的语义可以与之彻底脱钩——而 Scheme 宿主这个技巧是真正漂亮的可移植性故事：同一份源码树，既出原生二进制，又出浏览器 REPL。
+
+[`🔗 Jolt：Clojure that speaks C`](https://jolt-lang.net/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50519345)
+
+---
+
+## 32. Spamhaus 本月起强制 HELO/PTR/A 记录对齐——每个发件人的底线收紧了
+
+- **Velocity:** ▮ steady
+- **Source:** spamhaus.org · 77+ pts on HN · 6.9h ago (~05:35 UTC+8)
+- **Tags:** `email` `deliverability` `spamhaus` `dns`
+
+Spamhaus 新的 Sender Guidelines 带着明确日期的要求："**Starting in November 2026, we are gradually rolling out a requirement for every sending IP to have a valid HELO, a reverse DNS (PTR) record, and a matching A record**"（自 2026 年 11 月起，我们将逐步要求每个发信 IP 拥有有效 HELO、反向 DNS（PTR）记录以及匹配的 A 记录）——并配有 HELO/DNS 检查工具供自测。指南把其余门槛分六节：基础设施与 DNS、认证（SPF/DKIM/DMARC）、许可与列表卫生（含 spamtrap）、发送最佳实践（预热、退信管理、退订）、IP 与域名信誉、以及 ESP/大发件人义务。
+
+**Why it matters:** 多数邮件送达建议是民间偏方；这是一家黑名单运营商把准入标准写成了公开、带日期、可自测的规格。如果你自建邮件服务器，HELO/PTR/A 三角已是入场券——检查工具一次调用就告诉你过没过。
+
+[`🔗 Spamhaus：Sender Guidelines`](https://www.spamhaus.org/sender-guidelines/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50523784)
+
+---
+
+## 33. Git 的 `clone --recurse-submodules` 缺陷（8.0）与 containerd 的 manifest 恐慌（7.1）同乘隔夜这波浪
+
+- **Velocity:** ▮ steady
+- **Source:** NVD（GitHub CNA 记录，发布于 2026-11-16 20:00Z – 11-17 04:00Z）
+- **Tags:** `cve` `git` `containerd` `supply-chain`
+
+隔夜 GitHub CNA 记录里还有两条值得单独一行。**CVE-2026-111760（8.0）**：Git 2.50.2/2.51.3/2.52.1/2.53.1/2.54.1/2.55.1/2.56.1 之前的版本，一个**由攻击者自持的仓库**（"hosted by the attacker rather than on a normal forge site"，即不在正常托管平台上）配合 `git clone --recurse-submodules`，可以让 Git 把子模块 gitfile 覆写为符号链接，指向藏有攻击者控制的 Git 配置或钩子的目录——随后在克隆者机器上执行。**CVE-2026-95839（7.1，CVSS 4.0）**：containerd（2.2.0 至 2.2.10/2.3.7/2.4.2）在拉取 manifest 携带畸形 digest 的 `io.containerd.manifest.subject` 注解镜像时守护进程崩溃——"including through a default CRI PullImage request"（包括经由默认的 CRI PullImage 请求），也就是说一个恶意或被攻陷的 registry 能拖垮从中拉镜像的 Kubernetes 节点。已在 2.2.10、2.3.7、2.4.2 修复。
+
+**Why it matters:** 两个都是每个 CI 系统都要走的两步操作——clone 与 pull——上的信任边界缺陷，且都在普通命令上触发，无需花哨参数。在下一次对陌生 URL 做递归克隆之前，先把 Git 补丁位与 containerd 小版本钉死。
+
+[`🔗 GHSA-vp2w-7xxj-jvxr（Git）`](https://github.com/git/git/security/advisories/GHSA-vp2w-7xxj-jvxr) · [`🔗 GHSA-vwhp-8p66-mq4f（containerd）`](https://github.com/containerd/containerd/security/advisories/GHSA-vwhp-8p66-mq4f)
+
+---
+
+## 34. Phison SSD 主控固件：泄露的 RSA 参数解锁厂商命令——可在盘上任意内存读写、临时执行代码
+
+- **Velocity:** ▮ steady
+- **Source:** NVD（CERT/CC 记录，发布于 2026-11-16 20:00Z – 11-17 04:00Z）· CVE-2026-126828 等
+- **Tags:** `cve` `firmware` `ssd` `hardware-security`
+
+CERT/CC 的披露潮隔夜砸向 Phison SSD 主控固件：**CVE-2026-126828**（E18；固件 EIFM80.0 与 EIFK51.2）——拥有管理员权限的本地攻击者可以"by leveraging leaked RSA parameters found in vendor utility binaries"（利用厂商工具二进制中泄露的 RSA 参数）绕过盘的"Security Access"握手，解锁允许**任意内存读写**的厂商专有命令；由于"the firmware's code regions lack protection"（固件代码区缺少保护），这些原语可覆写既有处理函数，在 SSD 主控上实现**volatile 代码执行**。同批记录覆盖 E16（EGFM13.2，CVE-2026-129187）与 E12（ECFM32.2，CVE-2026-129190），VulnCheck 另案的 **CVE-2026-124017（6.7）** 则描述 E12/E18 上的**Secure Boot 绕过**，允许特权攻击者运行改过的固件。NVD 状态全部为 `Received`；关联研究仓库（VL4DR/PhisonExecutor）今天有推送。
+
+**Why it matters:** 这是 OS 之下的攻击面：磁盘加密、Secure Boot 和 OS 取证都默认信任的那一层。本地管理员到主控代码执行，正是物理接触或恶意内部人叙事需要的提权路径——而固件修复的时钟与 OS 补丁不同。
+
+[`🔗 CVE-2026-126828 记录`](https://www.cve.org/CVERecord?id=CVE-2026-126828) · [`🔗 VL4DR/PhisonExecutor`](https://github.com/VL4DR/PhisonExecutor)
+
+---
+
+## 35. lend：herdr 作者对 agent 凭据蔓延的答案——agent 以租约借用你笔记本上的工具，永远看不到密钥本身
+
+- **Velocity:** ▮ steady
+- **Source:** blog.antonio.cx · 52+ pts on HN · 3.2h ago (~09:20 UTC+8)
+- **Tags:** `agent-infrastructure` `credentials` `security` `cli`
+
+继 11 月 12 日报道过编码 agent 的 Rust 终端复用器 **herdr** 之后：其作者现已发布缺失的那一块——**lend**，一个"a tool built to let remote agents use tools on my laptop with my approval"（为让远程 agent 在我批准下使用我笔记本上的工具而造）的工具。架构：agent 跑在可丢弃 VM 上，笔记本保留王冠明珠（SSH key、1Password 保险库、已登录的 `gh` 与云 CLI）；agent 需要时，lend 以租约居中调停，持有"secrets the agent never sees"（agent 永远看不到的密钥），让作者事后检视 agent 做了什么，甚至从笔记本代答 agent 的提问。文章对边界同样坦白：专设一节"What lend doesn't protect against"（lend 防不了什么），外加先行工作梳理。
+
+**Why it matters:** 凭据问题是 agent 基础设施里不受待见的那一半——人人都靠把 token 糊进 VM 解决。租约加审批、密钥留在 agent 够不到的地方，这与 OpenCode 在浏览器侧选择的交接边界（第 26 条）是同一条信任线，在终端里独立长了出来。
+
+[`🔗 antonio's blog：Running coding agents without handing them my credentials`](https://blog.antonio.cx/running-agents-with-lend) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50526152)
+
+---
+
+## 36. psychic：会学习你打开什么的 fzf——用本机使用数据训练 ML 模型排序的 Rust 文件浏览器
+
+- **Velocity:** ▮ steady
+- **Source:** klauria.tech · 44+ pts on HN · 13.4h ago (~23:10 UTC+8)
+- **Tags:** `cli` `rust` `ml` `developer-tools`
+
+Kshitij Lauria 的 **psychic**（"like fzf but learns from your actions"，像 fzf 但会从你的行为中学习）是一个终端文件浏览器兼 `cd` 替代品：记录你去过哪些目录、打开过哪些文件，在本机数据上训练一个轻量 ML 模型并以此排序——开源（kshitijl/psychic，Rust），结果随输入即时更新，UI 渲染低于 16 毫秒。作者自己的使用数据把卖点说得很实：2025 年 10 月以来打开 1,450 次，找到目标文件**平均只敲 1.6 个字符**，29% 的时候零字符——打开、回车、完事。一切设计都服从一条规则：必须快到一个按键一帧内更新。
+
+**Why it matters:** 面向单个开发者的自适应浪潮（学习你代码库的编辑器、学习你命令的 shell）如今到达文件系统导航——而那句坦白的自省（"I'd rather do 10 fast searches … than 1 smart search"，宁可十次快搜索也不要一次慢聪明）正是 ML 进 CLI 回路的正确约束。
+
+[`🔗 klauria.tech：psychic`](https://klauria.tech/psychic/) · [`🔗 kshitijl/psychic`](https://github.com/kshitijl/psychic)
+
+---
+
+## 37. Sutra-OS：一个"AI agents 只提案"的自托管本体平台——每次变更都是服务端强制执行的提案，获批才生效
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 42+ pts · 5.1h ago (~07:30 UTC+8) · 0nelight/sutra-os 51★
+- **Tags:** `ontology` `self-hosted` `agent-governance` `data-lineage`
+
+今天的 Show HN：**Sutra-OS**——"Scarce Units, Typed, Related, Actionable"——一个 AGPL-3.0 的自托管本体平台（beta），把组织数据变成一个你拥有的模型：带类型、带关联、只能经服务端强制执行的规则变更，血缘把每个数字追溯到源头。它的九个核心特性读起来像一份 agent 治理清单：写入只走一扇门（action 会被服务端带着理由拒绝）、**"deciding is not doing"（决定不等于执行，每次变更都是提案，获批才生效）**、**"AI agents only propose"（AI agent 只能提案）**、模型与数据都有分支、访问控制由服务端经 markings 强制、模型即生成的类型化 API、凭据由独立的 egress agent 保管、Writer/Calc/Visio 式文档在模型上实时共编。Web 应用、Python SDK、CLI、REST API、agent 与 git 全部服从同一套规则。
+
+**Why it matters:** Agent 提案、人类审批，是本刊反复出现的治理模式——OmniAgent 的审批门（以及它把 `find` 前缀当安全的洞）已说明强制执行有多难。把执行放进服务端而非 prompt 的平台，是那课的架构版。
+
+[`🔗 0nelight/sutra-os`](https://github.com/0nelight/sutra-os) · [`🔗 Show HN 讨论`](https://news.ycombinator.com/item?id=50525052)
+
+---
+
+## 38. AI 原生笔记先驱 Mem 将于 1 月 15 日关停——品类开创者五度转型后谢幕
+
+- **Velocity:** ▮ steady
+- **Source:** get.mem.ai · 21+ pts on HN · 2.3h ago (~10:15 UTC+8)
+- **Tags:** `shutdown` `notes` `ai-native` `saas`
+
+Mem——这个 AI 原生笔记应用，其轨迹几乎就是整个品类的轨迹（2022 年基于嵌入的"Similar Mems"、2022–23 年的生成式 Smart Write、2024 年的 Mem Chat、2026 年 4 月的 MCP 连接器与 ChatGPT 应用、2026 年 7 月伸进 iMessage/WhatsApp/Slack 的主动 agent）——于 11 月 16 日宣布关闭：**12 月 18 日笔记转只读，2027 年 1 月 15 日服务关停**，计费已暂停。创始人 Kevin Moody 的告别信配了迁往 Apple Notes、Notion、Obsidian 等处的迁移指南，外加一份少见的详尽回顾，把每个时代原始发布帖都链接在列。
+
+**Why it matters:** 围绕 AI 整理个人知识建立的独立应用，正是前沿厂商不断吸收进自家产品的品类——而一次带着干净导出路径与公开时间线的关停，是本刊覆盖的每一样依赖都应被要求的告别方式。
+
+[`🔗 Mem：Mem is shutting down`](https://get.mem.ai/blog/mem-is-shutting-down) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50526537)
+
+---
+
+## 39. Uber 数据泄露：约 15 万司机驾照信息经一家技术供应商的被窃凭据外流
+
+- **Velocity:** ▮ steady
+- **Source:** techcrunch.com · 26+ pts on HN · 5.9h ago (~06:35 UTC+8)
+- **Tags:** `breach` `uber` `third-party` `pii`
+
+Uber 正在通知**近 15 万名司机**：他们的个人信息与驾照数据在**十月发生的一家技术供应商侧泄露**中被窃（Zack Whittaker，TechCrunch）。据本周向加州、爱荷华等多州总检察长提交的通知：该供应商 10 月 9 日告知 Uber，黑客入侵后**窃取内部凭据**，进而访问了存放在该供应商处的 Uber 数据。被窃数据包括姓名、地址、出生日期与驾照信息。Uber 自有系统并未被描述为失守——这次泄露走的是供应商关系。
+
+**Why it matters:** 就在本刊报道 FBI 把入侵归因于 AI 渗透平台（第 3 条）的同周，本季度的老模式再次应验：失守的边界不是公司自己的——是供应商的凭据。供应商凭据清单就是新的攻击面地图。
+
+[`🔗 TechCrunch：Uber says hackers stole information on close to 150,000 driver's licenses`](https://techcrunch.com/2026/11/16/uber-confirms-hackers-stole-thousands-of-drivers-license-information-in-data-breach/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50524538)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-16T20:29:19Z |
-| Items | 20 |
-| Sources tracked | 23 (Hacker News, GitHub Trending, NVD/CVE, vendor blogs, AP/ABC News, FAA, engineering blogs) |
+| Generated | 2026-11-17T04:36:32Z |
+| Items | 39 |
+| Sources tracked | 40 (Hacker News, GitHub Trending, NVD/CVE, vendor blogs, AP/CNN News, FAA, engineering blogs, research groups) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

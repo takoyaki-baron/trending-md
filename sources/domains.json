@@ -1958,6 +1958,15 @@
   "jp": "Redwood Research 公式ブログ。OpenAI/Hugging Face 事件に関する METR/Redwood 独立調査の一次情報。突合済み（08-28）：主要数値は同レポートの CGTN 要約と一致。",
   "zh": "Redwood Research 官方博客——METR/Redwood 对 OpenAI/Hugging Face 事件独立调查的一手来源。已交叉核验（08-28）：关键数字与 CGTN 对同一报告的摘要一致。"
  },
+ "blog.report-uri.com": {
+  "cat": "security",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "Report URI (Scott Helme's company blog) — first-party CSP/telemetry analysis of script-supply-chain incidents; the Nov 16 OPTIMJACK Optimizely post carries timestamped cleanup counts (169→1 of 188 snippets) and a named vector (Project JavaScript injection served from cdn.optimizely.com). Independent confirmation: amirulcyber.com's separate OPTIMJACK analysis overlaps on mechanism and brand list (CNN, Zoom, BBC, Salesforce, GitLab) with its own IOCs (track.js, 1688360.cc) not present in the Report URI post.",
+  "jp": "Report URI（Scott Helme の会社ブログ）——スクリプト・サプライチェーン事件の一次 CSP/テレメトリ分析。11月16日の OPTIMJACK（Optimizely）記事は時刻入りの清除数（188スニペット中169→1）と名前付きベクトル（Project JavaScript への注入、cdn.optimizely.com から配信）を載せる。独立確認：amirulcyber.com の別分析がメカニズムとブランドリスト（CNN、Zoom、BBC、Salesforce、GitLab）で重なり、Report URI 記事にない独自 IOC（track.js、1688360.cc）を持つ。",
+  "zh": "Report URI（Scott Helme 的公司博客）——脚本供应链事件的一手 CSP/遥测分析；其 11 月 16 日 OPTIMJACK（Optimizely）文章带有带时间戳的清理计数（188 个片段中 169→1）与命名的注入向量（写入 Project JavaScript、经 cdn.optimizely.com 投放）。交叉验证（2026-11-17）：amirulcyber.com 的独立 OPTIMJACK 分析在机制与品牌清单（CNN、Zoom、BBC、Salesforce、GitLab）上重叠，并持有 Report URI 文章中没有的自身 IOC（track.js、1688360.cc）。"
+ },
  "blog.scrt.ch": {
   "cat": "security",
   "cred": "high",

@@ -1,8 +1,8 @@
 ---
 date: 2026-11-17
-updated: 2026-11-16T20:29:19Z
+updated: 2026-11-17T04:36:32Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 23
+sources: 40
 license: CC-BY-4.0
 ---
 
@@ -288,13 +288,279 @@ Mike Masnick の2007年の投稿がフロントページに戻ってきた：真
 
 ---
 
+## 21. カーネギーメロンがCSの教室をYouTubeに——今月8講義が初公開、AI Agents の講義も含まれる
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** cs.cmu.edu · 915+ pts on HN · 7.8h ago (~04:40 UTC+8)
+- **Tags:** `education` `cmu` `courses` `open-access`
+
+カーネギーメロン大学コンピュータサイエンス学部が **CS Learn**（cs.cmu.edu/learn）を公開した：同校教員による講義のフル映像をYouTubeで無料視聴できる——「Free lectures now on YouTube. Free courseware coming next.」（無料講義はすでにYouTubeに、無料コースウェアは次に来る。）今月初公開は8講義。**10-605 大規模データセット機械学習**（William Cohen）、**15-442 機械学習システム**（Tianqi Chen と Zhihao Jia）、そして木曜初公開の **11-768 AI Agents**（Daniel Fried と Graham Neubig）——同日には 17-645 本番環境の機械学習（Christian Kästner と Bogdan Vasilescu）も。1月には確率と計算（Mor Harchol-Balter）、マルチモーダル機械学習などが続く。ロードマップは動画にとどまらない：次は即時フィードバックとバッジ付きの自習コースウェア、さらに「AI tutoring is coming to the courseware experience」（AIチュータリングがコースウェア体験にやってくる）。
+
+**Why it matters:** 先週はMITがコースサイトをエージェントに開放した。今度はCMUが講義室全体をYouTubeに載せ、カリキュラムにAI Agents の講義を組み込み、AIチュータリングをロードマップに掲げた——トップCS校が、人間とエージェント双方のための無料訓練コーパスを自らの教育で作る競争に入っている。
+
+[`🔗 CMU SCS：CS Learn`](https://www.cs.cmu.edu/learn/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50522980)
+
+---
+
+## 22. Windows 11 がどのコーディングエージェントを走らせているか静かに記録——MissionControlAggregator.dll が claude.exe、codex.exe、cursor.exe を照合しDiagnosticsへ報告
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** xusheng.dev · 332+ pts on HN · 5.6h ago (~06:52 UTC+8)
+- **Tags:** `windows` `telemetry` `privacy` `coding-agents`
+
+リバースエンジニアの Xusheng Li がAIにWindowsバイナリの未文書化機能を探させたところ、**MissionControlAggregator.dll** の中にコーディングエージェントの名前リストを突き止めた：CLIエージェント4スロットは `copilot.exe`、`claude.exe`、`codex.exe`、`agy.exe` を（WSL経由では拡張子なし版も）、デスクトップエージェント5スロットは `github.exe`、`claude.exe`、`codex.exe`、`cursor.exe`、`antigravity.exe` をチェックする。これらの名前は **CLICodingAgentUsage**（feature ID 62580080）という機能フラグの背後にある実行ファイル名マッチャーに使われ、このコンポーネントはどのエージェントと開発ツールが使われたかを記録し、ローカルに保存したうえでWindows Diagnosticsへ報告する——しかも「『オプション』の診断データ（既定で有効）をオプトアウトしない限り、データはMicrosoftに送られる」。
+
+**Why it matters:** エージェントの採用状況は、OSレベルの計測を組むに値するシグナルになった——そしてその計測自体がプライバシーの話。マシンを管理する人への結論は具体的だ：「オプション診断データ」には、開発者がどのAIツールを使っているかが含まれる。
+
+[`🔗 Xusheng Li：Windows 11 Is Collecting Data on Which Coding Agents and Developer Tools You Use`](https://xusheng.dev/posts/windows-coding-agent-telemetry/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50524736)
+
+---
+
+## 23. BugMeNot が約20年の歴史に幕——「Thanks to everyone who envisioned a better internet」
+
+- **Velocity:** ▮▮ rising
+- **Source:** bugmenot.com · 384+ pts on HN · 6.9h ago (~05:35 UTC+8)
+- **Tags:** `internet-history` `privacy` `login-walls`
+
+BugMeNot——「記事を読むには無料アカウント登録を」の壁を迂回させる、数十年続いた共有ログインサービス——が閉鎖した。サイトには告別のページだけが残る：「**BugMeNot has closed. Thanks to everyone who envisioned a better internet**」（BugMeNotは閉鎖しました。より良いインターネットを思い描いてくれたすべての人に感謝を）——理由の記述はなく、その後に誰も解けていない4文字グループの羅列が続く。HNスレッドの追悼文は衰退について正直だ：最近動いたログインの多くは使い捨てアドレス（bugmenot@mailinator.com、yopmail アカウント）で、ある利用者は「1〜2か月前」まで役に立っていたと今日の閉鎖を知った。
+
+**Why it matters:** 登録壁、スクレイピング禁止、ログインゲートだらけの現在をこのフィードが取り上げた同じ週に、壁のない時代の遺物が死んだ。告別の一行は、あの取引がどう終わったかの評価のように読める。
+
+[`🔗 BugMeNot 告別ページ`](https://www.bugmenot.com/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50523601)
+
+---
+
+## 24. ユナイテッド航空の30分間システム障害が全国の便に遅延——同日の2件目のシステミック障害
+
+- **Velocity:** ▮▮ rising
+- **Source:** cnn.com · 204+ pts on HN · 6.3h ago (~06:15 UTC+8)
+- **Tags:** `outage` `airlines` `reliability`
+
+ユナイテッド航空は月曜、米東部時間午後5時前に出発便に影響する**広範な技術障害**を認め、約1時間後に解消した——約30分の障害で全米の空港の出発便に遅延が出たが、報道広報の Leslie Scott によれば**影響便は150便未満**。CNNは「大規模な混乱を引き起こした稀なFAAの地上停止」に続いて起きたと指摘。原因は公表されていない。同じ日、米大手銀行5行が同時にアクセス障害を報告していた（第1項）——業界は異なり、共通原因は確認されていない。集中リスクとしては非常にまずい一日だ。
+
+**Why it matters:** 一つのニュースサイクルに無関係なシステミック障害が2つ——これはレジリエンス研究者が警告するまさにそのパターンだ：個別には耐えられる障害が、外からは同じ負荷にうめくインフラのように見える。両方の事後報告はまだ出ていない。
+
+[`🔗 CNN：United Airlines says it resolved system outage that delayed flights`](https://www.cnn.com/2026/11/16/us/united-airlines-outage) · [`🔗 AP：United Airlines has a widespread system outage`](https://apnews.com/article/united-airlines-outage-5a5e5f75bb07f11ffb8750901f0076ff)
+
+---
+
+## 25. OPTIMJACK：178サイトが Optimizely 自社CDN経由でマルウェアを配信——攻撃者は顧客の Project JavaScript に書き込み、キットはiOSエクスプロイトも運んだ
+
+- **Velocity:** ▮▮ rising
+- **Source:** blog.report-uri.com · 163+ pts on HN · 5.6h ago (~06:55 UTC+8)
+- **Tags:** `supply-chain` `skimware` `magecart` `optimizely`
+
+11月16日、**178組織**の訪問者が Optimizely Web のスニペット経由で悪意あるJavaScriptを受け取った——Zoom、BBC、CNN、Salesforce、GitLab、IKEA、HSBC、Equifax、Air France-KLM、Ledger、Peacock などが含まれる（Scott Helme、Report URI）。侵入は外科的だった：攻撃者は Optimizely ダッシュボード内の顧客プロジェクトの **Project JavaScript** フィールドにコードを書き込み、感染コードは Optimizely の証明書付きで `cdn.optimizely.com` からそのまま配信された——顧客自身のオリジンは最後まで清潔だった。キットは暗号資産のウォレットアドレスをすり替え、決済カードをskimし、Cookieとスクリーンショットを盗み、iPhoneとiPadには **Coruna と DarkSword のiOSエクスプロイトキット**を届けた。暗号資産はすでに盗まれており、取引は検証済み。清除はリアルタイムで追跡された：20:56 UTC には188の感染スニペット中169が汚染、21:52 UTC には1に減った。独立系の分析はこのキャンペーンを **OPTIMJACK** と命名した（Optimizely バンドル内のローダーが `track.js` を追加。C2は `1688360[.]cc` と2つの `.icu` ホスト）。
+
+**Why it matters:** 「Trusted JavaScript doesn't always remain trustworthy」（信頼されたJavaScriptは信頼されたままとは限らない）——サードパーティのタグプラットフォームは、これを埋め込む全サイトにとっての単一障害点だ。実験系・スニペット管理系のスクリプトを読み込んでいるなら、今日バンドルを監査しよう。report モードのCSPならこれを検出できたはずだ。
+
+[`🔗 Report URI：World's Largest Brands Infected With Malware Via Optimizely`](https://blog.report-uri.com/worlds-largest-brands-infected-with-malware-via-optimizely/) · [`🔗 Amirul Cyber：OPTIMJACK 分析`](https://amirulcyber.com/2026/11/16/optimjack-optimizely-skimmer/)
+
+---
+
+## 26. OpenCode が Browse を発表：あなたの本物のブラウザをエージェントの道具に——実タブ、実ログイン、2FAでは手渡し
+
+- **Velocity:** ▮▮ rising
+- **Source:** opencode.ai · 157+ pts on HN · 7.2h ago (~05:25 UTC+8)
+- **Tags:** `mcp` `browser` `agent-infrastructure` `opencode`
+
+OpenCode が **Browse** を発表：「An MCP server and a Chromium extension that let your agents use your real browser, with your tabs, your logins and your extensions.」（MCPサーバーとChromium拡張で、エージェントにあなたの本物のブラウザを——タブも、ログインも、拡張機能も使わせる。）エージェントのタブは Chrome、Edge、Brave、Arc、Helium、Vivaldi、Opera、Chromium で折りたたみグループとしてバックグラウンドに開き、ページを読み、クリックし、入力し、スクリーンショットを撮り、タブを録画する。鍵は**ハンドオフ**の境界だ：ログイン、2FA、支払いが必要になると、エージェントはタブをあなたに手渡し、Continue をクリックした時点で再開する——すでに開いているタブを「貸す」ツールバーボタンや、エージェントのタブを指定ドメインに留める allowed-sites リストもある。あらゆるMCPクライアント（OpenCode、Claude Code、Cursor、Codex、Zed）から使える。
+
+**Why it matters:** エージェントブラウザは双極だった：使い捨てのヘッドレスプロファイル（ログインなし）か、スクリーンショット駆動のcomputer use（遅くて盲）か。Browse が賭けた第三の道は——認証済みの本物のブラウザを基盤にし、クレデンシャルが関わるステップでだけ人間をループに残すというものだ。
+
+[`🔗 OpenCode：Browse`](https://opencode.ai/product/browse) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50523459)
+
+---
+
+## 27. 一夜のCVEウェーブがエージェントスタックそのものを直撃：Phoenix 10.0（環境変数窃取）、CubeSandbox 9.4（サンドボックス脱獄）、MCP Python SDK 7.5（OAuth認証情報漏洩）
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD（GitHub CNA 記録28件、2026-11-16 20:00Z – 11-17 04:00Z に公開）
+- **Tags:** `cve` `agent-infrastructure` `mcp` `sandbox-escape`
+
+一夜の GitHub CNA 記録のうち3件が、エージェントスタック自身の配管に着地した。スコアはすべてCNA自己採点で、NVDの状態はまだ `Received`。**CVE-2026-53998（10.0）**：Arize-Ai の AI 可観測性プラットフォーム Phoenix（13.0.0 から 15.7.0 まで）は、攻撃者制御のF文字列テンプレートを `applyChatTemplate` GraphQL クエリに通し、`DotDict.__getattr__` がプライベート属性のトラバーサルを阻止できなかった——`__class__`、`__init__`、`__globals__`——細工されたフィールドが**プロセスの環境変数を読める**。APIキーの住処だ。**CVE-2026-120699（9.4、CVSS 4.0）**：Tencent Cloud の「AIエージェントのための即時・並行・安全・軽量サンドボックス」CubeSandbox は、認証済みテナントなら誰でも `metadata["host-mount"]` に任意の既存ホストパスを渡せた——認可チェックも許可プレフィックス検証もなし——ホストのディレクトリをサンドボックスにマウントできる。0.5.1で修正。**CVE-2026-115563（7.5）**：公式 **MCP Python SDK**（1.9.1 から 1.30.0 まで、および 2.2.0）のOAuthクライアントは、信頼できないMCPサーバーが選んだ認可サーバーに認証情報を送りうる——`ClientCredentialsOAuthProvider` と `PrivateKeyJWTOAuthProvider` は「cannot identify the authorization server that owns their credentials.」（自分の認証情報がどの認可サーバーのものか特定できない。）
+
+**Why it matters:** 環境変数はキーの住処、サンドボックスは信頼境界、OAuthはエージェントの認証——3つのCVEはまさにこの3つの前提を打ち、しかも真面目なエージェントデプロイが必ず乗る3層（可観測性、サンドボックス、プロトコルSDK）だ。パッチリスト：Phoenix ≥ 15.7.0、CubeSandbox ≥ 0.5.1、MCP SDK は影響範囲外へ。
+
+[`🔗 GHSA-gfv3-m769-5xm3（Phoenix）`](https://github.com/Arize-ai/phoenix/security/advisories/GHSA-gfv3-m769-5xm3) · [`🔗 GHSA-qx49-fqc8-xw99（MCP Python SDK）`](https://github.com/modelcontextprotocol/python-sdk/security/advisories/GHSA-qx49-fqc8-xw99)
+
+---
+
+## 28. ChatGPT Wallet：エージェントに本物の財布を——カードトークン、購入ごとの生体認証、Amex/Chase/Mastercard/Visa が参加
+
+- **Velocity:** ▮▮ rising
+- **Source:** openai.com · 46+ pts on HN · 13.4h ago (~23:10 UTC+8)
+- **Tags:** `agentic-commerce` `payments` `openai` `chatgpt`
+
+OpenAI が **ChatGPT Wallet** を公開——「the first wallet that lets agents pay without access to users' actual card details and that requires a security check for every purchase」（ユーザーの実際のカード情報に触れさせずにエージェントへ支払わせ、購入ごとにセキュリティチェックを要求する、最初のウォレット）——American Express、Chase、Mastercard、Visa との共同構築だ。流れ：ユーザーはカードを一度だけ登録。各購入前に商品・合計・選択カードを確認し、承認は生体認証のセキュリティチェック。支払いネットワークがカードの**トークン**を発行し、エージェントも加盟店も実際のカード番号は見えない——既存のポイントと dispute 保護はそのまま適用される。**本日から dots で**、18歳以上の米国 ChatGPT Pro 購読者と対象の米国発行カードに展開開始。同時に Commerce Partner Playbook も公開：署名付きエージェントリクエストの Web Bot Auth、不正検知パートナー（Forter、Riskified、Sardine、Signifyd）、PSP統合（Adyen、Checkout.com、Stripe）——そして将来的には支出上限やカテゴリの枠内での完全委任購入も。
+
+**Why it matters:** ユナイテッドのエージェント予約禁止、x402 の都度払い実験を経て、カードネットワークは旗を立てた：エージェント決済はハックではなく、生体認証の承認記録を持つ規制されたインフラになっていく。加盟店が来週構築すべきコンプライアンス面の仕様書が、もう出ている。
+
+[`🔗 OpenAI：Introducing ChatGPT Wallet`](https://openai.com/index/introducing-chatgpt-wallet/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50518501)
+
+---
+
+## 29. Anthropic の IPO ラロードショー主張を精読：Mythos は約3日で Claude を AMD MI355X に載せた——prefillのみ、1モデル
+
+- **Velocity:** ▮▮ rising
+- **Source:** tomshardware.com · 29+ pts on HN · 3.3h ago (~09:10 UTC+8)
+- **Tags:** `anthropic` `claude-mythos` `amd` `cuda`
+
+Anthropic はIPO投資家に対し、**Claude Mythos Preview** が「in just three days with basically no human intervention」（わずか3日、ほぼ人手なしで）Claude を AMD Instinct MI355X GPU で動かすソフトウェア作業を済ませ、kernel の「almost 100%（ほぼ100%）」を移植または執筆したと語った——対照は数十人のエンジニアと6〜12か月という過去のアクセラレータ立ち上げ（共同創業者・チーフコンピュートオフィサー Tom Brown、11月10日のロードショー動画。目論見書 S-1/A No. 2 にも数字なしで記載）。Tom's Hardware がスライドの脚注から読み取ったのが引用すべき部分だ：約3日が覆うのは「**prompt processing for one Anthropic model on AMD MI355X GPUs at a useful level of performance**」（1つのAnthropicモデルについて、MI355X上で実用レベルの性能に達するprompt処理）——decode 性能は未記載、グラフの「~100%」軸は100%の何かを一度も言わず、AMD対Nvidiaの速度比較も開示されていない。背景：AMDの7月基調講演では1人のエンジニアとClaudeが週末でMI355Xラックを立ち上げた。Jensen Huang は Anthropic を「a unique instance, not a trend（孤立例であり、傾向ではない）」と呼ぶ——Nvidia と AMD は、IPO発行価で Anthropic の株式260億ドルを購入する7社のうちの2社でもある。
+
+**Why it matters:** kernel移植が数か月から数日へ縮むなら、CUDAの堀は工学の問題からベンチマークの問題へ変わる——ただし主張の脚注（prefillのみ、1モデル、速度基準なし）は、このフィードが繰り返し指摘してきた「増分とセットアップの不一致」型の曖昧さそのものだ。再実験は2027年上期の初の MI450 Helios ラックで来る。
+
+[`🔗 Tom's Hardware：Anthropic says Claude Mythos slashed software work to onboard AMD GPUs`](https://www.tomshardware.com/tech-industry/artificial-intelligence/anthropic-says-claude-mythos-slashed-software-work-to-onboard-amd-gpus-from-up-to-12-months-to-around-three-days-writing-almost-100-percent-of-kernels-autonomously-chips-away-at-nvidias-cuda-moat) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50526264)
+
+---
+
+## 30. Harmonic の Aristotle が Rust に対応：未定義動作なしと仕様適合を証明——「even inside unsafe blocks」
+
+- **Velocity:** ▮ steady
+- **Source:** harmonic.fun · 110+ pts on HN · 11.1h ago (~01:30 UTC+8)
+- **Tags:** `formal-verification` `rust` `ai` `harmonic`
+
+Harmonic が **Aristotle の Rust 対応**を発表し、AI駆動の形式検証の対象を C と Verilog から広げた。Rust 対応で「prove that your code has no undefined behavior and does exactly what its spec says, **even inside unsafe blocks**」（コードに未定義動作がなく、仕様どおりに動くことを証明できる——unsafe block の内側でさえ）となり、CからRustへの書き換えでは、新コードが元の実装と同じ振る舞いをすることを証明できる。CEO Tudor Achim：「Rust is where much of the world's most critical new code is being written, and increasingly, AI is the one writing it.」（世界の最も重大な新しいコードが書かれるのはRustであり、ますますそれを書いているのはAIだ。）公表済みのケーススタディは、それが捉えると主張するものの質感を与えてくれる：ある Verilog 設計のバグは「found 110,000 cycles deep in its hardest block（最も難しいブロックの11万サイクルの深さで発見）」、LibTomMath は同一仕様で31〜38%高速と証明され、Rust のオーダーブック全体からは28件の結果が出た。
+
+**Why it matters:** 第4項の Buzzard による Lean 検証主張の4テストと同じ日に着地した——AIコード時代のQAスタックは、統計的（テスト・ベンチマーク）と機械的（証明・検証器）の二つに裂けつつあり、Rust——安全クリティカルな書き換え波が選んだ言語——を食える検証器は、その二つのうちより重い方だ。
+
+[`🔗 Harmonic：Aristotle Expands Into Rust`](https://www.harmonic.fun/news/aristotle-rust-verification) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50520270)
+
+---
+
+## 31. Jolt：Cを話すClojure——Schemeレイヤ上でセルフホスト、JVMなし、ネイティブC相互運用の単一バイナリビルド
+
+- **Velocity:** ▮ steady
+- **Source:** jolt-lang.net · 99+ pts on HN · 12.2h ago (~00:20 UTC+8)
+- **Tags:** `clojure` `lisp` `languages` `compilers`
+
+**Jolt** は、複数バックエンドを支える移植性のあるSchemeレイヤ上で動くセルフホストのClojure実装だ——ネイティブは Chez Scheme、JavaScriptは Gambit——JVMはどこにもない。売り文句：「Most Clojure runs unchanged, any C library binds natively, and `jolt build` ships a single standalone binary.」（大半のClojureは無変更で動き、どんなCライブラリもネイティブにバインドされ、`jolt build` は単一のスタンドアロンバイナリを出荷する。）`defcfn` はC関数を普通のClojure fnに変える（ドキュメント自身の例がこの道で SQLite、Postgres、OpenSSL、zlib に届く）；`jolt build` はランタイム・標準ライブラリ・アプリ・依存をC依存ごと静的リンクした単一の自己完結実行ファイルへ事前コンパイルする。完全なClojureセマンティクスを謳い——永続データ構造、遅延シーケンス、トランスデューサ、マルチメソッド、プロトコル——OSスレッドの実并发（`future`、`agent`、`pmap`、`core.async`）も持つ。トップページのREPLは、GambitバックエンドでJavaScriptにコンパイルされたJoltそのもので、ブラウザ内でライブ評価される。
+
+**Why it matters:** ClojureがJVMに賭けてから二十年、Joltはこの方言のセマンティクスがJVMから完全に切り離せることを実証した——そしてSchemeホスティングというトリックは本物の移植性の物語だ：同じソースツリーから、ネイティブバイナリとブラウザREPLの両方が出る。
+
+[`🔗 Jolt：Clojure that speaks C`](https://jolt-lang.net/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50519345)
+
+---
+
+## 32. Spamhaus が今月から HELO/PTR/Aレコードの整合を強制へ——すべての送信者の最低ラインが引き上がる
+
+- **Velocity:** ▮ steady
+- **Source:** spamhaus.org · 77+ pts on HN · 6.9h ago (~05:35 UTC+8)
+- **Tags:** `email` `deliverability` `spamhaus` `dns`
+
+Spamhaus の新しい Sender Guidelines には日付入りの要件が刻まれている：「**Starting in November 2026, we are gradually rolling out a requirement for every sending IP to have a valid HELO, a reverse DNS (PTR) record, and a matching A record**」（2026年11月から、すべての送信IPに有効なHELO、逆引きDNS（PTR）レコード、そして一致するAレコードを求める要件を段階的に導入します）——自スタックを試すHELO/DNSチェッカーも用意された。ガイドラインは残りの基準を6節に整理する：インフラとDNS、認証（SPF/DKIM/DMARC）、許可とリスト衛生（spamtrap を含む）、送信のベストプラクティス（ウォームアップ、バウンス管理、配信停止）、IPとドメインの評判、そしてESP/大口送信者の義務。
+
+**Why it matters:** 到達性の助言の大半は民間療法だ。これはブロックリスト運営者が自らの受入基準を、公開され、日付け入り、自己検証可能な仕様に変えたものだ。自前メールサーバーを運用するなら、HELO/PTR/Aの三角形はもう入場券——チェッカーが1回の呼び出しで合否を教えてくれる。
+
+[`🔗 Spamhaus：Sender Guidelines`](https://www.spamhaus.org/sender-guidelines/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50523784)
+
+---
+
+## 33. Git の `clone --recurse-submodules` 脆弱性（8.0）と containerd の manifest パニック（7.1）が同じ夜の波に乗る
+
+- **Velocity:** ▮ steady
+- **Source:** NVD（GitHub CNA 記録、2026-11-16 20:00Z – 11-17 04:00Z に公開）
+- **Tags:** `cve` `git` `containerd` `supply-chain`
+
+同じ夜の GitHub CNA 記録から、もう2つは単独行に値する。**CVE-2026-111760（8.0）**：Git 2.50.2/2.51.3/2.52.1/2.53.1/2.54.1/2.55.1/2.56.1 より前では、**攻撃者自身がホストするリポジトリ**（「hosted by the attacker rather than on a normal forge site」、通常のフォージ上にないもの）が `git clone --recurse-submodules` を突くと、Git にサブモジュールの gitfile をシンボリックリンクで上書きさせられる——リンク先は攻撃者制御の Git 設定やフックを置いたディレクトリで、クローンしたユーザーのシステム上で実行される。**CVE-2026-95839（7.1、CVSS 4.0）**：containerd（2.2.0 から 2.2.10/2.3.7/2.4.2 まで）は、manifest が不正な digest を持つ `io.containerd.manifest.subject` アノテーションを運ぶイメージのプルでデーモンをクラッシュさせる——「including through a default CRI PullImage request」（既定の CRI PullImage リクエスト経由を含む）——つまり敵性または乗っ取られたレジストリが、そこからプルする Kubernetes ノードを落とせる。2.2.10、2.3.7、2.4.2 で修正済み。
+
+**Why it matters:** どちらも、あらゆるCIシステムが通る2つの操作——clone と pull——の信頼境界のバグで、しかも普通のコマンドで発火し、エキゾチックなフラグは要らない。見知らぬURLへの再帰クローンの前に、Git のパッチレベルと containerd のマイナーを釘付けしよう。
+
+[`🔗 GHSA-vp2w-7xxj-jvxr（Git）`](https://github.com/git/git/security/advisories/GHSA-vp2w-7xxj-jvxr) · [`🔗 GHSA-vwhp-8p66-mq4f（containerd）`](https://github.com/containerd/containerd/security/advisories/GHSA-vwhp-8p66-mq4f)
+
+---
+
+## 34. Phison SSD コントローラファームウェア：漏洩したRSAパラメータがベンダコマンドを解錠——ドライブ上で任意のメモリ読み書き、一時的なコード実行
+
+- **Velocity:** ▮ steady
+- **Source:** NVD（CERT/CC 記録、2026-11-16 20:00Z – 11-17 04:00Z に公開）· CVE-2026-126828 など
+- **Tags:** `cve` `firmware` `ssd` `hardware-security`
+
+CERT/CC の開示ウェーブが一夜で Phison SSD コントローラファームウェアを打った：**CVE-2026-126828**（E18。ファームウェア EIFM80.0 と EIFK51.2）——管理者権限を持つローカル攻撃者が「by leveraging leaked RSA parameters found in vendor utility binaries」（ベンダユーティリティバイナリに見つかった漏洩RSAパラメータを利用して）ドライブの「Security Access」ハンドシェイクを迂回し、**任意のメモリ読み書き**を許すベンダ専用コマンドを解錠できる。さらに「the firmware's code regions lack protection（ファームウェアのコード領域は保護されていない）」ため、これらのプリミティブは既存ハンドラを上書きし、SSDコントローラ上での**一時的なコード実行**に至る。同批の記録は E16（EGFM13.2、CVE-2026-129187）と E12（ECFM32.2、CVE-2026-129190）をカバーし、VulnCheck の別件 **CVE-2026-124017（6.7）** は E12/E18 での**Secure Boot バイパス**——特権攻撃者が改変ファームウェアを実行できる——を記述する。NVD状態はすべて `Received`。関連研究リポジトリ（VL4DR/PhisonExecutor）は本日プッシュされた。
+
+**Why it matters:** これはOSより下の攻撃面だ：ディスク暗号化もSecure BootもOSレベルのフォレンジクスも、黙って信頼している層がそこにある。ローカル管理者からコントローラ上のコード実行という道は、物理アクセスや悪意ある内部関係者の物語が必要とする昇格パスそのものだ——そしてファームウェア修正の時計は、OSパッチとは違う。
+
+[`🔗 CVE-2026-126828 記録`](https://www.cve.org/CVERecord?id=CVE-2026-126828) · [`🔗 VL4DR/PhisonExecutor`](https://github.com/VL4DR/PhisonExecutor)
+
+---
+
+## 35. lend：herdr 作者の、エージェント認証情報スプロールへの答え——エージェントはリースであなたのノートPCの道具を借り、秘密そのものは見えない
+
+- **Velocity:** ▮ steady
+- **Source:** blog.antonio.cx · 52+ pts on HN · 3.2h ago (~09:20 UTC+8)
+- **Tags:** `agent-infrastructure` `credentials` `security` `cli`
+
+11月12日にこのフィードが取り上げたコーディングエージェント向けRust端末マルチプレクサ **herdr** の続き：作者が今、欠けていた一片を公開した——**lend**、「a tool built to let remote agents use tools on my laptop with my approval」（リモートエージェントが私の承認のもとでノートPCの道具を使えるように作った道具）。構図：エージェントは使い捨てVMで動き、ノートPCは王冠の宝石を保持する（SSH鍵、1Password ヴォルト、ログイン済みの `gh` とクラウドCLI）。エージェントが必要になると lend がリースで仲介し、「secrets the agent never sees（エージェントが決して見ない秘密）」を保持し、作者は事後にエージェントのしたことを見られ、ノートPCからエージェントのプロンプトに答えることさえできる。投稿は境界にも率直だ：「What lend doesn't protect against（lendが防げないもの）」の節が丸ごとあり、先行研究もある。
+
+**Why it matters:** 認証情報の問題は、エージェントインフラの地味な半分だ——誰もがトークンをVMに貼り付けて解決している。リースと承認で、秘密をエージェントの手の届かない場所に置くこの模型は、OpenCode がブラウザ側で選んだハンドオフ境界（第26項）と同じ信頼線が、端末で独立に生えたものだ。
+
+[`🔗 antonio's blog：Running coding agents without handing them my credentials`](https://blog.antonio.cx/running-agents-with-lend) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50526152)
+
+---
+
+## 36. psychic：あなたの開けたものを学ぶ fzf——自分の使用データでMLモデルを訓練してランク付けする Rust のファイルブラウザ
+
+- **Velocity:** ▮ steady
+- **Source:** klauria.tech · 44+ pts on HN · 13.4h ago (~23:10 UTC+8)
+- **Tags:** `cli` `rust` `ml` `developer-tools`
+
+Kshitij Lauria の **psychic**（「like fzf but learns from your actions」、fzf のようだがあなたの行動から学ぶ）は、どのディレクトリを訪れどのファイルを開けたかを記録し、そのローカルデータで軽量MLモデルを訓練し、それで結果をランク付けする端末ファイルブラウザ兼 `cd` の置き換えだ——オープンソース（kshitijl/psychic、Rust）。結果はタイプに合わせ即時更新し、UIは16ミリ秒未満で描画される。作者自身の使用数値が売りを具体的にする：2025年10月からのオープン回数1,450回、正しいファイルが一番に来るまでの平均タイプ数は**1.6文字**、29%はゼロ文字——開けて、Enter、終わり。すべての設計が従うルールはひとつ：1キー押下1フレーム以内に更新できる速さ。
+
+**Why it matters:** 開発者個別の適応の波（コードベースを学ぶエディタ、コマンドを学ぶシェル）が、ファイルシステムのナビゲーションに届いた——そして率直な枠組み（「I'd rather do 10 fast searches … than 1 smart search」、賢い1回より速い10回の方がいい）は、MLをCLIのループに入れる正しい制約だ。
+
+[`🔗 klauria.tech：psychic`](https://klauria.tech/psychic/) · [`🔗 kshitijl/psychic`](https://github.com/kshitijl/psychic)
+
+---
+
+## 37. Sutra-OS：「AI agents は提案のみ」のセルフホスト・オントロジープラットフォーム——すべての変更はサーバー強制の提案であり、承認されて初めて効く
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 42+ pts · 5.1h ago (~07:30 UTC+8) · 0nelight/sutra-os 51★
+- **Tags:** `ontology` `self-hosted` `agent-governance` `data-lineage`
+
+今日の Show HN：**Sutra-OS**——「Scarce Units, Typed, Related, Actionable」——AGPL-3.0 のセルフホスト・オントロジープラットフォーム（beta）で、組織のデータを、あなたが所有するひとつのモデルに変える：型付き、リンクされ、サーバーが強制するルールを通してのみ変更され、血統がすべての数値を源流まで辿れる。9つのコア機能は、エージェント・ガバナンスのチェックリストのように読める：書き込みには扉がひとつ（アクションはサーバーが理由とともに拒否する）、**「deciding is not doing」（決めることと実行することは別。すべての変更は承認されるまで提案）**、**「AI agents only propose」（AIエージェントは提案のみ）**、モデルもデータもブランチに、アクセス制御は markings でサーバー強制、モデルは生成された型付きAPI、認証情報は独立した egress エージェントが保管、Writer/Calc/Visio 型ドキュメントがモデル上でライブ共編集。Webアプリ、Python SDK、CLI、REST API、エージェント、git のすべてが同じルールの下で動く。
+
+**Why it matters:** エージェントが提案し人間が承認する——このフィードが繰り返し扱ってきたガバナンスの型だ。OmniAgent の承認ゲート（と `find` プレフィックスを安全とみなした穴）が、強制の難しさを示した。その強制をプロンプトではなくサーバーに置くプラットフォームは、あの教訓のアーキテクチャ版だ。
+
+[`🔗 0nelight/sutra-os`](https://github.com/0nelight/sutra-os) · [`🔗 Show HN 議論`](https://news.ycombinator.com/item?id=50525052)
+
+---
+
+## 38. AIネイティブノートの先駆け Mem が1月15日に閉鎖——カテゴリの開拓者が5度の転換を経て幕を下ろす
+
+- **Velocity:** ▮ steady
+- **Source:** get.mem.ai · 21+ pts on HN · 2.3h ago (~10:15 UTC+8)
+- **Tags:** `shutdown` `notes` `ai-native` `saas`
+
+Mem——このAIネイティブノートアプリの軌跡は、カテゴリ全体の軌跡そのものだった（2022年の埋め込みベース「Similar Mems」、2022–23年の生成的 Smart Write、2024年の Mem Chat、2026年4月のMCPコネクタとChatGPTアプリ、2026年7月に iMessage/WhatsApp/Slack に届いたプロアクティブエージェント）——11月16日に閉鎖を発表した：**12月18日にノートは読み取り専用、2027年1月15日にサービス終了**、課金はすでに停止済み。創業者 Kevin Moody の告別の手紙は、Apple Notes、Notion、Obsidian への移行ガイドと、各時代のオリジナル告知投稿をリンクした異例に丁寧な回顧を添えている。
+
+**Why it matters:** AIが個人の知識を整理してくれるスタンドアロンアプリというカテゴリは、フロンティアベンダーが自社製品に吸収し続けている領域だ——そしてきれいなエクスポート経路と公表されたタイムラインを持つ閉鎖は、このフィードが扱うすべての依存先にユーザーが要求してよい別れの形だ。
+
+[`🔗 Mem：Mem is shutting down`](https://get.mem.ai/blog/mem-is-shutting-down) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50526537)
+
+---
+
+## 39. Uber の情報漏洩：約15万人分の運転手免許情報が、技術プロバイダの盗まれた認証情報経由で流出
+
+- **Velocity:** ▮ steady
+- **Source:** techcrunch.com · 26+ pts on HN · 5.9h ago (~06:35 UTC+8)
+- **Tags:** `breach` `uber` `third-party` `pii`
+
+Uber は**約15万人の運転手**に、個人情報と運転手免許データが**10月に同社の技術プロバイダ側で起きた漏洩**で盗まれたことを通知している（Zack Whittaker、TechCrunch）。今週カリフォルニア、アイオワなどを含む複数州の検事総長に提出した通知によれば：プロバイダは10月9日、ハッカーが侵入して**内部認証情報を盗み**、それを使ってプロバイダに預けられていたUberのデータへアクセスしたとUberに伝えた。盗まれたデータには氏名、住所、生年月日、運転手免許情報が含まれる。Uber 自身のシステムの侵害は示されていない——漏洩はベンダ関係を通って起きた。
+
+**Why it matters:** FBIがAIペネトレーションプラットフォームへの侵入の帰属を公表した（第3項）のと同じ週、今四半期の繰り返しパターンがまた的中した：落ちた境界は会社自身のものではなく——プロバイダの認証情報だった。ベンダの認証情報インベントリが、新しい攻撃表面マップだ。
+
+[`🔗 TechCrunch：Uber says hackers stole information on close to 150,000 driver's licenses`](https://techcrunch.com/2026/11/16/uber-confirms-hackers-stole-thousands-of-drivers-license-information-in-data-breach/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50524538)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-16T20:29:19Z |
-| Items | 20 |
-| Sources tracked | 23 (Hacker News, GitHub Trending, NVD/CVE, vendor blogs, AP/ABC News, FAA, engineering blogs) |
+| Generated | 2026-11-17T04:36:32Z |
+| Items | 39 |
+| Sources tracked | 40 (Hacker News, GitHub Trending, NVD/CVE, vendor blogs, AP/CNN News, FAA, engineering blogs, research groups) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

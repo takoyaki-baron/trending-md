@@ -1,8 +1,8 @@
 ---
 date: 2026-11-17
-updated: 2026-11-16T20:29:19Z
+updated: 2026-11-17T04:36:32Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 23
+sources: 40
 license: CC-BY-4.0
 ---
 
@@ -288,13 +288,279 @@ Mike Masnick's 2007 post is back on the front page: his brand-new ThinkPad z61t 
 
 ---
 
+## 21. Carnegie Mellon puts its CS classroom on YouTube — 8 full courses premiere this month, an AI Agents course among them
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** cs.cmu.edu · 915+ pts on HN · 7.8h ago (~04:40 UTC+8)
+- **Tags:** `education` `cmu` `courses` `open-access`
+
+Carnegie Mellon's School of Computer Science opened **CS Learn** (cs.cmu.edu/learn): full classroom lectures from its faculty, free on YouTube — "Free lectures now on YouTube. Free courseware coming next." Eight courses premiere this month, including **10-605 Machine Learning with Large Datasets** (William Cohen), **15-442 Machine Learning Systems** (Tianqi Chen and Zhihao Jia), and — premiering Thursday — **11-768 AI Agents** (Daniel Fried and Graham Neubig), with 17-645 Machine Learning in Production (Christian Kästner and Bogdan Vasilescu) the same day. January brings Probability and Computing (Mor Harchol-Balter), Multimodal ML, and more. The roadmap goes beyond video: self-paced courseware with instant feedback and badges is next, and "AI tutoring is coming to the courseware experience."
+
+**Why it matters:** MIT opened its course site to agents last week; CMU is now putting its entire lecture hall on YouTube with an agents course in the lineup and AI tutoring on the roadmap — the top CS schools are racing to make their teaching the free training corpus for both humans and agents.
+
+[`🔗 CMU SCS: CS Learn`](https://www.cs.cmu.edu/learn/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50522980)
+
+---
+
+## 22. Windows 11 quietly tracks which coding agents you run — MissionControlAggregator.dll matches claude.exe, codex.exe, cursor.exe and reports usage to Diagnostics
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** xusheng.dev · 332+ pts on HN · 5.6h ago (~06:52 UTC+8)
+- **Tags:** `windows` `telemetry` `privacy` `coding-agents`
+
+Reverse engineer Xusheng Li asked AI to hunt for undocumented features in Windows binaries and hit a list of coding agents inside **MissionControlAggregator.dll**: `copilot.exe`, `claude.exe`, `codex.exe`, `agy.exe` in four CLI-agent slots (with extensionless equivalents on the WSL route), and `github.exe`, `claude.exe`, `codex.exe`, `cursor.exe`, `antigravity.exe` in five desktop-agent slots. The names feed executable-name matchers behind a feature flag named **CLICodingAgentUsage** (feature ID 62580080); the component records which agents and developer tools have been used, caches that locally, and reports it into Windows Diagnostics — and "unless you have opted out of the 'optional' diagnostic data (which is enabled by default), the data is uploaded to Microsoft."
+
+**Why it matters:** Agent adoption is now a signal worth building OS-level instrumentation for — and the instrumentation itself is the privacy story. If you manage machines, the takeaway is concrete: "optional diagnostic data" now includes which AI tools your developers run.
+
+[`🔗 Xusheng Li: Windows 11 Is Collecting Data on Which Coding Agents and Developer Tools You Use`](https://xusheng.dev/posts/windows-coding-agent-telemetry/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50524736)
+
+---
+
+## 23. BugMeNot shuts down after two decades — "Thanks to everyone who envisioned a better internet"
+
+- **Velocity:** ▮▮ rising
+- **Source:** bugmenot.com · 384+ pts on HN · 6.9h ago (~05:35 UTC+8)
+- **Tags:** `internet-history` `privacy` `login-walls`
+
+BugMeNot — the decades-old shared-credential service that let people bypass "create a free account to read this article" walls — is closed. The site now renders a single farewell page: "**BugMeNot has closed. Thanks to everyone who envisioned a better internet**" — with no stated reason, followed by a block of four-letter groups nobody in the thread has explained yet. The community's eulogy is honest about the decline: recent working logins were mostly throwaway addresses (bugmenot@mailinator.com, yopmail accounts), and one user found it still useful "as recently as a month or two ago" before discovering the closure today.
+
+**Why it matters:** It's an artifact of the pre-walled web dying in the same week this feed covered registration walls, scraping bans and login-gated everything. The farewell line reads as a verdict on how that trade went.
+
+[`🔗 BugMeNot farewell page`](https://www.bugmenot.com/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50523601)
+
+---
+
+## 24. United Airlines' 30-minute system outage delays flights nationwide — the second systemic tech failure of the same day
+
+- **Velocity:** ▮▮ rising
+- **Source:** cnn.com · 204+ pts on HN · 6.3h ago (~06:15 UTC+8)
+- **Tags:** `outage` `airlines` `reliability`
+
+United Airlines acknowledged a **widespread technology outage** impacting departing flights just before 5 p.m. ET Monday and resolved it about an hour later — a roughly 30-minute failure that delayed outbound flights at US airports, with **fewer than 150 flights impacted**, per spokesperson Leslie Scott. CNN notes it came "on the heels of a rare FAA ground stop that caused massive disruption." No cause given. The same day, five major US banks reported simultaneous access problems (item 1) — different sectors, no common cause identified, one very bad day for concentration risk.
+
+**Why it matters:** Two unrelated systemic failures in one news cycle is exactly the pattern resilience researchers warn about: individually survivable failures that look, from the outside, like infrastructure groaning under the same load. Postmortems for both are still pending.
+
+[`🔗 CNN: United Airlines says it resolved system outage that delayed flights`](https://www.cnn.com/2026/11/16/us/united-airlines-outage) · [`🔗 AP: United Airlines has a widespread system outage`](https://apnews.com/article/united-airlines-outage-5a5e5f75bb07f11ffb8750901f0076ff)
+
+---
+
+## 25. OPTIMJACK: 178 sites served malware through Optimizely's own CDN — the attacker wrote into customers' Project JavaScript, and the kit delivered iOS exploits
+
+- **Velocity:** ▮▮ rising
+- **Source:** blog.report-uri.com · 163+ pts on HN · 5.6h ago (~06:55 UTC+8)
+- **Tags:** `supply-chain` `skimware` `magecart` `optimizely`
+
+On November 16, malicious JavaScript was served to visitors of **178 organisations** through Optimizely Web's snippets — Zoom, BBC, CNN, Salesforce, GitLab, IKEA, HSBC, Equifax, Air France-KLM, Ledger and Peacock among them (Scott Helme, Report URI). The compromise was surgical: the attacker wrote code into the **Project JavaScript** field of customer projects in the Optimizely dashboard, so the poisoned code still loaded from `cdn.optimizely.com` with Optimizely's certificate — customers' own origins stayed clean. The kit swapped crypto wallet addresses, skimmed payment cards, stole cookies and screenshots, and on iPhones and iPads delivered the **Coruna and DarkSword iOS exploit kits**; crypto has already been stolen, with verified transactions. Cleanup tracked live: 169 of 188 infected snippets at 20:56 UTC down to 1 of 188 at 21:52 UTC. An independent writeup names the campaign **OPTIMJACK** (a loader inside the Optimizely bundle appends `track.js`; C2 at `1688360[.]cc` plus two `.icu` hosts).
+
+**Why it matters:** "Trusted JavaScript doesn't always remain trustworthy" — a third-party tag platform is a single point of compromise for every site that embeds it. If your site loads any experimentation or snippet manager, audit what your bundle serves today; a CSP in report mode would have surfaced this.
+
+[`🔗 Report URI: World's Largest Brands Infected With Malware Via Optimizely`](https://blog.report-uri.com/worlds-largest-brands-infected-with-malware-via-optimizely/) · [`🔗 Amirul Cyber: OPTIMJACK writeup`](https://amirulcyber.com/2026/11/16/optimjack-optimizely-skimmer/)
+
+---
+
+## 26. OpenCode ships Browse: your real browser as an agent's tool — real tabs, real logins, handoff for the 2FA step
+
+- **Velocity:** ▮▮ rising
+- **Source:** opencode.ai · 157+ pts on HN · 7.2h ago (~05:25 UTC+8)
+- **Tags:** `mcp` `browser` `agent-infrastructure` `opencode`
+
+OpenCode launched **Browse**: "An MCP server and a Chromium extension that let your agents use your real browser, with your tabs, your logins and your extensions." Agent tabs open in the background in collapsed groups across Chrome, Edge, Brave, Arc, Helium, Vivaldi, Opera and Chromium; agents read pages, click, type, take screenshots and record tabs. The interesting boundary is the **handoff**: when a login, 2FA prompt or payment is needed, the agent hands the tab back to you and resumes once you click Continue — plus a toolbar button to "lend" a tab you already have open, and an allowed-sites list to pin an agent's tab to named domains. Works from any MCP client (OpenCode, Claude Code, Cursor, Codex, Zed).
+
+**Why it matters:** Agent browsers have been split between headless throwaway profiles (no logins) and screenshot-driven computer use (slow, blind). Browse bets on a third path — your actual authenticated browser as the substrate, with the human kept in the loop at exactly the steps where credentials are involved.
+
+[`🔗 OpenCode: Browse`](https://opencode.ai/product/browse) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50523459)
+
+---
+
+## 27. One overnight CVE wave hits the agent stack itself: Phoenix 10.0 (env-var theft), CubeSandbox 9.4 (sandbox escape), MCP Python SDK 7.5 (OAuth credential leak)
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD (28 GitHub-CNA records published 2026-11-16 20:00Z – 11-17 04:00Z)
+- **Tags:** `cve` `agent-infrastructure` `mcp` `sandbox-escape`
+
+Three of the overnight GitHub-CNA records land on the agent stack's own plumbing, every score CNA-assigned and still `Received` at NVD. **CVE-2026-53998 (10.0)**: Arize-Ai's Phoenix AI-observability platform (13.0.0 until 15.7.0) passed attacker-controlled F-string templates through its `applyChatTemplate` GraphQL query, and `DotDict.__getattr__` failed to block traversal through private attributes — `__class__`, `__init__`, `__globals__` — letting a crafted field **read process environment variables**, where API keys live. **CVE-2026-120699 (9.4, CVSS 4.0)**: CubeSandbox, Tencent Cloud's "instant, concurrent, secure, and lightweight sandbox for AI agents", let any authenticated tenant pass `metadata["host-mount"]` with an arbitrary existing host path — no authorization check or allowed-prefix validation — mounting host directories into the sandbox; fixed in 0.5.1. **CVE-2026-115563 (7.5)**: the official **MCP Python SDK** (1.9.1 until 1.30.0, and 2.2.0) shipped OAuth clients that could send credentials to an authorization server chosen by an untrusted MCP server — `ClientCredentialsOAuthProvider` and `PrivateKeyJWTOAuthProvider` "cannot identify the authorization server that owns their credentials."
+
+**Why it matters:** Environment variables are where keys live, sandboxes are the trust boundary, OAuth is how agents authenticate — the three CVEs hit exactly those three assumptions, in the three layers (observability, sandbox, protocol SDK) every serious agent deployment stands on. Patch list: Phoenix ≥ 15.7.0, CubeSandbox ≥ 0.5.1, MCP SDK off the affected range.
+
+[`🔗 GHSA-gfv3-m769-5xm3 (Phoenix)`](https://github.com/Arize-ai/phoenix/security/advisories/GHSA-gfv3-m769-5xm3) · [`🔗 GHSA-qx49-fqc8-xw99 (MCP Python SDK)`](https://github.com/modelcontextprotocol/python-sdk/security/advisories/GHSA-qx49-fqc8-xw99)
+
+---
+
+## 28. ChatGPT Wallet: agents get a real wallet — card tokens, per-purchase biometric approval, Amex/Chase/Mastercard/Visa attached
+
+- **Velocity:** ▮▮ rising
+- **Source:** openai.com · 46+ pts on HN · 13.4h ago (~23:10 UTC+8)
+- **Tags:** `agentic-commerce` `payments` `openai` `chatgpt`
+
+OpenAI launched **ChatGPT Wallet** — "the first wallet that lets agents pay without access to users' actual card details and that requires a security check for every purchase" — built with American Express, Chase, Mastercard and Visa. The flow: user adds a card once; before each purchase the agent's items, total and selected card are reviewed; approval is a biometric security check; the payment network then issues a **token** standing in for the card, so neither the agent nor the merchant sees real card details, while existing rewards and dispute protections carry over. It rolls out **today in dots** for ChatGPT Pro subscribers 18+ in the US with eligible US-issued cards. Alongside it comes a Commerce Partner Playbook: Web Bot Auth for signed agent requests, fraud-stack partners (Forter, Riskified, Sardine, Signifyd), PSP integrations (Adyen, Checkout.com, Stripe) — and, eventually, fully-delegated purchases bounded by spending limits and categories.
+
+**Why it matters:** After United's agent-booking ban and x402's pay-per-call experiments, the card networks have picked a side: agent payments are becoming regulated infrastructure with biometric authorization records, not hacks. The compliance surface every merchant builds next week just got a spec.
+
+[`🔗 OpenAI: Introducing ChatGPT Wallet`](https://openai.com/index/introducing-chatgpt-wallet/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50518501)
+
+---
+
+## 29. Anthropic's IPO roadshow claim, read carefully: Mythos brought Claude up on AMD MI355X in ~3 days — for prefill, on one model
+
+- **Velocity:** ▮▮ rising
+- **Source:** tomshardware.com · 29+ pts on HN · 3.3h ago (~09:10 UTC+8)
+- **Tags:** `anthropic` `claude-mythos` `amd` `cuda`
+
+Anthropic told IPO investors that **Claude Mythos Preview** got Claude running on AMD Instinct MI355X GPUs "in just three days with basically no human intervention," porting or writing "almost 100% of the kernels" — against a 6–12-month estimate with dozens of engineers for historical accelerator bring-up (co-founder and chief compute officer Tom Brown, Nov 10 roadshow video; the prospectus S-1/A No. 2 carries the claim without a number). Tom's Hardware's reading of the slide footnote is the part to quote: the ~3 days covers "**prompt processing for one Anthropic model on AMD MI355X GPUs at a useful level of performance**" — decode performance is unstated, the chart's "~100%" axis never says 100% of what, and no AMD-vs-Nvidia speed comparison was disclosed. Context: AMD's July keynote showed one engineer + Claude bringing up an MI355X rack over a weekend; Jensen Huang calls Anthropic "a unique instance, not a trend" — while Nvidia and AMD are among seven companies buying $26.0B of Anthropic's stock at the IPO price.
+
+**Why it matters:** If kernel-porting collapses from months to days, the CUDA moat becomes a benchmark question rather than an engineering one — but the claim's fine print (prefill-only, one model, no speed baseline) is exactly the delta-vs-setup ambiguity this feed keeps flagging. The repeat experiment arrives with the first MI450 Helios racks in H1 2027.
+
+[`🔗 Tom's Hardware: Anthropic says Claude Mythos slashed software work to onboard AMD GPUs`](https://www.tomshardware.com/tech-industry/artificial-intelligence/anthropic-says-claude-mythos-slashed-software-work-to-onboard-amd-gpus-from-up-to-12-months-to-around-three-days-writing-almost-100-percent-of-kernels-autonomously-chips-away-at-nvidias-cuda-moat) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50526264)
+
+---
+
+## 30. Harmonic's Aristotle expands into Rust: prove no UB and spec conformance "even inside unsafe blocks"
+
+- **Velocity:** ▮ steady
+- **Source:** harmonic.fun · 110+ pts on HN · 11.1h ago (~01:30 UTC+8)
+- **Tags:** `formal-verification` `rust` `ai` `harmonic`
+
+Harmonic announced **Aristotle now verifies Rust**, extending its AI-driven formal verification beyond C and Verilog. With Rust support it can "prove that your code has no undefined behavior and does exactly what its spec says, **even inside unsafe blocks**" — and for C-to-Rust rewrites, prove the new code behaves the same as the original. CEO Tudor Achim: "Rust is where much of the world's most critical new code is being written, and increasingly, AI is the one writing it." The company's published case studies give the flavor of what it claims to catch: a Verilog design with bugs "found 110,000 cycles deep in its hardest block," LibTomMath proven 31–38% faster against the same spec, and 28 results across an entire Rust order book.
+
+**Why it matters:** It lands the same day as Buzzard's four-part checklist for AI-math claims verified in Lean (item 4) — the AI-code era is splitting into two QA stacks, statistical (tests, benchmarks) and mechanized (proofs, verifiers), and a verifier that eats Rust — the language the safety-critical rewrite wave chose — is the more consequential of the two.
+
+[`🔗 Harmonic: Aristotle Expands Into Rust`](https://www.harmonic.fun/news/aristotle-rust-verification) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50520270)
+
+---
+
+## 31. Jolt: Clojure that speaks C — self-hosted on a Scheme layer, no JVM, single-binary builds with native C interop
+
+- **Velocity:** ▮ steady
+- **Source:** jolt-lang.net · 99+ pts on HN · 12.2h ago (~00:20 UTC+8)
+- **Tags:** `clojure` `lisp` `languages` `compilers`
+
+**Jolt** is a self-hosted Clojure implementation running on a portable Scheme layer with multiple backends — Chez Scheme natively, Gambit for JavaScript — and no JVM anywhere. The pitch: "Most Clojure runs unchanged, any C library binds natively, and `jolt build` ships a single standalone binary." `defcfn` turns C functions into ordinary Clojure fns (the docs' own examples reach SQLite, Postgres, OpenSSL and zlib this way); `jolt build` ahead-of-time-compiles runtime, stdlib, app and deps into one self-contained executable with C dependencies statically linked. Full Clojure semantics are claimed — persistent data structures, lazy seqs, transducers, multimethods, protocols — with real OS-thread concurrency (`future`, `agent`, `pmap`, `core.async`). The homepage REPL is Jolt itself compiled to JavaScript by the Gambit backend, evaluating live in your browser.
+
+**Why it matters:** Two decades after Clojure bet on the JVM, Jolt demonstrates the dialect's semantics can detach from it entirely — and the Scheme-hosting trick is a genuinely elegant portability story: one language, native binaries and a browser REPL from the same source tree.
+
+[`🔗 Jolt: Clojure that speaks C`](https://jolt-lang.net/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50519345)
+
+---
+
+## 32. Spamhaus starts enforcing HELO/PTR/A-record alignment this month — the email baseline tightens for every sender
+
+- **Velocity:** ▮ steady
+- **Source:** spamhaus.org · 77+ pts on HN · 6.9h ago (~05:35 UTC+8)
+- **Tags:** `email` `deliverability` `spamhaus` `dns`
+
+Spamhaus' new Sender Guidelines carry a dated requirement: "**Starting in November 2026, we are gradually rolling out a requirement for every sending IP to have a valid HELO, a reverse DNS (PTR) record, and a matching A record**" — with a HELO/DNS checker tool to test your own stack. The guidelines organize the rest of the bar in six sections: infrastructure and DNS, authentication (SPF/DKIM/DMARC), permission and list hygiene (spamtraps included), sending best practices (warm-up, bounce management, unsubscribe), IP and domain reputation, and ESP/large-sender obligations.
+
+**Why it matters:** Most deliverability advice is folk wisdom; this is a blocklist operator converting its acceptance criteria into a public, dated, checkable spec. If you run your own mail server, the HELO/PTR/A triangle is now table stakes — and the checker tells you in one call whether you pass.
+
+[`🔗 Spamhaus: Sender Guidelines`](https://www.spamhaus.org/sender-guidelines/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50523784)
+
+---
+
+## 33. Git's `clone --recurse-submodules` flaw (8.0) and containerd's manifest panic (7.1) ride the same overnight wave
+
+- **Velocity:** ▮ steady
+- **Source:** NVD (GitHub-CNA records published 2026-11-16 20:00Z – 11-17 04:00Z)
+- **Tags:** `cve` `git` `containerd` `supply-chain`
+
+Two more GitHub-CNA records worth their own line. **CVE-2026-111760 (8.0)**: in Git before 2.50.2/2.51.3/2.52.1/2.53.1/2.54.1/2.55.1/2.56.1, an **attacker-hosted repository** (one "hosted by the attacker rather than on a normal forge site") exploiting `git clone --recurse-submodules` can get Git to overwrite a submodule gitfile with a symbolic link pointing at a directory holding attacker-controlled Git configuration or hooks — which then execute on the cloning user's system. **CVE-2026-95839 (7.1, CVSS 4.0)**: containerd (2.2.0 until 2.2.10/2.3.7/2.4.2) crashes the daemon on image pulls whose manifest carries an `io.containerd.manifest.subject` annotation with a malformed digest — "including through a default CRI PullImage request," i.e. a hostile or compromised registry can take down Kubernetes nodes that pull from it. Fixed in 2.2.10, 2.3.7 and 2.4.2.
+
+**Why it matters:** Both are trust-boundary bugs in the two operations every CI system walks through — clone and pull — and both trigger on ordinary commands, not exotic flags. Pin your Git patch level and your containerd minor before the next recursive clone of an unfamiliar URL.
+
+[`🔗 GHSA-vp2w-7xxj-jvxr (Git)`](https://github.com/git/git/security/advisories/GHSA-vp2w-7xxj-jvxr) · [`🔗 GHSA-vwhp-8p66-mq4f (containerd)`](https://github.com/containerd/containerd/security/advisories/GHSA-vwhp-8p66-mq4f)
+
+---
+
+## 34. Phison SSD controller firmware: leaked RSA parameters unlock vendor commands — arbitrary memory read/write and volatile code execution on the drive itself
+
+- **Velocity:** ▮ steady
+- **Source:** NVD (CERT/CC records published 2026-11-16 20:00Z – 11-17 04:00Z) · CVE-2026-126828 et al.
+- **Tags:** `cve` `firmware` `ssd` `hardware-security`
+
+A CERT/CC disclosure wave hit Phison SSD controller firmware overnight: **CVE-2026-126828** (E18; firmware EIFM80.0 and EIFK51.2) — a local attacker with administrative privileges can bypass the drive's "Security Access" handshake "by leveraging leaked RSA parameters found in vendor utility binaries," unlocking vendor-specific commands that permit **arbitrary memory read and write** on the controller; because "the firmware's code regions lack protection," those primitives can overwrite existing handlers and achieve **volatile code execution on the SSD controller**. Sibling records cover E16 (EGFM13.2, CVE-2026-129187) and E12 (ECFM32.2, CVE-2026-129190), and VulnCheck's separate **CVE-2026-124017 (6.7)** describes a **Secure Boot bypass** on E12/E18 allowing a privileged attacker to run patched firmware. All are `Received` at NVD; the linked research repo (VL4DR/PhisonExecutor) was pushed today.
+
+**Why it matters:** This is below-the-OS attack surface: the layer that disk encryption, Secure Boot and OS-level forensics all silently trust. Local-admin-to-controller-code-execution is exactly the escalation path a physical-access or malicious-insider story needs, and firmware fixes arrive on a different clock than OS patches.
+
+[`🔗 CVE-2026-126828 record`](https://www.cve.org/CVERecord?id=CVE-2026-126828) · [`🔗 VL4DR/PhisonExecutor`](https://github.com/VL4DR/PhisonExecutor)
+
+---
+
+## 35. lend: the herdr author's answer to agent credential sprawl — agents borrow your laptop's tools through leases, and never see the secrets
+
+- **Velocity:** ▮ steady
+- **Source:** blog.antonio.cx · 52+ pts on HN · 3.2h ago (~09:20 UTC+8)
+- **Tags:** `agent-infrastructure` `credentials` `security` `cli`
+
+Since we covered **herdr**, the Rust terminal multiplexer for coding agents, on Nov 12: its author has now published the missing piece — **lend**, a tool built "to let remote agents use tools on my laptop with my approval." The setup: agents run on disposable VMs while the laptop keeps the crown jewels (SSH keys, 1Password vault, logged-in `gh` and cloud CLIs); when an agent needs one, lend mediates the request through leases, keeps "secrets the agent never sees," lets the author see what the agent did afterward, and even answers agent prompts from the laptop. The post is candid about scope: a whole section on "What lend doesn't protect against," plus prior art.
+
+**Why it matters:** The credential problem is the unfashionable half of agent infrastructure — everyone solves it by pasting tokens into VMs. A lease-and-approve model with secrets held outside the agent's reach is the same trust boundary OpenCode's handoff chose on the browser side (item 26), arriving independently in the terminal.
+
+[`🔗 antonio's blog: Running coding agents without handing them my credentials`](https://blog.antonio.cx/running-agents-with-lend) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50526152)
+
+---
+
+## 36. psychic: fzf that learns what you open — a Rust file browser that ranks with an ML model trained on your own usage
+
+- **Velocity:** ▮ steady
+- **Source:** klauria.tech · 44+ pts on HN · 13.4h ago (~23:10 UTC+8)
+- **Tags:** `cli` `rust` `ml` `developer-tools`
+
+Kshitij Lauria's **psychic** ("like fzf but learns from your actions") is a terminal file browser and `cd` replacement that records which directories you visit and files you open, trains a lightweight ML model on that local data, and ranks results with it — open source (kshitijl/psychic, Rust), with results updating as you type and a UI that renders in under 16 ms. The author's own usage numbers make the pitch concrete: 1,450 opens since October 2025, **1.6 characters typed on average** before the right file is on top, and 29% of the time zero characters — open, hit enter, done. The design rule everything follows: fast enough to update within one frame of a keypress.
+
+**Why it matters:** The per-developer adaptation wave (editors that learn your codebase, shells that learn your commands) has now reached filesystem navigation — and the honest framing ("I'd rather do 10 fast searches … than 1 smart search") is the right constraint for ML-in-the-loop CLI tools.
+
+[`🔗 klauria.tech: psychic`](https://klauria.tech/psychic/) · [`🔗 kshitijl/psychic`](https://github.com/kshitijl/psychic)
+
+---
+
+## 37. Sutra-OS: a self-hosted ontology platform where "AI agents only propose" — every change is a server-enforced proposal until approved
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 42+ pts · 5.1h ago (~07:30 UTC+8) · 0nelight/sutra-os at 51★
+- **Tags:** `ontology` `self-hosted` `agent-governance` `data-lineage`
+
+Show HN today: **Sutra-OS** — "Scarce Units, Typed, Related, Actionable" — an AGPL-3.0 self-hosted ontology platform (beta) that turns an organization's data into one owned model: typed, linked, changed only through rules the server enforces, with lineage tracing every number to its source. Its nine core features read like an agent-governance checklist: one door for every write (an action the server refuses with its reason), **"deciding is not doing" (every change is a proposal until approved)**, **"AI agents only propose"**, model and data on branches, server-enforced access markings, a generated typed API as the model, credentials held by a separate egress agent, and Writer/Calc/Visio-style documents co-edited live on the model. Web apps, Python SDK, CLI, REST API, agents and git all work under the same rules.
+
+**Why it matters:** The idea that an agent proposes and a human approves has been this feed's recurring governance pattern — OmniAgent's approval gate (and its `find`-prefix hole) showed how hard enforcing it is. A platform where the enforcement lives in the server, not in a prompt, is the architectural version of that lesson.
+
+[`🔗 0nelight/sutra-os`](https://github.com/0nelight/sutra-os) · [`🔗 Show HN discussion`](https://news.ycombinator.com/item?id=50525052)
+
+---
+
+## 38. Mem, the AI-native notes pioneer, shuts down January 15 — a category originator closes after five years of pivots
+
+- **Velocity:** ▮ steady
+- **Source:** get.mem.ai · 21+ pts on HN · 2.3h ago (~10:15 UTC+8)
+- **Tags:** `shutdown` `notes` `ai-native` `saas`
+
+Mem — the AI-native note-taking app whose arc traced the whole category (embeddings-based "Similar Mems" in 2022, generative Smart Write in 2022–23, Mem Chat in 2024, an MCP connector and ChatGPT app in April 2026, a proactive agent reaching into iMessage/WhatsApp/Slack in July 2026) — announced its closure on Nov 16: **notes become read-only December 18, the service shuts down January 15, 2027**, and billing has already paused. Founder Kevin Moody's note pairs the farewell with a migration guide to Apple Notes, Notion, Obsidian and friends, plus an unusually thorough retrospective linking every era's original launch post.
+
+**Why it matters:** Standalone apps built around AI-organized personal knowledge are a category the frontier vendors have been absorbing into their own products — and a shutdown with clean export paths and a published timeline is the goodbye users should demand from every dependency this feed covers.
+
+[`🔗 Mem: Mem is shutting down`](https://get.mem.ai/blog/mem-is-shutting-down) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50526537)
+
+---
+
+## 39. Uber breach: ~150,000 drivers' license data stolen through a tech provider's stolen credentials
+
+- **Velocity:** ▮ steady
+- **Source:** techcrunch.com · 26+ pts on HN · 5.9h ago (~06:35 UTC+8)
+- **Tags:** `breach` `uber` `third-party` `pii`
+
+Uber is notifying **close to 150,000 drivers** that their personal information and driver's license data were stolen in an **October breach at one of the company's tech providers** (Zack Whittaker, TechCrunch). Per notices filed this week with state attorneys general including California and Iowa: the provider told Uber on October 9 that hackers had broken in and **stole internal credentials**, which were then used to access Uber's data held with that provider. The stolen data includes names, addresses, dates of birth and driver's license information. Uber's own systems are not described as compromised — the breach rode a vendor relationship.
+
+**Why it matters:** The same week the FBI attributed intrusions to an AI pentest platform (item 3), the quarter's recurring pattern holds: the perimeter that fell wasn't the company's — it was a provider's credentials. Vendor credential inventories are the new attack-surface map.
+
+[`🔗 TechCrunch: Uber says hackers stole information on close to 150,000 driver's licenses`](https://techcrunch.com/2026/11/16/uber-confirms-hackers-stole-thousands-of-drivers-license-information-in-data-breach/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50524538)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-16T20:29:19Z |
-| Items | 20 |
-| Sources tracked | 23 (Hacker News, GitHub Trending, NVD/CVE, vendor blogs, AP/ABC News, FAA, engineering blogs) |
+| Generated | 2026-11-17T04:36:32Z |
+| Items | 39 |
+| Sources tracked | 40 (Hacker News, GitHub Trending, NVD/CVE, vendor blogs, AP/CNN News, FAA, engineering blogs, research groups) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
