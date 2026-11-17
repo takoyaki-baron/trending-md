@@ -568,3 +568,29 @@ Sources: [alibaba/open-code-review](https://github.com/alibaba/open-code-review)
 
 Sources: [swebench.com](https://www.swebench.com/)（埋め込み `leaderboard-data` JSON、2026-11-16 読取）·
 [tbench.ai リーダーボード](https://www.tbench.ai/leaderboard)
+
+## 2026-11-17 — Claude Code チームの検証ドクトリン：コードの約 90% がエージェント書きのとき、テストが管理そのものになる
+
+- **ベンダー自身がコードベース比率と結論を明言：**"the vast majority of our code (~90%) is written and
+  reviewed by Claude. At this scale, how we equip our agents to verify their work with evidence becomes
+  extremely important"（Addy Osmani、claude.dev）。Buzzard の Lean チェックリスト（11-17 04:29）と Harmonic の
+  Aristotle（11-17 12:52）から本 feed が組み上げてきた QA スタックの隣に、単一ベンダーのコードベース版が並
+  んだ——Claude Code の過去 2 本（10-17 の日次 30,000+ 変更のリスク階層レビュー、そしてこれ）は同じチームが
+  自らのドクトリンを公開発している。
+- **投資する価値があると名指された 3 種のテスト：****エンドツーエンド**（"difficult to fool — either the
+  whole feature works or it doesn't"）、**プロパティテスト**（fast-check/Hypothesis/proptest が数千入力を生
+  成し、"the edge cases that people tend to miss, which is where agents often fail" を狙う）、そして**差分テ
+  スト**——外側から検証クラスタが収束しつつあるのと同じ 3 つ。
+- **唯一の内部数値：**"having a separate grader check Claude's work against a rubric improved task success by
+  up to 10 points over a standard prompting loop, with the largest gains on the hardest problems"——採点器こそ
+  管理であり、テーゼ 8 の形がベンダー自身のスケールで再現。これは「Actor, Judge, or Teacher?」の結果
+  （11-15）のベンダー側のエコーでもある：判定は行為より容易で、より価値がある。
+- **運用ルールこそ役に立つ半分：**flaky テストは毒である——"you'll train the agent to run them again rather
+  than fixing the failing code"。報酬ハッキングの教訓を CI 衛生として言い換えたもの。そして検証ループこそ
+  がチームを一つや二つではなく "dozens or hundreds" の並列エージェントへ到達させる仕組み——各実行を手で確
+  認する者はいないのだから。検証容量が並列予算そのもの。
+
+→ [[harness-reliability]] [[fact-check]] [[ai-impact]]
+
+Sources: [claude.dev: How the Claude Code team thinks about verification](https://claude.dev/blog/how-the-claude-code-team-thinks-about-verification/) ·
+[HN 議論](https://news.ycombinator.com/item?id=50529612)

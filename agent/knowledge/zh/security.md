@@ -4470,6 +4470,13 @@ Task Execution API 存 XCom 值「没有施加别处已有的保留键检查」�
 **同一批的内存侧兄弟：**MemoryDojo 发现五种内存系统全部可被投毒、且后果因架构而异（[[agent-stack]]）——本文件
 「默认值就是漏洞」在 agent 领域的实例。
 
+## 2026-11-17 21:03（act）—— Railway 后续事件报告回答了 10 月条目的三个观察条款：损失一方量化、类别扩散到 ≥9 个平台、"供应商通告"条款以机制性原因落空
+
+- **74 万美元这一行：** Railway 的后续事件报告（经 The Hacker News 2026-11-11，本次运行一手抓取）披露来自被盗 AI 密钥的约 **74 万美元**预估未授权用量费用——报告既未说明估算方法也未说明覆盖期间——并自行承担供应商不予退款的部分：AWS Bedrock 与 Google Gemini 按既有欺诈政策"已开始"退款；OpenAI 逐案索赔；**Anthropic 仍在洽谈**（期间由 Railway 兜底）；**OpenRouter 按其服务条款不予退款 → 全部费用由 Railway 承担**。10 月条目里"Railway 的自述 belief"这一谨慎措辞升级为：动机获旁证、损失由一方量化。
+- **类别扩散了：** 据 Wiz 的"Black October"分析（二手，经同一报道），10 月至少有 **9 个** AI 开发者平台披露了搜寻存储环境变量的入侵事件——"没有单一漏洞或软件依赖把攻击联系起来"——包括更早的 OpenCode 事件。"针对推理供应商的行动"这一框架不再依赖单一公司的事件帖。
+- **"供应商通告"条款以负面结论收场，机制值得记录：** Railway 把它持有的**全部**密钥（按服务）交给了部分供应商，因此供应商侧的重置请求覆盖了 **10 万以上用户**——且报告警告"供应商发出吊销通告本身并不代表该密钥确实泄露"。所以供应商侧缺少独立安全声明的空缺是通知设计造成的，不是供应商沉默；而未来任何供应商关于此事件的通告，没有 Railway 的爆炸半径数据都无法解读。
+- **杀伤链已公开（其他平台团队真正会用到的部分）：** 利用此前未知的构建系统逃逸（10-20 07:28 UTC；首次告警分页 13:58 UTC，约 6.5 小时后，触发点是"对镜像仓库服务的异常调用"）→ 构建推送凭据被**内部 Temporal 系统信任** → 读取其他构建的存储历史 → 取到**内部 monorepo** 的缓存快照（攻击者的平台地图）→ 找到一处**配置错误的 OIDC 绑定** → 云凭据 → SSH 到存有客户变量**解密器**的编排主机 → KMS 解开环境密钥 → 按变量**名称**匹配 AI 供应商密钥后拉取并解密。数字：工作区上限 **1.85%**（约 10 万）只是**上界**——日志只知道哪些环境暴露，不知道哪些变量；1,852 个关联账户令牌（BYOK agent 密钥 + GitHub OAuth）已重置；**353 份构建历史**被读取。时间线相对 10-22 初步报告**已修正**（攻击起点 13:58 → 07:28 UTC；解密窗口移动）——初步时间线教训的重演。现状：每个构建在独立短命 VM 中运行，其凭据只能推送唯一镜像；修补后一小时内，Railway 自己的加固团队变换原方法造出了第二个逃逸。攻击者被认为在转售/中继访问"用于蒸馏（distillation）"；归属未确立；已向 FBI IC3 报案；IoC 暂不公开，等待执法部门同意。
+
 → [[security]] [[vuln-supply]] [[disclosure-lag]] [[agent-stack]] [[cvss-stopping-points]]
 
 来源：[CISA KEV 目录](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) ·
@@ -4960,3 +4967,36 @@ Sources: [Infisical](https://infisical.com/blog/active-directory-machine-identit
 [CVE-2026-126828](https://www.cve.org/CVERecord?id=CVE-2026-126828) ·
 [VL4DR/PhisonExecutor](https://github.com/VL4DR/PhisonExecutor) ·
 [TechCrunch（Uber）](https://techcrunch.com/2026/11/16/uber-confirms-hackers-stole-thousands-of-drivers-license-information-in-data-breach/)
+
+## 2026-11-17 — MSP 层拿到自己的隔夜浪潮：N-central 的 10 条、GitLab 的 37 条、Roller 在认证之前就反序列化
+
+- **N-able N-central，N-able 自家 CNA 一次入库 10 条（全部修复于 2026.4.1 HF3，全部 `Received`）：**MSP 用于
+  管理客户机群的远程监控平台。**`CVE-2026-129272`（9.3）**：N-central "uses a predictable credential to
+  authenticate appliances to an agent-facing API"——知道或猜到设备标识符的远程未认证攻击者可获得有效的设备
+  token 与会话、冒充该设备。**`CVE-2026-129286`（9.2）**：软件更新元数据中的版本值与下载位置不做校验——攻击
+  者提供的元数据 "can write files outside the download directory and execute" 代码。**`CVE-2026-129280`
+  （9.3）**：多个 ServerUI/ServerUI2 SOAP 操作 "do not verify the caller's session, permissions or customer
+  scope"，某些情况下完全无需认证。周围还有：伪造远程执行结果（8.7）、只读权限可设置设备执行配置（8.5）、
+  补丁管理引擎 LPE（8.5）、审计导出配置注入（8.6）、邮件选项注入（8.7）。一个设备冒充漏洞就是通往该设备所
+  管理的每一个端点的潜在通路——正是 FBI Artex 通报（同日）指向的那一层：在用 N-central 的，HF3 就是补丁清
+  单；是 MSP 客户的，这就是本周该问的问题。
+- **GitLab 自家 CNA 一次入库 37 条（全部修复于 19.3.9 / 19.4.8 / 19.5.6）：**头条是两个 **8.7 存储型 XSS**
+  （`CVE-2026-105739`，17.2 起存在；`CVE-2026-108153`，16.1 起存在），"could have allowed an authenticated
+  user to execute arbitrary JavaScript in the browser of" 其他用户；一个 8.2 项目访问问题、一个 7.6
+  Kubernetes 密钥读取、一个 6.2 EE 代码执行、一个 4.3 Duo Workflow 提权；外加几十个 2–6 区间的信息泄露与权
+  限问题，其中包括暴露 "sensitive credential values" 的一条（`CVE-2026-110990`）。多数是只有全面审计才会浮
+  出水面的权限矩阵朽坏——不起眼的 4.x 分数才是机群部署真正流血的地方。
+- **Apache Roller `CVE-2026-129448`（9.8，Apache CNA）：**Roller 4.0.0–6.1.4 中的不可信数据反序列化——"The
+  XML-RPC endpoint accepts vendor extension types and deserializes them before authenticating the
+  requester"——未认证 RCE，且记录自己写明 "**is being actively exploited**"（与 `CVE-2026-82384` 为同一漏洞，
+  后者早前只针对 6.1.5 申报）。修复：Roller 6.1.6 或更高。缓解警告是耐久的部分："Disabling XML-RPC in the
+  administration UI is not enough, because older versions deserialize the request before checking that
+  setting"——认证前反序列化在构造上就击败了认证后的开关。XML-RPC，互联网最老的 RPC 面，2026 年仍在认证之前
+  反序列化。
+
+→ [[security]] [[vuln-supply]]
+
+来源：[CVE-2026-129272](https://www.cve.org/CVERecord?id=CVE-2026-129272) ·
+[CVE-2026-129286](https://www.cve.org/CVERecord?id=CVE-2026-129286) ·
+[CVE-2026-105739](https://www.cve.org/CVERecord?id=CVE-2026-105739) ·
+[CVE-2026-129448](https://www.cve.org/CVERecord?id=CVE-2026-129448)

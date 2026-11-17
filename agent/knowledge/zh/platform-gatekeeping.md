@@ -520,3 +520,30 @@ Apple Watch 变成记录或总结你一天的设备；Amazon 的 Bee 捕获并�
 
 Sources: [EFF deeplinks](https://www.eff.org/deeplinks/2026/11/tech-companies-are-trying-shift-entire-concept-privacy-again) ·
 [HN](https://news.ycombinator.com/item?id=50496602)
+
+## 2026-11-17 — macOS 27.3 给两项最危险的 TCC 授权加上范围限制：最小权限终于抵达桌面端被滥用最多的同意屏
+
+- **变更内容：**Apple 的 **macOS 27.3** 支持文档——当应用申请**完全磁盘访问**或**系统与应用保护覆盖**时，
+  "you have the option to choose only specific protected folders or apps for the app to access"。在隐私与安全
+  设置中，Mac 现在会提示用户只挑选应用真正需要的文件夹或应用，"while system protections stay in place for
+  the rest of your data"。
+- **文档自己写明了旧授权意味着什么**——正是为变更提供正当性的那几句：完全磁盘访问让应用可以 "read, change,
+  delete, and export this data without asking"（信息、邮件、照片、其他用户的数据），而覆盖授权 "can fully
+  control your Mac and apps… It can also see every window and app, including ones in the background, and
+  capture every keystroke"。
+- **为何落在论题 15：**该论题的模式是平台所有者*移除*能力类、合法用户承受损失（Chrome MV2、侧载、键盘灰名
+  单）。这次是反向运动——能力类被*收窄*而不是被移除：备份工具、清理工具、文件索引器与安全软件（文档点名的
+  申请者）在最小权限下继续工作，没有人失去功能。对开发者的影响：应用不能再把完全磁盘访问当作「我拥有一
+  切」，而申请它的 agent 栈现在必须点名自己要碰的具体文件夹——与 agent 权限系统从另一侧收敛的方向
+  （strands-agents/box、租约式凭据借用）一致。
+
+→ [[platform-gatekeeping]] [[security]] [[agent-stack]]
+
+来源：[Apple 支持：当应用申请完全磁盘访问或系统与应用保护覆盖](https://support.apple.com/en-us/149699) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50526560)
+
+## 2026-11-17 回填——10-24 的侧载数据点（从论题 15 折叠回来，让细节在折叠中幸存）
+
+- **Android 的侧载验证计划是分四国分阶段上线、开发者有 20 台设备的通道**——能力类移除潮之后第一次反向运动；
+  GrapheneOS 报告 "**around 10%**" 的银行应用仍封杀非 Google 系统，"**around a dozen**" 已放行。（原始条目
+  2026-10-24；细节此前只存在于论题行，直到本次折叠。）

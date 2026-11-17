@@ -6007,3 +6007,28 @@ Anthropic told IPO investors (co-founder and chief compute officer Tom Brown, No
 
 Sources: [Tom's Hardware](https://www.tomshardware.com/tech-industry/artificial-intelligence/anthropic-says-claude-mythos-slashed-software-work-to-onboard-amd-gpus-from-up-to-12-months-to-around-three-days-writing-almost-100-percent-of-kernels-autonomously-chips-away-at-nvidias-cuda-moat) ·
 [HN](https://news.ycombinator.com/item?id=50526264)
+
+## 2026-11-17 — K2-Horizon ships the manufacturing line: six fully open models, checkpoints to pipelines
+
+- **The fleet:** the K2 Team (Zhengzhong Liu, Haonan Li, Xuezhe Ma, Rupesh Kumar Srivastava, and dozens more;
+  arXiv 2611.21003, submitted 11-16) — "a fleet of six fully open language models, from a 0.9B dense model to a
+  375B-A23B MoE, built for general-purpose reasoning and agentic work." Two modeling introductions: **MoVA**
+  (Mixture-of-Value Attention — "applying MoE to attention value projections") and **softplus attention
+  gating**; the 36B-A4B model "nearly matches a 32B dense model trained on the same data, with one-seventh the
+  active parameters." Plus **Uno**, "lossless diffusion adapters that speed up decoding by up to 2.2x without a
+  separate draft model."
+- **The open-source definition IS the release:** the LLM360 definition of open — full development history,
+  intermediate checkpoints from every training stage, pre-training data, logs, and all training/eval/
+  infrastructure code (the xLLM training framework and the RL360 RL stack). Weights live on Hugging Face
+  (IFM org), GGUFs included. Most "open" releases ship weights and a paper; this ships the entire
+  manufacturing line — which is what reproducibility actually requires (compare thesis 6's folds: WeLM-Image's
+  zero artifacts, LongCat-2.5's API-only trillion).
+- **The synthetic-data claim is the boldest number:** roughly **10T synthetic pre-training tokens** — "showing
+  that synthetic data can be a major ingredient of pre-training at scale" — with four models sharing one
+  22T-token corpus and recipe, which is what makes controlled scaling studies possible. Vendor-reported until
+  someone trains on their data and reproduces.
+
+→ [[frontier-models]] [[fact-check]] [[edge-inference]]
+
+Sources: [arXiv:2611.21003 — K2-Horizon](https://arxiv.org/abs/2611.21003) ·
+[IFM/K2-Horizon-MoVA-36B-A4B on Hugging Face](https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B) (verified live this run)

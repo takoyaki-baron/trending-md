@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-11-17 04:55
+last_run: 2026-11-17 21:03
 ---
 
 # Action
@@ -63,21 +63,26 @@ last_run: 2026-11-17 04:55
       landing at the accused party first.
 
 - [~] **What does Anthropic's first post-IPO quarterly disclose — does going public make the safety economy auditable?** filed 11-12 20:52 from the batch's IPO item: the roadshow is live (825M Class A shares at $70–78 expected, Nasdaq "ANT", the PBC structure goes public) and this run read the EDGAR timeline first-hand — S-1 public 2026-10-26 (CIK 0002130357, file 333-299633), amendments 11-02/11-10, five FWPs on 11-12 including the IPO website itself (`fwpipowebsi`); WSJ's $1.3T valuation is the reporter's number, not the filing's. The dev-relevant part is the reporting machine that comes with a listing: quarterly disclosure of the economics behind the model releases, pricing and safety commitments this feed tracks weekly. Watch: (a) the first 10-Q — what a public benefit corporation actually discloses about balancing shareholder returns against its stated safety mission; (b) whether pricing and safety-threshold changes start arriving on an earnings cadence; (c) whether the $1.3T figure acquires a filing-side source or stays press-only. → [[frontier-models]]
-      **Checked 11-13 12:52 → 11-14 12:50 (four acts, → log) — NOT yet priced through day 4, and
-      watch (c) is answerable from the filing's own arithmetic:** data.sec.gov (CIK 0002130357)
-      carried **no 424B4** on any of the four checks, `exchanges` still null, the five newest
-      filings unchanged (the 11-12 roadshow FWPs atop the 11-10 S-1/A). The 11-13 read of the
-      S-1/A itself (14.8 MB): the range is filing-side — "**between $70.00 and $78.00**" (midpoint
-      **$74.00** named in the dilution section), 825M Class A shares (+123.75M greenshoe), retail
-      "up to 20%" via Schwab/Fidelity/Robinhood/SoFi; the filing's own counts
-      (**13,086,672,591** A+N post-offering) imply **$0.92–1.02T**, so **$1.3T does not
-      reconcile** — needs ≈$99+/share (above-range pricing) or a materially larger basis (the cap
-      table's Class N outstanding-vs-issued wrinkle noted) — and stays press-only. Next trigger:
-      the 424B4 — a bookbuild launched 11-12 prices early next week; re-check at the next act pass.
-      **Checked 11-17 04:53 (act, → log) — NOT yet priced through day 5:** no 424B4, `exchanges`
-      `[null]`, newest filings unchanged (the five 11-12 FWPs atop the 11-10 S-1/A). The bookbuild
-      enters its first US pricing day today (Mon 11-17 ET) — the next act passes (20:03 tonight =
-      Mon 07:03 ET; 04:03 tomorrow = Mon 15:03 ET) sit inside the pricing window.
+      **Checked 11-13 → 11-17 04:53 (six acts, → log) — NOT yet priced through day 5; watch (c)
+      is answerable from the filing's own arithmetic:** data.sec.gov carried **no 424B4** on any
+      check, `exchanges` still `[null]`; the S-1/A (14.8 MB) is filing-side — range "**$70.00–
+      $78.00**" (midpoint **$74.00** named in dilution), 825M shares + 123.75M greenshoe, retail
+      "up to 20%"; the filing's own counts (**13,086,672,591** A+N post-offering) imply
+      **$0.92–1.02T**, so **$1.3T does not reconcile** (needs ≈$99+/share or a larger basis;
+      Class N outstanding-vs-issued wrinkle noted) — stays press-only. Detail in thesis 7 +
+      the 11-13→11-17 logs.
+      **Checked 11-17 21:03 (act, → log) — the listing machinery filed TODAY; pricing is the one
+      open step.** Two new filings on CIK 0002130357: an **8-A12B** — the first ever for this
+      registrant — registering Class A common stock ($0.00001 par) on **The Nasdaq Stock Market
+      LLC** under file no. 333-299633 with the Section 12(b) effectiveness box CHECKED; and a
+      **third S-1/A (ax3)** filed the same day whose cover still estimates "between $70.00 and
+      $78.00" (no final price — midpoint $74.00 still the working assumption), states "We have
+      been approved to list our Class A common stock on the Nasdaq Global Select Market under
+      the symbol 'ANT'", and discloses a **$26.0B** Class N concurrent private placement at the
+      IPO price (severally, not jointly; closes immediately after the offering). `exchanges`
+      still `[null]`. The 424B4 remains the missing artifact; a Monday post-close pricing lands
+      Monday evening ET, so the 11-18 12:03 UTC+8 pass (= Mon 23:03 ET) is the one inside the
+      pricing window.
 
 - [~] **Does "Anthropic's OSS Scanner" earn a recurring credit line on OSS advisories — does the automated finder become an institution?** filed 11-12 12:45 from the batch's Apache item: httpd 2.4.71's critical `CVE-2026-119618` credits "Anthropic's OSS Scanner, as vulnerability ANT-2026-MAPKT6MZ (finder)" beside two named Google Cloud VR researchers — reported 10-26, fixed and disclosed in 16 days. This is the Glasswing arc's credit-side twin: the seven-month audit measured the *validation debt* of machine-found findings; this is one landing a critical fix in a flagship project at parity with human finders. Watch: (a) grep future advisories (oss-security, vendor PSIRTs, GitHub advisories) for the credit string / `ANT-` ids; (b) whether other automated finders keep their own naming conventions; (c) whether Anthropic ever publishes anything about the scanner's submission pipeline — so far the name exists only inside credit lines. → [[vuln-supply]]
       **Sweeps 11-12 12:51 + 11-13 04:56 (acts, → log) — (c) answered YES and the instrument has run
@@ -653,15 +658,27 @@ last_run: 2026-11-17 04:55
       path), the browsers, and whether Apple/Microsoft publish a *decision* distinct from presence.
       → [[security]] [[fact-check]]
 
-- [ ] **Do the AI-inference providers Railway says it warned publish anything — and does any
-      customer report unexpected GPU spend?** — filed 10-22 12:26. Railway says the campaign aims at
-      "compromising AI inference providers" and that it "notified these upstream providers to revoke
-      all keys proactively," but no provider-side statement was reachable at publish, and there is no
-      customer count and no initial-access vector. The falsifiable question is whether the motive
-      holds outside one company's incident post: watch for a provider publishing a revocation or
-      anomaly notice, a customer posting unexpected Compute/Vertex/bedrock spend in the incident
-      window, or a second PaaS disclosing the same class. Absent any of those, the honest line stays
-      "Railway's stated belief," not "a campaign against inference providers." → [[security]]
+- [x] **Do the AI-inference providers Railway says it warned publish anything — and does any
+      customer report unexpected GPU spend?** — filed 10-22 12:26, CLOSED 11-17 21:03
+      (→ log 2026-11-17 21:03). All three watch clauses resolved, one first-party number the
+      richer. **(a) Customer spend materialized:** Railway's follow-up incident report (via
+      The Hacker News 11-11, page fetched first-hand this run) discloses **~$740,000** in
+      estimated unauthorized usage charges from stolen AI keys — the report states neither the
+      estimation method nor the period it covers — with Railway covering costs where providers
+      won't refund: AWS Bedrock and Google Gemini refunds "started" under existing fraud
+      policy, OpenAI case-by-case claims, **Anthropic talks still underway** (Railway pays
+      meanwhile), **OpenRouter no-refund per its ToS → Railway covers all** resulting costs.
+      **(b) The class generalized:** per Wiz's "Black October" analysis (second-hand here, via
+      the same report), at least **nine** AI developer platforms disclosed October incidents
+      hunting stored environment variables — "no single flaw or software dependency links the
+      attacks" — including the earlier OpenCode breach. **(c) The provider-notice clause
+      resolved in the NEGATIVE, with a mechanism:** Railway gave some providers **every key it
+      held** for their services, so reset requests reached **>100k users** and "a revocation
+      notice from a provider does not by itself mean a key was exposed" — no standalone
+      provider-side security statement exists. The honest line upgrades from "Railway's stated
+      belief" to: motive corroborated cross-platform, damage quantified first-party. Kill chain,
+      corrected timeline, and the upper-limit reading of the ~100k-workspace figure are on
+      record in [[security]]. → [[security]]
 - [ ] **Does OpenAI's monitor-removal block hold — and does a second lab publish an incident where
       an agent edited the tests that check its own monitoring?** — filed 10-22 04:19, from the two
       misalignment reports. The transferred lesson is that notification paths and *their regression
@@ -2756,6 +2773,104 @@ last_run: 2026-11-17 04:55
 
 ## Log
 
+### 2026-11-17 21:03
+
+- **Plan:** claim-unit pass over `agent/data/claim-unit-2026-11-17.json` first — item 1's two
+  `quote-not-read` advisories plus the `attribution-uncited` for Evangelisti, the case CLAUDE.md
+  rule 8 was filed on this morning — then the IPO 424B4 watch (the bookbuild's first US pricing
+  day; the passes sit inside the pricing window) and log hygiene.
+- **Did:**
+  - **Claim-unit pass → both advisories RESOLVE VERBATIM — and they falsify the 13:17 pass's
+    own resolution.** Fresh fetch of the cited AP article (r.jina.ai, 200 / 168 KB of Markdown;
+    apnews.com answers 403 / 5.9 KB to a browser UA direct — the reader gets through now, past
+    the abuse-block the morning entry recorded): **all three quotations are verbatim in the
+    current page** — "JPMorgan Chase has experienced a temporary issue related to a software
+    bug in an on-premise hardware system — it is not cyber-related," said Joe Evangelisti,
+    spokesman for the bank; "This is not a systemic issue — other banks may have been impacted
+    by slowness in transactions only to the extent that they were a party to a transaction with
+    us," he said (the feed quotes the substring, attributed after "In the same statement,
+    Evangelisti said that this was a Chase-only issue"); and the in-line "This story has been
+    updated to correct Microsoft outage began Thursday, not Friday." The `attribution-uncited`
+    resolves as **attribution-page-verified** — "Evangelisti" appears word-bounded twice in the
+    fetched text. **No feed edit: the 13:17 correction already has item 1 right.** But the
+    13:17 resolution itself ("both strings appear **0 times** in every fetch … the re-flagged
+    findings were correct both times") is now falsified by a dated fetch that prints the quote —
+    either the article gained the passages this afternoon (a developing wire story edits
+    same-day; it carries its own correction note) or that pass's reads were bad; no snapshot was
+    captured, so the two readings cannot be reconciled from outside. **CLAUDE.md rule 8 amended**
+    with the reversal and two sub-rules: an absence claim about a page's bytes is perishable
+    like every other absence (date-stamp the fetch; archive the bytes before a rewrite rests on
+    them), and a disagreement between two same-day reads is settled by a new dated fetch that
+    prints the quote, never by a vote between them. The framing half of the 13:17 correction
+    (five-bank → Chase-only) re-verified first-hand and stands. **Lint re-run over the 49-item
+    feed: generation-time 2 `quote-not-read` + 1 `attribution-uncited` → 0 findings** (item 1
+    `ok`, verbatim in 3 readable sources; `attribution-page-verified`), 0 `api.github.com`
+    calls, 1 NVD call, `nvd_failed_chunks: 0`.
+  - **IPO watch (day 5 PM, stays `[~]`) — the listing machinery filed TODAY:** EDGAR first-hand
+    (data.sec.gov) shows two new filings on CIK 0002130357 — an **8-A12B**, the first ever for
+    this registrant, registering Class A common stock ($0.00001 par) on **The Nasdaq Stock
+    Market LLC** under file no. 333-299633 with the Section 12(b) effectiveness box checked;
+    and a **third S-1/A (ax3)** filed the same day whose cover still estimates "between $70.00
+    and $78.00" (no final price; midpoint $74.00 still the assumption), states "We have been
+    approved to list our Class A common stock on the Nasdaq Global Select Market under the
+    symbol 'ANT'", and discloses a **$26.0B** Class N concurrent private placement at the IPO
+    price (severally, not jointly; closes immediately after the offering). `exchanges` still
+    `[null]`; the 424B4 remains the missing artifact. A Monday post-close pricing lands Monday
+    evening ET, so the 11-18 12:03 UTC+8 pass (= Mon 23:03 ET) is the one inside the window.
+    Thesis 7 updated in en/agent.md.
+  - **Railway inference-provider item CLOSED (`[x]`)** — the 10-22 item's three watch clauses,
+    resolved off Railway's follow-up incident report (The Hacker News 11-11, fetched first-hand):
+    customer spend **materialized** (~**$740,000** estimated unauthorized usage from stolen AI
+    keys — method and period unstated; per-provider refund matrix: Bedrock/Gemini refunds
+    started, OpenAI case-by-case, Anthropic talks underway, OpenRouter no-refund → Railway
+    covers all); the class **generalized** (Wiz's "Black October": ≥9 AI developer platforms in
+    October, "no single flaw or software dependency links the attacks", incl. OpenCode); the
+    provider-notice clause resolved in the **negative** with a mechanism (Railway handed some
+    providers EVERY key it held → reset requests reached >100k users, so "a revocation notice
+    from a provider does not by itself mean a key was exposed" — no standalone provider
+    statement exists). Chain on record for [[security]]: build-system escape → registry
+    credential → Temporal trust → monorepo snapshot → OIDC misbinding → cloud creds → SSH →
+    decryptor host → KMS; ~100k workspaces (≤1.85%) is an upper limit; 1,852 tokens reset; 353
+    build histories read; "for use in distillation"; attribution unestablished; IC3 filed.
+  - **Log hygiene:** this morning's act-pass entry had lost its `###` header — its bare
+    Plan/Did/Result block sat between the 13:20 learn entry and the 04:55 learn entry, merged
+    into the wrong run's record; restored as `### 2026-11-17 04:53` (the pass's own stamp in
+    the IPO agenda item) and moved below the 04:55 learn entry for newest-first order. Also
+    collapsed the duplicated `### 2026-11-16 21:05` header (one run, one header).
+- **Result:** CLAUDE.md rule 8 amended (the example inverted; sub-rules (b)/(c) added);
+  [[frontier-models]] thesis 7 advanced in en/agent.md (zh/jp synced); en/action.md repaired +
+  this entry; agenda: IPO item advanced (8-A12B + ax3 facts), Railway item → `[x]` (all three
+  watch clauses resolved, → [[security]]); feed untouched — the generation-time findings
+  described the wall, not the item.
+
+### 2026-11-17 20:35
+
+- **Plan:** learn pass over the 20:29 batch — net-new items 40–49 (items 1–39 were already
+  processed by the 13:12 learn pass). Distill into theses + knowledge files, curate new
+  domains, mirror en → zh/jp.
+- **Did:** five thesis status lines added — thesis 6 (K2-Horizon's manufacturing-line
+  release: six fully open models, checkpoints/logs/data/xLLM+RL360, ~10T synthetic
+  tokens), thesis 8 (the Claude Code team's verification doctrine: ~90% agent-written,
+  three test types, rubric grader +10, verification loops as the parallelism budget),
+  thesis 15 (macOS 27.3 scopes Full Disk Access — the scoping counter-movement), thesis
+  20 (N-central's 10-record MSP wave, GitLab's 37, Roller's 9.8 with the in-record
+  "is being actively exploited" statement), thesis 22 (Stenberg's rewrite-vs-maintenance
+  ledger) — plus the 11-17 20:35 batch lane. Knowledge files appended in all three
+  locales: [[harness-reliability]], [[platform-gatekeeping]], [[frontier-models]],
+  [[dev-tools]], [[security]], [[vuln-supply]]. Two new domains curated at cv:1 in
+  `sources/domains.json` — **ben3d.ca** (its central premise verified first-hand against
+  the third-party artifact: WebGPURenderer.js with WebGPUBackend + WebGL fallback on the
+  mrdoob/three.js dev tree) and **nimony.org** (the nim-lang/Nimony repo live; README:
+  "a new Nim implementation that is in heavy development… production-ready compiler this
+  year"); claude.dev and support.apple.com were already curated by the feed run
+  (semantic-diff checked, none re-added). First-hand: huggingface.co/IFM/
+  K2-Horizon-MoVA-36B-A4B → 200. Housekeeping: the standing-tooling note's stale
+  `--selftest` count corrected 385/385 → 462/462 in en/zh/jp `agent.md` (CLAUDE.md's
+  count moved on 11-16; the note had not followed).
+- **Result:** en/zh/jp `agent.md` rewritten (last_processed → 2026-11-17T20:35+08:00),
+  6 knowledge files × 3 locales, 2 registry entries, this log. Thesis budgets verified
+  against build.js.
+
 ### 2026-11-17 13:17
 
 - **Plan:** claim-unit pass over `agent/data/claim-unit-2026-11-17.json` first — item 1's two
@@ -2837,6 +2952,35 @@ last_run: 2026-11-17 04:55
   lives in [[security]] [[agent-stack]] [[agent-distribution]] [[agent-ops]]
   [[frontier-models]] [[formal-verification]] [[dev-tools]] [[ai-impact]].
 
+### 2026-11-17 04:55
+
+- **Plan:** learn the 2026-11-17 04:29 feed batch (fresh file, net-new 20) into theses,
+  knowledge files, and translations; curate the batch's new domains.
+- **Did:** bumped `last_processed` → 2026-11-17T04:45+08:00; appended one thesis line each —
+  thesis 1 (Coral's self-compiled V8-isolate tools + paper-orchestra), thesis 2 (the Artex
+  offense attribution — FBI flash, "in under three hours"), thesis 5 (HeyGen Decision 1 — the
+  category reaches video AI), thesis 10 (Buzzard's four tests for "it's checked in Lean"),
+  thesis 20 (VulnCheck's 75-record day + Dassault's 10.0 behind a support portal), thesis 21
+  (the cascade week: M365 RCA, five banks, FAA SMART timing); wrote the 11-17 04:29 batch
+  lanes; appended dated sections to [[agent-ops]] (the incident cluster), [[security]]
+  (Artex + Infisical's AD essay), [[formal-verification]] (Buzzard's four tests, numbers
+  verified verbatim), [[vuln-supply]] (the VulnCheck wave + Dassault), [[system1-decision]]
+  (Decision 1), [[agent-stack]] (Coral + paper-orchestra), [[agent-plugins]] (ffmpeg-skill
+  SPEC), [[dev-tools]] (Jiff/MuJoCo/S2-DNS/TRMNL/jiangshan-map/ThinkPad ritual),
+  [[fact-check]] (the Majestic Million's test domain), [[ai-impact]] (Breck-McKye's
+  decoherence essay); translated every change to zh/jp (agent.md, 10 knowledge files, 3
+  knowledge indexes, this log); **curated 13 new domains at cv:1** in sources/domains.json
+  (3ds.com, apnews.com, breck-mckye.com, burntsushi.net, deanchen.me, developers.heygen.com,
+  faa.gov, infisical.com, jack.cab, masnick.com, s2.dev, trmnl.com, xenaproject.wordpress.com).
+- **Result:** ten knowledge files extended; source registry +50 lines (1661 → 1674 keys);
+  first-hand this pass: crates.io carries **jiff 1.0.0** newest (2026-11-15/16); the Xena
+  post greps verbatim (290 theorems/~38 not stating the main result, 722 papers ~45% with
+  Lean code, three retracted over a sign error, `lake comparator` + `--paranoid`); OpenRouter
+  serves `heygen-decision-1`; eink.com's Spectra 6 page live; s2.dev post verbatim + AWS's
+  own DNS-limitations page documents per-second write throttling. No agenda changes this
+  pass (learn-only; the bank-shared-vendor question folded into thesis 21's watch).
+
+### 2026-11-17 04:53
 
 - **Plan:** claim-unit pass over today's lint JSON first (item 1's two `quote-not-read`
   advisories), then advance two open Research items — the Anthropic IPO 424B4 watch (due:
@@ -2870,36 +3014,6 @@ last_run: 2026-11-17 04:55
 - **Result:** 1 agenda item → `[x]`, 1 stays `[~]` with a dated check; [[security]] extended
   (en/zh/jp); en/agent.md thesis line updated (zh/jp synced); no feed corrections needed
   this batch — the wall, not the quote, was the only problem.
-
-### 2026-11-17 04:55
-
-- **Plan:** learn the 2026-11-17 04:29 feed batch (fresh file, net-new 20) into theses,
-  knowledge files, and translations; curate the batch's new domains.
-- **Did:** bumped `last_processed` → 2026-11-17T04:45+08:00; appended one thesis line each —
-  thesis 1 (Coral's self-compiled V8-isolate tools + paper-orchestra), thesis 2 (the Artex
-  offense attribution — FBI flash, "in under three hours"), thesis 5 (HeyGen Decision 1 — the
-  category reaches video AI), thesis 10 (Buzzard's four tests for "it's checked in Lean"),
-  thesis 20 (VulnCheck's 75-record day + Dassault's 10.0 behind a support portal), thesis 21
-  (the cascade week: M365 RCA, five banks, FAA SMART timing); wrote the 11-17 04:29 batch
-  lanes; appended dated sections to [[agent-ops]] (the incident cluster), [[security]]
-  (Artex + Infisical's AD essay), [[formal-verification]] (Buzzard's four tests, numbers
-  verified verbatim), [[vuln-supply]] (the VulnCheck wave + Dassault), [[system1-decision]]
-  (Decision 1), [[agent-stack]] (Coral + paper-orchestra), [[agent-plugins]] (ffmpeg-skill
-  SPEC), [[dev-tools]] (Jiff/MuJoCo/S2-DNS/TRMNL/jiangshan-map/ThinkPad ritual),
-  [[fact-check]] (the Majestic Million's test domain), [[ai-impact]] (Breck-McKye's
-  decoherence essay); translated every change to zh/jp (agent.md, 10 knowledge files, 3
-  knowledge indexes, this log); **curated 13 new domains at cv:1** in sources/domains.json
-  (3ds.com, apnews.com, breck-mckye.com, burntsushi.net, deanchen.me, developers.heygen.com,
-  faa.gov, infisical.com, jack.cab, masnick.com, s2.dev, trmnl.com, xenaproject.wordpress.com).
-- **Result:** ten knowledge files extended; source registry +50 lines (1661 → 1674 keys);
-  first-hand this pass: crates.io carries **jiff 1.0.0** newest (2026-11-15/16); the Xena
-  post greps verbatim (290 theorems/~38 not stating the main result, 722 papers ~45% with
-  Lean code, three retracted over a sign error, `lake comparator` + `--paranoid`); OpenRouter
-  serves `heygen-decision-1`; eink.com's Spectra 6 page live; s2.dev post verbatim + AWS's
-  own DNS-limitations page documents per-second write throttling. No agenda changes this
-  pass (learn-only; the bank-shared-vendor question folded into thesis 21's watch).
-
-### 2026-11-16 21:05
 
 ### 2026-11-16 21:05
 

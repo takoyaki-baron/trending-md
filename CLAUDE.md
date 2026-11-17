@@ -1747,17 +1747,37 @@ renumber or silently drop it:
    unclosed-delimiter class this section's sibling check exists to catch, one level up.)
 
 8. **An act-pass resolution of a lint finding is itself a claim — quote what you found.** (added
-   2026-11-17 13:17). When an act pass "resolves" a generation-time lint finding by asserting the
-   source carries the claim ("verified verbatim via the reader"), the resolution must quote the
-   verbatim string or name the cached page that carries it — a resolution that asserts
-   verification without quoting can itself be false, and the finding then survives uncorrected
-   while the log says it was handled. 2026-11-17: item 1's two Chase quotes were resolved as
-   "verbatim in the AP article" by the morning act pass; both strings appear **0 times** in the
-   article (the lint's own 172 KB reader-twin cache fetch, and a fresh fetch the same day) and
-   nowhere else on the open web — they were the feed's own paraphrase of AP's indirect speech
-   wearing quotation marks, and the re-flagged findings were correct both times. The rule this
-   exercises is the same one the lint's quotation arm enforces: *a quotation is a claim about
-   bytes*, and so is a claim that bytes were found.
+   2026-11-17 13:17; the filing case INVERTED same day 21:03). When an act pass "resolves" a
+   generation-time lint finding by asserting the source carries the claim ("verified verbatim
+   via the reader"), the resolution must quote the verbatim string or name the cached page that
+   carries it — a resolution that asserts verification without quoting can itself be false, and
+   the finding then survives uncorrected while the log says it was handled. The filing case, in
+   full, is now a three-reading disagreement: the morning act pass resolved item 1's two Chase
+   quotes as "verbatim in the AP article" **without quoting**; the 13:17 pass re-checked (the
+   lint's 172 KB reader-twin cache fetch plus a fresh fetch) recorded **0 hits** for both,
+   corrected the item's blast-radius framing (five-bank → Chase-only), and wrote the strings off
+   as the feed's paraphrase "wearing quotation marks"; and the 21:03 pass's fresh fetch
+   (r.jina.ai, 200 / 168 KB of Markdown, past the abuse-block the morning had recorded) has
+   **both strings verbatim** beside the third — "JPMorgan Chase has experienced a temporary
+   issue related to a software bug in an on-premise hardware system — it is not cyber-related,"
+   said Joe Evangelisti, spokesman for the bank; "This is not a systemic issue — other banks
+   may have been impacted by slowness in transactions only to the extent that they were a party
+   to a transaction with us," he said (after "In the same statement, Evangelisti said that this
+   was a Chase-only issue"); and the in-line "This story has been updated to correct Microsoft
+   outage began Thursday, not Friday." The re-run lint (0 findings, `ok` verbatim in 3 readable
+   sources, `attribution-page-verified` for Evangelisti ×2 in the fetched text) agrees with
+   21:03. Two same-day readings of one URL disagree and cannot be reconciled from outside: no
+   byte-level snapshot was captured at 13:17, and a developing wire story edits same-day (the
+   article carries its own correction note — proof it edits). The rules that survive: **(a)**
+   quote your resolution — it is what made the 13:17 claim checkable at all; **(b) an absence
+   claim about a page's bytes is perishable like every other absence** — "the string appears 0
+   times" is a claim about ONE fetch: date-stamp it, and archive the fetched bytes before
+   building a rewrite on them, so the absence stays re-checkable; **(c)** when two same-day
+   reads disagree, the tie-break is a **new dated fetch that prints the quote**, never a vote
+   between the two. The framing half of the 13:17 correction (Chase-only) was independently
+   re-verified at 21:03 and stands. The rule this exercises is the same one the lint's
+   quotation arm enforces: *a quotation is a claim about bytes*, and so is a claim that bytes
+   were found — and so is a claim that bytes were NOT found.
 
 A correction is the same fact-check discipline applied *after* publication: visit the primary
 source first, then edit. Never edit from the aggregate's framing.

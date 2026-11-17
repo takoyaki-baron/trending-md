@@ -4908,6 +4908,13 @@ Task Execution API が XCom 値を「他所で適用されている予約キー�
 **同じ日のメモリ側の兄弟：** MemoryDojo は五つのメモリシステムすべてが毒入れ可能で、影響はアーキテクチャで変わると
 示す（[[agent-stack]]）——本ファイルの「既定値が脆弱性」のエージェント版。
 
+## 2026-11-17 21:03（act）—— Railway のフォローアップ報告が 10 月項目の 3 つのウォッチ節に回答：損失は一次情報で量化、クラスは ≥9 プラットフォームに一般化、「プロバイダー通知」節はメカニズム付きで否定で決着
+
+- **74 万ドルの行：** Railway のフォローアップインシデント報告（The Hacker News 2026-11-11 経由、今回一次取得）は、盗まれた AI キーによる推定 **約 74 万ドル** の不正利用課金を開示した——推定方法も対象期間も報告書は示していない——そしてプロバイダーが返金しない分は Railway が負担する：AWS Bedrock と Google Gemini は既存の詐欺ポリシーで返金「開始」；OpenAI は件別審査；**Anthropic はまだ協議中**（当面は Railway が負担）；**OpenRouter は利用規約上返金なし → 関連費用は全額 Railway 負担**。10 月項目の「Railway の主張」という慎重な言い回しは、動機が裏付けられ損失が一次情報で量化された段階へ格上げ。
+- **クラスは一般化した：** Wiz の「Black October」分析（二次情報、同一報道経由）によれば、10 月に保存された環境変数を狙うインシデントを開示した AI 開発者プラットフォームは **9 以上**——「攻撃を結びつける単一の脆弱性やソフトウェア依存は存在しない」——先前の OpenCode 事件を含む。「推論プロバイダーを狙う作戦」という枠組みはもはや一社の事件投稿に依存しない。
+- **「プロバイダー通知」節は否定で決着、メカニズムが残る：** Railway は一部のプロバイダーに自社が保有する**全キー**を渡したため、プロバイダー側のリセット要求は **10 万人超**に届いた——そして報告書は「プロバイダーからの失効通知は、それ自体ではキーが露出したことを意味しない」と警告している。プロバイダー側に独立したセキュリティ声明がない欠落は、沈黙ではなく通知設計の帰結であり、今後のプロバイダー側通知は Railway の爆発半径データなしには解釈できない。
+- **公開されたキルチェーン（他のプラットフォームチームが実際に使う部分）：** 既知でなかったビルドシステム逃逸を悪用（10-20 07:28 UTC；初回ページングは 13:58 UTC、約 6.5 時間後、トリガーは「レジストリサービスへの異常な呼び出し」）→ ビルドのイメージ push 用の資格情報が**内部 Temporal システムに信頼される** → 他ビルドの保存履歴を読む → **内部 monorepo** のキャッシュスナップショットを取得（攻撃者にとってのプラットフォーム地図）→ **誤設定の OIDC バインディング**を発見 → クラウド資格情報 → 顧客変数の**復号器**を保持するオーケストレーションホストへ SSH → KMS が環境鍵を解錠 → 変数の**名前**で AI プロバイダーキーを照合して取得・復号。数字：ワークスペース **1.85%**（約 10 万）は**上限**——ログが示すのはどの環境が露出したかで、どの変数かは不明；1,852 個の連携アカウントトークン（BYOK agent キー + GitHub OAuth）をリセット；**353 件のビルド履歴**が読まれた。タイムラインは 10-22 の暫定報告から**修正済み**（攻撃開始 13:58 → 07:28 UTC；復号ウィンドウが移動）——暫定タイムラインの教訓の再演。現状：各ビルドは専用の短命 VM で走り、その資格情報は 1 つのイメージしか push できない；修正後 1 時間以内に Railway 自身の強化チームが方法を変えた第 2 の逃逸を構築。攻撃者はアクセスを中継・転売し「蒸留（distillation）に使用した」と考えられるが、帰属は未確定；FBI IC3 に申告済み；IoC は法執行機関の同意を待って非公開。
+
 → [[security]] [[vuln-supply]] [[disclosure-lag]] [[agent-stack]] [[cvss-stopping-points]]
 
 Sources: [CISA KEV カタログ](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) ·
@@ -5436,3 +5443,39 @@ Sources: [Infisical](https://infisical.com/blog/active-directory-machine-identit
 [CVE-2026-126828](https://www.cve.org/CVERecord?id=CVE-2026-126828) ·
 [VL4DR/PhisonExecutor](https://github.com/VL4DR/PhisonExecutor) ·
 [TechCrunch（Uber）](https://techcrunch.com/2026/11/16/uber-confirms-hackers-stole-thousands-of-drivers-license-information-in-data-breach/)
+
+## 2026-11-17 — MSP 層が自前の夜間波を手にする：N-central の 10 件、GitLab の 37 件、認証前に deserialize する Roller
+
+- **N-able N-central、N-able 自社 CNA から一斉 10 件（すべて 2026.4.1 HF3 で修正、すべて `Received`）：**MSP
+  が顧客フリート管理に使うリモート監視プラットフォーム。**`CVE-2026-129272`（9.3）**：N-central は "uses a
+  predictable credential to authenticate appliances to an agent-facing API"——アプライアンス識別子を知るか推
+  測できるリモートの未認証攻撃者が、有効なアプライアンストークンとセッションを取得してアプライアンスを偽
+  装。**`CVE-2026-129286`（9.2）**：ソフトウェア更新メタデータのバージョン値とダウンロード場所が無検証——
+  攻撃者供給のメタデータが "can write files outside the download directory and execute"。**`CVE-2026-129280`
+  （9.3）**：複数の ServerUI/ServerUI2 SOAP 操作が "do not verify the caller's session, permissions or customer
+  scope"、場合によっては認証なし。周辺には：遠隔実行結果の偽造（8.7）、閲覧専用権限でのデバイス実行設定変更
+  （8.5）、パッチ管理エンジンの LPE（8.5）、監査エクスポート経由の設定注入（8.6）、メールオプション注入
+  （8.7）。アプライアンス偽装 1 件が、そのアプライアンスが管理する全エンドポイントへの潜在通路になる——同
+  日の FBI Artex 告示が指すまさにその階層：N-central を使うなら HF3 がパッチリスト、MSP の顧客なら今週尋ね
+  べき質問。
+- **GitLab 自社 CNA が一斉 37 件（すべて 19.3.9 / 19.4.8 / 19.5.6 で修正）：**主力は 2 つの **8.7 ストアド
+  XSS**（`CVE-2026-105739`、17.2 から存在；`CVE-2026-108153`、16.1 から存在）——"could have allowed an
+  authenticated user to execute arbitrary JavaScript in the browser of" 他ユーザー；8.2 のプロジェクトアク
+  セス問題、7.6 の Kubernetes シークレット読み取り、6.2 の EE コード実行、4.3 の Duo Workflow 昇格；さらに
+  2〜6 帯の情報漏えいと権限バグが数十件、その中には "sensitive credential values" を露出したもの
+  （`CVE-2026-110990`）。ほとんどは全面監査だけが浮かび上がらせる権限マトリクスの静かな腐敗——地味な 4.x ス
+  コアこそフリート展開が実際に出血する場所。
+- **Apache Roller `CVE-2026-129448`（9.8、Apache CNA）：**Roller 4.0.0–6.1.4 の信頼できないデータの脱直列化
+  ——"The XML-RPC endpoint accepts vendor extension types and deserializes them before authenticating the
+  requester"——未認証 RCE で、レコード自身が "**is being actively exploited**" と明記（`CVE-2026-82384` と同
+  一脆弱性、先の申报は 6.1.5 のみ）。修正は Roller 6.1.6 以降。緩和の警告が耐久部分："Disabling XML-RPC in
+  the administration UI is not enough, because older versions deserialize the request before checking that
+  setting"——認証前脱直列化は構造上、認証後の kill switch を無効化する。インターネット最古の RPC 面であ
+  る XML-RPC が、2026 年になっても認証の前に deserialize している。
+
+→ [[security]] [[vuln-supply]]
+
+Sources: [CVE-2026-129272](https://www.cve.org/CVERecord?id=CVE-2026-129272) ·
+[CVE-2026-129286](https://www.cve.org/CVERecord?id=CVE-2026-129286) ·
+[CVE-2026-105739](https://www.cve.org/CVERecord?id=CVE-2026-105739) ·
+[CVE-2026-129448](https://www.cve.org/CVERecord?id=CVE-2026-129448)

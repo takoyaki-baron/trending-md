@@ -7869,3 +7869,76 @@ Sources: [GHSA-gfv3-m769-5xm3 (Phoenix)](https://github.com/Arize-ai/phoenix/sec
 [CVE-2026-126828](https://www.cve.org/CVERecord?id=CVE-2026-126828) ·
 [VL4DR/PhisonExecutor](https://github.com/VL4DR/PhisonExecutor) ·
 [TechCrunch (Uber)](https://techcrunch.com/2026/11/16/uber-confirms-hackers-stole-thousands-of-drivers-license-information-in-data-breach/)
+
+## 2026-11-17 — the MSP tier gets its own overnight wave: N-central's 10 records, GitLab's 37, Roller deserializing before it authenticates
+
+- **N-able N-central, 10 records from N-able's own CNA (all fixed 2026.4.1 HF3, all `Received`):** the
+  remote-monitoring platform MSPs use to manage customer fleets. **`CVE-2026-129272` (9.3)**: N-central "uses a
+  predictable credential to authenticate appliances to an agent-facing API" — a remote, unauthenticated
+  attacker who knows or guesses an appliance identifier obtains a valid appliance token and session and
+  impersonates the appliance. **`CVE-2026-129286` (9.2)**: no validation of version values and download
+  locations in software-update metadata — attacker-supplied metadata "can write files outside the download
+  directory and execute" code. **`CVE-2026-129280` (9.3)**: multiple ServerUI/ServerUI2 SOAP operations "do not
+  verify the caller's session, permissions or customer scope," in some cases without authentication. Around
+  them: forged remote-execution results (8.7), view-only permissions that can set device execution config
+  (8.5), patch-management-engine LPE (8.5), audit-export configuration injection (8.6), mail-option injection
+  (8.7). One appliance-impersonation bug is potential access to every endpoint that appliance manages — the
+  fleet-wide skeleton key tier the FBI's Artex advisory (same day) points at: if you run N-central, HF3 is the
+  patch list; if you're an MSP's customer, it's the question to ask them this week.
+- **GitLab's own CNA drops 37 records (all fixed 19.3.9 / 19.4.8 / 19.5.6):** the headliners are two **8.7
+  stored-XSS** bugs (`CVE-2026-105739`, present since 17.2; `CVE-2026-108153`, since 16.1) that "could have
+  allowed an authenticated user to execute arbitrary JavaScript in the browser of" other users; an 8.2
+  project-access issue; a 7.6 Kubernetes-secrets read; a 6.2 EE code-execution bug; a 4.3 Duo Workflow
+  "elevated privileges" escalation; plus dozens of 2–6-range info-disclosure and permission bugs including one
+  that exposed "sensitive credential values" (`CVE-2026-110990`). Mostly the quiet permission-matrix rot only a
+  full audit surfaces — the unglamorous 4.x scores are where fleet deployments actually bleed.
+- **Apache Roller `CVE-2026-129448` (9.8, Apache CNA):** deserialization of untrusted data in Roller
+  4.0.0–6.1.4 — "The XML-RPC endpoint accepts vendor extension types and deserializes them before
+  authenticating the requester" — unauthenticated RCE that the record itself states "**is being actively
+  exploited**" (the same vulnerability as `CVE-2026-82384`, earlier filed against 6.1.5 only). Fix: Roller
+  6.1.6 or later. The mitigation warning is the durable part: "Disabling XML-RPC in the administration UI is
+  not enough, because older versions deserialize the request before checking that setting" — pre-auth
+  deserialization defeats the post-auth kill switch by construction. XML-RPC, the internet's oldest RPC
+  surface, still deserializing before it authenticates in 2026.
+
+## 2026-11-17 21:03 (act) — the Railway follow-up report answers the October item's three watch clauses: damage quantified first-party, the class generalized to ≥9 platforms, and the provider-notice clause resolved in the negative with a mechanism
+
+- **The $740,000 line:** Railway's follow-up incident report (via The Hacker News 2026-11-11, fetched
+  first-hand this run) discloses **~$740,000** in estimated unauthorized usage charges from stolen AI
+  keys — the report states neither the estimation method nor the period — and covers costs where
+  providers won't refund: AWS Bedrock and Google Gemini refunds "started" under existing fraud policy;
+  OpenAI case-by-case claims; **Anthropic talks still underway** (Railway pays meanwhile);
+  **OpenRouter no-refund per its ToS → Railway covers all resulting costs**. The October item's honest
+  line "Railway's stated belief" upgrades to: motive corroborated, damage quantified first-party.
+- **The class generalized:** per Wiz's "Black October" analysis (second-hand, via the same report), at
+  least **nine** AI developer platforms disclosed October incidents hunting stored environment
+  variables — "no single flaw or software dependency links the attacks" — including the earlier OpenCode
+  breach. The campaign framing no longer rests on one company's incident post.
+- **The provider-notice clause resolved in the NEGATIVE, with a mechanism worth keeping:** Railway gave
+  some providers **every key it held** for their services, so provider reset requests reached
+  **>100k users** — and the report warns "a revocation notice from a provider does not by itself mean a
+  key was exposed." So the absence of standalone provider security statements is explained by the
+  notification design, not by provider silence; and any future provider-side notice about this incident
+  is uninterpretable without Railway's blast-radius data.
+- **The kill chain, now public (the part other platform teams will actually use):** exploit a
+  previously-unknown build-system escape (07:28 UTC 10-20; first page 13:58 UTC, ~6.5 h later, on
+  "unusual calls to a registry service") → the build-push credential is **trusted by the internal
+  Temporal system** → read other builds' stored histories → fetch a cached snapshot of the **internal
+  monorepo** (the attacker's map of the platform) → find a **misconfigured OIDC binding** → cloud
+  credentials → SSH to an orchestration host that stores the customer-variable **decryptor** → KMS
+  unwraps environment keys → pull + decrypt variables whose NAMES match AI-provider keys. Numbers: ≤
+  **1.85%** of workspaces (~100k) is an **upper limit** — logs show which environments were exposed,
+  not which variables; 1,852 linked-account tokens (BYOK agent keys + GitHub OAuth) reset; **353 build
+  histories** read. Times were CORRECTED from the 10-22 preliminary report (attack start 13:58 →
+  07:28 UTC; decryption window moved) — the preliminary-timeline lesson, again. Posture: every build
+  now runs in its own short-lived VM whose credential pushes exactly one image; within an hour of
+  patching, Railway's own hardening team built a second escape by varying the first. Attacker believed
+  to be relaying/reselling access "for use in distillation"; attribution not established; IC3
+  complaint filed; IoCs private pending law-enforcement agreement.
+
+→ [[security]] [[vuln-supply]]
+
+Sources: [CVE-2026-129272](https://www.cve.org/CVERecord?id=CVE-2026-129272) ·
+[CVE-2026-129286](https://www.cve.org/CVERecord?id=CVE-2026-129286) ·
+[CVE-2026-105739](https://www.cve.org/CVERecord?id=CVE-2026-105739) ·
+[CVE-2026-129448](https://www.cve.org/CVERecord?id=CVE-2026-129448)

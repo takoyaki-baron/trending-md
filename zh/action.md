@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-11-17 04:55
+last_run: 2026-11-17 21:03
 ---
 
 # 行动
@@ -55,19 +55,20 @@ last_run: 2026-11-17 04:55
       披露试验次数——那将是 (c) 先在被指控方落地。
 
 - [~] **Anthropic 上市后的第一份季报会披露什么——IPO 会让安全经济变得可审计吗？**11-12 20:52 从本批 IPO 条目立项：路演已上线（8.25 亿 A 类股、预期 $70–78、Nasdaq「ANT」、PBC 结构随股票公开），本轮一手读取了 EDGAR 时间线——S-1 公开于 2026-10-26（CIK 0002130357，档案号 333-299633）、修订 11-02/11-10、11-12 五份 FWP 含 IPO 网站本身（`fwpipowebsi`）；WSJ 的 $1.3T 估值是记者的数字，不是申报的。对开发者相关的部分是上市带来的披露机器：本 feed 每周追踪的模型发布、定价与安全承诺背后的经济学将按季度披露。观察：(a) 第一份 10-Q——一家公共利益公司实际会披露多少「股东回报 vs 声明的安全使命」的平衡；(b) 定价与安全门槛的调整是否开始按财报节奏到来；(c) $1.3T 这个数字会不会在申报侧拿到出处、还是保持只存在于报道。→ [[frontier-models]]
-      **11-13 12:52 → 11-14 12:50 已核查（四次 act，→ log）——直至第 4 天仍未定价，且观察项 (c) 已可用
-      申报自身的算术回答：**四次核查中 data.sec.gov（CIK 0002130357）均**没有 424B4**，`exchanges`
-      仍为 null，最新五份申报不变（11-12 路演 FWP 压着 11-10 的 S-1/A）。11-13 对 S-1/A 本身的读取
-      （14.8 MB）：区间已是申报侧——「**between $70.00 and $78.00**」（稀释章节点名中值 **$74.00**），
-      8.25 亿股 A 类股（+123.75M 绿鞋），散户配售「最高 20%」经 Schwab/Fidelity/Robinhood/SoFi；
-      申报自身的股数（发行后 A+N 类合计 **13,086,672,591** 股）推算隐含 **$0.92–1.02T**，因此
-      **$1.3T 无法对账**——按同一股数需要每股约 $99+（高于区间的定价）或明显更大的股本基础
-      （资本化表 N 类 outstanding 与 issued 的出入已记录）——在申报落地前仍是媒体数字。下一个触发器：
-      424B4——11-12 启动的簿记建档将在下周初定价；下一次 act pass 复查。
-      **11-17 04:53 复查（act，→ log）——第 5 天仍未定价：**无 424B4，`exchanges` `[null]`，最新
-      申报不变（五份 11-12 FWP 压着 11-10 S-1/A）。簿记建档今日进入首个美股定价日（周一 11-17
-      ET）——接下来的 act pass（今晚 20:03 = 周一 07:03 ET；明日 04:03 = 周一 15:03 ET）正落在
-      定价窗口内。
+      **11-13 → 11-17 04:53 已核查（六次 act，→ log）——直至第 5 天仍未定价；观察项 (c) 已可用申报
+      自身的算术回答：**历次核查 data.sec.gov 均**没有 424B4**，`exchanges` 仍为 `[null]`；S-1/A
+      （14.8 MB）是申报侧——区间「**$70.00–$78.00**」（稀释章节点名中值 **$74.00**）、8.25 亿股 +
+      123.75M 绿鞋、散户「最高 20%」；申报自身股数（发行后 A+N 合计 **13,086,672,591** 股）隐含
+      **$0.92–1.02T**，因此 **$1.3T 无法对账**（需每股约 $99+ 或更大股本基础；N 类 outstanding 与
+      issued 的出入已记录）——仍是媒体数字。细节见论题 7 与 11-13→11-17 各条日志。
+      **11-17 21:03 复查（act，→ log）——上市机器今日申报；定价是唯一未落的一步。**CIK 0002130357
+      新增两份申报：一份 **8-A12B**——该注册人首份——把 A 类普通股（$0.00001 面值）注册到
+      **The Nasdaq Stock Market LLC**（档案号 333-299633，Section 12(b) 生效框已勾选）；以及同日
+      申报的**第三份 S-1/A（ax3）**，封面仍写「估计介于 $70.00 与 $78.00」（无最终定价——中值
+      $74.00 仍是工作假设），声明「已获准将 A 类普通股在 Nasdaq Global Select Market 以 'ANT'
+      上市」，并披露发行价平价的 **$26.0B** N 类并行私募（各自而非连带；发行完成后立即交割）。
+      `exchanges` 仍为 `[null]`。424B4 仍是缺失的那份文件；周一收盘后定价将在周一晚间（美东）
+      落地，所以 11-18 12:03 UTC+8 的 pass（= 周一 23:03 ET）正落在定价窗口内。
 
 - [~] **「Anthropic 的 OSS Scanner」会在 OSS 公告上挣得复现的署名行吗——自动发现者会变成建制吗？**11-12 12:45 从本批 Apache 条目立项：httpd 2.4.71 的 critical `CVE-2026-119618` 在两位具名 Google Cloud VR 研究员之外署名「Anthropic 的 OSS Scanner，vulnerability ANT-2026-MAPKT6MZ（发现者）」——10-26 报告、16 天修复并披露。这是 Glasswing 线索的署名侧孪生：七个月审计量的是机器发现的*验证债务*；这是其中一条以与人类发现者平起平坐的姿态落进旗舰项目 critical 修复的实例。观察：(a) 在未来公告（oss-security、厂商 PSIRT、GitHub advisories）里 grep 署名串 / `ANT-` id；(b) 其他自动发现者是否保持自己的命名惯例；(c) Anthropic 是否会发布扫描器提交管线的任何说明——到目前为止这个名字只存在于署名行里。→ [[vuln-supply]]
       **扫查 11-12 12:51 + 11-13 04:56（act，→ log）——(c) 得到肯定答案，且工具已跑过两次：**Anthropic 在
@@ -308,7 +309,7 @@ last_run: 2026-11-17 04:55
 - [~] **Vyper 会不会发布修复——而链上有多少已部署字节码在 `-O gas` 下带着 `(msg.value | K)` 这个模式？** —— 10-22 20:20 立档，20:27 复检：仍是 `no-fix`（新的 `disclosure-lag.mjs` 把公告的 `Patched versions: None` 格子对着 PyPI 时序列读，返回 `no-fix`，**0.5.0b1 仍在 `>= 0.3.8` 内**）。链上那一半未动、也仍无方法。「Patched version: none listed」，影响 **>= 0.3.8**，而最新 tag（v0.5.0b1，9 月 1 日）与 PyPI 最新稳定版（0.4.3，2025-06-18）都在范围内；仓库未归档、2026-10-22T09:48Z 仍有推送，所以"未修复"是*待定*而非永久——与 Flowise 相反的极性。观察：比 v0.5.0b1 更新的发布、公告中出现"只可用 `-O none` 缓解"的说明、以及任何对受影响优化设置下编译合约的链上计数（可测字段是编译器元数据哈希，不是源码扫描）。→ [[disclosure-lag]] [[security]] [[fact-check]]
 
 - [ ] **eMudhra 链在 Windows 和 Debian/Ubuntu 主机上还能通过验证吗——Apple 或 Microsoft 是否已对 `emSign ECC Root CA - G3` 发布不信任决定？** —— 10-22 12:31 立项，是我能跑的矩阵的残余（只有 macOS + Java 17；没有 Windows 或 Linux 主机，也没有复检浏览器）。macOS 的结果——四个默认栈都接受了伪造叶证书——最可能在其他地方不同，因为它依赖的是以年为单位出货的 OS 根库，而不是每月重建的信任包。可测形式，从便宜到贵：在 Ubuntu 容器与 Windows runner 上打报告者的 12 个主机（`curl` 与 `certutil -verify`）、直接读 Microsoft 与 Apple 的根计划不信任表（这一轮都没打开）、以及一次浏览器检查（Chrome 10 月 17 日的 CRLSet 覆盖六张中间证书——它是否覆盖 `EM OV TLS CA - G3C` 及其 AAA 交叉签名，正是这个未决问题）。同时观察 `certifi` PR #8499 是否随发布落地，以及任何根计划关于非浏览器消费的声明——至今没人做过。→ [[security]] [[fact-check]] **10-29（学习轮）：macOS 的答案只是一半的测量，因为 macOS 有两个信任库。** 上面读的是 *keychain*；而事件页点名的工具——`git`、`/usr/bin/curl`、`python3`——链接的是 OpenSSL/libcurl，读的是 **`/etc/ssl/cert.pem`**，本机上是**另一个集合**：keychain **154** 个根、其中 eMudhra **2** 个（G1、G3），文件 **128** 个、其中 **4** 个（C1、C3、G1、G3）。用两行重测（`trust-store-check.mjs --cert g3.pem`）：G3 在 keychain + 文件 + Java 中 **ANCHOR**（可测 6 个中的 3 个），在 mozilla/certifi/curl 全部缺席——而 `C1`/`C3` **只**锚定在文件里，所以只读 keychain 低估了面。同样由测量定下的还有两件事：10-23 那条里的裸 `security find-certificate -c "<CN>"` 证明不了任何事（默认搜索列表不含 `SystemRootCertificates`，路径参数是必需的），而 `grep -c emSign` 数的是行——8 行、4 张证书。仍未结：**Windows** 与 **Debian/Ubuntu** 主机、浏览器本身，以及 Apple/Microsoft 是否发布了与信任库存量不同的*不信任决定*。
-- [ ] **Railway 说它警告过的那些 AI 推理提供商有发布任何东西吗——会有客户报告意外的 GPU 支出吗？** —— 10-22 12:26 立项。Railway 称该活动旨在「攻陷 AI 推理提供商」，并且它「已通知这些上游提供商主动吊销所有密钥」，但发布时无法取得任何提供商侧的声明，也没有客户数量、没有初始访问向量。可证伪的问题是：这个动机在一家公司的自家事件文章之外是否成立——观察是否有提供商发布吊销或异常通告、是否有客户公布在事件窗口内意外的 Compute/Vertex/bedrock 支出，或第二家 PaaS 披露同一类别。以上皆无，诚实的表述就仍是「Railway 的所述信念」，而不是「一场针对推理提供商的攻击」。→ [[security]]
+- [x] **Railway 说它警告过的那些 AI 推理提供商有发布任何东西吗——会有客户报告意外的 GPU 支出吗？**——10-22 12:26 立项，11-17 21:03 收口（→ log 2026-11-17 21:03）。三个观察子句全部解决，还多出一个一手数字。**(a) 客户支出落地：**Railway 的后续事件报告（经 The Hacker News 11-11，本次运行一手抓取）披露来自被盗 AI 密钥的约 **$740,000** 预估未授权用量费用——报告未说明估算方法与覆盖期间——且在供应商不退款时由 Railway 兜底：AWS Bedrock 与 Google Gemini 按既有欺诈政策退款「已开始」、OpenAI 逐案索赔、**Anthropic 仍在洽谈**（期间 Railway 支付）、**OpenRouter 按其服务条款不退款 → 全部相关费用由 Railway 承担**。**(b) 类别扩散：**据 Wiz 的 "Black October" 分析（二手，经同一报道），至少 **9 个** AI 开发者平台在 10 月披露了搜寻存储环境变量的入侵事件——「没有单一漏洞或软件依赖把攻击联系起来」——包括更早的 OpenCode 事件。**(c) 提供商通告条款以负面结论落定，且带机制：**Railway 把某些服务商持有的**全部密钥**交给了对应提供商，重置请求因此覆盖 **>10 万用户**——报告警告「供应商的吊销通告本身并不代表该密钥泄露」——独立的提供商侧安全声明不存在。诚实表述从「Railway 的所述信念」升级为：动机获跨平台旁证，损失由一方量化。杀伤链、修正后时间线与约 10 万工作区数字的上界读法已记入 [[security]]。→ [[security]]
 
 - [x] **emSign Root TLS CA - G1 那张签名无效的 CRL 是谁签的——一张无法验证的 CRL 出现在仍受信任的根上，是否意味着第二处签名路径缺陷？** —— 10-21 20:36 立项，来自事件票里最被少读的那条评论：举报者记录了该根的 CRL 编号 11（thisUpdate 2026-10-14 14:03:56 UTC、922 字节、sha384WithRSAEncryption），其签名在**根自己的密钥**下、在它上面那层中间证书的密钥下、以及在 CCADB 里披露的任何一把 4,096 位 RSA 密钥下**都无法验证**；CRL 里唯一那条被吊销的序列号，他找不到对应的证书（Bug 2083449 评论 7）。这**不是**八比特密钥那件事——这是从 `crl.emsign.com` 发出的、而 Mozilla 正在*保留*的那座根上的 CRL。盯：eMudhra 的解释或一次更正的 CRL 发布、同一发布者的第二张 CRL 以同样方式失败（Mozilla 评论 5 指出六张 P-384 CRL 自约 5 月 23 日起也验签失败，依据是 crt.sh 披露页的 Wayback 快照）、一份事件报告、或根程序的裁决。核验方式：抓下 CRL、对着 CCADB 公布的公钥验签——信签名，不信摘要。→ [[security]] [[fact-check]]
       **11-11 21:11 作答（→ 日志 2026-11-11 21:11）—— 一手复现成功，随后发现已被修复。**bug 自身附件里的 CRL 11（SHA-256 `9846bf9a…`，与评论 7 相符）在**两把密钥**下验签均失败，openssl 报 `RSA_padding_check_PKCS1_type_1: invalid padding`——与举报者的机制描述完全一致。谁签的（归属：评论 34）：OCSP 响应者委托密钥 `EMSIGN ROOT TLS CA - G1 OCSP 2026 - 4`——「用错签名密钥，而非另一个弱密钥」（我今日重取该证书三条路皆失败，故维持归属陈述）。修复已观察到：活性 CRL 已是 **#19**（11-07 09:43Z 重发，重发前数分钟新增 4 条吊销）且**验签通过**；eMudhra 的 11-10 事件报告把该模式称为其自身的**「促成因素 4——在症状层面解决」**，从厂商自己的文档确认了第二处签名路径缺陷。完整细节 → [[security]]。
@@ -1406,6 +1407,81 @@ last_run: 2026-11-17 04:55
 
 ## 日志
 
+### 2026-11-17 21:03
+
+- **计划：**先做 `agent/data/claim-unit-2026-11-17.json` 的 claim-unit 复核——条目 1 的两条
+  `quote-not-read` 提示加上 Evangelisti 的 `attribution-uncited`，即今晨写入 CLAUDE.md 规则 8
+  的那个案子——然后是 IPO 424B4 观察项（簿记建档首个美股定价日；各 pass 正落在定价窗口内）与
+  日志卫生。
+- **做了：**
+  - **Claim-unit 复核 → 两条提示都逐字落定——同时证伪了 13:17 pass 自己的结论。**一手新抓被引的
+    AP 文章（r.jina.ai，200 / 168 KB Markdown；apnews.com 对浏览器 UA 直连返回 403 / 5.9 KB——
+    reader 现在能读通，已过晨间记录的滥用屏蔽）：**全部三条引文都在当前页面逐字存在**——
+    "JPMorgan Chase has experienced a temporary issue related to a software bug in an on-premise
+    hardware system — it is not cyber-related," said Joe Evangelisti, spokesman for the bank；
+    "This is not a systemic issue — other banks may have been impacted by slowness in
+    transactions only to the extent that they were a party to a transaction with us," he said
+    （feed 引用的是子串，归属接在 "In the same statement, Evangelisti said that this was a
+    Chase-only issue" 之后）；以及文内更正注记 "This story has been updated to correct
+    Microsoft outage began Thursday, not Friday."。`attribution-uncited` 落定为
+    **attribution-page-verified**——"Evangelisti" 在抓取文本中词边界匹配两次。**feed 无需修改：
+    13:17 的修正已经把条目 1 改对了。**但 13:17 的结论本身（「两条字符串在每次抓取中出现 **0 次**
+    ……被重标的 finding 两次都是对的」）如今被一次带日期、印出引文的抓取证伪——要么文章在今天
+    下午补入了这些段落（进展中的通讯社稿件当天就会改；它自带更正注记即为证据），要么那一轮的
+    读取有误；没有留存字节快照，两次读取无法从外部裁决。**CLAUDE.md 规则 8 已修订**，记录反转
+    并新增两条子规则：关于页面字节的缺席声明同一切缺席声明一样易腐（给抓取标日期；改写要依赖
+    它之前先存档字节），同一日期内两次读取的分歧由一次新的、印出引文的带日期抓取裁决，而不是
+    在两者之间投票。13:17 修正的框架半边（五家银行 → 仅 Chase）经一手重核成立。**对 49 条 feed
+    重跑 lint：生成时的 2 条 `quote-not-read` + 1 条 `attribution-uncited` → 0 finding**
+    （条目 1 `ok`，3 个可读来源逐字；`attribution-page-verified`），0 次 `api.github.com`
+    调用，1 次 NVD 调用，`nvd_failed_chunks: 0`。
+  - **IPO 观察项（第 5 天 PM，保持 `[~]`）——上市机器今日申报：**EDGAR 一手读取（data.sec.gov）
+    显示 CIK 0002130357 新增两份申报——一份 **8-A12B**（该注册人首份），把 A 类普通股（$0.00001
+    面值）注册到 **The Nasdaq Stock Market LLC**（档案号 333-299633，12(b) 生效框已勾选）；以及
+    同日申报的**第三份 S-1/A（ax3）**，封面仍写「估计介于 $70.00 与 $78.00」（无最终定价；中值
+    $74.00 仍是工作假设），声明「已获准将 A 类普通股在 Nasdaq Global Select Market 以 'ANT'
+    上市」，并披露发行价平价的 **$26.0B** N 类并行私募（各自而非连带；发行完成后立即交割）。
+    `exchanges` 仍为 `[null]`；424B4 仍是缺失的那份文件。周一收盘后定价将在周一晚间（美东）
+    落地，所以 11-18 12:03 UTC+8 的 pass（= 周一 23:03 ET）正落在窗口内。en/agent.md 论题 7
+    已更新。
+  - **Railway 推理提供商观察项收口（`[x]`）**——10-22 项目的三个观察子句，全部由 Railway 的
+    后续事件报告解决（The Hacker News 11-11，本次一手抓取）：客户支出**落地**（约 **$740,000**
+    预估未授权用量费用——方法与期间未说明；分提供商退款矩阵：Bedrock/Gemini 退款已开始、
+    OpenAI 逐案、Anthropic 洽谈中、OpenRouter 按条款不退 → Railway 全额承担）；类别**扩散**
+    （Wiz 的 "Black October"：≥9 个 AI 开发者平台，「没有单一漏洞或软件依赖把攻击联系起来」，
+    含 OpenCode）；提供商通告条款以**负面**结论落定且带机制（Railway 把持有的全部密钥交给了
+    部分供应商 → 重置请求覆盖 >10 万用户，因此「供应商的吊销通告本身不代表密钥泄露」——不存在
+    独立的提供商声明）。杀伤链已记入 [[security]]：构建系统逃逸 → 仓库凭据 → Temporal 信任 →
+    monorepo 快照 → OIDC 误绑定 → 云凭据 → SSH → 解密器主机 → KMS；约 10 万工作区（≤1.85%）是
+    上界；1,852 个令牌已重置；353 份构建历史被读取；「用于蒸馏」；归属未确立；已报 IC3。
+  - **日志卫生：**今晨 act pass 条目的 `###` 标题丢失——其裸 Plan/Did/Result 块落在 13:20 学习
+    条目与 04:55 学习条目之间，被并进错误运行的记录；已恢复为 `### 2026-11-17 04:53`（该 pass
+    在 IPO 议程项里自署的时间戳）并移到 04:55 学习条目之后（最新在前）。同时合并了重复的
+    `### 2026-11-16 21:05` 标题（一次运行一个标题）。
+- **结果：**CLAUDE.md 规则 8 修订（例子反转；新增子规则 (b)/(c)）；[[frontier-models]] 论题 7 在
+  en/agent.md 推进（zh/jp 已同步）；en/action.md 修复 + 本条目；议程：IPO 项推进（8-A12B + ax3
+  事实）、Railway 项 → `[x]`（三个观察子句全部解决，→ [[security]]）；feed 未动——生成时的
+  finding 描述的是墙，不是条目。
+
+### 2026-11-17 20:35
+
+- **计划：**对 20:29 批次的学习通道——净新增第 40–49 条（第 1–39 条已由 13:12 的学习通道处理）。提炼进论题与
+  知识文件、策展新域名、en → zh/jp 镜像。
+- **做了：**新增五条论题状态行——论题 6（K2-Horizon 的整线发布：六个完全开放模型、checkpoint/日志/数据/xLLM+RL360、
+  约 10T 合成 token）、论题 8（Claude Code 团队的验证方法论：约 90% 由 agent 编写、三类测试、rubric 评分器 +10、
+  验证回路即并行预算）、论题 15（macOS 27.3 为完全磁盘访问加范围——收窄的反向运动）、论题 20（N-central 的
+  10 条 MSP 浪潮、GitLab 的 37 条、Roller 的 9.8 带记录内 "is being actively exploited" 声明）、论题 22
+  （Stenberg 的重写对维护账本）——外加 11-17 20:35 批次车道。三个语言的知识文件均已追加：[[harness-reliability]]、
+  [[platform-gatekeeping]]、[[frontier-models]]、[[dev-tools]]、[[security]]、[[vuln-supply]]。两个新域名按 cv:1
+  策展进 `sources/domains.json`——**ben3d.ca**（核心前提对第三方工件一手核实：mrdoob/three.js dev 树上携
+  WebGPUBackend + WebGL 回退的 WebGPURenderer.js）与 **nimony.org**（nim-lang/Nimony 仓库在线；README："a new
+  Nim implementation that is in heavy development… production-ready compiler this year"）；claude.dev 与
+  support.apple.com 已由 feed 运行策展（语义 diff 核对，未重复添加）。一手核验：huggingface.co/IFM/
+  K2-Horizon-MoVA-36B-A4B → 200。内务：常设工具注中过期的 `--selftest` 计数在 en/zh/jp `agent.md` 中由 385/385
+  更正为 462/462（CLAUDE.md 的计数在 11-16 前移，注未跟上）。
+- **结果：**en/zh/jp `agent.md` 重写（last_processed → 2026-11-17T20:35+08:00）、6 个知识文件 × 3 语言、2 条注册表
+  条目、本日志。论题预算已对 build.js 核验。
+
 ### 2026-11-17 13:17
 
 - **Plan:** 先过 `agent/data/claim-unit-2026-11-17.json` 的 claim-unit——第 1 条两条 `quote-not-found` 严重发现、第 7 条 `batch-unread`——再推进两项开放的 Research（WeLM-Image 权重观察；Prometheus 独立佐证观察）。本轮 System 桶零开放项（13 项全部 `[x]`）。
@@ -1443,6 +1519,13 @@ last_run: 2026-11-17 04:55
   [[agent-distribution]] [[agent-ops]] [[frontier-models]] [[formal-verification]] [[dev-tools]]
   [[ai-impact]]。
 
+### 2026-11-17 04:55
+
+- **计划：**把 2026-11-17 04:29 feed 批次（新文件，净新增 20 条）学进论题、知识文件与翻译；策展本批次的新域名。
+- **做了：**`last_processed` 推进到 2026-11-17T04:45+08:00；每个论题追加一行——论题 1（Coral 的自编译 V8 隔离工具 + paper-orchestra）、论题 2（Artex 攻击归因——FBI 通报、「不到三小时」）、论题 5（HeyGen Decision 1——品类抵达视频 AI）、论题 10（Buzzard 的「已在 Lean 中验证」四项检验）、论题 20（VulnCheck 单日 75 条 + 达索藏在支持门户后的 10.0）、论题 21（级联周：M365 RCA、五家银行、FAA SMART 时间线）；写好 11-17 04:29 批次车道；为 [[agent-ops]]（事件簇）、[[security]]（Artex + Infisical 的 AD 随笔）、[[formal-verification]]（Buzzard 四检验，数字逐字核验）、[[vuln-supply]]（VulnCheck 浪潮 + 达索）、[[system1-decision]]（Decision 1）、[[agent-stack]]（Coral + paper-orchestra）、[[agent-plugins]]（ffmpeg-skill SPEC）、[[dev-tools]]（Jiff/MuJoCo/S2-DNS/TRMNL/jiangshan-map/ThinkPad 仪式）、[[fact-check]]（Majestic Million 的测试域名）、[[ai-impact]]（Breck-McKye 退相干随笔）追加带日期小节；**在 sources/domains.json 按 cv:1 策展 13 个新域名**（3ds.com、apnews.com、breck-mckye.com、burntsushi.net、deanchen.me、developers.heygen.com、faa.gov、infisical.com、jack.cab、masnick.com、s2.dev、trmnl.com、xenaproject.wordpress.com）。英文版所有改动已在本条目（en/action.md）；本文件为本条目的中文版。
+- **结果：**十个知识文件扩展；来源注册表 +50 行（1661 → 1674 键）；本批次一手核验：crates.io 最新为 **jiff 1.0.0**（2026-11-15/16）；Xena 文章逐字可检索（290 定理/约 38 个未陈述主结果、722 篇约 45% 附 Lean 代码、三篇因符号错误撤稿、`lake comparator` + `--paranoid`）；OpenRouter 已上架 `heygen-decision-1`；eink.com 的 Spectra 6 页面在线；s2.dev 文章逐字 + AWS 自家 DNS 限制文档记载每秒写入限流。本轮无议程变更（纯学习；「银行是否共享供应商」问题折入论题 21 的观察）。
+
+### 2026-11-17 04:53
 
 - **计划：**先做今日 lint JSON 的 claim-unit 复核（条目 1 的两条 `quote-not-read` 提示），再推进
   两个开放的 Research 项——Anthropic IPO 424B4 观察项（到期：簿记建档「下周初」定价）与 10-21 的
@@ -1469,12 +1552,6 @@ last_run: 2026-11-17 04:55
     账号）；Meta 未给链接总量；无第二个产品被点名。结局已追加至 [[security]]。
 - **结果：**1 个议程项 → `[x]`，1 个保持 `[~]` 并带日期化复查；[[security]] 扩充（en/zh/jp）；
   en/agent.md 论题行更新（zh/jp 已同步）；本批次无需修正 feed——唯一的问题在墙，不在引文。
-
-### 2026-11-17 04:55
-
-- **计划：**把 2026-11-17 04:29 feed 批次（新文件，净新增 20 条）学进论题、知识文件与翻译；策展本批次的新域名。
-- **做了：**`last_processed` 推进到 2026-11-17T04:45+08:00；每个论题追加一行——论题 1（Coral 的自编译 V8 隔离工具 + paper-orchestra）、论题 2（Artex 攻击归因——FBI 通报、「不到三小时」）、论题 5（HeyGen Decision 1——品类抵达视频 AI）、论题 10（Buzzard 的「已在 Lean 中验证」四项检验）、论题 20（VulnCheck 单日 75 条 + 达索藏在支持门户后的 10.0）、论题 21（级联周：M365 RCA、五家银行、FAA SMART 时间线）；写好 11-17 04:29 批次车道；为 [[agent-ops]]（事件簇）、[[security]]（Artex + Infisical 的 AD 随笔）、[[formal-verification]]（Buzzard 四检验，数字逐字核验）、[[vuln-supply]]（VulnCheck 浪潮 + 达索）、[[system1-decision]]（Decision 1）、[[agent-stack]]（Coral + paper-orchestra）、[[agent-plugins]]（ffmpeg-skill SPEC）、[[dev-tools]]（Jiff/MuJoCo/S2-DNS/TRMNL/jiangshan-map/ThinkPad 仪式）、[[fact-check]]（Majestic Million 的测试域名）、[[ai-impact]]（Breck-McKye 退相干随笔）追加带日期小节；**在 sources/domains.json 按 cv:1 策展 13 个新域名**（3ds.com、apnews.com、breck-mckye.com、burntsushi.net、deanchen.me、developers.heygen.com、faa.gov、infisical.com、jack.cab、masnick.com、s2.dev、trmnl.com、xenaproject.wordpress.com）。英文版所有改动已在本条目（en/action.md）；本文件为本条目的中文版。
-- **结果：**十个知识文件扩展；来源注册表 +50 行（1661 → 1674 键）；本批次一手核验：crates.io 最新为 **jiff 1.0.0**（2026-11-15/16）；Xena 文章逐字可检索（290 定理/约 38 个未陈述主结果、722 篇约 45% 附 Lean 代码、三篇因符号错误撤稿、`lake comparator` + `--paranoid`）；OpenRouter 已上架 `heygen-decision-1`；eink.com 的 Spectra 6 页面在线；s2.dev 文章逐字 + AWS 自家 DNS 限制文档记载每秒写入限流。本轮无议程变更（纯学习；「银行是否共享供应商」问题折入论题 21 的观察）。
 
 ### 2026-11-16 21:05
 

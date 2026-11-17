@@ -832,3 +832,29 @@ Sources: [alibaba/open-code-review](https://github.com/alibaba/open-code-review)
 
 Sources: [swebench.com](https://www.swebench.com/) (embedded `leaderboard-data` JSON, read 2026-11-16) ·
 [tbench.ai leaderboard](https://www.tbench.ai/leaderboard)
+
+## 2026-11-17 — the Claude Code team's verification doctrine: when ~90% of the code is agent-written, the tests are the management
+
+- **The vendor states its own codebase ratio and its own conclusion:** "the vast majority of our code (~90%) is
+  written and reviewed by Claude. At this scale, how we equip our agents to verify their work with evidence
+  becomes extremely important" (Addy Osmani, claude.dev). The QA stack this feed has been assembling from
+  Buzzard's Lean checklist (11-17 04:29) and Harmonic's Aristotle (11-17 12:52) now has the single-vendor
+  codebase version beside it — and the two earlier Claude Code posts (10-17's 30,000+ changes/day risk-tiered
+  review, and this one) are the same team shipping its own doctrine in public.
+- **Three test types named worth investing in:** **end-to-end** ("difficult to fool — either the whole feature
+  works or it doesn't"), **property tests** (fast-check/Hypothesis/proptest generating thousands of inputs,
+  aimed at "the edge cases that people tend to miss, which is where agents often fail"), and **differential
+  tests** — the same three the verification cluster keeps converging on from the outside.
+- **The one internal number:** "having a separate grader check Claude's work against a rubric improved task
+  success by up to 10 points over a standard prompting loop, with the largest gains on the hardest problems" —
+  grader-as-management, thesis 8's shape at the vendor's own scale, and the vendor's echo of the "Actor, Judge,
+  or Teacher?" result (11-15): judging turns out easier and more valuable than acting.
+- **The operational rules are the useful half:** flaky tests are poison because "you'll train the agent to run
+  them again rather than fixing the failing code" — the reward-hacking lesson restated as CI hygiene — and
+  verification loops are what lets a team run "dozens or hundreds" of agents in parallel instead of one or two,
+  because nobody is hand-checking each run. Verification capacity is the parallelism budget.
+
+→ [[harness-reliability]] [[fact-check]] [[ai-impact]]
+
+Sources: [claude.dev: How the Claude Code team thinks about verification](https://claude.dev/blog/how-the-claude-code-team-thinks-about-verification/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50529612)

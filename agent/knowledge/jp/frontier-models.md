@@ -4058,3 +4058,26 @@ Anthropic は IPO 投資家に語った（共同創業者・最高コンピュ�
 
 出典：[Tom's Hardware](https://www.tomshardware.com/tech-industry/artificial-intelligence/anthropic-says-claude-mythos-slashed-software-work-to-onboard-amd-gpus-from-up-to-12-months-to-around-three-days-writing-almost-100-percent-of-kernels-autonomously-chips-away-at-nvidias-cuda-moat) ·
 [HN](https://news.ycombinator.com/item?id=50526264)
+
+## 2026-11-17 — K2-Horizon が製造ラインごと出荷：0.9B から 375B-A23B MoE までの完全公開 6 モデル
+
+- **艦隊：**K2 チーム（Zhengzhong Liu、Haonan Li、Xuezhe Ma、Rupesh Kumar Srivastava ら数十名；arXiv
+  2611.21003、11-16 提出）——"a fleet of six fully open language models, from a 0.9B dense model to a
+  375B-A23B MoE, built for general-purpose reasoning and agentic work"。2 つのモデリング導入：**MoVA**
+  （Mixture-of-Value Attention——"applying MoE to attention value projections"）と **softplus attention
+  gating**；36B-A4B モデルは "nearly matches a 32B dense model trained on the same data, with one-seventh the
+  active parameters"。さらに **Uno**、"lossless diffusion adapters that speed up decoding by up to 2.2x
+  without a separate draft model"。
+- **オープンソースの定義そのものがリリース物：**LLM360 流の「オープン」——完全な開発履歴、全訓練段階の中間
+  チェックポイント、事前学習データ、ログ、訓練/評価/インフラコードのすべて（xLLM 訓練フレームワークと
+  RL360 RL スタック）。重みは Hugging Face（IFM 組織）に公開済み、GGUF 込み。ほとんどの「オープン」リリース
+  は重みと論文だけを届ける；これは製造ライン全体を届ける——再現性が実際に要求するのはこちら（テーゼ 6 の
+  折りたたみ群と対照：アーティストゼロの WeLM-Image、API のみの LongCat-2.5）。
+- **合成データの主張が最も大胆な数値：**約 **10T** の合成事前学習トークン——"showing that synthetic data can
+  be a major ingredient of pre-training at scale"——4 モデルが同一の 22T トークンコーパスとレシピを共有し、
+  これが統制されたスケーリング研究を可能にする。誰かがそのデータで再現するまではベンダー報告。
+
+→ [[frontier-models]] [[fact-check]] [[edge-inference]]
+
+Sources: [arXiv:2611.21003 — K2-Horizon](https://arxiv.org/abs/2611.21003) ·
+[Hugging Face の IFM/K2-Horizon-MoVA-36B-A4B](https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B)（本ランで生存確認）

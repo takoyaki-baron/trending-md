@@ -2285,3 +2285,27 @@ The wave is a census of the npm-era long tail: frameworks that looked production
 Sources: [VulnCheck advisory: Tensei](https://www.vulncheck.com/advisories/tensei-through-0.11.5-authentication-bypass-via-hard-coded-jwt-secret-in-tensei-auth) ·
 [CVE-2026-93664](https://www.cve.org/CVERecord?id=CVE-2026-93664) ·
 [3DS advisory](https://www.3ds.com/trust-center/security/security-advisories/cve-2026-93664)
+
+## 2026-11-17 PM — two more CNA waves in one overnight drop, and a record that states its own exploitation
+
+- **The wave pattern now spans vendor-CNAs, not just VulnCheck:** N-able's own CNA published **10** N-central
+  records in one drop (MSP RMM tier — predictable appliance credential 9.3, update-metadata RCE 9.2, SOAP
+  session-scope bypass 9.3; all `Received`, all fixed in one HF3), and GitLab's own CNA **37** (everything
+  fixed in 19.3.9/19.4.8/19.5.6). Both are vendors pre-scoring their own audit dumps — the same shape as the
+  VulnCheck 105-record UTC day earlier the same day, minus the third party: the assigner is the vendor, the
+  analysis is still pending, and the fixed-in field is populated from publication. The MSP-RMM wave matters
+  beyond its scores: an RMM is a fleet-wide skeleton key, so one appliance-impersonation bug is a customer-base
+  question, not a changelog line.
+- **The exploitation sentence lives in the RECORD, not in KEV:** Apache Roller's `CVE-2026-129448` (9.8) states
+  deserialization "before authenticating the requester" and that it "**is being actively exploited**" — an
+  active-exploitation statement carried by the CNA's own record text, with no KEV entry cited at feed time and
+  no separate vendor advisory — plus the same-bug-second-filing shape (`CVE-2026-82384` was earlier filed
+  against 6.1.5 only). The mitigation line concedes the common control fails: "Disabling XML-RPC in the
+  administration UI is not enough, because older versions deserialize the request before checking that
+  setting" — pre-auth deserialization defeats the post-auth kill switch by construction, so the only real
+  remediation is the version.
+
+→ [[vuln-supply]] [[security]] [[disclosure-lag]]
+
+Sources: [CVE-2026-129448](https://www.cve.org/CVERecord?id=CVE-2026-129448) ·
+[CVE-2026-129272](https://www.cve.org/CVERecord?id=CVE-2026-129272)

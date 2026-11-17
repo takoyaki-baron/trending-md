@@ -693,3 +693,34 @@ recording device's owner is not the only party with rights in the room.
 
 Sources: [EFF deeplinks](https://www.eff.org/deeplinks/2026/11/tech-companies-are-trying-shift-entire-concept-privacy-again) ·
 [HN](https://news.ycombinator.com/item?id=50496602)
+
+## 2026-11-17 — macOS 27.3 scopes the two most dangerous TCC grants: least privilege arrives at the desktop's most-abused consent screen
+
+- **The change:** Apple's support document for **macOS 27.3** — when an app asks for **Full Disk Access** or the
+  **System & App Protection Override**, "you have the option to choose only specific protected folders or apps
+  for the app to access." In Privacy & Security settings the Mac now prompts users to pick exactly the folders
+  or apps the app needs, "while system protections stay in place for the rest of your data."
+- **The doc states what the old grant meant** — the sentences that justify the change: Full Disk Access lets an
+  app "read, change, delete, and export this data without asking" (messages, emails, photos, other users' data),
+  and the Override "can fully control your Mac and apps… It can also see every window and app, including ones in
+  the background, and capture every keystroke."
+- **Why it lands on thesis 15:** the thesis's pattern is platform owners REMOVING capability classes and
+  legitimate users eating the loss (Chrome MV2, sideloading, the keyboard grey-list). This is the
+  counter-movement — a capability class SCOPED instead of removed: backup apps, disk cleaners, file indexers and
+  security apps (the named askers) keep working under least privilege; nobody loses the feature. The
+  developer-facing consequence: an app can no longer treat FDA as "I get everything," and agent stacks that
+  request FDA must now name the specific folders they touch — the same least-privilege direction agent
+  permission systems (strands-agents/box, lending-based credential leases) have been converging on from the
+  other side.
+
+→ [[platform-gatekeeping]] [[security]] [[agent-stack]]
+
+Sources: [Apple Support: If an app asks for Full Disk Access or System & App Protection Override](https://support.apple.com/en-us/149699) ·
+[HN discussion](https://news.ycombinator.com/item?id=50526560)
+
+## 2026-11-17 backfill — the 10-24 sideloading datapoint (folded back from thesis 15 so the detail survives the fold)
+
+- **Android's sideloading verification program is a staged four-country rollout with a 20-device developer path** —
+  the first movement the other way after the capability-class removals; GrapheneOS reports "**around 10%**" of
+  banking apps still ban a non-Google OS and "**around a dozen**" now permit it. (Original item 2026-10-24; detail
+  was thesis-line-only until this fold.)

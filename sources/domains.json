@@ -1296,6 +1296,15 @@
   "jp": "beaksec の独立脆弱性研究ブログ。クロスチェック済み（10-10）：Telegram Desktop CVE-2026-107181 の検証は NVD レコード（10月7日公開）とバージョン・機構・7.2.9 修正で一致。CVSS 8.1 は研究者自身のスコアと明記、NVD は執筆時点でメトリクスなし。",
   "zh": "beaksec 的独立漏洞研究博客。交叉核验（10-10）：其 Telegram Desktop CVE-2026-107181 分析与 NVD 记录（10 月 7 日发布）在版本、机理与 7.2.9 修复上一致；其 CVSS 8.1 明确标注为研究者自评，NVD 撰写时无评分。"
  },
+ "ben3d.ca": {
+  "cat": "community",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "Ben Houston's 3D engineering blog (ben3d.ca) — a five-part, per-stage audit of what a game-grade WebGPU lighting pipeline needs vs what Three.js ships; a gap analysis with the missing pieces named as work, not a demo reel. Cross-checked (11-17): the central premise — Three.js's WebGPU-first renderer — verified first-hand against the mrdoob/three.js source tree (WebGPURenderer.js with WebGPUBackend + WebGL fallback on dev).",
+  "zh": "Ben Houston 的 3D 工程博客（ben3d.ca）——五篇连载，逐阶段对照游戏级 WebGPU 光照管线审计 Three.js 现状；是点名缺口为待办工作的差距分析，不是演示集。交叉核验（11-17）：核心前提——Three.js 的 WebGPU 优先渲染器——已对 mrdoob/three.js 源码树一手核实（dev 分支上的 WebGPURenderer.js，携 WebGPUBackend + WebGL 回退）。",
+  "jp": "Ben Houston の 3D エンジニアリングブログ（ben3d.ca）——全 5 部構成で、ゲーム級 WebGPU 照明パイプラインの要求を Three.js の現状へ段階ごとに監査。欠落を作業として名指すギャップ分析であり、デモリールではない。クロスチェック（11-17）：中心の前提——Three.js の WebGPU ファーストレンダラ——を mrdoob/three.js のソースツリーで一次確認（dev の WebGPURenderer.js、WebGPUBackend + WebGL フォールバック付き）。"
+ },
  "bench.killswitch-lang.org": {
   "cat": "data",
   "cred": "med",
@@ -9161,6 +9170,15 @@
   "en": "Nieman Lab (Harvard's Nieman Foundation) — journalism-industry coverage. Cross-checked (10-06): the ChatGPT-forged-cartoonist-signatures story's URL and framing confirmed via its HN thread (495 pts / 362 c); the site itself Cloudflare-blocks plain fetches (403 bot-wall — read via cache/HN; bot-wall ≠ dead). The underlying findings (15+ real pen names, one fake ~25k likes, one posthumous) trace to the New Yorker cartoonists' own documentation.",
   "jp": "Nieman Lab（ハーバードNieman財団）——ジャーナリズム業界報道。クロスチェック済み（10-06）：ChatGPT による漫画家署名偽造記事のURLと枠組みはHNスレッド（495pt/362c）で確認。サイト自体はプレーン取得にCloudflare 403（ボット壁）——キャッシュ/HN経由で読むこと。ボット壁 ≠ 死リンク。根拠（15+の実在ペンネーム、1件は約2.5万いいね、1件は故人の署名）は New Yorker 漫画家自身の記録に辿れる。",
   "zh": "Nieman Lab（哈佛 Nieman 基金会）——新闻行业报道。已交叉核验（10-06）：ChatGPT 伪造漫画家签名报道的 URL 与框架经其 HN 帖证实（495 分/362 评）；站点自身对普通抓取返回 Cloudflare 403 机器人墙——经缓存/HN 阅读；机器人墙 ≠ 死链。底层发现（15+ 真实笔名、一张假画约 2.5 万赞、一张系已故者）可溯源到纽约客漫画家自己的记录。"
+ },
+ "nimony.org": {
+  "cat": "code",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "Nimony.org — official site of the Nim 3 compiler rewrite (Andreas Rumpf/Araq): borrow checking, explicit nilability, native codegen independent of LLVM/GCC. First-party claims until the compiler ships its promised feature set. Cross-checked (11-17): the nim-lang/Nimony repo is live first-hand (README: 'a new Nim implementation that is in heavy development… production-ready compiler this year'), matching the site's Nim-3 framing; the HN thread (83 pts) carries independent builder discussion.",
+  "zh": "Nimony.org——Nim 3 编译器重写（Andreas Rumpf/Araq）的官方站点：借用检查、显式可空性、独立于 LLVM/GCC 的原生代码生成。在编译器兑现承诺特性集之前均属第一方主张。交叉核验（11-17）：nim-lang/Nimony 仓库一手在线（README：「a new Nim implementation that is in heavy development… production-ready compiler this year」），与站点的 Nim-3 框架一致；HN 讨论串（83 分）有独立的构建者讨论。",
+  "jp": "Nimony.org——Nim 3 コンパイラ書き直し（Andreas Rumpf/Araq）の公式サイト：借用検査、明示的 nilability、LLVM/GCC に依存しないネイティブコード生成。コンパイラが約束の機能セットを出荷するまでは、主張はプロジェクト自身のもの。クロスチェック（11-17）：nim-lang/Nimony リポジトリを一次確認（README：'a new Nim implementation that is in heavy development… production-ready compiler this year'）、サイトの Nim-3 の枠組みと一致；HN スレッド（83 pts）に独立のビルダー議論。"
  },
  "nishantjosh.dev": {
   "cat": "community",

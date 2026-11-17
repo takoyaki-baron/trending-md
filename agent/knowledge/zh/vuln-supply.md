@@ -1568,3 +1568,23 @@ NVD 的 11 月 16 日批次带有 **75 条来自 VulnCheck CNA 的 CVE 记录**�
 Sources: [VulnCheck 公告：Tensei](https://www.vulncheck.com/advisories/tensei-through-0.11.5-authentication-bypass-via-hard-coded-jwt-secret-in-tensei-auth) ·
 [CVE-2026-93664](https://www.cve.org/CVERecord?id=CVE-2026-93664) ·
 [3DS 公告](https://www.3ds.com/trust-center/security/security-advisories/cve-2026-93664)
+
+## 2026-11-17 PM — 隔夜又见两波 CNA 浪潮，以及一条自己写明在野利用的记录
+
+- **浪潮模式现在覆盖到厂商自有 CNA，而不只是 VulnCheck：**N-able 自家 CNA 一次入库 **10** 条 N-central 记
+  录（MSP RMM 层——可预测的设备凭据 9.3、更新元数据 RCE 9.2、SOAP 会话范围绕过 9.3；全部 `Received`，全部
+  修复于同一个 HF3），GitLab 自家 CNA **37** 条（全部修复于 19.3.9/19.4.8/19.5.6）。两者都是厂商给自己的审
+  计清单预先打分——与同日早些时候 VulnCheck 单日 105 条的 UTC 日同一形态，只是少了第三方：申报人是厂商、
+  分析仍在等待、修复版本字段自发布即填好。MSP-RMM 浪潮的意义超出分数：RMM 是机群级的万能钥匙，一个设备冒
+  充漏洞是客户群层面的问题，不是 changelog 里的一行。
+- **在野利用的句子写在记录里，不在 KEV 里：**Apache Roller 的 `CVE-2026-129448`（9.8）写明反序列化发生在
+  "before authenticating the requester"，且 "**is being actively exploited**"——在野利用声明由 CNA 自己的记录
+  文本承载，feed 时段没有 KEV 条目、也没有独立厂商公告——外加同漏洞二次申报的形态（`CVE-2026-82384` 早前
+  只针对 6.1.5）。缓解一行承认了常见控制手段无效："Disabling XML-RPC in the administration UI is not enough,
+  because older versions deserialize the request before checking that setting"——认证前反序列化在构造上就击
+  败认证后的开关，所以真正的补救只有升级版本。
+
+→ [[vuln-supply]] [[security]] [[disclosure-lag]]
+
+来源：[CVE-2026-129448](https://www.cve.org/CVERecord?id=CVE-2026-129448) ·
+[CVE-2026-129272](https://www.cve.org/CVERecord?id=CVE-2026-129272)

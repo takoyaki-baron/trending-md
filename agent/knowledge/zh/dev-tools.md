@@ -1537,3 +1537,46 @@ Sources: [burntsushi.net](https://burntsushi.net/jiff/) ·
 [HN](https://news.ycombinator.com/item?id=50526537) ·
 [BugMeNot](https://www.bugmenot.com/) ·
 [HN](https://news.ycombinator.com/item?id=50523601)
+
+## 2026-11-17 — 重写对维护的账本、浏览器级光照路线图、绕开 LLVM 的编译器，与复古货架
+
+- **Stenberg 对 AI curl 重写的回应（daniel.haxx.se）：**今年秋天的两个 agent 重写——**urlx**（几个月前）与
+  "curl, rewritten in Rust"（十一月，"confusingly enough not even using a different name"，自报花费约 $8,600）。
+  他的账本："During the time these agents converted 185,000 lines of C code into 340,000 lines of Rust code
+  (I counted), we merged over 300 commits in the actual curl project… A little over 200 bugfixes actually. 200
+  bugfixes that none of those rust rewrites have." 内存安全上他给的是具体数字：2026 年确认的 **81** 个 curl
+  CVE 中，**14** 个（17.3%）"most likely would have been avoided" 换成内存安全语言——"A Rust implementation of
+  curl would thus still have had 67 of those vulnerabilities." 结论："I don't believe in rewrites into any
+  language. I believe in constant and never-ending polishing, iterating and refactoring." 元层面的要点在规范一
+  端：重写之所以可能，是因为 "all the AIs of the world have trained on curl code for years"——数十年的测试与
+  文档*就是*规范，而每天约 11 个 commit 的维护速度是任何基准都不测量的部分。Jankiewicz 开源随笔与论题 22 碰
+  撞的维护者视角续篇。
+- **Three.js AAA 光照审计（ben3d.ca，五篇；第三篇是干货）：**"WebGPU now runs on most devices, and Three.js
+  has a new renderer built for it"——随后把一条游戏级管线（G-buffer、烘焙 GI、动态 GI、遮挡、SSR/SSGI、反射
+  探针、间接 BRDF、TRAA/TAAU）逐阶段对照 Three.js 做成三列表：**已在 Three.js**（MRT prepass、lightmap +
+  radiosity 烘焙器、GTAO、烘焙快 8× 的 LightProbeGrid）、**评审中或已起草**（DDGI visibility、JPEG XL /
+  KHR_lightmap 扩展）、**尚待构建**（octahedral normals、运行时 BC6H、接缝缝合）。每个阶段都写明游戏对它的要
+  求——一份测量过的差距分析与公开路线图，不是演示集。
+- **Nimony.org 上线——Nim 3 的编译器（Andreas Rumpf/Araq）：**"borrow checking, explicit nilability, sum
+  types, checked generics and more, with incremental and parallel builds from the start"；x86_64/ARM64/ARM32/
+  AVR/RISC-V 原生代码生成，"**independent of LLVM and GCC**"（`nimony n` 连 C 编译器都不需要）；运行时
+  "hardened against heap exhaustion"，OOM "is a condition you handle, not a crash"；同一代码库可编译到
+  C/native/JS/WASM；`staticContracts` 之下 "an index that is provably out of range is a compile-time error"。
+  四个平台的 nightly 工具链每日构建；nim-lang/Nimony 仓库一手在线（"a new Nim implementation that is in heavy
+  development… production-ready compiler this year"）。极少数代码生成完全不经过 LLVM 或 C 的生产语言——对
+  嵌入式与 RISC-V 而言，C 工具链所掩盖的 UB 不存在，这本身就是特性。
+- **货架：****Carmack 谈 3dfx Voodoo 1 为什么看着发灰**——"Both NeXT and 3DFX tried to 'do the right thing'
+  with color spaces, and it wound up generally making them look worse… I didn't really understand it properly
+  until years later"（讨论串给出的机制：sRGB 除信号电压层外处处非线性，而 CRT 上 50% 就是真正的 50%——数学
+  上正确的线性管线渲染出来比用户眼前那块玻璃的实际响应更暗更平；正确 ≠ 对）。**WINUDF 1.2**（ages2001）——
+  在 DOS 与 Windows 1.0x–ME 上读写 UDF 1.02–2.60（`WINUDF.EXE` 盘符），Windows 95/98/ME 用 `WINUDF.VXD`（长
+  文件名），是同一作者四件 WINDRV 套件之一（WINDISK：IDE/SATA AHCI/NVMe；WINUSB 含 USB4/Thunderbolt；
+  WINAUDIO：HD Audio/AC'97/GM/SB16）——复古计算场景成了正经的系统工程，作者本人正在 HN 讨论串里实时回答驱
+  动层问题。
+
+→ [[dev-tools]] [[ai-impact]] [[fact-check]]
+
+来源：[daniel.haxx.se: Actual curl rewrites in rust](https://daniel.haxx.se/blog/2026/11/17/actual-curl-rewrites-in-rust/) ·
+[ben3d.ca: Building the AAA Lighting Pipeline in Three.js](https://ben3d.ca/blog/building-the-aaa-lighting-pipeline-in-threejs) ·
+[nimony.org](https://nimony.org/) · [HN：WINUDF](https://news.ycombinator.com/item?id=50515182) ·
+[HN：Carmack 讨论串](https://news.ycombinator.com/item?id=50525575)

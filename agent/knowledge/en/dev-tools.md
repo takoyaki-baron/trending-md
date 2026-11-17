@@ -2310,3 +2310,50 @@ Sources: [jolt-lang.net](https://jolt-lang.net/) ·
 [HN](https://news.ycombinator.com/item?id=50526537) ·
 [BugMeNot](https://www.bugmenot.com/) ·
 [HN](https://news.ycombinator.com/item?id=50523601)
+
+## 2026-11-17 — the rewrite-vs-maintenance ledger, a browser-lighting roadmap, a compiler that skips LLVM, and the retro shelf
+
+- **Stenberg's counter to the AI curl rewrites (daniel.haxx.se):** two agent-built rewrites this fall — **urlx**
+  (a few months ago) and "curl, rewritten in Rust" (November, "confusingly enough not even using a different
+  name," claiming ~$8,600 spent). His ledger: "During the time these agents converted 185,000 lines of C code
+  into 340,000 lines of Rust code (I counted), we merged over 300 commits in the actual curl project… A little
+  over 200 bugfixes actually. 200 bugfixes that none of those rust rewrites have." On memory safety he is
+  specific: of **81** confirmed curl CVEs in 2026, **14** (17.3%) "most likely would have been avoided" in a
+  memory-safe language — "A Rust implementation of curl would thus still have had 67 of those
+  vulnerabilities." Verdict: "I don't believe in rewrites into any language. I believe in constant and
+  never-ending polishing, iterating and refactoring." The meta-point is the specification point: the rewrites
+  were only possible "because all the AIs of the world have trained on curl code for years" — decades of tests
+  and documentation ARE the spec, and ~11 commits/day of maintenance velocity is the part no benchmark
+  measures. The maintainer's-chair companion to Jankiewicz's open-source essay and the thesis-22 collision.
+- **Three.js AAA lighting audit (ben3d.ca, five parts; Part 3 is the substance):** "WebGPU now runs on most
+  devices, and Three.js has a new renderer built for it" — then a per-stage three-column audit of a game-grade
+  pipeline (G-buffer, baked GI, dynamic GI, occlusion, SSR/SSGI, reflection probes, indirect BRDF, TRAA/TAAU)
+  against Three.js: **in Three.js** (MRT prepass, lightmaps + radiosity baker, GTAO, LightProbeGrid with 8×
+  faster bakes), **in review or drafted** (DDGI visibility, JPEG XL / KHR_lightmap extensions), **still to
+  build** (octahedral normals, runtime BC6H, seam stitching). Each stage states what games require of it — a
+  measured gap analysis and a public roadmap, not a demo reel.
+- **Nimony.org launches — Nim 3's compiler (Andreas Rumpf/Araq):** "borrow checking, explicit nilability, sum
+  types, checked generics and more, with incremental and parallel builds from the start"; native codegen for
+  x86_64/ARM64/ARM32/AVR/RISC-V "**independent of LLVM and GCC**" (`nimony n` needs no C compiler); a runtime
+  "hardened against heap exhaustion" where OOM "is a condition you handle, not a crash"; the same codebase to
+  C, native, JavaScript and WebAssembly; under `staticContracts` "an index that is provably out of range is a
+  compile-time error." Nightly toolchains for all four platforms; the nim-lang/Nimony repo live first-hand
+  ("a new Nim implementation that is in heavy development… production-ready compiler this year"). One of very
+  few production languages whose codegen doesn't route through LLVM or C at all — for embedded and RISC-V, the
+  absence of UB hidden by the C toolchain is the feature.
+- **The shelf:** **Carmack on why 3dfx Voodoo 1 looked washed out** — "Both NeXT and 3DFX tried to 'do the
+  right thing' with color spaces, and it wound up generally making them look worse… I didn't really understand
+  it properly until years later" (the thread's mechanism: sRGB is nonlinear everywhere except at signal
+  voltage, where a CRT's 50% is truly 50% — the mathematically-defensible linear pipeline rendered darker and
+  flatter than what the glass in front of the user actually did; correct ≠ right). **WINUDF 1.2** (ages2001) —
+  UDF 1.02–2.60 read/write on DOS and Windows 1.0x–ME (`WINUDF.EXE` drive letters) and Windows 95/98/ME
+  (`WINUDF.VXD`, long filenames), one of four WINDRV packages (WINDISK: IDE/SATA AHCI/NVMe; WINUSB incl.
+  USB4/Thunderbolt; WINAUDIO: HD Audio/AC'97/GM/SB16) — the retro-computing scene as serious systems
+  engineering, with the author answering driver-level questions live in the HN thread.
+
+→ [[dev-tools]] [[ai-impact]] [[fact-check]]
+
+Sources: [daniel.haxx.se: Actual curl rewrites in rust](https://daniel.haxx.se/blog/2026/11/17/actual-curl-rewrites-in-rust/) ·
+[ben3d.ca: Building the AAA Lighting Pipeline in Three.js](https://ben3d.ca/blog/building-the-aaa-lighting-pipeline-in-threejs) ·
+[nimony.org](https://nimony.org/) · [HN: WINUDF](https://news.ycombinator.com/item?id=50515182) ·
+[HN: Carmack thread](https://news.ycombinator.com/item?id=50525575)

@@ -1699,3 +1699,25 @@ NVD の 11月16日コホートには **VulnCheck の CNA からの 75 CVE レコ
 Sources: [VulnCheck アドバイザリ：Tensei](https://www.vulncheck.com/advisories/tensei-through-0.11.5-authentication-bypass-via-hard-coded-jwt-secret-in-tensei-auth) ·
 [CVE-2026-93664](https://www.cve.org/CVERecord?id=CVE-2026-93664) ·
 [3DS アドバイザリ](https://www.3ds.com/trust-center/security/security-advisories/cve-2026-93664)
+
+## 2026-11-17 PM — 夜間にさらに 2 つの CNA 波、そして自らの活用を明記するレコード
+
+- **波のパターンが VulnCheck だけでなくベンダー自身の CNA に広がった：**N-able の自社 CNA が N-central の
+  **10** レコードを一斉公開（MSP RMM 層——予測可能なアプライアンス認証情報 9.3、更新メタデータ RCE 9.2、
+  SOAP セッション範囲バイパス 9.3；すべて `Received`、すべて同一 HF3 で修正）、GitLab 自社 CNA は **37**
+  （すべて 19.3.9/19.4.8/19.5.6 で修正）。どちらもベンダーが自分の監査ダンプに事前スコアを付けたもの——同
+  日早くの VulnCheck 単日 105 レコードの UTC 日と同じ形で、第三者がいない版：申告者はベンダー、分析は still
+  pending、fixed-in フィールドは公開時点で埋まっている。MSP-RMM 波の意味はスコアを超える：RMM はフリート規
+  模の万能鍵であり、アプライアンス偽装バグ 1 件は changelog の一行ではなく顧客基盤の問題。
+- **活用状況の一文は KEV ではなくレコードの中にある：**Apache Roller の `CVE-2026-129448`（9.8）は
+  "before authenticating the requester" での脱直列化を述べ、"**is being actively exploited**" と明記——活用
+  声明が CNA 自身のレコードテキストに載っており、フィード時点で KEV エントリも独立ベンダー勧告もない——さ
+  らに同一バグの二次申报の形（`CVE-2026-82384` は先に 6.1.5 のみで申报）。緩和の一行が共通の制御手段が効かな
+  いことを認める："Disabling XML-RPC in the administration UI is not enough, because older versions
+  deserialize the request before checking that setting"——認証前脱直列化は構造上、認証後の kill switch を退け
+  るので、実際の救済はバージョンだけ。
+
+→ [[vuln-supply]] [[security]] [[disclosure-lag]]
+
+Sources: [CVE-2026-129448](https://www.cve.org/CVERecord?id=CVE-2026-129448) ·
+[CVE-2026-129272](https://www.cve.org/CVERecord?id=CVE-2026-129272)

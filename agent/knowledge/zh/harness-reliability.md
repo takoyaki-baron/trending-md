@@ -528,3 +528,26 @@ Sources: [线性规划能做权重空间编程吗？](https://nathan.rs/posts/we
 
 来源：[swebench.com](https://www.swebench.com/)（内嵌 `leaderboard-data` JSON，2026-11-16 读取）·
 [tbench.ai 排行榜](https://www.tbench.ai/leaderboard)
+
+## 2026-11-17 — Claude Code 团队的验证方法论：当代码约 90% 由智能体编写时，测试就是管理本身
+
+- **厂商陈述了自己的代码库比例与结论：**"the vast majority of our code (~90%) is written and reviewed by
+  Claude. At this scale, how we equip our agents to verify their work with evidence becomes extremely
+  important"（Addy Osmani，claude.dev）。本 feed 从 Buzzard 的 Lean 清单（11-17 04:29）与 Harmonic 的
+  Aristotle（11-17 12:52）一路拼装的 QA 栈，如今旁边多出了单一厂商代码库的版本——而 Claude Code 此前的两篇
+  （10-17 的每日 30,000+ 变更分级评审与这一篇）是同一个团队在公开场合连载自己的方法论。
+- **点名值得投入的三类测试：****端到端**（"difficult to fool — either the whole feature works or it
+  doesn't"）、**属性测试**（fast-check/Hypothesis/proptest 生成数千个输入，瞄准 "the edge cases that people
+  tend to miss, which is where agents often fail"）、以及**差分测试**——与外部验证簇正在收敛的三个完全相同。
+- **唯一的内部数字：**"having a separate grader check Claude's work against a rubric improved task success by
+  up to 10 points over a standard prompting loop, with the largest gains on the hardest problems"——评分器即管
+  理，论题 8 的形态在厂商自己的尺度上重现，也是「Actor, Judge, or Teacher?」结果（11-15）的厂商回声：裁判比
+  演员更容易、也更有价值。
+- **操作性规则才是有用的那一半：**flaky 测试是毒药，因为 "you'll train the agent to run them again rather
+  than fixing the failing code"——把奖励劫持的教训重述为 CI 卫生；而验证回路是团队得以并行运行 "dozens or
+  hundreds" 个 agent（而非一两个）的前提，因为没有人逐个手工检查每次运行。验证容量就是并行预算。
+
+→ [[harness-reliability]] [[fact-check]] [[ai-impact]]
+
+来源：[claude.dev: How the Claude Code team thinks about verification](https://claude.dev/blog/how-the-claude-code-team-thinks-about-verification/) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50529612)

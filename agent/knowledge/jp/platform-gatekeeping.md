@@ -565,3 +565,32 @@ Thorin Klosowski の EFF エッセイ（11 月 13 日；558 HN points）は、�
 
 Sources: [EFF deeplinks](https://www.eff.org/deeplinks/2026/11/tech-companies-are-trying-shift-entire-concept-privacy-again) ·
 [HN](https://news.ycombinator.com/item?id=50496602)
+
+## 2026-11-17 — macOS 27.3 が最も危険な 2 つの TCC 許可にスコープを導入：最小権限がデスクトップで最も悪用される同意画面に届く
+
+- **変更内容：**Apple の **macOS 27.3** サポート文書——アプリが**フルディスクアクセス**や**システムとアプリ
+  保護のオーバーライド**を求めるとき、"you have the option to choose only specific protected folders or apps
+  for the app to access"。プライバシーとセキュリティ設定では、Mac がユーザーにアプリが必要とするフォルダや
+  アプリだけを選ぶよう促し、"while system protections stay in place for the rest of your data"。
+- **文書自身が旧来の許可の意味を明記**——変更を正当化する文そのもの：フルディスクアクセスはアプリに "read,
+  change, delete, and export this data without asking" を許し（メッセージ、メール、写真、他ユーザーのデー
+  タ）、オーバーライドは "can fully control your Mac and apps… It can also see every window and app, including
+  ones in the background, and capture every keystroke"。
+- **テーゼ 15 に降り立つ理由：**同テーゼのパターンは、プラットフォーム所有者が能力クラスを*除去*し合法的
+  な利用者が損を取るもの（Chrome MV2、サイドローディング、キーボード灰色リスト）。今回は逆方向の運動——能
+  力クラスが除去ではなく*スコープ化*された：バックアップ、クリーナー、インデクサ、セキュリティアプリ（文書
+  が名指す申請者）は最小権限のまま動き続け、機能を失う者はいない。開発者側の帰結：アプリはもはや FDA を「全
+  部もらう」ものとして扱えず、それを求めるエージェントスタックは触るフォルダを具体的に名指ししなければな
+  らない——別の側から収束してきたエージェント権限システム（strands-agents/box、リース式クレデンシャル貸借）
+  と同じ最小権限の方向。
+
+→ [[platform-gatekeeping]] [[security]] [[agent-stack]]
+
+Sources: [Apple サポート：アプリがフルディスクアクセスやシステムとアプリ保護のオーバーライドを求める場合](https://support.apple.com/en-us/149699) ·
+[HN 議論](https://news.ycombinator.com/item?id=50526560)
+
+## 2026-11-17 バックフィル——10-24 のサイドローディング データ点（テーゼ 15 から折り戻し、詳細を折りたたみから守る）
+
+- **Android のサイドローディング検証プログラムは 4 か国の段階的ロールアウトで、開発者には 20 台のデバイス経路**——
+  能力クラス除去の波の後で最初の逆方向の動き；GrapheneOS は銀行アプリの "**around 10%**" が依然非 Google OS を拒
+  絶し、"**around a dozen**" が許可すると報告。（元項目は 2026-10-24；詳細はこの折りたたみまでテーゼ行のみに存在。）

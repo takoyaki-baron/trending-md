@@ -3719,3 +3719,24 @@ Anthropic 向 IPO 投资人透露（联合创始人兼首席算力官 Tom Brown�
 
 来源：[Tom's Hardware](https://www.tomshardware.com/tech-industry/artificial-intelligence/anthropic-says-claude-mythos-slashed-software-work-to-onboard-amd-gpus-from-up-to-12-months-to-around-three-days-writing-almost-100-percent-of-kernels-autonomously-chips-away-at-nvidias-cuda-moat) ·
 [HN](https://news.ycombinator.com/item?id=50526264)
+
+## 2026-11-17 — K2-Horizon 把整条生产线发了出来：六个完全开放的模型，从 0.9B 到 375B-A23B MoE
+
+- **舰队：**K2 团队（Zhengzhong Liu、Haonan Li、Xuezhe Ma、Rupesh Kumar Srivastava 等数十人；arXiv 2611.21003，
+  11-16 提交）——"a fleet of six fully open language models, from a 0.9B dense model to a 375B-A23B MoE, built
+  for general-purpose reasoning and agentic work"。两项建模引入：**MoVA**（Mixture-of-Value Attention——
+  "applying MoE to attention value projections"）与 **softplus attention gating**；36B-A4B 模型 "nearly matches
+  a 32B dense model trained on the same data, with one-seventh the active parameters"。另有 **Uno**，
+  "lossless diffusion adapters that speed up decoding by up to 2.2x without a separate draft model"。
+- **开源的定义本身就是发布物：**LLM360 式的「开放」——完整开发历史、每个训练阶段的中间 checkpoint、预训练
+  数据、日志、全部训练/评测/基础设施代码（xLLM 训练框架与 RL360 RL 栈）。权重已挂在 Hugging Face（IFM 组
+  织），含 GGUF。多数「开放」发布只给权重加论文；这份发布给的是整条生产线——那才是可复现性真正需要的东
+  西（对照论题 6 的历次折叠：WeLM-Image 的零工件、LongCat-2.5 的纯 API 万亿参数）。
+- **合成数据主张是最大胆的数字：**约 **10T** 合成预训练 token——"showing that synthetic data can be a major
+  ingredient of pre-training at scale"——四个模型共享同一份 22T token 语料与配方，这正是受控 scaling 研究得
+  以进行的前提。在有人用他们的数据复现之前，这只是厂商自报。
+
+→ [[frontier-models]] [[fact-check]] [[edge-inference]]
+
+来源：[arXiv:2611.21003 — K2-Horizon](https://arxiv.org/abs/2611.21003) ·
+[Hugging Face 上的 IFM/K2-Horizon-MoVA-36B-A4B](https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B)（本批次在线核实）

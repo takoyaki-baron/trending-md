@@ -3143,6 +3143,46 @@
    "id": "CVE-2026-124017",
    "why": "2026-11-17 — Phison SSD controller firmware: leaked RSA parameters unlock vendor commands — arbitrary memory read/write and volatile code execution on th",
    "seeded": "2026-11-17 [Received] 3.1 Primary/disclosure@vulncheck.com 6.7, 4.0 Secondary/disclosure@vulncheck.com 8.4, CWE-347, published 11-16"
+  },
+  {
+   "id": "CVE-2026-129272",
+   "why": "2026-11-17 — N-able N-central drops 10 CVE records in one wave — an MSP's RMM where a 9.3 lets anyone impersonate an appliance and 9.2 turns update metad",
+   "seeded": "2026-11-17 [Received] 4.0 Secondary/a5532a13-c4dd-4202-bef1-e0b8f2f8d12b 9.3, CWE-287, published 11-17"
+  },
+  {
+   "id": "CVE-2026-129286",
+   "why": "2026-11-17 — N-able N-central drops 10 CVE records in one wave — an MSP's RMM where a 9.3 lets anyone impersonate an appliance and 9.2 turns update metad",
+   "seeded": "2026-11-17 [Received] 4.0 Secondary/a5532a13-c4dd-4202-bef1-e0b8f2f8d12b 9.2, CWE-22, published 11-17"
+  },
+  {
+   "id": "CVE-2026-129280",
+   "why": "2026-11-17 — N-able N-central drops 10 CVE records in one wave — an MSP's RMM where a 9.3 lets anyone impersonate an appliance and 9.2 turns update metad",
+   "seeded": "2026-11-17 [Received] 4.0 Secondary/a5532a13-c4dd-4202-bef1-e0b8f2f8d12b 9.3, CWE-862, published 11-17"
+  },
+  {
+   "id": "CVE-2026-129448",
+   "why": "2026-11-17 — GitLab ships a 37-record security wave — two 8.7 stored XSS — while Apache Roller's 9.8 XML-RPC deserialization RCE lands beside it",
+   "seeded": "2026-11-17 [Received] 3.1 Secondary/security@apache.org 9.8, CWE-502, published 11-17"
+  },
+  {
+   "id": "CVE-2026-105739",
+   "why": "2026-11-17 — GitLab ships a 37-record security wave — two 8.7 stored XSS — while Apache Roller's 9.8 XML-RPC deserialization RCE lands beside it",
+   "seeded": "2026-11-17 [Received] 3.1 Secondary/cve@gitlab.com 8.7, CWE-79, published 11-17"
+  },
+  {
+   "id": "CVE-2026-108153",
+   "why": "2026-11-17 — GitLab ships a 37-record security wave — two 8.7 stored XSS — while Apache Roller's 9.8 XML-RPC deserialization RCE lands beside it",
+   "seeded": "2026-11-17 [Received] 3.1 Secondary/cve@gitlab.com 8.7, CWE-79, published 11-17"
+  },
+  {
+   "id": "CVE-2026-110990",
+   "why": "2026-11-17 — GitLab ships a 37-record security wave — two 8.7 stored XSS — while Apache Roller's 9.8 XML-RPC deserialization RCE lands beside it",
+   "seeded": "2026-11-17 [Received] 3.1 Secondary/cve@gitlab.com 2.3, CWE-532, published 11-17"
+  },
+  {
+   "id": "CVE-2026-82384",
+   "why": "2026-11-17 — GitLab ships a 37-record security wave — two 8.7 stored XSS — while Apache Roller's 9.8 XML-RPC deserialization RCE lands beside it",
+   "seeded": "2026-11-17 [Deferred] 3.1 Secondary/security@apache.org 9.8, CWE-502, published 09-28"
   }
  ]
 }

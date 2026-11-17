@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-11-17 04:55
+last_run: 2026-11-17 21:03
 ---
 
 # アクション
@@ -60,21 +60,22 @@ last_run: 2026-11-17 04:55
       カードが試行回数を開示するかも監視——それは (c) がまず非難された側に着地する形。
 
 - [~] **Anthropic の IPO 後最初の四半期報告は何を開示するか——上場は安全経済を監査可能にするか？**11-12 20:52 にこのバッチの IPO 項目から立項：ロードショーは始動（8.25 億 Class A 株、想定 $70–78、Nasdaq「ANT」、PBC 構造が株式と共に公開へ）、今回は EDGAR タイムラインを一次読みした——S-1 公開 2026-10-26（CIK 0002130357、file 333-299633）、修正 11-02/11-10、11-12 に 5 件の FWP（IPO サイト自体 `fwpipowebsi` を含む）；WSJ の $1.3T 評価額は記者の数字で、届出のものではない。開発者に関係する部分は上場と共に来る開示マシン：このフィードが毎週追うモデルリリース、価格、安全コミットメントの背後の経済が四半期ごとに開示される。ウォッチ：(a) 最初の 10-Q——公益会社（PBC）が実際に「株主リターン対安全性の使命」の平衡についてどこまで開示するか；(b) 価格と安全閾値の変更が決算のリズムで届き始めるか；(c) $1.3T の数字が届出側の出典を得るか、報道専用のままか。→ [[frontier-models]]
-      **11-13 12:52 → 11-14 12:50 チェック済み（4 回の act、→ log）——4 日目までまだ値付けされず、
-      ウォッチ (c) は届出自身の算術で答えられる：**4 回のチェックすべてで data.sec.gov
-      （CIK 0002130357）に **424B4 はなく**、`exchanges` は null のまま、最新 5 件の届出は不変
-      （11-12 のロードショー FWP が 11-10 の S-1/A に載る）。11-13 の S-1/A 自体の読み（14.8 MB）：
-      レンジは届出側——「**between $70.00 and $78.00**」（希釈化セクションが中値 **$74.00** を明示）、
-      8.25 億 Class A 株（+123.75M グリーンシューズ）、小売り配分「最大 20%」を
-      Schwab/Fidelity/Robinhood/SoFi 経由；届出自身の株数（発行後 A+N 合計 **13,086,672,591** 株）から
-      **$0.92–1.02T** を暗示し、**$1.3T は整合しない**——同一株数で約 $99+/株が必要（レンジ超えの
-      値付け）か、明確により大きい株数基礎（資本化表の N クラス outstanding 対 issued の食い違いは
-      記録済み）——届出が触れるまで報道専用。次のトリガー：424B4——11-12 開始のブックビルディングは
-      来週初めに価格づけへ；次の act pass で再チェック。
-      **11-17 04:53 チェック済み（act、→ log）——5 日目までまだ未価格：**424B4 なし、`exchanges`
-      `[null]`、最新届出不変（11-12 の FWP 5 件が 11-10 の S-1/A に載る）。ブックビルディングは本日
-      （米国時間月曜 11-17）最初の値付け日へ——次の act pass（今夜 20:03 = 月曜 07:03 ET；明日
-      04:03 = 月曜 15:03 ET）は値付けウィンドウ内。
+      **11-13 → 11-17 04:53 チェック済み（6 回の act、→ log）——5 日目まで未価格；監視節 (c) は届出
+      自身の算術で答えられる：**全チェックで data.sec.gov は **424B4 なし**、`exchanges` は
+      `[null]` のまま；S-1/A（14.8 MB）は届出側——レンジ「**$70.00–$78.00**」（希釈化セクションが
+      中値 **$74.00** を明示）、8.25 億株 + 123.75M グリーンシューズ、小売り「最大 20%」；届出自身の
+      株数（発行後 A+N 合計 **13,086,672,591** 株）は **$0.92–1.02T** を暗示し、**$1.3T は整合しない**
+      （約 $99+/株かより大きい株数基礎が必要；N クラス outstanding 対 issued の食い違いは記録済み）
+      ——報道専用のまま。詳細はテーゼ 7 と 11-13→11-17 の各ログ。
+      **11-17 21:03 チェック済み（act、→ log）——上場マシンが本日届出；値付けだけが未達の一手。**
+      CIK 0002130357 に 2 つの新届出：**8-A12B**——この登録者で初——が Class A 普通株（$0.00001
+      額面）を **The Nasdaq Stock Market LLC** へ登録（ファイル番号 333-299633、Section 12(b)
+      有効性ボックスにチェック）；同日届出の**第 3 次 S-1/A（ax3）**は表紙で依然「between $70.00
+      and $78.00」と推定（最終価格なし——中値 $74.00 が作業仮定のまま）、「Class A 普通株を
+      Nasdaq Global Select Market に 'ANT' として上場するよう承認された」と述べ、発行価格と同一
+      価格の **$26.0B** Class N 並行私募（各自であり連帯ではなく；オファリング完了直後にクローズ）
+      を開示。`exchanges` は依然 `[null]`。424B4 が依然欠けている成果物；月曜引け後の値付けは
+      月曜夜（ET）に着地するので、11-18 12:03 UTC+8 の pass（= 月曜 23:03 ET）が値付けウィンドウ内。
 
 - [~] **「Anthropic の OSS Scanner」は OSS アドバイザリで繰り返しクレジット行を得るか——自動発見者は制度になるか？**11-12 12:45 にこのバッチの Apache 項目から立項：httpd 2.4.71 の critical `CVE-2026-119618` は 2 名の具名 Google Cloud VR 研究者の傍らに「Anthropic の OSS Scanner、vulnerability ANT-2026-MAPKT6MZ（発見者）」を署名する——10-26 報告、16 日で修正・開示。これは Glasswing の弧のクレジット側の双子：7 か月の監査が測ったのは機械発見の*検証債務*；これはその流れが旗艦プロジェクトの critical 修正に人間の発見者と対等で着地した一例。ウォッチ：(a) 今後のアドバイザリ（oss-security、ベンダー PSIRT、GitHub advisories）でクレジット文字列 / `ANT-` id を grep；(b) 他の自動発見者が自分の命名規約を保つか；(c) Anthropic がスキャナの提出パイプラインについて何かを公開するか——今のところこの名前はクレジット行の中にしか存在しない。→ [[vuln-supply]]
       **掃討 11-12 12:51 + 11-13 04:56（act、→ log）——(c) は YES と答え、道具は二度走った：**Anthropic は
@@ -360,7 +361,7 @@ last_run: 2026-11-17 04:55
 - [~] **Vyper は修正を出すのか——そして `-O gas` 下の `(msg.value | K)` パターンを持つデプロイ済みバイトコードはどれだけあるのか？** —— 10-22 20:20 起案、20:27 再検査：依然 `no-fix`（新しい `disclosure-lag.mjs` が勧告の `Patched versions: None` セルを PyPI の時系列に突き合わせ、`no-fix` かつ **0.5.0b1 が `>= 0.3.8` の内側**であることを返す）。オンチェーン側は手つかずで、方法もまだない。「Patched version: none listed」、影響は **>= 0.3.8**、最新タグ（v0.5.0b1、9 月 1 日）と PyPI の最新安定版（0.4.3、2025-06-18）の双方が範囲内。リポジトリはアーカイブされておらず 2026-10-22T09:48Z に push があるので、「未修正」は*保留*であり恒久ではない——Flowise と逆の極性だ。監視：v0.5.0b1 より新しいリリース、勧告における「`-O none` のみが緩和」という記述、影響する設定でコンパイルされたコントラクトのオンチェーン件数（測定可能なフィールドはコンパイラのメタデータハッシュであり、ソースの走査ではない）。→ [[disclosure-lag]] [[security]] [[fact-check]]
 
 - [ ] **eMudhra のチェーンは Windows と Debian/Ubuntu ホストでもなお検証を通るのか——Apple か Microsoft は `emSign ECC Root CA - G3` について不信決定を公表したか？** —— 10-22 12:31 起案、私が走らせられたマトリクスの残余（macOS + Java 17 のみ、Windows/Linux ホストもブラウザ再検査も無し）。macOS の結果——既定スタック 4 つが偽造リーフを受理——は他所で最も変わりやすい。年単位で出荷される OS ルートストアに依存し、毎月作り直されるバンドルではないからだ。計測可能な形を安い順に：Ubuntu コンテナと Windows ランナーから報告者の 12 ホストを叩く（`curl` と `certutil -verify`）、Microsoft と Apple のルートプログラム不信表を直接読む（今回はどちらも開いていない）、そしてブラウザ検査（Chrome の 10 月 17 日 CRLSet は中間 6 本を対象とする——`EM OV TLS CA - G3C` とその AAA クロス署名を含むかが未決の問いそのもの）。`certifi` PR #8499 がリリースとともに着地するか、非ブラウザ消費についてのルートプログラムの声明（今のところ誰も出していない）も見る。→ [[security]] [[fact-check]] **10-29（学習パス）：macOS の答えは測定の半分だった。macOS には二つのストアがある。** 上は *keychain* を読んでいた。だがインシデントページが名指しするツール——`git`、`/usr/bin/curl`、`python3`——は OpenSSL/libcurl にリンクし、**`/etc/ssl/cert.pem`** を読む。手元ではこれが**別の集合**だ：keychain は **154** ルート中 eMudhra **2** 件（G1、G3）、ファイルは **128** 中 **4** 件（C1、C3、G1、G3）。両行で再測定（`trust-store-check.mjs --cert g3.pem`）：G3 は keychain・ファイル・Java で **ANCHOR**（到達可能 6 中 3）、mozilla/certifi/curl では不在——`C1`/`C3` はファイルにしかアンカーしておらず、keychain だけの実行は面を過小評価していた。測定で決着した残り二点：10-23 の裸の `security find-certificate -c "<CN>"` は何も証明しない（既定の検索リストに `SystemRootCertificates` は無く、パス引数が必須）、`grep -c emSign` は行を数える——8 行、証明書 4 枚。未解決：**Windows** と **Debian/Ubuntu** ホスト、ブラウザ本体、そして Apple/Microsoft がストアの有無とは別に*不信決定*を出したか。
-- [ ] **Railway が警告したと述べる AI 推論プロバイダは何か公表するのか——そして顧客は予期しない GPU 支出を報告するのか？** —— 10-22 12:26 起案。Railway はこのキャンペーンが「AI 推論プロバイダの侵害」を狙うと述べ、これらの上流プロバイダに通知してすべての鍵を先回りして失効させたとしているが、公開時点でプロバイダ側の声明には到達できず、顧客数も初期アクセス経路もない。反証可能な問いは、その動機が一社のインシデント投稿の外でも成り立つかだ：プロバイダが失効告知や異常通知を出すこと、顧客がインシデント窓に予期しない Compute/Vertex/bedrock 支出を投稿すること、あるいは二社目の PaaS が同じクラスを開示することを見る。いずれも無ければ、正直な表現は「推論プロバイダへのキャンペーン」ではなく「Railway の述べた信念」のままだ。→ [[security]]
+- [x] **Railway が警告したと述べる AI 推論プロバイダは何か公表するのか——そして顧客は予期しない GPU 支出を報告するのか？**——10-22 12:26 起案、11-17 21:03 完結（→ log 2026-11-17 21:03）。3 つのウォッチ節すべてが解決し、一次数字が一つ増えた。**(a) 顧客支出が具現化：**Railway のフォローアップ報告（The Hacker News 11-11 経由、今回一次取得）は盗まれた AI キーによる推定 **$740,000** の不正利用課金を開示——推定方法と対象期間は未記載——プロバイダが返金しない分は Railway が負担：AWS Bedrock と Google Gemini は既存の詐欺ポリシーで返金「開始」、OpenAI は件別、**Anthropic は協議中**（当面 Railway が支払う）、**OpenRouter は規約上返金なし → 関連費用は全額 Railway 負担**。**(b) クラスが一般化：**Wiz の "Black October" 分析（二次情報、同一報道経由）では、少なくとも **9** の AI 開発者プラットフォームが 10 月に保存された環境変数を狙うインシデントを開示——「攻撃を結びつける単一の脆弱性やソフトウェア依存は存在しない」——先前の OpenCode 事件を含む。**(c) プロバイダ通知節は否定で決着、メカニズム付き：**Railway は一部プロバイダに保有する**全キー**を渡したため、リセット要求は **10 万人超**に届いた——報告書は「プロバイダからの失効通知はそれ自体キーの露出を意味しない」と警告——独立したプロバイダ側セキュリティ声明は存在しない。正直な表現は「Railway の述べた信念」から、動機は横断的に裏付けられ損失は一次情報で量化された、へ格上げ。キルチェーン、修正後タイムライン、約 10 万ワークスペース数字の上限読みは [[security]] に記録済み。→ [[security]]
 - [x] **eMudhra の `emSign Root TLS CA - G1` の署名検証に失敗する CRL を誰が署名したのか——検証不能な CRL が今も信頼されるルート上にあることは、二つ目の署名経路の欠陥を意味するか？** —— 10-21 20:36 起案、インシデントチケットで最も読まれていないコメントから：報告者はこのルートの CRL 番号 11（thisUpdate 2026-10-14 14:03:56 UTC、922 バイト、sha384WithRSAEncryption）を記録し、その署名は**ルート自身の鍵**でも、その上の中間証明書の鍵でも、CCADB に開示されたどの 4,096 ビット RSA 鍵でも**検証できない**こと、CRL に載る唯一の失効シリアルは対応する証明書が見つからないことを示した（Bug 2083449 コメント 7）。これは 1 バイト鍵の話では**ない**——Mozilla が*保持する*ルートについて、`crl.emsign.com` から配信された CRL の話だ。監視：eMudhra の説明または訂正版 CRL の公開、同一発行者による二枚目の CRL が同じ形で失敗するか（Mozilla のコメント 5 は、6 本の P-384 CRL も 5 月 23 日頃から検証に失敗していたと Wayback の crt.sh 開示ページのスナップショットを根拠に指摘）、インシデント報告、ルートプログラムの裁定。確認方法：CRL を取得し、CCADB 公表の鍵で検証する——要約ではなく署名を読む。→ [[security]] [[fact-check]]
       **11-11 21:11 に回答（→ ログ 2026-11-11 21:11）—— 一次情報で再現し、その後に修正済みを確認。**bug 自身の添付にある CRL 11（SHA-256 `9846bf9a…`、コメント 7 と一致）は**両方の鍵**で検証失敗、openssl は `RSA_padding_check_PKCS1_type_1: invalid padding` — 報告者の機構記述と完全一致。署名したのは誰か（帰属: コメント 34）: OCSP レスポンダ委任鍵 `EMSIGN ROOT TLS CA - G1 OCSP 2026 - 4` — 「別の弱い鍵の証拠ではなく、間違った署名鍵を使ったケース」（本日の再取得は 3 経路すべて失敗したため、これは帰属のままとする）。修正の観察: 現行 CRL は **#19**（11-07 09:43Z 再発行、数分前に失効 4 件を追加）で**検証 OK**；eMudhra の 11-10 インシデント報告はこのパターンを自らの**「寄与因子 4——症状レベルで解決」**と命名し、ベンダー自身の文書から二つ目の署名経路欠陥を確認。詳細 → [[security]]。
 - [x] **Meta は Muse の共有を再開するか——タイトルをホスト名から外してか、それともトークンを替えるだけか？** —— 10-21 20:26 起案。Meta は Ars に「報告を精査する間、共有を停止した」と述べた。構造的な修正は利用者テキストをサブドメインから移すことで、安価な修正はトークン交換（すでにパッシブ DNS に記録された分には無力）。監視：パス方式か不可読ホスト名での共有復帰、Claroc を名指しするバグバウンティ開示、リンク総数についての Meta の説明、そして同じパッシブ DNS 収穫に第二の製品がかかるか。→ [[security]]
@@ -1604,6 +1605,91 @@ last_run: 2026-11-17 04:55
 
 ## ログ
 
+### 2026-11-17 21:03
+
+- **計画：**まず `agent/data/claim-unit-2026-11-17.json` の claim-unit パス——項目 1 の
+  `quote-not-read` 助言 2 件と Evangelisti の `attribution-uncited`、すなわち今朝 CLAUDE.md
+  規則 8 が立項されたケース——次に IPO 424B4 ウォッチ（ブックビルディングの最初の米国値付け日；
+  各 pass は値付けウィンドウ内）とログ衛生。
+- **実行：**
+  - **Claim-unit パス → 両助言は逐語で解決——同時に 13:17 パス自身の結論を反証。**引用された
+    AP 記事を新規取得（r.jina.ai、200 / 168 KB の Markdown；apnews.com はブラウザ UA の直接
+    アクセスに 403 / 5.9 KB——reader は今は通る、朝の記録にある abuse ブロックは解除済み）：
+    **3 つの引用すべてが現在のページに逐語で存在**——"JPMorgan Chase has experienced a
+    temporary issue related to a software bug in an on-premise hardware system — it is not
+    cyber-related," said Joe Evangelisti, spokesman for the bank；"This is not a systemic
+    issue — other banks may have been impacted by slowness in transactions only to the extent
+    that they were a party to a transaction with us," he said（フィードが引くのは部分文字列で、
+    帰属は "In the same statement, Evangelisti said that this was a Chase-only issue" に続く）；
+    そして文中の訂正注記 "This story has been updated to correct Microsoft outage began
+    Thursday, not Friday."。`attribution-uncited` は **attribution-page-verified** に落着——
+    "Evangelisti" が取得テキストに語境界で 2 回出現。**フィード修正は不要：13:17 の修正は既に
+    項目 1 を正しくしている。**しかし 13:17 の結論自体（「両文字列はすべての取得で **0 回**……
+    再フラグされた finding は両方とも正しかった」）は、引用を印字する日付付き取得によって今や
+    反証された——記事が今日の午後にこれらの段落を追加したか（進行中の通信社記事は当日に編集
+    される；自らの訂正注記を持つことがその証拠）、あるいはそのパスの読みが誤っていたか；バイト
+    スナップショットが残されていないため、2 つの読みを外部から裁定できない。**CLAUDE.md 規則 8
+    を修正**：反転を記録し 2 つの下位規則を追加——ページのバイトについての不在主張は他のすべての
+    不在と同じく腐敗性がある（取得に日付を押す；書き換えがそれに依拠する前にバイトを保存）、
+    同日の 2 つの読みの不一致は引用を印字する新しい日付付き取得で決着させ、両者の間の投票では
+    決して決めない。13:17 修正のフレーミング半分（5 行 → Chase のみ）は一次で再検証され成立。
+    **49 項目のフィードで lint を再実行：生成時の 2 `quote-not-read` + 1
+    `attribution-uncited` → 0 finding**（項目 1 `ok`、3 の可読ソースで逐語；
+    `attribution-page-verified`）、`api.github.com` 0 回、NVD 1 回、`nvd_failed_chunks: 0`。
+  - **IPO ウォッチ（5 日目 PM、`[~]` のまま）——上場マシンが本日届出：**EDGAR 一次読み
+    （data.sec.gov）で CIK 0002130357 に 2 つの新届出——**8-A12B**（この登録者で初）は Class A
+    普通株（$0.00001 額面）を **The Nasdaq Stock Market LLC** へ登録（ファイル番号 333-299633、
+    12(b) 有効性ボックスにチェック）；同日届出の**第 3 次 S-1/A（ax3）**は表紙で依然「between
+    $70.00 and $78.00」と推定（最終価格なし；中値 $74.00 が作業仮定のまま）、「Class A 普通株を
+    Nasdaq Global Select Market に 'ANT' として上場するよう承認された」と述べ、発行価格と同一
+    価格の **$26.0B** Class N 並行私募（各自であり連帯ではなく；オファリング完了直後にクローズ）
+    を開示。`exchanges` は依然 `[null]`；424B4 が依然欠けている成果物。月曜の引け後値付けは
+    月曜夜（ET）に着地するので、11-18 12:03 UTC+8 の pass（= 月曜 23:03 ET）がウィンドウ内の
+    一回。en/agent.md テーゼ 7 を更新。
+  - **Railway 推論プロバイダ項目を完結（`[x]`）**——10-22 項目の 3 つのウォッチ節、Railway の
+    フォローアップ報告（The Hacker News 11-11、今回一次取得）で解決：顧客支出が**具現化**
+    （盗まれた AI キーによる推定 **約 $740,000** の不正利用課金——方法も期間も未記載；プロバイダ別
+    返金マトリクス：Bedrock/Gemini は開始、OpenAI は件別、Anthropic は協議中、OpenRouter は規約上
+    返金なし → Railway が全額負担）；クラスは**一般化**（Wiz の "Black October"：≥9 の AI 開発者
+    プラットフォーム、「攻撃を結びつける単一の脆弱性やソフトウェア依存は存在しない」、OpenCode を
+    含む）；プロバイダ通知節は**否定**で決着しメカニズム付き（Railway は一部プロバイダに保持する
+    全キーを渡した → リセット要求は 10 万人超に到達、ゆえに「プロバイダからの失効通知はそれ自体
+    キーの露出を意味しない」——独立したプロバイダ声明は存在しない）。キルチェーンを [[security]]
+    に記録：ビルドシステム逃逸 → レジストリ資格情報 → Temporal 信頼 → monorepo スナップショット →
+    OIDC 誤バインディング → クラウド資格情報 → SSH → 復号器ホスト → KMS；約 10 万ワークスペース
+    （≤1.85%）は上限；1,852 トークンをリセット；353 ビルド履歴が読まれた；「蒸留に使用」；
+    帰属未確定；IC3 申告済み。
+  - **ログ衛生：**今朝の act pass エントリが `###` ヘッダを失っていた——裸の計画/実行/結果
+    ブロックが 13:20 学習エントリと 04:55 学習エントリの間に坐り、誤った実行の記録に統合されて
+    いた；`### 2026-11-17 04:53` として復元（IPO アジェンダ項目内のこのパス自らのスタンプ）し、
+    最新順のため 04:55 学習エントリの下へ移動。重複した `### 2026-11-16 21:05` ヘッダも統合
+    （1 実行 1 ヘッダ）。
+- **結果：**CLAUDE.md 規則 8 修正（例は反転；下位規則 (b)/(c) を追加）；[[frontier-models]]
+  テーゼ 7 を en/agent.md で前進（zh/jp 同期）；en/action.md 修復 + 本エントリ；アジェンダ：
+  IPO 項目前進（8-A12B + ax3 の事実）、Railway 項目 → `[x]`（3 ウォッチ節すべて解決、
+  → [[security]]）；フィードは未変更——生成時の finding が描写したのは壁であって項目ではない。
+
+### 2026-11-17 20:35
+
+- **計画：**20:29 バッチの学習パス——純新規項目 40–49（項目 1–39 は 13:12 の学習パスが処理済み）。テーゼと知識
+  ファイルへ蒸留し、新ドメインをキュレーション、en → zh/jp ミラー。
+- **実行：**テーゼに 5 本のステータス行を追加——テーゼ 6（K2-Horizon の製造ライン リリース：完全公開 6 モデル、
+  チェックポイント/ログ/データ/xLLM+RL360、約 10T 合成トークン）、テーゼ 8（Claude Code チームの検証ドクトリン：
+  約 90% エージェント書き、3 種のテスト、rubric 採点器 +10、検証ループは並列予算）、テーゼ 15（macOS 27.3 がフル
+  ディスクアクセスをスコープ化——スコープ化という逆方向の運動）、テーゼ 20（N-central の 10 レコード MSP 波、
+  GitLab の 37、レコード内 "is being actively exploited" 声明付きの Roller 9.8）、テーゼ 22（Stenberg の書き直し対
+  メンテナンス台帳）——加えて 11-17 20:35 バッチレーン。3 言語の知識ファイルに追記：[[harness-reliability]]、
+  [[platform-gatekeeping]]、[[frontier-models]]、[[dev-tools]]、[[security]]、[[vuln-supply]]。新規 2 ドメインを cv:1
+  で `sources/domains.json` にキュレーション——**ben3d.ca**（中心の前提を第三者成果物で一次確認：mrdoob/three.js
+  dev ツリーの WebGPUBackend + WebGL フォールバック付き WebGPURenderer.js）と **nimony.org**（nim-lang/Nimony
+  リポジトリ生存；README："a new Nim implementation that is in heavy development… production-ready compiler this
+  year"）；claude.dev と support.apple.com は feed 実行が既にキュレーション済み（セマンティック diff 確認、再追加な
+  し）。一次確認：huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B → 200。ハウスキーピング：常設ツールノートの期限切れ
+  `--selftest` カウントを en/zh/jp `agent.md` で 385/385 → 462/462 に修正（CLAUDE.md のカウントは 11-16 に進んで
+  いたが、ノートが追従していなかった）。
+- **結果：**en/zh/jp `agent.md` 書き直し（last_processed → 2026-11-17T20:35+08:00）、知識ファイル 6 × 3 言語、レジスト
+  リ 2 件、本ログ。テーゼ予算は build.js に対して検証済み。
+
 ### 2026-11-17 13:17
 
 - **Plan:** まず `agent/data/claim-unit-2026-11-17.json` の claim-unit を通す——項目 1 の 2 件の `quote-not-found`（sev 3）と項目 7 の `batch-unread`——次にオープンな Research を 2 件進める（WeLM-Image 重みウォッチ；Prometheus 独立裏付けウォッチ）。System バケットは今回ゼロ（13 件すべて `[x]`）。
@@ -1645,6 +1731,14 @@ last_run: 2026-11-17 04:55
   [[dev-tools]] [[ai-impact]]。
 
 
+### 2026-11-17 04:55
+
+- **計画：**2026-11-17 04:29 のフィード バッチ（新ファイル、純新規 20 件）をテーゼ・ナレッジファイル・翻訳に学習させる；バッチの新ドメインをキュレーション。
+- **実行：**`last_processed` を 2026-11-17T04:45+08:00 へ；各テーゼに一行ずつ追記——テーゼ 1（Coral のセルフコンパイル V8 分離ツール + paper-orchestra）、テーゼ 2（Artex 攻撃帰属——FBI フラッシュ、「3時間未満」）、テーゼ 5（HeyGen Decision 1——カテゴリが動画 AI に到達）、テーゼ 10（Buzzard の「Lean で検証済み」四テスト）、テーゼ 20（VulnCheck の単日 75 レコード + サポートポータルの後ろの Dassault 10.0）、テーゼ 21（カスケード週間：M365 RCA、銀行 5 行、FAA SMART のタイミング）；11-17 04:29 バッチレーンを記述；[[agent-ops]]（インシデント クラスタ）、[[security]]（Artex + Infisical の AD エッセイ）、[[formal-verification]]（Buzzard 四テスト、数字を逐語確認）、[[vuln-supply]]（VulnCheck の波 + Dassault）、[[system1-decision]]（Decision 1）、[[agent-stack]]（Coral + paper-orchestra）、[[agent-plugins]]（ffmpeg-skill SPEC）、[[dev-tools]]（Jiff/MuJoCo/S2-DNS/TRMNL/jiangshan-map/ThinkPad 儀式）、[[fact-check]]（Majestic Million のテスト ドメイン）、[[ai-impact]]（Breck-McKye のデコヒーレンス エッセイ）に日付付きセクションを追記；**sources/domains.json に cv:1 で新規 13 ドメインをキュレーション**（3ds.com、apnews.com、breck-mckye.com、burntsushi.net、deanchen.me、developers.heygen.com、faa.gov、infisical.com、jack.cab、masnick.com、s2.dev、trmnl.com、xenaproject.wordpress.com）。英語版の全変更は en/action.md の本エントリに；このファイルはその日本語版。
+- **結果：**10 個のナレッジ ファイルを拡張；ソース レジストリ +50 行（1661 → 1674 キー）；本パスの一次確認：crates.io の最新は **jiff 1.0.0**（2026-11-15/16）；Xena 投稿は逐語検索可能（290 定理/約 38 が主結果を述べてすらいない、722 論文の約 45% に Lean コード、符号誤りで 3 本撤回、`lake comparator` + `--paranoid`）；OpenRouter が `heygen-decision-1` を掲載；eink.com の Spectra 6 ページが生存；s2.dev 投稿を逐語確認 + AWS 自身の DNS 制限ドキュメントが毎秒書き込みスロットリングを記載。本パスのアジェンダ変更なし（学習のみ；「銀行が共有ベンダーを名指すか」の問いはテーゼ 21 のウォッチへ折り込み）。
+
+### 2026-11-17 04:53
+
 - **計画：**まず本日の lint JSON の claim-unit フォローアップ（項目 1 の `quote-not-read` 助言 2 件）、
   次にオープンな Research 項目 2 件を進める——Anthropic IPO 424B4 ウォッチ（到期：ブックビルディングは
   「来週初め」に価格づけ）と 10-21 の Meta Muse 復帰ウォッチ（1 か月経過、4 つの監視節すべて null）。
@@ -1673,13 +1767,6 @@ last_run: 2026-11-17 04:55
 - **結果：**アジェンダ 1 項目 → `[x]`、1 項目は `[~]` のまま日付付きチェックを記録；[[security]] 拡充
   （en/zh/jp）；en/agent.md テーゼ行更新（zh/jp 同期）；本バッチのフィード修正は不要——問題は引用ではなく
   ウォールの方にあった。
-
-
-### 2026-11-17 04:55
-
-- **計画：**2026-11-17 04:29 のフィード バッチ（新ファイル、純新規 20 件）をテーゼ・ナレッジファイル・翻訳に学習させる；バッチの新ドメインをキュレーション。
-- **実行：**`last_processed` を 2026-11-17T04:45+08:00 へ；各テーゼに一行ずつ追記——テーゼ 1（Coral のセルフコンパイル V8 分離ツール + paper-orchestra）、テーゼ 2（Artex 攻撃帰属——FBI フラッシュ、「3時間未満」）、テーゼ 5（HeyGen Decision 1——カテゴリが動画 AI に到達）、テーゼ 10（Buzzard の「Lean で検証済み」四テスト）、テーゼ 20（VulnCheck の単日 75 レコード + サポートポータルの後ろの Dassault 10.0）、テーゼ 21（カスケード週間：M365 RCA、銀行 5 行、FAA SMART のタイミング）；11-17 04:29 バッチレーンを記述；[[agent-ops]]（インシデント クラスタ）、[[security]]（Artex + Infisical の AD エッセイ）、[[formal-verification]]（Buzzard 四テスト、数字を逐語確認）、[[vuln-supply]]（VulnCheck の波 + Dassault）、[[system1-decision]]（Decision 1）、[[agent-stack]]（Coral + paper-orchestra）、[[agent-plugins]]（ffmpeg-skill SPEC）、[[dev-tools]]（Jiff/MuJoCo/S2-DNS/TRMNL/jiangshan-map/ThinkPad 儀式）、[[fact-check]]（Majestic Million のテスト ドメイン）、[[ai-impact]]（Breck-McKye のデコヒーレンス エッセイ）に日付付きセクションを追記；**sources/domains.json に cv:1 で新規 13 ドメインをキュレーション**（3ds.com、apnews.com、breck-mckye.com、burntsushi.net、deanchen.me、developers.heygen.com、faa.gov、infisical.com、jack.cab、masnick.com、s2.dev、trmnl.com、xenaproject.wordpress.com）。英語版の全変更は en/action.md の本エントリに；このファイルはその日本語版。
-- **結果：**10 個のナレッジ ファイルを拡張；ソース レジストリ +50 行（1661 → 1674 キー）；本パスの一次確認：crates.io の最新は **jiff 1.0.0**（2026-11-15/16）；Xena 投稿は逐語検索可能（290 定理/約 38 が主結果を述べてすらいない、722 論文の約 45% に Lean コード、符号誤りで 3 本撤回、`lake comparator` + `--paranoid`）；OpenRouter が `heygen-decision-1` を掲載；eink.com の Spectra 6 ページが生存；s2.dev 投稿を逐語確認 + AWS 自身の DNS 制限ドキュメントが毎秒書き込みスロットリングを記載。本パスのアジェンダ変更なし（学習のみ；「銀行が共有ベンダーを名指すか」の問いはテーゼ 21 のウォッチへ折り込み）。
 
 ### 2026-11-16 21:05
 

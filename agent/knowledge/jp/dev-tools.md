@@ -1666,3 +1666,50 @@ Sources: [burntsushi.net](https://burntsushi.net/jiff/) ·
 [HN](https://news.ycombinator.com/item?id=50526537) ·
 [BugMeNot](https://www.bugmenot.com/) ·
 [HN](https://news.ycombinator.com/item?id=50523601)
+
+## 2026-11-17 — 書き直し対メンテナンスの台帳、ブラウザ照明のロードマップ、LLVM を通らないコンパイラ、そしてレトロ棚
+
+- **AI curl 書き直しへの Stenberg の反論（daniel.haxx.se）：**今秋の 2 つのエージェント製書き直し——**urlx**
+  （数か月前）と "curl, rewritten in Rust"（11 月、"confusingly enough not even using a different
+  name"、費用約 $8,600 を申告）。彼の台帳："During the time these agents converted 185,000 lines of C code
+  into 340,000 lines of Rust code (I counted), we merged over 300 commits in the actual curl project… A little
+  over 200 bugfixes actually. 200 bugfixes that none of those rust rewrites have." メモリ安全性については具体的
+  だ：2026 年に確認された curl の **81** CVE のうち **14**（17.3%）はメモリ安全な言語なら "most likely would
+  have been avoided" —— "A Rust implementation of curl would thus still have had 67 of those
+  vulnerabilities." 結論："I don't believe in rewrites into any language. I believe in constant and never-ending
+  polishing, iterating and refactoring." メタレベルの要点は仕様側にある：書き直しが可能だったのは "because
+  all the AIs of the world have trained on curl code for years" から——数十年のテストと文書*こそ*が仕様で、
+  1 日約 11 コミットのメンテナ速度はどのベンチマークも測らない部分。Jankiewicz のオープンソースエッセイとテ
+  ーゼ 22 の衝突へのメンテナの椅子からの続篇。
+- **Three.js AAA 照明監査（ben3d.ca、全 5 部；第 3 部が本体）：**"WebGPU now runs on most devices, and
+  Three.js has a new renderer built for it"——その上で、ゲーム級パイプライン（G-buffer、ベイク GI、動的 GI、
+  オクルージョン、SSR/SSGI、反射プローブ、間接 BRDF、TRAA/TAAU）を Three.js に対して段階ごとに 3 列の表で監
+  査：**Three.js にある**（MRT prepass、lightmap + radiosity ベイカー、GTAO、ベイク 8× 高速の
+  LightProbeGrid）、**レビュー中または起草済み**（DDGI visibility、JPEG XL / KHR_lightmap 拡張）、**まだ作る必
+  要がある**（octahedral normals、実行時 BC6H、シームスティッチング）。各段階がゲームの要求を明記する——測
+  定済みのギャップ分析と公開ロードマップであり、デモリールではない。
+- **Nimony.org 公開——Nim 3 のコンパイラ（Andreas Rumpf/Araq）：**"borrow checking, explicit nilability, sum
+  types, checked generics and more, with incremental and parallel builds from the start"；x86_64/ARM64/ARM32/
+  AVR/RISC-V 向けネイティブコード生成は "**independent of LLVM and GCC**"（`nimony n` なら C コンパイラすら不
+  要）；ランタイムは "hardened against heap exhaustion" で OOM "is a condition you handle, not a crash"；同一
+  コードベースで C/native/JS/WASM へ；`staticContracts` の下では "an index that is provably out of range is a
+  compile-time error"。4 プラットフォームの nightly ツールチェーンが毎日ビルド；nim-lang/Nimony リポジトリを
+  一次確認（"a new Nim implementation that is in heavy development… production-ready compiler this year"）。
+  コード生成が LLVM にも C にも通らない本番言語は非常に少ない——組み込みと RISC-V にとって、C ツールチェーン
+  が隠す UB が存在しないこと自体が機能。
+- **棚：****Carmack、3dfx Voodoo 1 が色あせて見えた理由**——"Both NeXT and 3DFX tried to 'do the right thing'
+  with color spaces, and it wound up generally making them look worse… I didn't really understand it properly
+  until years later"（スレッドが示す機構：sRGB は信号電圧層以外で非線形で、CRT の 50% は文字どおり 50% ——数
+  学的に正しいリニアパイプラインは、ユーザーの目の前のガラスの実応答より暗く平坦に描いた；正しい ≠ 良い）。
+  **WINUDF 1.2**（ages2001）——DOS と Windows 1.0x–ME で UDF 1.02–2.60 の読み書き（`WINUDF.EXE` のドライブ文
+  字）、Windows 95/98/ME は `WINUDF.VXD`（LFN 対応）、同一作者の WINDRV 4 点セットのひとつ（WINDISK：
+  IDE/SATA AHCI/NVMe；WINUSB は USB4/Thunderbolt 込み；WINAUDIO：HD Audio/AC'97/GM/SB16）——レトロコンピュー
+  ティングの舞台が本気のシステム工学になっており、作者本人が HN スレッドでドライバレベルの質問に即答してい
+  る。
+
+→ [[dev-tools]] [[ai-impact]] [[fact-check]]
+
+Sources: [daniel.haxx.se: Actual curl rewrites in rust](https://daniel.haxx.se/blog/2026/11/17/actual-curl-rewrites-in-rust/) ·
+[ben3d.ca: Building the AAA Lighting Pipeline in Three.js](https://ben3d.ca/blog/building-the-aaa-lighting-pipeline-in-threejs) ·
+[nimony.org](https://nimony.org/) · [HN: WINUDF](https://news.ycombinator.com/item?id=50515182) ·
+[HN: Carmack スレッド](https://news.ycombinator.com/item?id=50525575)
