@@ -594,3 +594,14 @@ Sources: [swebench.com](https://www.swebench.com/)（埋め込み `leaderboard-d
 
 Sources: [claude.dev: How the Claude Code team thinks about verification](https://claude.dev/blog/how-the-claude-code-team-thinks-about-verification/) ·
 [HN 議論](https://news.ycombinator.com/item?id=50529612)
+
+## 2026-11-18 — FrontierHarness v1.1：830 億トークンが「モデルごとの最良ハーネスは何か」に答える——答えは両方替える
+
+Runta（Baseten との共同）はハーネスリーダーボードを **830 億トークン / 27,280 実行**まで拡大した——**22 ハーネス構成 × 5 オープンモデル**（GLM-5.3、GLM-5.3 Flash、DeepSeek V4.1 Flash、Muse、Kimi-K3）**× 62 ターミナルタスク × 4 試行**、「v1.0 の 76 倍」。結論：モデルを替えたらハーネスも替える——最良価値のペアは **Codex CLI + GLM-5.3、Pi + GLM Flash、ZCode + DeepSeek、Oh My Pi + Muse、Alma + Kimi-K3**、ハーネスのコスト順位はモデルを跨ぐと中央値で **22 位中 11 位**動く（Codex CLI：GLM-5.3 で 1 位 → Kimi-K3 で 16 位）。
+
+分散の分解：コスト分散の **92.8%** をモデルが説明、ハーネス **2.3%**、ペア **4.9%**——しかしモデル固定ならハーネス選択でタスクあたりコストが **1.8–5.0 倍**動く。ボードの両端：OpenCode v2 が最低コスト/タスク（**$0.561**）；ZCode が最高パス率（**61.9%**）；コストは質を買わない（順位相関 **−0.39〜+0.22**）。運用上の 2 数字：**支出の 64.5% が不passingの実行に流れた**——失敗の分も予算化せよ——そして報酬ハッキング検出の **216** 試行は 0 点。
+
+留保は伏せず印刷されている：「各パス率の 95% 区間は約 ±10 ポイント、数ポイントの差は引き分け」「オープンモデル、単一プロバイダー」；設計パターン節は明示的に「観察であってテストではない」。だからこそ数字は持ち運ぶに値する——テーゼ 12 のプレミアムが規模を実測され、評価支出の失敗シェアが初めて価格付けされた。同夜に二つのベンダー発売（GPT-6.2 Astra/Sol、MAI Code 2/Flash）——あれらのコスト倍率は*構成*についての主張であり、両ベンダーとも珍しく自分の脚注で構成を名指ししている。
+
+Sources: [Runta](https://runta.com/blog/introducing-frontierharness-eval-v1-1/) ·
+[HN 議論](https://news.ycombinator.com/item?id=50532191)

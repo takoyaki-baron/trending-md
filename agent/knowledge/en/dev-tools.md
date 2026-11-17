@@ -2357,3 +2357,37 @@ Sources: [daniel.haxx.se: Actual curl rewrites in rust](https://daniel.haxx.se/b
 [ben3d.ca: Building the AAA Lighting Pipeline in Three.js](https://ben3d.ca/blog/building-the-aaa-lighting-pipeline-in-threejs) ·
 [nimony.org](https://nimony.org/) · [HN: WINUDF](https://news.ycombinator.com/item?id=50515182) ·
 [HN: Carmack thread](https://news.ycombinator.com/item?id=50525575)
+
+## 2026-11-18 — Solid 2.0 ships diagnostics built for agents; Antfly relicenses on agent economics; Alloy CSS is the 34-star Show-HN lesson
+
+- **Solid 2.0 (five years after 1.0):** async in the reactive graph — computations return Promises or async
+  iterators, **speculative state automatically rolls back**, the server is source of truth; server functions in
+  core (RPC over Request/Response, persistent SSE via a `live()` async generator). The 2026 novel part:
+  **error diagnostics designed so a coding agent can self-repair** — stable codes, source locations, fixes, an
+  **"agent repair guide" path**, detection for waterfalls, bad effect loops and wide graph fanouts, plus "The
+  Long Hold" (a pending state shown too long). RC-phase bug reports came from "agents deliberately hunting
+  edge cases". Breaking: `createResource`/`batch`/`createComputed`/`createMutable` gone, the core rewritten
+  from scratch, SolidStart retired for framework-agnostic Vite plugins; 23 RCs in 14 weeks, 971 PRs merged,
+  stability bar "a full week with no regression in ordinary app code, and no crash or hang anywhere". Same-hour
+  footnote: sveltejs/svelte trending **533★ off no release** (5.57.3 was October) — launch days move
+  competitors' numbers too.
+- **Antfly: Elastic License 2.0 → Apache 2.0** (0.3 is the first release under it) — the clearest
+  agent-economics argument against source-available yet: the ELv2 hedge only ever protected against clouds
+  cloning your work, and "a license like that only protects you if the code is the hard part to copy… **I
+  don't think it takes years anymore. Everyone on our team writes code with agents now.**" The first explicit
+  counter-argument in the license pendulum (Elastic 2021 → HashiCorp 2023 → Redis 2024, all restrictive)
+  grounded in AI economics rather than community goodwill — and testable: if reproduction cost really
+  collapsed, expect more small-infra relicensing *to* permissive, and watch whether the big cloud-target firms
+  ever follow.
+- **Alloy CSS** (1.0.8, Nov 16): one stylesheet giving server-rendered HTML the parts you'd pull a JS library
+  for — dialogs, menus, drawers, tabs, tooltips, toasts — **working with JavaScript off** (popover, details,
+  `:checked` state), no build step, two dark themes; the demo is a complete invoicing app in one HTML file with
+  no script tag. The repo itself is the trend-reading lesson: created 2018, dormant for years, revived this
+  week, **34 stars** — a Show HN day outrunning any star count, the star-velocity-is-the-wrong-metric case in
+  miniature.
+
+Sources: [Solid 2.0](https://www.solidjs.com/blog/solid-2-0-the-long-hold/) ·
+[Antfly](https://antfly.io/thoughts/how-antfly-learned-to-stop-worrying-and-love-apache-2) ·
+[antflydb/antfly](https://github.com/antflydb/antfly) ·
+[Alloy demo](https://alloyhtml.com/example.html) ·
+[alloyhtml/css](https://github.com/alloyhtml/css)

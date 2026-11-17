@@ -97,3 +97,10 @@ TPU agent 套件接入 Claude Code、Cursor 与 Google Antigravity；还有开�
 
 来源：[Our newest TPUs: 8tx and 8i Max](https://blog.google/innovation-and-ai/infrastructure-and-cloud/global-network/tpu-8i-max-and-8tx/) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50432831)
+
+## 2026-11-18 — TrnRT 开源 Trainium 推理层：NKI 巨内核与一个现货价数据点
+
+`RunanywhereAI/trnrt`（仓库创建于 10-30，约 1.6k★）是一个面向 AWS Trainium 的开源推理引擎——此前这块硅片的软件栈几乎完全封闭在 AWS 内部（Neuron SDK）。它在单台 `trn2.48xlarge` 上提供 OpenAI 兼容 API；解码以 **NKI 巨内核**运行——约每层半个融合内核（KDA 注意力、融合的 DSA 层、mHC、MoE FFN）；在 **FP8 KV 页**上维护基数树前缀缓存并带主机内存层；**首个支持的模型是 GLM-5.3-Flash**。实测主张（自家卡片 + 博客）：单机 **357 万 token/分钟**（AgentX、batch 12）、**24 ms** batch-8 解码步（自 32.2 ms 降）、现货价 **$0.040/百万 token**（容量块 $0.167）；100 万 token 上下文来自稀疏注意力（top-2,048）加定长状态的线性注意力；所有计算图在一台 CPU 主机上离线编译，推理机默认零编译。厂商自测、仓库年轻、单模型——但这是该硬件上第一个公开的逐层内核设计，也是廉价推理竞赛里的一个具体数字。
+
+来源：[RunanywhereAI/trnrt](https://github.com/RunanywhereAI/trnrt) ·
+[博客：单台 Trainium2 服务器上跑 GLM-5.3-Flash](https://runanywhere.ai/blog/glm-5-3-flash-trainium2-nki-megakernels)

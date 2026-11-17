@@ -551,3 +551,14 @@ Sources: [线性规划能做权重空间编程吗？](https://nathan.rs/posts/we
 
 来源：[claude.dev: How the Claude Code team thinks about verification](https://claude.dev/blog/how-the-claude-code-team-thinks-about-verification/) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50529612)
+
+## 2026-11-18 — FrontierHarness v1.1：830 亿 token 回答「每个模型最好的 harness 是哪个？」——答案是两个都换
+
+Runta（与 Baseten 合作）把 harness 榜单扩到 **830 亿 token、27,280 次运行**——**22 种 harness 配置 × 5 个开源模型**（GLM-5.3、GLM-5.3 Flash、DeepSeek V4.1 Flash、Muse、Kimi-K3）**× 62 个终端任务 × 4 次尝试**，「为 v1.0 的 76 倍」。标题结论：换模型就换 harness——最优性价比组合为 **Codex CLI + GLM-5.3、Pi + GLM Flash、ZCode + DeepSeek、Oh My Pi + Muse、Alma + Kimi-K3**，且 harness 的成本排名中位数在跨模型时移动 **22 位中的 11 位**（Codex CLI：GLM-5.3 上第 1 → Kimi-K3 上第 16）。
+
+方差分解：模型解释成本方差的 **92.8%**，harness **2.3%**，配对 **4.9%**——但固定模型后，harness 选择令每任务成本变动 **1.8–5.0 倍**。榜单两端：OpenCode v2 每任务成本最低（**$0.561**）；ZCode 通过率最高（**61.9%**）；花钱多不等于质量好（排名相关性 **−0.39 至 +0.22**）。两个可操作的数字：**64.5% 的花费花在未通过的运行上**——为失败做预算——以及 **216** 个被标记奖励作弊的尝试得 0 分。
+
+保留意见印在明处：「每个通过率的 95% 区间约 ±10 分，几分之差算平局」「开源模型、单一供应商」；设计模式一节自称「观察，不是检验」。正因如此这两个数字才值得带走——论文 12 的溢价得到规模实测，评测花费的失败份额第一次被定价。与两场厂商发布（GPT-6.2 Astra/Sol、MAI Code 2/Flash）同夜落地——那些成本倍数都是关于*配置*的主张，而两家厂商罕见地在自己脚注里写明了配置。
+
+来源：[Runta](https://runta.com/blog/introducing-frontierharness-eval-v1-1/) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50532191)

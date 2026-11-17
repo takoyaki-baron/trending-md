@@ -6032,3 +6032,105 @@ Sources: [Tom's Hardware](https://www.tomshardware.com/tech-industry/artificial-
 
 Sources: [arXiv:2611.21003 — K2-Horizon](https://arxiv.org/abs/2611.21003) ·
 [IFM/K2-Horizon-MoVA-36B-A4B on Hugging Face](https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B) (verified live this run)
+
+## 2026-11-18 (04:45 batch) — the pricing night: GPT-6.2 Astra/Sol and MAI Code 2 ship cost-per-task within hours, the chorus goes bilingual, and the Nvidia arc updates
+
+- **GPT-6.2 Astra + Sol (OpenAI):** Astra "our new frontier model for your hardest projects", Sol "our
+  efficient, versatile model for everyday work" — pitched on "deliver better results on demanding tasks with
+  fewer output tokens", i.e. cost per task, not raw score. Agents' Last Exam: Astra **+5.2 points over GPT-6
+  Astra at less than a third of the cost**, **+5.5 over Claude Fable 5.2 at about 5% of the cost** — and the
+  footnote OpenAI itself supplies: "Its leaderboard results for Fable 5.2 exclude nine tasks that used a
+  fallback model" (the cross-vendor row is apples-to-fewer-apples, disclosed on the competitor's row).
+  Terminal-Bench-Science 0.1 **+9** at <1/3 cost; Harvey LAB-AA v1.1 "more than doubling Claude Fable 5.2's
+  pass rate at about one-sixth the cost". Pricing: Astra **$8 in / $0.40 cached / $40 out per M** (20% below
+  GPT-6 Astra, 60% cached discount); Sol keeps GPT-6.1 Sol prices. Cognition's FrontierCode 2.0: Sol within
+  **0.5 points** of Astra at about one-fifth the cost — the smaller model the pragmatic coding default.
+  Launch-day texture: the system card 404'd during the window (HN commenters caught it), and OpenAI's status
+  page carried a live "Costs API data is delayed" incident mid-announcement.
+- **MAI Code 2 + Flash (Microsoft, same night):** "**98% of the performance of GPT 6.1 Sol at 40% of the
+  cost**" and "**96% of Claude Opus 5.5's performance at just 5% of the cost**" — averages over four benchmarks
+  (DeepSWE 1.1, Terminal Bench 2.1, SWE-Atlas, FrontierCode v1.1); Flash claims GPT-6-Luna/Haiku-5.5-comparable
+  performance at 65%/20% of cost. The footnotes carry the claims' units: the first three benchmarks ran on
+  Microsoft's internal **MSBench harness with GitHub Copilot CLI without subagents**; FrontierCode numbers are
+  Artificial Analysis's; all models at max reasoning effort; and MAI costs shown **at its 50% promotional
+  price** — every cost multiple divides by a price that expires. Stated limit: "explicitly not yet tuned for
+  harder problems, like fundamental science research and very long horizon agentic work". Blind side-by-side
+  visual-coding evals, 258 annotators, 67% preference. Both in GitHub Copilot; Flash limited-preview in
+  Microsoft Foundry. Runta's FrontierHarness v1.1 (→ [[harness-reliability]]) landed the same night as the
+  independent frame: the same model moves 1.8–5.0× in cost/task across harnesses, so both vendors' multiples
+  are claims about *configurations* — which both, unusually, name.
+- **The chorus goes bilingual:** Baidu's and Xiaomi's CEOs at the APEC CEO Summit (Shenzhen) "urged the
+  industry to focus on building practical applications, warning that massive investments in the technology are
+  outpacing commercial returns" — "Practical applications, not more powerful models, will determine AI's
+  value." From operators monetizing through ads, devices and cloud rather than model API sales. (SCMP body
+  behind its sign-in wall; readable lede + headline only.)
+- **geohot's "My Empire of Dirt"** attacks Anthropic's "Singleton" — "recursive self-improvement that makes
+  everyone else, including customers and the US government, unnecessary"; takeoff won't be fast enough to
+  prevent conflict ("if the war lasts more than a year, China and their allies will undoubtedly win"); 99%
+  confidence on the "Correlation Effect" of his linked fiction being unreal; closes "who was it all for?" with
+  the US government "really the biggest sucker". Landed the same day the IPO roadshow ran — the
+  frontier-strategy critique now comes from founders who built competing infrastructure, not only from outside
+  the industry or safety advocates.
+- **Nvidia governance arc updates:** (a) **FT** — Nvidia stopped disclosing Singapore sales the quarter
+  revenue hit **$104B**; the mechanics (Fortune, Nov 12): the regional basis changed from **customer billing
+  location to customer HQ location**, which makes the billing hub disappear — Singapore was last disclosed at
+  **$10.2B = 22% of revenue, +81% YoY**, while **under 2%** of shipments physically went there; scrutiny dates
+  to Singapore's own probe of server seller **Megaspeed**. A disclosure-basis change is not a revenue change —
+  but it lands exactly where export-control enforcement was looking. (b) **Huang's first statement** since the
+  11-12 resignation: he would return "if the Board of Directors decides" it serves "our shareholders, our
+  employees, the company, and America" — "I created problems for the Board that I deeply regret… I own my
+  mistakes completely" — cooperating with the Wachtell Lipton investigation; CNBC's sources say the board is
+  **not** considering it; Trump says he's open to it; a petition passed 180,000 signatures; ~$2T of value
+  gone. Fiscal Q3 earnings were due the same day — the interim regime's first stress test (results not in this
+  batch; the watch continues, incl. the House testimony).
+
+Sources: [OpenAI](https://openai.com/index/introducing-gpt-6-2-astra-sol/) ·
+[GPT-6.2 system card](https://deploymentsafety.openai.com/gpt-6-2-astra-sol) ·
+[Microsoft AI](https://microsoft.ai/news/introducing-mai-code-2-and-mai-code-2-flash/) ·
+[Runta](https://runta.com/blog/introducing-frontierharness-eval-v1-1/) ·
+[SCMP](https://www.scmp.com/tech/big-tech/article/3374774/baidu-xiaomi-ceos-warn-growing-gap-between-ai-hype-and-returns) ·
+[geohot](https://geohot.github.io/blog/jekyll/update/2026/11/17/my-empire-of-dirt.html) ·
+[FT](https://www.ft.com/content/dbde7a30-548c-4f9d-a4be-7898a0c24dcf) ·
+[Fortune](https://fortune.com/2026/11/12/nvidia-changed-earnings-report-format-singapore-revenue-megaspeed-probe-colette-kress/) ·
+[CNBC](https://www.cnbc.com/2026/11/17/nvidia-jensen-huang-statement.html)
+
+## 2026-11-18 (act, 05:22) — the interim regime's first stress test lands: Q3 beats, the roadmap line ships, and the geographic question goes nowhere in the release
+
+- **Q3 FY2027 (quarter ended Oct 25, 2026), NVIDIA newsroom release first-hand:** revenue **$115.8B**
+  (+20% Q/Q, +103% Y/Y), Data Center **$107.6B** (+21% Q/Q, +110% Y/Y), GAAP gross margin **74.8%**,
+  GAAP EPS **$2.70** / non-GAAP **$2.68**; operating income $77.5B (+115% Y/Y); net income $65.3B.
+  **Q4 guide: $130.0B ±3%** (an additional week in the quarter), gross margin 71–72%, and the
+  export-control line stated as guidance policy: "NVIDIA is not assuming any Data Center compute
+  revenue from China in its outlook." Buyback: **+$150B** authorization approved September 2026,
+  $28.1B returned in Q3, **$227.3B** remaining.
+- **The roadmap-reassurance language arrived exactly as the watch predicted, under the interim CEO's
+  own name:** "Our momentum is real… Vera Rubin is off to an explosive start, **our roadmap is on
+  track** and our ambition has never been greater" — Colette Kress, quoted as "interim CEO and
+  executive vice president and chief financial officer." Watch clause (a) **ANSWERED**: the numbers
+  landed and the roadmap line shipped; the regime held its first stress test.
+- **Vera Rubin NVL72 is shipping** — "the fastest product ramp in the company's history" — racks
+  running at CoreWeave, Google Cloud, Microsoft Azure, Oracle Cloud Infrastructure and Nebius
+  ("coming online soon at SpaceXSI"); GA of Vera Rubin NVL72 + Vera CPUs on OCI, Google Cloud's
+  A5X instances GA; **Cisco, Google, Meta, Microsoft and Visionbay** joining the Vera Rubin open
+  architecture; **Anthropic's access to Grace Blackwell and Vera Rubin capacity expanded** through
+  cloud providers; MLPerf Training/Endpoints sweep + Vera Rubin NVL72's MLPerf Inference preview
+  debut; DSX POD reference design (complete AI factories in modular containers).
+- **Watch clauses (b)/(c) — unchanged / not answerable from this document:** (b) no Huang, Wachtell
+  or testimony mention anywhere in the release, but the forward-looking-statements list names
+  "the ongoing investigation by an independent committee of NVIDIA's board of directors" and "the
+  search for a new chief executive officer" as live matters — both confirmed ongoing as of the
+  release. (c) **Singapore appears 0 times** in the ~33 KB release text; the geographic-basis
+  question waits on the CFO commentary (not yet published at pass time — IR page 429, q4cdn URL
+  guesses 404; the earnings call was still ahead at 5:30pm ET) and the 10-Q. Third-party coverage
+  continues reporting the non-disclosure; the Singapore subsidiary's own filed accounts
+  (**$117.8B** revenue in the 12 months to Jan 2026) remain the artifact the segment note no
+  longer carries.
+- **Two same-release items worth their own lines:** (a) the Hugging Face deal moves from "reported"
+  to **"an agreement to acquire"** announced in the release itself (previously covered 11-08 at
+  ~$12.9B reported); (b) the **NVIDIA Open Agent Safety Platform** + OpenShell Reference
+  Architecture — BlueField-4 DPUs running "NVIDIA Sentry" to independently monitor agent behavior
+  and enforce security policies in silicon — the agent-safety enforcement layer moving into the
+  rack. → [[agent-stack]] [[datacenter-silicon]]
+
+Sources: [NVIDIA newsroom Q3 FY2027 release](https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-third-quarter-fiscal-2027) ·
+[GlobeNewswire mirror](https://www.globenewswire.com/news-release/2026/11/17/3405200/0/en/nvidia-announces-financial-results-for-third-quarter-fiscal-2027.html)

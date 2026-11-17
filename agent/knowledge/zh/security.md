@@ -5000,3 +5000,14 @@ Sources: [Infisical](https://infisical.com/blog/active-directory-machine-identit
 [CVE-2026-129286](https://www.cve.org/CVERecord?id=CVE-2026-129286) ·
 [CVE-2026-105739](https://www.cve.org/CVERecord?id=CVE-2026-105739) ·
 [CVE-2026-129448](https://www.cve.org/CVERecord?id=CVE-2026-129448)
+
+## 2026-11-18 — Phrack 73 的目录是一份「攻击正在往哪看」的普查；Fastify multipart 栈交付非认证 DoS 的三 Bug 分类学
+
+**Phrack 73**（复刊编辑部的第三期，距第 72 期约 15 个月）：**23 篇主刊论文 + 八篇 Line Noise**，从漏洞利用与逆向一路铺到机器学习、硬件与历史文化。操作上最相关的几篇：「Escaping from a Docker container through vDSO」（andersonc0d3）、「Painting Out of the Box: Escaping the Chromium Renderer Sandbox via Skia」（Quang Luong）、「Reflections on Trusting AI: A Virus Inside an LLM」（marver）、「Backdoor attacks against Machine Learning IRL」（G. Cherubin）与「A Journey Into Kernel Exploit Development in the LLM Era」；Prophile 聚焦 Halvar Flake；历史栏目重访 2000 年 SSH1 CRC32 漏洞（《黑客帝国 2》里被点名的那一个）与 2003 年内核后门未遂事件。容器边界、渲染器沙箱与 ML 供应链作为一等攻击面与经典堆/内核材料并列——这是本期自己给出的方向判断。
+
+**Fastify multipart 三连**（三条 NVD 记录发布于 11-16，均可被未认证客户端利用，全部 **7.5 CNA 评分**、`Awaiting Analysis`）：`CVE-2026-124724`（@fastify/busboy ≤ 3.2.5）——触及配置的 part 上限后，后续 part 在无错误监听器时被跳过；若请求体在跳过的 part 中途结束，内嵌的 Dicer 解析器抛出未处理错误，**进程直接退出**——一个精心构造的请求即可打崩服务器。`CVE-2026-128835`（同为 busboy ≤ 3.2.5）——一个 header 块在下一个边界前从未终止的 part 被计为永不结束的开放 part；约 **一百字节**即可触发，且经 @fastify/multipart 时挂起的 handler 在客户端断开后永不释放，重复请求**泄漏 handler 及其资源**。`CVE-2026-124289`（@fastify/multipart 7.4.0–10.1.8）——启用 `attachFieldsToBody` 时，`saveRequestFiles` 把任何带 truthy `file`/`buffer` 属性的对象当上传文件，于是一个普通 JSON 请求即可**伪造一个，向临时目录写入攻击者任选的字节，同时绕过上传钩子与文件数/大小限制**。一份工整的分类学：崩溃、挂起、资源泄漏，外加一个绕过限制的写，全部落在 Node.js API 表面之下很大一块的栈上。修复：**busboy 3.2.6** 与 **multipart 10.1.9**（已在公告 Patched 格子确认）。扫描器注意：这些 CVE 的 OSV 记录目前只带 GIT 范围——版本核对请以公告为准，别信数据库。
+
+来源：[Phrack 73 引言](https://phrack.org/issues/73/introduction_md) ·
+[GHSA-pvmq-3jr9-v5qh](https://github.com/fastify/busboy/security/advisories/GHSA-pvmq-3jr9-v5qh) ·
+[GHSA-wh8h-qr34-3rj3](https://github.com/fastify/busboy/security/advisories/GHSA-wh8h-qr34-3rj3) ·
+[GHSA-gmhr-r4mc-w935](https://github.com/fastify/fastify-multipart/security/advisories/GHSA-gmhr-r4mc-w935)

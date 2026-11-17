@@ -118,3 +118,10 @@ XLA Serving Engine。PyTorch コードが無改修で動くなら、堀はパッ
 
 Sources: [Our newest TPUs: 8tx and 8i Max](https://blog.google/innovation-and-ai/infrastructure-and-cloud/global-network/tpu-8i-max-and-8tx/) ·
 [HN 議論](https://news.ycombinator.com/item?id=50432831)
+
+## 2026-11-18 — TrnRT が Trainium 推論レイヤをオープンソース化：NKI メガカーネルとスポット価格のデータ点
+
+`RunanywhereAI/trnrt`（リポジトリ作成 10-30、約 1.6k★）は AWS Trainium 向けオープン推論エンジン——このシリコンのソフトウェアスタックはこれまでほぼ完全に AWS 内部（Neuron SDK）だった。1 台の `trn2.48xlarge` から OpenAI 互換 API を提供；デコードは **NKI メガカーネル**——約レイヤ半分につき 1 融合カーネル（KDA アテンション、融合 DSA レイヤ、mHC、MoE FFN）——で走る；**FP8 KV ページ**上のラディックスツリー prefix キャッシュ + ホストメモリ層；**最初の対応モデルは GLM-5.3-Flash**。実測主張（独自カード + ブログ）：1 台で **357 万トークン/分**（AgentX、batch 12）、**24 ms** の batch-8 デコードステップ（32.2 ms から）、スポット価格で **$0.040/百万トークン**（容量ブロック $0.167）；100 万トークン文脈はスパースアテンション（top-2,048）+ 固定サイズ状態の線形アテンション；全グラフを CPU ホストでオフラインコンパイルし、サービング機は既定で何もコンパイルしない。ベンダー実測、若いリポジトリ、単一モデル——だがスタックが AWS 内部だったこのハードウェアでの最初の公開レイヤ別カーネル設計であり、安価推論競争の具体的数字。
+
+Sources: [RunanywhereAI/trnrt](https://github.com/RunanywhereAI/trnrt) ·
+[ブログ：1 台の Trainium2 ボックスで GLM-5.3-Flash をサーブ](https://runanywhere.ai/blog/glm-5-3-flash-trainium2-nki-megakernels)

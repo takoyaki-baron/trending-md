@@ -1713,3 +1713,15 @@ Sources: [daniel.haxx.se: Actual curl rewrites in rust](https://daniel.haxx.se/b
 [ben3d.ca: Building the AAA Lighting Pipeline in Three.js](https://ben3d.ca/blog/building-the-aaa-lighting-pipeline-in-threejs) ·
 [nimony.org](https://nimony.org/) · [HN: WINUDF](https://news.ycombinator.com/item?id=50515182) ·
 [HN: Carmack スレッド](https://news.ycombinator.com/item?id=50525575)
+
+## 2026-11-18 — Solid 2.0 がエージェント向け診断を出荷；Antfly がエージェント経済学で再ライセンス；Alloy CSS は 34 スターの Show-HN 教訓
+
+- **Solid 2.0（1.0 から 5 年）：**リアクティブグラフ内の async——計算は Promise や async イテレータを返せ、**投機的状態は自動ロールバック**、サーバが真実の源；server functions がコアに（Request/Response 上の RPC、`live()` async ジェネレータによる持続 SSE）。2026 年の新機軸：**コーディングエージェントが自己修復できるよう設計されたエラー診断**——安定コード、ソース位置、修正、**「agent 修復ガイド」パス**、ウォーターフォール・悪い effect ループ・広いグラフ扇出の検出、さらに「The Long Hold」（pending 状態の表示が長すぎると発火）。RC 期のバグ報告は「エッジケースを意図的に狩るエージェント」から来た。破壊的変更：`createResource`/`batch`/`createComputed`/`createMutable` 削除、コアをゼロから書き直し、SolidStart はフレームワーク非依存 Vite プラグインに退職；14 週で 23 RC、971 PR マージ、安定性の基準は「通常アプリコードが丸一週間回帰なし、どこでもクラッシュやハングなし」。同時間の脚注：sveltejs/svelte が**リリースなしで**トレンド入り（533★；5.57.3 は 10 月）——発売の日は競合の数字も動かす。
+- **Antfly：Elastic License 2.0 → Apache 2.0**（0.3 が新ライセンス下の最初のリリース）——source-available への最も明快なエージェント経済学反論：ELv2 のヘッジはクラウドによるコード複製から守るだけ、そして「その種のライセンスはコードが複製の難しい部分である場合にしか守らない……**もう年数はかからないと思う。我々のチームは全員エージェントでコードを書いている。**」ライセンス振り子（Elastic 2021 → HashiCorp 2023 → Redis 2024、いずれも制限側）で初めて AI 経済学に立脚した明示的な反対方向の主張——検証可能：複製コストが本当に崩れたなら、小規模インフラベンダーの*パーミッシブへの*再ライセンス増を期待し、クラウド標的の大手が追随するかを観察せよ。
+- **Alloy CSS**（1.0.8、11-16）：一枚のスタイルシートがサーバーレンダリング HTML に JS ライブラリを引いていた部品——ダイアログ、メニュー、ドロワー、タブ、ツールチップ、トースト——を与え、**JavaScript オフでも動く**（popover、details、`:checked` 状態）、ビルドステップなし、ダークテーマ二種；デモは script タグなしの単一 HTML ファイルで完全な請求書アプリ。リポジトリ自体がトレンド読みの教訓：2018 年作成、数年間休眠、今週復活、**34 スター**——Show HN の一日がどんな星数よりも注目を集める、「スター速度 は誤った指標」の縮小模型。
+
+Sources: [Solid 2.0](https://www.solidjs.com/blog/solid-2-0-the-long-hold/) ·
+[Antfly](https://antfly.io/thoughts/how-antfly-learned-to-stop-worrying-and-love-apache-2) ·
+[antflydb/antfly](https://github.com/antflydb/antfly) ·
+[Alloy デモ](https://alloyhtml.com/example.html) ·
+[alloyhtml/css](https://github.com/alloyhtml/css)

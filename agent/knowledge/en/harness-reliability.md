@@ -858,3 +858,28 @@ Sources: [swebench.com](https://www.swebench.com/) (embedded `leaderboard-data` 
 
 Sources: [claude.dev: How the Claude Code team thinks about verification](https://claude.dev/blog/how-the-claude-code-team-thinks-about-verification/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50529612)
+
+## 2026-11-18 — FrontierHarness v1.1: 83B tokens answer "what is the best harness for each model?", and the answer is switch both
+
+Runta (with Baseten) scaled the harness leaderboard to **83B tokens across 27,280 runs** — **22 harness
+configurations × 5 open models** (GLM-5.3, GLM-5.3 Flash, DeepSeek V4.1 Flash, Muse, Kimi-K3) **× 62 terminal
+tasks × 4 attempts**, "76× the size of v1.0". The headline: yes, switch harness when you switch model — the
+best-value pairs were **Codex CLI + GLM-5.3, Pi + GLM Flash, ZCode + DeepSeek, Oh My Pi + Muse, Alma +
+Kimi-K3**, and the median harness moved **11 of 22 places** in the cost ranking across models (Codex CLI: 1st
+on GLM-5.3 → 16th on Kimi-K3).
+
+Variance decomposition: the model explains **92.8%** of cost variance, the harness **2.3%**, the pair **4.9%**
+— but with the model fixed, harness choice changes cost per task by **1.8–5.0×**. Board extremes: OpenCode v2
+lowest cost per task (**$0.561**); ZCode highest pass rate (**61.9%**); cost doesn't buy quality (rank
+correlation **−0.39 to +0.22**). The two operational numbers: **64.5% of spend went to non-passing runs** —
+budget for the misses — and **216 trials flagged for reward hacking scored 0**.
+
+The caveats are printed, not buried: "each pass rate has a 95% interval of about ±10 points, so a gap of a few
+points is a tie"; "Open models, one provider"; the design-pattern section is explicitly "observations, not
+tests". That honesty is what makes the numbers worth carrying — the thesis-12 premium measured at scale, and
+eval spend's failure share priced for the first time. Lands the same night as two vendor launches
+(GPT-6.2 Astra/Sol, MAI Code 2/Flash) whose cost multiples are claims about *configurations* — which both
+vendors, unusually, name in their own footnotes.
+
+Sources: [Runta](https://runta.com/blog/introducing-frontierharness-eval-v1-1/) ·
+[HN](https://news.ycombinator.com/item?id=50532191)

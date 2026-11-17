@@ -7942,3 +7942,35 @@ Sources: [CVE-2026-129272](https://www.cve.org/CVERecord?id=CVE-2026-129272) ·
 [CVE-2026-129286](https://www.cve.org/CVERecord?id=CVE-2026-129286) ·
 [CVE-2026-105739](https://www.cve.org/CVERecord?id=CVE-2026-105739) ·
 [CVE-2026-129448](https://www.cve.org/CVERecord?id=CVE-2026-129448)
+
+## 2026-11-18 — Phrack 73's TOC is a census of where offense is looking; the Fastify multipart stack ships a three-bug taxonomy of unauthenticated DoS
+
+**Phrack 73** (third issue from the relaunched staff, ~15 months after Issue 72): **23 main papers + eight
+Line Noise**, spanning exploitation and reverse engineering through ML, hardware, history and culture. The
+operationally relevant rows: "Escaping from a Docker container through vDSO" (andersonc0d3), "Painting Out of
+the Box: Escaping the Chromium Renderer Sandbox via Skia" (Quang Luong), "Reflections on Trusting AI: A Virus
+Inside an LLM" (marver), "Backdoor attacks against Machine Learning IRL" (G. Cherubin), and "A Journey Into
+Kernel Exploit Development in the LLM Era"; the Prophile spotlights Halvar Flake; history revisits the 2000
+SSH1 CRC32 exploit (the Matrix Reloaded name-drop) and the 2003 Linux kernel backdoor attempt. Container
+boundaries, renderer sandboxes and ML supply chains appear as first-class attack surfaces beside the classical
+heap/kernel material — the issue's own thesis about which way the field is moving.
+
+**The Fastify multipart trio** (three NVD records published Nov 16, each exploitable by an unauthenticated
+client, all **7.5 CNA-assigned**, `Awaiting Analysis`): `CVE-2026-124724` (@fastify/busboy ≤ 3.2.5) — once the
+configured part limit is hit, further parts are skipped without an error listener; a body ending
+mid-skipped-part makes the vendored Dicer parser emit an unhandled error and **the process exits** — one
+crafted request crashes the server. `CVE-2026-128835` (also busboy ≤ 3.2.5) — a part whose header block is
+never terminated before the next boundary counts as an open part that never ends; roughly **a hundred bytes**
+triggers it, and through @fastify/multipart the hung handler is never released on client disconnect, so
+repeated requests **leak handlers and their resources**. `CVE-2026-124289` (@fastify/multipart 7.4.0–10.1.8) —
+with `attachFieldsToBody` enabled, `saveRequestFiles` treats any object with truthy `file`/`buffer` properties
+as an uploaded file, so a plain JSON request **forges one, writing attacker-chosen bytes to the temp directory
+while upload hooks and file-count/size limits are skipped**. A tidy taxonomy: crash, hang, resource leak, plus
+one limits-bypass write, under a stack that sits beneath a large fraction of the Node.js API surface. Fixes:
+**busboy 3.2.6** and **multipart 10.1.9** (confirmed on the advisories' Patched cells). Scanner note: the OSV
+records currently carry only GIT ranges — version-check against the advisories, not the DBs.
+
+Sources: [Phrack 73 intro](https://phrack.org/issues/73/introduction_md) ·
+[GHSA-pvmq-3jr9-v5qh](https://github.com/fastify/busboy/security/advisories/GHSA-pvmq-3jr9-v5qh) ·
+[GHSA-wh8h-qr34-3rj3](https://github.com/fastify/busboy/security/advisories/GHSA-wh8h-qr34-3rj3) ·
+[GHSA-gmhr-r4mc-w935](https://github.com/fastify/fastify-multipart/security/advisories/GHSA-gmhr-r4mc-w935)

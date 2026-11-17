@@ -169,3 +169,16 @@ United Airlines は月曜（11月16日）東部時間午後5時前に出発便�
 出典：[CNN](https://www.cnn.com/2026/11/16/us/united-airlines-outage) ·
 [AP](https://apnews.com/article/united-airlines-outage-5a5e5f75bb07f11ffb8750901f0076ff) ·
 [HN](https://news.ycombinator.com/item?id=50522980)
+
+## 2026-11-18 — カスケード週が全範囲をカバー：Apple の「内部アップデート」障害と NSANet が機密側を埋める
+
+**Apple（火曜）：**iPhone/Mac で予期しない iCloud サインアウト、その後のサインインエラー；**App Store、iCloud、Apple Pay、Apple Support、iPhone アクティベーション、Apple Music、App Store Connect** が影響、小売・社内システムも襲われたとの報告。Downdetector が複数サービスで点灯する間、ステータスページは**ずっと緑**（HN トップコメントがスクショ：「all lit up green」）；Apple は後になって一般と開発者両方のステータスページで確認。Mark Gurman 経由の声明：「当社の多くのシステムは復旧しています……**内部アップデート**が今朝の一部障害を引き起こしました」——サイバー攻撃ではなく、太平洋時間午後に大半のサービスが回復。
+
+**NSANet（同じ火曜）：**NSA の機密内部通信ネットワークがオフライン、6 名の関係者が確認（Reuters、CNN の第一報を引用）；NYT は全省庁での業務混乱——バッジインできない職員の錯峰出勤を含む Fort Meade——を報道；**サイバー攻撃の兆候なし**、原因未確認、復旧状況も未表明。
+
+週の累計：Microsoft 365（木曜；RCA——7 月ゲートウェイの潜在欠陥）、FAA 全國地上停止（金曜；原因——L3Harris のカットオーバー）、米銀行 5 行 + Chase（月曜；「技術的バグでサイバーではない」）、Apple と NSANet（火曜）——5 営業日で 5 件超のシステミック障害が消費者クラウド、民間航空、銀行決済、機密国家安全保障側を横断、**いずれも共通原因の証拠なし**、そして 2 ベンダーの説明は自ら出荷した変更そのもの。繰り返される計器の教訓：**ステータスページは緑、ユーザーレポートは急増**——ユーザーレポート量がベンダーのダッシュボードより速いシグナルになった。
+
+Sources: [9to5Mac](https://9to5mac.com/2026/11/17/icloud-app-store-and-other-apple-services-hit-by-ongoing-outage/) ·
+[Apple システム状況](https://www.apple.com/support/systemstatus/) ·
+[Reuters](https://www.reuters.com/technology/highly-classified-us-national-security-communications-network-is-down-cnn-2026-11-17/) ·
+[NYT](https://www.nytimes.com/2026/11/17/us/politics/nsa-down-network-outage-nsanet.html)

@@ -5479,3 +5479,14 @@ Sources: [CVE-2026-129272](https://www.cve.org/CVERecord?id=CVE-2026-129272) ·
 [CVE-2026-129286](https://www.cve.org/CVERecord?id=CVE-2026-129286) ·
 [CVE-2026-105739](https://www.cve.org/CVERecord?id=CVE-2026-105739) ·
 [CVE-2026-129448](https://www.cve.org/CVERecord?id=CVE-2026-129448)
+
+## 2026-11-18 — Phrack 73 の目次は「攻撃がどこを見ているか」の国勢調査；Fastify multipart スタックが非認証 DoS の三バグ分類学を届ける
+
+**Phrack 73**（復刊スタッフの第三号、72 号から約 15 ヶ月）：**主要論文 23 本 + Line Noise 8 本**、エクスプロイテーションとリバースエンジニアリングから ML・ハードウェア・歴史文化まで。運用上重要な行：「Escaping from a Docker container through vDSO」（andersonc0d3）、「Painting Out of the Box: Escaping the Chromium Renderer Sandbox via Skia」（Quang Luong）、「Reflections on Trusting AI: A Virus Inside an LLM」（marver）、「Backdoor attacks against Machine Learning IRL」（G. Cherubin）、そして「A Journey Into Kernel Exploit Development in the LLM Era」；Prophile は Halvar Flake；歴史欄は 2000 年 SSH1 CRC32 エクスプロイト（マトリックス・リローデッドで名前が挙がるやつ）と 2003 年 Linux カーネルバックドア未遂を再訪。コンテナ境界、レンダラサンドボックス、ML サプライチェーンが古典的なヒープ/カーネル素材の隣に一等攻撃面として並ぶ——分野の進む方向についての号自らのテーゼ。
+
+**Fastify multipart の三連**（11-16 公開の NVD レコード 3 件、いずれも未認証クライアントが悪用可能、全て **7.5 CNA 付点**、`Awaiting Analysis`）：`CVE-2026-124724`（@fastify/busboy ≤ 3.2.5）——設定した part 上限に達すると、以降の part がエラーリスナーなしでスキップされ；ボディがスキップ中の part 途中で終わると内蔵 Dicer パーサが未処理エラーを投げて**プロセスが終了**——細工リクエスト 1 発でサーバが落ちる。`CVE-2026-128835`（同じく busboy ≤ 3.2.5）——次の境界より前にヘッダブロックが終端しない part は終わらない開放 part として数えられ；約 **100 バイト**で発火、@fastify/multipart 経由ではクライアント切断でもハングしたハンドラが解放されず、反復リクエストが**ハンドラとその資源を漏洩**。`CVE-2026-124289`（@fastify/multipart 7.4.0–10.1.8）——`attachFieldsToBody` 有効時、`saveRequestFiles` は truthy な `file`/`buffer` プロパティを持つ任意のオブジェクトをアップロードファイルと見なし、平文 JSON リクエストが**一つを偽造して一時ディレクトリへ攻撃者選択のバイトを書き込み、アップロードフックとファイル数/サイズ制限をすり抜ける**。整った分類学：クラッシュ、ハング、資源リーク、加えて制限バイパス書き込み——Node.js API 表面の大きな割合を支えるスタックの下で。修正：**busboy 3.2.6** と **multipart 10.1.9**（公告の Patched セルで確認）。スキャナ注意：これら CVE の OSV レコードは現在 GIT 範囲のみ——バージョン確認はデータベースではなく公告に対して。
+
+Sources: [Phrack 73 イントロ](https://phrack.org/issues/73/introduction_md) ·
+[GHSA-pvmq-3jr9-v5qh](https://github.com/fastify/busboy/security/advisories/GHSA-pvmq-3jr9-v5qh) ·
+[GHSA-wh8h-qr34-3rj3](https://github.com/fastify/busboy/security/advisories/GHSA-wh8h-qr34-3rj3) ·
+[GHSA-gmhr-r4mc-w935](https://github.com/fastify/fastify-multipart/security/advisories/GHSA-gmhr-r4mc-w935)

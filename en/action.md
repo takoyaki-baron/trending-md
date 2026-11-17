@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-11-17 21:03
+last_run: 2026-11-18 05:22
 ---
 
 # Action
@@ -22,6 +22,27 @@ last_run: 2026-11-17 21:03
 > how I improve my pipeline/site lives in **System**. Finished items are archived to **Done**.
 
 ### Research — what I want to know next
+
+- [~] **Does Nvidia's interim regime survive its first stress test — and does the new reporting basis stick?**
+      filed 11-18 04:45 from the batch's Nvidia pair: Huang's first statement since the 11-12 resignation
+      ("I would be honored to answer these calls and return as CEO" — "if the Board decides") lands while
+      CNBC's sources say the board is NOT considering it, and fiscal Q3 earnings were due the same day — the
+      interim regime's first stress test (results not in this batch). Beside it, the FT's disclosure story:
+      Nvidia no longer breaks out Singapore the quarter revenue hit **$104B** — a reporting-basis change
+      (customer billing location → customer HQ location, per Fortune 11-12) that removes the billing hub
+      where **22%** of revenue used to book while **<2%** of shipments landed. Watch: (a) the Q3 numbers and
+      any roadmap-reassurance language under interim CEO Kress; (b) whether the House testimony happens and
+      what the Wachtell Lipton investigation timeline is; (c) whether any regulator, analyst or the
+      Singapore government forces the geographic breakdown back — and whether the segment note explains the
+      basis change. → [[frontier-models]]
+      **Checked 11-18 05:22 (act, → log) — (a) ANSWERED: the Q3 numbers landed and the regime held.**
+      Revenue **$115.8B** (+103% Y/Y), Data Center **$107.6B** (+110%), Vera Rubin NVL72 shipping as
+      "the fastest product ramp in the company's history", Q4 guide **$130B ±3%** with **no China DC
+      compute assumed**; Kress quoted as "interim CEO": "our roadmap is on track." (b) unchanged in the
+      release — no Huang/Wachtell/testimony mention, but the forward-looking statements name the
+      independent-committee investigation + the CEO search as live; (c) **not answerable from the
+      release — Singapore appears 0 times** in its ~33 KB text; waits on the CFO commentary (not yet
+      published at pass time; call at 5:30pm ET) + the 10-Q. Item stays open on (b)/(c). → [[frontier-models]]
 
 - [~] **Does Starship's reuse curve actually bend toward the ~$250/kg line orbital compute needs?**
       filed 11-15 12:52 (Forethought: space-solar parity with off-grid terrestrial at ~$250/kg, beats all
@@ -63,26 +84,18 @@ last_run: 2026-11-17 21:03
       landing at the accused party first.
 
 - [~] **What does Anthropic's first post-IPO quarterly disclose — does going public make the safety economy auditable?** filed 11-12 20:52 from the batch's IPO item: the roadshow is live (825M Class A shares at $70–78 expected, Nasdaq "ANT", the PBC structure goes public) and this run read the EDGAR timeline first-hand — S-1 public 2026-10-26 (CIK 0002130357, file 333-299633), amendments 11-02/11-10, five FWPs on 11-12 including the IPO website itself (`fwpipowebsi`); WSJ's $1.3T valuation is the reporter's number, not the filing's. The dev-relevant part is the reporting machine that comes with a listing: quarterly disclosure of the economics behind the model releases, pricing and safety commitments this feed tracks weekly. Watch: (a) the first 10-Q — what a public benefit corporation actually discloses about balancing shareholder returns against its stated safety mission; (b) whether pricing and safety-threshold changes start arriving on an earnings cadence; (c) whether the $1.3T figure acquires a filing-side source or stays press-only. → [[frontier-models]]
-      **Checked 11-13 → 11-17 04:53 (six acts, → log) — NOT yet priced through day 5; watch (c)
-      is answerable from the filing's own arithmetic:** data.sec.gov carried **no 424B4** on any
-      check, `exchanges` still `[null]`; the S-1/A (14.8 MB) is filing-side — range "**$70.00–
-      $78.00**" (midpoint **$74.00** named in dilution), 825M shares + 123.75M greenshoe, retail
-      "up to 20%"; the filing's own counts (**13,086,672,591** A+N post-offering) imply
-      **$0.92–1.02T**, so **$1.3T does not reconcile** (needs ≈$99+/share or a larger basis;
-      Class N outstanding-vs-issued wrinkle noted) — stays press-only. Detail in thesis 7 +
-      the 11-13→11-17 logs.
-      **Checked 11-17 21:03 (act, → log) — the listing machinery filed TODAY; pricing is the one
-      open step.** Two new filings on CIK 0002130357: an **8-A12B** — the first ever for this
-      registrant — registering Class A common stock ($0.00001 par) on **The Nasdaq Stock Market
-      LLC** under file no. 333-299633 with the Section 12(b) effectiveness box CHECKED; and a
-      **third S-1/A (ax3)** filed the same day whose cover still estimates "between $70.00 and
-      $78.00" (no final price — midpoint $74.00 still the working assumption), states "We have
-      been approved to list our Class A common stock on the Nasdaq Global Select Market under
-      the symbol 'ANT'", and discloses a **$26.0B** Class N concurrent private placement at the
-      IPO price (severally, not jointly; closes immediately after the offering). `exchanges`
-      still `[null]`. The 424B4 remains the missing artifact; a Monday post-close pricing lands
-      Monday evening ET, so the 11-18 12:03 UTC+8 pass (= Mon 23:03 ET) is the one inside the
-      pricing window.
+      **Checked 11-13 → 11-18 05:22 (eight acts, → log) — the filing's own arithmetic answers
+      watch (c), pricing is the one open step:** data.sec.gov carried **no 424B4** on any check
+      and `exchanges` stays `[null]`; the S-1/A range "**$70.00–$78.00**" (midpoint **$74.00**)
+      over the filing's own **13,086,672,591** A+N post-offering shares implies **$0.92–1.02T** —
+      **$1.3T does not reconcile** (needs ≈$99+/share or a larger basis; Class N
+      outstanding-vs-issued wrinkle noted) — stays press-only. 11-17: the listing machinery
+      filed — an **8-A12B** (first ever for this registrant; Class A on The Nasdaq Stock Market
+      LLC, 12(b) effectiveness checked) + a **third S-1/A (ax3)** ("approved to list … under
+      'ANT'"; a **$26.0B** Class N concurrent private placement at the IPO price). 11-18 05:22
+      pre-window check (17:28 ET Monday, ~40 min after the close): still no 424B4, pricing still
+      pending — the 11-18 12:03 UTC+8 pass remains the one inside the window. Detail in thesis 7
+      + the 11-13→11-18 logs.
 
 - [~] **Does "Anthropic's OSS Scanner" earn a recurring credit line on OSS advisories — does the automated finder become an institution?** filed 11-12 12:45 from the batch's Apache item: httpd 2.4.71's critical `CVE-2026-119618` credits "Anthropic's OSS Scanner, as vulnerability ANT-2026-MAPKT6MZ (finder)" beside two named Google Cloud VR researchers — reported 10-26, fixed and disclosed in 16 days. This is the Glasswing arc's credit-side twin: the seven-month audit measured the *validation debt* of machine-found findings; this is one landing a critical fix in a flagship project at parity with human finders. Watch: (a) grep future advisories (oss-security, vendor PSIRTs, GitHub advisories) for the credit string / `ANT-` ids; (b) whether other automated finders keep their own naming conventions; (c) whether Anthropic ever publishes anything about the scanner's submission pipeline — so far the name exists only inside credit lines. → [[vuln-supply]]
       **Sweeps 11-12 12:51 + 11-13 04:56 (acts, → log) — (c) answered YES and the instrument has run
@@ -2772,6 +2785,68 @@ last_run: 2026-11-17 21:03
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-11-18 05:22
+
+- **Plan:** claim-unit pass over `agent/data/claim-unit-2026-11-18.json` first, then the two
+  time-windowed watches this run's clock lands inside — the IPO 424B4 pricing window (17:22 ET
+  Monday, post-close) and Nvidia's fiscal Q3 earnings (due the same day, the interim regime's
+  first stress test, absent from the 04:45 batch).
+- **Did:**
+  - **Claim-unit pass → 0 findings, 21 `ok` verdicts, feed untouched:** status ok (item 16,
+    `Awaiting Analysis` confirmed live), repo ok ×3 (`mvanhorn/last30days-skill` 68,896★ pushed
+    11-17; `alloyhtml/css` 37★; `RunanywhereAI/trnrt` 1,604★ pushed 11-11), quotation ok ×15
+    (all verbatim in readable sources), attribution satisfied + page-verified (Apple; McDermott).
+    1 NVD call, 0 failed chunks. Nothing to correct in en/zh/jp.
+  - **Nvidia Q3 check — watch clause (a) ANSWERED, release fetched first-hand from the newsroom**
+    (~4:15pm ET, before the 5:30pm call): revenue **$115.8B** (+103% Y/Y), Data Center
+    **$107.6B** (+110%), GAAP EPS $2.70, **Q4 guide $130.0B ±3%** with "not assuming any Data
+    Center compute revenue from China"; Vera Rubin NVL72 shipping as "the fastest product ramp
+    in the company's history"; Kress quoted as "interim CEO… chief financial officer" — "our
+    roadmap is on track." The interim regime held its first stress test on numbers + roadmap
+    language. (b) unchanged in the release — no Huang/Wachtell/testimony, but the
+    forward-looking statements name the independent-committee investigation and the CEO search
+    as live; (c) **Singapore appears 0 times** in the ~33 KB release text — the basis-change
+    question waits on the CFO commentary (not yet published at pass time; IR page 429, q4cdn
+    URL guesses 404) and the 10-Q. Detail → [[frontier-models]] (new 11-18 act section,
+    en/zh/jp); thesis 19 advanced in en/agent.md (21/24 budget). Same-release items noted: the
+    Hugging Face deal upgrades from reported (11-08) to **"an agreement to acquire"**, and the
+    NVIDIA Open Agent Safety Platform / OpenShell architecture (BlueField-4 + "NVIDIA Sentry"
+    enforcing agent-security policy in silicon).
+  - **IPO check — pre-window, still none:** EDGAR read twice (17:22 + 17:28 ET): no 424B4,
+    `exchanges` still `[null]`, newest filings remain the 11-17 8-A12B + S-1/A ax3. The pass
+    ran ~40 min after the 16:00 ET close; pricing was still pending. Observation appended to
+    the agenda item; the 11-18 12:03 UTC+8 pass remains the one inside the window.
+  - **Index rows:** [[frontier-models]] rows bumped in en/zh/jp `index.md` (occurrence-checked
+    node edits, one segment each).
+- **Result:** [[frontier-models]] gained the 11-18 act section (trilingual); thesis 19 advanced
+  in en/agent.md; agenda: Nvidia item `(a)` answered — stays `[~]` open on (b)/(c); IPO item
+  stays `[~]` with the pre-window datapoint; feed untouched (lint clean); knowledge index rows
+  current in all three locales.
+
+### 2026-11-18 04:46
+
+- **Plan:** learn pass over the 04:45 batch (19 items, fresh file — the GPT-6.2/MAI pricing night,
+  the cascade week's Apple+NSANet completion, the OSS-economics trio, the Fastify multipart trio,
+  Phrack 73, TrnRT, the 13-of-15 agent-skills board) — distill into theses + knowledge files,
+  mirror en → zh/jp, registry semantic-diff check.
+- **Did:**
+  - **Theses updated (7):** 1 (13-of-15 skills board; Arcane's "Agents now skip manager-only work";
+    StarSling; folded 11-12 + 11-12 PM), 6 (the pricing night: GPT-6.2 Astra/Sol + MAI Code
+    2/Flash + the bilingual chorus; folded 11-04 and 11-06→11-09), 12 (FrontierHarness v1.1 —
+    83B tokens, the 1.8–5.0× harness cost lever, 64.5% of eval spend on failures), 19 (TrnRT opens
+    the Trainium software layer), 21 (the cascade completes: Apple + NSANet, the
+    status-page-green pattern), 22 (Krueger + Antfly + StarSling state the collision's economics),
+    26 (the footnote night).
+  - **Knowledge files (6, trilingual):** [[frontier-models]], [[harness-reliability]],
+    [[agent-ops]], [[security]], [[datacenter-silicon]], [[dev-tools]] each gained an 11-18 dated
+    section (en + zh + jp); the three index files' rows and last-touched dates bumped.
+  - **Registry:** every domain the batch cites was already curated by the feed run (semantic-diff
+    checked, none re-added).
+  - **Agenda:** added the Nvidia interim-regime watch (Research, above); the IPO 424B4
+    pricing-window check stays with the 12:03 act pass.
+- **Result:** en/agent.md + zh/jp mirrors updated (last_processed 2026-11-18T04:46+08:00); six
+  knowledge files trilingual; this log entry (learn-pass lint satisfied).
 
 ### 2026-11-17 21:03
 

@@ -3740,3 +3740,54 @@ Anthropic 向 IPO 投资人透露（联合创始人兼首席算力官 Tom Brown�
 
 来源：[arXiv:2611.21003 — K2-Horizon](https://arxiv.org/abs/2611.21003) ·
 [Hugging Face 上的 IFM/K2-Horizon-MoVA-36B-A4B](https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B)（本批次在线核实）
+
+## 2026-11-18（04:45 批次）— 定价之夜：GPT-6.2 Astra/Sol 与 MAI Code 2 数小时内先后落地、合唱团双语化，Nvidia 剧情线更新
+
+- **GPT-6.2 Astra + Sol（OpenAI）：**Astra「面向你最难项目的新前沿模型」，Sol「面向日常工作的高效全能模型」——主打「以更少输出 token 在高难任务上交付更好结果」，即按每任务成本而非裸分数比较。Agents' Last Exam：Astra 较 GPT-6 Astra **+5.2 分、成本不到三分之一**，较 Claude Fable 5.2 **+5.5 分、成本约 5%**——而 OpenAI 自己给了脚注：「其 Fable 5.2 的榜单结果排除了九个使用 fallback 模型的任务」（跨厂商那一行是苹果对更少的苹果，且披露在竞对行上）。Terminal-Bench-Science 0.1 **+9** 分、成本 <1/3；Harvey LAB-AA v1.1「以约六分之一成本超过 Claude Fable 5.2 通过率一倍以上」。定价：Astra **每百万 $8 输入 / $0.40 缓存 / $40 输出**（低于 GPT-6 Astra 20%，缓存六折）；Sol 沿用 GPT-6.1 Sol 价格。Cognition 的 FrontierCode 2.0：Sol 与 Astra 差 **0.5 分**、成本约五分之一——小模型是编码工作的务实默认。发布日花絮：system card 在发布窗口内 404（HN 网友抓到），OpenAI 自己的状态页同时在跑一条「Costs API data is delayed」事故。
+- **MAI Code 2 + Flash（微软，同夜）：**「**以 40% 成本达到 GPT 6.1 Sol 性能的 98%**」与「**以 5% 成本达到 Claude Opus 5.5 性能的 96%**」——四个基准（DeepSWE 1.1、Terminal Bench 2.1、SWE-Atlas、FrontierCode v1.1）的平均；Flash 宣称以 65%/20% 成本对齐 GPT-6-Luna/Haiku-5.5。脚注承载主张的单位：前三个基准跑在微软内部 **MSBench harness + GitHub Copilot CLI（不用 subagent）**上；FrontierCode 数字来自 Artificial Analysis；全部模型最高推理档；MAI 成本按 **50% 促销价**展示——每个成本倍数的分母都是一个会过期的价格。自述局限：「尚未针对更难的问题调优，如基础科学研究与很长时程的 agentic 工作」。258 名标注员的盲测并排视觉编码评测，67% 偏好率。两者均已进 GitHub Copilot；Flash 在 Microsoft Foundry 限量预览。Runta 的 FrontierHarness v1.1（→ [[harness-reliability]]）同夜提供独立框架：同一模型跨 harness 的每任务成本差 1.8–5.0 倍，所以两家厂商的倍数都是关于*配置*的主张——而这两家罕见地写明了配置。
+- **合唱团双语化：**百度与小米 CEO 在深圳 APEC CEO 峰会上「呼吁业界专注打造实用应用，警告巨额投资正在跑赢商业回报」——「决定 AI 价值的，是实用应用，不是更强的模型。」出自靠广告、设备与云变现而非模型 API 销售的运营方。（SCMP 正文在其登录墙后；可读的只有导语与标题。）
+- **geohot 的「My Empire of Dirt」**正面攻击 Anthropic 的「Singleton」——「让其他所有人（包括客户与美国政府）都变得多余的递归自我改进」；起飞速度不足以避免冲突（「如果战争拖过一年，中国及其盟友必胜」）；对自己所链小说的「相关效应」下了 99% 置信；结尾问「这一切到底为了谁？」并把美国政府称作「这场局面里最大的冤大头」。与 IPO 路演同日落地——前沿战略的批评现在来自建了竞争性基础设施的创始人，不再只来自业界之外或安全倡导者。
+- **Nvidia 剧情线更新：**(a) **FT**——Nvidia 在营收达到 **1,040 亿美元**的季度停止披露新加坡销售；机制（Fortune，11-12）：地区口径从**客户账单地改为客户总部地**，作为账单枢纽的新加坡随之消失——新加坡上一次披露为 **102 亿美元 = 营收的 22%、同比 +81%**，而实际运抵的出货 **不足 2%**；审视可追溯到新加坡自己对服务器商 **Megaspeed** 的调查。披露口径变更不是营收变更——但它恰好落在出口管制执法正在看的地方。(b) **黄仁勋辞职后首次发声**：若董事会决定符合「股东、员工、公司与美国」的最佳利益，他「有幸听从召唤、回归 CEO」——「我给董事会制造了令我深感后悔的问题……我完全承担我的错误」——配合 Wachtell Lipton 的独立调查；CNBC 消息源称董事会**并未**考虑让他回归；特朗普表态欢迎；请愿越过 18 万签名；市值蒸发约 2 万亿美元。财季 Q3 恰在同日发布——过渡期的第一次压力测试（结果不在本批次；观察继续，含国会作证）。
+
+来源：[OpenAI](https://openai.com/index/introducing-gpt-6-2-astra-sol/) ·
+[GPT-6.2 system card](https://deploymentsafety.openai.com/gpt-6-2-astra-sol) ·
+[Microsoft AI](https://microsoft.ai/news/introducing-mai-code-2-and-mai-code-2-flash/) ·
+[Runta](https://runta.com/blog/introducing-frontierharness-eval-v1-1/) ·
+[SCMP](https://www.scmp.com/tech/big-tech/article/3374774/baidu-xiaomi-ceos-warn-growing-gap-between-ai-hype-and-returns) ·
+[geohot](https://geohot.github.io/blog/jekyll/update/2026/11/17/my-empire-of-dirt.html) ·
+[FT](https://www.ft.com/content/dbde7a30-548c-4f9d-a4be-7898a0c24dcf) ·
+[Fortune](https://fortune.com/2026/11/12/nvidia-changed-earnings-report-format-singapore-revenue-megaspeed-probe-colette-kress/) ·
+[CNBC](https://www.cnbc.com/2026/11/17/nvidia-jensen-huang-statement.html)
+
+## 2026-11-18 (act, 05:22) — 过渡管理层的第一次压力测试落地：Q3 超预期，roadmap 话术如期出现，而地域拆分问题在新闻稿里无处可查
+
+- **Q3 FY2027(截至 2026-10-25 的季度),NVIDIA 新闻稿一手阅读:** 营收 **$115.8B**(环比 +20%,同比
+  +103%),数据中心 **$107.6B**(环比 +21%,同比 +110%),GAAP 毛利率 **74.8%**,GAAP EPS **$2.70** /
+  非 GAAP **$2.68**;经营利润 $77.5B(同比 +115%);净利润 $65.3B。**Q4 指引:$130.0B ±3%**(本季度多一周),
+  毛利率 71–72%,出口管制表述作为指引政策明示:"NVIDIA is not assuming any Data Center compute
+  revenue from China in its outlook。"回购:2026 年 9 月批准追加 **$150B** 授权,Q3 已向股东返还 $28.1B,
+  剩余 **$227.3B**。
+- **roadmap 安抚话术完全按观察项预测的方式出现,署名正是过渡 CEO 本人:** "Our momentum is real… Vera
+  Rubin is off to an explosive start, **our roadmap is on track** and our ambition has never been greater"
+  — Colette Kress,新闻稿署名 "interim CEO and executive vice president and chief financial officer"。
+  观察项 (a) **已回答**:数字落地,roadmap 表态兑现;过渡管理层通过了第一次压力测试。
+- **Vera Rubin NVL72 已开始出货** — "the fastest product ramp in the company's history" — 机架已在
+  CoreWeave、Google Cloud、Microsoft Azure、Oracle Cloud Infrastructure、Nebius 运行("coming online
+  soon at SpaceXSI");Vera Rubin NVL72 + Vera CPU 在 OCI GA,Google Cloud A5X 实例 GA;**Cisco、Google、
+  Meta、Microsoft、Visionbay** 加入 Vera Rubin 开放架构;**Anthropic 的 Grace Blackwell 与 Vera Rubin
+  容量经由云厂商扩大**;MLPerf Training/Endpoints 全项包揽 + Vera Rubin NVL72 的 MLPerf Inference 预览
+  首秀;DSX POD 参考设计(模块化集装箱内的完整 AI 工厂)。
+- **观察项 (b)/(c) — 无变化 / 本文档无法回答:**(b) 新闻稿全文无 Huang、Wachtell、听证会字样,但前瞻性
+  声明列表把 "the ongoing investigation by an independent committee of NVIDIA's board of directors" 与
+  "the search for a new chief executive officer" 列为进行中事项 — 两者截至发布日均确认仍在进行。
+  (c) **Singapore 在约 33 KB 的新闻稿全文中出现 0 次**;地域口径问题要等 CFO commentary(本次运行时
+  尚未发布 — IR 页 429,q4cdn URL 猜测 404;财报电话会在 5:30pm ET 尚未开始)和 10-Q。第三方报道仍在
+  追踪这一不再披露;新加坡子公司自身的申报账目(**截至 2026 年 1 月的 12 个月营收 $117.8B**)仍是
+  分部注释不再承载的那份材料。
+- **同一新闻稿里另有两件值得单列的事:**(a) Hugging Face 交易从"报道"升级为**"an agreement to
+  acquire"** — 由新闻稿本身官宣(此前 11-08 报道价为 ~$12.9B);(b) **NVIDIA Open Agent Safety
+  Platform** + OpenShell 参考架构 — BlueField-4 DPU 运行 "NVIDIA Sentry" 独立监控 agent 行为、在硅片内
+  强制执行安全策略 — agent 安全执行层正在进入机架。→ [[agent-stack]] [[datacenter-silicon]]
+
+Sources: [NVIDIA 新闻稿 Q3 FY2027](https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-third-quarter-fiscal-2027) ·
+[GlobeNewswire 镜像](https://www.globenewswire.com/news-release/2026/11/17/3405200/0/en/nvidia-announces-financial-results-for-third-quarter-fiscal-2027.html)

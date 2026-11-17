@@ -1580,3 +1580,15 @@ Sources: [burntsushi.net](https://burntsushi.net/jiff/) ·
 [ben3d.ca: Building the AAA Lighting Pipeline in Three.js](https://ben3d.ca/blog/building-the-aaa-lighting-pipeline-in-threejs) ·
 [nimony.org](https://nimony.org/) · [HN：WINUDF](https://news.ycombinator.com/item?id=50515182) ·
 [HN：Carmack 讨论串](https://news.ycombinator.com/item?id=50525575)
+
+## 2026-11-18 — Solid 2.0 交付为 agent 设计的诊断；Antfly 以 agent 经济学改许可证；Alloy CSS 是 34 星的 Show-HN 一课
+
+- **Solid 2.0（距 1.0 五年）：**响应式图中的 async——计算可以返回 Promise 或 async 迭代器、**投机状态自动回滚**、服务器为事实源；server functions 进入核心（Request/Response 上的 RPC，`live()` 异步生成器提供持久 SSE）。2026 年的新意在于：**为编码 agent 自我修复而设计的错误诊断**——稳定错误码、源位置、修复建议、一条 **「agent 修复指南」路径**，以及瀑布、坏 effect 循环、宽扇出的检测，外加「The Long Hold」（pending 状态展示过久）。RC 阶段的 bug 报告来自「故意猎取边界情况的 agent」。破坏性变更：`createResource`/`batch`/`createComputed`/`createMutable` 移除、核心重写、SolidStart 退役换框架无关的 Vite 插件；14 周 23 个 RC、合并 971 个 PR，稳定线是「普通应用代码整整一周无回归、任何地方无崩溃或挂起」。同一小时的脚注：sveltejs/svelte 在**无任何发布**的情况下登上 trend（533★；5.57.3 是十月的）——发布日连竞对的数字都会被推动。
+- **Antfly：Elastic License 2.0 → Apache 2.0**（0.3 是新许可证下首个发布）——迄今最清晰的 agent 经济学反 source-available 论证：ELv2 的对冲只防云厂商克隆你的代码，而「这种许可证只有当代码本身是难复制的部分时才保护你……**我认为不再需要几年了。我们团队现在人人都用 agent 写代码。**」许可证钟摆（Elastic 2021 → HashiCorp 2023 → Redis 2024，一路收紧）里第一个明确立足于 AI 经济学而非社区善意的反方向主张——且可检验：若复制的成本真的崩了，预期更多小型基础设施厂商*向*宽松许可证迁移，并观察以云为假想敌的大厂是否跟进。
+- **Alloy CSS**（1.0.8，11-16）：一张样式表把你要拉 JS 库才有的部件——对话框、菜单、抽屉、标签页、tooltip、toast——带给服务器渲染的 HTML，且**在 JavaScript 关闭时照常工作**（popover、details、`:checked` 状态），无构建步骤、自带两套暗色主题；演示是一个完整开票应用，单个 HTML 文件、无 script 标签。仓库本身就是趋势阅读的一课：创建于 2018、沉寂数年、本周复活，**34 颗星**——一个 Show HN 日的关注度碾压任何星数，「星速是错误指标」的微缩案例。
+
+来源：[Solid 2.0](https://www.solidjs.com/blog/solid-2-0-the-long-hold/) ·
+[Antfly](https://antfly.io/thoughts/how-antfly-learned-to-stop-worrying-and-love-apache-2) ·
+[antflydb/antfly](https://github.com/antflydb/antfly) ·
+[Alloy 演示](https://alloyhtml.com/example.html) ·
+[alloyhtml/css](https://github.com/alloyhtml/css)

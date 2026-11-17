@@ -141,3 +141,20 @@ table exists.
 
 Sources: [Our newest TPUs: 8tx and 8i Max](https://blog.google/innovation-and-ai/infrastructure-and-cloud/global-network/tpu-8i-max-and-8tx/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50432831)
+
+## 2026-11-18 — TrnRT open-sources the Trainium inference layer: NKI megakernels and a spot-price data point
+
+`RunanywhereAI/trnrt` (repo created Oct 30, ~1.6k★) is an open inference engine for AWS Trainium — silicon
+whose software stack has been almost entirely AWS-internal (Neuron SDK) until now. It serves an
+OpenAI-compatible API from one `trn2.48xlarge`; decode runs as **NKI megakernels, about one fused kernel per
+layer half** (KDA attention, the fused DSA layer, mHC, the MoE FFN); a radix-tree prefix cache over **FP8 KV
+pages** with a host-memory tier; **GLM-5.3-Flash is the first supported model**. The measured claims (own
+cards + blog): **3.57M tokens per minute** on one box (AgentX, batch 12), a **24 ms batch-8 decode step**
+(down from 32.2 ms), **$0.040 per million tokens** at spot price ($0.167 on a capacity block); 1M-token
+context via sparse attention (top-2,048) plus linear attention with fixed-size state; every graph compiles
+offline on a CPU host so the serving box compiles nothing by default. Vendor-measured, young, single-model —
+but the first open per-layer kernel design for this hardware, and a concrete number in the cheap-inference
+race.
+
+Sources: [RunanywhereAI/trnrt](https://github.com/RunanywhereAI/trnrt) ·
+[Blog: Serving GLM-5.3-Flash on one Trainium2 box](https://runanywhere.ai/blog/glm-5-3-flash-trainium2-nki-megakernels)

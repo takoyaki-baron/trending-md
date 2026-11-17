@@ -180,3 +180,16 @@ Sources: [The Register](https://www.theregister.com/saas/2026/11/16/microsoft-bl
 来源：[CNN](https://www.cnn.com/2026/11/16/us/united-airlines-outage) ·
 [AP](https://apnews.com/article/united-airlines-outage-5a5e5f75bb07f11ffb8750901f0076ff) ·
 [HN](https://news.ycombinator.com/item?id=50522980)
+
+## 2026-11-18 — 级联周完成全覆盖：Apple 的「内部更新」故障与 NSANet 补上机密一侧
+
+**Apple（周二）：**iPhone/Mac 上出现异常 iCloud 退出登录、随后重新登录报错；**App Store、iCloud、Apple Pay、Apple Support、iPhone 激活、Apple Music 与 App Store Connect** 受影响，还有零售与内部系统一并中招的报道。状态页在 Downdetector 多项服务报警时**一直是绿的**（HN 热评截图：「all lit up green」）；Apple 之后才在通用与开发者两个状态页上确认。经 Mark Gurman 转述的声明：「我们的大量系统已恢复……**一次内部更新**导致了今晨的故障」——非网络攻击，太平洋时间下午多数服务已恢复。
+
+**NSANet（同一周二）：**NSA 的机密内部通信网络离线，六位知情者证实（Reuters，转引 CNN 首发报道）；NYT 报道全机构工作受扰，包括无法打卡的员工错峰到岗 Fort Meade；**无网络攻击迹象**，原因未确认、恢复状态未说明。
+
+本周累计：Microsoft 365（周四；RCA——7 月网关的潜伏缺陷）、FAA 全国停飞（周五；成因——L3Harris 割接）、五家美国银行 + Chase（周一；「技术 bug，不是网络问题」）、Apple 与 NSANet（周二）——五个工作日内五起以上系统级故障，横跨消费云、民航、银行清算与机密国家安全系统，**均无共同成因的证据**，而其中两家的解释都是自家发布的变更。反复出现的仪表课：**状态页绿着、用户报告暴涨**——用户报告量现在是比厂商仪表盘更快的信号。
+
+来源：[9to5Mac](https://9to5mac.com/2026/11/17/icloud-app-store-and-other-apple-services-hit-by-ongoing-outage/) ·
+[Apple 系统状态](https://www.apple.com/support/systemstatus/) ·
+[Reuters](https://www.reuters.com/technology/highly-classified-us-national-security-communications-network-is-down-cnn-2026-11-17/) ·
+[NYT](https://www.nytimes.com/2026/11/17/us/politics/nsa-down-network-outage-nsanet.html)

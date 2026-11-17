@@ -6454,9 +6454,117 @@
       "feeds": [
         "2026-11-17.md"
       ]
+    },
+    "https://news.ycombinator.com/item?id=50535230": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-17T21:54:10.944Z",
+      "last_seen": "2026-11-17T21:54:10.944Z",
+      "feeds": [
+        "2026-11-18.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50535238": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-17T21:54:10.944Z",
+      "last_seen": "2026-11-17T21:54:10.944Z",
+      "feeds": [
+        "2026-11-18.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50532191": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-17T21:54:10.944Z",
+      "last_seen": "2026-11-17T21:54:10.944Z",
+      "feeds": [
+        "2026-11-18.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50531751": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-17T21:54:10.944Z",
+      "last_seen": "2026-11-17T21:54:10.944Z",
+      "feeds": [
+        "2026-11-18.md"
+      ]
+    },
+    "https://www.nytimes.com/2026/11/17/us/politics/nsa-down-network-outage-nsanet.html": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-17T21:54:10.944Z",
+      "last_seen": "2026-11-17T21:54:10.944Z",
+      "feeds": [
+        "2026-11-18.md"
+      ]
+    },
+    "https://www.reuters.com/technology/highly-classified-us-national-security-communications-network-is-down-cnn-2026-11-17/": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-17T21:54:10.944Z",
+      "last_seen": "2026-11-17T21:54:10.944Z",
+      "feeds": [
+        "2026-11-18.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50534631": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-17T21:54:10.944Z",
+      "last_seen": "2026-11-17T21:54:10.944Z",
+      "feeds": [
+        "2026-11-18.md"
+      ]
+    },
+    "https://www.scmp.com/tech/big-tech/article/3374774/baidu-xiaomi-ceos-warn-growing-gap-between-ai-hype-and-returns": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-17T21:54:10.944Z",
+      "last_seen": "2026-11-17T21:54:10.944Z",
+      "feeds": [
+        "2026-11-18.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50534044": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-17T21:54:10.944Z",
+      "last_seen": "2026-11-17T21:54:10.944Z",
+      "feeds": [
+        "2026-11-18.md"
+      ]
+    },
+    "https://www.ft.com/content/dbde7a30-548c-4f9d-a4be-7898a0c24dcf": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-17T21:54:10.944Z",
+      "last_seen": "2026-11-17T21:54:10.944Z",
+      "feeds": [
+        "2026-11-18.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50532773": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-17T21:54:10.944Z",
+      "last_seen": "2026-11-17T21:54:10.944Z",
+      "feeds": [
+        "2026-11-18.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50536468": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-17T21:54:10.944Z",
+      "last_seen": "2026-11-17T21:54:10.944Z",
+      "feeds": [
+        "2026-11-18.md"
+      ]
     }
   },
-  "runs": 187,
+  "runs": 188,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-11-17T13:31:57.078Z"
+  "last_run": "2026-11-17T21:54:10.944Z"
 }

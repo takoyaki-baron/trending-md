@@ -4081,3 +4081,58 @@ Anthropic は IPO 投資家に語った（共同創業者・最高コンピュ�
 
 Sources: [arXiv:2611.21003 — K2-Horizon](https://arxiv.org/abs/2611.21003) ·
 [Hugging Face の IFM/K2-Horizon-MoVA-36B-A4B](https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B)（本ランで生存確認）
+
+## 2026-11-18（04:45 バッチ）— 価格の夜：GPT-6.2 Astra/Sol と MAI Code 2 が数時間のうちに cost-per-task で登場、合唱は二言語化、Nvidia の物語線が更新
+
+- **GPT-6.2 Astra + Sol（OpenAI）：**Astra「最も難しいプロジェクトのための新しいフロンティアモデル」、Sol「日常の仕事のための効率的で万能なモデル」——「少ない出力トークンで要求の厳しいタスクにより良い結果を届ける」、つまり生のスコアではなくタスクあたりコストで比べる売り方。Agents' Last Exam：Astra は GPT-6 Astra 比 **+5.2 ポイント・コスト 1/3 未満**、Claude Fable 5.2 比 **+5.5 ポイント・コスト約 5%**——そして OpenAI 自身が脚注を供給する：「Fable 5.2 のリーダーボード結果はフォールバックモデルを使った 9 タスクを除外している」（クロスベンダーの行はより少ないリンゴ対リンゴで、しかも競合の行に開示されている）。Terminal-Bench-Science 0.1 で **+9**・コスト <1/3；Harvey LAB-AA v1.1 は「約 1/6 のコストで Claude Fable 5.2 のパス率を倍以上に」。価格：Astra **100 万トークンあたり $8 入力 / $0.40 キャッシュ / $40 出力**（GPT-6 Astra より 20% 安、キャッシュ 60% 引）；Sol は GPT-6.1 Sol の価格を維持。Cognition の FrontierCode 2.0：Sol は Astra に **0.5 ポイント**差・コスト約 1/5——小さい方がコーディングの実務的デフォルト。発売日の皮肉：system card は窓内で 404（HN コメンタが捕捉）、OpenAI のステータスページは発表の最中に「Costs API data is delayed」インシデントを生で表示。
+- **MAI Code 2 + Flash（Microsoft、同夜）：**「**GPT 6.1 Sol の性能の 98% をコスト 40% で**」「**Claude Opus 5.5 の性能の 96% をコストわずか 5% で**」——4 ベンチマーク（DeepSWE 1.1、Terminal Bench 2.1、SWE-Atlas、FrontierCode v1.1）の平均；Flash は GPT-6-Luna/Haiku-5.5 に匹敵する性能を 65%/20% のコストでと主張。脚注が主張の単位を運ぶ：最初の 3 ベンチは Microsoft 内部の **MSBench ハーネス + GitHub Copilot CLI（サブエージェントなし）**で実施；FrontierCode の数字は Artificial Analysis；全モデル最大推論努力；MAI のコストは **50% のプロモーション価格**表示——すべてのコスト倍率の分母は期限切れになる価格。明示された限界：「基礎科学研究や非常に長い時間軸の agentic ワークのような、より難しい問題にはまだ調整されていない」。258 名のアノテータによるブラインド並視覚コーディング評価で 67% の選好。両方とも GitHub Copilot に搭載；Flash は Microsoft Foundry で限定プレビュー。Runta の FrontierHarness v1.1（→ [[harness-reliability]]）が同夜、独立の枠組みを提供：同一モデルでもハーネスを跨ぐとタスクあたりコストが 1.8–5.0 倍動く——だから両ベンダーの倍率は*構成*についての主張であり、その構成を両社とも珍しく明記している。
+- **合唱は二言語化：**百度と Xiaomi の CEO が深圳の APEC CEO サミットで「業界に実用アプリケーションの構築に集中するよう促し、巨額投資が商業的リターンを追い越していると警告」——「AI の価値を決めるのは、より強力なモデルではなく実用アプリケーション。」モデル API 販売ではなく広告・デバイス・クラウドで収益化する事業者からの発言。（SCMP 本文はサインイン壁の内側；読めるのはリードと見出しのみ。）
+- **geohot の「My Empire of Dirt」**が Anthropic の「Singleton」を正面攻撃——「顧客と米国政府を含む他のすべての人を不要にする再帰的自己改善」；テークオフは衝突を防ぐほど速くない（「戦争が一年を超えれば、中国とその同盟国が間違いなく勝つ」）；リンクした小説の「相関効果」が作り物であることに 99% の信頼；結びは「全部終わったあと、結局それは誰のためだったのか？」で米国政府を「この状況で最大のカモ」。IPO ロードショーと同日に着地——フロンティア戦略への批判は今や、競合インフラを建てた創業者からも来る。
+- **Nvidia の物語線が更新：**(a) **FT**——Nvidia が売上 **1,040 億ドル**の四半期でシンガポール販売の開示を止めた；仕組み（Fortune、11-12）：地域報告の基準を**顧客の請求所在地から顧客本社所在地へ**変更——請求ハブとしてのシンガポールが行ごと消える。シンガポールの最後の開示は **102 億ドル = 収益の 22%、前年比 +81%**、物理的に出荷されたのは **2% 未満**；精査の起源はシンガポール自身のサーバ販売商 **Megaspeed** への調査。開示基準の変更は収益の変更ではない——だがそれは輸出規制執行が見ていたまさにその場所に着地する。(b) **黄仁勲の辞任後初の発言**：取締役会が「株主、従業員、会社、そしてアメリカ」の最善の利益と決めるなら「これらの呼び出しに応え、CEO に戻ることは光栄なことです」——「取締役会に深く後悔する問題を作りました……過ちを完全に私のものとして受け止めます」——Wachtell Lipton の独立調査に協力；CNBC の情報源は取締役会が戻すことを**検討していない**と；トランプ大統領は容認；請願は 18 万署名を突破；時価総額は約 2 兆ドル消失。Q3 決算はまさに同日に予定——暫定体制の最初のストレステスト（結果は本バッチには未着；ウォッチは議会証言ともに継続）。
+
+Sources: [OpenAI](https://openai.com/index/introducing-gpt-6-2-astra-sol/) ·
+[GPT-6.2 system card](https://deploymentsafety.openai.com/gpt-6-2-astra-sol) ·
+[Microsoft AI](https://microsoft.ai/news/introducing-mai-code-2-and-mai-code-2-flash/) ·
+[Runta](https://runta.com/blog/introducing-frontierharness-eval-v1-1/) ·
+[SCMP](https://www.scmp.com/tech/big-tech/article/3374774/baidu-xiaomi-ceos-warn-growing-gap-between-ai-hype-and-returns) ·
+[geohot](https://geohot.github.io/blog/jekyll/update/2026/11/17/my-empire-of-dirt.html) ·
+[FT](https://www.ft.com/content/dbde7a30-548c-4f9d-a4be-7898a0c24dcf) ·
+[Fortune](https://fortune.com/2026/11/12/nvidia-changed-earnings-report-format-singapore-revenue-megaspeed-probe-colette-kress/) ·
+[CNBC](https://www.cnbc.com/2026/11/17/nvidia-jensen-huang-statement.html)
+
+## 2026-11-18 (act, 05:22) — 暫定経営陣の最初のストレステストが着地:Q3 は上方達成、ロードマップ文言は予想どおり出荷、地域別開示の問題はリリース本文では回答不能
+
+- **Q3 FY2027(2026-10-25 終了四半期)、NVIDIA ニュースルームの一次情報:** 売上 **$115.8B**(QoQ +20%、
+  YoY +103%)、データセンター **$107.6B**(QoQ +21%、YoY +110%)、GAAP 粗利率 **74.8%**、GAAP EPS
+  **$2.70** / 非 GAAP **$2.68**;営業利益 $77.5B(YoY +115%);純利益 $65.3B。**Q4 ガイダンス:$130.0B ±3%**
+  (四半期に追加週あり)、粗利率 71〜72%、輸出規制の一文はガイダンス方針として明示:"NVIDIA is not
+  assuming any Data Center compute revenue from China in its outlook"。自社株買い:2026 年 9 月に
+  **+$150B** の承認、Q3 は $28.1B を返還、残り **$227.3B**。
+- **ロードマップ安心文言は観察項目の予測どおり、暫定 CEO 自身の名前で出た:** "Our momentum is real…
+  Vera Rubin is off to an explosive start, **our roadmap is on track** and our ambition has never been
+  greater" — Colette Kress、リリース上の肩書きは "interim CEO and executive vice president and chief
+  financial officer"。観察項目 (a) **回答済み**:数字が着地し、ロードマップ文言も
+  出荷された。暫定体制は最初のストレステストを通過。
+- **Vera Rubin NVL72 は出荷開始** — "the fastest product ramp in the company's history" — CoreWeave、
+  Google Cloud、Microsoft Azure、Oracle Cloud Infrastructure、Nebius でラックが稼働("coming online soon
+  at SpaceXSI");OCI での Vera Rubin NVL72 + Vera CPU の GA、Google Cloud A5X インスタンス GA;
+  **Cisco・Google・Meta・Microsoft・Visionbay** が Vera Rubin オープンアーキテクチャに参加;
+  **Anthropic の Grace Blackwell と Vera Rubin 容量がクラウド経由で拡大**;MLPerf Training/Endpoints の
+  全項目制覇 + Vera Rubin NVL72 の MLPerf Inference プレビュー初出演;DSX POD リファレンスデザイン
+  (モジュラーコンテナ内の完全な AI ファクトリ)。
+- **観察項目 (b)/(c) — 変化なし / この文書では回答不能:**(b) リリース全体に Huang・Wachtell・証言への
+  言及はゼロ。ただし forward-looking statements の一覧が "the ongoing investigation by an independent
+  committee of NVIDIA's board of directors" と "the search for a new chief executive officer" を進行中の
+  事項として列挙 — 発表時点で両方継続中と確認。(c) **約 33 KB のリリース本文に Singapore は 0 回**;
+  地域集計の基準変更の問題は CFO commentary(実行時点で未公開 — IR ページは 429、q4cdn の URL 推測は
+  404。決算説明会は 5:30pm ET でまだ先)と 10-Q を待つ。第三者報道は引き続き不開示を追跡中;
+  シンガポール子会社自身の提出勘定(2026 年 1 月までの 12 か月で売上 **$117.8B**)がセグメント注記が
+  もはや載せない材料であり続けている。
+- **同じリリース内で単独行に値する二件:**(a) Hugging Face 取引が「報道」から**「an agreement to
+  acquire」**(リリース自身による正式発表)へ(以前の 11-08 は報道額 ~$12.9B);(b) **NVIDIA Open Agent
+  Safety Platform** + OpenShell リファレンスアーキテクチャ — BlueField-4 DPU 上の "NVIDIA Sentry" が
+  エージェントの振る舞いを独立監視し、シリコン内でセキュリティポリシーを強制 — エージェント安全の
+  強制レイヤーがラックの中へ移動。→ [[agent-stack]] [[datacenter-silicon]]
+
+Sources: [NVIDIA ニュースルーム Q3 FY2027 リリース](https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-third-quarter-fiscal-2027) ·
+[GlobeNewswire ミラー](https://www.globenewswire.com/news-release/2026/11/17/3405200/0/en/nvidia-announces-financial-results-for-third-quarter-fiscal-2027.html)

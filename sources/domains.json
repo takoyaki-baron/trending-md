@@ -587,6 +587,15 @@
   "jp": "Allen Institute for AI のブログ —— 非営利ラボの発表で、開示が異例なまでに完全（AstaBrief 8B：Apache 2.0 ウェイト、訓練データ、RL 見送りの理由、率直な人間研究結果）。突合済み（10-03）：公開主張は allenai/AstaBrief_8B の HF モデルカード（apache-2.0）と一致。",
   "zh": "Allen Institute for AI 的博客 —— 非营利实验室公告，披露异常完整（AstaBrief 8B：Apache 2.0 权重、训练数据、跳过 RL 的理由、诚实的人类研究结果）。已交叉核验（10-03）：发布主张与 allenai/AstaBrief_8B 的 HF 模型卡（apache-2.0）一致。"
  },
+ "alloyhtml.com": {
+  "cat": "code",
+  "cred": "high",
+  "cv": 1,
+  "density": "med",
+  "en": "Alloy CSS — one stylesheet for server-rendered HTML: dialogs, menus, tabs and toasts that work with JavaScript off; no build step, no framework. Cross-validated (11-18): the demo's no-script claim verified first-hand by reading example.html's own source (no script tag) and the README; repo revived this week (created 2018, 1.0.8 shipped Nov 16).",
+  "jp": "Alloy CSS —— サーバーレンダリング HTML 用の1枚のスタイルシート。JavaScript オフで動くダイアログ、メニュー、タブ、トースト。ビルドもフレームワークも不要。突合済み（11-18）：デモのスクリプトなし主張を example.html のソース（script タグなし）と README で一次検証。リポジトリは今週復活（2018年作成、11月16日に 1.0.8）。",
+  "zh": "Alloy CSS —— 给服务端渲染 HTML 的一张样式表：对话框、菜单、标签页与 toast 在关闭 JavaScript 时照常工作；无构建步骤、无框架。已交叉核验（11-18）：演示页无脚本主张经一手验证——通读 example.html 源码（无 script 标签）与 README；仓库本周复活（2018 年创建，11 月 16 日发布 1.0.8）。"
+ },
  "alphapixeldev.com": {
   "cat": "vendor",
   "cred": "high",
@@ -765,6 +774,15 @@
   "en": "Project website for the answer-me-with-html agent skill (same author as the GitHub repo, whose README it mirrors); token-count claims validated against the repo's own counted table — vendor-self-reported numbers, cite as such.",
   "jp": "answer-me-with-html エージェントスキルのプロジェクトサイト（GitHub リポジトリと同一作者、README のミラー）。トークン集計の主張はリポジトリ自身の集計表に対して検証 — ベンダー自己申告の数値としてその旨を明記して引用。",
   "zh": "answer-me-with-html 智能体技能的项目网站（与 GitHub 仓库同一作者，内容为 README 镜像）；token 统计主张已对照仓库自统计表验证——属厂商自报数字，引用时照实标注。"
+ },
+ "antfly.io": {
+  "cat": "vendor",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "Antfly (search engine) engineering blog — first-party essays by the CEO; the Apache 2.0 relicensing argument grounded in agent economics is the notable one. Cross-validated (11-18): relicense claims (ELv2 to Apache 2.0, 0.3 as first release) checked against the antflydb/antfly repo's LICENSE and releases; vendor-self-authored, cred stays med.",
+  "jp": "Antfly（検索エンジン）のエンジニアリングブログ —— CEO による一次エッセイ。エージェント経済学に足場を置いた Apache 2.0 への再ライセンス論が注目点。突合済み（11-18）：再ライセンスの主張（ELv2 から Apache 2.0、0.3 が最初のリリース）を antflydb/antfly の LICENSE とリリースで確認。ベンダー自著のため cred は med のまま。",
+  "zh": "Antfly（搜索引擎）工程博客 —— CEO 一手撰写的文章；基于 agent 经济学的 Apache 2.0 重许可论证最值得关注。已交叉核验（11-18）：重许可主张（ELv2 转 Apache 2.0、0.3 为首个发布）已对照 antflydb/antfly 仓库的 LICENSE 与发布记录核实；厂商自撰，cred 维持 med。"
  },
  "anthropic.com": {
   "cat": "vendor",
@@ -5589,6 +5607,15 @@
   "jp": "gentic.news——AI/開発ツールの紹介記事。Reticle の記事は reticlehq/reticle リポジトリの二次紹介（共引用）。",
   "zh": "gentic.news——AI/开发工具评测；其 Reticle 文章是对 reticlehq/reticle 仓库的二次报道（共同引用）。"
  },
+ "geohot.github.io": {
+  "cat": "community",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "George Hotz's personal blog — opinionated essays on AI industry strategy and geopolitics; argumentative, not reportage. Cross-validated (11-18): every quoted sentence verified verbatim in the fetched post text; claims are the author's own position, attribute as opinion.",
+  "jp": "George Hotz の個人ブログ —— AI 業界戦略と地政学についての主張的なエッセイ。論説であって報道ではない。突合済み（11-18）：引用文はすべて取得した本文で逐語確認。主張は著者自身の立場であり、意見として属性を明記して引用。",
+  "zh": "George Hotz 个人博客 —— 关于 AI 产业战略与地缘政治的观点性文章；是论说文而非报道。已交叉核验（11-18）：所有引用句均已在抓取的原文中逐字核实；其主张为作者个人立场，引用时按观点标注。"
+ },
  "geordie.ai": {
   "cat": "vendor",
   "cred": "low",
@@ -7107,6 +7134,15 @@
   "en": "Jolt's language site — a self-hosted Clojure on a portable Scheme layer (Chez native, Gambit→JS), no JVM; the docs' own claims are the artifact (the homepage REPL runs Jolt compiled to JS). Cross-checked (11-17): the Chez/Gambit/defcfn backend story reads on the live page; the HN thread corroborates.",
   "zh": "Jolt 的语言官网——运行在可移植 Scheme 层上的自托管 Clojure（Chez 原生、Gambit→JS），无 JVM；文档自身的主张即工件（首页 REPL 运行编译为 JS 的 Jolt）。交叉核验（11-17）：Chez/Gambit/defcfn 后端故事在实时页面可读；HN 讨论帖印证。",
   "jp": "Jolt の言語サイト——移植性のある Scheme レイヤ上で自己ホストされる Clojure（Chez ネイティブ、Gambit→JS）、JVM なし。ドキュメント自身の主張がアーティファクト（トップページ REPL は JS にコンパイルされた Jolt）。クロスチェック（11-17）：Chez/Gambit/defcfn バックエンドの記述を生存確認、HN スレッドが裏付け。"
+ },
+ "jordankrueger.com": {
+  "cat": "community",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "Jordan Krueger's blog — essays on open-source maintenance and the self-hosting experience; practical, example-driven. Cross-validated (11-18): the uv install-speed figures it cites as evidence match uv's own published benchmarks (8-10x, up to 115x warm); the xz and curl-bounty history is on public record.",
+  "jp": "Jordan Krueger のブログ —— オープンソースメンテナンスとセルフホスト体験についてのエッセイ。実践的で事例駆動。突合済み（11-18）：証拠として挙げる uv のインストール速度数値は uv 自身の公開ベンチマーク（8-10倍、ウォームで最大115倍）と一致。xz と curl 賞金制度の歴史は公記録どおり。",
+  "zh": "Jordan Krueger 博客 —— 关于开源维护与自托管体验的文章；务实、以实例驱动。已交叉核验（11-18）：其作为论据引用的 uv 安装提速数字与 uv 官方公布的基准一致（8–10 倍，热缓存最高 115 倍）；xz 与 curl 赏金终止的历史均属公开记录。"
  },
  "jorgegarciaherrero.com": {
   "cat": "research",
@@ -10244,6 +10280,15 @@
   "zh": "PHP 项目官网；安全预告与发布历史的权威来源（php.net/archive/2026.php）。已于 2026-10-21 交叉核验：归档页“2026 年 9 月 24 日 — PHP 8.4.26 发布”与 php-src 仓库的 php-8.4.26 tag（发布于 2026-09-24T18:42Z）一致——源码仓库独立于网站。它的预告是厂商自己的措辞，包含“若细节公开则保留提前发布的权利”一条；其中宣称的 CVSS 4.0 9.2 为厂商自评，发布时 NVD 尚未复核。",
   "jp": "PHP プロジェクト公式サイト。事前告知とリリース履歴の正典（php.net/archive/2026.php）。2026-10-21 に突合済み：アーカイブの「2026 年 9 月 24 日 — PHP 8.4.26 リリース」は php-src のタグ php-8.4.26（2026-09-24T18:42Z 公開）と一致 — ソースリポジトリはウェブサイトから独立している。事前告知はベンダー自身の文言で、「詳細が公開された場合はより早くリリースする権利を留保する」条項を含む。告知される CVSS 4.0 9.2 はベンダー付与で、公開時点で NVD は未レビュー。"
  },
+ "phrack.org": {
+  "cat": "security",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "Phrack — the canonical hacker quarterly; the primary source where exploit technique gets archived as literature. Cross-validated (11-18): issue 73's table of contents and introduction read first-hand on phrack.org; quotes and the article list verified in the fetched text (artifact check, first-hand).",
+  "jp": "Phrack —— 最も権威あるハッカー季刊誌。エクスプロイト技術が文献としてアーカイブされる一次ソース。突合済み（11-18）：第73号の目次とイントロを phrack.org で一次読解。引用と論文リストは取得テキスト内で確認（アーティファクトチェック、一次）。",
+  "zh": "Phrack —— 最具权威性的黑客季刊；漏洞利用技术作为文献存档的一手来源。已交叉核验（11-18）：第 73 期目录与导语已在 phrack.org 一手通读；引文与文章清单已在抓取文本中核实（工件核验，一手）。"
+ },
  "phreak.ing": {
   "cat": "community",
   "cred": "med",
@@ -11357,6 +11402,15 @@
   "jp": "RunJS(JSプレイグラウンド)のブログ。常連の教育エッセイ——文章は良いがベンダー隣接で、再浮上は新発表ではない。",
   "zh": "RunJS JavaScript 游乐场的博客；常青教育长文——文笔好，但属厂商周边且翻红内容无新发布。"
  },
+ "runta.com": {
+  "cat": "research",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "Runta — agent-harness evaluation lab (FrontierHarness leaderboard, built with Baseten); publishes scale, raw run counts and printed caveats (±10-pt intervals, one provider, observations-not-tests). Cross-validated (11-18): v1.1 scale, results and caveats read first-hand on the cited post; benchmark numbers are self-reported — cite with the caveats attached.",
+  "jp": "Runta —— エージェントハーネス評価ラボ（Baseten と構築した FrontierHarness リーダーボード）。規模、生実行数、明示的な注意書き（±10pt 区間、単一プロバイダ、観察はテストではない）を公開する。突合済み（11-18）：v1.1 の規模・結果・注意書きを引用先記事で一次確認。数値は自己申告 —— 注意書き付きで引用すること。",
+  "zh": "Runta —— agent-harness 评测实验室（与 Baseten 合建的 FrontierHarness 排行榜）；公布规模、原始运行数与明示的注意事项（±10 分区间、单一供应商、观察而非测试）。已交叉核验（11-18）：v1.1 的规模、结果与注意事项已在被引文章一手核对；数字为自报——引用时须附带注意事项。"
+ },
  "runtimewire.com": {
   "cat": "news",
   "cred": "med",
@@ -12166,6 +12220,15 @@
   "jp": "自社製品のトラストセンター勧告。ARM CVE-2026-28326 勧告（2026.2.1 で修正、回避策なし）は今回確認した NVD レコードと一致——8.8、SolarWinds-PSIRT「Secondary」、AV:A 隣接ベクトルで、二次報道の「リモート RCE」ではない。突合済み（09-22）。",
   "zh": "厂商信任中心为其自身产品发布的公告。ARM CVE-2026-28326 公告（2026.2.1 修复、无变通）与本次查证的 NVD 记录一致——8.8、SolarWinds-PSIRT \"Secondary\"、AV:A 相邻向量，并非二手报道的\"未认证远程 RCE\"。已交叉核验（09-22）。"
  },
+ "solidjs.com": {
+  "cat": "code",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "SolidJS official site and release blog — first-party framework announcements with unusual process transparency (RC counts, PR stats, the stability bar). Cross-validated (11-18): the Solid 2.0 release post read first-hand; quotes verified verbatim in the fetched text.",
+  "jp": "SolidJS 公式サイトとリリースブログ —— 一次のフレームワーク発表で、プロセスの透明性が異例（RC 数、PR 統計、安定性の基準）。突合済み（11-18）：Solid 2.0 リリース記事を一次読解。引用文は取得テキスト内で逐語確認。",
+  "zh": "SolidJS 官网与发布博客 —— 一手框架公告，流程透明度罕见（RC 数量、PR 统计、稳定性门槛）。已交叉核验（11-18）：Solid 2.0 发布文已一手通读；引文已在抓取文本中逐字核实。"
+ },
  "somethingbig.ai": {
   "cat": "code",
   "cred": "med",
@@ -12355,6 +12418,15 @@
   "jp": "StarSkirmish Bench——1時間で競争力ある Brood War ボットを書かせる長時間コーディング ベンチマーク（作者 Kai McPheeters）。各モデルは各ラボのファーストパーティ CLI ハーネスで動作し、注意書きは全文掲載（トップ人間ボットに 7%、2人マップ3枚、実行分散18ポイント、AA Intelligence Index と ρ 0.26）。突合済み（10-17）：相関先の AA Intelligence Index は artificialanalysis.ai に実在（v4.3.2、10評価）。自己実行の数値——正直ベンチとして読むものであり、独立再現ではない。",
   "zh": "StarSkirmish Bench——长时程编码基准（一小时内写一个有竞争力的 Brood War 机器人，作者 Kai McPheeters）；每个模型运行于其实验室的第一方 CLI harness，注意事项全文刊出（对顶级人类机器人胜率 7%、仅三张双人对战图、运行方差达 18 分、与 AA Intelligence Index ρ 0.26）。已交叉核验（10-17）：其相关的 AA Intelligence Index 确实存在于 artificialanalysis.ai（v4.3.2，10 项子评测）。数字为自跑——按“诚实基准”读，而非独立复现。"
  },
+ "starsling.dev": {
+  "cat": "vendor",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "StarSling (YC P25) — AI-native CI for GitHub Actions: drop-in runners plus agents that open optimization PRs. Cross-validated (11-18): launch claims and benchmarks read first-hand on the site; all numbers are vendor-self-reported (median TS job 131.5s to 61s) — cite as such.",
+  "jp": "StarSling（YC P25）—— GitHub Actions 向け AI ネイティブ CI。ドロップインランナーに加え、最適化 PR を開けてくるエージェント。突合済み（11-18）：ローンチの主張とベンチマークをサイトで一次確認。数値はすべてベンダー自己申告（TS ジョブ中央値 131.5秒→61秒）—— その旨を明記して引用。",
+  "zh": "StarSling（YC P25）—— 面向 GitHub Actions 的 AI 原生 CI：即插即用 runner，外加会开优化 PR 的 agent。已交叉核验（11-18）：发布主张与基准已在官网一手核对；所有数字均为厂商自报（TS 任务中位数 131.5 秒降至 61 秒）——引用时照实标注。"
+ },
  "state.gov": {
   "cat": "news",
   "cred": "high",
@@ -12417,6 +12489,15 @@
   "en": "GitLab's official incident status page — first-party outage timelines, but only current incidents (no deep post-mortems here). Cross-checked (09-25): its Sept 24 GitLab.com 503 incident timeline lines up with the same-day 19.2.7/19.3.3/19.4.1 security release versions cited in NVD records.",
   "jp": "GitLab 公式インシデントステータスページ——一次情報の障害タイムラインだが現在進行中の事件のみ（深いポストモーテムはここにはない）。クロスチェック済み（09-25）：9月24日 GitLab.com 503 インシデントのタイムラインは、NVD レコードが引用する同日の 19.2.7/19.3.3/19.4.1 セキュリティリリース版数と整合。",
   "zh": "GitLab 官方事件状态页——第一方故障时间线，但仅覆盖当前事件（此处无深度复盘）。已交叉核验（09-25）：其 9 月 24 日 GitLab.com 503 事件时间线与 NVD 记录中同日 19.2.7/19.3.3/19.4.1 安全版本的引用吻合。"
+ },
+ "status.openai.com": {
+  "cat": "vendor",
+  "cred": "high",
+  "cv": 1,
+  "density": "med",
+  "en": "OpenAI's status page — first-party incident record; a live incident page is the artifact a launch-day claim gets checked against. Cross-validated (11-18): the \"Costs API data is delayed\" banner verified verbatim in the fetched incident page HTML during the GPT-6.2 launch window.",
+  "jp": "OpenAI のステータスページ —— 一次のインシデント記録。ライブのインシデントページは、リリース日の主張を検証する先のアーティファクト。突合済み（11-18）：GPT-6.2 リリース時間帯に「Costs API data is delayed」バナーを取得したインシデントページの HTML で逐語確認。",
+  "zh": "OpenAI 状态页 —— 一手事故记录；实时事故页是发布日主张对照核验的工件。已交叉核验（11-18）：在 GPT-6.2 发布窗口内，\"Costs API data is delayed\" 横幅已在抓取的事故页 HTML 中逐字核实。"
  },
  "status.salesforce.com": {
   "cat": "data",

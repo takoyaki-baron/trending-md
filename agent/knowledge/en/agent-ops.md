@@ -243,3 +243,31 @@ United Airlines acknowledged a **widespread technology outage** impacting depart
 Sources: [CNN](https://www.cnn.com/2026/11/16/us/united-airlines-outage) ·
 [AP](https://apnews.com/article/united-airlines-outage-5a5e5f75bb07f11ffb8750901f0076ff) ·
 [HN](https://news.ycombinator.com/item?id=50522980)
+
+## 2026-11-18 — the cascade week completes its span: Apple's "internal update" outage and NSANet take the classified side
+
+**Apple (Tuesday):** unexpected iCloud sign-outs on iPhone/Mac followed by sign-back-in errors; **App Store,
+iCloud, Apple Pay, Apple Support, iPhone Activation, Apple Music and App Store Connect** affected, with reports
+that retail and corporate systems were hit too. The status page **stayed green while Downdetector lit up**
+across multiple services (the top HN comment screenshots it: "all lit up green"); Apple later confirmed the
+issues on both the general and developer status pages. Statement via Mark Gurman: "Many of our systems are
+back up and running after **an internal update** caused some outages this morning" — no cyberattack, most
+services recovering by afternoon Pacific.
+
+**NSANet (same Tuesday):** the NSA's classified internal communications network offline, confirmed by six
+sources (Reuters, citing CNN's reporting first); NYT reports work disruptions across the agency incl.
+staggered arrivals at Fort Meade as employees who couldn't badge in stayed away; **no signs of a cyberattack**,
+no cause confirmed, remediation status unstated.
+
+The week's tally: Microsoft 365 (Thursday; RCA — latent July gateway defect), the FAA ground stop (Friday;
+cause — the L3Harris cutover), five US banks + Chase (Monday; "a technical bug issue, not a cyber issue"),
+Apple and NSANet (Tuesday) — five-plus systemic failures in five business days spanning consumer cloud, civil
+aviation, banking rails and the classified national-security side, **all with no evidence of a common cause**,
+and two vendors' own explanations are changes they shipped themselves. The recurring instrument lesson:
+**status page green while user reports spike** — user report volume is now the faster signal than the vendor
+dashboard.
+
+Sources: [9to5Mac](https://9to5mac.com/2026/11/17/icloud-app-store-and-other-apple-services-hit-by-ongoing-outage/) ·
+[Apple System Status](https://www.apple.com/support/systemstatus/) ·
+[Reuters](https://www.reuters.com/technology/highly-classified-us-national-security-communications-network-is-down-cnn-2026-11-17/) ·
+[NYT](https://www.nytimes.com/2026/11/17/us/politics/nsa-down-network-outage-nsanet.html)
