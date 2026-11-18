@@ -1,8 +1,8 @@
 ---
 date: 2026-11-18
-updated: 2026-11-18T04:42:08Z
+updated: 2026-11-18T12:36:01Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 34
+sources: 45
 license: CC-BY-4.0
 ---
 
@@ -432,13 +432,153 @@ Cerebras launched disaggregated inference: **AMD Instinct GPUs process prompts, 
 
 ---
 
+## 31. Codeberg's domain was suspended at its registrar and vanished from DNS for ~3 hours — the forge open source is migrating to met its single point of failure
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** social.anoxinon.de/@codebergstatus · 213+ pts on HN · 2h ago (~18:02 UTC+8)
+- **Tags:** `codeberg` `dns` `registrar` `outage`
+
+Codeberg's domain went dark this morning, and the incident log reads like the outage class nobody can self-fix: at 08:13 UTC the project posted "our domain codeberg.org is entirely unreachable. It was registered with namesilo and entirely disappeared from our account" — and, pre-empting the obvious guesses, "No, we didn't forget to renew. There are no suspicious logins in the login history. There is no entry about the situation in the account's domain history." At 08:53 UTC: "our domain was suspended and our case got forwarded to the abuse team. We're still waiting for a final decision." The team declined switching to codeberg.eu as a workaround — multi-domain support, SEO, two-factor auth, and "updating all the Git remotes and other references" made the temporary fix cost more than the outage. At 11:23 UTC: "The domain is slowly recovering. Many users are able to connect to our systems again… We haven't yet received an official response from Namesilo's abuse department." Verified first-hand at 12:10 UTC: DNS answering again via 1.1.1.1 and 8.8.8.8 (217.197.84.140), site serving HTML.
+
+**Why it matters:** A registrar suspension is the failure mode where recovery is entirely in someone else's queue — no rollback, no failover, just an abuse team's inbox. It lands on the forge that has been collecting the open-source exodus (this feed covered mini.nvim's Codeberg move two days ago), and thread commenters drew the obvious conclusion: a German nonprofit holding its identity at a US registrar was one abuse-filter ticket away from a whole platform disappearing from DNS.
+
+[`🔗 Codeberg Status: the 08:13 UTC post`](https://social.anoxinon.de/@codebergstatus/117636437840688845) · [`🔗 Codeberg Status: recovery at 11:23 UTC`](https://social.anoxinon.de/@codebergstatus/117637187711177698) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50544261)
+
+---
+
+## 32. Google's AI Overviews cut clicks to outside websites ~40% — the strongest evidence yet is a randomized trial, and Overviews now sit on 61% of tracked keywords
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** revscope.co · 459+ pts on HN · ~12h ago (~08:17 UTC+8)
+- **Tags:** `google` `search` `ai-overviews` `publishers`
+
+The causal number the publisher-collapse debate has been missing: a preregistered randomized experiment (Saharsh Agarwal and Ananya Sen, SSRN working paper, June 2026 draft) gave 1,065 US desktop Chrome users an extension that assigned them at random to see Google as usual or with AI Overviews hidden, then watched two weeks of browsing — an Overview cuts clicks to outside websites **about 40%**, significant for informational searches (navigational/transactional samples too small), desktop-only, not yet peer-reviewed. The scale context: DataForSEO's 20M-keyword panel shows Overviews climbing from **5.93% of keywords (Sep 2024) to 61.43% (Aug 2026)** while featured snippets fell 8.96% → 0.44%. A second preregistered experiment (Wang et al., arXiv 2608.18352, N=1,100) independently supports the direction. Pew's observational browsing data agrees: people clicked an ordinary result on 8% of visits with a summary on the page vs 15% without. The blog does the honesty work too: "we sell analytics. Almost everything about what earns a citation is correlation" — and AI assistants sent just **0.28% of traffic** across 74,752 sites in March 2026 (Ahrefs).
+
+**Why it matters:** This is the measured version of this week's anecdotes (an All About Berlin essay at −75% resurfaced on HN yesterday to 429 points): a ranking now buys ~60% of the visits it used to wherever an Overview appears, the snippet slot it replaced has effectively gone to zero, and the RCT finally separates Google's design choice from mere correlation.
+
+[`🔗 RevScope: Google's AI Overviews cut clicks to websites by 40%`](https://revscope.co/blog/search-seo-geo-2026/) · [`🔗 Agarwal & Sen: working paper (SSRN)`](https://ssrn.com/abstract=6513059) · [`🔗 Wang et al.: preregistered field experiment (arXiv)`](https://arxiv.org/abs/2608.18352) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50540178)
+
+---
+
+## 33. Congressional sources: Wall Street and the NSA say this week's outages came from rushing fixes to AI-identified vulnerabilities
+
+- **Velocity:** ▮▮ rising
+- **Source:** washingtonsun.com · 79+ pts on HN · ~10h ago (~09:45 UTC+8)
+- **Tags:** `outages` `ai-security` `policy` `infrastructure`
+
+Jeff Stein reports in The Washington Sun (NOTUS's 2026 rebrand), citing three sources familiar with private conversations: Wall Street executives and the NSA have told Congress that this week's cascade of failures — Microsoft 365, the FAA ground stop, the banks, NSANet — "stem from attempts to fix gaps in cyber defenses identified by AI models," and that "the fixes, however, temporarily overwhelmed the systems." A congressional official briefed on the matter: **"These models are identifying massive vulnerabilities, and that increases the urgency to patch right away… They're trying to push through a lot of patches all at once — more than the system was designed for."** DHS Secretary Markwayne Mullin on CNBC: "they're pushing new technology on top of really old computer systems, and it just seems to overwhelm the system… We're going to see more of this." Note the tension the article itself carries: the NSA's public statement called its outage "scheduled routine maintenance" — a different framing than the private account attributed to it.
+
+**Why it matters:** Hold it as the reporting of an anonymous-source claim, not established cause — but it is the first hypothesis that connects this week's cascade to this feed's security beat: the same AI wave that found Java4Shell in an hour for under $200 of tokens and files 100-CVE days also generates patch pressure faster than legacy change management can absorb. Encode's Nathan Calvin: "it shows the extent to which safety critical infrastructure we rely on is based on software with large vulnerabilities on legacy systems."
+
+[`🔗 The Washington Sun: Bank CEOs, NSA Tell Congress That AI-Driven Patches Are Behind Outages`](https://www.washingtonsun.com/technology/bank-ceos-nsa-tell-congress-ai-driven-patches-behind-outages) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50540836)
+
+---
+
+## 34. Claude models were trained on protein sequences at scale — and still predict proteins published after their training cutoff
+
+- **Velocity:** ▮▮ rising
+- **Source:** xinmingtu.cn · 72+ pts on HN · ~8h ago (~11:47 UTC+8)
+- **Tags:** `claude` `proteins` `training-data` `research`
+
+"The latest Claude models were trained on protein sequences, at scale." Xinming Tu's post demonstrates exactly that: give Claude Fable 5.2 or Opus 5.5 the start of a little-studied bacterial protein and they predict the next amino acid; shuffle the protein and they can't; no other general model tested does this. Performance scales with protein-family size, "and they do it even in families with no papers at all" — the signature of sequence-level training rather than literature memorization. Fable 5.2 beats every open protein language model the author ran; Opus 5.5 is level with ProtGPT3-10B, the largest. The update posted today sharpens it: with Leo Tianlai Chen, **56 proteins first made public in August 2026 — after the training cutoff — are still predicted** (Appendix G); ProGen3-3B is the strongest open pLM in the comparison and Fable 5.2 still beats it; and GPT-6.2 Sol and Astra show no sign of the ability.
+
+**Why it matters:** This is contamination-detection methodology pointed in the opposite direction — next-token prediction plus a shuffle control plus a post-cutoff held-out set — and it finds specialized pretraining data inside a frontier general model. It also explains why Anthropic gates life-sciences use behind a verification program (LSVP, published Sep 17): the capability is real, domain-specific, and undisclosed in any model card.
+
+[`🔗 Xinming Tu: Claude was trained on protein sequences at scale`](https://xinmingtu.cn/blog/2026/claude-opus-5-5-protein-sequences/) · [`🔗 Anthropic: Life Sciences Verification Program`](https://www.anthropic.com/news/life-sciences-verification-program) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50541619)
+
+---
+
+## 35. Since we covered GPT-6.2's launch this morning: ARC-AGI-3 results went live — 100% with a provider adapter, 70.3% in standard mode, where Fable 5.2 still leads
+
+- **Velocity:** ▮▮ rising
+- **Source:** arcprize.org · 37+ pts on HN · ~17h ago (~02:59 UTC+8)
+- **Tags:** `arc-agi` `benchmarks` `gpt-6-2` `evals`
+
+The thread that trended put it as "GPT-6.2 Astra scores 100% on ARC-AGI-3" — the leaderboard itself is more interesting. ARC Prize's table now carries GPT-6.2 rows dated 2026-11-17: Astra scores **98.5%** on ARC-AGI-1, **95.8%** on ARC-AGI-2, **70.3% on ARC-AGI-3 in Standard mode and 100.0% with a provider adapter**, at $24.2K cost; Sol posts 97.5 / 85.8 / 54.9 / 98.2 at $5.5K. The comparison rows reframe the headline: Gemini 4 Carbon ran 65.1% standard / 99.1% adapter (11-10), and Claude Fable 5.2 ran **81.2% standard / 97.7% adapter (11-09)** — so under the benchmark's standard configuration, Astra does not lead ARC-AGI-3; it trails Fable 5.2 by 10.9 points. The 100% is real, and it is the adapter column.
+
+**Why it matters:** This is this morning's FrontierHarness lesson measured at the benchmark level: the configuration is part of the score, and the two columns describe different products. A "100% on ARC-AGI-3" claim that arrives with a 70.3% standard-mode sibling two cells away is exactly the shape where you quote both numbers and name which column each came from.
+
+[`🔗 ARC Prize: ARC-AGI-3 leaderboard (Standard vs Provider adapter)`](https://arcprize.org/leaderboard) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50536438)
+
+---
+
+## 36. Puppet Enterprise report deserialization is now in KEV — any CA-signed agent certificate becomes code execution on Puppet Server; federal deadline Dec 1
+
+- **Velocity:** ▮▮ rising
+- **Source:** cisa.gov KEV · added 2026-11-17
+- **Tags:** `cve` `puppet` `kev` `deserialization`
+
+**CVE-2026-115731** joined CISA's Known Exploited Vulnerabilities catalog on Nov 17 (catalog version 2026.11.17; federal remediation due **2026-12-01**). The NVD record (status **Analyzed**) describes deserialization of untrusted data in the report-processing code of Puppet, as used by Puppet Server: it "allows a client that holds any CA-signed agent certificate to execute arbitrary code on the Puppet Server as its service user by submitting a report containing a crafted rich-data type via PUT request. Where the certificate authority autosigns requests without strong verification, an unauthenticated network attacker can obtain such a certificate." Score provenance, both halves: **NVD's own CVSS 3.1 is 9.9** (`nvd@nist.gov`, Primary, on the Analyzed record) beside **Puppet's CNA score of 9.4 under CVSS 4.0** — two frameworks, two numbers, name both. Affected (Perforce's CNA container): Puppet Enterprise **2023.8.0 < 2023.8.13, 2025.0.0 < 2025.12.1, 2026.0.0 < 2026.0.1** — fixed in 2023.8.13, 2025.12.1 and 2026.0.1; CWE-502 with CWE-94.
+
+**Why it matters:** Puppet is config management for fleets — code execution as the service user on Puppet Server is a path toward executing on everything it manages, and the auth premise is unusually weak: any legitimately-enrolled agent certificate suffices, and autosigning widens it to unauthenticated attackers. KEV listing means it is being exploited now; if you run Puppet Enterprise, the fix versions above are the whole action item.
+
+[`🔗 NVD: CVE-2026-115731`](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE-2026-115731) · [`🔗 Perforce advisory portal`](https://portal.perforce.com/s/cve/a91Qi000003IaHpIAK/report-deserialization-code-execution) · [`🔗 CISA KEV catalog`](https://www.cisa.gov/known-exploited-vulnerabilities-catalog?field_cve=CVE-2026-115731)
+
+---
+
+## 37. Kernel.dev asks why Gemini 4 Carbon takes so long — inference speed is only 16–49% of the gap; the rest is longer trajectories
+
+- **Velocity:** ▮ steady
+- **Source:** kernel.dev · 126+ pts on HN · ~8h ago (~12:14 UTC+8)
+- **Tags:** `gemini` `carbon` `latency` `agent-evals`
+
+Benchmarking Gemini 4 Carbon on a private eval — bug-diagnosis-and-fix tasks where the model gets a pre-fix codebase and a symptoms-only report — the kernel.dev team found it spending "close to an hour completing tasks that routinely took Opus and Astra only a few minutes," matching the user reports they quote (Theo: "Gemini 4 Carbon is unacceptably slow in real world usage. Gemini 4 Carbon low: 22m21s. Opus 5.5 high: 9m33s"). Then they traced every step and quantified the split: **slower inference accounts for 16–30% of Carbon's extra time compared with Astra, and 45–49% compared with Opus** — "The rest comes from longer trajectories. Carbon simply does more work per task" Carbon is not capability-weak (65.1% standard on ARC-AGI-3 per ARC Prize's leaderboard); it is a style: more exploration, more verification, more steps per task.
+
+**Why it matters:** Users conflate two different latencies — per-token speed and trajectory length — and this decomposes the complaint with a number. For harness and router builders it's a genuine trade-off input: a model that does more work per task is acceptable in batch and punishing in an interactive loop, and "slow" may be the price of a thorough style rather than a broken product. The decomposition is the authors' own eval and methodology; hold the exact percentages to that setup.
+
+[`🔗 Kernel.dev: Why is Gemini 4 Carbon taking so long?`](https://kernel.dev/blog/why-is-gemini-4-carbon-taking-so-long/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50541790)
+
+---
+
+## 38. Energy-Based Reasoners: a 1.8M-parameter model hits 99.9% on Sudoku-Extreme with 345× less inference compute than the next-best
+
+- **Velocity:** ▮ steady
+- **Source:** energy-based-reasoners.github.io · 52+ pts on HN · 2.5h ago (~17:29 UTC+8)
+- **Tags:** `research` `reasoning` `energy-based-models` `architecture`
+
+From Duke, UIUC and Harvard (William Chen, Alexi Gladstone, Zeyu Li, Heng Ji, Yilun Du), arXiv 2611.08977 (submitted Nov 6): Energy-Based Reasoners learn an energy function over latent reasoning states and formulate looped updates as **gradient descent on that energy** — the energy scores candidate predictions without an external verifier, its gradient guides refinement, and its value provides "a natural signal for stopping." Training adds exploration-based shaping of the energy landscape. The numbers: **99.9% accuracy on Sudoku-Extreme with 345× less inference compute than the next-best model** at comparable training compute; state-of-the-art coverage of distinct valid solutions on N-Queens and Graph Coloring with near-100% single-sample accuracy. Code is up at wwillchen/ebr. (Note: the HN headline says 385×; the paper and project page both say **345×**.)
+
+**Why it matters:** Making "when to stop looping" a learned quantity rather than a sampler budget is the decision-model move this week's vendor launches made, done at the architecture level — and at 1.8M parameters it's a striking efficiency point. The caveat to carry: the four benchmarks are the classic looped-recurrence turf (Sudoku, N-Queens, graph coloring) where small recurrent models always shine; generalization to natural-language tasks is untested in this paper.
+
+[`🔗 Energy-Based Reasoners project page`](https://energy-based-reasoners.github.io/) · [`🔗 arXiv 2611.08977`](https://arxiv.org/abs/2611.08977) · [`🔗 Code: wwillchen/ebr`](https://github.com/wwillchen/ebr) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50543989)
+
+---
+
+## 39. OpenAI opens computer-use agents to healthcare teams — Cigna and CVS named, HIPAA-mode API access
+
+- **Velocity:** ▮ steady
+- **Source:** openai.com · 49+ pts on HN · ~18h ago (~02:26 UTC+8)
+- **Tags:** `openai` `computer-use` `healthcare` `agents`
+
+OpenAI published new results measuring performance, safety and cost for computer-use agents in clinical and administrative workflows — the click-and-type work between systems that healthcare runs on (prior authorization, referrals, discharge planning, outreach between visits). Named partners: **Abridge, Ambience, Cigna Healthcare, and CVS Health**. Access routes: the OpenAI API, **ChatGPT for Healthcare**, and **ChatGPT for Clinicians**, with organizations able to "support HIPAA-compliant workflows, configure approvals and agent access, and record audit logs for secure deployments." The demo — built on synthetic patient data — shows a computer-use agent and an authorization specialist working the same MRI request, the agent retrieving what the insurer needs and entering it into the payer's portal.
+
+**Why it matters:** Healthcare paperwork is the canonical computer-use wedge — multi-system, high-volume, low-glamour — and naming insurer-side partners (Cigna, CVS) means prior authorization is being automated at both ends of the transaction, provider and payer. The approvals/audit-log language is the same agent-governance pattern every enterprise deployment is converging on. Standard caveat: the measured results are OpenAI's own.
+
+[`🔗 OpenAI: Advancing computer-use agents for healthcare teams`](https://openai.com/index/advancing-computer-use-for-healthcare-teams/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50535898)
+
+---
+
+## 40. Purism launches Librem 5 v2 crowdfunding: an eight-core RISC-V phone running PureOS — at $1,599, "when it is ready"
+
+- **Velocity:** ▮ steady
+- **Source:** puri.sm · 98+ pts on HN · ~17h ago (~02:34 UTC+8)
+- **Tags:** `risc-v` `hardware` `linux-phone` `crowdfunding`
+
+Purism announced its second smartphone crowdfunding campaign on Nov 17: the **Librem 5 v2**, "Powered by an eight-core RISC-V processor and running PureOS," positioned as "an alternative to Android and iOS—grounded in free software, open standards, and user ownership," with third-party apps in secure sandboxes. CEO Todd Weaver: "A smartphone that works for you, not for the companies collecting your data. No Android, no iOS, no mandatory Big Tech account." The campaign page's own numbers frame the ask: **$1,599** per phone (or $129 now plus $99/month for 15 months), **92 of 2,500 orders with 89 days remaining** (campaign ends Feb 15, 2027), and the delivery promise is exactly "when it is ready" — no date on the page. HN's reception ran skeptical: commenters flagged the specs-per-dollar against a $1,599 flagship, the prudence of RISC-V this early in its phone-grade maturation, and delivery expectations.
+
+**Why it matters:** A RISC-V phone is a real test of the architecture's application ecosystem — mainstream Android-on-RISC-V momentum exists upstream, but a mainline-GNU/Linux phone on RISC-V silicon is the hard version of the bet. Given how the original Librem 5 campaign went, the honest reading is the page's own: this is a funded development project with a defined order book, not a shipping product.
+
+[`🔗 Purism: Librem 5 v2 announcement`](https://puri.sm/posts/purism-launches-librem-5-v2-a-risc-v-phone-to-empower-people/) · [`🔗 Crowdfunding campaign page (order/goal numbers first-hand)`](https://puri.sm/librem-5-v2-crowdfunding-campaign) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50536031)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-18T04:42:08Z |
-| Items | 30 |
-| Sources tracked | 34 (Hacker News, GitHub Trending, OpenAI, Microsoft AI, Apple, Reuters/NYT/CNBC/FT/SCMP/Fortune, NVD/GitHub advisories, vendor blogs, Phrack, SolidJS, Runta, Antfly, Calif, JFrog, Red Hat, Cloudflare, jQuery, Archive Team, PostHog, ComplexDiscovery/Harvard, arXiv, Tencent Hunyuan, Cerebras) |
+| Generated | 2026-11-18T12:36:01Z |
+| Items | 40 |
+| Sources tracked | 45 (Hacker News, GitHub Trending, OpenAI, Microsoft AI, Apple, Reuters/NYT/CNBC/FT/SCMP/Fortune, NVD/CISA KEV/GitHub advisories, vendor blogs, Phrack, SolidJS, Runta, Antfly, Calif, JFrog, Red Hat, Cloudflare, jQuery, Archive Team, PostHog, ComplexDiscovery/Harvard, arXiv, SSRN, Tencent Hunyuan, Cerebras, Codeberg Status, RevScope, Washington Sun/NOTUS, kernel.dev, xinmingtu.cn, ARC Prize, Energy-Based Reasoners, Purism) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

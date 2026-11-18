@@ -1,9 +1,9 @@
 {
- "generated": "2026-11-18T04:42:15.059Z",
+ "generated": "2026-11-18T12:36:08.924Z",
  "files": [
   {
    "file": "2026-11-18.md",
-   "items": 30,
+   "items": 40,
    "findings": [
     {
      "check": "status",
@@ -24,35 +24,56 @@
      "item": 20,
      "verdict": "ok",
      "claim": "CVE-2026-114938 `Received`",
-     "detail": "Received (lastModified 2026-11-18T04:17:12.560)"
+     "detail": "Received (lastModified 2026-11-18T05:19:00.783)"
+    },
+    {
+     "check": "status",
+     "item": 36,
+     "verdict": "ok",
+     "claim": "CVE-2026-115731 `Analyzed`",
+     "detail": "Analyzed (lastModified 2026-11-18T05:19:01.130)"
+    },
+    {
+     "check": "status",
+     "item": 36,
+     "verdict": "ok",
+     "claim": "CVE-2026-115731 `Analyzed`",
+     "detail": "Analyzed (lastModified 2026-11-18T05:19:01.130)"
+    },
+    {
+     "check": "field",
+     "item": 40,
+     "verdict": "field-unknown-name",
+     "claim": "“no iOS”",
+     "detail": "“iOS” is not a CVE record field this check knows — the claim is about something else, or FIELD_VOCAB needs the name"
     },
     {
      "check": "repo",
      "item": 6,
      "verdict": "ok",
      "claim": "mvanhorn/last30days-skill",
-     "detail": "69254★, last push 2026-11-17"
+     "detail": "69584★, last push 2026-11-17"
     },
     {
      "check": "repo",
      "item": 8,
      "verdict": "star-surge",
-     "claim": "34 quoted vs 54 now",
-     "detail": "alloyhtml/css: 34 → 54 (+37%, 20 stars) since the batch was written — a rising count is not a wrong one; date the reading if the number will be re-used"
+     "claim": "34 quoted vs 58 now",
+     "detail": "alloyhtml/css: 34 → 58 (+41%, 24 stars) since the batch was written — a rising count is not a wrong one; date the reading if the number will be re-used"
     },
     {
      "check": "repo",
      "item": 8,
      "verdict": "ok",
      "claim": "alloyhtml/css",
-     "detail": "54★, last push 2026-11-16"
+     "detail": "58★, last push 2026-11-16"
     },
     {
      "check": "repo",
      "item": 17,
      "verdict": "ok",
      "claim": "RunanywhereAI/trnrt",
-     "detail": "1622★, last push 2026-11-11"
+     "detail": "1629★, last push 2026-11-18"
     },
     {
      "check": "quotation",
@@ -212,7 +233,7 @@
      "check": "quotation",
      "item": 27,
      "verdict": "ok",
-     "claim": "4 quotation(s)",
+     "claim": "2 quotation(s)",
      "detail": "verbatim in 3 readable source(s)"
     },
     {
@@ -235,6 +256,76 @@
      "verdict": "ok",
      "claim": "2 quotation(s)",
      "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 31,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 32,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 33,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 34,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 35,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 36,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 6 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 37,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 38,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 4 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 39,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 40,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
     },
     {
      "check": "attribution",
@@ -263,7 +354,7 @@
  "status_watch": [],
  "api_calls": 0,
  "readme_calls": 0,
- "cited_page_calls": 0,
+ "cited_page_calls": 1,
  "repo_page_calls": 0,
  "nvd_calls": 1,
  "nvd_failed_chunks": 0,

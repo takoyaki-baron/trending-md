@@ -1,8 +1,8 @@
 ---
 date: 2026-11-18
-updated: 2026-11-18T04:42:08Z
+updated: 2026-11-18T12:36:01Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 34
+sources: 45
 license: CC-BY-4.0
 ---
 
@@ -432,13 +432,153 @@ Cerebras 发布分离式推理：**AMD Instinct GPU 处理提示词，Cerebras C
 
 ---
 
+## 31. Codeberg 域名被注册商暂停，DNS 消失约 3 小时——开源正在迁入的代码托管平台撞上了自己的单点故障
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** social.anoxinon.de/@codebergstatus · 213+ pts on HN · 2h ago (~18:02 UTC+8)
+- **Tags:** `codeberg` `dns` `registrar` `outage`
+
+Codeberg 的域名今晨熄灭，事件日志读起来像一种谁都无法自救的故障类型：08:13 UTC 项目发帖称 "our domain codeberg.org is entirely unreachable. It was registered with namesilo and entirely disappeared from our account"（我们的域名完全不可达。域名注册在 NameSilo，而且从我们的账户里整个消失了）——并预先堵住了显而易见的猜测："No, we didn't forget to renew. There are no suspicious logins in the login history. There is no entry about the situation in the account's domain history."（不，我们没有忘记续费。登录历史里没有可疑登录，账户的域名历史里也没有任何相关记录。）08:53 UTC 更新："our domain was suspended and our case got forwarded to the abuse team. We're still waiting for a final decision."（确认域名被暂停，案件已转交滥用处理团队，仍在等最终决定。）团队拒绝了切换到 codeberg.eu 的临时方案——多域名支持、SEO、双因素认证，以及"更新所有 Git remote 和其他引用"，让临时修复的成本超过了宕机本身。11:23 UTC："The domain is slowly recovering. Many users are able to connect to our systems again… We haven't yet received an official response from Namesilo's abuse department."（域名正在缓慢恢复，许多用户已能重新连上……尚未收到 NameSilo 滥用部门的正式回复。）本文 12:10 UTC 一手验证：1.1.1.1 与 8.8.8.8 的 DNS 均已重新应答（217.197.84.140），站点正常返回 HTML。
+
+**Why it matters:** 注册商暂停是一种恢复权完全在别人队列里的故障模式——没有回滚、没有故障转移，只有滥用团队收件箱的排队。它落在正在承接开源出走潮的托管平台上（本 feed 两天前刚报道过 mini.nvim 迁往 Codeberg），评论区也得出显而易见的结论：一家德国非营利组织把身份押在美国注册商手里，离"整个平台从 DNS 消失"只差一张滥用过滤工单。
+
+[`🔗 Codeberg Status：08:13 UTC 的帖子`](https://social.anoxinon.de/@codebergstatus/117636437840688845) · [`🔗 Codeberg Status：11:23 UTC 恢复`](https://social.anoxinon.de/@codebergstatus/117637187711177698) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50544261)
+
+---
+
+## 32. Google AI Overviews 让站外点击减少约 40%——最有力的证据终于是一项随机实验，而且 Overviews 已覆盖 61% 的被追踪关键词
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** revscope.co · 459+ pts on HN · ~12h ago (~08:17 UTC+8)
+- **Tags:** `google` `search` `ai-overviews` `publishers`
+
+"出版业崩塌"之争一直缺的那个因果数字来了：一项预注册随机实验（Saharsh Agarwal 与 Ananya Sen，SSRN 工作论文，2026 年 6 月稿）给 1,065 名美国桌面版 Chrome 用户装了扩展，把他们随机分入"照常看到 Google"或"隐藏 AI Overviews"两组，随后追踪两周浏览——出现 Overview 时，**点击站外网站的次数减少约 40%**，对信息型搜索统计显著（导航型/交易型样本太小），仅限桌面端、尚未同行评审。规模背景：DataForSEO 的 2,000 万关键词面板显示，Overview 覆盖率从 **2024 年 9 月的 5.93% 升至 2026 年 8 月的 61.43%**，同期精选摘要从 8.96% 跌到 0.44%。第二项预注册实验（Wang 等，arXiv 2608.18352，N=1,100）独立支持同一方向。Pew 的观察性浏览数据一致：页面带摘要时用户点击普通结果的比例为 8%，无摘要时为 15%。这篇博客也把诚实的部分做了："we sell analytics. Almost everything about what earns a citation is correlation"（我们卖分析工具，关于什么能被引用，几乎所有证据都只是相关性）——而且 2026 年 3 月，AI 助手在 74,752 个站点上只送去了 **0.28% 的流量**（Ahrefs）。
+
+**Why it matters:** 这是本周那些轶事（昨日重返 HN 拿 429 分的 All About Berlin 自述 −75%）的测量版：只要出现 Overview，一个排位只能买到过去约六成的访问；它取代的精选摘要位实际上已归零；而 RCT 终于把"Google 的设计选择"从纯相关性里剥了出来。
+
+[`🔗 RevScope：Google's AI Overviews cut clicks to websites by 40%`](https://revscope.co/blog/search-seo-geo-2026/) · [`🔗 Agarwal & Sen：工作论文（SSRN）`](https://ssrn.com/abstract=6513059) · [`🔗 Wang 等：预注册现场实验（arXiv）`](https://arxiv.org/abs/2608.18352) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50540178)
+
+---
+
+## 33. 国会知情源：华尔街与 NSA 称本周一系列宕机源于"抢修 AI 发现的漏洞"
+
+- **Velocity:** ▮▮ rising
+- **Source:** washingtonsun.com · 79+ pts on HN · ~10h ago (~09:45 UTC+8)
+- **Tags:** `outages` `ai-security` `policy` `infrastructure`
+
+Jeff Stein 在 The Washington Sun（NOTUS 的 2026 年更名）报道，援引三位知情人士：华尔街高管与 NSA 已告知国会，本周的连锁故障——Microsoft 365、FAA 全国禁飞、多家银行、NSANet——"stem from attempts to fix gaps in cyber defenses identified by AI models"（源于修补 AI 模型发现的网络防御缺口的尝试），而"the fixes, however, temporarily overwhelmed the systems"（这些修复本身一度压垮了系统）。一位知情国会官员：**"These models are identifying massive vulnerabilities, and that increases the urgency to patch right away… They're trying to push through a lot of patches all at once — more than the system was designed for."**（这些模型在发现海量漏洞，立刻修补的紧迫性被拉满……他们在同时推送大量补丁——超出了系统设计的承受范围。）国土安全部长 Markwayne Mullin 在 CNBC 上说："they're pushing new technology on top of really old computer systems, and it just seems to overwhelm the system… We're going to see more of this."（他们在很老的计算机系统上叠新技术，系统就是这样被压垮的……这类事会越来越多。）注意文章自身带出的张力：NSA 的公开说法是"计划内例行维护"——与文中归于它的私下说法并不一致。
+
+**Why it matters:** 把它当"对匿名信源说法的报道"来持有，而不是已确证的成因——但它是第一个把本周故障级联与本 feed 的安全条线连起来的假说：同一波 AI 浪潮既能在 1 小时内用不到 200 美元 token 找到 Java4Shell、制造一天 100 条 CVE 的纪录，也会产生超出旧式变更管理吸收能力的补丁压力。Encode 的 Nathan Calvin："它说明我们所依赖的安全关键基础设施，构建在带着大漏洞的旧软件之上。"
+
+[`🔗 The Washington Sun：Bank CEOs, NSA Tell Congress That AI-Driven Patches Are Behind Outages`](https://www.washingtonsun.com/technology/bank-ceos-nsa-tell-congress-ai-driven-patches-behind-outages) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50540836)
+
+---
+
+## 34. Claude 模型在海量蛋白质序列上训练过——而且能预测训练截止之后才发表的蛋白质
+
+- **Velocity:** ▮▮ rising
+- **Source:** xinmingtu.cn · 72+ pts on HN · ~8h ago (~11:47 UTC+8)
+- **Tags:** `claude` `proteins` `training-data` `research`
+
+"The latest Claude models were trained on protein sequences, at scale."（最新的 Claude 模型在海量蛋白质序列上训练过。）Xinming Tu 的文章对此给出了直接演示：给 Claude Fable 5.2 或 Opus 5.5 一个冷门细菌蛋白的开头，它们能预测下一个氨基酸；把序列打乱，它们就不行了；被测的其他通用模型都做不到。性能随蛋白家族规模提升，"even in families with no papers at all"（即使在完全没有论文的家族里也如此）——这是序列级训练的信号，而非文献记忆。Fable 5.2 胜过作者测过的所有开源蛋白质语言模型；Opus 5.5 与最大的 ProtGPT3-10B 打平。今天发布的更新把结论磨得更尖：与 Leo Tianlai Chen 合作，**2026 年 8 月才首次公开的 56 个蛋白质——训练截止之后——依然能被预测**（附录 G）；比较中最强的开源 pLM 是 ProGen3-3B，Fable 5.2 仍然胜出；而 GPT-6.2 Sol 与 Astra 没有任何这种能力的迹象。
+
+**Why it matters:** 这是把"污染检测"的方法学反着用——下一个 token 预测 + 打乱对照 + 截止后保留集——结果在前沿通用模型内部发现了领域专用训练数据。它也解释了 Anthropic 为何把生命科学用途关在验证程序后面（LSVP，2026-09-17 发布）：这个能力是真实的、领域专用的，而且没有写进任何模型卡。
+
+[`🔗 Xinming Tu：Claude was trained on protein sequences at scale`](https://xinmingtu.cn/blog/2026/claude-opus-5-5-protein-sequences/) · [`🔗 Anthropic：Life Sciences Verification Program`](https://www.anthropic.com/news/life-sciences-verification-program) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50541619)
+
+---
+
+## 35. 续今晨 GPT-6.2 发布：ARC-AGI-3 成绩上线——适配器模式 100%，标准模式 70.3%，而 Fable 5.2 仍以 81.2% 领跑
+
+- **Velocity:** ▮▮ rising
+- **Source:** arcprize.org · 37+ pts on HN · ~17h ago (~02:59 UTC+8)
+- **Tags:** `arc-agi` `benchmarks` `gpt-6-2` `evals`
+
+刷屏的那个帖子标题写的是 "GPT-6.2 Astra scores 100% on ARC-AGI-3"——而榜单本身更有意思。ARC Prize 的表格已带上日期为 2026-11-17 的 GPT-6.2 行：Astra 在 ARC-AGI-1 得 **98.5%**、ARC-AGI-2 得 **95.8%**、**ARC-AGI-3 标准模式 70.3%、提供方适配器模式 100.0%**，成本 $24.2K；Sol 为 97.5 / 85.8 / 54.9 / 98.2，成本 $5.5K。对比行重构了标题：Gemini 4 Carbon 标准模式 65.1% / 适配器 99.1%（11-10），Claude Fable 5.2 则是**标准模式 81.2% / 适配器 97.7%（11-09）**——也就是说在基准的标准配置下，Astra 并没有领跑 ARC-AGI-3，而是落后 Fable 5.2 达 10.9 分。100% 是真的，但它在适配器那一列。
+
+**Why it matters:** 这是今晨 FrontierHarness 的教训在基准层面的复现：配置是分数的一部分，两列描述的是两个不同的产品。一个"ARC-AGI-3 拿 100%"的说法旁边两格就是 70.3% 的标准模式——这正是那种必须两个数字都报、并说清各自来自哪一列的形状。
+
+[`🔗 ARC Prize：ARC-AGI-3 榜单（标准 vs 提供方适配器）`](https://arcprize.org/leaderboard) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50536438)
+
+---
+
+## 36. Puppet Enterprise 报告反序列化进入 KEV——任何持有 CA 签名 agent 证书的客户端都能在 Puppet Server 上执行代码；联邦整改期限 12 月 1 日
+
+- **Velocity:** ▮▮ rising
+- **Source:** cisa.gov KEV · added 2026-11-17
+- **Tags:** `cve` `puppet` `kev` `deserialization`
+
+**CVE-2026-115731** 于 11 月 17 日加入 CISA 已知被利用漏洞目录（目录版本 2026.11.17；联邦整改期限 **2026-12-01**）。NVD 记录（状态 **Analyzed**）描述了 Puppet（用于 Puppet Server）报告处理代码中的不可信数据反序列化："allows a client that holds any CA-signed agent certificate to execute arbitrary code on the Puppet Server as its service user by submitting a report containing a crafted rich-data type via PUT request. Where the certificate authority autosigns requests without strong verification, an unauthenticated network attacker can obtain such a certificate."（任何持有 CA 签名 agent 证书的客户端，都可以通过 PUT 提交含构造富数据类型的报告，以服务用户的身份在 Puppet Server 上执行任意代码；若 CA 在无强校验的情况下自动签发请求，未经身份验证的网络攻击者也能拿到这样的证书。）分数出处，两头都报：**NVD 自己的 CVSS 3.1 为 9.9**（`nvd@nist.gov`，Primary，位于 Analyzed 记录上）旁边是 **Puppet CNA 的 CVSS 4.0 9.4**——两个框架、两个数字，都写明。受影响范围（Perforce 的 CNA 容器）：Puppet Enterprise **2023.8.0 < 2023.8.13、2025.0.0 < 2025.12.1、2026.0.0 < 2026.0.1**——修复版本为 2023.8.13、2025.12.1、2026.0.1；CWE-502 合并 CWE-94。
+
+**Why it matters:** Puppet 是机群级的配置管理——以服务用户身份在 Puppet Server 上执行代码，就是通向"在它管理的所有东西上执行"的路径；而且认证前提异常薄弱：任何一枚正规注册的 agent 证书就够用，autosign 配置更是把它放宽到未认证攻击者。KEV 收录意味着它正在被利用；在跑 Puppet Enterprise 的话，上面的修复版本就是全部行动项。
+
+[`🔗 NVD：CVE-2026-115731`](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE-2026-115731) · [`🔗 Perforce 公告门户`](https://portal.perforce.com/s/cve/a91Qi000003IaHpIAK/report-deserialization-code-execution) · [`🔗 CISA KEV 目录`](https://www.cisa.gov/known-exploited-vulnerabilities-catalog?field_cve=CVE-2026-115731)
+
+---
+
+## 37. Kernel.dev 追问 Gemini 4 Carbon 为何这么慢——推理速度只占差距的 16–49%，其余来自更长的执行轨迹
+
+- **Velocity:** ▮ steady
+- **Source:** kernel.dev · 126+ pts on HN · ~8h ago (~12:14 UTC+8)
+- **Tags:** `gemini` `carbon` `latency` `agent-evals`
+
+kernel.dev 团队在一个私有评测上给 Gemini 4 Carbon 做基准——任务是"诊断并修复 bug"：模型拿到修复前的代码库和一份只描述症状的报告——结果发现它"close to an hour completing tasks that routinely took Opus and Astra only a few minutes"（花近一小时完成 Opus 和 Astra 通常几分钟就能完成的任务），与他们引用的用户报告吻合（Theo："Gemini 4 Carbon is unacceptably slow in real world usage. Gemini 4 Carbon low: 22m21s. Opus 5.5 high: 9m33s"）。随后他们逐步追踪并量化了拆分：**与 Astra 相比，推理变慢只占 Carbon 多耗时间的 16–30%；与 Opus 相比是 45–49%**——"The rest comes from longer trajectories. Carbon simply does more work per task"（其余来自更长的执行轨迹，Carbon 每个任务就是做了更多的事。）Carbon 并非能力弱（ARC Prize 榜单上 ARC-AGI-3 标准模式 65.1%）；它是一种风格：更多探索、更多验证、每件事更多步骤。
+
+**Why it matters:** 用户把两种不同的延迟混为一谈——每 token 速度与轨迹长度——而这次拆分给了抱怨一个数字。对 harness 和路由器的建造者，这是真实的权衡输入：每任务做更多事的模型在批处理里可接受，在交互循环里是惩罚；"慢"可能是一种彻底风格的代价，而不是产品坏了。这个拆分来自作者自己的评测与方法学，具体百分比请以那套设置为限。
+
+[`🔗 Kernel.dev：Why is Gemini 4 Carbon taking so long?`](https://kernel.dev/blog/why-is-gemini-4-carbon-taking-so-long/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50541790)
+
+---
+
+## 38. 能量模型推理器：180 万参数在 Sudoku-Extreme 上拿到 99.9%，推理算力比次优模型少 345 倍
+
+- **Velocity:** ▮ steady
+- **Source:** energy-based-reasoners.github.io · 52+ pts on HN · 2.5h ago (~17:29 UTC+8)
+- **Tags:** `research` `reasoning` `energy-based-models` `architecture`
+
+来自杜克、UIUC 与哈佛（William Chen、Alexi Gladstone、Zeyu Li、Heng Ji、Yilun Du），arXiv 2611.08977（11 月 6 日提交）：Energy-Based Reasoners（EBR）学习一个定义在潜空间推理状态上的能量函数，把循环更新表述为**在该能量上做梯度下降**——能量为候选预测打分（无需外部验证器），其梯度引导精修，其数值提供"停下来的自然信号"。训练上增加了基于探索的能量地形塑形。数字：**Sudoku-Extreme 上 99.9% 准确率，推理算力比次优模型少 345 倍**，训练算力相当；N-Queens 与图着色等多解基准上以接近 100% 的单样本准确率取得 SOTA 的解覆盖。代码在 wwillchen/ebr。（注意：HN 标题写 385×，论文与项目页均为 **345×**。）
+
+**Why it matters:** 把"何时停止循环"（when to stop looping）从采样器预算变成一个被学习的量——这是本周厂商发布所做的 decision-model 操作，只是做在了架构层面；而在 180 万参数上完成，效率点的冲击力更大。要带走的警示：这四个基准正是小型循环模型一向吃香的老战场（数独、N 皇后、图着色）；对自然语言任务的泛化在本文中未被检验。
+
+[`🔗 Energy-Based Reasoners 项目页`](https://energy-based-reasoners.github.io/) · [`🔗 arXiv 2611.08977`](https://arxiv.org/abs/2611.08977) · [`🔗 代码：wwillchen/ebr`](https://github.com/wwillchen/ebr) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50543989)
+
+---
+
+## 39. OpenAI 把计算机使用 agent 开放给医疗团队——点名 Cigna 与 CVS，API 支持 HIPAA 模式
+
+- **Velocity:** ▮ steady
+- **Source:** openai.com · 49+ pts on HN · ~18h ago (~02:26 UTC+8)
+- **Tags:** `openai` `computer-use` `healthcare` `agents`
+
+OpenAI 发布了新一批实测结果，衡量计算机使用 agent 在临床与管理流程中的性能、安全与成本——也就是医疗系统之间那些点击与输入的工作（预授权、转诊、出院计划、随访触达）。点名的合作伙伴：**Abridge、Ambience、Cigna Healthcare 与 CVS Health**。接入途径：OpenAI API、**ChatGPT for Healthcare** 与 **ChatGPT for Clinicians**，机构可以"support HIPAA-compliant workflows, configure approvals and agent access, and record audit logs for secure deployments"（支持符合 HIPAA 的流程，配置审批与 agent 访问权限，并为安全部署记录审计日志）。演示基于合成患者数据：一个计算机使用 agent 与一位授权专员处理同一个 MRI 请求——agent 取出保险方需要的资料并录入支付方门户。
+
+**Why it matters:** 医疗文书是计算机使用的经典楔子——多系统、高频次、不体面——而点名保险侧伙伴（Cigna、CVS）意味着预授权这条事务正在被两端同时自动化：提供方与支付方。审批/审计日志的措辞，是所有企业部署正在汇聚的同一套 agent 治理模式。惯常警示：所测结果是 OpenAI 自己的。
+
+[`🔗 OpenAI：Advancing computer-use agents for healthcare teams`](https://openai.com/index/advancing-computer-use-for-healthcare-teams/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50535898)
+
+---
+
+## 40. Purism 启动 Librem 5 v2 众筹：八核 RISC-V 手机、运行 PureOS——售价 $1,599，"ready 就发货"
+
+- **Velocity:** ▮ steady
+- **Source:** puri.sm · 98+ pts on HN · ~17h ago (~02:34 UTC+8)
+- **Tags:** `risc-v` `hardware` `linux-phone` `crowdfunding`
+
+Purism 于 11 月 17 日宣布其第二次智能手机众筹：**Librem 5 v2**，"Powered by an eight-core RISC-V processor and running PureOS"（八核 RISC-V 处理器，运行 PureOS），定位为"an alternative to Android and iOS—grounded in free software, open standards, and user ownership"（Android 与 iOS 之外的替代品——扎根自由软件、开放标准与用户所有权），第三方应用在安全沙箱中运行。CEO Todd Weaver："A smartphone that works for you, not for the companies collecting your data. No Android, no iOS, no mandatory Big Tech account."（一部为你工作的手机，而不是为收集你数据的公司工作的手机。没有 Android，没有 iOS，没有强制的大厂账户。）众筹页面自己的数字构成了这份要约的框架：每部 **$1,599**（或首付 $129 + 15 个月每月 $99），**2,500 部订单已落实 92 部，还剩 89 天**（活动 2027 年 2 月 15 日结束），而发货承诺就是字面的"when it is ready"——页面上没有日期。HN 的反应以怀疑为主：评论者拿 $1,599 旗舰价对照每美元规格、质疑在 RISC-V 手机级成熟度尚早时押注、以及交付预期。
+
+**Why it matters:** 一部 RISC-V 手机是对该架构应用生态的真实检验——主流 Android-on-RISC-V 的动量在上游存在，但跑在 RISC-V 硅片上的主线 GNU/Linux 手机是这个赌注的困难版。鉴于初代 Librem 5 战役的走向，诚实的读法就是页面自己写的那句：这是一个有明确订单簿的受资开发项目，不是已出货的产品。
+
+[`🔗 Purism：Librem 5 v2 公告`](https://puri.sm/posts/purism-launches-librem-5-v2-a-risc-v-phone-to-empower-people/) · [`🔗 众筹页面（订单/目标数字为一手读取）`](https://puri.sm/librem-5-v2-crowdfunding-campaign) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50536031)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-18T04:42:08Z |
-| Items | 30 |
-| Sources tracked | 34 (Hacker News, GitHub Trending, OpenAI, Microsoft AI, Apple, Reuters/NYT/CNBC/FT/SCMP/Fortune, NVD/GitHub advisories, vendor blogs, Phrack, SolidJS, Runta, Antfly, Calif, JFrog, Red Hat, Cloudflare, jQuery, Archive Team, PostHog, ComplexDiscovery/Harvard, arXiv, Tencent Hunyuan, Cerebras) |
+| Generated | 2026-11-18T12:36:01Z |
+| Items | 40 |
+| Sources tracked | 45 (Hacker News, GitHub Trending, OpenAI, Microsoft AI, Apple, Reuters/NYT/CNBC/FT/SCMP/Fortune, NVD/CISA KEV/GitHub advisories, vendor blogs, Phrack, SolidJS, Runta, Antfly, Calif, JFrog, Red Hat, Cloudflare, jQuery, Archive Team, PostHog, ComplexDiscovery/Harvard, arXiv, SSRN, Tencent Hunyuan, Cerebras, Codeberg Status, RevScope, Washington Sun/NOTUS, kernel.dev, xinmingtu.cn, ARC Prize, Energy-Based Reasoners, Purism) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
