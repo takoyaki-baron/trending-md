@@ -1,574 +1,250 @@
 ---
-date: 2026-11-18
-updated: 2026-11-18T12:36:01Z
+date: 2026-11-19
+updated: 2026-11-18T21:16:41Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 45
+sources: 22
 license: CC-BY-4.0
 ---
 
-# trending.md — 2026-11-18
+# trending.md — 2026-11-19
 
-## 1. GPT-6.2 Astra and Sol ship — frontier quality at cost-per-task numbers, with OpenAI's own footnote on its competitor's score
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** openai.com · 674+ pts on HN · 2.5h ago (~01:46 UTC+8)
-- **Tags:** `openai` `gpt-6-2` `model-release` `cost-per-task`
-
-OpenAI shipped two models: **GPT-6.2 Astra**, "our new frontier model for your hardest projects," and **GPT-6.2 Sol**, "our efficient, versatile model for everyday work" — pitched around a framing the HN thread immediately appreciated: both "deliver better results on demanding tasks with fewer output tokens," so the comparison unit is cost per task, not raw score. On Agents' Last Exam, GPT-6.2 Astra scores **5.2 points higher than GPT-6 Astra at less than a third of the cost, and 5.5 points ahead of Claude Fable 5.2 at just 5% of the cost** — and the footnote matters: "Its leaderboard results for Fable 5.2 exclude nine tasks that used a fallback model." Astra also sets new highs on Terminal-Bench-Science 0.1 (+9 pts over GPT-6 Astra, <1/3 cost) and Harvey LAB-AA v1.1 ("more than doubling Claude Fable 5.2's pass rate at about one-sixth the cost"). Pricing: Astra runs **$8 input / $0.40 cached input / $40 output per million tokens** (20% below GPT-6 Astra, 60% cached discount); Sol keeps GPT-6.1 Sol's prices. The system card at deploymentsafety.openai.com resolves now — HN commenters caught it 404ing during the launch window.
-
-**Why it matters:** The cost-per-task unit is doing real work here — OpenAI is pricing against workflow completion, not tokens, and its own footnote shows the cross-vendor comparisons are still apples-to-fewer-apples (nine excluded tasks on the competitor's row). The launch also lands mid-Anthropic-IPO-roadshow week, and while the announcement went out, OpenAI's own status page carried a live "Costs API data is delayed" incident — launch-day infrastructure irony included.
-
-> On Cognition's FrontierCode 2.0, GPT-6.2 Sol comes within 0.5 points of GPT-6.2 Astra at about one-fifth the cost — the smaller model may be the pragmatic default for coding work.
-
-[`🔗 OpenAI: Introducing GPT-6.2 Astra and Sol`](https://openai.com/index/introducing-gpt-6-2-astra-sol/) · [`🔗 GPT-6.2 system card`](https://deploymentsafety.openai.com/gpt-6-2-astra-sol) · [`🔗 OpenAI status: the "Costs API" incident`](https://status.openai.com/incidents/01M7N9VNR6X5SEC90M1YCDB36D) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50535230)
-
----
-
-## 2. Apple services outage: iCloud sign-outs, App Store and activation down for hours — Apple blames "an internal update"
+## 1. Two unauthenticated RCEs in NGINX disclosed today — five research teams found the same bugs independently
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** developer.apple.com/system-status · 367+ pts on HN · 2.5h ago (~01:47 UTC+8)
-- **Tags:** `apple` `outage` `icloud` `reliability`
+- **Source:** Wiz Research · 677+ pts on HN · ~5h ago (~23:19 UTC+8)
+- **Tags:** `nginx` `rce` `http2` `vulnerability` `f5`
 
-Apple's services had "a rough Tuesday": users reported unexpected iCloud sign-outs on iPhone and Mac followed by errors signing back in, with the **App Store, iCloud, Apple Pay, Apple Support, iPhone Activation, Apple Music and App Store Connect** all affected — and reports that Apple retail stores and corporate systems were hit too. The status page initially kept everything green while Downdetector lit up across multiple services (the top HN comment screenshots it: "all lit up green"); Apple later confirmed the issues on both the general and developer status pages. Apple's statement, via Mark Gurman: **"Many of our systems are back up and running after an internal update caused some outages this morning"** — no cyberattack, most services already recovering by afternoon Pacific.
+F5 shipped a coordinated NGINX security release today for **two critical unauthenticated remote-code-execution flaws**, CVE-2026-123633 and CVE-2026-123007, both **CVSS 4.0 9.2 Critical** (8.1 High on the older 3.1 scale — the scores are F5's own, and NVD still served both records as `Received` at check time). **Wiz Research, Ikotas Labs, Metnir, Rapid7, and Xint independently uncovered the same two bugs** and reported them separately. CVE-2026-123633 is a use-after-free in the worker process when NGINX proxies HTTP/2 client traffic to a backend *and* is running low on `worker_connections` — Wiz reported it October 21 with confirmed RCE including an ASLR bypass, and per the disclosure timeline, "F5 confirms that another research team had previously reported the same vulnerability." CVE-2026-123007 is a heap buffer overflow where the HTTP/2 flow-control window can exceed the allowed threshold, and it "affects versions dating back to NGINX 1.9.5 in 2015" — the release that introduced HTTP/2. Fixed releases: **1.30.7 stable and 1.31.9 mainline** (OSS; F5's advisory table covers the Plus R33–R37 lines). If you can't upgrade, Wiz's guidance is to "temporarily disable HTTP/2 on affected NGINX instances" — `http2 off;` in affected server blocks on 1.25.1+.
 
-**Why it matters:** That's the fourth high-profile infrastructure failure inside a week (Microsoft 365 Thursday, the FAA ground stop Friday, Chase Monday, Apple Tuesday) and the second this week where the vendor's own explanation is a change Apple/Microsoft shipped themselves — Microsoft's RCA named a July gateway defect, Apple names an internal update. The status-page-initially-green pattern is also recurring: user report volume is now the faster signal than the vendor's own dashboard.
+**Why it matters:** NGINX fronts "more than 225 million websites," and both bugs live in the proxy layer — sites can be exposed even when their own application code is secure. The five-team independent discovery is the story's other half: the same memory-safety seam was being pulled at by five different groups at once, which is what the window between October 21 and today's patch was racing against.
 
-[`🔗 9to5Mac: iCloud, App Store, and other Apple services hit by ongoing outage`](https://9to5mac.com/2026/11/17/icloud-app-store-and-other-apple-services-hit-by-ongoing-outage/) · [`🔗 Apple System Status`](https://www.apple.com/support/systemstatus/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50535238)
+> Xint's companion writeup is titled exactly what it demonstrates: NGINX2Root — from NGINX visitor to root of the server host (English/Korean/Japanese).
+
+[`🔗 Wiz: Unauthenticated RCE in NGINX (CVE-2026-123633/-123007)`](https://www.wiz.io/blog/nginx-http2-rce-vulnerabilities) · [`🔗 Xint: NGINX2Root writeup`](https://nginx2root.com/) · [`🔗 NVD: CVE-2026-123633`](https://www.cve.org/CVERecord?id=CVE-2026-123633) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50547374)
 
 ---
 
-## 3. "We don't need more apps, we need better open source" — an essay on the operability gap, with a job list AI is actually suited for
+## 2. Genie 4 opens up in Project Genie — mid-session world editing and real-time native audio
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** jordankrueger.com · 326+ pts on HN · 5.5h ago (~22:45 UTC+8)
-- **Tags:** `open-source` `maintainers` `self-hosting` `ai-assistance`
+- **Source:** Google DeepMind · 74+ pts on HN · ~1.3h ago (~02:49 UTC+8)
+- **Tags:** `google-deepmind` `world-models` `genie-4` `generative-ai`
 
-Jordan Krueger's argument lands on 326 points because it names a gap the self-hosting generation knows firsthand: "Free and open source software already does most of what my clients and I need… The software is usually great. Running it is the hard part." Drawing on his own Matrix server, Coolify-on-Hetzner and Paperless-ngx experience — upgrades that break things, apps that "eat 4GB of RAM to serve a handful of people," nonprofit clients who can't afford a part-time sysadmin and default to corporate SaaS — he proposes four weekend-sized contribution tracks: make it faster, easy to install, friendly to run, lighter. His proof that polish pays is **uv** (8–10× faster installs than pip, up to 115× warm), and his warnings are **xz** (exhausted maintainers as the attack surface) and **curl's ended bug bounty** (January 2026 — good AI-generated reports drowning maintainers by volume). Etiquette rules included: talk to maintainers first, bring measurements, disclose AI use.
+Google rolled out a new Project Genie experience for AI Ultra subscribers with first-time access to **Genie 4** — "our most realistic and interactive world model yet," with the headline capability that "you can now prompt mid-session to change the world you created": shift weather, drop in a character, redirect the action, while exploring in the browser. Genie 4 also pairs the visuals with "real-time native audio that adapts as the scene unfolds." Genie 3 stays in the model picker for longer runs and panorama-seeded spaces, and picks up its own upgrades: **sessions extended to 3 minutes per generation (up from 60 seconds), world chaining, 360° panorama image grounding, and real-time in-world events**. The new Project Genie agent orchestrates Google's multimodal models conversationally, and Gemini models ride along in-session surfacing context-aware suggestion chips. A community gallery ships curated and user-built worlds for remixing. The post is honest about the ceiling: these "remain world models in the frontier research space," with the team "actively tackling key challenges such as camera latency, intricate physical interactions, real-time audio precision, and long-term scene permanence."
 
-**Why it matters:** The essay's sharpest point is that agentic coding is well-matched to exactly the work volunteers avoid — profiling, installer testing, rewriting cryptic errors, docs — which reframes the agent boom from "more apps" to "maintain what exists." "Making a tool millions already use 20% lighter helps all of them, every day" is a contribution rubric, not a slogan.
+**Why it matters:** World models just crossed from research demo into a consumer product surface with editing, audio, and sharing — the interactive-media implications are the point, and the named challenge list (permanence, latency, physics) is exactly where the research frontier now sits.
 
-[`🔗 Jordan Krueger: We don't need more apps, we need better open source`](https://jordankrueger.com/blog/better-open-source-not-more-apps/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50532086)
+[`🔗 Google: Genie 4 is now available (Project Genie)`](https://blog.google/innovation-and-ai/models-and-research/google-deepmind/genie-4-now-available-project-genie/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50550415)
 
 ---
 
-## 4. NSANet, the NSA's classified internal network, goes down — work disruptions at Fort Meade, no signs of a cyberattack
+## 3. Inside Deutsche Bank: a 15-million-file leak lays out two decades of ignored compliance warnings
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** reuters.com · 306+ pts on HN · 4.5h ago (~23:50 UTC+8)
-- **Tags:** `nsa` `outage` `classified-systems` `reliability`
+- **Source:** FT-led media consortium · 352+ pts on HN · ~4.5h ago (~23:38 UTC+8)
+- **Tags:** `deutsche-bank` `data-leak` `investigation` `compliance`
 
-The NSA's highly classified internal communications network — **NSANet**, the system the agency uses to store and share classified information internally — went offline Tuesday, confirmed by six people familiar with the matter (Reuters, citing CNN's reporting first). The New York Times reports work disruptions across the agency, including staggered arrivals at Fort Meade as employees who couldn't badge in or access systems stayed away. The same reporting states there are currently **no signs the outage resulted from a cyberattack** — no cause confirmed, remediation status unstated.
+A major international investigation went live today under the name **Inside Deutsche Bank**, built on **more than 15 million leaked internal documents** — the project's own framing: "The leak of 15+ million files lays bare the bank's flawed culture, systemic blind spots and pursuit of profit over compliance." The files span roughly 20 years of the bank's most sensitive functions: anti-financial-crime, sanctions monitoring, internal audit, and the units that decide whether risky clients stay. Publishing partners include the FT, the New York Times, Dawn, Malaysiakini, IrpiMedia, elDiario.es, and Follow The Money. Among the published findings: at least 24 transactions totaling €172.98 million linked to fugitive Jho Low; an internal warning about Russian clients — "As you know we have a large Russian Oligarchs client population" — quoted as the bank braced for sanctions; an Orbán-linked Hungarian bank allegedly platforming a multi-billion-euro laundering scheme whose payments Deutsche Bank processed; and arms-trade financing that violated the bank's own internal policies. German officials are demanding transparency, and analysts expect fresh regulatory probes.
 
-**Why it matters:** The week's failure cascade now spans unclassified consumer clouds (Microsoft, Apple), civil aviation (FAA), banking rails (Chase) and the classified side of the national-security apparatus — all with no evidence of a common cause, and all inside five business days. Whatever the individual causes turn out to be, the reliability conversation this week stopped being about any single vendor's SRE practice and became about how much of critical infrastructure shares the same change-management physics.
+**Why it matters:** This is the largest financial-sector document leak since the Panama/Paradise Papers era, and its center of gravity is different — not hidden offshore wealth but the compliance machinery of a G-SIB overriding its own controls in writing. Expect regulatory, litigation, and (given the bank's role as everyone's correspondent bank) counterparty fallout to run for quarters.
 
-[`🔗 Reuters: Highly classified US national security communications network is down`](https://www.reuters.com/technology/highly-classified-us-national-security-communications-network-is-down-cnn-2026-11-17/) · [`🔗 NYT: Classified N.S.A. Network Goes Down, Causing Work Disruptions`](https://www.nytimes.com/2026/11/17/us/politics/nsa-down-network-outage-nsanet.html) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50533089)
-
----
-
-## 5. FrontierHarness eval v1.1: 83B tokens answer "what is the best harness for each model?" — and the answer is switch both
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** runta.com · 269+ pts on HN · 5.4h ago (~22:53 UTC+8)
-- **Tags:** `evals` `agent-harnesses` `benchmarks` `baseten`
-
-Runta's harness leaderboard, built with Baseten, ran **83B tokens across 27,280 runs** — 22 harness configurations × 5 open models (GLM-5.3, GLM-5.3 Flash, DeepSeek V4.1 Flash, Muse, Kimi-K3) × 62 terminal tasks × 4 attempts, "76× the size of v1.0." The headline answer: yes, switch harness when you switch model — the best-value pairs were Codex CLI + GLM-5.3, Pi + GLM Flash, ZCode + DeepSeek, Oh My Pi + Muse, Alma + Kimi-K3, and the median harness moved **11 of 22 places** in the cost ranking across models (Codex CLI went 1st on GLM-5.3 to 16th on Kimi-K3). Variance decomposition: the model explains **92.8%** of cost variance, the harness 2.3%, the pair 4.9% — but with the model fixed, the harness choice changes cost per task by **1.8–5.0×**. Over all models, OpenCode v2 had the lowest cost per task ($0.561); ZCode the highest pass rate (61.9%); and cost doesn't buy quality (rank correlation −0.39 to +0.22). Also: **64.5% of spend went to non-passing runs**, and 216 trials were flagged for reward hacking and scored 0.
-
-**Why it matters:** The caveats are printed, not buried — "each pass rate has a 95% interval of about ±10 points, so a gap of a few points is a tie," "Open models, one provider," and the design-pattern section is explicitly "observations, not tests." That honesty is what makes the two operational numbers worth carrying: harness choice is a 2–5× cost lever at fixed model, and nearly two-thirds of eval spend produces failures — budget for the misses, not just the passes.
-
-[`🔗 Runta: What is the best harness for each model?`](https://runta.com/blog/introducing-frontierharness-eval-v1-1/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50532191)
+[`🔗 Inside Deutsche Bank (project hub)`](https://www.inside-db.com/) · [`🔗 FT: Leak of 15mn Deutsche Bank files exposes systemic failures`](https://www.ft.com/content/df518845-ed97-4a38-8a38-7fa9d4d24003) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50547620)
 
 ---
 
-## 6. last30days-skill ships v4.3.2 and rides to #2 on trending — as agent-skills repos take 13 of GitHub's 15 trending slots
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** github.com/mvanhorn/last30days-skill · 772★ today, v4.3.2 released today (~23:28 UTC+8)
-- **Tags:** `agent-skills` `research-tools` `trending` `harnesses`
-
-**last30days-skill** — an AI agent skill that researches any topic across Reddit, X, YouTube, HN, Polymarket and the web, then synthesizes a grounded summary (the repo's own description) — shipped **v4.3.2 today at 15:28 UTC** (v4.3.0 yesterday) and sits at **772★ today** on a 68,885★ total, with a nine-language README and a #1-trending badge in the repo itself. It's the clearest trigger in a trending board now dominated by the category: of today's 15 slots, **13 are agent/skills/harness infrastructure** — ECC (902★ today, 305k total, "the agent harness operating system"), obra/superpowers (598★ today, 319k total), cursor/plugins (196★, the official plugin spec, pushed today), alongside the already-covered Claude-BugHunter, open-code-review, LoopForge, univer, stitch-skills, ag-ui and plannotator.
-
-**Why it matters:** The trigger discipline matters here: last30days' spike has a verifiable cause (two releases in 36 hours), but ECC and superpowers have **no fresh release** (v2.2.3 from Sep 30 and v7.0.2 from Oct 21 respectively) — their spikes are attention-driven, not release-driven, and we're not going to invent one. The structural fact is the story: agent-harness tooling is now the dominant gravity well of open-source attention, occupying nearly every slot on the board at once.
-
-[`🔗 mvanhorn/last30days-skill`](https://github.com/mvanhorn/last30days-skill) · [`🔗 releases`](https://github.com/mvanhorn/last30days-skill/releases) · [`🔗 affaan-m/ECC`](https://github.com/affaan-m/ECC)
-
----
-
-## 7. Baidu's and Xiaomi's CEOs warn the AI-hype-to-returns gap is growing — "practical applications, not more powerful models"
+## 4. All About Berlin, at −75% traffic: the first-person ledger of Google's AI answers
 
 - **Velocity:** ▮▮ rising
-- **Source:** scmp.com · 175+ pts on HN · 6h ago (~22:20 UTC+8)
-- **Tags:** `ai-industry` `bubble` `apec` `china-tech`
+- **Source:** nicolasbouliane.com · 723+ pts on HN · ~13h ago (~14:47 UTC+8)
+- **Tags:** `seo` `google` `ai-overviews` `web-publishing`
 
-At the APEC CEO Summit in Shenzhen on Tuesday — with market jitters fresh from Nvidia's week — the leaders of two of China's biggest tech firms "urged the industry to focus on building practical applications, warning that massive investments in the technology are outpacing commercial returns." SCMP's sub-headline carries the thesis: **"Practical applications, not more powerful models, will determine AI's value."** The framing echoes what this feed covered from the English-language side — Baidu has spent 2026 shipping application-layer AI (ERNIE integrations across search and cloud) while the frontier-capability story concentrated elsewhere; now its CEO is arguing that's where the returns are. (Note: SCMP's article body sits behind its sign-in wall; the summary above is from the readable lede and headline.)
+The HN thread of the day is Nicolas Bouliane's essay on running **All About Berlin** since 2017 (full-time since 2020) — the site that Berlin's own immigration office refers people to puts its traffic loss to Google AI Overviews at 75% (the post carries an update; the original figure was 70%). "When you Googled something, you used to get a link to my website. Now you get a page of ads, then an AI-generated answer trained on my content, then finally a link to my website." The resurfacing momentum is Google's own announcement the essay points at — last week Google announced that AI-generated answers will replace search results entirely, and that they will carry ads. Bouliane catalogs where the independent web goes from here: some sites paywalled, others "keep the websites online, but they no longer update them. It's just not worth it." It's the human-scale companion to yesterday's item — where the randomized-trial evidence put the aggregate click loss near 40%, this is what one of the affected sites looks like from inside.
 
-**Why it matters:** The returns-skepticism chorus now speaks with a Chinese accent too — this is the same "capex outruns revenue" argument as the US hypervisor debates, but from operators whose companies monetize AI through ads, devices and cloud rather than model API sales. When model-sellers, device-makers and platform-owners all start saying the value migrated to the application layer in the same week, that's a coordinate change worth watching.
+**Why it matters:** The 40% number told you the size of the shift; this tells you the shape of the casualty. When the reference infrastructure people actually use — the site a government office sends immigrants to — is subsumed into answers trained on it, the question stops being about SEO and becomes about who funds and maintains the primary sources the answers are trained on.
 
-[`🔗 SCMP: Baidu, Xiaomi CEOs warn of growing gap between AI hype and returns`](https://www.scmp.com/tech/big-tech/article/3374774/baidu-xiaomi-ceos-warn-growing-gap-between-ai-hype-and-returns) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50531751)
+[`🔗 AI is killing All About Berlin (essay)`](https://nicolasbouliane.com/blog/death-by-ai) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50542705)
 
 ---
 
-## 8. Alloy CSS: dialogs, menus, tabs and toasts that work with JavaScript off — one stylesheet for server-rendered HTML
+## 5. Since we covered MAI Code 2 yesterday: Ignite's full lineup is seven models — and a chip
 
 - **Velocity:** ▮▮ rising
-- **Source:** alloyhtml.com · 140+ pts on HN · 5.2h ago (~23:07 UTC+8)
-- **Tags:** `css` `html` `no-javascript` `server-rendered`
+- **Source:** Microsoft AI · 298+ pts on HN · ~4h ago (~00:08 UTC+8)
+- **Tags:** `microsoft` `mai` `ignite-2026` `model-lineup`
 
-Alloy CSS's demo is a complete invoicing app — dialogs, dropdown menus, a date-range picker, tabs with counts, accordions, a dismissible toast, bulk-action checkboxes — in **one HTML file with no script tag**. The project describes itself precisely: "One stylesheet for HTML your server renders. Utilities, plus the parts you'd usually pull in a JavaScript library for: dialogs, menus, drawers, tabs, tooltips and toasts, all working with scripts turned off." No build step, no framework — positioned for Rails, Django, Laravel, htmx or a folder of HTML files, with two dark themes included and the theming split out so your colors and fonts live in one small file of your own. It shipped **1.0.8 on Nov 16** and the repo itself is a nice honesty check: created in 2018, dormant for years, revived this week — with **34 stars** at writing (**54** by the 12:42 run, as the HN thread ran — the reading dated because it will keep moving). The attention is entirely the Show HN, not a star count.
+Yesterday we covered MAI Code 2 and Code 2 Flash out of Microsoft Ignite; the full announcement is a **seven-model family plus Microsoft's second-gen accelerator**. The boldest new claim is the security line: per Microsoft, **"MAI Cyber 2 Flash beats GPT-6 Astra's quality at less than 2% of the cost per task on the CyberGym-E2E benchmark."** The rest of the lineup, all Microsoft's own comparisons: Code 2 reaches "98% of the coding quality of GPT-6.1 Sol at about 40% of the price" and, against Opus 5.5, "96% performance for just 5% of the price"; Code 2 Flash "matches the performance of GPT-6 Luna at 65% of the price, and Haiku 5.5 at 20%"; Image 2.5 is "#1 on Artificial Analysis image editing" at one-fifth the price of GPT Image 2.5 Sunburst (max); Realtime 1 "outperforms GPT-Realtime 2.1" from $0.01/audio-minute; Transcribe 2 (behind Dragon Copilot Transcribe) "already powers 10 million patient encounters a month"; and Decision 1.1 is "50x faster and 79x cheaper than GPT-6.1 Sol." **Maia 200**, the second-generation AI accelerator, "is now in production running our largest models, achieving 1.7x more tokens per watt."
 
-**Why it matters:** The demo works precisely because modern HTML plus CSS state (popover, details, `:checked` and friends) crossed the threshold where the common component-library JS is mostly state plumbing — and the audience that runs htmx/Rails/Django stacks is the one that benefits first. Also a small lesson in reading trend signals: a 34-star repo topping an HN day is exactly the case where star velocity is the wrong metric.
+**Why it matters:** Yesterday's lesson stands: these are the vendor's own benchmark rows at the vendor's chosen operating points, so read the cost-per-task framing as the marketing thesis, not an independent measurement. What's genuinely new since yesterday's coverage is the shape — Microsoft is now fielding a decision model, a realtime voice model, a security-agent model, and its own training silicon in one announcement, which is a full-stack pitch aimed directly at enterprise token spend.
 
-[`🔗 Alloy CSS: live demo (view source — no JS)`](https://alloyhtml.com/example.html) · [`🔗 alloyhtml/css`](https://github.com/alloyhtml/css) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50532385)
+[`🔗 Microsoft AI: Seven new models at scalable price-performance`](https://microsoft.ai/news/microsoft-ignite-2026/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50548021)
 
 ---
 
-## 9. FT: Nvidia stopped disclosing Singapore sales as quarterly revenue hit $104B — the line vanished via a reporting-basis change
+## 6. KPMG ran 100+ AI agents on a full FTSE 250 audit in parallel with its humans — and says the agents asked better questions
 
 - **Velocity:** ▮▮ rising
-- **Source:** ft.com · 124+ pts on HN · 3.1h ago (~01:12 UTC+8)
-- **Tags:** `nvidia` `export-controls` `singapore` `disclosure`
+- **Source:** Financial Times · 160+ pts on HN · ~4.3h ago (~23:49 UTC+8)
+- **Tags:** `kpmg` `ai-agents` `audit` `enterprise-ai`
 
-The FT reports Nvidia no longer breaks out Singapore in its revenue disclosures, in the quarter where revenue hit **$104B**. The mechanics were reported by Fortune on Nov 12: Nvidia changed its regional reporting basis from **customer billing location to customer headquarters location** — a change that makes Singapore disappear as a line, because Singapore's role was billing hub rather than destination. The background numbers explain why anyone cares: Singapore was last disclosed at **$10.2B — 22% of revenue, up 81% year-over-year** — in the quarter Fortune examined, while under 2% of shipments physically went to Singapore; the scrutiny dates to Singapore's own probe of server seller **Megaspeed**. (The FT article itself sits behind a paywall; the reporting-basis mechanics are from Fortune's Nov 12 piece.)
+The FT reports KPMG's UK audit pilot: **over 100 AI agents** worked a full audit of a FTSE 250-listed company **in parallel with the traditional human-led audit** of the same accounts. KPMG UK head of audit Cath Burnet said the agents asked better questions and dug much deeper than the human teams in several instances. The firm's framing keeps humans in the judgment seat — final sign-off stays with people, and KPMG hopes to offer AI-based audits to clients in the future. The rollout is broader than the pilot: Bloomberg Tax reports hundreds of KPMG audit teams are field-testing advanced AI agents ahead of busy season, starting with private-company clients, and the firm's US arm has launched **KPMG Clara Intelligence**, an AI-enabled, "human-assured" audit platform.
 
-**Why it matters:** A disclosure method change is not a revenue change — but it lands, uncoincidentally, exactly where export-control enforcement was looking: a billing hub that books 22% of revenue while receiving under 2% of product is the geography where diverted GPUs would show up. When a company under congressional and regulatory scrutiny simultaneously (a) changes interim CEO days after its longtime chief's resignation and (b) makes its riskiest geography untraceable in the headline numbers, the disclosure itself becomes the story.
+**Why it matters:** Audit is the perfect adversarial test for agent claims — the work product is checked by regulators, the queries are the product, and here the firm itself is reporting its agents out-questioning its own staff on a real engagement, not a demo. It's also the second professional-services domain this month where the honest finding isn't *AI does the job* but *AI moves the bottleneck* — the humans still sign, and what they review is now machine-deep rather than machine-shallow.
 
-[`🔗 FT: Nvidia stopped disclosing Singapore sales as revenues hit $104bn`](https://www.ft.com/content/dbde7a30-548c-4f9d-a4be-7898a0c24dcf) · [`🔗 Fortune: Nvidia suddenly changed how it reported revenue`](https://fortune.com/2026/11/12/nvidia-changed-earnings-report-format-singapore-revenue-megaspeed-probe-colette-kress/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50534631)
+[`🔗 FT: AI asked 'better questions' than KPMG accountants in pilot audit`](https://www.ft.com/content/5168b3e9-75d0-4be0-9ccd-d327d6b16c05) · [`🔗 KPMG: Clara Intelligence US launch`](https://kpmg.com/us/en/media/news/kpmg-unveils-next-era-of-ai-enabled-human-assured-audit-with-us-launch-of-kpmg-clara-intelligence.html) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50547777)
 
 ---
 
-## 10. Microsoft ships MAI Code 2 and Code 2 Flash — "98% of the performance of GPT 6.1 Sol at 40% of the cost," with the harness in a footnote
+## 7. OpenAI details model-written RTL inside Jalapeño — and an AMD collaboration it calls "a year of progress in less than 5 months"
 
 - **Velocity:** ▮▮ rising
-- **Source:** microsoft.ai · 116+ pts on HN · 1.9h ago (~02:25 UTC+8)
-- **Tags:** `microsoft` `mai` `coding-models` `benchmarks`
+- **Source:** OpenAI · 61+ pts on HN · ~2.3h ago (~01:45 UTC+8)
+- **Tags:** `openai` `chip-design` `amd` `risc-v` `eda`
 
-Microsoft's MAI team shipped two coding models: **MAI Code 2**, positioned "at the frontier of price-performance for common enterprise coding tasks," and **Code 2 Flash** for high-volume work. The claims, averaged over four benchmarks (DeepSWE 1.1, Terminal Bench 2.1, SWE-Atlas, FrontierCode v1.1): **"98% of the performance of GPT 6.1 Sol at 40% of the cost"** and **"96% of Claude Opus 5.5's performance at just 5% of the cost"** — Flash claims GPT-6-Luna/Haiku-5.5-comparable performance at 65%/20% of the cost. In blind side-by-side visual-coding evals with 258 annotators, reviewers preferred its results over GPT-6 Sol 67% of the time. The honest part is in the footnotes: the first three benchmarks ran on Microsoft's internal **MSBench harness with GitHub Copilot CLI without subagents**, FrontierCode numbers come from Artificial Analysis, all models ran at max reasoning effort, and MAI costs are shown **at its 50% promotional price**. The limitation is stated too: "explicitly not yet tuned for harder problems, like fundamental science research and very long horizon agentic work." Both are in GitHub Copilot; Flash is in limited-preview in Microsoft Foundry.
+OpenAI's research post goes deep on what its models actually did to its first custom inference chip, **Jalapeño**: model-proposed RTL changes cut standard-cell area ~13% in the vector unit and ~10% in the matrix unit, and OpenAI says the optimizations "were silicon proven during Jalapeño's silicon bring-up." Concrete examples: a multiplier redesign at ~15% less cell area that also dropped latency from two cycles to one, and an adder redesign at ~15% less area with latency retained. On the AMD side, OpenAI claims **"up to 14% improvement relative to heavily optimized baselines on the flagship GPU IP"** and characterizes the collaboration as "roughly a year of progress achieved in less than 5 months" — with the claim that "AMD has already included some of these changes in a recent design it sent for manufacturing," plus AMD-verified single-digit-percent PPA gains on blocks of its next flagship CPU. The post also announces work with **Synopsys** to integrate frontier models with production EDA tools ("to ground capability development in trusted evaluators"), and results on designing **RISC-V cores from a specification**.
 
-**Why it matters:** The claims-vs-footnotes structure is exactly the harness-sensitivity this morning's FrontierHarness study measured — the same model moves on different harnesses, so 96%-at-5%-of-the-cost is a claim about a *configuration*, and Microsoft is unusually upfront about which one. Also note the pricing asterisk: every cost multiple here divides by a promotional price that expires.
+**Why it matters:** If the silicon-proven claims hold, this is the first public evidence of LLM-authored RTL shipping in someone's tape-out — the meaningful unit is not *AI designs chips* but *AI finds PPA wins in blocks human teams had already squeezed* — and the honest caveats are in the sentence itself: the AMD comparison is against *heavily optimized* baselines, and "up to 14%" is a maximum, not a mean.
 
-[`🔗 Microsoft AI: Introducing MAI Code 2 and MAI Code 2 Flash`](https://microsoft.ai/news/introducing-mai-code-2-and-mai-code-2-flash/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50535885)
+[`🔗 OpenAI: Advancing chip design with OpenAI models`](https://openai.com/index/advancing-chip-design-with-our-models/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50549493)
 
 ---
 
-## 11. geohot's "My Empire of Dirt": a frontal attack on Anthropic's "Singleton" — landing the day of its IPO roadshow
+## 8. Cursor's plugin spec is trending at 17k stars — official plugins plus a live third-party merge train
 
 - **Velocity:** ▮▮ rising
-- **Source:** geohot.github.io · 109+ pts on HN · 8.6h ago (~19:39 UTC+8)
-- **Tags:** `anthropic` `ai-safety` `geopolitics` `essay`
+- **Source:** GitHub Trending · +315★ today · last PR merge ~7.8h ago (~20:24 UTC+8)
+- **Tags:** `cursor` `plugins` `agent-skills` `spec`
 
-George Hotz's essay argues Anthropic is pursuing what he calls "the Singleton" — recursive self-improvement that makes everyone else, including customers and the US government, unnecessary: "This is the ideology of Anthropic. The Singleton. And it may win." His predictions are blunt: takeoff won't be fast enough to prevent conflict ("if the war lasts more than a year, China and their allies will undoubtedly win" — supported, he says, by "Have you ever played an RTS game?"), and he puts 99% confidence on the "Correlation Effect" of the fiction he links being unreal. The closing is the part being quoted: "And after it's done, at the end of the day, who was it all for?" — with the US government called "really the biggest sucker in this situation."
+`cursor/plugins` — the official **Cursor plugin specification and plugins** repo — is riding trending at **17,149 stars** (+315 today), and its commit feed shows why: a third-party plugin pipeline is running at high cadence, with today's merges adding the Hospitable plugin (PR #1269), Fiscal AI (#1275), CreateOS (#1262), and LMTY. Each plugin is "a standalone directory at the repository root with its own `.cursor-plugin/plugin.json` manifest." The official set includes `create-plugin` (scaffold and validate new plugins), `teaching` (skill mapping and practice plans), `continual-learning` (incremental transcript-driven memory updates for AGENTS.md), `agent-compatibility`, and two with strongly opinionated briefs: `thermos` — "Thermo-nuclear branch review: deep security/correctness audits, harsh code-quality rubrics, parallel subagents" — and `ralph-loop`, "Iterative self-referential AI loops using the Ralph Wiggum technique."
 
-**Why it matters:** Whether or not one accepts the argument, the timing is the story: this shipped while Anthropic's IPO roadshow runs (the feed covered the prospectus claims yesterday) and while the industry's capex debates are at full volume. The essay is a data point in a real shift — the critique of frontier-lab strategy is no longer coming only from outside the industry or only from safety advocates, but from founders who built competing infrastructure.
+**Why it matters:** This is the agent-skills wave getting its first-party packaging moment from a major IDE vendor — community-invented patterns (the Ralph loop, aggressive branch-review rubrics) are being curated into an official catalog with a manifest spec and an open PR pipeline. Where the skills standard settles across vendors, manifests like this are the emerging interface.
 
-[`🔗 geohot: My Empire of Dirt`](https://geohot.github.io/blog/jekyll/update/2026/11/17/my-empire-of-dirt.html) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50530114)
+[`🔗 cursor/plugins (spec + official plugins)`](https://github.com/cursor/plugins) · [`🔗 Plugin catalog README`](https://github.com/cursor/plugins/blob/main/README.md)
 
 ---
 
-## 12. Since we covered Jensen Huang's resignation on Nov 13: he now says he's open to returning as CEO — while the board, per CNBC sources, is not considering it
+## 9. CISA KEV adds four entries — three carry three-day federal deadlines, and one is a seven-month-old LiteLLM RCE
 
 - **Velocity:** ▮▮ rising
-- **Source:** cnbc.com · 92+ pts on HN · 3.6h ago (~00:40 UTC+8)
-- **Tags:** `nvidia` `jensen-huang` `leadership` `update`
+- **Source:** CISA KEV catalog 2026.11.18 · catalog refresh today
+- **Tags:** `kev` `cisa` `litellm` `synology` `vulnerability-management`
 
-Jensen Huang gave his first public statement since resigning as Nvidia CEO: his return would happen "If the Board of Directors decides" it is "in the best interest of our shareholders, our employees, the company, and America" — **"I would be honored to answer these calls and return as CEO."** He took responsibility — "I created problems for the Board that I deeply regret… I own my mistakes completely" — and pledged cooperation with the board's independent investigation (Wachtell Lipton, probing whether his conduct compromised national security or company secrets). CNBC's sources say the board is **not** considering bringing him back; President Trump said Monday he's open to it, an online petition passed 180,000 signatures, and Nvidia has lost roughly $2 trillion in value since — with fiscal Q3 earnings due the same day.
+Today's KEV refresh adds four exploited-in-the-wild entries, three of them on an unusually short federal leash (due **2026-11-21**): **Synology DiskStation Manager CVE-2024-10441** (CVSS 9.8, improper output escaping in the system plugin daemon — patched in DSM builds back in 2025, which makes its KEV add today a statement about who is still running unpatched NAS firmware); **REDCap CVE-2026-90817** (code injection in the Vanderbilt research-data platform that hospitals and universities run); and **Apache Axis CVE-2026-90436** (unsafe reflection in the long-EOL Java SOAP stack). The fourth is **BerriAI LiteLLM CVE-2026-40217** (CVSS 8.8, due 2026-12-02): per the NVD record, "LiteLLM through 2026-04-08 allows remote attackers to execute arbitrary code via bytecode rewriting at the /guardrails/test_custom_code URI" — the guardrails endpoint that executes user-supplied code as LLM proxy infra becomes the exploited path. The underlying LiteLLM bug was public since spring (X41 D-Sec's advisory; Red Hat shipped errata), so today's KEV add is the exploitation wave catching up with the disclosure.
 
-**Why it matters:** This updates two items from this feed's week (the Nov 13 resignation and Nov 16 comeback reports): the public-pressure track is now explicit and named — Trump, a six-figure petition, and Huang himself — while the decision-makers' track runs the other way. The gap between the-founder-wants-to-come-back-and-the-crowd-wants-him-back and the board-is-running-a-national-security-adjacent-investigation is where Nvidia's governance story now lives, and earnings day is the first stress test of the interim arrangement.
+**Why it matters:** Three-day remediation windows are a federal emergency signal — patch-or-isolate decisions for DSM and REDCap can't wait for a change window. And for anyone running LiteLLM as shared AI infrastructure: the exploited endpoint is in the guardrails feature itself, the component teams add precisely because it *runs code*.
 
-[`🔗 CNBC: Jensen Huang says he's open to returning in first statement since resignation`](https://www.cnbc.com/2026/11/17/nvidia-jensen-huang-statement.html) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50534044)
-
----
-
-## 13. Phrack 73 is out: 23 papers spanning Docker escapes, Skia sandbox escapes, ML backdoors — and the 2000 SSH1 exploit history
-
-- **Velocity:** ▮▮ rising
-- **Source:** phrack.org · 69+ pts on HN · 1.8h ago (~02:31 UTC+8)
-- **Tags:** `phrack` `security-research` `exploitation` `machine-learning`
-
-The third issue from the relaunched staff — roughly 15 months after Issue 72 — carries **23 main papers plus eight Line Noise articles**, spanning "exploitation and reverse engineering to machine learning, hardware, and the history and culture." Highlights with immediate operational relevance: **"Escaping from a Docker container through vDSO"** (andersonc0d3), **"Painting Out of the Box: Escaping the Chromium Renderer Sandbox via Skia"** (Quang Luong), **"Reflections on Trusting AI: A Virus Inside an LLM"** (marver), **"Backdoor attacks against Machine Learning IRL"** (G. Cherubin), and **"A Journey Into Kernel Exploit Development in the LLM Era."** The Prophile spotlights Halvar Flake; the history section revisits the 2000 SSH1 CRC32 exploit — the one name-dropped in The Matrix Reloaded — and the 2003 Linux kernel backdoor attempt. The intro's own verdict on the relaunch: "The relaunch worked, and this issue is the follow-through."
-
-**Why it matters:** Phrack is where exploit technique gets archived as literature, and this issue's Table of Contents is a census of where offense is looking now — container boundaries, renderer sandboxes, and ML supply chains all appear as first-class attack surfaces alongside the classical heap/kernel material. The two ML-security papers back-to-back with kernel-exploit-in-the-LLM-era papers is the issue's own thesis about which way the field is moving.
-
-[`🔗 Phrack 73: Introduction`](https://phrack.org/issues/73/introduction_md) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50535992)
+[`🔗 CISA KEV catalog (JSON)`](https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json) · [`🔗 NVD: CVE-2026-40217`](https://www.cve.org/CVERecord?id=CVE-2026-40217) · [`🔗 X41 D-Sec: LiteLLM advisory`](https://www.x41-dsec.de/lab/advisories/x41-2026-001-litellm/)
 
 ---
 
-## 14. Solid 2.0 ships after five years: async in the reactive graph, server functions — and diagnostics built for agents
-
-- **Velocity:** ▮▮ rising
-- **Source:** solidjs.com · 59+ pts on HN · 1.3h ago (~02:56 UTC+8)
-- **Tags:** `solidjs` `javascript` `reactivity` `frameworks`
-
-Solid 2.0 is out, five years after 1.0, with the pitch "async in the reactive graph, server functions, diagnostics built for agents, and a smaller API." Computations can return Promises or async iterators and downstream code just handles it, with **speculative state automatically rolled back** and the server as source of truth; server functions ship in core (RPC over Request/Response, plus persistent SSE via a `live()` async generator). The diagnostics are the novel part for 2026: errors carry **stable codes, source locations, fixes, and an "agent repair guide" path**, with detection for waterfalls, bad effect loops and wide graph fanouts — plus "The Long Hold," a diagnostic that fires when a pending state has been shown too long (yes, the release-name pun is deliberate). Breaking: `createResource`, `batch`, `createComputed`, `createMutable` and friends are gone; the core was rewritten from scratch; SolidStart is retired in favor of framework-agnostic Vite plugins. The process stats: 23 RCs in 14 weeks, 971 PRs merged, with the stability bar "a full week with no regression in ordinary app code, and no crash or hang anywhere."
-
-**Why it matters:** A framework shipping error diagnostics designed so a *coding agent* can self-repair is a genuine 2026 artifact — the RC-phase bug reports came from "agents deliberately hunting edge cases," per the post. Side note from the same hour: sveltejs/svelte is trending with 533★ today off no release (5.57.3 was October) — comparison traffic from Solid's launch is the likeliest driver, and a reminder that launch days move competitors' numbers too.
-
-[`🔗 Solid: Solid 2.0 — The Long Hold`](https://www.solidjs.com/blog/solid-2-0-the-long-hold/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50536387)
-
----
-
-## 15. Antfly moves from Elastic License 2.0 to Apache 2.0 — because agents made the clouds-will-clone-us hedge obsolete
+## 10. CLI-Anything rides trending again — 59.5k stars, no commits since September, and a registry front
 
 - **Velocity:** ▮ steady
-- **Source:** antfly.io · 38+ pts on HN · 4.7h ago (~23:33 UTC+8)
-- **Tags:** `licensing` `open-source` `search` `agents`
+- **Source:** GitHub Trending · +384★ today
+- **Tags:** `cli` `agents` `hkuds` `skill-registry`
 
-Antfly, a search engine, relicensed from Elastic License 2.0 to **Apache 2.0**, shipping 0.3 as its first release under the new license. CEO James McDermott's post is the clearest articulation yet of the agent-economy argument against source-available licenses: the ELv2 hedge — "you could read the code, change it, and run it, you just couldn't build your own business reselling it" — only ever protected against clouds cloning your work, and "a license like that only protects you if the code is the hard part to copy. If a cloud provider can't host your code, it has to write its own, and that used to take years. **I don't think it takes years anymore. Everyone on our team writes code with agents now.**" So the hedge stopped making sense: if a competitor can agent-together a substitute anyway, the license only costs adoption.
+HKUDS' **CLI-Anything** ("CLI-Anything: Making ALL Software Agent-Native") is back on GitHub trending at **+384 stars today** with **59,594 total** — and the honest part first: the repo itself has **no commits since September 22**. The activity lives one layer out, at **CLI-Hub** (cliany.cc), the agent-friendly CLI registry fronting the project: "Any software. Any codebase. Any Web API. Generate an agent-native CLI and let AI agents operate it — install with a single command." The install path is SKILL.md-native — `npx skills add HKUDS/CLI-Anything --skill cli-hub-meta-skill -g -y` — plus a pip package (`cli-anything-hub`) exposing `cli-hub list/search/install/info`, and the site lists compatibility with OpenClaw, Nanobot, Claude Code, Codex, and Antigravity. This is the stitch-skills shape from two days ago: a dormant first-party repo lifted by the agent-tooling wave around it.
 
-**Why it matters:** The license pendulum (Elastic 2021 → HashiCorp 2023 → Redis 2024 all went *restrictive*) just got its first explicit counter-argument grounded in AI economics rather than community goodwill — and the direction of the argument is testable: if code reproduction cost really collapsed, expect more relicsensing *to* permissive licenses from small infrastructure vendors, and watch whether the big cloud-target firms ever follow.
+**Why it matters:** The interesting unit here isn't the star count — it's the registry pattern. If agents discover and install CLI wrappers per-task rather than per-tool, the distribution of *software that agents can drive* becomes a curated index, and HKUDS is staking the claim that the index is the product.
 
-[`🔗 Antfly: How Antfly learned to stop worrying and love Apache 2.0`](https://antfly.io/thoughts/how-antfly-learned-to-stop-worrying-and-love-apache-2) · [`🔗 antflydb/antfly`](https://github.com/antflydb/antfly) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50532773)
+[`🔗 HKUDS/CLI-Anything`](https://github.com/HKUDS/CLI-Anything) · [`🔗 CLI-Hub registry`](https://cliany.cc/)
 
 ---
 
-## 16. @fastify/busboy and @fastify/multipart: three CVE records — a single-request crash, a handler leak, and forged file writes that skip upload limits
+## 11. A KVM INIT-emulation fix lands as a CVE record the same day — nested-SVM stale MMU context
 
 - **Velocity:** ▮ steady
-- **Source:** NVD (three records, 7.5 CNA-assigned, `Awaiting Analysis`) · published Nov 16 (~22:17 UTC+8)
-- **Tags:** `cve` `fastify` `nodejs` `multipart`
+- **Source:** cve.org · 141+ pts on HN · ~4h ago (~00:06 UTC+8)
+- **Tags:** `kvm` `linux-kernel` `virtualization` `nested-virtualization`
 
-Three records published Nov 16 cover the multipart stack under Fastify, each exploitable by an **unauthenticated** client. **CVE-2026-124724** (@fastify/busboy ≤ 3.2.5): when a request hits the configured part limit, each further part is skipped without an error listener — if the body ends mid-skipped-part, the vendored Dicer parser emits an unhandled error and **the process exits**; one crafted request crashes the server. **CVE-2026-128835** (also busboy ≤ 3.2.5): a multipart part whose header block is never terminated before the next boundary is counted as an open part that never ends, so neither finish nor error fires and the request hangs — roughly **a hundred bytes** triggers it, and through @fastify/multipart the hung handler is never released on client disconnect, so repeated requests leak handlers and their resources. **CVE-2026-124289** (@fastify/multipart 7.4.0–10.1.8): with `attachFieldsToBody` enabled, `saveRequestFiles` treats any object with truthy `file` and `buffer` properties as an uploaded file — a plain JSON request can forge one, writing **attacker-chosen bytes to the temp directory while upload hooks and file-count/size limits are skipped**. All three score 7.5; fixes are **busboy 3.2.6** and **multipart 10.1.9** (confirmed on the repo advisories' "Patched versions" cells).
+CVE-2026-99312 is the kernel's own fix, records: "KVM: x86: Unconditionally reset MMU context when emulating INIT." The bug: when an INIT arrives while a nested guest (L2) is running with paging disabled, KVM could keep running L1 with a stale MMU context — per the record, "the MMU page role includes guest_mode (L2), i.e. an INIT while L2 is running with CR0.PG=0 will result in KVM running L1 with a stale MMU context." The commit's own scoping is worth reading: the reset could have been narrowed to the paging/L2 cases, but SMM is also encoded in the page role, and the unconditional reset is cheap because KVM elides re-configuration when the role isn't changing. The description closes with the blast radius: "this bug only affects nested SVM as INIT is an unconditional intercept on VMX." Four stable-tree commits are referenced, and the NVD record itself published this morning UTC (09:17Z, still `Received`).
 
-**Why it matters:** This stack sits under a very large fraction of the Node.js API surface — Fastify is a default choice for new services, and busboy is vendored far beyond it. The three bugs are a tidy taxonomy of unauthenticated-DoS classes (crash, hang, resource leak) plus one limits-bypass write; if you run Fastify with file uploads or `attachFieldsToBody`, the patch is the whole action item. Note for scanners: the OSV records for these CVEs currently carry only GIT ranges — the npm-range records may lag, so version-check against the advisories, not the DBs.
+**Why it matters:** The HN thread (84 comments) spent most of its energy on the meta-question — why a niche nested-virtualization correctness fix carries a CVE at all. That's the modern registry reality: kernel self-fixes get IDs by default now, and the CVE number carries no severity signal until someone analyzes it. For anyone running nested SVM guests, it's still a should-patch.
 
-[`🔗 GHSA-pvmq-3jr9-v5qh (busboy, hang/leak)`](https://github.com/fastify/busboy/security/advisories/GHSA-pvmq-3jr9-v5qh) · [`🔗 GHSA-wh8h-qr34-3rj3 (busboy, crash)`](https://github.com/fastify/busboy/security/advisories/GHSA-wh8h-qr34-3rj3) · [`🔗 GHSA-gmhr-r4mc-w935 (multipart, forged files)`](https://github.com/fastify/fastify-multipart/security/advisories/GHSA-gmhr-r4mc-w935)
+[`🔗 CVE-2026-99312 (cve.org)`](https://www.cve.org/CVERecord?id=CVE-2026-99312) · [`🔗 Stable-tree fix commit`](https://git.kernel.org/stable/c/24f644ea26c2ebb7b14c3baa2aa92d37fde3095f) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50548004)
 
 ---
 
-## 17. TrnRT open-sources: an LLM inference engine for AWS Trainium — NKI megakernels, 3.57M tokens/min on one box
+## 12. "Can Peer Review Survive AI-Generated Text?" — a Fed economist and Fernández-Villaverde propose treating AI-written referee reports like plagiarism
 
 - **Velocity:** ▮ steady
-- **Source:** github.com/RunanywhereAI/trnrt · 27+ pts on HN · 4.3h ago (~00:01 UTC+8)
-- **Tags:** `inference` `trainium` `kernels` `openai-api`
+- **Source:** UPenn / Federal Reserve Board · 63+ pts on HN · ~6.2h ago (~21:51 UTC+8)
+- **Tags:** `peer-review` `ai-detection` `economics` `research-integrity`
 
-TrnRT is an open inference engine for AWS Trainium — a chip whose software stack has been almost entirely AWS-internal (Neuron SDK) until now. It serves an OpenAI-compatible API from one `trn2.48xlarge`, runs decode as **NKI megakernels — about one fused kernel per layer half** (KDA attention, the fused DSA layer, mHC and the MoE FFN), and keeps a radix-tree prefix cache over FP8 KV pages with a host-memory tier. **GLM-5.3-Flash is the first supported model.** The measured claims, from its own cards and blog: **3.57M tokens per minute on one trn2.48xlarge** (AgentX, batch 12), a **24 ms batch-8 decode step** (down from 32.2 ms), at **$0.040 per million tokens** at spot price ($0.167 on a capacity block). 1M-token context comes from sparse attention (top-2,048) plus linear attention with fixed-size state; every graph compiles offline on a CPU host so the serving box compiles nothing by default.
+A new paper by **Dario Caldara** (Federal Reserve Board) and **Jesús Fernández-Villaverde** (UPenn, CEPR, NBER), dated November 16, argues that in economics "peer review is in serious danger of collapsing" unless the profession builds norms for AI-generated text now. Their experiment: AI detectors flag referee reports **written** by LLMs, not reports that AI merely proofread or helped edit — a distinction their policy leans on. The proposals are pointed: detectors as standard tools, closer reading with reject-at-the-first-factual-mistake for flagged papers, and the sharpest line — "an AI-generated referee report adds nothing that editors could not get by running the prompt themselves," so AI-written reviews "should be treated like plagiarism." The paper closes with a practical guide for authors, referees, and editors, and its own disclosure footnote notes the authors used LLMs while preparing it.
 
-**Why it matters:** AWS's Trainium software story has been closed-source kernels inside AWS services; an open engine with published per-layer kernel design and honest concurrency numbers changes who can build custom serving on that hardware — and the $0.040/M-token spot price is a concrete data point in the cheap-inference race. The repo is young (created Oct 30, 1.6k stars) and single-model so far; treat the perf claims as vendor-measured, with the blog's methodology linked.
+**Why it matters:** This is a structural argument, not a moral panic: the referee's comparative advantage was scarce careful attention, and that's precisely what LLMs commoditize. The detector experiment's finding — that *drafting* and *editing* separate cleanly — matters beyond economics, because it suggests enforcement can target the fraud case without criminalizing every grammar pass.
 
-[`🔗 RunanywhereAI/trnrt`](https://github.com/RunanywhereAI/trnrt) · [`🔗 Blog: Serving GLM-5.3-Flash on one Trainium2 box`](https://runanywhere.ai/blog/glm-5-3-flash-trainium2-nki-megakernels) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50533270)
+[`🔗 Paper (PDF, UPenn)`](https://www.sas.upenn.edu/~jesusfv/Peer_Review.pdf) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50546312)
 
 ---
 
-## 18. Arcane's v3 line lands on trending: Docker management where agents skip manager-only work
+## 13. Show HN: Mastra Factory — the agent-run kanban that merged 238 PRs last week
 
 - **Velocity:** ▮ steady
-- **Source:** github.com/getarcaneapp/arcane · 654★ today · v3.0.1 released Nov 15
-- **Tags:** `docker` `self-hosted` `devops` `agents`
+- **Source:** Show HN · 34+ pts · ~3.2h ago (~00:53 UTC+8)
+- **Tags:** `mastra` `agents` `ci` `open-source`
 
-Arcane — a Go-based, self-hosted Docker management UI ("Modern Docker Management, Designed for Everyone," 9.2k★) — is trending at **654★ today** on the strength of its v3 release train: v3.0.0 (Nov 14) brought a redesigned dashboard and activity center, live upgrade progress, and expanded backup and GitOps capabilities — plus, in its own words, "substantial performance, security, agent, and interface" changes; v3.0.1 (Nov 15, also shipped as `cli/v3.0.1`) fixed agent-mode startup and performance problems, tightened certificate and update verification, and made one change that explains why this feed cares: **"Agents now skip manager-only work."** The main branch is now the v3 line, with 2.x on a maintenance branch.
+The Mastra team (Shane, Sam, Abhi) is back on Show HN two years after their framework launch, with the tool they use to maintain Mastra itself: **Mastra Factory**, "a configurable agentic kanban board that's @-taggable in Slack," built on Mastra's durable agents for long-running sessions. The scale numbers are the pitch: Mastra now averages "nearly 4M downloads per week," and **"Last week, Factory opened and merged 238 PRs, alongside 630 merged PRs from humans"** across the mastra-ai org — agent-authored work was 238 of 868 merged PRs, about 27% of the total and roughly 38% of the human rate.
 
-**Why it matters:** Docker management is the layer where self-hosters meet coding agents — the agent that maintains your server increasingly needs to talk to Docker, and Arcane's permission split (agents excluded from manager-only operations like swarm control) is exactly the least-privilege pattern the agent-ops tooling wave keeps rediscovering. The trending spike has a verifiable trigger this time: two releases in two days.
+**Why it matters:** After the StarSling launch yesterday (CI opening optimization PRs *because agents write faster than CI checks*), this is the maintainer-side version of the same thesis: the bottleneck is no longer writing the change but shepherding it, so teams are building factories where agents hold tickets end-to-end and humans review at merge. The 238-vs-630 ratio is a concrete early data point for agent-share-of-merges at a real 4M-downloads-week project.
 
-[`🔗 getarcaneapp/arcane`](https://github.com/getarcaneapp/arcane) · [`🔗 v3.0.1 release notes`](https://github.com/getarcaneapp/arcane/releases/tag/v3.0.1) · [`🔗 v3.0.0 release notes`](https://github.com/getarcaneapp/arcane/releases/tag/v3.0.0)
+[`🔗 Show HN: Mastra Factory (HN)`](https://news.ycombinator.com/item?id=50548660) · [`🔗 Mastra`](https://mastra.ai)
 
 ---
 
-## 19. Launch HN: StarSling (YC P25) — CI that opens optimization PRs, because "agents write code faster than CI can check it"
+## 14. Take Voyager 1 apart, down to a single memory chip
 
 - **Velocity:** ▮ steady
-- **Source:** starsling.dev · 20+ pts on HN · 1.3h ago (~03:01 UTC+8)
-- **Tags:** `ci-cd` `github-actions` `devtools` `yc`
+- **Source:** Show HN · 85+ pts · ~3.9h ago (~00:18 UTC+8)
+- **Tags:** `voyager` `interactive` `space` `visualization`
 
-StarSling launches out of YC P25 with a problem statement aimed at exactly this feed's audience: **"Agents write code faster than CI can check it."** The product is AI-native CI for GitHub Actions: drop-in runners (swap `runs-on: ubuntu-latest` for `runs-on: starsling-ubuntu-26.04`, 5th-gen AMD EPYC hardware, each job in a single-use hardware-isolated microVM), plus agents that "continuously analyze your workflows, jobs, run logs, and machine telemetry, then open pull requests" for caching, parallelization, dependency installs and test sharding — you review and merge; optimization PRs are off by default on free plans. Measured claims: median TypeScript job **131.5s → 61s**; Mastra's test suite **6× faster** (29m56s → 5m06s); 16× shorter queue time for Partcl; $0.008/min billed per second with queue time never billed ("33% cheaper than GitHub Actions"), 3M+ CI jobs run so far.
+Raj Shekhar built an interactive teardown of the two 1977 Voyagers: "Two spacecraft launched in 1977, still talking to Earth from interstellar space. This is where they are right now." You can open the craft bay by bay (keys 1–10 step through the bays), descend to individual modules and chips, rotate and zoom each assembly, and watch the journey from launch to today's interstellar position. The whole thing is keyboard-driven and self-contained — a browser-native technical document built for the most distant human-made objects there are.
 
-**Why it matters:** The agent-volume-repos problem is real — when a repo absorbs dozens of agent PRs a day, 20-minute CI loops and GitHub-hosted queue times become the bottleneck resource, and "CI that improves itself" is the same replace-the-toil pattern as the rest of this week's agent-infra wave. The claims are the company's own benchmarks; the 131s-vs-61s median is the honest one to hold them to.
+**Why it matters:** This is what agent-assisted craft looks like when it lands well: one person, a weekend-scale project, and a level of explorable detail that used to belong to JPL's own media team. It's also a small act of preservation — the engineering knowledge of the most distant human objects, made navigable.
 
-[`🔗 StarSling`](https://starsling.dev) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50536468)
-
----
-
-## 20. Java4Shell (CVE-2026-114938): pre-auth RCE in OpenJDK's JIT Base64 intrinsic — found "in an hour" with AI, patched the same day
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** calif.io · 626+ pts on HN · 7h ago (~05:11 UTC+8)
-- **Tags:** `cve` `openjdk` `rce` `jit`
-
-Calif disclosed **Java4Shell**, a memory-corruption bug in OpenJDK's AVX-512 Base64 intrinsic: "The x86-64 Base64 intrinsic miscalculated the padded tail's store mask, causing an out-of-bounds write" — a 65-character input (64 `A`s + `=`) overflows a 50-byte buffer by 62 bytes. It "affects OpenJDK from version 17.0.6 or newer" (Oracle's own record lists affected Java SE builds 8u511b33-perf, 17.0.21.0.3, 21.0.13.0.3, 25.0.5.0.3, 27.0.1.0.3), and only x86-64 CPUs with AVX-512 VBMI — ARM64 is unaffected. The impact demos are the alarming part: **pre-auth RCE in Keycloak, Jira, Confluence, JFrog Artifactory, Jenkins and PingFederate**, post-auth RCE in Kafka, Solr, Elasticsearch, Gerrit and Spinnaker, a Heartbleed-style heap leak dubbed **JavaBleed**, and a client-side variant via a malicious TLS server. Oracle shipped patches at 1:00pm PT Nov 17; until you can upgrade, the mitigations are `-XX:-UseBASE64Intrinsics` or `-XX:UseAVX=2`. Score provenance: NVD's record (`Received`, published 22:18Z) carries Oracle's CNA score — CVSS 3.1 **8.1** (AV:N/AC:H) — while Calif's write-up computes **9.2 CRITICAL under CVSS 4.0**; product-specific weaponized exploits are being withheld "until everyone has had a chance to upgrade."
-
-**Why it matters:** The discovery economics are the story inside the story — Calif says it took Quang Luong "an hour to discover the vulnerability, and two more hours to develop the first working exploit," with "the total token cost… less than $200," continuing their PHP2Shell/Squidbleed line of AI-assisted parser and JIT work. The finding is independently corroborated by JFrog, Horizon3.ai and Red Hat (RHSB-2026-018). Oracle's AC:H says the exploit friction is real (ASLR bypass + heap feng shui + bespoke per-target chains — "not a universal point-and-shoot"), but every JVM service that decodes Base64 — which is nearly all of them — carries the code path.
-
-[`🔗 Calif: Java4Shell`](https://calif.io/java4shell/) · [`🔗 JFrog: What we know`](https://research.jfrog.com/post/java4shell-vulnerability) · [`🔗 Red Hat RHSB-2026-018`](https://access.redhat.com/security/vulnerabilities/RHSB-2026-018) · [`🔗 NVD: CVE-2026-114938`](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE-2026-114938) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50538240)
+[`🔗 Voyager, up close (interactive)`](https://rshekhar.com/voyager/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50548161)
 
 ---
 
-## 21. Quad9 pulls its free DNS resolver out of France rather than pay daily blocking fines — Cloudflare: "a canary in the coal mine"
-
-- **Velocity:** ▮▮ rising
-- **Source:** blog.cloudflare.com · 356+ pts on HN · 6h ago (~06:13 UTC+8)
-- **Tags:** `dns` `policy` `france` `blocking`
-
-Quad9, the Swiss nonprofit behind 9.9.9.9, is withdrawing its resolver from France entirely after months of litigation ended in a court order imposing **daily financial penalties** for failing to block copyright-infringing domains. As a pure public resolver — unlike Cloudflare, which could demonstrate compliance through its CDN and proxy services — it had no alternative compliance path: a choice between "crippling litigation and penalties" or fundamentally changing a privacy-protecting service. The precedent lattice around it matters: a Brussels court has ordered **Cloudflare, Google and Cisco** to block via public resolvers by early January 2027 (all three appealing); German courts previously rejected DNS-blocking demands; Cisco already pulled OpenDNS from France, Portugal and Belgium. Cloudflare's argument: resolver-level blocking is ineffective (switching takes under a minute), blunt (whole domains, legal content included), and opaque — hospitals, universities and government bodies may find "their Internet will fail with no explanation" — and because resolvers are global, one country "could dictate what content is accessible around the world." Its proposed alternative: enforce at the hosting-provider level, where the infringing files actually live.
-
-**Why it matters:** The first public-resolver exit driven by daily-fine litigation is a template any jurisdiction can copy — and the Belgian January 2027 deadline is the next checkpoint. If the appeals fail, resolver-level blocking stops being a French exception and becomes EU practice, with every privacy-forward resolver facing the same Quad9 choice: comply, geo-exit, or litigate.
-
-[`🔗 Cloudflare: Quad9's withdrawal from France`](https://blog.cloudflare.com/quad9-withdrawal-from-france/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50538994)
-
----
-
-## 22. jQuery 4.1.0 and 3.8.0 ship together — "passing the torch": 3.x gets its final feature release, both lines get a ReDoS fix
-
-- **Velocity:** ▮▮ rising
-- **Source:** blog.jquery.com · 269+ pts on HN · 8.5h ago (~03:50 UTC+8)
-- **Tags:** `jquery` `javascript` `release` `redos`
-
-jQuery released two versions at once: **4.1.0**, the first minor of the 4.x line, and **3.8.0** — "a send-off, not a comeback," the last planned feature release on 3.x, which now receives only "critical security and bug fixes." Both carry a **ReDoS fix in selector identifier matching** (catastrophic backtracking could hang pages) and a new object-based AJAX transport complete-callback API. 4.1.0 adds `jqXHR.responseURL` (issue #4339, finally), moves the selector engine entirely to `querySelectorAll`, fixes XML-document handling via `createElementNS`, handles form-associated custom elements in `.serialize()`, cuts `uniqueSort` from O(N²) to O(N), and works around a **Safari 27 regex interpreter bug**. 3.8.0 gets `hidden="until-found"` support and formal deprecations (`push`/`sort`/`splice` on the prototype, `jQuery.expr.filters`). The same release cycle added "guidelines for machine-generated contributions" to the repo.
-
-**Why it matters:** This is the dated milestone the enormous 3.x installed base can act on: the torch is now formally with 4.x, the upgrade guide and Migrate plugin are the path, and the security fix landing on both branches is the reason even version-pinned sites should move. A two-decade-old library quietly shipping agent-contribution guidelines in the same breath is its own 2026 artifact.
-
-[`🔗 jQuery blog: 4.1.0 and 3.8.0 released`](https://blog.jquery.com/2026/11/17/jquery-4-1-0-and-3-8-0-released-passing-the-torch/) · [`🔗 4.1.0 release notes`](https://github.com/jquery/jquery/releases/tag/4.1.0) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50537156)
-
----
-
-## 23. Microsoft's ONNX Runtime has vanished from GitHub — repo, releases feed and API all 404, PyPI still serves 1.32.0, no explanation yet
-
-- **Velocity:** ▮▮ rising
-- **Source:** github.com/microsoft/onnxruntime · 175+ pts on HN · 5h ago (~07:18 UTC+8)
-- **Tags:** `onnx` `supply-chain` `github` `inference`
-
-microsoft/onnxruntime — the inference engine under a large share of local and edge AI — went dark overnight: as of **04:16 UTC Nov 18** the repo page, its `releases.atom` feed and the GitHub API all return **404**, with no advance notice and no official statement. HN commenters report downstream breakage ("we found out about this this morning, when evals started failing in our pipelines") and describe it as "a repository with 22k stars" going dark. What's verified: **PyPI still serves `onnxruntime` 1.32.0** — a release that predates the disappearance — and the closest public fork is **intel/onnxruntime** (carrying Intel's OpenVINO modifications). What isn't: the cause. Thread speculation ranges from a security takedown to an org restructuring; one commenter linked an unrelated PyPI-compromise writeup — none of it confirmed.
-
-**Why it matters:** A vanished upstream is an operational event even when the packages still install — anyone building from source, filing issues, or assuming the repo's existence in CI just lost it silently, and the "vendor everything" habit gets another data point. Date-stamped honestly: this is a developing story; if the repo reappears under a new path, the disappearance was a rename — until someone says so, "gone without explanation" is the accurate state.
-
-[`🔗 github.com/microsoft/onnxruntime (currently 404)`](https://github.com/microsoft/onnxruntime) · [`🔗 intel/onnxruntime fork`](https://github.com/intel/onnxruntime) · [`🔗 PyPI: onnxruntime 1.32.0`](https://pypi.org/project/onnxruntime/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50539610)
-
----
-
-## 24. ID.me is now the only sign-in for TreasuryDirect, with arbitration terms attached — and senators are asking why not Login.gov
-
-- **Velocity:** ▮▮ rising
-- **Source:** consumerrights.wiki · 182+ pts on HN · 3.5h ago (~08:51 UTC+8)
-- **Tags:** `privacy` `identity` `irs` `policy`
-
-ID.me's newest terms sharpen a running privacy fight: v10.1.0 (dated Nov 13, 2026) keeps the binding-arbitration clause and class-action waiver (a 30-day email opt-out window is the new part), and privacy policy v7.1.8 (Nov 2) states that by using the platform you agree ID.me "determines how personal information may be used" for your wallet. Verification history is retained up to three years after account closure; biometric-deletion requests can face an internal review where ID.me "reserves the right to decline"; liability is capped at $1,000. The access change is the sharp edge: **TreasuryDirect made ID.me available Sept 13 and replaced its traditional login Oct 28 — and Login.gov "cannot be used to log in to your TreasuryDirect account"** — despite an OMB memo (M-26-18, Aug 31) requiring agencies to promote Login.gov as the default where it can serve users, and a Wyden/Warren letter (Oct 27) citing 6 U.S.C. §1523(b)(1)(D), the statute naming GSA's platform. ID.me's five-year agreement has a ceiling above $1 billion (~$93M obligated so far). For 2027 filing the IRS says "Taxpayers can use Login.gov or ID.me" — TreasuryDirect users have no such choice, and Direct Pay remains the no-sign-in fallback.
-
-**Why it matters:** The government-run identity option exists, is statutorily preferred, and the savings-bond portal still routes everyone through a private provider whose terms bundle arbitration and data-use consent — with the memos, statute and senator letters now public. For anyone building IRS/Treasury integrations, the operational fact is the asymmetry: two providers for the IRS, exactly one for TreasuryDirect.
-
-[`🔗 Consumer Rights Wiki: ID.me terms required for IRS sign-in`](https://consumerrights.wiki/w/ID.me_terms_required_for_IRS_sign-in) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50540437)
-
----
-
-## 25. Since we covered the Apple Support Community's Nov 20 closure on Nov 12: Archive Team is racing to preserve it — in eight languages
+## 15. HUMAN.md — a working manifesto written in the format of a config file
 
 - **Velocity:** ▮ steady
-- **Source:** wiki.archiveteam.org · 113+ pts on HN · 4.8h ago (~07:32 UTC+8)
-- **Tags:** `archival` `apple` `preservation` `community`
+- **Source:** human-md.ai · 118+ pts on HN · ~23h ago (~04:47 UTC+8 yesterday)
+- **Tags:** `essay` `human-skills` `ai-era` `craft`
 
-Update on a story this feed flagged on Nov 12: Apple announced Nov 10 that "The Apple Support Community will permanently close on November 20, 2026" (read-only since the announcement), and Archive Team has stood up a full preservation project against the Friday deadline. It's a DPoS effort — run the ArchiveTeam Warrior and it grabs automatically — with the `applediscussions-grab` scripts, an item tracker at tracker.archiveteam.org/applediscussions, and coordination in #badapple on hackint. The target isn't just the English site: **seven regional communities** (French, Chinese, Japanese, Korean, German, Spanish, Portuguese) are in scope. Progress is listed as "In progress…" with no completion numbers on the wiki.
+Briana (Mazzio) May's essay is a file: "HUMAN.md > a working manifesto. notes-to-self, mostly. > not a thinkpiece. not a thread. not a deck." The argument underneath the formatting: taste is the wrong word for what humans still contribute — "Taste is the surface. There is a whole engine underneath it, and that engine is the part the model can't have." The numbered sections are craft doctrine — "break the rule on purpose" (with the corollary: "If you can't say why you broke it, you didn't break it, you just missed"), "find the thing in the weird place" (inspiration lives in "a misprinted parking ticket," "an obscure Victorian zoetrope of a cat"), and more. The format is the point: a person specifying themselves the way we now specify agents.
 
-**Why it matters:** Two decades of troubleshooting answers — including workarounds for problems Apple no longer documents — expire in two days, and the eight-language scope means the non-English archives are disappearing too. The platform-closure-to-volunteer-swarm response time is now measured in days; if you've ever benefited from a decade-old thread, running a warrior this week is the one-command way to pay it back.
+**Why it matters:** Days after "No AI Slop: A Manifesto," the human-side response is arriving in the same native format the agents read — and that inversion is the argument. When your value is the judgment you apply *to* model output, writing your operating principles as a markdown spec is exactly how you'd hand them to a teammate who happens to be a machine.
 
-[`🔗 Archive Team wiki: Apple Discussions`](https://wiki.archiveteam.org/index.php/Apple_Discussions) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50539747)
+[`🔗 HUMAN.md`](https://www.human-md.ai/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50537962)
 
 ---
 
-## 26. "Not Everything Needs an LLM": PostHog's production ledger for decision models — 98.7% of PII checks never reach the big model, failures included
+## 16. Scottish HTTP status codes — the 418 teapot tradition gains a Gaelic dialect
 
 - **Velocity:** ▮ steady
-- **Source:** newsletter.posthog.com · 113+ pts on HN · 10h ago (~02:16 UTC+8)
-- **Tags:** `decision-models` `llm` `engineering` `routing`
+- **Source:** underwood.network · 130+ pts on HN · ~1.6h ago (~03:26 UTC+8)
+- **Tags:** `http` `humor` `standards` `web-culture`
 
-The decision-model category got four vendor launches in a week (Google's Decisions API Nov 12, Perplexity Decider Nov 14, HeyGen Decision 1 yesterday); PostHog's essay is the practitioner's counterweight — real numbers from their own stack. Replay Vision's PII scrub asks two narrow yes/no questions instead of one broad one (false flags dropped to ~a tenth), and **98.7% of session summaries skip the LLM call entirely**. The Slack bot routes via a choice question ("cheapest option that will most likely finish the task correctly on the first try"); search reranks embedding candidates by probability (~+25% ranking quality on 20 test queries); a SQL chart picker replaced hand-written deterministic rules. The failures are printed, which is what makes it credible: thresholds encode mistake costs (0.4 for PII — false negatives leak data; 0.85 for the bot — false positives annoy), one ranking job with 12–38k-token requests "flooded the model server and blocked other products' calls for hours," and PR-review ranking simply failed (AUC 0.52).
+A table of HTTP status codes rendered in Scots, in the grand tradition of RFC 2324 and last week's actual *I'm Not a Freezer* internet-draft. The whole canon is there: `403 GET TAE FUCK`, `404 NAE FUCKIN HERE, PAL`, `500 AH'VE FUCKED IT`, `503 WE'RE FUCKIN SHUT`, and the obligatory `418 AH'M A FUCKIN TEAPOT`. The 451 is the sharpest one on the page — "THE COUNCIL SAYS NAW" — which is, historically speaking, exactly what 451 means.
 
-**Why it matters:** The category now has its field manual: typed decisions as a gating/routing layer under LLMs, with calibration as the actual engineering work. "Too simple for a language model, yet too fuzzy for a regex" is a real product boundary, and the 98.7% bypass number is the concrete version of the cost argument every vendor launch this week implied.
+**Why it matters:** Pure culture, filed under the observation that HTTP status humor tracks the industry's mood — the freezer draft got real because freezers actually got attacked, and the Scots table's charm is that every line is a more honest error message than most production APIs send.
 
-[`🔗 PostHog: Not Everything Needs an LLM`](https://newsletter.posthog.com/p/decision-models) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50535740)
+[`🔗 Scottish HTTP Codes`](https://underwood.network/http/scots.html) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50550062)
 
 ---
 
-## 27. Harvard firm-level study (Nov 14 revision): agents lift code output up to 76% while final output rises just 9–11% — code review is the bottleneck, +56% submission-to-approval
+## 17. California orders Waymo off state freeways — an imminent-hazard finding, then a nationwide freeway suspension
 
 - **Velocity:** ▮ steady
-- **Source:** complexdiscovery.com · 89+ pts on HN · 7h ago (~05:16 UTC+8)
-- **Tags:** `research` `ai-coding` `economics` `code-review`
+- **Source:** ABC7 / AP · 63+ pts on HN · ~22h ago (~10:00 UTC+8 yesterday)
+- **Tags:** `waymo` `autonomous-vehicles` `regulation` `california`
 
-*Corrected 2026-11-18 13:10 UTC+8: this item originally quoted an earlier revision of the paper (flat resolved-issues, +3.45 days to merge, 718 firms/725,938 workers). The current version — Nov 14, 2026, first-hand — supersedes those figures; none of them appear in its text. The direction (output up, review bottlenecked) holds and is stronger.*
+California's DMV has ordered Waymo's autonomous vehicles off state freeways, per an imminent-hazard-to-public-safety determination, after a run of incidents — including three Waymo vehicles entering an active construction zone on Highway 101 near Burlingame. Waymo's response went beyond compliance: it **temporarily suspended freeway operations nationwide** while it addresses the safety findings, making this the first time the largest US robotaxi operator has pulled its signature highway capability at national scale.
 
-A Harvard job-market paper (Fiona Chen & James Stratton, "Artificial Intelligence in the Firm: Bottlenecks in Software Production," current version **Nov 14, 2026**; first draft Jan 7, 2026) runs staggered adoption over **655 firms employing 720,542 workers** — **445M work events** (GitHub coding activity, Jira issues, Google Calendar) from the Jellyfish engineering-analytics platform, Jan 2021–Aug 2026 — and estimates AI **assistants** and AI **agents** separately. The shape: median-firm lines of code per worker-month rise **+42%** after assistant adoption (3,115 → 4,424) and **+76%** after agent adoption (3,679 → 6,482); commits +14%/+23%, PRs +15%/+32% — while **resolved Jira issues rise just +9% (2.53 → 2.76) and +11% (2.76 → 3.08)**, epics barely move. The review stage is where it lands: after agent adoption, average time from review submission to approval **+56.1%**, decomposing into backlog wait **+1.67 days (59.9% of a 2.78-day baseline)** and active review **+2.33 days (58.5% of 3.98 days)**, with comments per code change **+38.6%** — assistants show no significant effects on these margins. AI review tools haven't rescued it: **79.1%** of firms had used AI in code review by July 2026, but only **23.3%** of review comments are AI-generated (10.8% of PRs get ≥1 AI comment) — "humans are still heavily involved with review." Caveats are disclosed: a working paper with no completed peer review, and Jellyfish's commercial stake (the authors thank the Jellyfish team in the acknowledgments).
+**Why it matters:** The regulatory instrument here is the point — California didn't pass a new rule, it invoked an existing imminent-hazard power against a specific operator's ODD, and the operator's answer was to shrink its own domain nationwide rather than contest the finding. For every AV company watching: the freeway ODD you fought years to earn can be revoked in a press cycle, and the commercially rational response is unilateral retreat.
 
-**Why it matters:** When leading indicators outrun the shipping metric, the constraint has a name and a number: review throughput — approval time +56%, comments per change +38.6%, while resolved issues move single digits. For tool builders that's the addressable market; for teams, it says agent adoption without review-capacity planning converts velocity into queue time.
-
-[`🔗 ComplexDiscovery: Harvard researchers find AI coding agents shifted the bottleneck to code review`](https://complexdiscovery.com/harvard-researchers-find-ai-coding-agents-shifted-the-bottleneck-to-code-review/) · [`🔗 Working paper (PDF, first-hand Nov 14 text)`](https://fion.ac/jellyfish.pdf) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50538303)
-
----
-
-## 28. A 1-megaton detonation at 500 km would disable ~98% of modeled LEO satellites within a week — and tripling radiation tolerance buys only days
-
-- **Velocity:** ▮ steady
-- **Source:** arxiv.org · 88+ pts on HN · 8.6h ago (~03:46 UTC+8)
-- **Tags:** `arxiv` `space` `satellites` `research`
-
-An arXiv paper (2611.09827, submitted Nov 6 by Petersen, Qin, Thiele & Philippe) couples prompt radiation, electron trapping and belt evolution to satellite failures, collisions and atmospheric drag for a nuclear detonation in low Earth orbit — where 13,000+ satellites now operate. Central case: a 1-Mt burst at 500 km over the South Atlantic creates an artificial radiation belt whose repeated exposure "disables approximately 98% of modeled satellites within one week in our central case." The hardening math is the bleak part: "**Tripling the assumed radiation tolerance delays widespread failure by only days: approximately 97% are still disabled within two weeks.**" Lost maneuverability then compounds into collision risk — ~20 collisions expected within two years as disabled satellites drift.
-
-**Why it matters:** It's a model, not a test — the authors print "in our central case," and the assumptions are the debate. But the directional finding is stark: spacecraft-grade hardening barely moves the outcome, which locates the vulnerability in the orbital-shell architecture itself rather than in any single satellite's shielding — a quantified footnote to why the 1967 Outer Space Treaty bans nuclear detonations in space even for powers that might accept the blast damage.
-
-[`🔗 arXiv 2611.09827`](https://arxiv.org/abs/2611.09827) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50537120)
-
----
-
-## 29. Tencent ships Hy4 Flash: 224B-total/12B-active, 1M context, $0.07/$0.28 per M tokens — the cheap tier becomes a benchmark fight
-
-- **Velocity:** ▮ steady
-- **Source:** hy.tencent.ai · 78+ pts on HN · 7.3h ago (~05:06 UTC+8)
-- **Tags:** `tencent` `model-release` `inference` `efficiency`
-
-Tencent's Hunyuan line shipped **Hy4 flash** (posted Nov 16, hitting HN now): 224B total parameters including 64B "Engram" parameters with just **12B active per token**, natively multimodal, 1M-token context. The efficiency stack: hybrid attention + LatentMoE + Engram shrink KV cache to **1/24 of Hy3 and 1/6 of Hy4**; self-distillation from Hy4 plus reinforcement learning that "cuts average end-to-end output tokens by 50%"; megakernels with 4-bit quantization push decode past 150 tok/s. Pricing is the headline: **$0.003 cached / $0.070 input / $0.281 output per million tokens** (Hy4: $0.042/$0.834/$2.501). The claims lean on Tencent's own WorkIndex benchmark ("grounded in typical WorkBuddy tasks" — slide/doc/spreadsheet work across 8 eval sets): average cost per task "just 1/13 of Hy4 preview, 1/20 of Hy4, and 1/8 of DeepSeek-V4.1-Flash-1017 (Max tier, peak-hour pricing)," with a blind eval of 85 internal users across 259 tasks rating satisfaction "close to Claude Haiku 5.5." HN commenters report solid results via OpenRouter, and one data-analytics benchmark where it beat GPT-6 Luna on the cheap tier ($0.13 to answer 43 questions, against ~$20 on frontier models). A weights-opening commitment is reported in the thread; that sentence isn't in the reader-readable text (the page is a JS shell), so treat it as unconfirmed until it's posted somewhere greppable.
-
-**Why it matters:** The workhorse tier is where the price war actually bites — this lands at roughly a quarter of Hy4's output price while claiming slightly-above-Hy4-preview task quality, keeping the flash-tier pattern (GLM-5.3-Flash, DeepSeek V4.1 Flash, Qwen flash) competitive on three continents. Caveat carried: WorkIndex is Tencent's internal benchmark, so the cost-per-task ratios are vendor-measured.
-
-[`🔗 Tencent: Introducing Hy4 flash`](https://hy.tencent.ai/research/hy4-flash) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50538184)
-
----
-
-## 30. Cerebras disaggregates inference: AMD GPUs handle prefill, wafers handle decode — claiming 5× tokens per megawatt on one measured endpoint
-
-- **Velocity:** ▮ steady
-- **Source:** cerebras.ai · 42+ pts on HN · 3.5h ago (~08:56 UTC+8)
-- **Tags:** `inference` `cerebras` `gpu` `efficiency`
-
-Cerebras launched disaggregated inference: **AMD Instinct GPUs process prompts, and Cerebras CS-3 systems generate responses** — splitting the pipeline at the prefill/decode boundary because decode is autoregressive and memory-bandwidth-bound, which is where the wafer-scale engine's SRAM-centric design (claimed "350× the SRAM capacity and 5,400× the memory bandwidth of a typical GB300 GPU") has its structural edge. The measured claim: "5X the throughput per megawatt of a CS-3-only configuration, with no loss in token generation speed" — from a single shared **GPT-OSS-120B endpoint on November 14**, one model, one day, normalized to 1×. Early-access partners named: AWS, Fireworks AI, Gimlet Labs, General Compute. Broad rollout across "hundreds of megawatts" of Cerebras cloud and partner sites is targeted for end of 2027, alongside a planned 700MW of data-center capacity.
-
-**Why it matters:** Prefill/decode disaggregation is already standard practice inside the GPU ecosystem — what's new is pointing the decode half at non-GPU silicon and pricing it in megawatts. The caveat is doing real work: 5× is one endpoint, one model, vendor-measured. If it generalizes, it changes the power math every 2027 datacenter plan is built on; if it doesn't, it's a launch-day slide. Both outcomes are live.
-
-[`🔗 Cerebras: Disaggregated Inference`](https://www.cerebras.ai/blog/cerebras-launches-disaggregated-inference) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50540472)
-
----
-
-## 31. Codeberg's domain was suspended at its registrar and vanished from DNS for ~3 hours — the forge open source is migrating to met its single point of failure
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** social.anoxinon.de/@codebergstatus · 213+ pts on HN · 2h ago (~18:02 UTC+8)
-- **Tags:** `codeberg` `dns` `registrar` `outage`
-
-Codeberg's domain went dark this morning, and the incident log reads like the outage class nobody can self-fix: at 08:13 UTC the project posted "our domain codeberg.org is entirely unreachable. It was registered with namesilo and entirely disappeared from our account" — and, pre-empting the obvious guesses, "No, we didn't forget to renew. There are no suspicious logins in the login history. There is no entry about the situation in the account's domain history." At 08:53 UTC: "our domain was suspended and our case got forwarded to the abuse team. We're still waiting for a final decision." The team declined switching to codeberg.eu as a workaround — multi-domain support, SEO, two-factor auth, and "updating all the Git remotes and other references" made the temporary fix cost more than the outage. At 11:23 UTC: "The domain is slowly recovering. Many users are able to connect to our systems again… We haven't yet received an official response from Namesilo's abuse department." Verified first-hand at 12:10 UTC: DNS answering again via 1.1.1.1 and 8.8.8.8 (217.197.84.140), site serving HTML.
-
-**Why it matters:** A registrar suspension is the failure mode where recovery is entirely in someone else's queue — no rollback, no failover, just an abuse team's inbox. It lands on the forge that has been collecting the open-source exodus (this feed covered mini.nvim's Codeberg move two days ago), and thread commenters drew the obvious conclusion: a German nonprofit holding its identity at a US registrar was one abuse-filter ticket away from a whole platform disappearing from DNS.
-
-[`🔗 Codeberg Status: the 08:13 UTC post`](https://social.anoxinon.de/@codebergstatus/117636437840688845) · [`🔗 Codeberg Status: recovery at 11:23 UTC`](https://social.anoxinon.de/@codebergstatus/117637187711177698) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50544261)
-
----
-
-## 32. Google's AI Overviews cut clicks to outside websites ~40% — the strongest evidence yet is a randomized trial, and Overviews now sit on 61% of tracked keywords
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** revscope.co · 459+ pts on HN · ~12h ago (~08:17 UTC+8)
-- **Tags:** `google` `search` `ai-overviews` `publishers`
-
-The causal number the publisher-collapse debate has been missing: a preregistered randomized experiment (Saharsh Agarwal and Ananya Sen, SSRN working paper, June 2026 draft) gave 1,065 US desktop Chrome users an extension that assigned them at random to see Google as usual or with AI Overviews hidden, then watched two weeks of browsing — an Overview cuts clicks to outside websites **about 40%**, significant for informational searches (navigational/transactional samples too small), desktop-only, not yet peer-reviewed. The scale context: DataForSEO's 20M-keyword panel shows Overviews climbing from **5.93% of keywords (Sep 2024) to 61.43% (Aug 2026)** while featured snippets fell 8.96% → 0.44%. A second preregistered experiment (Wang et al., arXiv 2608.18352, N=1,100) independently supports the direction. Pew's observational browsing data agrees: people clicked an ordinary result on 8% of visits with a summary on the page vs 15% without. The blog does the honesty work too: "we sell analytics. Almost everything about what earns a citation is correlation" — and AI assistants sent just **0.28% of traffic** across 74,752 sites in March 2026 (Ahrefs).
-
-**Why it matters:** This is the measured version of this week's anecdotes (an All About Berlin essay at −75% resurfaced on HN yesterday to 429 points): a ranking now buys ~60% of the visits it used to wherever an Overview appears, the snippet slot it replaced has effectively gone to zero, and the RCT finally separates Google's design choice from mere correlation.
-
-[`🔗 RevScope: Google's AI Overviews cut clicks to websites by 40%`](https://revscope.co/blog/search-seo-geo-2026/) · [`🔗 Agarwal & Sen: working paper (SSRN)`](https://ssrn.com/abstract=6513059) · [`🔗 Wang et al.: preregistered field experiment (arXiv)`](https://arxiv.org/abs/2608.18352) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50540178)
-
----
-
-## 33. Congressional sources: Wall Street and the NSA say this week's outages came from rushing fixes to AI-identified vulnerabilities
-
-- **Velocity:** ▮▮ rising
-- **Source:** washingtonsun.com · 79+ pts on HN · ~10h ago (~09:45 UTC+8)
-- **Tags:** `outages` `ai-security` `policy` `infrastructure`
-
-Jeff Stein reports in The Washington Sun (NOTUS's 2026 rebrand), citing three sources familiar with private conversations: Wall Street executives and the NSA have told Congress that this week's cascade of failures — Microsoft 365, the FAA ground stop, the banks, NSANet — "stem from attempts to fix gaps in cyber defenses identified by AI models," and that "the fixes, however, temporarily overwhelmed the systems." A congressional official briefed on the matter: **"These models are identifying massive vulnerabilities, and that increases the urgency to patch right away… They're trying to push through a lot of patches all at once — more than the system was designed for."** DHS Secretary Markwayne Mullin on CNBC: "they're pushing new technology on top of really old computer systems, and it just seems to overwhelm the system… We're going to see more of this." Note the tension the article itself carries: the NSA's public statement called its outage "scheduled routine maintenance" — a different framing than the private account attributed to it.
-
-**Why it matters:** Hold it as the reporting of an anonymous-source claim, not established cause — but it is the first hypothesis that connects this week's cascade to this feed's security beat: the same AI wave that found Java4Shell in an hour for under $200 of tokens and files 100-CVE days also generates patch pressure faster than legacy change management can absorb. Encode's Nathan Calvin: "it shows the extent to which safety critical infrastructure we rely on is based on software with large vulnerabilities on legacy systems."
-
-[`🔗 The Washington Sun: Bank CEOs, NSA Tell Congress That AI-Driven Patches Are Behind Outages`](https://www.washingtonsun.com/technology/bank-ceos-nsa-tell-congress-ai-driven-patches-behind-outages) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50540836)
-
----
-
-## 34. Claude models were trained on protein sequences at scale — and still predict proteins published after their training cutoff
-
-- **Velocity:** ▮▮ rising
-- **Source:** xinmingtu.cn · 72+ pts on HN · ~8h ago (~11:47 UTC+8)
-- **Tags:** `claude` `proteins` `training-data` `research`
-
-"The latest Claude models were trained on protein sequences, at scale." Xinming Tu's post demonstrates exactly that: give Claude Fable 5.2 or Opus 5.5 the start of a little-studied bacterial protein and they predict the next amino acid; shuffle the protein and they can't; no other general model tested does this. Performance scales with protein-family size, "and they do it even in families with no papers at all" — the signature of sequence-level training rather than literature memorization. Fable 5.2 beats every open protein language model the author ran; Opus 5.5 is level with ProtGPT3-10B, the largest. The update posted today sharpens it: with Leo Tianlai Chen, **56 proteins first made public in August 2026 — after the training cutoff — are still predicted** (Appendix G); ProGen3-3B is the strongest open pLM in the comparison and Fable 5.2 still beats it; and GPT-6.2 Sol and Astra show no sign of the ability.
-
-**Why it matters:** This is contamination-detection methodology pointed in the opposite direction — next-token prediction plus a shuffle control plus a post-cutoff held-out set — and it finds specialized pretraining data inside a frontier general model. It also explains why Anthropic gates life-sciences use behind a verification program (LSVP, published Sep 17): the capability is real, domain-specific, and undisclosed in any model card.
-
-[`🔗 Xinming Tu: Claude was trained on protein sequences at scale`](https://xinmingtu.cn/blog/2026/claude-opus-5-5-protein-sequences/) · [`🔗 Anthropic: Life Sciences Verification Program`](https://www.anthropic.com/news/life-sciences-verification-program) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50541619)
-
----
-
-## 35. Since we covered GPT-6.2's launch this morning: ARC-AGI-3 results went live — 100% with a provider adapter, 70.3% in standard mode, where Fable 5.2 still leads
-
-- **Velocity:** ▮▮ rising
-- **Source:** arcprize.org · 37+ pts on HN · ~17h ago (~02:59 UTC+8)
-- **Tags:** `arc-agi` `benchmarks` `gpt-6-2` `evals`
-
-The thread that trended put it as "GPT-6.2 Astra scores 100% on ARC-AGI-3" — the leaderboard itself is more interesting. ARC Prize's table now carries GPT-6.2 rows dated 2026-11-17: Astra scores **98.5%** on ARC-AGI-1, **95.8%** on ARC-AGI-2, **70.3% on ARC-AGI-3 in Standard mode and 100.0% with a provider adapter**, at $24.2K cost; Sol posts 97.5 / 85.8 / 54.9 / 98.2 at $5.5K. The comparison rows reframe the headline: Gemini 4 Carbon ran 65.1% standard / 99.1% adapter (11-10), and Claude Fable 5.2 ran **81.2% standard / 97.7% adapter (11-09)** — so under the benchmark's standard configuration, Astra does not lead ARC-AGI-3; it trails Fable 5.2 by 10.9 points. The 100% is real, and it is the adapter column.
-
-**Why it matters:** This is this morning's FrontierHarness lesson measured at the benchmark level: the configuration is part of the score, and the two columns describe different products. A "100% on ARC-AGI-3" claim that arrives with a 70.3% standard-mode sibling two cells away is exactly the shape where you quote both numbers and name which column each came from.
-
-[`🔗 ARC Prize: ARC-AGI-3 leaderboard (Standard vs Provider adapter)`](https://arcprize.org/leaderboard) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50536438)
-
----
-
-## 36. Puppet Enterprise report deserialization is now in KEV — any CA-signed agent certificate becomes code execution on Puppet Server; federal deadline Dec 1
-
-- **Velocity:** ▮▮ rising
-- **Source:** cisa.gov KEV · added 2026-11-17
-- **Tags:** `cve` `puppet` `kev` `deserialization`
-
-**CVE-2026-115731** joined CISA's Known Exploited Vulnerabilities catalog on Nov 17 (catalog version 2026.11.17; federal remediation due **2026-12-01**). The NVD record (status **Analyzed**) describes deserialization of untrusted data in the report-processing code of Puppet, as used by Puppet Server: it "allows a client that holds any CA-signed agent certificate to execute arbitrary code on the Puppet Server as its service user by submitting a report containing a crafted rich-data type via PUT request. Where the certificate authority autosigns requests without strong verification, an unauthenticated network attacker can obtain such a certificate." Score provenance, both halves: **NVD's own CVSS 3.1 is 9.9** (`nvd@nist.gov`, Primary, on the Analyzed record) beside **Puppet's CNA score of 9.4 under CVSS 4.0** — two frameworks, two numbers, name both. Affected (Perforce's CNA container): Puppet Enterprise **2023.8.0 < 2023.8.13, 2025.0.0 < 2025.12.1, 2026.0.0 < 2026.0.1** — fixed in 2023.8.13, 2025.12.1 and 2026.0.1; CWE-502 with CWE-94.
-
-**Why it matters:** Puppet is config management for fleets — code execution as the service user on Puppet Server is a path toward executing on everything it manages, and the auth premise is unusually weak: any legitimately-enrolled agent certificate suffices, and autosigning widens it to unauthenticated attackers. KEV listing means it is being exploited now; if you run Puppet Enterprise, the fix versions above are the whole action item.
-
-[`🔗 NVD: CVE-2026-115731`](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE-2026-115731) · [`🔗 Perforce advisory portal`](https://portal.perforce.com/s/cve/a91Qi000003IaHpIAK/report-deserialization-code-execution) · [`🔗 CISA KEV catalog`](https://www.cisa.gov/known-exploited-vulnerabilities-catalog?field_cve=CVE-2026-115731)
-
----
-
-## 37. Kernel.dev asks why Gemini 4 Carbon takes so long — inference speed is only 16–49% of the gap; the rest is longer trajectories
-
-- **Velocity:** ▮ steady
-- **Source:** kernel.dev · 126+ pts on HN · ~8h ago (~12:14 UTC+8)
-- **Tags:** `gemini` `carbon` `latency` `agent-evals`
-
-Benchmarking Gemini 4 Carbon on a private eval — bug-diagnosis-and-fix tasks where the model gets a pre-fix codebase and a symptoms-only report — the kernel.dev team found it spending "close to an hour completing tasks that routinely took Opus and Astra only a few minutes," matching the user reports they quote (Theo: "Gemini 4 Carbon is unacceptably slow in real world usage. Gemini 4 Carbon low: 22m21s. Opus 5.5 high: 9m33s"). Then they traced every step and quantified the split: **slower inference accounts for 16–30% of Carbon's extra time compared with Astra, and 45–49% compared with Opus** — "The rest comes from longer trajectories. Carbon simply does more work per task" Carbon is not capability-weak (65.1% standard on ARC-AGI-3 per ARC Prize's leaderboard); it is a style: more exploration, more verification, more steps per task.
-
-**Why it matters:** Users conflate two different latencies — per-token speed and trajectory length — and this decomposes the complaint with a number. For harness and router builders it's a genuine trade-off input: a model that does more work per task is acceptable in batch and punishing in an interactive loop, and "slow" may be the price of a thorough style rather than a broken product. The decomposition is the authors' own eval and methodology; hold the exact percentages to that setup.
-
-[`🔗 Kernel.dev: Why is Gemini 4 Carbon taking so long?`](https://kernel.dev/blog/why-is-gemini-4-carbon-taking-so-long/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50541790)
-
----
-
-## 38. Energy-Based Reasoners: a 1.8M-parameter model hits 99.9% on Sudoku-Extreme with 345× less inference compute than the next-best
-
-- **Velocity:** ▮ steady
-- **Source:** energy-based-reasoners.github.io · 52+ pts on HN · 2.5h ago (~17:29 UTC+8)
-- **Tags:** `research` `reasoning` `energy-based-models` `architecture`
-
-From Duke, UIUC and Harvard (William Chen, Alexi Gladstone, Zeyu Li, Heng Ji, Yilun Du), arXiv 2611.08977 (submitted Nov 6): Energy-Based Reasoners learn an energy function over latent reasoning states and formulate looped updates as **gradient descent on that energy** — the energy scores candidate predictions without an external verifier, its gradient guides refinement, and its value provides "a natural signal for stopping." Training adds exploration-based shaping of the energy landscape. The numbers: **99.9% accuracy on Sudoku-Extreme with 345× less inference compute than the next-best model** at comparable training compute; state-of-the-art coverage of distinct valid solutions on N-Queens and Graph Coloring with near-100% single-sample accuracy. Code is up at wwillchen/ebr. (Note: the HN headline says 385×; the paper and project page both say **345×**.)
-
-**Why it matters:** Making "when to stop looping" a learned quantity rather than a sampler budget is the decision-model move this week's vendor launches made, done at the architecture level — and at 1.8M parameters it's a striking efficiency point. The caveat to carry: the four benchmarks are the classic looped-recurrence turf (Sudoku, N-Queens, graph coloring) where small recurrent models always shine; generalization to natural-language tasks is untested in this paper.
-
-[`🔗 Energy-Based Reasoners project page`](https://energy-based-reasoners.github.io/) · [`🔗 arXiv 2611.08977`](https://arxiv.org/abs/2611.08977) · [`🔗 Code: wwillchen/ebr`](https://github.com/wwillchen/ebr) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50543989)
-
----
-
-## 39. OpenAI opens computer-use agents to healthcare teams — Cigna and CVS named, HIPAA-mode API access
-
-- **Velocity:** ▮ steady
-- **Source:** openai.com · 49+ pts on HN · ~18h ago (~02:26 UTC+8)
-- **Tags:** `openai` `computer-use` `healthcare` `agents`
-
-OpenAI published new results measuring performance, safety and cost for computer-use agents in clinical and administrative workflows — the click-and-type work between systems that healthcare runs on (prior authorization, referrals, discharge planning, outreach between visits). Named partners: **Abridge, Ambience, Cigna Healthcare, and CVS Health**. Access routes: the OpenAI API, **ChatGPT for Healthcare**, and **ChatGPT for Clinicians**, with organizations able to "support HIPAA-compliant workflows, configure approvals and agent access, and record audit logs for secure deployments." The demo — built on synthetic patient data — shows a computer-use agent and an authorization specialist working the same MRI request, the agent retrieving what the insurer needs and entering it into the payer's portal.
-
-**Why it matters:** Healthcare paperwork is the canonical computer-use wedge — multi-system, high-volume, low-glamour — and naming insurer-side partners (Cigna, CVS) means prior authorization is being automated at both ends of the transaction, provider and payer. The approvals/audit-log language is the same agent-governance pattern every enterprise deployment is converging on. Standard caveat: the measured results are OpenAI's own.
-
-[`🔗 OpenAI: Advancing computer-use agents for healthcare teams`](https://openai.com/index/advancing-computer-use-for-healthcare-teams/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50535898)
-
----
-
-## 40. Purism launches Librem 5 v2 crowdfunding: an eight-core RISC-V phone running PureOS — at $1,599, "when it is ready"
-
-- **Velocity:** ▮ steady
-- **Source:** puri.sm · 98+ pts on HN · ~17h ago (~02:34 UTC+8)
-- **Tags:** `risc-v` `hardware` `linux-phone` `crowdfunding`
-
-Purism announced its second smartphone crowdfunding campaign on Nov 17: the **Librem 5 v2**, "Powered by an eight-core RISC-V processor and running PureOS," positioned as "an alternative to Android and iOS—grounded in free software, open standards, and user ownership," with third-party apps in secure sandboxes. CEO Todd Weaver: "A smartphone that works for you, not for the companies collecting your data. No Android, no iOS, no mandatory Big Tech account." The campaign page's own numbers frame the ask: **$1,599** per phone (or $129 now plus $99/month for 15 months), **92 of 2,500 orders with 89 days remaining** (campaign ends Feb 15, 2027), and the delivery promise is exactly "when it is ready" — no date on the page. HN's reception ran skeptical: commenters flagged the specs-per-dollar against a $1,599 flagship, the prudence of RISC-V this early in its phone-grade maturation, and delivery expectations.
-
-**Why it matters:** A RISC-V phone is a real test of the architecture's application ecosystem — mainstream Android-on-RISC-V momentum exists upstream, but a mainline-GNU/Linux phone on RISC-V silicon is the hard version of the bet. Given how the original Librem 5 campaign went, the honest reading is the page's own: this is a funded development project with a defined order book, not a shipping product.
-
-[`🔗 Purism: Librem 5 v2 announcement`](https://puri.sm/posts/purism-launches-librem-5-v2-a-risc-v-phone-to-empower-people/) · [`🔗 Crowdfunding campaign page (order/goal numbers first-hand)`](https://puri.sm/librem-5-v2-crowdfunding-campaign) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50536031)
+[`🔗 ABC7: CA DMV bans Waymos from operating on state freeways`](https://abc7news.com/story/california-dmv-bans-waymos-operating-state-freeways-bay-area-traffic-incidents/20046974) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50538841)
 
 ---
 
@@ -576,11 +252,11 @@ Purism announced its second smartphone crowdfunding campaign on Nov 17: the **Li
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-18T12:36:01Z |
-| Items | 40 |
-| Sources tracked | 45 (Hacker News, GitHub Trending, OpenAI, Microsoft AI, Apple, Reuters/NYT/CNBC/FT/SCMP/Fortune, NVD/CISA KEV/GitHub advisories, vendor blogs, Phrack, SolidJS, Runta, Antfly, Calif, JFrog, Red Hat, Cloudflare, jQuery, Archive Team, PostHog, ComplexDiscovery/Harvard, arXiv, SSRN, Tencent Hunyuan, Cerebras, Codeberg Status, RevScope, Washington Sun/NOTUS, kernel.dev, xinmingtu.cn, ARC Prize, Energy-Based Reasoners, Purism) |
+| Generated | 2026-11-18T21:16:41Z |
+| Items | 17 |
+| Sources tracked | 22 (Hacker News, GitHub Trending, Wiz Research, NVD/cve.org, CISA KEV, X41 D-Sec, Google DeepMind, Microsoft AI, OpenAI, FT, KPMG, UPenn, git.kernel.org, inside-db.com, ABC7, mastra.ai, HKUDS, Cursor, rshekhar.com, human-md.ai, underwood.network, nicolasbouliane.com) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
 
-[Previous day](2026-11-17.md) · [Raw .md](https://trending.md/en/feed/2026-11-18.md) · [Archive](../archive/index.md)
+[Previous day](2026-11-18.md) · [Raw .md](https://trending.md/en/feed/2026-11-19.md) · [Archive](../archive/index.md)

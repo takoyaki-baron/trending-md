@@ -1,574 +1,250 @@
 ---
-date: 2026-11-18
-updated: 2026-11-18T12:36:01Z
+date: 2026-11-19
+updated: 2026-11-18T21:16:41Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 45
+sources: 22
 license: CC-BY-4.0
 ---
 
-# trending.md — 2026-11-18
+# trending.md — 2026-11-19
 
-## 1. GPT-6.2 Astra と Sol が登場——タスクあたりコストを単位とするフロンティア性能、OpenAI 自ら競合スコアへの脚注も添えて
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** openai.com · 674+ pts on HN · 2.5h ago (~01:46 UTC+8)
-- **Tags:** `openai` `gpt-6-2` `model-release` `cost-per-task`
-
-OpenAI が2つのモデルを出した。最難プロジェクト向けの新フロンティアモデル **GPT-6.2 Astra** と、日常業務向けの効率的で汎用的な **GPT-6.2 Sol** である。両者とも「deliver better results on demanding tasks with fewer output tokens」（より少ない出力トークンで、要求の厳しいタスクにおいてより良い結果を出す）という売り文句で、比較の単位は生スコアではなくタスクあたりコストだ——この枠組みは HN のスレッドですぐに支持された。Agents' Last Exam では、GPT-6.2 Astra は **GPT-6 Astra をコスト1/3未満で5.2ポイント上回り、Claude Fable 5.2 をコストわずか5%で5.5ポイントリード**——しかも脚注が重要だ。「Its leaderboard results for Fable 5.2 exclude nine tasks that used a fallback model」（Fable 5.2 のリーダーボード成績は、フォールバックモデルを使った9タスクを除外している）。Astra は Terminal-Bench-Science 0.1（GPT-6 Astra 比 +9pt、コスト <1/3）と Harvey LAB-AA v1.1（「more than doubling Claude Fable 5.2's pass rate at about one-sixth the cost」）でも新記録を打ち立てた。価格は Astra が**100万トークンあたり入力 $8 / キャッシュ入力 $0.40 / 出力 $40**（GPT-6 Astra より20%安、キャッシュは60%割引）、Sol は GPT-6.1 Sol の価格を維持。deploymentsafety.openai.com のシステムカードは現在アクセス可能だ——HN ではリリース時間帯に404だったことが指摘されていた。
-
-**Why it matters:** 「タスクあたりコスト」という単位がここでは実際に機能している——OpenAI はトークンではなくワークフロー完了に対して価格比較を行っており、自社の脚注がクロスベンダー比較がいまだ「同等比較ではない」（競合の行から9タスクが除外）ことを示している。発表は Anthropic の IPO ロードショー真っただ中に重なり、発表と同じ時に OpenAI 自身のステータスページには「Costs API data is delayed」のライブ障害が表示されていた——リリース日のインフラの皮肉もおまけだ。
-
-> Cognition の FrontierCode 2.0 では、GPT-6.2 Sol が約1/5のコストで GPT-6.2 Astra に0.5ポイント以内まで迫る——コーディング用途なら小さいモデルの方が実用的なデフォルトかもしれない。
-
-[`🔗 OpenAI: Introducing GPT-6.2 Astra and Sol`](https://openai.com/index/introducing-gpt-6-2-astra-sol/) · [`🔗 GPT-6.2 システムカード`](https://deploymentsafety.openai.com/gpt-6-2-astra-sol) · [`🔗 OpenAI ステータス：Costs API 障害`](https://status.openai.com/incidents/01M7N9VNR6X5SEC90M1YCDB36D) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50535230)
-
----
-
-## 2. Apple サービス大規模障害：iCloud サインアウト、App Store とアクティベーションが数時間ダウン——Apple は「内部更新」を原因と説明
+## 1. NGINX の未認証 RCE 2件が本日公開——5つの研究チームが同じ脆弱性に独立たどり着いた
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** developer.apple.com/system-status · 367+ pts on HN · 2.5h ago (~01:47 UTC+8)
-- **Tags:** `apple` `outage` `icloud` `reliability`
+- **Source:** Wiz Research · 677+ pts on HN · 約5時間前 (~23:19 UTC+8)
+- **Tags:** `nginx` `rce` `http2` `vulnerability` `f5`
 
-Apple のサービスは「a rough Tuesday」（辛い火曜日）を過ごした。iPhone と Mac で iCloud から予期しないサインアウトが発生し、再サインイン時にエラーが続出。**App Store、iCloud、Apple Pay、Apple Support、iPhone アクティベーション、Apple Music、App Store Connect** がすべて影響を受け、Apple の実店舗や社内システムへの被害も報じられた。ステータスページは当初すべて緑のままだったが（HN のトップコメントは「all lit up green」とスクショ付きで突っ込んだ）、Downdetector では複数サービスが一斉に点灯。Apple は後に一般・開発者の両ステータスページで問題を認めた。Apple の声明は Mark Gurman 経由でこうだ。**「Many of our systems are back up and running after an internal update caused some outages this morning」**（今朝、内部更新が一部サービスの障害を引き起こした。多くのシステムは復旧済み）——サイバー攻撃ではなく、太平洋時間午後には大半のサービスが復旧途上だった。
+F5 が本日、NGINX のセキュリティリリースを公開した。**認証なしでリモートコード実行が可能な重大脆弱性2件**、CVE-2026-123633 と CVE-2026-123007 で、いずれも **CVSS 4.0 9.2 Critical**（旧3.1スケールでは 8.1 High——スコアは F5 自身の評価で、確認時点で NVD の両レコードは `Received` のまま）。**Wiz Research、Ikotas Labs、Metnir、Rapid7、Xint が独立に同じ2つの脆弱性を発見**し、別々に報告していた。CVE-2026-123633 は、NGINX が HTTP/2 クライアント通信をバックエンドへプロキシしていて `worker_connections` が逼迫している場合に worker プロセスで起こる use-after-free——Wiz は10月21日に ASLR バイパス込みの確認済み RCE として報告しており、開示タイムラインには「F5 confirms that another research team had previously reported the same vulnerability」（F5 によれば、別の研究チームがすでに同じ脆弱性を報告していた）とある。CVE-2026-123007 は HTTP/2 フロー制御ウィンドウが許容閾値を超えうることで起こるヒープバッファオーバーフローで、「affects versions dating back to NGINX 1.9.5 in 2015」（2015年の NGINX 1.9.5 まで遡って影響する）——HTTP/2 を導入したまさにそのリリースだ。修正版は **1.30.7 stable と 1.31.9 mainline**（OSS。Plus の R33〜R37 は F5 のアドバイザリ表を参照）。すぐにアップグレードできない場合は、Wiz のガイダンスに従い該当 NGINX インスタンスで「temporarily disable HTTP/2」——1.25.1 以降の対象 server ブロックで `http2 off;` を設定する。
 
-**Why it matters:** これは1週間で4件目の大型インフラ障害だ（木曜 Microsoft 365、金曜 FAA の地面停止、月曜 Chase、火曜 Apple）。しかも今週2件目の「ベンダー自身がリリースした変更」が原因という形だ——Microsoft の RCA は7月のゲートウェイ欠陥を、Apple は内部更新を名指した。「ステータスページは最初緑」というパターンも再演している。ユーザーレポートの量が、ベンダー自身のダッシュボードより速いシグナルになりつつある。
+**Why it matters:** NGINX は「more than 225 million websites」（2億2500万以上のウェブサイト）を支えており、両脆弱性はプロキシ層にある——アプリケーションコードが安全でもサイトは露出しうる。物語のもう半分は5チームによる独立の到達だ。同じメモリ安全性の縫い目を5つのグループが同時に引っ張っていた。10月21日から本日のパッチまでの期間は、まさにそれとの競走だった。
 
-[`🔗 9to5Mac: iCloud, App Store, and other Apple services hit by ongoing outage`](https://9to5mac.com/2026/11/17/icloud-app-store-and-other-apple-services-hit-by-ongoing-outage/) · [`🔗 Apple システムステータス`](https://www.apple.com/support/systemstatus/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50535238)
+> Xint の同伴記事は、そのタイトルがそのまま実証内容になっている：NGINX2Root——NGINX の訪問者からサーバーホストの root へ（英語/韓国語/日本語）。
+
+[`🔗 Wiz：NGINX における未認証 RCE（CVE-2026-123633/-123007）`](https://www.wiz.io/blog/nginx-http2-rce-vulnerabilities) · [`🔗 Xint：NGINX2Root 技術解説`](https://nginx2root.com/) · [`🔗 NVD：CVE-2026-123633`](https://www.cve.org/CVERecord?id=CVE-2026-123633) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50547374)
 
 ---
 
-## 3. 「We don't need more apps, we need better open source」——“運用可能性のギャップ”を論じ、AI が実際に得意な仕事のリストを添えたエッセイ
+## 2. Genie 4 が Project Genie で解禁——セッション途中の世界編集とリアルタイム・ネイティブ音声
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** jordankrueger.com · 326+ pts on HN · 5.5h ago (~22:45 UTC+8)
-- **Tags:** `open-source` `maintainers` `self-hosting` `ai-assistance`
+- **Source:** Google DeepMind · 74+ pts on HN · 約1.3時間前 (~02:49 UTC+8)
+- **Tags:** `google-deepmind` `world-models` `genie-4` `generative-ai`
 
-Jordan Krueger の論考が326ポイントを獲得したのは、セルフホスト世代が肌で知るギャップを言語化したからだ。「Free and open source software already does most of what my clients and I need… The software is usually great. Running it is the hard part.」（フリーオープンソースソフトウェアは、私とクライアントが必要とする大部分をすでに満たしている……ソフト自体は通常優れている。難しいのは動かすことだ）。自身の Matrix サーバー、Hetzner 上の Coolify、Paperless-ngx の経験から——アップデートで壊れ、「eat 4GB of RAM to serve a handful of people」（数人に奉仕するために 4GB の RAM を食う）アプリ、専任 sysadmin を雇えない非営利団体が企業 SaaS に流れる現実——彼は「週末1回分」の貢献トラックを4つ提示する。速く、導入しやすく、運用しやすく、軽く。磨きが報われる証拠が **uv**（pip の8〜10倍速、ウォームキャッシュで最大115倍）、警鐘が **xz**（疲弊したメンテナーが攻撃面になる）と **curl の賞金制度終了**（2026年1月——質の高い AI 生成レポートが量でメンテナーを溺れさせる）。マナーのルールも付属する。まずメンテナーと話す、計測値を持参する、AI の使用を開示する。
+Google が AI Ultra 購読者向けに Project Genie の新体験を公開し、**Genie 4** への初アクセスを実現した——「our most realistic and interactive world model yet」（これまでで最も写実的でインタラクティブな世界モデル）で、目玉は「you can now prompt mid-session to change the world you created」（セッション途中でプロンプトを出せば、作った世界を変更できる）：天気を変え、キャラクターを落とし、展開を改変する。すべてブラウザ内で。Genie 4 は映像に「real-time native audio that adapts as the scene unfolds」（シーンの展開に適応するリアルタイム・ネイティブ音声）を初めて組み合わせた。Genie 3 は長いランやパノラマシード空間向けにモデルピッカーに残り、こちらも更新される：**1生成あたりのセッションが3分に延長（従来は60秒）、ワールドチェイニング、360°パノラマ画像グラウンディング、リアルタイムの世界内イベント**。新しい Project Genie エージェントは Google のマルチモーダルモデルを会話的にオーケストレーションし、Gemini モデルはセッション内に同行して文脈認識のサジェスチョンチップを表示する。コミュニティギャラリーも公開され、キュレーションされた世界とユーザー制作の世界がリミックス可能で並ぶ。投稿は天井についても正直だ：これらは「remain world models in the frontier research space」（フロンティア研究領域に留まる世界モデル）であり、チームは「actively tackling key challenges such as camera latency, intricate physical interactions, real-time audio precision, and long-term scene permanence」（カメラのレイテンシ、精緻な物理インタラクション、リアルタイム音声の精度、長期のシーン永続性といった重要課題に積極的に取り組んでいる）。
 
-**Why it matters:** このエッセイの最も鋭い指摘は、エージェントによるコーディングが、ボランティアが避けたがる仕事——プロファイリング、インストーラのテスト、暗号のようなエラーメッセージの書き直し、ドキュメント——にうまく適合するという点だ。これはエージェントブームを「もっとアプリを作る」から「既存のものをメンテナンスする」へと再フレーミングする。「Making a tool millions already use 20% lighter helps all of them, every day」はスローガンではなく、貢献のルーブリックだ。
+**Why it matters:** 世界モデルが研究デモから、編集・音声・共有を備えた消費者向けプロダクト面へ交差した——インタラクティブメディアへの含意が本題で、公式が名指しした課題リスト（永続性・レイテンシ・物理）が、研究フロンティアの現在位置をそのまま示している。
 
-[`🔗 Jordan Krueger: We don't need more apps, we need better open source`](https://jordankrueger.com/blog/better-open-source-not-more-apps/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50532086)
+[`🔗 Google：Genie 4 が利用可能に（Project Genie）`](https://blog.google/innovation-and-ai/models-and-research/google-deepmind/genie-4-now-available-project-genie/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50550415)
 
 ---
 
-## 4. NSA の機密内部ネットワーク NSANet がダウン——Fort Meade で業務支障、サイバー攻撃の兆候はなし
+## 3. Inside Deutsche Bank：1500万ファイルの漏洩が、20年分の無視されたコンプライアンス警告を暴く
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** reuters.com · 306+ pts on HN · 4.5h ago (~23:50 UTC+8)
-- **Tags:** `nsa` `outage` `classified-systems` `reliability`
+- **Source:** FT 主導の報道連合 · 352+ pts on HN · 約4.5時間前 (~23:38 UTC+8)
+- **Tags:** `deutsche-bank` `data-leak` `investigation` `compliance`
 
-NSA の極めて機密性の高い内部通信ネットワーク——機密情報を機関内部で保管・共有するための **NSANet**——が火曜日にオフラインになった。関係者6名が確認（Reuters、CNN の報道を引用）。ニューヨーク・タイムズによれば、機関全体で業務が混乱し、バッジやシステムにアクセスできない従業員が欠けたことで Fort Meade では時差出勤が発生した。同じ報道は、**現在のところダウンタイムがサイバー攻撃の結果である兆候はない**としている——原因は未確認、復旧状況も未公表だ。
+大規模な国際調査が本日公開された。プロジェクト名は **Inside Deutsche Bank**、**1500万件超の漏洩した内部文書**に基づく。プロジェクト自身の定義づけはこうだ：「The leak of 15+ million files lays bare the bank's flawed culture, systemic blind spots and pursuit of profit over compliance」（1500万件超のファイルの漏洩は、銀行の欠陥ある文化、体系的な盲点、コンプライアンスより利益を追う姿勢を露わにしている）。ファイルは約20年分の銀行の最も機密性の高い機能をカバーする：アンチ金融犯罪、制裁モニタリング、内部監査、そしてリスクのある顧客の去就を決める部門だ。公開パートナーには FT、ニューヨーク・タイムズ、Dawn、Malaysiakini、IrpiMedia、elDiario.es、Follow The Money が名を連ねる。既に報じられた発見には、逃亡中のジョー・ローに関連する24件以上・計1億7298万ユーロの取引、制裁に備える銀行内で引用された内部警告——「As you know we have a large Russian Oligarchs client population」（ご存じのとおり、我々にはロシア・オリガルヒの顧客層が大勢いる）——、ハンガリーのオルバン系銀行が数十億ユーロ規模のマネーロンダリングSchemeのプラットフォームになったとされ、Deutsche Bank がその決済を処理していた件、そして銀行自身の内部方針に違反した武器貿易ファイナンスが含まれる。ドイツ政府は透明性を要求し、アナリストは新たな規制調査を予想している。
 
-**Why it matters:** 今週の障害カスケードは、非機密の消費者クラウド（Microsoft、Apple）、民間航空（FAA）、銀行決済（Chase）、そして国家安全保障機構の機密側にまで及んだ——共通原因の証拠はなく、すべてが5営業日以内に発生している。個々の原因が何であれ、今週の信頼性論争はもはや特定ベンダーの SRE 実践の話ではなく、重要インフラのどれだけが同じ変更管理の物理を共有しているかの話になっている。
+**Why it matters:** これはパナマ/パラダイス文書時代以降最大の金融セクター文書漏洩で、重心が違う——隠されたオフショア資産ではなく、G-SIB のコンプライアンス機構そのものが、書面で自らの管理を突き止めつつ利益を追った姿だ。規制、訴訟、そして（Deutsche Bank が皆の決済銀行である以上）取引相手への波紋は、四半期単位で続くだろう。
 
-[`🔗 Reuters: Highly classified US national security communications network is down`](https://www.reuters.com/technology/highly-classified-us-national-security-communications-network-is-down-cnn-2026-11-17/) · [`🔗 NYT: Classified N.S.A. Network Goes Down, Causing Work Disruptions`](https://www.nytimes.com/2026/11/17/us/politics/nsa-down-network-outage-nsanet.html) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50533089)
-
----
-
-## 5. FrontierHarness 評価 v1.1：830億トークンが「モデルごとの最良ハーネスは?」に答える——答えは両方替えろ
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** runta.com · 269+ pts on HN · 5.4h ago (~22:53 UTC+8)
-- **Tags:** `evals` `agent-harnesses` `benchmarks` `baseten`
-
-Baseten と構築した Runta のハーネスリーダーボードは、**830億トークンを27,280実行**に投入した——22ハーネス構成 × 5オープンモデル（GLM-5.3、GLM-5.3 Flash、DeepSeek V4.1 Flash、Muse、Kimi-K3）× 62ターミナルタスク × 4試行で、「76× the size of v1.0」。結論はこうだ。モデルを替えたらハーネスも替えよ——コストパフォーマンス最良の組は Codex CLI + GLM-5.3、Pi + GLM Flash、ZCode + DeepSeek、Oh My Pi + Muse、Alma + Kimi-K3 で、コスト順位の中間ハーネスはモデルを跨いで **22位中11位** 動いた（Codex CLI は GLM-5.3 で1位、Kimi-K3 で16位）。分散の内訳は、モデルがコスト分散の **92.8%** を説明し、ハーネスは2.3%、ペアは4.9%——だがモデルを固定すると、ハーネスの選択でタスクあたりコストが **1.8〜5.0倍** 変わる。全モデル合計では OpenCode v2 が最低タスクコスト（$0.561）、ZCode が最高パス率（61.9%）。そしてコストは品質を買わない（順位相関 −0.39〜+0.22）。さらに **支出の64.5%が不合格ランに流れ**、216試行が報酬ハッキングとしてフラグされ0点だった。
-
-**Why it matters:** 注意書きが埋もれずに印刷されているのが何よりの価値だ——「each pass rate has a 95% interval of about ±10 points, so a gap of a few points is a tie」（各パス率の95%区間は約±10ポイントで、数ポイントの差は引き分け）、「Open models, one provider」（オープンモデル、単一プロバイダ）、設計パターンの節は明示的に「observations, not tests」（観察であってテストではない）。だからこそ、運用に使える2つの数字を持ち帰る価値がある。モデル固定ならハーネスは2〜5倍のコストレバーであり、評価支出の約3分の2が失敗に消える——予算はパスだけでなくミスのために積め。
-
-[`🔗 Runta: What is the best harness for each model?`](https://runta.com/blog/introducing-frontierharness-eval-v1-1/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50532191)
+[`🔗 Inside Deutsche Bank（プロジェクトハブ）`](https://www.inside-db.com/) · [`🔗 FT：Leak of 15mn Deutsche Bank files exposes systemic failures`](https://www.ft.com/content/df518845-ed97-4a38-8a38-7fa9d4d24003) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50547620)
 
 ---
 
-## 6. last30days-skill が v4.3.2 をリリースしトレンド2位に——エージェントスキル系リポジトリが GitHub トレンド15枠中13枠を占める
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** github.com/mvanhorn/last30days-skill · 772★ today, v4.3.2 released today (~23:28 UTC+8)
-- **Tags:** `agent-skills` `research-tools` `trending` `harnesses`
-
-**last30days-skill**——an AI agent skill that researches any topic across Reddit, X, YouTube, HN, Polymarket and the web, then synthesizes a grounded summary（リポジトリ自述：Reddit、X、YouTube、HN、Polymarket、ウェブを横断して任意のトピックを調査し、根拠ある要約を合成する AI エージェントスキル）——本日 15:28 UTC に **v4.3.2 をリリース**（前日は v4.3.0）し、累計68,885★に**本日 +772★** で届いた。README は9言語、リポジトリ自体がトレンド1位バッジを掲げる。これは今のトレンドボードを支配するカテゴリの中で最も明確なトリガー事例だ。本日の15枠のうち **13枠がエージェント/スキル/ハーネスインフラ**である——ECC（本日 +902★、累計305k、エージェントハーネスOS）、obra/superpowers（本日 +598★、累計319k）、cursor/plugins（+196★、公式プラグイン仕様、本日プッシュ）に、本フィードが既に取り上げた Claude-BugHunter、open-code-review、LoopForge、univer、stitch-skills、ag-ui、plannotator が続く。
-
-**Why it matters:** トリガーの規律がここでは重要だ。last30days の急上昇には検証可能な原因がある（36時間で2リリース）。一方 ECC と superpowers には**新しいリリースがない**（それぞれ9月30日の v2.2.3、10月21日の v7.0.2）——この上昇はリリースではなく注目駆動であり、原因をでっち上げることはしない。構造的事実こそがストーリーだ。エージェントハーネスツールは今やオープンソースの注目を引く重力の井戸であり、ボードのほぼ全枠を同時に占めている。
-
-[`🔗 mvanhorn/last30days-skill`](https://github.com/mvanhorn/last30days-skill) · [`🔗 releases`](https://github.com/mvanhorn/last30days-skill/releases) · [`🔗 affaan-m/ECC`](https://github.com/affaan-m/ECC)
-
----
-
-## 7. Baidu・Xiaomi の CEO が AI の期待とリターンの乖離拡大を警告——「実用アプリケーションであって、より強いモデルではない」
+## 4. All About Berlin、トラフィック −75%：Google AI 回答の当事者からの記録
 
 - **Velocity:** ▮▮ rising
-- **Source:** scmp.com · 175+ pts on HN · 6h ago (~22:20 UTC+8)
-- **Tags:** `ai-industry` `bubble` `apec` `china-tech`
+- **Source:** nicolasbouliane.com · 723+ pts on HN · 約13時間前 (~14:47 UTC+8)
+- **Tags:** `seo` `google` `ai-overviews` `web-publishing`
 
-火曜日に深圳で開かれた APEC CEO サミットで——Nvidia の激動の週による市場の不安が残る中——中国最大級のテック企業2社のトップが「urged the industry to focus on building practical applications, warning that massive investments in the technology are outpacing commercial returns」（実用アプリケーションの構築に業界が集中すべきだと訴え、技術への巨額投資が商業的リターンを上回りつつあると警告した）。SCMP のサブ見出しに主題がある。**「Practical applications, not more powerful models, will determine AI's value」**（AI の価値を決めるのは実用アプリであって、より強いモデルではない）。この枠組みは、本フィードが英語圏側から扱ってきた流れと呼応する。2026年、Baidu はアプリケーション層の AI（検索とクラウドへの ERNIE 統合）を出し続け、フロンティア能力の物語は他に集中していた。その CEO が今、リターンはそこにあると論じている。（注記：SCMP の本文はサインインウォールの内側。上の要約は読めたリードと見出しによる。）
+本日の HN 最大スレッドは、Nicolas Bouliane が 2017年から運営してきた（2020年からは専業の）**All About Berlin** についてのエッセイだ——ベルリン州 itself が移民に案内に使っているあのサイトが、Google AI Overviews によりトラフィックの75%を失ったと書いている（投稿には更新があり、初出時の数字は70%）。「When you Googled something, you used to get a link to my website. Now you get a page of ads, then an AI-generated answer trained on my content, then finally a link to my website.」（以前は何かを検索すれば私のサイトへのリンクが返ってきた。今はまず広告のページ、次に私のコンテンツで訓練された AI 回答、ようやく最後に私のサイトへのリンクが来る。）投稿が再燃した引き金は、それが指す Google 自身の発表だ——先週 Google は、AI 生成回答が検索結果を完全に置き換えること、そしてその回答に広告が載ることを発表した。Bouliane は独立系ウェブの行き先を書き留める：有料化したサイトもあれば、「keep the websites online, but they no longer update them. It's just not worth it.」（サイトは放置するがもう更新はしない。割に合わないのだ。）これは昨日の項目の第一人称の続篇だ——無作為化試験が集計上のクリック損失を約40%と示したのに対し、こちらは影響を受けたサイトの内側からの姿だ。
 
-**Why it matters:** リターン懐疑論のコーラスに、いま中国のアクセントも加わった——米国側の「capex が収益を追い抜く」議論と同じ論点が、モデル API ではなく広告・デバイス・クラウドで AI を収益化する企業の口から語られている。モデルベンダー、デバイスメーカー、プラットフォームオーナーが同じ週に「価値はアプリケーション層に移った」と言い始めたなら、それは記録に値する座標変換だ。
+**Why it matters:** 40%という数字は移行の規模を教えてくれた。これは犠牲の形状を教えてくれる。人々が実際に使うリファレンス・インフラ——政府の窓口が移民をそこへ送るあのサイト——が、そのコンテンツで訓練された回答に呑み込まれるとき、問いは SEO を超えて：誰が回答の依拠する一次情報源を資金面で支え、維持するのか、になる。
 
-[`🔗 SCMP: Baidu, Xiaomi CEOs warn of growing gap between AI hype and returns`](https://www.scmp.com/tech/big-tech/article/3374774/baidu-xiaomi-ceos-warn-growing-gap-between-ai-hype-and-returns) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50531751)
+[`🔗 AI is killing All About Berlin（エッセイ）`](https://nicolasbouliane.com/blog/death-by-ai) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50542705)
 
 ---
 
-## 8. Alloy CSS：JavaScript オフで動くダイアログ、メニュー、タブ、トースト——サーバーレンダリング HTML のための1枚のスタイルシート
+## 5. 昨日の MAI Code 2 報道の続き：Ignite の全容は7モデルファミリー——そしてチップが1つ
 
 - **Velocity:** ▮▮ rising
-- **Source:** alloyhtml.com · 140+ pts on HN · 5.2h ago (~23:07 UTC+8)
-- **Tags:** `css` `html` `no-javascript` `server-rendered`
+- **Source:** Microsoft AI · 298+ pts on HN · 約4時間前 (~00:08 UTC+8)
+- **Tags:** `microsoft` `mai` `ignite-2026` `model-lineup`
 
-Alloy CSS のデモは完全な請求書アプリだ——ダイアログ、ドロップダウンメニュー、日付範囲ピッカー、件数付きタブ、アコーディオン、消せるトースト、一括操作チェックボックス——すべてが **script タグなしの1つの HTML ファイル**に収まっている。プロジェクトの自己紹介は正確だ。「One stylesheet for HTML your server renders. Utilities, plus the parts you'd usually pull in a JavaScript library for: dialogs, menus, drawers, tabs, tooltips and toasts, all working with scripts turned off.」（サーバーがレンダリングする HTML のための1枚のスタイルシート。ユーティリティに加え、通常は JavaScript ライブラリに頼む部分——ダイアログ、メニュー、ドロワー、タブ、ツールチップ、トースト——がスクリプトオフのまま動く）。ビルド不要、フレームワーク不要——Rails、Django、Laravel、htmx、あるいは HTML ファイルの山を想定し、ダークテーマ2種を同梱、テーマは分離して自分の色とフォントを小さな1ファイルに置ける。**11月16日に 1.0.8 をリリース**。リポジトリ自体が誠実な読みどころだ。2018年作成、長年休眠、今週復活——執筆時点でスター **34**（12:42 の回には HN スレッドの流れとともに **54** に——数え直される数字なので読取時点を明記）。注目はすべて Show HN から来ており、スター数からではない。
+昨日は Microsoft Ignite から MAI Code 2 と Code 2 Flash を報じた。完全な発表は**7モデルのファミリーと、マイクロソフト第2世代アクセラレータ**だ。最も大胆な新主張はセキュリティラインにある：Microsoft いわく、**「MAI Cyber 2 Flash beats GPT-6 Astra's quality at less than 2% of the cost per task on the CyberGym-E2E benchmark」**（MAI Cyber 2 Flash は CyberGym-E2E ベンチマークで、タスクあたりコスト2%未満で GPT-6 Astra の品質を上回る）。その他のラインナップはすべて Microsoft 自身の比較だ：Code 2 は「98% of the coding quality of GPT-6.1 Sol at about 40% of the price」（価格約40%で GPT-6.1 Sol のコーディング品質の98%）、Opus 5.5 対比では「96% performance for just 5% of the price」。Code 2 Flash は「matches the performance of GPT-6 Luna at 65% of the price, and Haiku 5.5 at 20%」。Image 2.5 は GPT Image 2.5 Sunburst (max) の5分の1の価格で「#1 on Artificial Analysis image editing」。Realtime 1 は「outperforms GPT-Realtime 2.1」で音声1分あたり $0.01 から。Transcribe 2（Dragon Copilot Transcribe の基盤）は「already powers 10 million patient encounters a month」。Decision 1.1 は「50x faster and 79x cheaper than GPT-6.1 Sol」。そして **Maia 200**、第2世代 AI アクセラレータは「is now in production running our largest models, achieving 1.7x more tokens per watt」。
 
-**Why it matters:** デモが成立するのは、モダン HTML と CSS の状態機構（popover、details、`:checked` などの仲間たち）が、「よくあるコンポーネントライブラリの JS の大部分は状態配管にすぎない」という閾値を越えたからだ。htmx/Rails/Django スタックを動かす層が最初の受益者になる。トレンドシグナルの読み方の小さな教訓でもある。34スターのリポジトリが HN の一日を制するのは、スター速度という誤った指標の実例そのものだ。
+**Why it matters:** 昨日の教訓はそのまま立つ：これらはベンダー自身が選んだ動作点でのベンダー自身のベンチマーク行であり、「タスクあたりコスト」の枠組みは独立な測定ではなくマーケティングの論点として読むべきだ。昨日の報道から本当に新しいのは陣形の方——Microsoft は意思決定モデル、リアルタイム音声モデル、セキュリティエージェントモデル、そして自社の学習シリコンを一つの発表に並べ、企業のトークン支出に向けたフルスタックの売り込みを見せている。
 
-[`🔗 Alloy CSS: ライブデモ（ソースを閲覧可、JS なし）`](https://alloyhtml.com/example.html) · [`🔗 alloyhtml/css`](https://github.com/alloyhtml/css) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50532385)
+[`🔗 Microsoft AI：Seven new models at scalable price-performance`](https://microsoft.ai/news/microsoft-ignite-2026/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50548021)
 
 ---
 
-## 9. FT：四半期売上1040億ドル到達と同時に、Nvidia がシンガポール売上の開示をやめた——行は報告基準の変更で消えた
+## 6. KPMG が FTSE 250 企業の監査を100超の AI エージェントで人間と並行実行——エージェントの方が良い質問をしたと発表
 
 - **Velocity:** ▮▮ rising
-- **Source:** ft.com · 124+ pts on HN · 3.1h ago (~01:12 UTC+8)
-- **Tags:** `nvidia` `export-controls` `singapore` `disclosure`
+- **Source:** Financial Times · 160+ pts on HN · 約4.3時間前 (~23:49 UTC+8)
+- **Tags:** `kpmg` `ai-agents` `audit` `enterprise-ai`
 
-FT によれば、売上が **$104B** に達した四半期で、Nvidia は収益開示からシンガポールを分離表示しなくなった。仕組みは 11月12日の Fortune が解説している。Nvidia は地域収益の報告基準を**顧客の請求所在地から顧客の本社所在地へ**変更した——この変更によりシンガポールは行として消える。シンガポールの役割が請求ハブであって仕向地ではないからだ。背景の数字が関心の所在を説明する。Fortune が検証した四半期で、シンガポールは最後に **$10.2B——売上の22%、前年比81%増**——と開示されていた一方、出荷の2%未満が物理的にシンガポールへ向かった。調査の出発点は、シンガポール当局によるサーバー販売業者 **Megaspeed** への調査そのものだ。（FT 記事本体はペイウォールの内側。報告基準の仕組みは Fortune の 11月12日記事による。）
+FT が KPMG 英国の監査パイロットを報じた：**100超の AI エージェント**が、FTSE 250 上場企業の完全な監査を**従来型の人間主導の監査と並行して**実行したのだ。KPMG 英国監査責任者の Cath Burnet は、エージェントが複数の事例で人間のチームより良い質問をし、より深く掘ったと述べた。会社の枠組みでは判断は人間の座に残る——最終署名は人が行い、KPMG は将来 AI 監査をクライアントに提供したいと考えている。展開はパイロットより広い：Bloomberg Tax によれば数百の KPMG 監査チームが繁忙期を前に先進的 AI エージェントを実地試験しており、非公開会社のクライアントから始めている。米国法人は **KPMG Clara Intelligence**——AI 支援で「human-assured」（人間が保証する）監査プラットフォーム——を既にローンチ済みだ。
 
-**Why it matters:** 開示手法の変更は収益の変更ではない——だがそれは、輸出規制執行が狙っている場所に、偶然とは思えない形で着地する。売上の22%を計上しながら製品の2%未満しか受け取らない請求ハブは、迂回された GPU が姿を現す地形だからだ。議会と規制当局の監視下にある企業が、長年トップを務めた人物の辞任の数日後に暫定 CEO を迎え、なおかつ最もリスクの高い地域をヘッドライン数字から追跡不能にしたなら、開示そのものがストーリーになる。
+**Why it matters:** 監査はエージェント主張への完璧な敵対的試験だ——成果物は規制当局が検算し、質問そのものが成果物であり、しかもここで報告しているのは事務所自身が、実際の受託で自社のスタッフよりエージェントの質問が優れていたと認めたことだ。今月2つ目の専門職領域で、正直な発見は「AI が仕事を完遂する」ではなく「AI がボトルネックを動かす」——署名は依然人間がするし、彼らがレビューするものが機械の浅さから機械の深さへ変わった、ということだ。
 
-[`🔗 FT: Nvidia stopped disclosing Singapore sales as revenues hit $104bn`](https://www.ft.com/content/dbde7a30-548c-4f9d-a4be-7898a0c24dcf) · [`🔗 Fortune: Nvidia suddenly changed how it reported revenue`](https://fortune.com/2026/11/12/nvidia-changed-earnings-report-format-singapore-revenue-megaspeed-probe-colette-kress/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50534631)
+[`🔗 FT：AI asked 'better questions' than KPMG accountants in pilot audit`](https://www.ft.com/content/5168b3e9-75d0-4be0-9ccd-d327d6b16c05) · [`🔗 KPMG：Clara Intelligence 米国ローンチ`](https://kpmg.com/us/en/media/news/kpmg-unveils-next-era-of-ai-enabled-human-assured-audit-with-us-launch-of-kpmg-clara-intelligence.html) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50547777)
 
 ---
 
-## 10. Microsoft が MAI Code 2 と Code 2 Flash をリリース——GPT-6.1 Sol の性能の 98% をコスト 40% で、ハーネスは脚注に
+## 7. OpenAI が Jalapeño にモデルが書いた RTL を詳述——そして「5か月未満で約1年分の進展」と呼ぶ AMD との協業
 
 - **Velocity:** ▮▮ rising
-- **Source:** microsoft.ai · 116+ pts on HN · 1.9h ago (~02:25 UTC+8)
-- **Tags:** `microsoft` `mai` `coding-models` `benchmarks`
+- **Source:** OpenAI · 61+ pts on HN · 約2.3時間前 (~01:45 UTC+8)
+- **Tags:** `openai` `chip-design` `amd` `risc-v` `eda`
 
-Microsoft の MAI チームがコーディングモデル2種を出した。一般的なエンタープライズコーディングタスクのコストパフォーマンス最前線をうたう **MAI Code 2** と、高ボリューム作業向けの **Code 2 Flash** だ。主張は4ベンチマーク（DeepSWE 1.1、Terminal Bench 2.1、SWE-Atlas、FrontierCode v1.1）の平均で、**「98% of the performance of GPT 6.1 Sol at 40% of the cost」**、**「96% of Claude Opus 5.5's performance at just 5% of the cost」**——Flash は GPT-6-Luna/Haiku-5.5 並みの性能をコスト65%/20%でと主張する。258名のアノテーターによるブラインドのビジュアルコーディング並行評価では、67%の場面でレビュアーが GPT-6 Sol よりその結果を好んだ。誠実な部分は脚注にある。最初の3ベンチマークは Microsoft 内部の **MSBench ハーネス + GitHub Copilot CLI（サブエージェントなし）** で実行され、FrontierCode の数値は Artificial Analysis から、全モデルは最大推論努力で実行され、MAI のコストは**50%のプロモーション価格**で表示されている。限界も明記されている。「explicitly not yet tuned for harder problems, like fundamental science research and very long horizon agentic work」（基礎科学研究や超長期のエージェント作業のような、より難しい問題にはまだ調整されていない）。両モデルとも GitHub Copilot に搭載、Flash は Microsoft Foundry で限定プレビュー。
+OpenAI の研究投稿は、最初のカスタム推論チップ **Jalapeño** に対して自社モデルが実際に何をしたかを深く掘り下げている：モデル提案の RTL 変更がベクターユニットの標準セル面積を約13%、マトリクスユニットを約10%削り、OpenAI はその最適化が「were silicon proven during Jalapeño's silicon bring-up」（Jalapeño のシリコンブリングアップでシリコン実証済み）だと述べる。具体例：乗算器の再設計でセル面積約15%減、しかもレイテンシを2クロックから1へ短縮。加算器の再設計で面積約15%減、レイテンシは維持。AMD 側では、OpenAI は「up to 14% improvement relative to heavily optimized baselines on the flagship GPU IP」（フラッグシップ GPU IP で、徹底最適化されたベースライン比で最大14%の改善）を主張し、協業を「roughly a year of progress achieved in less than 5 months」（5か月未満で達成された約1年分の進展）と形容する——さらに「AMD has already included some of these changes in a recent design it sent for manufacturing」（AMD は既にこれらの変更の一部を製造に回した最近の設計に含めている）と主張し、AMD が次期フラッグシップ CPU の主要ブロックで検証した1桁台の PPA 改善も添える。投稿はさらに **Synopsys** との協業（「to ground capability development in trusted evaluators」——能力開発を信頼できる評価器に接地させる）と、仕様書から **RISC-V** コアを設計する結果も報告している。
 
-**Why it matters:** 「主張 vs 脚注」の構造は、朝の FrontierHarness 研究が測定したハーネス感受性そのものだ——同じモデルでもハーネスが違えば動く。だから「コスト5%で96%」という数字は*ある構成*についての主張であり、Microsoft はその構成について異例なほど率直だ。価格のアスタリスクにも注意。ここでのすべてのコスト倍率は、期限のあるプロモーション価格で割られている。
+**Why it matters:** 「シリコン実証」の主張が正しければ、これは LLM が書いた RTL が誰かのテープアウトに載った最初の公開証拠になる——意味のある単位は「AI がチップを設計」ではなく「AI が、人間のチームが既に絞り切ったブロックから PPA の勝ち筋を見つける」だ。誠実な注意書きは文の内側にある：AMD 比較は*徹底最適化された*ベースラインに対するものであり、「up to 14%」は平均ではなく最大値だ。
 
-[`🔗 Microsoft AI: Introducing MAI Code 2 and MAI Code 2 Flash`](https://microsoft.ai/news/introducing-mai-code-2-and-mai-code-2-flash/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50535885)
+[`🔗 OpenAI：Advancing chip design with OpenAI models`](https://openai.com/index/advancing-chip-design-with-our-models/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50549493)
 
 ---
 
-## 11. geohot の「My Empire of Dirt」：Anthropic の「Singleton」への正面攻撃——IPO ロードショーの日に届く
+## 8. Cursor のプラグイン仕様が trending で17kスター——公式プラグインと、稼働中のサードパーティmerge列車
 
 - **Velocity:** ▮▮ rising
-- **Source:** geohot.github.io · 109+ pts on HN · 8.6h ago (~19:39 UTC+8)
-- **Tags:** `anthropic` `ai-safety` `geopolitics` `essay`
+- **Source:** GitHub Trending · 本日 +315★ · 直近のPR merge 約7.8時間前 (~20:24 UTC+8)
+- **Tags:** `cursor` `plugins` `agent-skills` `spec`
 
-George Hotz のエッセイは、Anthropic が彼の言う「Singleton」——顧客や米政府を含む全員を不要にする再帰的自己改良——を追求していると論じる。「This is the ideology of Anthropic. The Singleton. And it may win.」予測は率直だ。テイクオフは紛争を防ぐほど速くない（「if the war lasts more than a year, China and their allies will undoubtedly win」——根拠は「Have you ever played an RTS game?」）、そして彼がリンクしたフィクションの「Correlation Effect」が実在しないことには99%の確信を置く。引用されるのは締めの部分だ。「And after it's done, at the end of the day, who was it all for?」——米政府は「really the biggest sucker in this situation」と呼ばれる。
+`cursor/plugins`——**Cursor プラグイン仕様とプラグイン**の公式リポジトリ——が **17,149 スター**（本日 +315）で trending に乗っている。コミットフィードが理由を語る：サードパーティプラグインのパイプラインが高回転で動いており、本日のmergeで Hospitable プラグイン（PR #1269）、Fiscal AI（#1275）、CreateOS（#1262）、LMTY が加わった。各プラグインは「ルート直下のスタンドアロンディレクトリで、固有の `.cursor-plugin/plugin.json` マニフェストを持つ」。公式セットには `create-plugin`（新プラグインのスキャフォールドと検証）、`teaching`（スキルマッピングと練習プラン）、`continual-learning`（トランスクリプト駆動の AGENTS.md への増分メモリ更新）、`agent-compatibility`、そして強い主張を持つ2つが含まれる：`thermos`——「Thermo-nuclear branch review: deep security/correctness audits, harsh code-quality rubrics, parallel subagents」（熱核級ブランチレビュー：深いセキュリティ/正確性監査、厳格なコード品質ルーブリック、並列サブエージェント）——と `ralph-loop`、「Iterative self-referential AI loops using the Ralph Wiggum technique」（Ralph Wiggum 手法による反復自己言及 AI ループ）。
 
-**Why it matters:** 論証を受け入れるか否かにかかわらず、タイミングそのものがストーリーだ。これは Anthropic の IPO ロードショーが進行中（本フィードは昨日 prospectus の主張を扱った）で、業界の capex 論争が全開の週に出た。フロンティアラボの戦略への批判が、業界の外からだけでも、安全派からだけでもなく、競合インフラを建設した創業者からも来るようになった——この記事はその実質的な変化のデータポイントだ。
+**Why it matters:** これは agent-skills の波が、主要 IDE ベンダーの一人称パッケージングを得た瞬間だ——コミュニティで発明されたパターン（Ralph ループ、過激なブランチレビューのルーブリック）が、マニフェスト仕様と開かれた PR パイプラインを備えた公式カタログにキュレーションされつつある。スキル標準がどのベンダーに収束するかはまだ決まらないが、こうしたカタログこそが形成されつつあるインターフェイスだ。
 
-[`🔗 geohot: My Empire of Dirt`](https://geohot.github.io/blog/jekyll/update/2026/11/17/my-empire-of-dirt.html) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50530114)
+[`🔗 cursor/plugins（仕様 + 公式プラグイン）`](https://github.com/cursor/plugins) · [`🔗 プラグインカタログ README`](https://github.com/cursor/plugins/blob/main/README.md)
 
 ---
 
-## 12. 11月13日の Jensen Huang 辞任報道を受けて：彼は CEO 復帰に前向きと表明——ただし CNBC の筋によれば、取締役会は検討していない
+## 9. CISA KEV に4件追加——3件は3日の連邦期限つき、1件は7か月前の LiteLLM RCE
 
 - **Velocity:** ▮▮ rising
-- **Source:** cnbc.com · 92+ pts on HN · 3.6h ago (~00:40 UTC+8)
-- **Tags:** `nvidia` `jensen-huang` `leadership` `update`
+- **Source:** CISA KEV catalog 2026.11.18 · 本日のカタログ更新
+- **Tags:** `kev` `cisa` `litellm` `synology` `vulnerability-management`
 
-Jensen Huang が Nvidia CEO 辞任後、初の公開声明を出した。復帰は、取締役会がそれを「in the best interest of our shareholders, our employees, the company, and America」だと判断する場合に起こる——**「I would be honored to answer these calls and return as CEO.」**彼は責任を認めた——「I created problems for the Board that I deeply regret… I own my mistakes completely」——そして、取締役会の独立調査（Wachtell Lipton による、彼の行動が国家安全保障や企業機密を損なったかの調査）への協力を約束した。CNBC の筋によれば、取締役会は復帰を**検討していない**。トランプ大統領は月曜に復帰に前向きと発言し、オンライン請願は18万署名を超え、Nvidia は時価総額で約2兆ドルを失っている——そして第3四半期決算が同じ日に予定されていた。
+本日の KEV 更新は、実際に悪用されている4件を追加した。うち3件は異例に短い連邦の猶予（期限 **2026-11-21**）：**Synology DiskStation Manager CVE-2024-10441**（CVSS 9.8、システムプラグインデーモンにおける出力エスケープ不備——2025年の DSM ビルドで修正済みであり、本日の KEV 追加が言っているのは、まだ未パッチの NAS ファームウェアがどれだけあるかだ）、**REDCap CVE-2026-90817**（病院や大学が走らせている Vanderbilt の研究データプラットフォームにおけるコードインジェクション）、そして **Apache Axis CVE-2026-90436**（とっくに EOL の Java SOAP スタックにおける unsafe reflection）。4件目は **BerriAI LiteLLM CVE-2026-40217**（CVSS 8.8、期限 2026-12-02）：NVD レコードいわく「LiteLLM through 2026-04-08 allows remote attackers to execute arbitrary code via bytecode rewriting at the /guardrails/test_custom_code URI」——ユーザーコードを実行する guardrails 機能そのものが、悪用経路になった。下地の脆弱性は春から公開済み（X41 D-Sec のアドバイザリ。Red Hat も errata を出している）ので、本日の KEV 追加は、開示に悪用の波が追いついた形だ。
 
-**Why it matters:** これは本フィードの今週の2項目（11月13日の辞任、11月16日の復帰協議）のアップデートだ。公開圧力の軌道は今や明示的で名前がある——トランプ、6桁の請願、そして Huang 自身——一方、決定権者の軌道は逆方向に走っている。創業者が戻りたい、群衆は戻ってほしい——その一方で取締役会は国家安全保障に隣接する調査を進めている。この落差こそ、Nvidia のガバナンス物語の現在地であり、決算日は暫定体制の最初のストレステストになる。
+**Why it matters:** 3日の連邦 Remediation 猶予は緊急シグナルだ——DSM と REDCap の patch-or-isolate 判断に変更窓は待てない。そして LiteLLM を共有 AI インフラとして走らせているすべての人へ：悪用されたエンドポイントは guardrails 機能の中にある。まさに「コードを実行するから」という理由で追加したはずの部品だ。
 
-[`🔗 CNBC: Jensen Huang says he's open to returning in first statement since resignation`](https://www.cnbc.com/2026/11/17/nvidia-jensen-huang-statement.html) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50534044)
-
----
-
-## 13. Phrack 73 が発行：Docker 脱獄、Skia サンドボックス脱獄、ML バックドアに及ぶ23本——そして 2000 年の SSH1 脆弱性の歴史も
-
-- **Velocity:** ▮▮ rising
-- **Source:** phrack.org · 69+ pts on HN · 1.8h ago (~02:31 UTC+8)
-- **Tags:** `phrack` `security-research` `exploitation` `machine-learning`
-
-再始動スタッフの第3号——第72号から約15ヶ月——には**主要論文23本と Line Noise 8本**が収められ、「exploitation and reverse engineering to machine learning, hardware, and the history and culture」をカバーする。即応性のあるハイライト：**「Escaping from a Docker container through vDSO」**（andersonc0d3）、**「Painting Out of the Box: Escaping the Chromium Renderer Sandbox via Skia」**（Quang Luong）、**「Reflections on Trusting AI: A Virus Inside an LLM」**（marver）、**「Backdoor attacks against Machine Learning IRL」**（G. Cherubin）、そして**「A Journey Into Kernel Exploit Development in the LLM Era」**。Prophile は Halvar Flake を特集。歴史セクションは 2000 年の SSH1 CRC32 脆弱性——『マトリックス・レボリューションズ』で名前が出た例のやつ——と 2003 年の Linux カーネルバックドア未遂を再訪する。イントロの復開への自己評価は「The relaunch worked, and this issue is the follow-through.」
-
-**Why it matters:** Phrack はエクスプロイト技術を文献としてアーカイブする場所であり、この号の目次は攻撃がどこを向いているかの国勢調査だ——コンテナ境界、レンダラーサンドボックス、ML サプライチェーンが古典的なヒープ/カーネルの素材と並んで一等の攻撃面として現れている。ML セキュリティ論文2本と「LLM 時代のカーネルエクスプロイト開発」が背中合わせに並ぶこと自体が、この号の分野の行き先についての主張だ。
-
-[`🔗 Phrack 73: Introduction`](https://phrack.org/issues/73/introduction_md) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50535992)
+[`🔗 CISA KEV カタログ（JSON）`](https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json) · [`🔗 NVD：CVE-2026-40217`](https://www.cve.org/CVERecord?id=CVE-2026-40217) · [`🔗 X41 D-Sec：LiteLLM アドバイザリ`](https://www.x41-dsec.de/lab/advisories/x41-2026-001-litellm/)
 
 ---
 
-## 14. Solid 2.0 が5年を経て登場：リアクティブグラフの中の async、サーバー関数——そしてエージェント向けに作られた診断
-
-- **Velocity:** ▮▮ rising
-- **Source:** solidjs.com · 59+ pts on HN · 1.3h ago (~02:56 UTC+8)
-- **Tags:** `solidjs` `javascript` `reactivity` `frameworks`
-
-Solid 2.0 がリリースされた。1.0 から5年で、売りは「async in the reactive graph, server functions, diagnostics built for agents, and a smaller API」。計算は Promise や非同期イテレータを返せ、下流はそれをそのまま扱え、**投機的状態は自動でロールバック**され、サーバーが真実の源になる。サーバー関数はコアに搭載（Request/Response 上の RPC に加え、`live()` 非同期ジェネレータによる永続 SSE）。2026年として新しいのは診断部分だ。エラーには**安定したコード、ソース位置、修正案、「agent repair guide」への経路**が付き、ウォーターフォール、悪い effect ループ、広いグラフ扇出の検出が含まれる——さらに「The Long Hold」、pending 状態が長く表示され続けた時に発火する診断（そう、リリース名のダジャレは意図的だ）。破壊的変更：`createResource`、`batch`、`createComputed`、`createMutable` などが削除され、コアはゼロから書き直され、SolidStart は引退してフレームワーク非依存の Vite プラグインへ。プロセスの数字：14週間で23個の RC、971個の PR マージ、安定性の基準は「通常のアプリコードで1週間完全にリグレッションなし、どこにもクラッシュやハングなし」。
-
-**Why it matters:** *コーディングエージェント*が自己修復できるように設計されたエラー診断をフレームワークが出荷するのは、紛れもない 2026 年の成果物だ——記事によれば、RC フェーズのバグ報告は「agents deliberately hunting edge cases」（境界ケースを意図的に狩るエージェント）から来たという。同時刻の傍注：sveltejs/svelte がリリースなしで本日 +533★ でトレンド入り（5.57.3 は10月）——最も可能性が高い駆動因は Solid のリリースによる比較トラフィックで、リリース日は競合の数字も動かすという教訓でもある。
-
-[`🔗 Solid: Solid 2.0 — The Long Hold`](https://www.solidjs.com/blog/solid-2-0-the-long-hold/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50536387)
-
----
-
-## 15. Antfly が Elastic License 2.0 から Apache 2.0 へ移行——エージェントが、クラウドによるクローンを防ぐ予防線を時代遅れにしたから
+## 10. CLI-Anything が再び trending に——59.5kスター、9月以降コミットゼロ、そしてレジストリの顔
 
 - **Velocity:** ▮ steady
-- **Source:** antfly.io · 38+ pts on HN · 4.7h ago (~23:33 UTC+8)
-- **Tags:** `licensing` `open-source` `search` `agents`
+- **Source:** GitHub Trending · 本日 +384★
+- **Tags:** `cli` `agents` `hkuds` `skill-registry`
 
-検索エンジン Antfly が Elastic License 2.0 から **Apache 2.0** にライセンスを変更し、新ライセンス下の最初のリリースとして 0.3 を出した。CEO James McDermott の記事は、source-available ライセンスへのエージェント経済学からの反論として、これまでで最も明快な定式化だ。ELv2 のヘッジ——「you could read the code, change it, and run it, you just couldn't build your own business reselling it」——が防げるのはクラウドによるクローンだけだ。そして「a license like that only protects you if the code is the hard part to copy. If a cloud provider can't host your code, it has to write its own, and that used to take years. **I don't think it takes years anymore. Everyone on our team writes code with agents now.**」そのためヘッジは意味を失った。競合がどうせエージェントで代替品を作れるなら、ライセンスは採用コストを払わせるだけだ。
+HKUDS の **CLI-Anything**（「CLI-Anything: Making ALL Software Agent-Native」）が本日 **+384スター**で GitHub trending に復帰、総数 **59,594**——正直な部分から：リポジトリ本体は**9月22日以降コミットゼロ**だ。活動は一層外、**CLI-Hub**（cliany.cc）で起きている。プロジェクトの前面に立つエージェントフレンドリーな CLI レジストリだ：「Any software. Any codebase. Any Web API. Generate an agent-native CLI and let AI agents operate it — install with a single command.」（どんなソフトウェアも、コードベースも、Web API も。エージェントネイティブな CLI を生成し、AI エージェントに操作させよ——ワンコマンドでインストール。）インストール経路は SKILL.md ネイティブ——`npx skills add HKUDS/CLI-Anything --skill cli-hub-meta-skill -g -y`——加えて pip パッケージ（`cli-anything-hub`）が `cli-hub list/search/install/info` を公開し、サイトは OpenClaw、Nanobot、Claude Code、Codex、Antigravity との互換性を掲げる。これは2日前の stitch-skills と同じ形だ：休止中の一次リポジトリが、周囲のエージェントツールの波に持ち上げられている。
 
-**Why it matters:** ライセンスの振り子（Elastic 2021 → HashiCorp 2023 → Redis 2024 とすべて*制限*寄りへ）が、コミュニティの善意ではなく AI 経済学に足場を置いた初めての明示的な逆方向の議論を得た——しかもこの議論の方向は検証可能だ。コード複製コストが本当に崩壊したなら、小規模インフラベンダーから寛容ライセンス*への*再ライセンスが増え、クラウド標的の大手が追従するかを watch すればいい。
+**Why it matters:** ここで面白い単位はスター数ではない——レジストリパターンだ。エージェントがツール単位ではなくタスク単位で CLI ラッパーを発見・インストールするなら、「エージェントが動かせるソフトウェア」の分布はキュレーションされた索引になり、HKUDS はその索引こそが製品だという賭けに出ている。
 
-[`🔗 Antfly: How Antfly learned to stop worrying and love Apache 2.0`](https://antfly.io/thoughts/how-antfly-learned-to-stop-worrying-and-love-apache-2) · [`🔗 antflydb/antfly`](https://github.com/antflydb/antfly) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50532773)
+[`🔗 HKUDS/CLI-Anything`](https://github.com/HKUDS/CLI-Anything) · [`🔗 CLI-Hub レジストリ`](https://cliany.cc/)
 
 ---
 
-## 16. @fastify/busboy と @fastify/multipart：CVE 記録3件——単一リクエストでのクラッシュ、ハンドルリーク、アップロード制限を素通しする偽造ファイル書き込み
+## 11. KVM の INIT エミュレーション修正が当日中に CVE レコードとして着地——ネステッドSVMの古いMMUコンテキスト
 
 - **Velocity:** ▮ steady
-- **Source:** NVD (three records, 7.5 CNA-assigned, `Awaiting Analysis`) · published Nov 16 (~22:17 UTC+8)
-- **Tags:** `cve` `fastify` `nodejs` `multipart`
+- **Source:** cve.org · 141+ pts on HN · 約4時間前 (~00:06 UTC+8)
+- **Tags:** `kvm` `linux-kernel` `virtualization` `nested-virtualization`
 
-11月16日に公開された3件の記録は Fastify の下にある multipart スタックを覆い、いずれも**未認証**クライアントが悪用可能だ。**CVE-2026-124724**（@fastify/busboy ≤ 3.2.5）：リクエストが設定済みパート数上限に達すると、それ以降のパートはエラーリスナーなしでスキップされる——ボディがスキップされたパートの途中で終わると、内蔵の Dicer パーサーが未処理エラーを発し、**プロセスが終了する**。細工リクエスト1発でサーバーが落ちる。**CVE-2026-128835**（同じく busboy ≤ 3.2.5）：次のバウンダリの前にヘッダブロックが決して終端されない multipart パートは、終わらない開放パートとして数えられ、finish も error も発火せずリクエストがハングする——**約100バイト**で発火し、@fastify/multipart 経由ではクライアント切断でもハングしたハンドルが解放されず、反復リクエストがハンドルとその資源をリークする。**CVE-2026-124289**（@fastify/multipart 7.4.0–10.1.8）：`attachFieldsToBody` 有効時、`saveRequestFiles` は truthy な `file` と `buffer` プロパティを持つ任意のオブジェクトをアップロードファイルとして扱う——素の JSON リクエストで偽造でき、**アップロードフックとファイル数/サイズ制限をスキップしたまま、攻撃者が選んだバイトを一時ディレクトリへ書き込める**。3件すべて7.5点。修正は **busboy 3.2.6** と **multipart 10.1.9**（リポジトリアドバイザリの「Patched versions」セルで確認済み）。
+CVE-2026-99312 はカーネル自身の修正を記録したものだ：「KVM: x86: Unconditionally reset MMU context when emulating INIT」（INIT エミュレーション時に MMU コンテキストを無条件にリセット）。バグ：ページング無効のままネステッドゲスト（L2）が走っている状態で INIT が届くと、KVM は L1 を古い MMU コンテキストのまま走らせてしまう可能性がある——レコードいわく「the MMU page role includes guest_mode (L2), i.e. an INIT while L2 is running with CR0.PG=0 will result in KVM running L1 with a stale MMU context」（MMU ページロールには guest_mode (L2) が含まれる。つまり CR0.PG=0 で L2 が走行中に INIT が来ると、KVM は L1 を古い MMU コンテキストで走らせる）。コミット自身のスコーピングも読みごたえがある：リセットはページング/L2 のケースに絞れたはずだが、SMM もページロールにエンコードされており、ロールが変わらないとき KVM は再構成の大半を省略するため、無条件リセットは安い。説明は影響範囲で閉じる：「this bug only affects nested SVM as INIT is an unconditional intercept on VMX」（このバグはネステッド SVM のみに影響する。VMX では INIT は無条件インターセプトだからだ）。4つの stable ツリーコミットが参照され、NVD レコード自身は本日朝 UTC に発行された（09:17Z、まだ `Received`）。
 
-**Why it matters:** このスタックは Node.js API 面のごく大きな部分の下にある——Fastify は新規サービスのデフォルト選択で、busboy はその遙か先まで組み込まれている。3つのバグは未認証 DoS クラスの分類学（クラッシュ、ハング、資源リーク）に制限素通しの書き込みが1つ加わった見事な見本だ。Fastify でファイルアップロードや `attachFieldsToBody` を使っているなら、パッチ適用が全行動項目だ。スキャナーへの注記：これら CVE の OSV 記録は現在 GIT レンジのみを持ち——npm レンジの記録は遅れる可能性があるため、バージョン確認は DB ではなくアドバイザリに対して行うこと。
+**Why it matters:** HN スレッド（84コメント）の火力の大半はメタ問に向かった——なぜニッチなネステッド仮想化の正しさ修正が CVE を帯びるのか。これが現代のレジストリの現実だ：カーネルの自己修正は今やデフォルトで番号を取り、CVE 番号は誰かが分析するまで重大度のシグナルを何も運ばない。ネステッド SVM ゲストを走らせている人にとっては、それでもパッチすべき一行だ。
 
-[`🔗 GHSA-pvmq-3jr9-v5qh（busboy、ハング/リーク）`](https://github.com/fastify/busboy/security/advisories/GHSA-pvmq-3jr9-v5qh) · [`🔗 GHSA-wh8h-qr34-3rj3（busboy、クラッシュ）`](https://github.com/fastify/busboy/security/advisories/GHSA-wh8h-qr34-3rj3) · [`🔗 GHSA-gmhr-r4mc-w935（multipart、偽造ファイル）`](https://github.com/fastify/fastify-multipart/security/advisories/GHSA-gmhr-r4mc-w935)
+[`🔗 CVE-2026-99312（cve.org）`](https://www.cve.org/CVERecord?id=CVE-2026-99312) · [`🔗 Stable ツリー修正コミット`](https://git.kernel.org/stable/c/24f644ea26c2ebb7b14c3baa2aa92d37fde3095f) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50548004)
 
 ---
 
-## 17. TrnRT がオープンソース化：AWS Trainium 向け LLM 推論エンジン——NKI メガカーネル、1台で毎分357万トークン
+## 12. 「ピアレビューはAI生成テキストを生き延びられるか」——Fed のエコノミストと Fernández-Villaverde が、AI 執筆の査読報告を盗作扱いにする提案
 
 - **Velocity:** ▮ steady
-- **Source:** github.com/RunanywhereAI/trnrt · 27+ pts on HN · 4.3h ago (~00:01 UTC+8)
-- **Tags:** `inference` `trainium` `kernels` `openai-api`
+- **Source:** UPenn / Federal Reserve Board · 63+ pts on HN · 約6.2時間前 (~21:51 UTC+8)
+- **Tags:** `peer-review` `ai-detection` `economics` `research-integrity`
 
-TrnRT は AWS Trainium 向けのオープン推論エンジンだ——このチップのソフトウェアスタックはこれまでほぼ完全に AWS 内部（Neuron SDK）に閉じていた。単体の `trn2.48xlarge` で OpenAI 互換 API を提供し、デコードを **NKI メガカーネル——約半層につき1つの融合カーネル**（KDA アテンション、融合 DSA 層、mHC、MoE FFN）として実行し、FP8 KV ページ上のラディックスツリー形式プレフィックスキャッシュにホストメモリ層を重ねる。**GLM-5.3-Flash が最初の対応モデル。**自前のカードとブログによる測定値の主張：**1台の trn2.48xlarge で毎分357万トークン**（AgentX、batch 12）、**24 ms の batch-8 デコードステップ**（32.2 ms から削減）、スポット価格で**100万トークンあたり $0.040**（容量ブロックで $0.167）。100万トークン文脈は疎アテンション（top-2,048）と固定サイズ状態の線形アテンションで実現。全グラフは CPU ホスト上でオフラインコンパイルされ、サービング機はデフォルトでは何もコンパイルしない。
+**Dario Caldara**（Federal Reserve Board）と **Jesús Fernández-Villaverde**（UPenn、CEPR、NBER）による11月16日付の新論文は、経済学が AI 生成テキストへの規範を今すぐ作らなければ「peer review is in serious danger of collapsing」（ピアレビューは崩壊の重大な危険にさらされている）と論じる。彼らの実験：AI 検出器は LLM が**執筆した**査読報告を検出し、AI が単に校正したり編集を支援したりした報告は検出しない——彼らの政策はこの区別の上に立つ。提案は鋭い：検出器を標準ツールに。フラグ付き論文はより厳しい読解へ、最初の事実誤りでリジェクト可。そして最も重い一文——「an AI-generated referee report adds nothing that editors could not get by running the prompt themselves」（AI 生成の査読報告は、編集者が自分でプロンプトを実行すれば得られる以上の何ものも加えない）——ゆえに AI 執筆の査読は「should be treated like plagiarism」（盗作のように扱われるべき）だ。論文は著者・査読者・編集者向けの実践ガイドで閉じ、その開示脚注は執筆過程で LLM を使ったと自ら記している。
 
-**Why it matters:** AWS の Trainium ソフトウェアの物語は、AWS サービス内部のクローズドソースカーネルだった。層ごとのカーネル設計を公開し、誠実な同時実行数を出すオープンなエンジンは、そのハードウェア上で誰がカスタム推論を組めるかを変える——そして $0.040/M トークンのスポット価格は、安価な推論競争における具体的なデータポイントだ。リポジトリは若い（10月30日作成、1.6k スター）し、現状単一モデル。性能主張はベンダー測定と見なし、手法はブログのリンクで確認すること。
+**Why it matters:** これは構造の議論であって道徳的パニックではない：査読者の比較優位は希少な注意の焦点であり、それこそまさに LLM が商品化したものだ。検出実験の発見——*執筆*と*編集*はきれいに分離できる——は経済学を超えて意味を持つ：執行は詐欺ケースを狙えて、文法の通しをすべて犯罪化する必要がない、ということだからだ。
 
-[`🔗 RunanywhereAI/trnrt`](https://github.com/RunanywhereAI/trnrt) · [`🔗 ブログ：Serving GLM-5.3-Flash on one Trainium2 box`](https://runanywhere.ai/blog/glm-5-3-flash-trainium2-nki-megakernels) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50533270)
+[`🔗 論文（PDF、UPenn）`](https://www.sas.upenn.edu/~jesusfv/Peer_Review.pdf) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50546312)
 
 ---
 
-## 18. Arcane の v3 ラインがトレンドに登場：エージェントが manager-only 作業をスキップする Docker 管理
+## 13. Show HN：Mastra Factory——先週 238 PR をマージしたエージェント走るカンバン
 
 - **Velocity:** ▮ steady
-- **Source:** github.com/getarcaneapp/arcane · 654★ today · v3.0.1 released Nov 15
-- **Tags:** `docker` `self-hosted` `devops` `agents`
+- **Source:** Show HN · 34+ pts · 約3.2時間前 (~00:53 UTC+8)
+- **Tags:** `mastra` `agents` `ci` `open-source`
 
-Arcane——Go 製のセルフホスト Docker 管理 UI（「Modern Docker Management, Designed for Everyone」、9.2k★）——が v3 リリースラッシュの勢いで**本日 +654★**。v3.0.0（11月14日）はリデザインされたダッシュボードとアクティビティセンター、ライブアップグレード進行状況、拡張されたバックアップと GitOps 能力に——リリースノート自身の言葉で——「substantial performance, security, agent, and interface」の変更をもたらし、v3.0.1（11月15日、`cli/v3.0.1` も同時）はエージェントモードの起動と性能の問題を修復し、証明書と更新の検証を強化し、本フィードが関心を持つ理由になる変更を1つ行った。**「Agents now skip manager-only work.」**main ブランチは既に v3 ライン、2.x はメンテナンスブランチだ。
+Mastra チーム（Shane、Sam、Abhi）がフレームワーク公開から2年、Show HN に戻ってきた。今度は Mastra 自体の保守に使っているツールだ：**Mastra Factory**、「a configurable agentic kanban board that's @-taggable in Slack」（Slack で @ できる、設定可能なエージェント的カンバンボード）で、長いセッションのために Mastra の durable エージェントの上に構築されている。規模の数字がそのまま売りだ：Mastra は今や「nearly 4M downloads per week」（週にほぼ400万ダウンロード）を平均し、**「Last week, Factory opened and merged 238 PRs, alongside 630 merged PRs from humans」**（先週、Factory は238の PR を開いてマージし、人間は630の PR をマージした）——mastra-ai 組織全体で、エージェントの成果はマージ PR 全体868のうち238、約27%で、人間比率の約4割に相当する。
 
-**Why it matters:** Docker 管理は、セルフホスターがコーディングエージェントに出会う層だ——サーバーをメンテナンスするエージェントはますます Docker と話す必要があり、Arcane の権限分割（エージェントは swarm 制御など manager-only 操作から排除）は、エージェント ops ツールの波が何度も再発見している最小権限パターンそのものだ。今回の上昇には検証可能なトリガーがある。2日で2リリース。
+**Why it matters:** 昨日の StarSling ローンチ（「エージェントは CI がチェックできるより速くコードを書く」——CI が最適化 PR を開く）に続いて、これは同じテーゼのメンテナ側バージョンだ：ボトルネックはもはや変更を書くことではなく、変更を護送することにある。そこでチームは工場を建て始めている——エージェントがチケットを端から端まで保持し、人間はマージでレビューする。238対630という比率は、実在する週400万ダウンロードのプロジェクトにおけるエージェント share-of-merges の最初の具体的データポイントのひとつだ。
 
-[`🔗 getarcaneapp/arcane`](https://github.com/getarcaneapp/arcane) · [`🔗 v3.0.1 release notes`](https://github.com/getarcaneapp/arcane/releases/tag/v3.0.1) · [`🔗 v3.0.0 release notes`](https://github.com/getarcaneapp/arcane/releases/tag/v3.0.0)
+[`🔗 Show HN：Mastra Factory（HN）`](https://news.ycombinator.com/item?id=50548660) · [`🔗 Mastra`](https://mastra.ai)
 
 ---
 
-## 19. Launch HN: StarSling (YC P25)——最適化 PR を開けてくる CI、「エージェントは CI がチェックできるより速くコードを書く」から
+## 14. ボイジャー1号を、メモリチップ1個の粒度まで分解する
 
 - **Velocity:** ▮ steady
-- **Source:** starsling.dev · 20+ pts on HN · 1.3h ago (~03:01 UTC+8)
-- **Tags:** `ci-cd` `github-actions` `devtools` `yc`
+- **Source:** Show HN · 85+ pts · 約3.9時間前 (~00:18 UTC+8)
+- **Tags:** `voyager` `interactive` `space` `visualization`
 
-StarSling は YC P25 からローンチし、その問題設定は本フィードの読者層に正確に狙いを定めている。**「Agents write code faster than CI can check it.」**製品は GitHub Actions 向けの AI ネイティブ CI だ。`runs-on: ubuntu-latest` を `runs-on: starsling-ubuntu-26.04` に替えるだけのドロップインランナー（第5世代 AMD EPYC、各ジョブは使い捨てのハードウェア分離 microVM 内）に加え、ワークフロー、ジョブ、実行ログ、マシンテレメトリを継続的に分析してキャッシュ、並列化、依存インストール、テストシャーディングの PR を開くエージェント——レビューとマージは自分で行う。最適化 PR は無料プランではデフォルトオフ。測定値の主張：TypeScript ジョブの中央値 **131.5秒 → 61秒**、Mastra のテストスイート**6倍速**（29分56秒 → 5分06秒）、Partcl のキュー時間は16分の1、$0.008/分で秒単位課金かつキュー時間は課金なし（「GitHub Actions より33%安」）、これまでに300万以上の CI ジョブを実行。
+Raj Shekhar が、1977年の2機のボイジャーのインタラクティブ分解を作った：「Two spacecraft launched in 1977, still talking to Earth from interstellar space. This is where they are right now.」（1977年に打ち上げられた2機の探査機は、星間空間から今も地球と交信している。これが今の位置だ。）機体をベイごとに開け（1–10 のキーでベイを順送り）、個々のモジュールやチップへ降り、各アセンブリを回転・ズームし、打ち上げから今日の星間位置までの旅を見られる。全体がキーボード駆動で自己完結——最も遠くにある人類の造物のために作られた、ブラウザネイティブな技術文書だ。
 
-**Why it matters:** エージェント大量リポジトリの問題は現実にある。1リポジトリが1日に数十のエージェント PR を吸収するとき、20分の CI ループと GitHub ホストのキュー時間がボトルネック資源になり、「自分を改善する CI」は今週のエージェントインフラの波の他の部分と同じ「苦役の置換」パターンだ。主張は同社自身のベンチマークだ。131秒対61秒の中央値が、彼らに果たしてもらうべき誠実な数字だ。
+**Why it matters:** エージェント支援の職人仕事が上手く着地した姿だ：一人で、週末規模のプロジェクトで、かつては JPL 自身のメディアチームの持ち物だった探索可能なディテール密度を実現している。そして小さな保存の行為でもある——最遠の人工物のエンジニアリング知識が、ナビゲート可能になった。
 
-[`🔗 StarSling`](https://starsling.dev) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50536468)
-
----
-
-## 20. Java4Shell（CVE-2026-114938）：OpenJDK の JIT Base64 組み込み関数における事前認証 RCE——AI で「1時間」で発見、同日に修正
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** calif.io · 626+ pts on HN · 7h ago (~05:11 UTC+8)
-- **Tags:** `cve` `openjdk` `rce` `jit`
-
-Calif が **Java4Shell** を公開した。OpenJDK の AVX-512 Base64 組み込み関数におけるメモリ破壊バグだ。「The x86-64 Base64 intrinsic miscalculated the padded tail's store mask, causing an out-of-bounds write」（x86-64 Base64 組み込み関数がパディング末尾のストアマスクを誤計算し、境界外書き込みを引き起こす）——65文字の入力（`A` 64個 + `=`）で50バイトのバッファが62バイトオーバーフローする。「affects OpenJDK from version 17.0.6 or newer」（17.0.6 以降の OpenJDK に影響。Oracle 自身のレコードは影響を受ける Java SE ビルドとして 8u511b33-perf、17.0.21.0.3、21.0.13.0.3、25.0.5.0.3、27.0.1.0.3 を列挙）で、AVX-512 VBMI 対応の x86-64 CPU のみ——ARM64 は影響を受けない。衝撃的なのは影響実証の方だ。**Keycloak、Jira、Confluence、JFrog Artifactory、Jenkins、PingFederate での事前認証 RCE**、Kafka、Solr、Elasticsearch、Gerrit、Spinnaker での認証後 RCE、**JavaBleed** と名付けられた Heartbleed 型のヒープリーク、さらに悪意ある TLS サーバー経由のクライアント側亜種。Oracle は太平洋時間 11月17日午後1時にパッチを公開。アップグレードまでの緩和策は `-XX:-UseBASE64Intrinsics` か `-XX:UseAVX=2`。スコアの出所：NVD レコード（`Received`、22:18Z 公開）には Oracle CNA のスコア——CVSS 3.1 **8.1**（AV:N/AC:H）——が載り、Calif の記事は CVSS 4.0 で **9.2 CRITICAL** と計算している。製品別の武器化エクスプロイトは「until everyone has had a chance to upgrade」（全員がアップグレードを終えるまで）公開を控えている。
-
-**Why it matters:** 発見の経済性が物語の中の物語だ——Calif によれば Quang Luong が「an hour to discover the vulnerability, and two more hours to develop the first working exploit」（脆弱性発見に1時間、最初の実用エクスプロイトにさらに2時間）、「the total token cost… less than $200」（トークン総コスト200ドル未満）。彼らの PHP2Shell/Squidbleed に続く AI 支援パーサー・JIT 研究の延長線上にある。発見は JFrog、Horizon3.ai、Red Hat（RHSB-2026-018）によって独立に裏付けられた。Oracle の AC:H はエクスプロイトの摩擦が現実であることを示す（ASLR バイパス＋ヒープ・フeng shui＋標的別の個別チェーン——「not a universal point-and-shoot」）。しかし Base64 をデコードするすべての JVM サービス——ほぼ全部だ——がこのコードパスを抱えている。
-
-[`🔗 Calif：Java4Shell`](https://calif.io/java4shell/) · [`🔗 JFrog：わかっていること`](https://research.jfrog.com/post/java4shell-vulnerability) · [`🔗 Red Hat RHSB-2026-018`](https://access.redhat.com/security/vulnerabilities/RHSB-2026-018) · [`🔗 NVD：CVE-2026-114938`](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE-2026-114938) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50538240)
+[`🔗 Voyager（インタラクティブ分解）`](https://rshekhar.com/voyager/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50548161)
 
 ---
 
-## 21. Quad9、毎日のブロック罰金よりフランスからの無料 DNS リゾルバー撤退を選ぶ——Cloudflare は「a canary in the coal mine」と呼ぶ
-
-- **Velocity:** ▮▮ rising
-- **Source:** blog.cloudflare.com · 356+ pts on HN · 6h ago (~06:13 UTC+8)
-- **Tags:** `dns` `policy` `france` `blocking`
-
-Quad9（9.9.9.9 のスイス非営利団体）は、著作権侵害ドメインのブロック拒否で**毎日の罰金**を課す裁判所命令に数か月の訴訟の末で直面し、リゾルバーをフランスから完全に引き上げる。CDN とプロキシサービスでコンプライアンスを示せた Cloudflare と違い、純粋な公共リゾルバーには代替の準拠経路がなかった。選択は「crippling litigation and penalties」（骨まで削る訴訟と罰金）か、プライバシー保護サービスの根本的変更か、だ。周囲の判例の格子も重要だ。ブリュッセルの裁判所は **Cloudflare、Google、Cisco** に対し2027年1月初めまでに公共リゾルバー経由のブロックを命じ（3社とも控訴中）、ドイツの裁判所は過去に DNS ブロック要求を拒否し、Cisco はすでに OpenDNS をフランス・ポルトガル・ベルギーから引き上げた。Cloudflare の論点：リゾルバーレベルのブロックは無効（切り替えは1分以内）、不精確（ドメイン単位で合法的コンテンツも巻き込む）、不透明——病院、大学、政府機関は「their Internet will fail with no explanation」（自分たちのインターネットが説明なく死ぬ）ことに気づく——そしてリゾルバーは世界規模なので、一国が「could dictate what content is accessible around the world」（世界中でアクセスできるコンテンツを決定しかねない）。提案する代替策：侵害ファイルが実際に存在するホスティングプロバイダーレベルでの執行だ。
-
-**Why it matters:** 毎日罰金の訴訟に追い込まれた最初の公共リゾルバー撤退は、どの管轄でもコピーできるテンプレートだ——ベルギーの2027年1月期限が次のチェックポイントになる。控訴が敗れれば、リゾルバーレベルのブロックはフランスの例外ではなく EU の標準になり、すべてのプライバシー重視リゾルバーが Quad9 と同じ選択に立たされる：準拠、地域撤退、あるいは訴訟。
-
-[`🔗 Cloudflare：Quad9 のフランス撤退`](https://blog.cloudflare.com/quad9-withdrawal-from-france/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50538994)
-
----
-
-## 22. jQuery 4.1.0 と 3.8.0 が同時リリース——「passing the torch」：3.x は最後の機能リリース、両ラインに ReDoS 修正
-
-- **Velocity:** ▮▮ rising
-- **Source:** blog.jquery.com · 269+ pts on HN · 8.5h ago (~03:50 UTC+8)
-- **Tags:** `jquery` `javascript` `release` `redos`
-
-jQuery は2バージョンを一度にリリースした。**4.1.0**（4.x ライン初のマイナー）と、**3.8.0**——「a send-off, not a comeback」（送別出しであり、カムバックではない）で、3.x 分支の最後の計画された機能リリース。以後 3.x は「critical security and bug fixes」のみを受け取る。両方に**セレクター識別子マッチングの ReDoS 修正**（破局的バックトラッキングがページをハングさせ得た）と、新しいオブジェクトベースの AJAX トランスポート complete-callback API が入った。4.1.0 は `jqXHR.responseURL`（issue #4339、ついに）を追加し、セレクターエンジンを完全に `querySelectorAll` へ移行し、`createElementNS` で XML ドキュメント処理を修正し、`.serialize()` が form-associated カスタム要素を扱い、`uniqueSort` を O(N²) から O(N) に削り、**Safari 27 の正規表現インタプリタバグ**を回避する。3.8.0 は `hidden="until-found"` サポートと正式な非推奨化（プロトタイプ上の `push`/`sort`/`splice`、`jQuery.expr.filters`）。同じリリースサイクルでリポジトリには「guidelines for machine-generated contributions」が追加された。
-
-**Why it matters:** 巨大な 3.x インストールベースが行動できる日付付きマイルストーンだ。トーチは正式に 4.x へ移り、アップグレードガイドと Migrate プラグインがその道で、両分支に同時投入されたセキュリティ修正は、バージョン固定サイトも動くべき理由になる。20年の歴史を持つライブラリが同じ発表に静かにエージェント貢献ガイドラインを載せるのは、それ自体が2026年の成果物だ。
-
-[`🔗 jQuery ブログ：4.1.0 と 3.8.0 をリリース`](https://blog.jquery.com/2026/11/17/jquery-4-1-0-and-3-8-0-released-passing-the-torch/) · [`🔗 4.1.0 リリースノート`](https://github.com/jquery/jquery/releases/tag/4.1.0) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50537156)
-
----
-
-## 23. マイクロソフトの ONNX Runtime が GitHub から消えた——リポジトリ・releases フィード・API がすべて 404、PyPI は 1.32.0 をまだ配信、説明はなし
-
-- **Velocity:** ▮▮ rising
-- **Source:** github.com/microsoft/onnxruntime · 175+ pts on HN · 5h ago (~07:18 UTC+8)
-- **Tags:** `onnx` `supply-chain` `github` `inference`
-
-microsoft/onnxruntime——ローカルとエッジの AI の相当な部分を支える推論エンジン——が一晩で闇に消えた。**11月18日 04:16 UTC** 時点でリポジトリページ、`releases.atom` フィード、GitHub API のすべてが **404** を返す。事前通知も公式声明もない。HN のコメント者は下流の破損を報告している（「we found out about this this morning, when evals started failing in our pipelines」——今朝、評価パイプラインが失敗し始めて知った）、「a repository with 22k stars」が闇に消えたと表現する人もいる。検証済みの部分：**PyPI はまだ `onnxruntime` 1.32.0 を配信している**——消失より前のリリースだ——最も近い公開フォークは **intel/onnxruntime**（Intel の OpenVINO 変更を含む）。未検証の部分：原因だ。スレッドの憶測はセキュリティテイクダウンから組織再編まで及ぶ。あるコメント者が無関係な PyPI 汚染の解説をリンクした——いずれも未確認だ。
-
-**Why it matters:** パッケージがまだインストールできても、上流の消失は運用イベントだ。ソースからビルドする人、issue を立てる人、CI でリポジトリの存在を前提にしていた人が、音もなくそれを失った。「全部 vendor する」習慣にまた一件、データポイントが増えた。正直に日時を刻んでおく：これは発展中の話だ。リポジトリが新しいパスで復活すれば、消失は改名だったことになる——誰かがそう言うまで、「説明のない消失」が正確な状態だ。
-
-[`🔗 github.com/microsoft/onnxruntime（現在 404）`](https://github.com/microsoft/onnxruntime) · [`🔗 intel/onnxruntime フォーク`](https://github.com/intel/onnxruntime) · [`🔗 PyPI：onnxruntime 1.32.0`](https://pypi.org/project/onnxruntime/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50539610)
-
----
-
-## 24. ID.me が TreasuryDirect の唯一のサインインになり、仲裁条項が付く——上院議員はなぜ Login.gov ではないのかと問う
-
-- **Velocity:** ▮▮ rising
-- **Source:** consumerrights.wiki · 182+ pts on HN · 3.5h ago (~08:51 UTC+8)
-- **Tags:** `privacy` `identity` `irs` `policy`
-
-ID.me の最新規約は、続くプライバシー係争をさらに鋭くする。v10.1.0（2026年11月13日付）は拘束力ある仲裁条項と集団訴訟放棄を維持し（新規は30日のメール脱退窓口）、プライバシーポリシー v7.1.8（11月2日）は、プラットフォームの使用をもって ID.me が「determines how personal information may be used」（個人情報の使われ方を決定する）ことへの同意と定める。アカウント解約後も確認履歴は最長3年保持され、生体情報削除要求は内部審査に入り得て ID.me は「reserves the right to decline」（拒否する権利を留保する）、責任上限は1,000ドル。鋭い刃はアクセス変更の方だ。**TreasuryDirect は9月13日に ID.me を導入し、10月28日に従来のログインを置き換えた——そして Login.gov は「cannot be used to log in to your TreasuryDirect account」（TreasuryDirect アカウントのログインに使えない）**——OMB メモ（M-26-18、8月31日）が機関に対し Login.gov が対応できる利用者層ではデフォルトとして推進することを求め、Wyden/Warren の書簡（10月27日）が GSA プラットフォームを名指しする法令 6 U.S.C. §1523(b)(1)(D) を引用しているにもかかわらず、だ。ID.me の5年契約の上限は10億ドル超（これまで約9,300万ドルが執行）。2027年申告シーズンについて IRS は「Taxpayers can use Login.gov or ID.me」（納税者は Login.gov か ID.me を使える）と言う——TreasuryDirect 利用者にその選択肢はなく、Direct Pay がサインイン不要の退路であり続ける。
-
-**Why it matters:** 政府運営の身元確認オプションは存在し、法令上優先されているのに、貯蓄債ポータルは依然として全員を、仲裁とデータ利用同意を括った規約を持つ民間プロバイダーへルーティングする——メモ、法令、議員書簡は今や公開済みだ。IRS/Treasury 統合を構築する人への運用上の事実は非対称性だ：IRS には2つのプロバイダー、TreasuryDirect にはちょうど1つ。
-
-[`🔗 Consumer Rights Wiki：ID.me 規約が IRS サインインに必須に`](https://consumerrights.wiki/w/ID.me_terms_required_for_IRS_sign-in) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50540437)
-
----
-
-## 25. 11月12日に Apple Support Community の11月20日閉鎖を報えた件のその後：Archive Team が8言語で保存を急いでいる
+## 15. HUMAN.md——設定ファイルのフォーマットで書かれた働くマニフェスト
 
 - **Velocity:** ▮ steady
-- **Source:** wiki.archiveteam.org · 113+ pts on HN · 4.8h ago (~07:32 UTC+8)
-- **Tags:** `archival` `apple` `preservation` `community`
+- **Source:** human-md.ai · 118+ pts on HN · 約23時間前 (~04:47 UTC+8、昨日)
+- **Tags:** `essay` `human-skills` `ai-era` `craft`
 
-本フィードが11月12日に旗を立てた話のアップデート：Apple は11月10日「The Apple Support Community will permanently close on November 20, 2026」（Apple Support Community は2026年11月20日に永久閉鎖します。告知以降は読み取り専用）と発表し、Archive Team は金曜の締切に向けて完全な保存プロジェクトを立ち上げた。DPoS 方式——ArchiveTeam Warrior を走らせれば自動で取得する——で、`applediscussions-grab` スクリプト、tracker.archiveteam.org/applediscussions のアイテムトラッカー、hackint の #badapple での調整が整っている。対象は英語サイトだけではない。**7つの地域コミュニティ**（フランス語、中国語、日本語、韓国語、ドイツ語、スペイン語、ポルトガル語）が範囲だ。Wiki 上の進捗は「In progress…」のままで、完了数字はない。
+Briana (Mazzio) May のエッセイは、それ自体がファイルだ：「HUMAN.md > a working manifesto. notes-to-self, mostly. > not a thinkpiece. not a thread. not a deck.」（HUMAN.md > 働くマニフェスト。たいていは自分へのメモ。> 評論ではない。スレッドではない。デッキでもない。）フォーマットの下にある論点：taste（嗅覚）は、人間がまだ担っている貢献を言い表す言葉として間違っている——「Taste is the surface. There is a whole engine underneath it, and that engine is the part the model can't have.」（taste は表面だ。その下には一つのエンジン全体があり、そのエンジンこそモデルが持てない部分だ。）番号付きのセクションは職人至上主義の教義だ——「break the rule on purpose」（意図的にルールを破る。系として：「If you can't say why you broke it, you didn't break it, you just missed」——なぜ破ったか言えないなら、それは破ったのではなく外したのだ）、「find the thing in the weird place」（奇妙な場所でものを見つける：インスピレーションは「印字ミスされた駐車違反切符」や「無名のビクトリア朝ゾートロープの猫」に住んでいる）。フォーマット自体が論点だ：人間が、今われわれがエージェントを指定するやり方で自分自身を指定している。
 
-**Why it matters:** 20年分のトラブルシュート回答——Apple がもはや文書化していない問題の回避策を含む——が2日で消える。しかも8言語の範囲は、非英語アーカイブも消えることを意味する。プラットフォーム閉鎖からボランティアの群れが動くまでの時間は、今や日単位だ。10年前のスレッドに助けられたことがあるなら、今週 Warrior を走らせることが1コマンドで恩返しする方法だ。
+**Why it matters:** 「No AI Slop: A Manifesto」から数日、人間側の応答が、エージェントが読むネイティブなフォーマットで届いた——この転倒そのものが論証だ。あなたの価値がモデル出力に*対して*適用する判断にあるなら、あなたの運用原則を markdown の spec として書くことは、たまたま機械であるチームメイトにそれを渡す方法として、まさに正しい。
 
-[`🔗 Archive Team Wiki：Apple Discussions`](https://wiki.archiveteam.org/index.php/Apple_Discussions) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50539747)
+[`🔗 HUMAN.md`](https://www.human-md.ai/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50537962)
 
 ---
 
-## 26. 「Not Everything Needs an LLM」：PostHog の決定モデル実戦台帳——PII チェックの98.7%は大きなモデルに届かない、失敗例も印刷済み
+## 16. スコットランド HTTP ステータスコード——418 ティーポットの伝統にゲール語方言が加わる
 
 - **Velocity:** ▮ steady
-- **Source:** newsletter.posthog.com · 113+ pts on HN · 10h ago (~02:16 UTC+8)
-- **Tags:** `decision-models` `llm` `engineering` `routing`
+- **Source:** underwood.network · 130+ pts on HN · 約1.6時間前 (~03:26 UTC+8)
+- **Tags:** `http` `humor` `standards` `web-culture`
 
-決定モデルカテゴリは一週間で4つのベンダーローンチを迎えた（Google の Decisions API 11月12日、Perplexity Decider 11月14日、HeyGen Decision 1 は昨日）。PostHog のエッセイは実践者の対極にある——数字は自分たちの本番スタックからだ。Replay Vision の PII 洗浄は1つの広い質問の代わりに2つの狭いイエス/ノーの質問を投げ（誤検知は約10分の1に）、**セッション要約の98.7%は LLM 呼び出しを完全にスキップする**。Slack ボットは選択型の質問でルーティングし（「cheapest option that will most likely finish the task correctly on the first try」——一発で正しく終えられそうな最安の選択肢）、検索は embedding 候選を確率で再ランク付けし（20テストクエリで約+25%）、SQL チャートピッカーは手書きの決定論的ルールを置き換えた。失敗も印刷されている、それが信頼できる理由だ。閾値は誤りのコストを符号化する（PII は0.4——見逃しはデータ漏洩。ボットは0.85——誤検知は迷惑）、12–38k トークンの要求を出すランク付けジョブが「flooded the model server and blocked other products' calls for hours」（モデルサーバーを水没させ、他製品の呼び出しを何時間も塞いだ）、PR レビューのランク付けは素直に失敗した（AUC 0.52）。
+HTTP ステータスコードの表をスコットランド語で書き下したもの。RFC 2324 と、先週実在した「I'm a Freezer」インターネットドラフトの偉大な伝統に連なる。全奏鳴曲が揃っている：`403 GET TAE FUCK`、`404 NAE FUCKIN HERE, PAL`、`500 AH'VE FUCKED IT`、`503 WE'RE FUCKIN SHUT`、そして当然の `418 AH'M A FUCKIN TEAPOT`。ページで最も鋭いのは 451——「THE COUNCIL SAYS NAW」（評議会がノーと言った）——歴史的に言えば、それこそがまさに 451 の意味だからだ。
 
-**Why it matters:** カテゴリにフィールドマニュアルができた。型付きの決定を LLM の下のゲーティング/ルーティング層に置き、キャリブレーションこそが実際のエンジニアリングだと。「Too simple for a language model, yet too fuzzy for a regex」（言語モデルには単純すぎ、正規表現には曖昧すぎる）は現実の製品境界で、98.7% のバイパス数字は今週どのベンダーローンチも暗示していたコスト論の具体形だ。
+**Why it matters:** 純粋な文化項目で、次の観察のもとにファイリングする：HTTP ステータスのユーモアは業界の機嫌を追跡する——フリーザードラフトが本物になったのはフリーザーが実際に攻撃されたからで、スコットランド表の魅力は、どの行も大半の本番 API が返すエラーメッセージより正直だということだ。
 
-[`🔗 PostHog：Not Everything Needs an LLM`](https://newsletter.posthog.com/p/decision-models) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50535740)
+[`🔗 Scottish HTTP Codes`](https://underwood.network/http/scots.html) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50550062)
 
 ---
 
-## 27. ハーバードの企業レベル研究（11月14日改訂版）：エージェントはコード出力を最大76%押し上げるが、最終成果は9–11%——コードレビューがボトルネック、提出から承認まで +56%
+## 17. カリフォルニア州が Waymo を州高速道路から締め出す——「差し迫った危険」認定、その後全国の高速運行停止
 
 - **Velocity:** ▮ steady
-- **Source:** complexdiscovery.com · 89+ pts on HN · 7h ago (~05:16 UTC+8)
-- **Tags:** `research` `ai-coding` `economics` `code-review`
+- **Source:** ABC7 / AP · 63+ pts on HN · 約22時間前 (~10:00 UTC+8、昨日)
+- **Tags:** `waymo` `autonomous-vehicles` `regulation` `california`
 
-*訂正（2026-11-18 13:10 UTC+8）：本項目は当初、論文の旧改訂版（解決済みチケットは横ばい、マージ +3.45日、718社・従業員725,938人）を引用していた。現行版——2026年11月14日、一次読解——がこれらの数字を置き換える。いずれも現行テキストには現れない。方向（出力上昇、レビュー詰まり）は変わりなく、むしろ強まっている。*
+カリフォルニア州 DMV が、Waymo の自動運転車を州高速道路から締め出す命令を出した。公共の安全への差し迫った危険（imminent hazard to public safety）を認定したもので、引き金は一連の事故——Burlingame 近くの Highway 101 の工事中エリアに3台の Waymo 車が進入した件を含む。Waymo の応答はコンプライアンスを超えた：安全認定に対応する間、**全米で高速道路運行を一時停止**するという。米国最大の robotaxi オペレーターが、看板の高速性能を全国規模で引っ込めたのはこれが初めてだ。
 
-ハーバードのジョブマーケットペーパー（Fiona Chen と James Stratton、「Artificial Intelligence in the Firm: Bottlenecks in Software Production」、現行版 **2026年11月14日**。初稿2026年1月7日）は、Jellyfish エンジニアリング分析プラットフォームの **4億4,500万ワークイベント**（GitHub のコーディング活動、Jira チケット、Google カレンダー）から **655社・従業員720,542人**を対象に（2021年1月–2026年8月）、AI **アシスタント**と AI **エージェント**を分けて推定した。形はこうだ。アシスタント採用後、中央値企業のワーカー月あたりコード行数は **+42%**（3,115 → 4,424）、エージェント採用後は **+76%**（3,679 → 6,482）。コミット +14%/+23%、PR +15%/+32%——一方で**解決済み Jira チケットは +9%（2.53 → 2.76）と +11%（2.76 → 3.08）しか動かず**、エピックはほぼ不変。着地点はレビュー段階だ。エージェント採用後、レビュー提出から承認までの平均時間は **+56.1%**。内訳はバックログ待ち **+1.67日（2.78日基準の59.9%）**とアクティブレビュー **+2.33日（3.98日の58.5%）**、変更あたりコメント数 **+38.6%**——アシスタントはこれらのマージンで有意な効果がない。AI レビューツールはこれを救えなかった。2026年7月までに **79.1%** の企業がレビューで AI を使用したが、AI 生成のレビューコメントは **23.3%** のみ（PR の10.8%に1件以上の AI コメント）——「humans are still heavily involved with review」（人間は依然としてレビューに深く関わっている）。限界は開示済み。ピアレビューを完遂していないワーキングペーパー、Jellyfish の商業的利益（著者らは謝辞で Jellyfish チームに感謝している）。
+**Why it matters:** ここで重要なのは規制の道具立てだ——カリフォルニアは新しいルールを作らなかった。特定オペレーターの ODD に対して既存の imminent-hazard 権限を発動し、オペレーターの答えは認定に争わず全国で一方的に縮むことだった。見ているすべての AV 会社へ：数年かけて勝ち取った高速 ODD は、1ニュースサイクルで取り消されうるし、商業的に合理的な応答は自発的な撤退だ。
 
-**Why it matters:** 先行指標が出荷指標を追い抜くとき、制約には名前と数字がつく。レビューのスループット——承認時間 +56%、変更あたりコメント +38.6%、解決済みチケットは一桁。ツールビルダーにはこれが addressable market で、チームには、レビュー容量の計画なしのエージェント採用は速度をキュー時間に変換する、ということだ。
-
-[`🔗 ComplexDiscovery：ハーバードの研究者が AI コーディングエージェントはボトルネックをコードレビューへ移したと発見`](https://complexdiscovery.com/harvard-researchers-find-ai-coding-agents-shifted-the-bottleneck-to-code-review/) · [`🔗 ワーキングペーパー（PDF、11月14日テキストを一次読解）`](https://fion.ac/jellyfish.pdf) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50538303)
-
----
-
-## 28. 高度500kmでの1メガトン核爆発は、モデル化された LEO 衛星の約98%を1週間で無効化——放射線耐性を3倍にしても得られるのは数日
-
-- **Velocity:** ▮ steady
-- **Source:** arxiv.org · 88+ pts on HN · 8.6h ago (~03:46 UTC+8)
-- **Tags:** `arxiv` `space` `satellites` `research`
-
-arXiv 論文（2611.09827、11月6日に Petersen、Qin、Thiele、Philippe が投稿）は、即発放射、電子捕獲、放射線帯の進化を、低軌道核爆発に対する衛星の故障・衝突・大気抵抗と結合させた——そこには今や13,000基超の衛星が運用されている。中心ケース：南大西洋上空500km での1-Mt 爆発が作る人工放射線帯の反復曝露は「disables approximately 98% of modeled satellites within one week in our central case」（中心ケースで1週間以内にモデル化衛星の約98%を無効化）する。厳しいのは耐性の数学の方だ。「**Tripling the assumed radiation tolerance delays widespread failure by only days: approximately 97% are still disabled within two weeks.**」（想定放射線耐性を3倍にしても広範な故障は数日しか延びない。2週間以内に約97%がまだ無効化される。）機動力を失ったことは衝突リスクに複利で効く——漂流する故障衛星により、2年で約20件の衝突が予想される。
-
-**Why it matters:** これはモデルであって実験ではない——著者は「in our central case」と印刷しており、前提そのものが論点だ。だが方向性の発見は刺さる。衛星グレードの耐性強化はほとんど結果を動かさない。脆弱性は個々の衛星のシールドではなく、軌道シェルのアーキテクチャそのものにある——1967年の宇宙条約が宇宙空間での核爆発を禁じた理由に、爆発そのものを耐えられる大国向けの定量化された脚注が1つ増えた。
-
-[`🔗 arXiv 2611.09827`](https://arxiv.org/abs/2611.09827) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50537120)
-
----
-
-## 29. Tencent が Hy4 Flash を出荷：総224B/活性12B、1M コンテキスト、100万トークンあたり入力 $0.07/出力 $0.28——低価格層がベンチマーク合戦になる
-
-- **Velocity:** ▮ steady
-- **Source:** hy.tencent.ai · 78+ pts on HN · 7.3h ago (~05:06 UTC+8)
-- **Tags:** `tencent` `model-release` `inference` `efficiency`
-
-Tencent の Hunyuan ラインが **Hy4 flash** を出荷した（11月16日投稿、今 HN に浮上）：64B の「Engram」パラメータを含む総224Bパラメータでトークンあたりわずか **12B が活性**、ネイティブ・マルチモーダル、100万トークンのコンテキスト。効率スタック：ハイブリッドアテンション + LatentMoE + Engram が KV キャッシュを **Hy3 の1/24、Hy4 の1/6** まで縮め、Hy4 からの自己蒸留に強化学習が「cuts average end-to-end output tokens by 50%」（平均エンドツーエンド出力トークンを50%削る）を重ね、megakernel と4-bit 量子化がデコードを150 tok/s 超へ押し上げる。見出しは価格だ。**100万トークンあたり $0.003 キャッシュ / $0.070 入力 / $0.281 出力**（Hy4：$0.042/$0.834/$2.501）。主張は Tencent 自社の WorkIndex ベンチマーク（「grounded in typical WorkBuddy tasks」——スライド/文書/スプレッドシート作業、8評価セット）に頼る。タスクあたり平均コストは「just 1/13 of Hy4 preview, 1/20 of Hy4, and 1/8 of DeepSeek-V4.1-Flash-1017 (Max tier, peak-hour pricing)」（Hy4 プレビューの1/13、Hy4 の1/20、DeepSeek-V4.1-Flash-1017（Max 層・ピーク時価格）の1/8）。社内ユーザー85人・259タスクのブラインド評価で満足度は「close to Claude Haiku 5.5」（Claude Haiku 5.5 に近い）。HN コメント者は OpenRouter 経由で良好な結果を報告し、あるデータ分析ベンチマークでは低価格層で GPT-6 Luna を上回ったという（43問に $0.13。フロンティアモデルでは約 $20）。重み公開のコミットメントがスレッドで報じられている。その文は読み取り可能なテキストには見当たらない（ページは JS シェル）。Tencent が grep できる場所に貼るまで未確認として扱う。
-
-**Why it matters:** 実際に価格戦争に噛まれているのは働き者層だ。このモデルは Hy4 の出力価格の約4分の1で、Hy4 プレビューをわずかに上回るタスク品質を主張し、flash 層のパターン（GLM-5.3-Flash、DeepSeek V4.1 Flash、Qwen flash）を3大陸で競争力のあるまま保つ。注釈は携帯のまま：WorkIndex は Tencent の内部ベンチマークで、タスクあたりコスト比はベンダー測定だ。
-
-[`🔗 Tencent：Introducing Hy4 flash`](https://hy.tencent.ai/research/hy4-flash) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50538184)
-
----
-
-## 30. Cerebras が推論を分離：AMD GPU がプリフィル、ウェハがデコードを担う——1つの実測エンドポイントでメガワットあたり5倍のトークンを主張
-
-- **Velocity:** ▮ steady
-- **Source:** cerebras.ai · 42+ pts on HN · 3.5h ago (~08:56 UTC+8)
-- **Tags:** `inference` `cerebras` `gpu` `efficiency`
-
-Cerebras が disaggregated inference をローンチした。**AMD Instinct GPU がプロンプトを処理し、Cerebras CS-3 ウェハスケールシステムが応答を生成する**——プリフィル/デコード境界でパイプラインを分割する。デコードは自己回帰でメモリ帯域律速であり、ウェハスケールエンジンの SRAM 中心設計（「350× the SRAM capacity and 5,400× the memory bandwidth of a typical GB300 GPU」——典型的な GB300 GPU の350倍の SRAM 容量と5,400倍のメモリ帯域と主張）が構造的優位を持つのはそこだからだ。実測の主張：「5X the throughput per megawatt of a CS-3-only configuration, with no loss in token generation speed」（CS-3 専用構成比でメガワットあたりスループット5倍、トークン生成速度の損失なし）——ただし11月14日の単一共有 **GPT-OSS-120B エンドポイント**から。1モデル、1日、1×に正規化。名指しされた早期アクセスパートナー：AWS、Fireworks AI、Gimlet Labs、General Compute。「hundreds of megawatts」（数百メガワット）の Cerebras クラウドとパートナーサイトへの展開は2027年末を目標とし、並行して700MW のデータセンター容量を計画。
-
-**Why it matters:** プリフィル/デコード分離は GPU エコシステム内ではすでに標準的実践だ。新しいのは、デコード側を GPU 以外のシリコンに向け、メガワットで価格を語ることだ。注釈が実仕事をしている：5倍は1エンドポイント、1モデル、ベンダー測定。一般化すれば、すべての2027年データセンター計画が載っている電力の算術を変える。しなければ、ローンチ日のスライドだ。どちらの結末も生きている。
-
-[`🔗 Cerebras：Disaggregated Inference`](https://www.cerebras.ai/blog/cerebras-launches-disaggregated-inference) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50540472)
-
----
-
-## 31. Codeberg のドメインがレジストラで停止され、DNS から約3時間消失——オープンソースが移行先としているフォージが、自分の単一障害点にぶつかった
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** social.anoxinon.de/@codebergstatus · 213+ pts on HN · 2h ago (~18:02 UTC+8)
-- **Tags:** `codeberg` `dns` `registrar` `outage`
-
-Codeberg のドメインが今朝落ちた。インシデントログは、誰にも自己修復できない類の障害のように読める：08:13 UTC にプロジェクトは「our domain codeberg.org is entirely unreachable. It was registered with namesilo and entirely disappeared from our account」（ドメインが完全に到達不能に。NameSilo に登録していたが、アカウントから丸ごと消えた）と投稿——そして明白な推測を先回りして否定する：「No, we didn't forget to renew. There are no suspicious logins in the login history. There is no entry about the situation in the account's domain history.」（いいえ、更新を忘れたのではありません。ログイン履歴に不審なログインはなく、アカウントのドメイン履歴にも何も記録がありません。）08:53 UTC の更新：「our domain was suspended and our case got forwarded to the abuse team. We're still waiting for a final decision.」（ドメインが停止されたことの確認を受け取り、ケースはabuse 対応チームに転送されました。最終決定を待っています。）codeberg.eu への暫定切り替えは却下した——マルチドメイン対応、SEO、二要素認証、そして「すべての Git リモートと他の参照の更新」。暫定 fix のコストがダウンタイムを上回ったのだ。11:23 UTC：「The domain is slowly recovering. Many users are able to connect to our systems again… We haven't yet received an official response from Namesilo's abuse department.」（ドメインはゆっくり復旧中。多くのユーザーが再接続できています……NameSilo のabuse 対応部門からの公式回答はまだです。）本記事は 12:10 UTC に一次検証：1.1.1.1 と 8.8.8.8 の DNS がともに再応答（217.197.84.140）、サイトは HTML を返している。
-
-**Why it matters:** レジストラ停止は、回復が完全に他人のキューにある障害モードだ——ロールバックもフェイルオーバーもなく、あるのはabuse 対応チームの受信箱の順番だけ。GitHub 集約から逃げるオープンソースを受け入れてきたフォージに降りかかった（このフィードは2日前に mini.nvim の Codeberg 移行を報じた）。スレッドのコメントは明白な結論を口にしている：ドイツの非営利団体が身元を米国のレジストラに預けていたこと自体が、abuse フィルターのチケット1枚で「プラットフォーム全体が DNS から消える」距離だった。
-
-[`🔗 Codeberg Status：08:13 UTC の投稿`](https://social.anoxinon.de/@codebergstatus/117636437840688845) · [`🔗 Codeberg Status：11:23 UTC の復旧`](https://social.anoxinon.de/@codebergstatus/117637187711177698) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50544261)
-
----
-
-## 32. Google の AI Overviews がサイト外クリックを約40%減らす——最も強い証拠ついにランダム化試験で、Overviews は追跡キーワードの61%に
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** revscope.co · 459+ pts on HN · ~12h ago (~08:17 UTC+8)
-- **Tags:** `google` `search` `ai-overviews` `publishers`
-
-「パブリッシャー崩壊」論争が欠いていた因果の数字が出た：プレ登録済みランダム化実験（Saharsh Agarwal と Ananya Sen、SSRN ワーキングペーパー、2026年6月ドラフト）が1,065人の米国デスクトップ Chrome ユーザーに拡張機能を配り、ランダムに「通常の Google」か「AI Overviews を隠す」かの群に割り付け、2週間のブラウジングを観察した——Overview があるとサイト外クリックは**約40%減**。情報型検索で統計的に有意（ナビゲーション型/取引型はサンプル過小）、デスクトップのみ、査読はまだ。スケールの背景：DataForSEO の2,000万キーワードパネルでは、Overview の表示率が**2024年9月の5.93%から2026年8月の61.43%へ上昇**し、同期間でフィーチャードスニペットは8.96% → 0.44%に落ちた。第2のプレ登録実験（Wang ら、arXiv 2608.18352、N=1,100）が独立に方向を支持。Pew の観察データも一致：サマリーがあるページでは普通の結果のクリックが8%、ないと15%。このブログ自体も正直だ：「we sell analytics. Almost everything about what earns a citation is correlation」（私たちは分析ツールを売っている。引用を稼ぐものについて、ほぼすべては相関にすぎない）。そして2026年3月、AI アシスタントが74,752サイトに送ったトラフィックはわずか**0.28%**（Ahrefs）。
-
-**Why it matters:** 今週の逸話集（昨日 HN で429ポイントを取って再浮上した All About Berlin の −75% 報告）の計測版だ。Overview が出るところでは、順位は以前の約6割の訪問しか買えず、それが置き換えたスニペット枠は実質ゼロになった。RCT が、Google の設計選択を単なる相関からついに切り離した。
-
-[`🔗 RevScope：Google's AI Overviews cut clicks to websites by 40%`](https://revscope.co/blog/search-seo-geo-2026/) · [`🔗 Agarwal & Sen：ワーキングペーパー（SSRN）`](https://ssrn.com/abstract=6513059) · [`🔗 Wang ら：プレ登録フィールド実験（arXiv）`](https://arxiv.org/abs/2608.18352) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50540178)
-
----
-
-## 33. 議会の情報筋：ウォール街と NSA が、今週の障害は「AI が発見した脆弱性への急ぎの修正」が原因だと説明
-
-- **Velocity:** ▮▮ rising
-- **Source:** washingtonsun.com · 79+ pts on HN · ~10h ago (~09:45 UTC+8)
-- **Tags:** `outages` `ai-security` `policy` `infrastructure`
-
-Jeff Stein が The Washington Sun（NOTUS の2026年改称）で報じたところによると、3人の情報筋によれば、ウォール街の幹部と NSA は議会に対し、今週の連鎖障害——Microsoft 365、FAA の全国停止、複数銀行、NSANet——は「AI モデルが特定したサイバー防御の隙間を修復しようとした試み」に由来し、「しかし修正が一時的にシステムを圧倒した」と説明したという。事情を聞いた議会職員：**「These models are identifying massive vulnerabilities, and that increases the urgency to patch right away… They're trying to push through a lot of patches all at once — more than the system was designed for.」**（これらのモデルは膨大な脆弱性を特定しており、すぐパッチを当てろという緊急性が高まっている……システムの設計上限を超える量のパッチを一度に押し込もうとしている。）国土安全保障長官 Markwayne Mullin は CNBC で：「they're pushing new technology on top of really old computer systems, and it just seems to overwhelm the system… We're going to see more of this.」（非常に古いコンピュータシステムの上に新技術を積んでいて、それがシステムを圧倒している……こうした事例はさらに増える。）記事自身が抱える緊張にも注目：NSA の公式声明は自社の障害を「予定された routine メンテナンス」と呼んでおり、記事が私的会話として伝える説明と食い違う。
-
-**Why it matters:** 確立された原因ではなく「匿名ソースの主張の報道」として持つべきだ——だが、今週のカスケードをこのフィードのセキュリティ担当領域に接続した最初の仮説ではある。Java4Shell を1時間・200ドル未満のトークンで発見し、1日100 CVE を量産するのと同じ AI の波が、レガシーな変更管理の吸収能力を超えるパッチ圧力も生んでいる。Encode の Nathan Calvin：「これは、私たちが依存する safety critical インフラが、大きな脆弱性を抱えたレガシーソフトの上に成り立っていることの証左だ。」
-
-[`🔗 The Washington Sun：Bank CEOs, NSA Tell Congress That AI-Driven Patches Are Behind Outages`](https://www.washingtonsun.com/technology/bank-ceos-nsa-tell-congress-ai-driven-patches-behind-outages) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50540836)
-
----
-
-## 34. Claude モデルはタンパク質配列を大規模に学習していた——しかも学習カットオフ後に公開されたタンパク質まで予測できる
-
-- **Velocity:** ▮▮ rising
-- **Source:** xinmingtu.cn · 72+ pts on HN · ~8h ago (~11:47 UTC+8)
-- **Tags:** `claude` `proteins` `training-data` `research`
-
-「The latest Claude models were trained on protein sequences, at scale.」（最新の Claude モデルはタンパク質配列を大規模に学習していた。）Xinming Tu の投稿はこれを実証する：あまり研究されていない細菌タンパク質の冒頭を Claude Fable 5.2 や Opus 5.5 に与えると、次のアミノ酸を予測する。配列をシャッフルするとできなくなる。テストした他の汎用モデルは誰もこれができない。性能はタンパク質ファミリーのサイズとともに上がり、「論文が1本もないファミリーでも」機能する——文献の暗記ではなく、配列レベル学習のシグネチャだ。Fable 5.2 は著者が走らせたすべてのオープンなタンパク質言語モデルを上回り、Opus 5.5 は最大の ProtGPT3-10B に並ぶ。本日投稿されたアップデートがさらに鋭くする：Leo Tianlai Chen との共作で、**2026年8月に初めて公開された56個のタンパク質——カットオフ後——もなお予測できる**（Appendix G）。比較した最強のオープン pLM は ProGen3-3B だが、Fable 5.2 はそれも上回る。GPT-6.2 Sol と Astra にはこの能力の兆候が一切ない。
-
-**Why it matters:** これは「コンタミネーション検出」の方法論を逆向きに向けたものだ——次トークン予測＋シャッフル対照＋カットオフ後のホールドアウト——そしてフロンティア汎用モデルの中にドメイン特化の学習データを見出した。Anthropic が生命科学用途を検証プログラム（LSVP、2026-09-17 公開）の後ろに置いている理由も、これで説明がつく：この能力は実在し、ドメイン特化で、どのモデルカードにも書かれていない。
-
-[`🔗 Xinming Tu：Claude was trained on protein sequences at scale`](https://xinmingtu.cn/blog/2026/claude-opus-5-5-protein-sequences/) · [`🔗 Anthropic：Life Sciences Verification Program`](https://www.anthropic.com/news/life-sciences-verification-program) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50541619)
-
----
-
-## 35. 今朝の GPT-6.2 ローンチの続報：ARC-AGI-3 の結果が公開——プロバイダーアダプターで100%、Standard モードでは70.3%、Fable 5.2 が81.2%で首位を保つ
-
-- **Velocity:** ▮▮ rising
-- **Source:** arcprize.org · 37+ pts on HN · ~17h ago (~02:59 UTC+8)
-- **Tags:** `arc-agi` `benchmarks` `gpt-6-2` `evals`
-
-話題になったスレッドのタイトルは「GPT-6.2 Astra scores 100% on ARC-AGI-3」だった——リーダーボード自身はもっと面白い。ARC Prize の表には日付 2026-11-17 の GPT-6.2 行が載っている：Astra は ARC-AGI-1 で**98.5%**、ARC-AGI-2 で**95.8%**、**ARC-AGI-3 は Standard モードで70.3%、プロバイダーアダプターで100.0%**、コスト $24.2K。Sol は 97.5 / 85.8 / 54.9 / 98.2 で $5.5K。比較行が見出しを作り直す：Gemini 4 Carbon は Standard 65.1% / アダプター 99.1%（11-10）、Claude Fable 5.2 は**Standard 81.2% / アダプター 97.7%（11-09）**——つまりベンチマークの標準構成では、Astra は ARC-AGI-3 をリードしていない。Fable 5.2 に10.9ポイント遅れている。100% は本物で、それはアダプター列の数字だ。
-
-**Why it matters:** 今朝の FrontierHarness の教訓が、ベンチマークレベルで計測された形だ。構成はスコアの一部であり、2つの列は異なる製品を記述している。「ARC-AGI-3 で100%」という主張の2マス隣に70.3%の Standard モードが座っている——両方の数字を引用し、どちらがどの列かを名指すべき形状の典型だ。
-
-[`🔗 ARC Prize：ARC-AGI-3 リーダーボード（Standard vs プロバイダーアダプター）`](https://arcprize.org/leaderboard) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50536438)
-
----
-
-## 36. Puppet Enterprise のレポート逆シリアル化が KEV に入った——CA 署名付き agent 証明書の所持だけで Puppet Server 上のコード実行に；連邦対応期限は12月1日
-
-- **Velocity:** ▮▮ rising
-- **Source:** cisa.gov KEV · added 2026-11-17
-- **Tags:** `cve` `puppet` `kev` `deserialization`
-
-**CVE-2026-115731** が11月17日に CISA の既知悪用脆弱性カタログ（KEV）に追加された（カタログバージョン 2026.11.17；連邦機関の対応期限は**2026-12-01**）。NVD レコード（ステータス **Analyzed**）は、Puppet Server で使われる Puppet のレポート処理コードにおける信頼できないデータの逆シリアル化を記述する：「allows a client that holds any CA-signed agent certificate to execute arbitrary code on the Puppet Server as its service user by submitting a report containing a crafted rich-data type via PUT request. Where the certificate authority autosigns requests without strong verification, an unauthenticated network attacker can obtain such a certificate.」（CA 署名付き agent 証明書を持つ任意のクライアントが、細工したリッチデータ型を含むレポートを PUT で提出するだけで、サービスユーザーとして Puppet Server 上で任意コードを実行できる。CA が強い検証なしでリクエストを自動署名している場合、未認証のネットワーク攻撃者でもそのような証明書を取得できる。）スコアの出所は両方書く：**NVD 自身の CVSS 3.1 は9.9**（`nvd@nist.gov`、Primary、Analyzed レコード上）の隣に **Puppet CNA の CVSS 4.0 では9.4**——2つのフレームワーク、2つの数字。影響範囲（Perforce の CNA コンテナ）：Puppet Enterprise **2023.8.0 < 2023.8.13、2025.0.0 < 2025.12.1、2026.0.0 < 2026.0.1**——修正版は 2023.8.13、2025.12.1、2026.0.1。CWE-502 に CWE-94。
-
-**Why it matters:** Puppet はフリートの構成管理だ。サービスユーザーとして Puppet Server 上でコード実行できれば、それが管理するすべてのものへの実行パスになり得る。しかも認証の前提が異様に弱い：正規に登録された agent 証明書1枚で足り、autosign 構成はそれを未認証攻撃者にまで広げる。KEV 掲載は「現在悪用されている」を意味する。Puppet Enterprise を動かしているなら、上の修正バージョンが行動項目の全部だ。
-
-[`🔗 NVD：CVE-2026-115731`](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE-2026-115731) · [`🔗 Perforce アドバイザリポータル`](https://portal.perforce.com/s/cve/a91Qi000003IaHpIAK/report-deserialization-code-execution) · [`🔗 CISA KEV カタログ`](https://www.cisa.gov/known-exploited-vulnerabilities-catalog?field_cve=CVE-2026-115731)
-
----
-
-## 37. Kernel.dev が問う：Gemini 4 Carbon はなぜこんなに遅いのか——推論速度は差の16〜49%だけ、残りはより長い軌跡
-
-- **Velocity:** ▮ steady
-- **Source:** kernel.dev · 126+ pts on HN · ~8h ago (~12:14 UTC+8)
-- **Tags:** `gemini` `carbon` `latency` `agent-evals`
-
-kernel.dev チームはプライベート評価——修正前コードベースと症状だけのレポートを渡す「バグの診断と修正」タスク——で Gemini 4 Carbon を計測し、「Opus と Astra が数分で終わらせるタスクに1時間近くかかっている」ことを発見した。彼らが引用するユーザー報告と一致する（Theo：「Gemini 4 Carbon is unacceptably slow in real world usage. Gemini 4 Carbon low: 22m21s. Opus 5.5 high: 9m33s」）。そして全ステップを追跡して分解を数値化した：**Astra 比では Carbon の余分な時間の16〜30%しか、Opus 比では45〜49%しか、推論の遅さが説明しない**——「The rest comes from longer trajectories. Carbon simply does more work per task」。（残りはより長い軌跡から来る。Carbon はタスクあたりで単にもっと仕事をしているのだ。）Carbon は能力が弱いのではない（ARC Prize のリーダーボードで ARC-AGI-3 Standard 65.1%）。それはスタイルだ：より多くの探索、より多くの検証、タスクあたりのより多くのステップ。
-
-**Why it matters:** ユーザーは2種類のレイテンシを混同する——トークンあたりの速度と軌跡の長さ——そしてこの分解は不満に数字を与えた。ハーネスとルーターの構築者にとって、これは本物のトレードオフ入力だ：タスクあたりにより多くの仕事をするモデルはバッチでは許容でき、対話ループでは罰になる。「遅い」は壊れた製品の証ではなく、徹底的なスタイルの値段かもしれない。分解は著者自身の評価と方法論に基づく。正確なパーセントはそのセットアップの中に限って持つこと。
-
-[`🔗 Kernel.dev：Why is Gemini 4 Carbon taking so long?`](https://kernel.dev/blog/why-is-gemini-4-carbon-taking-so-long/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50541790)
-
----
-
-## 38. Energy-Based Reasoners：180万パラメータで Sudoku-Extreme 99.9%、推論計算量は次点モデルの345分の1
-
-- **Velocity:** ▮ steady
-- **Source:** energy-based-reasoners.github.io · 52+ pts on HN · 2.5h ago (~17:29 UTC+8)
-- **Tags:** `research` `reasoning` `energy-based-models` `architecture`
-
-デューク・UIUC・ハーバードから（William Chen、Alexi Gladstone、Zeyu Li、Heng Ji、Yilun Du）、arXiv 2611.08977（11月6日提出）：Energy-Based Reasoners（EBR）は、潜在推論状態の上にエネルギー関数を学習し、ループ更新を**そのエネルギー上の勾配降下**として定式化する——エネルギーは外部検証器なしで候補予測をスコア化し、その勾配が改善を導き、その値が「停止の自然なシグナル」を提供する。学習にはエネルギー地形を形づくる探索ベースの訓練を追加。数字：**Sudoku-Extreme で99.9%の精度を、次点モデルより345倍少ない推論計算量で**達成（学習計算量は同等）。N-Queens とグラフ彩色の多解ベンチマークでは、シングルサンプル精度をほぼ100%に保ったまま、異なる有効解のカバレッジで SOTA。コードは wwillchen/ebr にある。（注：HN の見出しは385×と書いたが、論文もプロジェクトページも**345×**だ。）
-
-**Why it matters:** 「いつループを止めるか」（when to stop looping）をサンプラーの予算ではなく学習される量にする——これは今週のベンダーローンチがやった decision-model の操作を、アーキテクチャレベルでやったものだ。しかも180万パラメータで遂行している。運ぶべき注意書き：4つのベンチマークは小型再帰モデルが昔から強い定番の領域（数独、N-Queens、グラフ彩色）であり、自然言語タスクへの汎化は本論文では検証されていない。
-
-[`🔗 Energy-Based Reasoners プロジェクトページ`](https://energy-based-reasoners.github.io/) · [`🔗 arXiv 2611.08977`](https://arxiv.org/abs/2611.08977) · [`🔗 コード：wwillchen/ebr`](https://github.com/wwillchen/ebr) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50543989)
-
----
-
-## 39. OpenAI が医療チーム向けに computer-use エージェントを開放——Cigna と CVS が名を連ね、API は HIPAA モードに対応
-
-- **Velocity:** ▮ steady
-- **Source:** openai.com · 49+ pts on HN · ~18h ago (~02:26 UTC+8)
-- **Tags:** `openai` `computer-use` `healthcare` `agents`
-
-OpenAI が、臨床・管理ワークフローにおける computer-use エージェントの性能・安全性・コストを測る新しい結果を公開した——事前承認、紹介、退院計画、来院間のアウトリーチといった、医療が動かすクリックと入力の仕事だ。名指されたパートナー：**Abridge、Ambience、Cigna Healthcare、CVS Health**。アクセス経路は OpenAI API、**ChatGPT for Healthcare**、**ChatGPT for Clinicians**。組織は「HIPAA 準拠ワークフローの支援、承認とエージェントアクセスの設定、安全なデプロイのための監査ログの記録」ができる。デモ（合成患者データで構築）は、computer-use エージェントと承認スペシャリストが同じ MRI リクエストを処理する様子を見せる——エージェントが保険者に必要な情報を取り出し、支払い側ポータルに入力する。
-
-**Why it matters:** 医療の書類仕事は computer-use の古典的な楔だ——マルチシステム、高ボリューム、地味。保険者側のパートナー（Cigna、CVS）を名指したことは、事前承認という取引が提供者と支払い者の両端で自動化されつつあることを意味する。承認/監査ログの用語は、あらゆるエンタープライズ展開が収斂しているのと同じエージェント・ガバナンスのパターンだ。恒例の注意書き：測定結果は OpenAI 自身のものだ。
-
-[`🔗 OpenAI：Advancing computer-use agents for healthcare teams`](https://openai.com/index/advancing-computer-use-for-healthcare-teams/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50535898)
-
----
-
-## 40. Purism が Librem 5 v2 のクラウドファンディングを開始：8コア RISC-V 搭載の PureOS スマホ——$1,599、「準備ができたら」
-
-- **Velocity:** ▮ steady
-- **Source:** puri.sm · 98+ pts on HN · ~17h ago (~02:34 UTC+8)
-- **Tags:** `risc-v` `hardware` `linux-phone` `crowdfunding`
-
-Purism が11月17日、2度目のスマートフォンクラウドファンディングを発表した：**Librem 5 v2**。「Powered by an eight-core RISC-V processor and running PureOS」（8コア RISC-V プロセッサで駆動し、PureOS を走る）、「an alternative to Android and iOS—grounded in free software, open standards, and user ownership」（Android と iOS に代わる選択肢——フリーソフトウェア、オープンスタンダード、ユーザーの所有に根ざす）と位置づけ、サードパーティアプリは安全なサンドボックスで動く。CEO Todd Weaver：「A smartphone that works for you, not for the companies collecting your data. No Android, no iOS, no mandatory Big Tech account.」（あなたのために働くスマホであり、あなたのデータを集める企業のためにではない。Android も iOS も、強制される大手アカウントもない。）キャンペーンページ自身の数字が要請の輪郭を描く：1台**$1,599**（または $129 の今払い＋15か月毎月 $99）、**2,500台の注文に対し92台、残り89日**（キャンペーンは2027年2月15日終了）、配送の約束は文字どおり「when it is ready」——ページに日付はない。HN の受けは懐疑色が強い：コメント者は $1,599 のフラッグシップ価格に対するスペック・パー・ドル、RISC-V のスマホ級成熟が早すぎる時点での賭け、配送への期待に旗を立てた。
-
-**Why it matters:** RISC-V スマホは、このアーキテクチャのアプリケーションエコシステムの実地試験だ——Android-on-RISC-V の主流の勢いは上流に存在するが、RISC-V シリコン上のメインライン GNU/Linux スマホはこの賭けの難しい版だ。初代 Librem 5 のキャンペーンがどうだったかを考えれば、正直な読み方はページ自身の言葉だ：これは明確な注文帳を持つ資金つき開発プロジェクトであって、出荷済み製品ではない。
-
-[`🔗 Purism：Librem 5 v2 発表`](https://puri.sm/posts/purism-launches-librem-5-v2-a-risc-v-phone-to-empower-people/) · [`🔗 クラウドファンディングページ（注文/目標数字は一次読み取り）`](https://puri.sm/librem-5-v2-crowdfunding-campaign) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50536031)
+[`🔗 ABC7：CA DMV bans Waymos from operating on state freeways`](https://abc7news.com/story/california-dmv-bans-waymos-operating-state-freeways-bay-area-traffic-incidents/20046974) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50538841)
 
 ---
 
@@ -576,11 +252,11 @@ Purism が11月17日、2度目のスマートフォンクラウドファンデ�
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-18T12:36:01Z |
-| Items | 40 |
-| Sources tracked | 45 (Hacker News, GitHub Trending, OpenAI, Microsoft AI, Apple, Reuters/NYT/CNBC/FT/SCMP/Fortune, NVD/CISA KEV/GitHub advisories, vendor blogs, Phrack, SolidJS, Runta, Antfly, Calif, JFrog, Red Hat, Cloudflare, jQuery, Archive Team, PostHog, ComplexDiscovery/Harvard, arXiv, SSRN, Tencent Hunyuan, Cerebras, Codeberg Status, RevScope, Washington Sun/NOTUS, kernel.dev, xinmingtu.cn, ARC Prize, Energy-Based Reasoners, Purism) |
+| Generated | 2026-11-18T21:16:41Z |
+| Items | 17 |
+| Sources tracked | 22 (Hacker News, GitHub Trending, Wiz Research, NVD/cve.org, CISA KEV, X41 D-Sec, Google DeepMind, Microsoft AI, OpenAI, FT, KPMG, UPenn, git.kernel.org, inside-db.com, ABC7, mastra.ai, HKUDS, Cursor, rshekhar.com, human-md.ai, underwood.network, nicolasbouliane.com) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
 
-[Previous day](2026-11-17.md) · [Raw .md](https://trending.md/jp/feed/2026-11-18.md) · [Archive](../archive/index.md)
+[Previous day](2026-11-18.md) · [Raw .md](https://trending.md/jp/feed/2026-11-19.md) · [Archive](../archive/index.md)
