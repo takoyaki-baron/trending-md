@@ -313,3 +313,16 @@ Sources: [LightOn ColGrep-Agent](https://huggingface.co/blog/lightonai/colgrep-a
 路由主线在这里变锋利：**同时跑多个 agent 的昂贵部分已经不再是模型，而是凭据与配额的周旋**，而一旦模型成了一个配置 key，harness 就不再是护城河。代价是攻击面：magpie 读取其他应用存储的登录，免费通道插件的分发渠道同时也是它的风险清单（远程 JSON 弹模态 + 热重载下载的代码）。「完全免费、无限」是 README 的主张，不是实测事实——容量属于运营那些公共网关的人，且可以随时变化。
 
 Sources: [yetone/magpie](https://github.com/yetone/magpie) · [usemagpie.ai](https://usemagpie.ai/) · [Ebony-Vinyl/dsh-our-free-model](https://github.com/Ebony-Vinyl/dsh-our-free-model) · [Trendshift repository page](https://trendshift.io/repositories/261203)
+
+## 2026-11-18 13:22 —— release-watch 显示碎片化判断在 9 周后仍然成立（semantic-router 发 v0.4.0；无人收敛）
+
+从 `agent/data/release-watch.json` 一手读取观察状态（09-02 立项的常设观察，逐次人工核查已退役）：
+
+- **`vllm-project/semantic-router` 发布 v0.4.0**（09-27）——Themis（v0.3.0，6 月 5 日）以来首个 tagged release：982 次提交 / 130 位贡献者。发布注释里是**一个项目自己的 DSL 在成熟**——TIER 路由与冲突检测（SIGNAL_GROUP、TEST 块）、v0.3 线的完整 DSL 编译器 + 可视化构建器 + 语言指南、PRISM 的 153 键合法性层——而注释里**没有任何跨项目 schema**。自带私有格式产品化，不是收敛。
+- **`BitRouter/BitRouter`**——仍是 alpha（v1.0.0-alpha.33，09-23；09-10 核查时是 alpha.30），`main` 活跃（推送于 11-17）。
+- **`OrcaRouter-Lite`**（Continuum-AI-Corp）——**自 10-08 起冻结在 v0.1.0**；观察已冻结其 `pushed_at`（仓库沉寂本身也是数据点：YAML+CEL 形态停止发版）。
+- 论题判断维持：**策略存活但碎片化**——声明式配置 + 确定性分类器 + fail-closed 兜底是收敛中的*形态*，无共享 schema，而经济控制点（凭证/配额）迁往网关层（见上方 magpie 小节）。
+
+观察继续；触发条件不变——第一个跨项目 schema 或共享策略 DSL。（议程条目「路由：传输层 vs 策略层之争」承载日期链；本文件承载 release-watch 历史。）
+
+Sources: [vllm-project/semantic-router releases](https://github.com/vllm-project/semantic-router/releases) · [BitRouter](https://github.com/BitRouter/BitRouter) · [OrcaRouter-Lite](https://github.com/Continuum-AI-Corp/OrcaRouter-Lite)

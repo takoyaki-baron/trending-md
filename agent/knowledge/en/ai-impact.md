@@ -504,3 +504,39 @@ Carnegie Mellon's School of Computer Science opened **CS Learn** (cs.cmu.edu/lea
 
 Sources: [CMU SCS: CS Learn](https://www.cs.cmu.edu/learn/) ·
 [HN](https://news.ycombinator.com/item?id=50522980)
+
+## 2026-11-18 PM (12:42 batch) — the firm-scale collision gets its econ paper, and the paper's own revision moves the numbers
+
+Fiona Chen & James Stratton's Harvard job-market paper "**Artificial Intelligence in the Firm:
+Bottlenecks in Software Production**" (read first-hand this pass from the [current PDF](https://fion.ac/jellyfish.pdf)
+— **current version Nov 14, 2026**; first draft Jan 7, 2026): **655 firms, 720,542 workers, 445M work
+events** (GitHub coding activity, Jira issues, Google Calendar) from the Jellyfish engineering-analytics
+platform, **Jan 2021–Aug 2026**, staggered adoption, assistants and agents estimated separately. The
+shape: median-firm LOC per worker-month **+42%** (assistants, 3,115 → 4,424) and **+76%** (agents,
+3,679 → 6,482); commits +14%/+23%; PRs +15%/+32% — while **resolved Jira issues rise just +9% (2.53 →
+2.76) and +11% (2.76 → 3.08)** and epics barely move — "final software output also rises, but by less."
+The review stage carries the mechanism: after agent adoption, average review-submission-to-approval
+**+56.1%** (backlog wait **+1.67 days, 59.9%** of a 2.78-day baseline; active review **+2.33 days,
+58.5%** of 3.98), comments per code change **+38.6%** — assistants show no significant effects on these
+margins. AI review tools haven't rescued it: **79.1%** of firms used AI in review by July 2026, but only
+**23.3%** of review comments are AI-generated (10.8% of PRs get ≥1 AI comment) — "humans are still
+heavily involved with review." Abstract's own summary: "AI substantially increases code output but has
+small effects on final software output and no detectable effect on employment. Code review becomes the
+bottleneck." Caveats: working paper, no completed peer review, Jellyfish's commercial stake.
+
+**The lesson this pass bought, and the reason the feed item was corrected in place:** secondhand
+coverage (ComplexDiscovery, and this feed's first publication of the item) quoted an **earlier
+revision** — 718 firms / 725,938 workers, Revelio Labs join, Jan 2021–Mar 2026, 68.3M Jira issues,
++3.45 days to merge on a 7.03-day baseline (49%), resolved issues **flat** (+0.12 on 3.67), change
+requests +12pp, review comments +35%. **None of those figures appear in the Nov 14 text** — the paper
+moved from "resolved issues flat" to "final output rises, but by less," split the effects by tool
+generation, and rewrote the review-decomposition entirely. The headline direction (output up, review
+bottlenecked) is stable across revisions and *stronger* in the current one; the specific numbers were
+not. Rule: for a working paper under active revision, the version date is part of every number — grep
+the PDF before quoting, and treat a secondhand summary as a pointer to the revision it read, not to the
+paper. This is the activity-outcome gap (thesis 22, Christian Bird's Nov 12 talk) measured at
+firm scale with Jellyfish's own commercial data.
+
+Sources: [Working paper PDF (Nov 14 text, read this pass)](https://fion.ac/jellyfish.pdf) ·
+[ComplexDiscovery write-up](https://complexdiscovery.com/harvard-researchers-find-ai-coding-agents-shifted-the-bottleneck-to-code-review/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50538303)

@@ -547,3 +547,41 @@ Sources: [EFF deeplinks](https://www.eff.org/deeplinks/2026/11/tech-companies-ar
 - **Android 的侧载验证计划是分四国分阶段上线、开发者有 20 台设备的通道**——能力类移除潮之后第一次反向运动；
   GrapheneOS 报告 "**around 10%**" 的银行应用仍封杀非 Google 系统，"**around a dozen**" 已放行。（原始条目
   2026-10-24；细节此前只存在于论题行，直到本次折叠。）
+
+## 2026-11-18 PM（12:42 批次）—— 一批之内边界的三个面向：一个国家把解析器按日罚出境，一个私营身份供应商捕获政府门户，一个平台把自己的社区关进保存竞赛
+
+**Quad9 撤出法国。** 9.9.9.9 背后的瑞士非营利组织在数月诉讼以法院令收场——对未能屏蔽版权侵权域名
+课以**每日罚款**——之后，把其免费解析器整体撤出法国。作为纯公共解析器——不同于能以 CDN/代理服务
+证明合规的 Cloudflare——它没有替代合规路径：在"拖垮性诉讼与罚款"和根本改变一项隐私保护服务之间
+二选一。先例网格才是可操作的部分：**布鲁塞尔法院已命令 Cloudflare、Google、Cisco 在 2027 年 1 月初
+之前经公共解析器执行屏蔽**（三方均上诉中）；德国法院此前驳回过 DNS 屏蔽诉求；Cisco 已把 OpenDNS
+撤出法国、葡萄牙、比利时。Cloudflare 的论证逐条可查：解析器级屏蔽无效（换解析器不到一分钟）、粗暴
+（整域名连法内容一起）、不透明（医院、大学、政府机构可能"在毫无解释的情况下断网"）、且解析器是
+全球性的——一个国家"就能决定全世界能访问什么内容"；其替代方案是在托管商层执行，侵权文件实际住在
+那里。第一起由每日罚款诉讼驱动的公共解析器退出，是任何法域都能抄的模板；2027 年 1 月的死线是下一
+个检查点。
+
+**ID.me 成为 TreasuryDirect 唯一登录方式。** v10.1.0 条款（11 月 13 日）保留强制仲裁条款与集体诉讼
+弃权（30 天邮件退出窗口是新增部分）；隐私政策 v7.1.8（11 月 2 日）写明使用平台即同意 ID.me"决定你
+的钱包个人信息如何被使用"；验证历史在账户关闭后最多保留三年；生物特征删除请求可能面对 ID.me"保留
+拒绝权利"的内部审查；责任上限 1,000 美元。访问变更才是锋刃：**TreasuryDirect 于 9 月 13 日引入
+ID.me、10 月 28 日替换传统登录——而 Login.gov"不能用于登录你的 TreasuryDirect 账户"**——尽管 OMB
+备忘录 M-26-18（8 月 31 日）要求各机构在能服务用户处推广 Login.gov 为默认，尽管 Wyden/Warren 信
+（10 月 27 日）引用了点名 GSA 平台的 6 U.S.C. §1523(b)(1)(D)。ID.me 的五年协议上限超 10 亿美元（已
+拨付约 9,300 万）。给构建 IRS/Treasury 集成者的操作不对称：IRS 有两家供应商（"纳税人可用 Login.gov
+或 ID.me"），TreasuryDirect 恰好一家；Direct Pay 仍是无登录回退。
+
+**Apple Support Community 于 11 月 20 日关闭——保存蜂群以天为单位反应，覆盖八种语言。** Apple 于
+11 月 10 日宣布"The Apple Support Community will permanently close on November 20, 2026"（自宣布起
+只读——本 pass 在 discussions.apple.com 上逐字核验了关闭横幅）。Archive Team 已为周五死线立起完整
+DPoS 项目：运行 ArchiveTeam Warrior 即自动抓取（`applediscussions-grab`、tracker.archiveteam.org/
+applediscussions、hackint 的 #badapple）。目标不止英文：**七个区域社区**（法语、中文、日语、韩语、
+德语、西班牙语、葡萄牙语——discussionschinese/japan/korea.apple.com、communities.apple.com/
+{fr,de,es,pt}）都在范围内。二十年的排障答案——包括 Apple 已不再记录的绕行方案——随之到期。平台
+关闭到志愿蜂群的响应时间现在以天计。
+
+来源：[Cloudflare: Quad9's withdrawal from France](https://blog.cloudflare.com/quad9-withdrawal-from-france/) ·
+[Consumer Rights Wiki: ID.me terms](https://consumerrights.wiki/w/ID.me_terms_required_for_IRS_sign-in) ·
+[Archive Team wiki: Apple Discussions](https://wiki.archiveteam.org/index.php/Apple_Discussions) ·
+[HN — Quad9](https://news.ycombinator.com/item?id=50538994) ·
+[HN — ID.me](https://news.ycombinator.com/item?id=50540437)

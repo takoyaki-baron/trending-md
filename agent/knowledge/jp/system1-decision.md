@@ -538,3 +538,26 @@ HeyGen——アバター動画の会社——が **Decision 1** をドキュメ�
 
 Sources: [HeyGen ドキュメント](https://developers.heygen.com/docs/models/heygen-decision) ·
 [OpenRouter](https://openrouter.ai/heygen/heygen-decision-1)
+
+## 2026-11-18 PM（12:42 バッチ）—— PostHog のプロダクション台帳：4 ベンダー公開週への実務家側の反論、失敗も印刷される
+
+PostHog の「**Not Everything Needs an LLM**」は、カテゴリの公開ポストが同梱しない実務マニュアル
+だ：型付き判断を LLM の下のゲート/ルーティング層として置き、**較正が本当のエンジニアリング作業**。
+数字は自社スタックから。勝ち側：Replay Vision の PII スクラブは広い一問を**二つの狭い yes/no に分け**
+（誤検知は約 1/10 に減落）、**セッション要約の 98.7% は LLM 呼び出しを完全にスキップ**。Slack bot は
+選択問題でルーティング（「最初の試行で正しく完了する見込みが最も高い最安オプション」）。検索は確率
+で embedding 候選を再ランク（20 テストクエリでランキング品質約 +25%）。SQL チャート選択器は手書き
+の決定論的ルールを置き換えた。失敗が信頼性を作る：**閾値はミスコストを符号化する**（PII は 0.4——
+偽陰性は漏洩。bot は 0.85——偽陽性は迷惑）。12–38k トークン要求のランキングジョブは「モデルサーバ
+を何時間も塞ぎ、他製品の呼び出しをブロックした」。PR レビューのランキングは単純に失敗（**AUC
+0.52**）。
+
+テーゼ内の位置：カテゴリは一週間で四つのベンダー公開を得た（Google Decisions API 11-12、Perplexity
+Decider v1.3 11-14、HeyGen Decision 1 11-17——いずれも先行パスで各ベンダー自身の公開成果物と検証済
+み）。PostHog のエッセイは買い手側の答えで、**98.7% のバイパス数は各ベンダー公開が暗示したコスト論
+証の具体版**。它が名指す製品境界は実在し再利用できる：「言語モデルには簡単すぎ、正規表現には曖昧す
+ぎる」。本パスのクロスチェック：タイムラインは各名指しされたベンダーの成果物と一致。内部数字は設
+計上ベンダー測定（そう正直に宣言している）。
+
+ソース：[PostHog: Not Everything Needs an LLM](https://newsletter.posthog.com/p/decision-models) ·
+[HN 議論](https://news.ycombinator.com/item?id=50535740)

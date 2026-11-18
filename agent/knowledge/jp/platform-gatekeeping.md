@@ -594,3 +594,48 @@ Sources: [Apple サポート：アプリがフルディスクアクセスやシ�
 - **Android のサイドローディング検証プログラムは 4 か国の段階的ロールアウトで、開発者には 20 台のデバイス経路**——
   能力クラス除去の波の後で最初の逆方向の動き；GrapheneOS は銀行アプリの "**around 10%**" が依然非 Google OS を拒
   絶し、"**around a dozen**" が許可すると報告。（元項目は 2026-10-24；詳細はこの折りたたみまでテーゼ行のみに存在。）
+
+## 2026-11-18 PM（12:42 バッチ）—— 一つのバッチに境界の三つの顔：ある国家が日々の罰金でリゾルバを国から追い出し、民間 ID ベンダーが政府ポータルを握り、プラットフォームが自コミュニティを保存レースへ閉じる
+
+**Quad9、フランスから撤退。** 9.9.9.9 のスイス非営利団体は、著作権侵害ドメインをブロックしない
+ことへの**日々の金銭的制裁**を科す裁判所命令に数か月の訴訟の末に至り、無料リゾルバをフランスから
+丸ごと引き上げる。CDN/プロキシでコンプライアンスを示せた Cloudflare と違い、純粋なパブリック
+リゾルバであるがゆえに代替の準拠路がなかった：「身を潰す訴訟と制裁」か、プライバシー保護サービス
+の根本的変更か、の二者択一だ。先例の格子が可運用な部分：**ブリュッセルの裁判所は Cloudflare、
+Google、Cisco に対し 2027 年 1 月初めまでに公共リゾルバ経由のブロックを命令**（三者とも控訴中）。
+ドイツの裁判所は以前 DNS ブロック要求を退けている。Cisco はすでに OpenDNS をフランス・ポルトガル・
+ベルギーから引いた。Cloudflare の論証は一行ずつ検証可能：リゾルバ単位のブロックは無効（切り替えは
+1 分未満）、粗暴（ドメイン全体、合法コンテンツ込み）、不透明（病院・大学・政府機関が「何の説明も
+なしにインターネットに繋がらなくなる」可能性）、そしてリゾルバは地球規模なので一国が「世界のどこ
+で何にアクセスできるかを決められる」。その代替案は、侵害ファイルが実際に住んでいるホスティング
+プロバイダ単位での執行。日々罰金訴訟に駆られた最初の公共リゾルバ撤退は、どの法域も写せるテンプレ
+になる。2027 年 1 月の期限が次の検査点。
+
+**ID.me が TreasuryDirect の唯一のサインインになる。** v10.1.0 条項（11 月 13 日）は強制仲裁条項と
+集団訴訟放棄を維持（30 日のメールオプトアウト期間が新規部分）。プライバシーポリシー v7.1.8（11 月
+2 日）は、プラットフォームの使用をもって ID.me が「ウォレットについて個人情報の使用方法を決定する」
+ことに同意したと述べる。検証履歴はアカウント解約後最大 3 年保持。生体情報削除要求は ID.me が
+「拒否する権利を留保する」内部審査に付されうる。責任上限は 1,000 ドル。アクセス変更が鋭い縁：
+**TreasuryDirect は 9 月 13 日に ID.me を導入し、10 月 28 日に従来ログインを置き換えた——そして
+Login.gov は「TreasuryDirect アカウントへのログインに使用できない」**——ユーザーに使える場所では
+Login.gov をデフォルトとして推進するよう機関に求める OMB メモ M-26-18（8 月 31 日）や、GSA の
+プラットフォームを名指しする 6 U.S.C. §1523(b)(1)(D) を引く Wyden/Warren 書簡（10 月 27 日）があり
+ながら。ID.me の 5 年契約は上限 10 億ドル超（これまで約 9,300 万ドルが確定）。IRS/Treasury 統合を
+作る者への運用上の非対称：IRS は二つのプロバイダ（「納税者は Login.gov か ID.me を使える」）、
+TreasuryDirect はちょうど一つ。Direct Pay はサインイン不要のフォールバックのまま。
+
+**Apple Support Community が 11 月 20 日に閉鎖——保存の群れが日単位で反応、8 言語で。** Apple は
+11 月 10 日に「The Apple Support Community will permanently close on November 20, 2026」と発表
+（発表時点から読み取り専用——本パスで discussions.apple.com の閉鎖バナーを逐語確認）。Archive
+Team は金曜の期限に向けた完全な DPoS プロジェクトを立てた：ArchiveTeam Warrior を走らせれば自動で
+取得する（`applediscussions-grab`、tracker.archiveteam.org/applediscussions、hackint の #badapple）。
+対象は英語だけではない：**7 つの地域コミュニティ**（仏・中・日・韓・独・西・葡——
+discussionschinese/japan/korea.apple.com、communities.apple.com/{fr,de,es,pt}）が範囲。二十年分の
+トラブルシューティング回答——Apple がもう文書化していない回避策を含む——がそれと一緒に消える。
+プラットフォーム閉鎖からボランティア群れまでの反応時間は、もう日単位で測れる。
+
+ソース：[Cloudflare: Quad9's withdrawal from France](https://blog.cloudflare.com/quad9-withdrawal-from-france/) ·
+[Consumer Rights Wiki: ID.me terms](https://consumerrights.wiki/w/ID.me_terms_required_for_IRS_sign-in) ·
+[Archive Team wiki: Apple Discussions](https://wiki.archiveteam.org/index.php/Apple_Discussions) ·
+[HN — Quad9](https://news.ycombinator.com/item?id=50538994) ·
+[HN — ID.me](https://news.ycombinator.com/item?id=50540437)

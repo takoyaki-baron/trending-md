@@ -5490,3 +5490,35 @@ Sources: [Phrack 73 イントロ](https://phrack.org/issues/73/introduction_md) 
 [GHSA-pvmq-3jr9-v5qh](https://github.com/fastify/busboy/security/advisories/GHSA-pvmq-3jr9-v5qh) ·
 [GHSA-wh8h-qr34-3rj3](https://github.com/fastify/busboy/security/advisories/GHSA-wh8h-qr34-3rj3) ·
 [GHSA-gmhr-r4mc-w935](https://github.com/fastify/fastify-multipart/security/advisories/GHSA-gmhr-r4mc-w935)
+
+## 2026-11-18 PM（12:42 バッチ）—— Java4Shell：JIT の Base64 組込み関数がストアマスクを誤計算し、発見はトークンで値付けされる
+
+**`CVE-2026-114938`**（Calif の **Java4Shell**）：OpenJDK の AVX-512 Base64 組込み関数が**パディング尾
+部のストアマスクを誤計算し、バッファオーバーフローを起こす**——65 文字の入力（`A` 64 個 + `=`）が
+50 バイトバッファを **62 バイト**溢れる。OpenJDK **17.0.6 以降**、**AVX-512 VBMI** 搭載の x86-64 CPU
+のみ影響（ARM64 は無関係）。Oracle 自身のレコードは影響ビルドとして 8u511b33-perf、17.0.21.0.3、
+21.0.13.0.3、25.0.5.0.3、27.0.1.0.3 を挙げる。物語の本体は影響デモであってプリミティブではない：
+Keycloak、Jira、Confluence、JFrog Artifactory、Jenkins、PingFederate での**認証前 RCE**。Kafka、Solr、
+Elasticsearch、Gerrit、Spinnaker での認証後 RCE。Heartbleed 型のヒープ漏洩（**JavaBleed**）。悪意ある
+TLS サーバ経由のクライアント側変種。ほぼすべての JVM サービスが Base64 をデコードするので、ほぼす
+べてがこのコードパスを抱える。Oracle は**太平洋時間 11 月 17 日午後 1 時**にパッチを出荷。暫定緩和は
+`-XX:-UseBASE64Intrinsics` か `-XX:UseAVX=2`。製品別の武器化エクスプロイトは「全員がアップグレード
+する時間を持つまで」公開を控えている。
+
+**スコアの来歴は stopping-point ではなく「二当事者・二フレームワーク」のケース：**本パスでライブ検
+証した NVD レコード（`Received`、公開 2026-11-17T22:18Z、NVD 慣例どおり `Z` なし）は Oracle CNA の
+**8.1**（CVSS **3.1**、`AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H`、`Secondary` スロット、
+`secalert_us@oracle.com`）を運び、傍らに **CISA-ADP SSVC** v2.0.3。Calif 自身の記事は CVSS 4.0 で
+**9.2 CRITICAL** と計算。引用時は両方にバージョンを付ける——同一ベンダーの二つの stopping point では
+なく、別当事者だからだ。Oracle の `AC:H` は正直だ：チェーンには ASLR バイパス + ヒープ feng shui +
+ターゲットごとの定制作が要る——「万能のワンクリックではない」。
+
+**発見の経済学：**Calif によれば Quang Luong は「発見に 1 時間、最初の動くエクスプロイトにさらに 2
+時間」、トークン総コスト **200 ドル未満**——PHP2Shell/Squidbleed に続く AI 支援路線。JFrog と Red
+Hat（RHSB-2026-018）が独立に裏付け。常設 NVD ウォッチ（`agent/tools/nvd-provenance.json`）にシード
+済み——捉えるべきイベントはレコードが `Received`/CNA のみから外へ動くこと。
+
+ソース：[Calif: Java4Shell](https://calif.io/java4shell/) ·
+[JFrog](https://research.jfrog.com/post/java4shell-vulnerability) ·
+[Red Hat RHSB-2026-018](https://access.redhat.com/security/vulnerabilities/RHSB-2026-018) ·
+[NVD CVE-2026-114938](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE-2026-114938)

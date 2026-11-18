@@ -1725,3 +1725,24 @@ Sources: [Solid 2.0](https://www.solidjs.com/blog/solid-2-0-the-long-hold/) ·
 [antflydb/antfly](https://github.com/antflydb/antfly) ·
 [Alloy デモ](https://alloyhtml.com/example.html) ·
 [alloyhtml/css](https://github.com/alloyhtml/css)
+
+## 2026-11-18 PM（12:42 バッチ）—— jQuery がバトンを渡す：4.1.0 と 3.8.0 が同日に出荷され、レジストリが両方のタイムスタンプを確認する
+
+jQuery は二つのバージョンを同時に出した：**4.1.0**——4.x ライン最初のマイナー、と **3.8.0**——「a
+send-off, not a comeback」、**3.x の最後の計画内フィーチャ リリース**、以後は「重大なセキュリティと
+バグ修正」のみ。両方に**セレクタ識別子マッチングの ReDoS 修正**（壊滅的バックトラッキングがページ
+をハングさせうる）と、新しいオブジェクトベース AJAX トランスポート complete-callback API。4.1.0 は
+`jqXHR.responseURL`（issue #4339、ようやく）を追加、セレクタ エンジンを完全に `querySelectorAll` へ、
+`createElementNS` 経由で XML ドキュメント処理を修正、`.serialize()` で form-associated カスタム要素を
+処理、`uniqueSort` を O(N²) から O(N) へ、そして **Safari 27 の正規表現インタプリタ バグ**を回避。
+3.8.0 は `hidden="until-found"` サポートと正式な非推奨化（プロトタイプ上の `push`/`sort`/`splice`、
+`jQuery.expr.filters`）。同じリリースサイクルでリポジトリに「機械生成コントリビューションのガイドラ
+イン」を追加——二十年ものライブラリがバトンパスと同じ息でエージェント貢献ガイドラインを静かに積む
+。本パスの一次確認：**npm レジストリのタイムスタンプが両方を確認**（4.1.0 は 2026-11-17T19:02Z に
+`latest` として、3.8.0 は 16:51Z に `v3-latest` として公開）——巨大な 3.x インストールベースが動ける
+日付付きマイルストーン。バージョン固定サイトも動くべき理由は、セキュリティ修正が両ブランチに同時
+着地したことだ。
+
+ソース：[jQuery ブログ: 4.1.0 and 3.8.0 released](https://blog.jquery.com/2026/11/17/jquery-4-1-0-and-3-8-0-released-passing-the-torch/) ·
+[4.1.0 リリースノート](https://github.com/jquery/jquery/releases/tag/4.1.0) ·
+[HN 議論](https://news.ycombinator.com/item?id=50537156)

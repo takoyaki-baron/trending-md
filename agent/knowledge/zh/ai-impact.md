@@ -347,3 +347,33 @@ Sources: [breck-mckye.com](https://www.breck-mckye.com/blog/2026/11/software-is-
 
 来源：[CMU SCS：CS Learn](https://www.cs.cmu.edu/learn/) ·
 [HN](https://news.ycombinator.com/item?id=50522980)
+
+## 2026-11-18 PM（12:42 批次）—— 企业级碰撞拿到计量经济学论文，而论文自己的修订把数字挪动了
+
+Fiona Chen 与 James Stratton 的哈佛求职市场论文"**Artificial Intelligence in the Firm: Bottlenecks in
+Software Production**"（本 pass 从[现行 PDF](https://fion.ac/jellyfish.pdf) 一手读取——**当前版本
+2026 年 11 月 14 日**；初稿 2026 年 1 月 7 日）：**655 家企业、720,542 名员工、4.45 亿个工作事件**
+（GitHub 编码活动、Jira issue、Google Calendar），来自 Jellyfish 工程分析平台，**2021 年 1 月–2026 年
+8 月**，交错采用，AI 助手与 AI agent 分开估计。形状：中位企业每工人月代码行数在采用助手后 **+42%**
+（3,115 → 4,424）、采用 agent 后 **+76%**（3,679 → 6,482）；commits +14%/+23%；PR +15%/+32%——而
+**已解决 Jira issue 只涨 +9%（2.53 → 2.76）与 +11%（2.76 → 3.08）**，epic 几乎不动——"最终软件产出
+也涨，但少得多"。评审阶段承载机制：采用 agent 后，评审提交到批准的平均时间 **+56.1%**（积压等待
+**+1.67 天，2.78 天基数的 59.9%**；活跃评审 **+2.33 天，3.98 天的 58.5%**），每变更评论数 **+38.6%**
+——助手在这些边际上无显著效应。AI 评审工具没能救回来：到 2026 年 7 月 **79.1%** 的企业已在评审中
+用过 AI，但只有 **23.3%** 的评审评论是 AI 生成的（10.8% 的 PR 收到至少一条 AI 评论）——"humans are
+still heavily involved with review"。摘要自己的总结："AI 大幅提高代码产出，但对最终软件产出影响很小，
+对就业无可检出效应。代码评审成为瓶颈。"局限：工作论文、未完成同行评审、Jellyfish 的商业利益。
+
+**本 pass 买到的教训，也是 feed 条目被就地更正的原因：**二手转述（ComplexDiscovery，以及本报首次
+刊发该条时）引用的是**更早的修订版**——718 家企业/725,938 名员工、Revelio Labs 联结、2021 年 1 月–
+2026 年 3 月、6,830 万条 Jira issue、合并慢 +3.45 天（7.03 天基数的 49%）、已解决 issue 持平（3.67
+基数上 +0.12）、变更请求 +12pp、评审评论 +35%。**这些数字没有一个出现在 11 月 14 日文本中**——论文
+从"已解决持平"移向"最终产出也涨但少得多"、按工具代际拆分效应、并整个重写了评审分解。标题方向
+（产出上升、评审卡死）跨修订稳定且现行版更强；具体数字不是。规则：对活跃修订中的工作论文，版本
+日期是每个数字的一部分——引用前 grep PDF，把二手摘要当作它读到的那一版的指针，而不是论文本身的
+指针。这是活动-产出鸿沟（论题 22，Christian Bird 11 月 12 日演讲）在企业尺度上用 Jellyfish 自有商业
+数据的测量。
+
+来源：[工作论文 PDF（11 月 14 日文本，本 pass 读取）](https://fion.ac/jellyfish.pdf) ·
+[ComplexDiscovery 转述](https://complexdiscovery.com/harvard-researchers-find-ai-coding-agents-shifted-the-bottleneck-to-code-review/) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50538303)

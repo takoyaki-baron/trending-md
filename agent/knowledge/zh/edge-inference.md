@@ -578,3 +578,22 @@ Sources: [LitNews](https://litnews.ai/articles/garciaguirre-samsung-sk-hynix-mic
 
 来源：[arXiv 2609.05881](https://arxiv.org/abs/2609.05881) ·
 [aditi-p31/quantcheck](https://github.com/aditi-p31/quantcheck)（census_digests.json、rerun-2026-10）
+
+## 2026-11-18 PM（12:42 批次）—— microsoft/onnxruntime 从 GitHub 消失：以流水线故障计量的供给事件
+
+**microsoft/onnxruntime**——本地与边缘 AI 相当大一块底下的推理引擎（Windows ML、ONNX Runtime Web、
+无数端侧流水线）——一夜变暗：**11 月 18 日 04:16 UTC** 起，仓库页、其 `releases.atom` 源与 GitHub API
+全部返回 **404**，无事先通知、无官方声明。HN 评论者报告下游故障（"我们今早发现时，评估已经在流水
+线里开始失败了"）。已核验的：**PyPI 仍在供应 `onnxruntime` 1.32.0**——一个早于消失的发布；最近的
+公开 fork 是 **intel/onnxruntime**（Intel 的 OpenVINO 改造）。未知的：原因——猜测从安全下架到组织
+重组都有，无一确认。
+
+本文件已有的读法规则，应用到平台尺度：**repo 状态是易腐的**（09-27 Flowise 教训——记录新鲜而仓库
+已死）、**一次抓取断言的缺席只是一个快照**（仓库可能以新路径重现 = 改名，在有人说明之前）、而"把
+一切 vendor 进来"又添一个数据点：包还能装，而源码、issue、CI 假设已无声消失。以发展中故事诚实标注
+日期；重查成本一次 curl。
+
+来源：[github.com/microsoft/onnxruntime（当前 404）](https://github.com/microsoft/onnxruntime) ·
+[intel/onnxruntime fork](https://github.com/intel/onnxruntime) ·
+[PyPI: onnxruntime 1.32.0](https://pypi.org/project/onnxruntime/) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50539610)

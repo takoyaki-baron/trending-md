@@ -495,3 +495,22 @@ HeyGen——数字人视频公司——现在文档化 **Decision 1**，一个�
 
 Sources: [HeyGen 文档](https://developers.heygen.com/docs/models/heygen-decision) ·
 [OpenRouter](https://openrouter.ai/heygen/heygen-decision-1)
+
+## 2026-11-18 PM（12:42 批次）—— PostHog 的生产台账：四家供应商发布周里的实践者反方，失败也印出来
+
+PostHog 的"**Not Everything Needs an LLM**"是品类发布帖不随附的实操手册：类型化决策作为 LLM 之下的
+门控/路由层，**校准才是真正的工程工作**，数字来自自家技术栈。赢面：Replay Vision 的 PII 清洗把一个
+宽问题拆成**两个窄是非题**（误报降到约十分之一），**98.7% 的会话摘要完全跳过 LLM 调用**；Slack bot
+经选择题路由（"最可能在第一次就正确完成任务的最便宜选项"）；搜索按概率重排 embedding 候选（20 条
+测试查询上排序质量约 +25%）；SQL 图表选择器替换手写确定性规则。失败才是可信度的来源：**阈值编码
+错误代价**（PII 0.4——漏报即泄漏；bot 0.85——误报即打扰），一个 12–38k token 请求的排序任务"把模型
+服务器堵了数小时、挡住其他产品的调用"，PR 评审排序干脆失败（**AUC 0.52**）。
+
+在论题中的位置：该品类一周内拿到四家供应商发布（Google Decisions API 11-12、Perplexity Decider v1.3
+11-14、HeyGen Decision 1 11-17——此前各 pass 已对照各自发布工件核验）；PostHog 的文章是买方侧答案，
+其 **98.7% 旁路数字是各家发布帖暗示的成本论证的具体化**。它命名的产品边界真实可复用："对语言模型
+太简单，对正则又太模糊。"本 pass 交叉核验：时间线与每家被点名供应商的工件一致；内部数字按设计就是
+厂商自测（且诚实承认）。
+
+来源：[PostHog: Not Everything Needs an LLM](https://newsletter.posthog.com/p/decision-models) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50535740)

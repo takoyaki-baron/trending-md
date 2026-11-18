@@ -1823,6 +1823,15 @@
   "jp": "JetBrains公式エンジニアリングブログ。IDE・ツールリリースの一次情報——ベンダー執筆だが技術的に具体的。",
   "zh": "JetBrains 官方工程博客；IDE 与工具链发布的一手来源——厂商撰写但技术细节具体。"
  },
+ "blog.jquery.com": {
+  "cat": "code",
+  "cred": "high",
+  "cv": 1,
+  "density": "med",
+  "en": "jQuery's release blog — first-party for version ships and the 3.x→4.x torch-passing. Cross-checked (11-18): the 4.1.0/3.8.0 release claims match npm's own registry timestamps (4.1.0 published 2026-11-17T19:02Z as latest, 3.8.0 at 16:51Z as v3-latest) — the release-drift check passing.",
+  "jp": "jQuery のリリースブログ。バージョン出荷と 3.x→4.x のバトンタッチの一次情報。クロスチェック済み（11-18）: 4.1.0/3.8.0 のリリース宣言が npm レジストリ自身のタイムスタンプと一致（4.1.0 は 2026-11-17T19:02Z で latest、3.8.0 は 16:51Z で v3-latest）——リリースドリフト検査の合格。",
+  "zh": "jQuery 官方发布博客——版本出货与 3.x→4.x 交棒的一手来源。已交叉核验（11-18）：4.1.0/3.8.0 的发布声明与 npm 注册表自身时间戳一致（4.1.0 于 2026-11-17T19:02Z 发布为 latest，3.8.0 于 16:51Z 为 v3-latest）——release-drift 检查通过。"
+ },
  "blog.kagi.com": {
   "cat": "vendor",
   "cred": "high",
@@ -3122,6 +3131,15 @@
   "en": "Zammad's official community forum (Discourse) — where the vendor published its Oct 1 statement on the DIVD-chain CVEs (CVE-2026-102489/102490): the scope dispute, the disclosure-timeline criticism. Cross-checked (10-04): the statement's Sep 24/26 timeline matches DIVD's own case page, and the posting staff account matches the GHSA publisher in the repo advisory API.",
   "jp": "Zammad の公式コミュニティフォーラム（Discourse）——ベンダーが 10/1 に DIVD チェーンの CVE（CVE-2026-102489/102490）に関する声明を発表した場所。スコープへの異議と開示タイムラインへの批判を含む。クロスチェック済み（10-04）：声明の 9/24・9/26 のタイムラインは DIVD のケースページと一致、投稿したスタッフアカウントはリポジトリアドバイザリ API の GHSA パブリッシャーと一致。",
   "zh": "Zammad 官方社区论坛（Discourse）——厂商 10 月 1 日就 DIVD 链 CVE（CVE-2026-102489/102490）发布声明的场所，含范围异议与披露时间线批评。已交叉核验（10-04）：声明中 9 月 24/26 的时间线与 DIVD 案件页一致，发帖员工账号与仓库公告 API 中的 GHSA 发布者一致。"
+ },
+ "complexdiscovery.com": {
+  "cat": "news",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "Legal/tech industry news aggregator; secondary write-ups of research papers. Cross-checked (11-18) with a catch: its Harvard Jellyfish-study summary matches the paper's headline (code review becomes the bottleneck — verified against the PDF abstract) but its sample numbers (718 firms/725,938 workers, +3.45 days to merge, flat resolved issues) come from a superseded revision — the current Nov 14 version reads 655 firms/720,542 workers/445M events with issues resolved +9–11%. Use it as a pointer, never as the numbers; the primary PDF lives at fion.ac.",
+  "jp": "法務/テック業界ニュースアグリゲータ。研究論文の二次まとめ。クロスチェック済み（11-18、ただし落し物あり）: ハーバード Jellyfish 研究の要約は論文のヘッドラインとは一致（コードレビューがボトルネック——PDF アブストラクトで検証）するが、そのサンプル数字（718社/725,938人、マージ +3.45日、解決済み横ばい）は廃止された改訂版からのもの——現行 11-14 版は 655社/720,542人/4.45億イベント、解決済み +9–11%。数字ではなくポインタとして使うこと。一次 PDF は fion.ac。",
+  "zh": "法律/科技行业新闻聚合站；论文的二手转述。已交叉核验（11-18，带收获）：其对哈佛 Jellyfish 研究的摘要与论文标题结论一致（代码评审成为瓶颈——已对照 PDF 摘要验证），但其样本数字（718 家企业/725,938 名员工、合并 +3.45 天、已解决工单持平）来自已被取代的旧修订版——现行 11-14 版为 655 家/720,542 人/4.45 亿事件、已解决 +9–11%。当指针用，别当数字用；一手 PDF 在 fion.ac。"
  },
  "computing.co.uk": {
   "cat": "news",
@@ -6560,6 +6578,15 @@
   "jp": "Huntressのセキュリティ研究ブログ。インシデントフォレンジックの一次情報。08-28にPaperCutゼロデイで使用（顧客インシデント2件、base64の`whoami & ver`ペイロード、`Udydn.class`のドロップ、SYSTEM権限の`charmap.exe`）。PaperCut公式勧告とRapid7に突合済み。",
   "zh": "Huntress 安全研究博客；一手事件取证。08-28 用于 PaperCut 零日（两起客户事件、base64 `whoami & ver` payload、`Udydn.class` 投放、SYSTEM 级 `charmap.exe`）。已与 PaperCut 官方公告及 Rapid7 交叉核验。"
  },
+ "hy.tencent.ai": {
+  "cat": "vendor",
+  "cred": "high",
+  "cv": 1,
+  "density": "med",
+  "en": "Tencent's Hunyuan (Hy) model research pages — first-party for Hy-line specs, pricing and benchmark claims, but a JS shell to plain fetches (11-05: the Hy4 GA page served 10 visible chars; 11-18: Hy4 flash read via reader twin only). Cross-checked (11-18): the model's cheap workhorse-tier positioning was independently exercised by a third party's own benchmark (HN commenter chriddyp: $0.13 for 43 data-analytics questions, ahead of GPT-6 Luna cost-adjusted) — while WorkIndex cost-per-task ratios stay vendor-measured, and a weights-opening sentence reported in the thread was not greppable on the page.",
+  "jp": "Tencent Hunyuan（Hy）モデルの研究ページ。Hy ラインのスペック・価格・ベンチマーク主張の一次情報だが、素のフェッチには JS シェルとして応答する（11-05: Hy4 GA ページは可視10文字。11-18: Hy4 flash はリーダーツイン経由でのみ読取）。クロスチェック済み（11-18）: 安価なワークホース層という位置づけは第三者の自前ベンチマークで独立に裏付け（HN コメント者 chriddyp: データ分析43問に $0.13、コスト調整後で GPT-6 Luna を上回る）——一方 WorkIndex のタスクあたりコスト比はベンダー測定のままで、スレッドで報じられた重み公開の一文はページ上で grep できず。",
+  "zh": "腾讯混元（Hy）模型研究页——Hy 系列规格、定价与基准声明的一手来源，但对普通抓取是 JS 壳（11-05：Hy4 GA 页面只有 10 个可见字符；11-18：Hy4 flash 仅经 reader twin 读取）。已交叉核验（11-18）：其廉价干活档定位已被第三方自跑基准独立验证（HN 评论者 chriddyp：43 道数据分析题花 $0.13，成本调整后优于 GPT-6 Luna）——而 WorkIndex 单任务成本比仍是厂商自测，帖子里报道的开权重语句在页面上 grep 不到。"
+ },
  "hyperframes.dev": {
   "cat": "code",
   "cred": "med",
@@ -9170,6 +9197,15 @@
   "en": "The practitioner's front page; high signal-to-noise on tech launches, but velocity ≠ importance.",
   "jp": "実務者のトップページ。技術ローンチのS/N比は高いが、盛り上がり≠重要性。",
   "zh": "从业者的头版；技术发布信噪比高，但热度不等于重要性。"
+ },
+ "newsletter.posthog.com": {
+  "cat": "vendor",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "PostHog's engineering newsletter — first-party for their own production measurements, notable for printing failures alongside wins (the AUC 0.52 PR-review ranker, the ranking job that flooded their model server for hours). Cross-checked (11-18): its decision-model category timeline (Google's Decisions API Nov 12, Perplexity Decider Nov 14, HeyGen Decision 1 Nov 17) matches each named vendor's own launch artifact; the internal numbers (98.7% LLM bypass, 0.4/0.85 thresholds) are vendor-measured by design.",
+  "jp": "PostHog のエンジニアリング ニュースレター。自社プロダクション測定の一次情報で、勝ちと一緒に失敗を印刷する点が特筆（AUC 0.52 の PR レビュー ランカー、モデルサーバを数時間塞いだランキングジョブ）。クロスチェック済み（11-18）: デシジョンモデル カテゴリのタイムライン（Google Decisions API 11-12、Perplexity Decider 11-14、HeyGen Decision 1 11-17）は各ベンダー自身の公開成果物と一致。内部数字（98.7% の LLM バイパス、0.4/0.85 の閾値）は設計上ベンダー測定。",
+  "zh": "PostHog 的工程通讯——自家生产环境测量的一手来源，亮点是连同失败一起印出来（AUC 0.52 的 PR 评审排序器、把模型服务器堵了数小时的排序任务）。已交叉核验（11-18）：其决策模型品类时间线（Google Decisions API 11-12、Perplexity Decider 11-14、HeyGen Decision 1 11-17）与各家供应商自己的发布工件一致；内部数字（98.7% 的 LLM 旁路、0.4/0.85 阈值）按设计就是厂商自测。"
  },
  "newsletter.semianalysis.com": {
   "cat": "research",
@@ -14509,6 +14545,15 @@
   "en": "AlpineBSD project wiki (first-party, single page) — a NetBSD kernel with an Alpine-inspired userspace and an explicit policy of no LLM output in the base system. Credible as the project's statement of intent, not as evidence the OS works: there is no installer and the author says so. Curated on a first-hand artifact check, not on coverage.",
   "jp": "AlpineBSD のプロジェクト Wiki（一次情報・単一ページ）——NetBSD カーネルに Alpine 風のユーザーランドを組み合わせ、ベースシステムに LLM 出力を入れない方針を明示する。意図の表明としては信頼できるが、OS が動く証拠ではない（インストーラは無く、本人がそう書いている）。カバレッジではなく一次アーティファクトの確認でキュレーションした。",
   "zh": "AlpineBSD 项目 wiki（第一方、单页）——NetBSD 内核配 Alpine 风格用户态，明确声明基础系统不含 LLM 输出。作为项目意图的陈述可信，但不能当作系统可用的证据：没有安装器，作者自己也这么说。策展依据是一次第一手产物核验，而非报道覆盖。"
+ },
+ "wiki.archiveteam.org": {
+  "cat": "community",
+  "cred": "high",
+  "cv": 1,
+  "density": "med",
+  "en": "Archive Team's project wikis — first-party status pages for volunteer preservation efforts (target, tracker, IRC, grab scripts). Cross-checked (11-18): its Apple Discussions closure claim (announced 11-10, closes 11-20, read-only now) matches the closure banner verbatim on Apple's own discussions.apple.com, and its eight-language target list names real regional hosts (discussionschinese/japan/korea.apple.com, communities.apple.com/{fr,de,es,pt}).",
+  "jp": "Archive Team のプロジェクト wiki。ボランティア保存活動の一次ステータスページ（対象、トラッカー、IRC、取得スクリプト）。クロスチェック済み（11-18）: Apple Discussions クローズの主張（11-10 発表、11-20 閉鎖、現在 read-only）は Apple 自身の discussions.apple.com のクローズバナーと逐語一致、8言語の対象リストは実在のリージョン ホスト名（discussionschinese/japan/korea.apple.com、communities.apple.com/{fr,de,es,pt}）。",
+  "zh": "Archive Team 的项目 wiki——志愿保存行动的一手状态页（目标、tracker、IRC、抓取脚本）。已交叉核验（11-18）：其 Apple Discussions 关闭声明（11-10 宣布、11-20 关闭、现已只读）与 Apple 自己 discussions.apple.com 上的关闭横幅逐字一致，八语言目标列表列的是真实区域站点（discussionschinese/japan/korea.apple.com、communities.apple.com/{fr,de,es,pt}）。"
  },
  "wiki.zimbra.com": {
   "cat": "vendor",

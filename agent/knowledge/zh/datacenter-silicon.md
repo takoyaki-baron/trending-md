@@ -104,3 +104,22 @@ TPU agent 套件接入 Claude Code、Cursor 与 Google Antigravity；还有开�
 
 来源：[RunanywhereAI/trnrt](https://github.com/RunanywhereAI/trnrt) ·
 [博客：单台 Trainium2 服务器上跑 GLM-5.3-Flash](https://runanywhere.ai/blog/glm-5-3-flash-trainium2-nki-megakernels)
+
+## 2026-11-18 PM（12:42 批次）—— Cerebras 拆分推理：AMD GPU 承担 prefill，晶圆承担 decode，按每兆瓦 token 数计价
+
+Cerebras 发布**拆分式推理**：**AMD Instinct GPU 处理提示词，Cerebras CS-3 系统生成响应**——在
+prefill/decode 边界切开流水线，因为 decode 是自回归且受内存带宽约束，而这正是晶圆级引擎以 SRAM 为
+中心的设计（自称"典型 GB300 GPU 的 350 倍 SRAM 容量与 5,400 倍内存带宽"）的结构性优势所在。测量
+声明："**每兆瓦吞吐为纯 CS-3 配置的 5 倍，token 生成速度无损**"——来自 **11 月 14 日单个共享的
+GPT-OSS-120B 端点**：一个模型、一天、厂商自测、归一到 1×。点名早期接入伙伴：AWS、Fireworks AI、
+Gimlet Labs、General Compute。"数百兆瓦"的 Cerebras 云与伙伴站点的大规模铺开目标 **2027 年底**，
+同期规划 **700MW** 数据中心容量。
+
+在论题中的位置：prefill/decode 拆分在 GPU 生态内已是标准做法——新的是把 **decode** 半边指向非 GPU
+硅片、并按兆瓦计价——正是本文件 10-25 条目指出万亿参数晶圆预算帖称其为"更有意义的指标"却未给出
+任何 tokens/s/MW 数字的那个指标。星号在做实事：5× 是一个端点、一个模型、一天——若能泛化，它改变
+每份 2027 数据中心计划赖以构建的功耗数学；若不能，它就是发布日幻灯片。两种结局都活着，举证责任在
+2027 年底的大规模铺开上：得给出多于一条曲线。
+
+来源：[Cerebras: Disaggregated Inference](https://www.cerebras.ai/blog/cerebras-launches-disaggregated-inference) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50540472)

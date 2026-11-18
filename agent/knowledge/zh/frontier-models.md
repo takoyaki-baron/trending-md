@@ -3791,3 +3791,25 @@ Anthropic 向 IPO 投资人透露（联合创始人兼首席算力官 Tom Brown�
 
 Sources: [NVIDIA 新闻稿 Q3 FY2027](https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-third-quarter-fiscal-2027) ·
 [GlobeNewswire 镜像](https://www.globenewswire.com/news-release/2026/11/17/3405200/0/en/nvidia-announces-financial-results-for-third-quarter-fiscal-2027.html)
+
+## 2026-11-18 PM（12:42 批次）—— 腾讯 Hy4 flash：廉价干活档变成基准争夺战
+
+**Hy4 flash**（11 月 16 日发布，11 月 18 日在 HN 起量）：**224B 总参数 / 每 token 12B 激活**，含
+**64B "Engram" 参数**，原生多模态，**100 万 token 上下文**。效率栈：混合注意力 + LatentMoE + Engram
+把 KV 缓存压到 **Hy3 的 1/24、Hy4 的 1/6**；自 Hy4 蒸馏加强化学习"把平均端到端输出 token 砍 50%"；
+megakernel 加 4-bit 量化把解码推过 150 tok/s。定价是头条：**每百万 token $0.003 缓存 / $0.070 输入 /
+$0.281 输出**（Hy4：$0.042/$0.834/$2.501）——约为 Hy4 输出价的四分之一。声明依赖腾讯自家的
+**WorkIndex** 基准（"扎根典型 WorkBuddy 任务"——幻灯/文档/表格工作，8 个评测集）：单任务平均成本
+"仅为 Hy4 preview 的 1/13、Hy4 的 1/20、DeepSeek-V4.1-Flash-1017 的 1/8（Max 档、峰值时段定价）"，
+85 名内部用户对 259 个任务的盲评满意度"接近 Claude Haiku 5.5"。
+
+星号随身携带：**WorkIndex 是腾讯内部基准**，成本比是厂商自测；页面是 JS 壳（11-05 教训重演——Hy4
+GA 页面当时只有 10 个可见字符），**HN 帖里报道的开权重语句在页面上 grep 不到**——在贴到可机读之处
+前按未确认处理。模式观察：Hy4 GA 在 11-05 **没出货任何权重**（只有 Apache-2.0 的 Hy4-preview），flash
+档 API 先行——公告 → 托管 → 权重靠后，是这条线的常态行为（Qwen4-Max 在 11-16 走了同一条路）。第
+三方佐证目前薄但真实：HN 评论者花 **$0.13** 跑完 43 道数据分析题，报告其在廉价档按成本调整后胜过
+GPT-6 Luna。定位：flash 档模式（GLM-5.3-Flash、DeepSeek V4.1 Flash、Qwen flash）现横跨三大洲，价格
+战挪到了量真正所在的干活档。
+
+来源：[腾讯：Introducing Hy4 flash](https://hy.tencent.ai/research/hy4-flash) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50538184)

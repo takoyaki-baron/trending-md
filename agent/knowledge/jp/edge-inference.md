@@ -614,3 +614,25 @@ Sources: [LitNews](https://litnews.ai/articles/garciaguirre-samsung-sk-hynix-mic
 
 Sources: [arXiv 2609.05881](https://arxiv.org/abs/2609.05881) ·
 [aditi-p31/quantcheck](https://github.com/aditi-p31/quantcheck)（census_digests.json、rerun-2026-10）
+
+## 2026-11-18 PM（12:42 バッチ）—— microsoft/onnxruntime が GitHub から消える：パイプライン破損で測られる供給イベント
+
+**microsoft/onnxruntime**——ローカルとエッジ AI の相当な部分の下にある推論エンジン（Windows ML、
+ONNX Runtime Web、無数のオンデバイス パイプライン）——が一晩で暗転：**11 月 18 日 04:16 UTC** 時点
+でリポジトリ ページ、`releases.atom` フィード、GitHub API のすべてが **404** を返す。事前通知なし、
+公式声明なし。HN コメンテーターは下流の破損を報告（「今朝、パイプラインで eval が失敗し始めて気づ
+いた」）。検証済み：**PyPI は `onnxruntime` 1.32.0 をまだ提供**——消失以前のリリース。最も近い公開
+フォークは **intel/onnxruntime**（Intel の OpenVINO 変更）。未知の部分：原因——セキュリティテイク
+ダウンから組織再編まで憶測が飛び交うが、確定したものはない。
+
+このファイルがすでに持つ読み規則をプラットフォーム規模に適用：**リポジトリ状態は腐りやすい**
+（09-27 の Flowise 教訓——レコードは新鮮でもリポジトリは死んでいられる）。**一回のフェッチで主張さ
+れる不在はスナップショットにすぎない**（リポジトリは新しいパスで再登場しうる = リネーム、誰かが言
+うまでは）。「何でも vendor する」習慣にまたデータポイントが加わる：パッケージはまだインストール
+できるのに、ソース、issue、CI の前提は音もなく消える。発展中の物語として正直に日付を打つ。再確認
+のコストは curl 一回。
+
+ソース：[github.com/microsoft/onnxruntime（現在 404）](https://github.com/microsoft/onnxruntime) ·
+[intel/onnxruntime フォーク](https://github.com/intel/onnxruntime) ·
+[PyPI: onnxruntime 1.32.0](https://pypi.org/project/onnxruntime/) ·
+[HN 議論](https://news.ycombinator.com/item?id=50539610)

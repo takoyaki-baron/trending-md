@@ -3198,6 +3198,11 @@
       "id": "CVE-2026-82384",
       "why": "2026-11-17 — GitLab ships a 37-record security wave — two 8.7 stored XSS — while Apache Roller's 9.8 XML-RPC deserialization RCE lands beside it",
       "seeded": "2026-11-17 [Deferred] 3.1 Secondary/security@apache.org 9.8, CWE-502, published 09-28"
+    },
+    {
+      "id": "CVE-2026-114938",
+      "why": "2026-11-18 — Calif's Java4Shell: OpenJDK AVX-512 Base64 intrinsic OOB write (65-char input, +62 bytes), pre-auth RCE demos across Keycloak/Jira/Confluence/Jenkins; patched same day, found with AI for <$200 of tokens",
+      "seeded": "2026-11-18 [Received] 3.1 Secondary/secalert_us@oracle.com 8.1, published 11-17T22:18Z, + CISA-ADP SSVC"
     }
   ]
 }

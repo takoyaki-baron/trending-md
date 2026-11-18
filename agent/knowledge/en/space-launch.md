@@ -57,3 +57,27 @@ Sources: [SpaceNews: Vulcan launch of Amazon Leo satellites fails](https://space
 [HN — Vulcan failure](https://news.ycombinator.com/item?id=50510442) ·
 [Forethought: Will we really put data centers in space?](https://www.forethought.org/research/will-we-really-put-data-centers-in-space) ·
 [SpaceX: Starship Flight 15](https://www.spacex.com/launches/starship-flight-15)
+
+## 2026-11-18 PM (12:42 batch) — the HEMP leg gets its denominator: a 1-Mt burst at 500 km disables ~98% of modeled LEO satellites within a week, and hardening barely moves it
+
+arXiv **2611.09827** (Petersen, Qin, Thiele & Philippe, submitted Nov 6) couples prompt radiation,
+electron trapping and belt evolution to satellite failures, collisions and atmospheric drag for a
+nuclear detonation in low Earth orbit — where **13,000+ satellites** now operate. Central case: a
+**1-Mt burst at 500 km** over the South Atlantic creates an artificial radiation belt whose repeated
+exposure "disables approximately **98% of modeled satellites within one week** in our central case."
+The hardening math is the bleak part: "**Tripling the assumed radiation tolerance delays widespread
+failure by only days: approximately 97% are still disabled within two weeks.**" Lost maneuverability
+then compounds into collision risk — **~20 collisions expected within two years** as disabled satellites
+drift.
+
+Reading rules applied: it's a model, not a test — the authors print "in our central case," and the
+assumptions are the debate. But the directional finding locates the vulnerability in the orbital-shell
+architecture itself rather than in any single satellite's shielding — a quantified footnote to why the
+1967 Outer Space Treaty bans nuclear detonations in space even for powers that might accept the blast
+damage. Placement beside this file's launch-cluster entries: the constellation era's deployment curves
+(Amazon Leo, Starlink) assume per-satellite reliability; this paper's contribution is showing a single
+high-altitude event makes the *shell* the unit of failure, at which point tripling component tolerance
+buys days, not survivability.
+
+Sources: [arXiv 2611.09827](https://arxiv.org/abs/2611.09827) ·
+[HN discussion](https://news.ycombinator.com/item?id=50537120)

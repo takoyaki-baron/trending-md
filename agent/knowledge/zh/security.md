@@ -5011,3 +5011,32 @@ Sources: [Infisical](https://infisical.com/blog/active-directory-machine-identit
 [GHSA-pvmq-3jr9-v5qh](https://github.com/fastify/busboy/security/advisories/GHSA-pvmq-3jr9-v5qh) ·
 [GHSA-wh8h-qr34-3rj3](https://github.com/fastify/busboy/security/advisories/GHSA-wh8h-qr34-3rj3) ·
 [GHSA-gmhr-r4mc-w935](https://github.com/fastify/fastify-multipart/security/advisories/GHSA-gmhr-r4mc-w935)
+
+## 2026-11-18 PM（12:42 批次）—— Java4Shell：JIT 的 Base64 内在函数算错 store mask，而发现成本以 token 计价
+
+**`CVE-2026-114938`**（Calif 的 **Java4Shell**）：OpenJDK 的 AVX-512 Base64 内在函数**算错了填充尾部的
+store mask，导致越界写**——65 个字符的输入（64 个 `A` + `=`）把 50 字节缓冲区溢出 **62 字节**。影响
+OpenJDK **17.0.6+**、且仅在带 **AVX-512 VBMI** 的 x86-64 CPU 上（ARM64 不受影响）；Oracle 自己的记录
+列出受影响的 Java SE 构建 8u511b33-perf、17.0.21.0.3、21.0.13.0.3、25.0.5.0.3、27.0.1.0.3。真正的故事
+是影响演示而非原语：Keycloak、Jira、Confluence、JFrog Artifactory、Jenkins、PingFederate 的**认证前
+RCE**；Kafka、Solr、Elasticsearch、Gerrit、Spinnaker 的认证后 RCE；Heartbleed 式堆泄漏（**JavaBleed**）；
+以及经恶意 TLS 服务器的客户端变体。几乎所有 JVM 服务都解码 Base64，所以几乎全都带着这条代码路径。
+Oracle 于 **太平洋时间 11 月 17 日下午 1 点**出货补丁；过渡缓解为 `-XX:-UseBASE64Intrinsics` 或
+`-XX:UseAVX=2`。针对具体产品的武器化利用"等大家都有机会升级"之后再放出。
+
+**分数出处是"两方两框架"案例，不是 stopping-point 案例：**本 pass 实时核验的 NVD 记录（`Received`，
+发布于 2026-11-17T22:18Z，按 NVD 惯例无 `Z`）带有 Oracle CNA 分数 **8.1**（CVSS **3.1**，
+`AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H`，`Secondary` 槽位，`secalert_us@oracle.com`），旁附 **CISA-ADP
+SSVC** v2.0.3；Calif 自己的文章按 CVSS 4.0 算出 **9.2 CRITICAL**。引用时带版本引用两个数字——这是不同
+当事方，不是同一供应商的两个 stopping point。Oracle 的 `AC:H` 是诚实的：利用链需要 ASLR 绕过 + 堆
+feng shui + 每目标定制——"不是通用的一键通吃。"
+
+**发现经济学：**Calif 说 Quang Luong"花一小时发现漏洞，再花两小时做出第一个可用 exploit"，token 总
+成本 **不到 200 美元**——延续其 PHP2Shell/Squidbleed 的 AI 辅助路线。JFrog 与 Red Hat（RHSB-2026-018）
+独立佐证。已种入常设 NVD 监视（`agent/tools/nvd-provenance.json`）——要抓的事件就是记录翻出
+`Received`/仅 CNA 状态。
+
+来源：[Calif: Java4Shell](https://calif.io/java4shell/) ·
+[JFrog](https://research.jfrog.com/post/java4shell-vulnerability) ·
+[Red Hat RHSB-2026-018](https://access.redhat.com/security/vulnerabilities/RHSB-2026-018) ·
+[NVD CVE-2026-114938](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE-2026-114938)

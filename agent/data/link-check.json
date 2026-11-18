@@ -6457,114 +6457,186 @@
     },
     "https://news.ycombinator.com/item?id=50535230": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-17T21:54:10.944Z",
-      "last_seen": "2026-11-17T21:54:10.944Z",
-      "feeds": [
-        "2026-11-18.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=50535238": {
-      "verdict": "blocked",
-      "streak": 1,
-      "first_seen": "2026-11-17T21:54:10.944Z",
-      "last_seen": "2026-11-17T21:54:10.944Z",
+      "last_seen": "2026-11-18T05:51:52.613Z",
       "feeds": [
         "2026-11-18.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50532191": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-17T21:54:10.944Z",
-      "last_seen": "2026-11-17T21:54:10.944Z",
-      "feeds": [
-        "2026-11-18.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=50531751": {
-      "verdict": "blocked",
-      "streak": 1,
-      "first_seen": "2026-11-17T21:54:10.944Z",
-      "last_seen": "2026-11-17T21:54:10.944Z",
+      "last_seen": "2026-11-18T05:51:52.613Z",
       "feeds": [
         "2026-11-18.md"
       ]
     },
     "https://www.nytimes.com/2026/11/17/us/politics/nsa-down-network-outage-nsanet.html": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-17T21:54:10.944Z",
-      "last_seen": "2026-11-17T21:54:10.944Z",
+      "last_seen": "2026-11-18T05:51:52.613Z",
       "feeds": [
         "2026-11-18.md"
       ]
     },
     "https://www.reuters.com/technology/highly-classified-us-national-security-communications-network-is-down-cnn-2026-11-17/": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-17T21:54:10.944Z",
-      "last_seen": "2026-11-17T21:54:10.944Z",
+      "last_seen": "2026-11-18T05:51:52.613Z",
       "feeds": [
         "2026-11-18.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50534631": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-17T21:54:10.944Z",
-      "last_seen": "2026-11-17T21:54:10.944Z",
+      "last_seen": "2026-11-18T05:51:52.613Z",
       "feeds": [
         "2026-11-18.md"
       ]
     },
     "https://www.scmp.com/tech/big-tech/article/3374774/baidu-xiaomi-ceos-warn-growing-gap-between-ai-hype-and-returns": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-17T21:54:10.944Z",
-      "last_seen": "2026-11-17T21:54:10.944Z",
+      "last_seen": "2026-11-18T05:51:52.613Z",
       "feeds": [
         "2026-11-18.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50534044": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-17T21:54:10.944Z",
-      "last_seen": "2026-11-17T21:54:10.944Z",
+      "last_seen": "2026-11-18T05:51:52.613Z",
       "feeds": [
         "2026-11-18.md"
       ]
     },
     "https://www.ft.com/content/dbde7a30-548c-4f9d-a4be-7898a0c24dcf": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-17T21:54:10.944Z",
-      "last_seen": "2026-11-17T21:54:10.944Z",
+      "last_seen": "2026-11-18T05:51:52.613Z",
       "feeds": [
         "2026-11-18.md"
       ]
     },
-    "https://news.ycombinator.com/item?id=50532773": {
+    "https://news.ycombinator.com/item?id=50532086": {
       "verdict": "blocked",
       "streak": 1,
-      "first_seen": "2026-11-17T21:54:10.944Z",
-      "last_seen": "2026-11-17T21:54:10.944Z",
+      "first_seen": "2026-11-18T05:51:52.613Z",
+      "last_seen": "2026-11-18T05:51:52.613Z",
       "feeds": [
         "2026-11-18.md"
       ]
     },
-    "https://news.ycombinator.com/item?id=50536468": {
+    "https://news.ycombinator.com/item?id=50532385": {
       "verdict": "blocked",
       "streak": 1,
-      "first_seen": "2026-11-17T21:54:10.944Z",
-      "last_seen": "2026-11-17T21:54:10.944Z",
+      "first_seen": "2026-11-18T05:51:52.613Z",
+      "last_seen": "2026-11-18T05:51:52.613Z",
+      "feeds": [
+        "2026-11-18.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50533270": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-18T05:51:52.613Z",
+      "last_seen": "2026-11-18T05:51:52.613Z",
+      "feeds": [
+        "2026-11-18.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50538240": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-18T05:51:52.613Z",
+      "last_seen": "2026-11-18T05:51:52.613Z",
+      "feeds": [
+        "2026-11-18.md"
+      ]
+    },
+    "https://github.com/microsoft/onnxruntime": {
+      "verdict": "dead",
+      "streak": 1,
+      "first_seen": "2026-11-18T05:51:52.613Z",
+      "last_seen": "2026-11-18T05:51:52.613Z",
+      "feeds": [
+        "2026-11-18.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50540437": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-18T05:51:52.613Z",
+      "last_seen": "2026-11-18T05:51:52.613Z",
+      "feeds": [
+        "2026-11-18.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50539610": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-18T05:51:52.613Z",
+      "last_seen": "2026-11-18T05:51:52.613Z",
+      "feeds": [
+        "2026-11-18.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50539747": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-18T05:51:52.613Z",
+      "last_seen": "2026-11-18T05:51:52.613Z",
+      "feeds": [
+        "2026-11-18.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50538184": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-18T05:51:52.613Z",
+      "last_seen": "2026-11-18T05:51:52.613Z",
+      "feeds": [
+        "2026-11-18.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50537120": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-18T05:51:52.613Z",
+      "last_seen": "2026-11-18T05:51:52.613Z",
+      "feeds": [
+        "2026-11-18.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50535740": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-18T05:51:52.613Z",
+      "last_seen": "2026-11-18T05:51:52.613Z",
+      "feeds": [
+        "2026-11-18.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50540472": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-18T05:51:52.613Z",
+      "last_seen": "2026-11-18T05:51:52.613Z",
       "feeds": [
         "2026-11-18.md"
       ]
     }
   },
-  "runs": 188,
+  "runs": 189,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-11-17T21:54:10.944Z"
+  "last_run": "2026-11-18T05:51:52.613Z"
 }

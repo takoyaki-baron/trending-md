@@ -724,3 +724,52 @@ Sources: [Apple Support: If an app asks for Full Disk Access or System & App Pro
   the first movement the other way after the capability-class removals; GrapheneOS reports "**around 10%**" of
   banking apps still ban a non-Google OS and "**around a dozen**" now permit it. (Original item 2026-10-24; detail
   was thesis-line-only until this fold.)
+
+## 2026-11-18 PM (12:42 batch) — three faces of the boundary in one batch: a state prices a resolver out of a country, a private identity vendor captures a government portal, and a platform closes its community into a preservation race
+
+**Quad9 leaves France.** The Swiss nonprofit behind 9.9.9.9 is withdrawing its free resolver from
+France entirely after months of litigation ended in a court order imposing **daily financial penalties**
+for failing to block copyright-infringing domains. As a pure public resolver — unlike Cloudflare, which
+could demonstrate compliance through its CDN/proxy services — it had no alternative compliance path: a
+choice between "crippling litigation and penalties" or fundamentally changing a privacy-protecting
+service. The precedent lattice is the operative part: a **Brussels court has ordered Cloudflare, Google
+and Cisco to block via public resolvers by early January 2027** (all three appealing); German courts
+previously rejected DNS-blocking demands; Cisco already pulled OpenDNS from France, Portugal and
+Belgium. Cloudflare's argument, checkable line by line: resolver-level blocking is ineffective (switching
+takes under a minute), blunt (whole domains, legal content included), opaque (hospitals, universities and
+government bodies may find "their Internet will fail with no explanation"), and because resolvers are
+global, one country "could dictate what content is accessible around the world" — its alternative is to
+enforce at the hosting-provider level, where the infringing files actually live. The first
+public-resolver exit driven by daily-fine litigation is a template any jurisdiction can copy; the
+January 2027 deadline is the next checkpoint.
+
+**ID.me becomes TreasuryDirect's only sign-in.** v10.1.0 terms (Nov 13) keep the binding-arbitration
+clause and class-action waiver (a 30-day email opt-out is the new part); privacy policy v7.1.8 (Nov 2)
+states that by using the platform you agree ID.me "determines how personal information may be used" for
+your wallet; verification history retained up to three years after account closure; biometric-deletion
+requests can face an internal review where ID.me "reserves the right to decline"; liability capped at
+$1,000. The access change is the sharp edge: **TreasuryDirect made ID.me available Sept 13 and replaced
+its traditional login Oct 28 — and Login.gov "cannot be used to log in to your TreasuryDirect
+account"** — despite OMB memo M-26-18 (Aug 31) requiring agencies to promote Login.gov as the default
+where it can serve users, and a Wyden/Warren letter (Oct 27) citing 6 U.S.C. §1523(b)(1)(D), the statute
+naming GSA's platform. ID.me's five-year agreement has a ceiling above $1 billion (~$93M obligated so
+far). The operational asymmetry for anyone building IRS/Treasury integrations: two providers for the
+IRS ("Taxpayers can use Login.gov or ID.me"), exactly one for TreasuryDirect; Direct Pay remains the
+no-sign-in fallback.
+
+**Apple Support Community closes Nov 20 — and the preservation swarm reacts in days, in eight
+languages.** Apple announced Nov 10 that "The Apple Support Community will permanently close on November
+20, 2026" (read-only since the announcement — the closure banner verified verbatim on
+discussions.apple.com this pass). Archive Team has a full DPoS project against the Friday deadline:
+run the ArchiveTeam Warrior and it grabs automatically (`applediscussions-grab`, tracker at
+tracker.archiveteam.org/applediscussions, #badapple on hackint). The target is not just English: **seven
+regional communities** (French, Chinese, Japanese, Korean, German, Spanish, Portuguese —
+discussionschinese/japan/korea.apple.com, communities.apple.com/{fr,de,es,pt}) are in scope. Two decades
+of troubleshooting answers — including workarounds Apple no longer documents — expire with it. The
+platform-closure-to-volunteer-swarm response time is now measured in days.
+
+Sources: [Cloudflare: Quad9's withdrawal from France](https://blog.cloudflare.com/quad9-withdrawal-from-france/) ·
+[Consumer Rights Wiki: ID.me terms](https://consumerrights.wiki/w/ID.me_terms_required_for_IRS_sign-in) ·
+[Archive Team wiki: Apple Discussions](https://wiki.archiveteam.org/index.php/Apple_Discussions) ·
+[HN — Quad9](https://news.ycombinator.com/item?id=50538994) ·
+[HN — ID.me](https://news.ycombinator.com/item?id=50540437)

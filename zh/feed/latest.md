@@ -114,7 +114,7 @@ Runta 与 Baseten 合建的 harness 排行榜跑了 **830 亿 token、27,280 次
 - **Source:** alloyhtml.com · 140+ pts on HN · 5.2h ago (~23:07 UTC+8)
 - **Tags:** `css` `html` `no-javascript` `server-rendered`
 
-Alloy CSS 的演示是一个完整的开票应用——对话框、下拉菜单、日期范围选择器、带计数的标签页、手风琴、可关闭的 toast、批量操作复选框——全部在**一个没有 script 标签的 HTML 文件**里。项目自述非常精确："One stylesheet for HTML your server renders. Utilities, plus the parts you'd usually pull in a JavaScript library for: dialogs, menus, drawers, tabs, tooltips and toasts, all working with scripts turned off."（给服务端渲染的 HTML 的一张样式表。工具类，加上你通常要引入 JavaScript 库的那些部件：对话框、菜单、抽屉、标签页、tooltip 和 toast，在脚本关闭时全部可用。）无构建步骤、无框架——面向 Rails、Django、Laravel、htmx 或一叠 HTML 文件，自带两套暗色主题，主题拆分出来让你的颜色和字体住进一个小文件。它 **11 月 16 日发布了 1.0.8**，而这个仓库本身就是一次诚实的阅读练习：创建于 2018 年，沉寂数年，本周复活——**34 颗星**。全部注意力来自 Show HN，而非星数。
+Alloy CSS 的演示是一个完整的开票应用——对话框、下拉菜单、日期范围选择器、带计数的标签页、手风琴、可关闭的 toast、批量操作复选框——全部在**一个没有 script 标签的 HTML 文件**里。项目自述非常精确："One stylesheet for HTML your server renders. Utilities, plus the parts you'd usually pull in a JavaScript library for: dialogs, menus, drawers, tabs, tooltips and toasts, all working with scripts turned off."（给服务端渲染的 HTML 的一张样式表。工具类，加上你通常要引入 JavaScript 库的那些部件：对话框、菜单、抽屉、标签页、tooltip 和 toast，在脚本关闭时全部可用。）无构建步骤、无框架——面向 Rails、Django、Laravel、htmx 或一叠 HTML 文件，自带两套暗色主题，主题拆分出来让你的颜色和字体住进一个小文件。它 **11 月 16 日发布了 1.0.8**，而这个仓库本身就是一次诚实的阅读练习：创建于 2018 年，沉寂数年，本周复活——撰写时**34 颗星**（到 12:42 那一班已涨至 **54** 颗，随 HN 讨论串滚动——因为数字还会变，所以标注了读取时点）。全部注意力来自 Show HN，而非星数。
 
 **Why it matters:** 演示之所以成立，是因为现代 HTML 加 CSS 状态机制（popover、details、`:checked` 及其伙伴们）跨过了那道门槛——常见组件库的 JS 大部分只是状态管道——而运行 htmx/Rails/Django 技术栈的受众最先受益。这也是解读趋势信号的小教训：一个 34 星仓库登顶 HN 的一天，恰恰是星标速度这个错误指标的现身说法。
 
@@ -374,17 +374,19 @@ ID.me 的最新条款让这场隐私拉锯战更加锋利：v10.1.0（2026 年 1
 
 ---
 
-## 27. 哈佛企业级研究：AI agent 把代码产出抬高约 30%，已解决工单却原地不动——瓶颈移进了代码评审，每个 PR 慢了 3.45 天
+## 27. 哈佛企业级研究（11 月 14 日修订版）：agent 把代码产出抬高最多 76%，最终产出只涨 9–11%——代码评审成为瓶颈，提交到批准 +56%
 
 - **Velocity:** ▮ steady
 - **Source:** complexdiscovery.com · 89+ pts on HN · 7h ago (~05:16 UTC+8)
 - **Tags:** `research` `ai-coding` `economics` `code-review`
 
-一篇哈佛工作论文（Fiona Chen 与 James Stratton，"Artificial Intelligence in the Firm: Bottlenecks in Software Production"，2026 年 8 月 4 日）用交错双重差分覆盖 **718 家企业、725,938 名员工**，数据为 Jellyfish 工程分析数据与 Revelio Labs 记录的联结（2021 年 1 月–2026 年 3 月；6,830 万条 Jira issue、2.009 亿 commits、4,910 万 PR）。形状是：代码行数涨了约 30%（每工人月 5,017 基数上多 1,494 行）、commits +20%、PR +23%——而**已解决的 Jira issue 在 3.67 基数上只动了 +0.12，统计上与零无异**。工作去哪了？"The time from pull request submission to merge rose 3.45 days on a 7.03-day baseline, a 49 percent increase"（PR 从提交到合并的时间在 7.03 天基数上增加 3.45 天，涨幅 49%），正式变更请求近乎翻倍（13% 基数上 +12 个百分点），每 PR 评审评论 +35%。AI 评审工具没能救回来——到 2026 年 3 月约 80% 的企业用过，但 AI 只写了 23.3% 的评审评论，论文写道"the bottleneck persists after firms adopt such tools"（企业采用这类工具之后瓶颈依然存在）。这是本报 11 月 12 日 Christian Bird 演讲的活动-产出鸿沟的企业级计量经济学版本。局限性已披露：一篇未经完整同行评审的工作论文、Jellyfish 的商业利益（作者称之为"part of our ongoing work with Jellyfish"，后者只做专有信息审查）、以及 2026 年 3 月的数据截止。
+*更正（2026-11-18 13:10 UTC+8）：本条最初引用的是论文的旧修订版（已解决工单持平、合并慢 3.45 天、718 家企业/725,938 名员工）。当前版本——2026 年 11 月 14 日，一手读取——取代了这些数字；它们已不在现文本中。方向（产出上升、评审卡死）不变且更强。*
 
-**Why it matters:** 当先行指标甩开出货指标，约束就有了名字和数字：评审吞吐——PR 合并慢 49%，AI 写的评审评论不足四分之一。对工具建造者，这是可寻址的市场；对团队，这意味着不做评审容量规划的 agent 转型，只是把速度换成了排队时间。
+一篇哈佛求职市场论文（Fiona Chen 与 James Stratton，"Artificial Intelligence in the Firm: Bottlenecks in Software Production"，当前版本 **2026 年 11 月 14 日**；初稿 2026 年 1 月 7 日）用交错采用覆盖 **655 家企业、720,542 名员工**——来自 Jellyfish 工程分析平台的 **4.45 亿个工作事件**（GitHub 编码活动、Jira issue、Google Calendar），2021 年 1 月–2026 年 8 月——并把 AI **助手**与 AI **agent** 分开估计。形状是：采用助手后中位企业每工人月代码行数涨 **+42%**（3,115 → 4,424），采用 agent 后涨 **+76%**（3,679 → 6,482）；commits +14%/+23%，PR +15%/+32%——而**已解决的 Jira issue 只涨 +9%（2.53 → 2.76）与 +11%（2.76 → 3.08）**，epic 几乎不动。落点在评审阶段：采用 agent 后，从评审提交到批准的平均时间 **+56.1%**，可分解为积压等待 **+1.67 天（2.78 天基数的 59.9%）**与活跃评审 **+2.33 天（3.98 天的 58.5%）**，每变更的评论数 **+38.6%**——助手在这些边际上无显著效应。AI 评审工具没能救回来：到 2026 年 7 月 **79.1%** 的企业已在评审中用过 AI，但只有 **23.3%** 的评审评论是 AI 生成的（10.8% 的 PR 收到至少一条 AI 评论）——"humans are still heavily involved with review"（人类仍然深度参与评审）。局限性已披露：一篇未经完整同行评审的工作论文、以及 Jellyfish 的商业利益（作者在致谢中感谢 Jellyfish 团队）。
 
-[`🔗 ComplexDiscovery：哈佛研究者发现 AI 编码 agent 把瓶颈移向代码评审`](https://complexdiscovery.com/harvard-researchers-find-ai-coding-agents-shifted-the-bottleneck-to-code-review/) · [`🔗 工作论文（PDF）`](https://fion.ac/jellyfish.pdf) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50538303)
+**Why it matters:** 当先行指标甩开出货指标，约束就有了名字和数字：评审吞吐——批准时间 +56%、每变更评论 +38.6%，而已解决工单只动个位数。对工具建造者，这是可寻址的市场；对团队，这意味着不做评审容量规划的 agent 转型，只是把速度换成了排队时间。
+
+[`🔗 ComplexDiscovery：哈佛研究者发现 AI 编码 agent 把瓶颈移向代码评审`](https://complexdiscovery.com/harvard-researchers-find-ai-coding-agents-shifted-the-bottleneck-to-code-review/) · [`🔗 工作论文（PDF，11 月 14 日文本一手读取）`](https://fion.ac/jellyfish.pdf) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50538303)
 
 ---
 

@@ -697,3 +697,28 @@ HeyGen — the avatar-video company — now documents **Decision 1**, an API tha
 
 Sources: [HeyGen docs](https://developers.heygen.com/docs/models/heygen-decision) ·
 [OpenRouter](https://openrouter.ai/heygen/heygen-decision-1)
+
+## 2026-11-18 PM (12:42 batch) — PostHog's production ledger: the practitioner counterweight to a four-vendor launch week, with the failures printed
+
+PostHog's "**Not Everything Needs an LLM**" is the field manual the category's launch posts don't ship:
+typed decisions as a gating/routing layer under LLMs, with **calibration as the actual engineering
+work**, and real numbers from their own stack. The wins: Replay Vision's PII scrub asks **two narrow
+yes/no questions instead of one broad one** (false flags dropped to ~a tenth) and **98.7% of session
+summaries skip the LLM call entirely**; the Slack bot routes via a choice question ("cheapest option
+that will most likely finish the task correctly on the first try"); search reranks embedding candidates
+by probability (~+25% ranking quality on 20 test queries); a SQL chart picker replaced hand-written
+deterministic rules. The failures are what make it credible: **thresholds encode mistake costs** (0.4
+for PII — false negatives leak data; 0.85 for the bot — false positives annoy), one ranking job with
+**12–38k-token requests "flooded the model server and blocked other products' calls for hours"**, and
+PR-review ranking simply failed (**AUC 0.52**).
+
+Placement in the thesis: the category got four vendor launches in one week (Google's Decisions API Nov
+12, Perplexity Decider v1.3 Nov 14, HeyGen Decision 1 Nov 17 — each verified against its own launch
+artifact in earlier passes); PostHog's essay is the buyer-side answer, and its **98.7% bypass number is
+the concrete version of the cost argument every vendor launch implied**. The product boundary it names
+is real and reusable: "too simple for a language model, yet too fuzzy for a regex." Cross-checked this
+pass: the timeline matches each named vendor's artifact; the internal numbers are vendor-measured by
+design (and honest about being so).
+
+Sources: [PostHog: Not Everything Needs an LLM](https://newsletter.posthog.com/p/decision-models) ·
+[HN discussion](https://news.ycombinator.com/item?id=50535740)

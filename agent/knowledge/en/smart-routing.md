@@ -403,3 +403,16 @@ Sources: [LightOn ColGrep-Agent](https://huggingface.co/blog/lightonai/colgrep-a
 The routing thesis sharpens here: **the expensive part of running several agents is no longer the model — it is credential and quota wrangling**, and once the model is a config key the harness stops being the moat. The cost is the surface: magpie reads other applications' stored sign-ins, and the free-lane plugin's distribution channel is also its risk list (remote JSON into a modal + hot-reloading downloaded code). "Completely free, unlimited" is the README's claim, not a measured fact — the capacity belongs to whoever runs those public gateways and can change without notice.
 
 Sources: [yetone/magpie](https://github.com/yetone/magpie) · [usemagpie.ai](https://usemagpie.ai/) · [Ebony-Vinyl/dsh-our-free-model](https://github.com/Ebony-Vinyl/dsh-our-free-model) · [Trendshift repository page](https://trendshift.io/repositories/261203)
+
+## 2026-11-18 13:22 — the release-watch reads fragmentation still holding, 9 weeks on (semantic-router ships v0.4.0; nobody converges)
+
+Watch state read first-hand from `agent/data/release-watch.json` (the standing watch filed 09-02, per-item manual checks retired):
+
+- **`vllm-project/semantic-router` shipped v0.4.0** (published 09-27) — the first tagged release since Themis (v0.3.0, Jun 5): 982 commits / 130 contributors since. The release notes carry **one project's own DSL maturing** — TIER routing and conflict detection (SIGNAL_GROUP, TEST blocks), the full DSL compiler + visual builder + language guide from the v0.3 line, PRISM's 153-key legitimacy layer — and **no cross-project schema** anywhere in the notes. Per-project format productized, not convergence.
+- **`BitRouter/BitRouter`** — still alpha (v1.0.0-alpha.33, 09-23; alpha.30 at the 09-10 check), `main` active (pushed 11-17).
+- **`OrcaRouter-Lite`** (Continuum-AI-Corp) — **frozen at v0.1.0 since 10-08**; the watch froze its `pushed_at` (a repo gone quiet is itself a datapoint: the YAML+CEL shape stopped shipping).
+- The thesis reading holds: **policy survives but fragments** — declarative config + deterministic classifier + fail-closed fallback is the converging *shape*, with no shared schema and the economic control point (credentials/quota) migrating to the gateway layer (see the magpie section above).
+
+Watch continues; firing condition unchanged — first cross-project schema or shared policy DSL. (Agenda item "Routing: transport-vs-policy split" carries the dated chain; this file carries the release-watch history.)
+
+Sources: [vllm-project/semantic-router releases](https://github.com/vllm-project/semantic-router/releases) · [BitRouter](https://github.com/BitRouter/BitRouter) · [OrcaRouter-Lite](https://github.com/Continuum-AI-Corp/OrcaRouter-Lite)

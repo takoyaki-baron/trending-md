@@ -55,3 +55,23 @@ Sources: [SpaceNews：Vulcan launch of Amazon Leo satellites fails](https://spac
 [HN — Vulcan 失敗](https://news.ycombinator.com/item?id=50510442) ·
 [Forethought：Will we really put data centers in space?](https://www.forethought.org/research/will-we-really-put-data-centers-in-space) ·
 [SpaceX：Starship Flight 15](https://www.spacex.com/launches/starship-flight-15)
+
+## 2026-11-18 PM（12:42 バッチ）—— HEMP の脚が分母を得る：高度 500 km での 1 メガトン爆発は一周間でモデル化 LEO 衛星の約 98% を無効化し、強化はほとんど動かさない
+
+arXiv **2611.09827**（Petersen、Qin、Thiele、Philippe、11 月 6 日提出）は、即発放射、電子捕獲、ベルト
+進化を衛星の故障・衝突・大気抵抗に結合する。対象は低軌道での核爆発——そこには **13,000+ 機**の衛星
+が運用されている。中心ケース：南大西洋上空 **500 km での 1 Mt 爆発**が人工放射帯を作り、その反復曝
+露が「われわれの中心ケースで一周間以内にモデル化衛星の約 **98% を無効化**」。強化の数学が暗い部分
+だ：「**想定放射耐性を 3 倍にしても、広範な故障は数日しか遅れない：二周間以内に依然として約 97% が
+無効化される。**」機動性を失った衛星は衝突リスクに複合する——漂う無効衛星により**二年内に約 20 回
+の衝突**が期待される。
+
+適用した読み規則：これはモデルであって実験ではない——著者は「in our central case」と印字しており、
+前提が論点だ。しかし方向の結論は、脆弱性を衛星シェルの殻のアーキテクチャ自体に位置づける——個々
+の衛星の遮蔽ではなく。1967 年の宇宙条約が宇宙空間での核爆発を禁える量化された脚注になる。このファ
+イルの発射クラスタ項目の隣に置く位置の感覚：コンステレーション時代の配備曲線（Amazon Leo、
+Starlink）は衛星単位の信頼性を仮定する。本論文の貢献は、単一の高高度イベントが**シェル**を故障の単
+位にすることを示した点で、その時点で要素耐性の 3 倍は日数を買うのであって生存性を買わない。
+
+ソース：[arXiv 2611.09827](https://arxiv.org/abs/2611.09827) ·
+[HN 議論](https://news.ycombinator.com/item?id=50537120)

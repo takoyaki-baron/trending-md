@@ -50,3 +50,21 @@ Sources: [SpaceNews：Vulcan launch of Amazon Leo satellites fails](https://spac
 [HN — Vulcan 失败](https://news.ycombinator.com/item?id=50510442) ·
 [Forethought：Will we really put data centers in space?](https://www.forethought.org/research/will-we-really-put-data-centers-in-space) ·
 [SpaceX：Starship Flight 15](https://www.spacex.com/launches/starship-flight-15)
+
+## 2026-11-18 PM（12:42 批次）—— HEMP 一腿拿到分母：50 万米高空 1 百万吨当量爆炸一周内致 ~98% 建模 LEO 卫星失效，加固几乎不改变结局
+
+arXiv **2611.09827**（Petersen、Qin、Thiele 与 Philippe，11 月 6 日提交）把瞬时辐射、电子捕获与
+带演化耦合到卫星失效、碰撞与大气阻力，对象是低地球轨道核爆——那里现有 **13,000+ 颗卫星**运行。
+中心情形：南大西洋上空 **50 万米高度 1 Mt 爆炸**产生人工辐射带，其反复暴露"在我们中心情形下一周内
+使约 **98% 建模卫星失效**"。加固数学是惨淡的部分："**把假设的辐射容限提高到三倍，广泛失效只推迟
+数天：两周内仍有约 97% 失效。**"失去机动性接着复合成碰撞风险——失效卫星漂移，**两年内预期约
+20 次碰撞**。
+
+应用的读法规则：这是模型不是试验——作者印着"in our central case"，假设就是争点。但方向性结论把
+脆弱性定位于轨道壳层架构本身，而非任何单星屏蔽——给 1967 年《外层空间条约》禁核爆提供了量化注脚，
+即使对可能接受爆炸损伤的强权也成立。与本文件发射簇条目并列的位置感：星座时代的部署曲线（Amazon
+Leo、Starlink）假设单星可靠性；本文的贡献是指出单一高空事件使**壳层**成为失效单元——此时元件容限
+三倍只买到天数，买不到生存性。
+
+来源：[arXiv 2611.09827](https://arxiv.org/abs/2611.09827) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50537120)

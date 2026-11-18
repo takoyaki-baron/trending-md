@@ -1592,3 +1592,21 @@ Sources: [burntsushi.net](https://burntsushi.net/jiff/) ·
 [antflydb/antfly](https://github.com/antflydb/antfly) ·
 [Alloy 演示](https://alloyhtml.com/example.html) ·
 [alloyhtml/css](https://github.com/alloyhtml/css)
+
+## 2026-11-18 PM（12:42 批次）—— jQuery 交棒：4.1.0 与 3.8.0 同日出货，注册表确认两个时间戳
+
+jQuery 一次发两版：**4.1.0**——4.x 线首个 minor，与 **3.8.0**——"a send-off, not a comeback"，**3.x
+最后一个计划内 feature 发布**，此后只收"关键安全与 bug 修复"。两版都带**选择器标识符匹配中的
+ReDoS 修复**（灾难性回溯可能挂死页面）与新的对象式 AJAX transport complete-callback API。4.1.0 加入
+`jqXHR.responseURL`（issue #4339，终于）、把选择器引擎整体迁到 `querySelectorAll`、经
+`createElementNS` 修 XML 文档处理、在 `.serialize()` 里处理 form-associated 自定义元素、把
+`uniqueSort` 从 O(N²) 降到 O(N)、并绕过一个 **Safari 27 正则解释器 bug**。3.8.0 获得
+`hidden="until-found"` 支持与正式弃用（原型上的 `push`/`sort`/`splice`、`jQuery.expr.filters`）。同一
+发布周期还给仓库加了"机器生成贡献指引"——一个二十岁的库在交棒的同一口气里悄悄装上 agent 贡献指
+引。本 pass 一手核验：**npm 注册表时间戳确认两版**（4.1.0 发布于 2026-11-17T19:02Z 为 `latest`；
+3.8.0 于 16:51Z 为 `v3-latest`）——庞大的 3.x 装机量可以行动的带日期里程碑；连锁版本的站点也该动的
+原因是安全修复同时落在两条分支上。
+
+来源：[jQuery 博客：4.1.0 and 3.8.0 released](https://blog.jquery.com/2026/11/17/jquery-4-1-0-and-3-8-0-released-passing-the-torch/) ·
+[4.1.0 release notes](https://github.com/jquery/jquery/releases/tag/4.1.0) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50537156)

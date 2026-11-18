@@ -158,3 +158,26 @@ race.
 
 Sources: [RunanywhereAI/trnrt](https://github.com/RunanywhereAI/trnrt) ·
 [Blog: Serving GLM-5.3-Flash on one Trainium2 box](https://runanywhere.ai/blog/glm-5-3-flash-trainium2-nki-megakernels)
+
+## 2026-11-18 PM (12:42 batch) — Cerebras disaggregates: AMD GPUs take prefill, wafers take decode, priced in tokens per megawatt
+
+Cerebras launched **disaggregated inference**: **AMD Instinct GPUs process prompts, Cerebras CS-3
+systems generate responses** — splitting the pipeline at the prefill/decode boundary because decode is
+autoregressive and memory-bandwidth-bound, which is where the wafer-scale engine's SRAM-centric design
+(claimed "350× the SRAM capacity and 5,400× the memory bandwidth of a typical GB300 GPU") has its
+structural edge. The measured claim: "**5× the throughput per megawatt of a CS-3-only configuration,
+with no loss in token generation speed**" — from a **single shared GPT-OSS-120B endpoint on November
+14**: one model, one day, vendor-measured, normalized to 1×. Early-access partners named: AWS, Fireworks
+AI, Gimlet Labs, General Compute. Broad rollout across "hundreds of megawatts" of Cerebras cloud and
+partner sites is targeted for **end of 2027**, alongside a planned **700MW** of data-center capacity.
+
+Placement in the thesis: prefill/decode disaggregation is already standard practice inside the GPU
+ecosystem — what's new is pointing the **decode** half at non-GPU silicon and pricing it in megawatts,
+the metric this file's 10-25 entry noted the trillion-parameter wafer-budget post called "the more
+meaningful metric" while shipping no tokens/s/MW figure. The caveat is doing real work: 5× is one
+endpoint, one model, one day — if it generalizes it changes the power math every 2027 datacenter plan
+is built on; if it doesn't, it's a launch-day slide. Both outcomes are live, and the burden is on the
+end-2027 broad rollout to show more than one curve.
+
+Sources: [Cerebras: Disaggregated Inference](https://www.cerebras.ai/blog/cerebras-launches-disaggregated-inference) ·
+[HN discussion](https://news.ycombinator.com/item?id=50540472)

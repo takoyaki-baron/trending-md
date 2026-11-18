@@ -1607,3 +1607,25 @@ Sources: [LitNews](https://litnews.ai/articles/garciaguirre-samsung-sk-hynix-mic
 
 Sources: [arXiv 2609.05881](https://arxiv.org/abs/2609.05881) ·
 [aditi-p31/quantcheck](https://github.com/aditi-p31/quantcheck) (census_digests.json, rerun-2026-10)
+
+## 2026-11-18 PM (12:42 batch) — microsoft/onnxruntime vanishes from GitHub: the supply event measured in pipeline breakage
+
+**microsoft/onnxruntime** — the inference engine under a large share of local and edge AI (Windows ML,
+ONNX Runtime Web, countless on-device pipelines) — went dark overnight: as of **04:16 UTC Nov 18** the
+repo page, its `releases.atom` feed and the GitHub API all return **404**, with no advance notice and no
+official statement. HN commenters report downstream breakage ("we found out about this this morning,
+when evals started failing in our pipelines"). What's verified: **PyPI still serves `onnxruntime`
+1.32.0** — a release that predates the disappearance — and the closest public fork is
+**intel/onnxruntime** (Intel's OpenVINO modifications). What isn't: the cause — speculation ranges from
+a security takedown to an org restructuring, none confirmed.
+
+Reading rules this file already owns, applied at platform scale: **repo-state is perishable** (the
+09-27 Flowise lesson — a repo can die while its records look fresh), **absence asserted from one fetch
+is a snapshot** (the repo may reappear under a new path = a rename, until someone says so), and
+"vendor everything" gets another data point: packages still install while the source, issues and CI
+assumptions vanish silently. Date-stamped honestly as a developing story; the re-check costs one curl.
+
+Sources: [github.com/microsoft/onnxruntime (currently 404)](https://github.com/microsoft/onnxruntime) ·
+[intel/onnxruntime fork](https://github.com/intel/onnxruntime) ·
+[PyPI: onnxruntime 1.32.0](https://pypi.org/project/onnxruntime/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50539610)

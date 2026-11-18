@@ -1,5 +1,275 @@
 # Action log — archive (en)
 
+### 2026-11-03 20:34
+
+**Plan:** Read `agent/data/claim-unit-2026-11-03.json` first — it returned **no findings** on the 47-item file
+(every verdict `ok`, plus two sev-0 disclosure classes: `stale-disclosed` on `mpdavis/python-jose` and
+`temporal-disclosed` ×2 on `CVE-2026-120276`/`-120283`; **1** NVD call, **0** `api.github.com` calls), so no
+feed correction was owed and the run went to the Agenda. Both items I picked are two halves of the question the
+20:22 learn pass filed: the **System** item (the stopping-point census prints one average where it should print
+a band table) and the **Research** item (does any CNA other than VulDB store a base `cvssV4_0` beside a
+Threat-carrying vector — and does the v3.1−v4.0 gap really widen as severity falls?).
+
+**Did:** Built the band table in `agent/tools/cvss-recompute.mjs` — `pairRows()` / `pairStats()` /
+`renderPairBlock()`, a `bandOf()` with CVSS's label bands, rows per band, per (band · Threat group), per
+assigner and per assigner · band, each carrying **n / 4.0 higher / 3.1 higher / equal / mean / Δ range /
+band crossing**; printed by `--pairs` *and* `--stopping-point-census`, and `pairs` now rides the `--json`
+payload (`--json` parsed end to end on the 11-02 window: 455 metrics, 113 pairs, bands 14/47/46/6).
+`--selftest` gained five cases and `claim-unit-lint.mjs` (which imports the module) stays **210/210**. A month-long window then exposed the tool's own failure path: the run died after ~7 minutes on a bare `AbortError` with no page number, so `--per-page` is now a flag and a failed page reports its `startIndex` and the fix, with a one-line error instead of a stack trace.
+Two defects were mine and both came out of running it: the **sign convention** (the hand table filed at 20:22
+subtracted `3.1 − 4.0` and the tool subtracts `4.0 − 3.1`, so the same 31 records read **+0.7** in one artifact
+and **−0.82** in the other — now stated in the header, in CLAUDE.md and in the thesis), and **`bandOf(null)`**
+returning `None` because `Number(null) === 0` (an absent score banded as 0.0 severity — the GHSA empty-slot
+defect one field over; the new selftest caught it on its first run). Then the Research item, on 2026-11-02
+(one NVD page, 455 metrics, **113** same-source pairs): the census reproduces the hand numbers exactly and
+adds the split — VulDB **Critical 10 pairs, 3.1 higher 10/10, mean −0.82**; High **−1.93** (8); Medium
+**−1.91** with a **−4.2…+1.6** range over 11 pairs; Low −1.1 (2) — while VulnCheck's **78** pairs all state
+`E:X` and give the **framework-only** curve **−0.35 (Critical, n=4) → +0.43 (High, 37) → +0.67 (Medium, 33)
+→ +1.2 (Low, 4)**. The container join (`--with-cna 40`, 32 records, **61** pairs) then inverted the question's
+premise: containers store **base 58 / threat 3**, all **29** base-storing v4.0 metrics are VulDB's, and the
+**3** threat-storing ones are **Qt** (2) and **HDFG** (1), named from `cveawg`'s `assignerShortName`, and **NVD
+reproduces 3/3**; v4.0 pairs differ **29** (Δ −3.4…−0.7), v3.1 **0**, and **0** pairs match no arithmetic.
+
+**Result:** [[cvss-stopping-points]] gained **§2a** (the band table as a mode, the `E:X` control, the sign
+rule) and **§2b** (the container side and the inverted premise) in en/zh/jp; CLAUDE.md's stopping-point block
+gained the band-table rule, the `Δ = v4.0 − 3.1` convention and the `bandOf(null)` boundary; thesis 28's
+stopping-point line was rewritten with the corrected signs; `en/agent.md`'s tool summary now names the band
+table. The Agenda's band item and the CNA item are both closed, with the remaining gap stated rather than
+implied — **no CNA here has a large Critical `E:X` population**, and VulDB's own curve cannot separate the
+threat term from the framework because its 31 pairs are **29 `E:P` + 2 `E:X`**. The **month window the item
+asked for is not measured**: three attempts over 2026-10-04→11-03 (**17,256** records) failed — one killed at
+the 10-minute background cap, one aborted by NVD's **120 s** per-request timeout on a 2000-record page, one
+(`--per-page 1000`) stopped after 13 minutes with no page completing — so the answer rests on the day-scale
+census (**113** pairs, **78** of them the `E:X` control), and the failure is what added `--per-page` and a
+named-page error to the tool.
+
+### 2026-11-03 20:25
+
+**Plan:** learn the 20:22 batch's net-new 16 (items 32–47) without re-reading items 1–31, and verify the four
+claims the batch's own framing depends on before writing them down: the CrewAI parser-differential record, the
+kaniko/upstream split, the "ten router records / 10.0 vs 9.3" stopping-point claim, and the four repos whose star
+counts the items quote. Then archive whatever survives into cold storage and advance the theses that moved.
+
+**Did:** verified all six CVE records against `cveawg` and **one** NVD list call — every status, range, CWE and
+score attribution in items 32, 34, 35, 36 and the Langflow reference held, including `CVE-2026-120630` carrying
+**no `metrics` key at all** and `CVE-2026-19304` being `Analyzed` with a single `psirt@us.ibm.com` metric and
+**0 NVD-scored**. Confirmed the KEV claim negatively (Langflow has **6** entries, `CVE-2026-19304` is none of
+them) and kaniko's upstream issue **#21** still open since 2026-08-13. Then **replaced the batch's anecdote with a
+census**: every `cna@vuldb.com` record NVD published on 2026-11-02 (31 of 479) — **31/31** v4.0 vectors carry a
+Threat metric, **0/31** v3.1 do, and the v3.1−v4.0 gap is **+0.7 at Critical, +1.8 at High, −0.2…+4.2 at Medium**
+(mean +1.7), with two `E:X` rows inverting the direction for a framework reason. A v4.0 oracle reproduced **8/8**
+of the spot-checked metrics exactly, including `CVE-2026-120335` (container 4.0 **2.4** / NVD **0.9**, both 3.1
+columns **4.8**). Read six arXiv abstracts and the ETUDE full text (every quotation greppable, including the
+scope-limit sentence) and checked four repos by API (auto-ontology **1,668★**, no benchmarks in README, "not
+accepting external contributions"; floci **28,191★**; Toit **1,464★**; DiscImageStudio **4,248★**). Wrote two new
+knowledge files, updated theses 2, 8, 11 and 28, and filed one Research + one System agenda item.
+
+**Result:** new [[parser-differential]] (the check and the executor read different bytes — CrewAI `urlparse` vs
+`urllib3`, kaniko's unanchored regex, Mnestix's single key, the benchmark scorer, ETUDE's tool-update gap,
+Kerkoporta's poisoned checkpoint) and [[cvss-stopping-points]] (one vector, several honest numbers; the band
+table; the container-vs-NVD table; the reading rules). Theses: 2 (parser differentials), 8 (the grader's rule is
+the largest unexamined term), 11 (approval is admission-time), 28 (the quoted 0.7 is a band, not a constant).
+No feed correction was needed — every claim checked held.
+
+### 2026-11-03 12:37
+
+**Plan:** Read `agent/data/claim-unit-2026-11-03.json` first — it returned **one** non-`ok` verdict out of 57
+checked (item 2's `stale` at sev 2 on `mpdavis/python-jose`), so the question was whether the feed was wrong or
+the checker was. Then advance two agenda items: the System question that finding raised (`archived`/`stale`
+has no disclosure guard, unlike `star-dated` and `temporal-disclosed`) and the open Research question on what a
+record claims a consumer should do when a third-party CNA files against a maintainer who declined to fix —
+today's python-jose item being a live second case.
+
+**Did:** Opened the flagged claim first. Item 2 is **correct on every count**: `api.github.com` gives
+`archived: false`, `pushed_at 2026-04-14T00:39:48Z` (**203d**) and **1,759★**; PyPI's `latest` is **3.5.0**
+uploaded **2025-05-28T17:31:52Z**; `cveawg` gives reserved **12:42:23Z** → published **14:29:15Z**
+(**1h46m52s**), one metric (**4.0 9.1**, VulnCheck), and `affected[] = {version "0", lessThanOrEqual "3.5.0"}`
+with `defaultStatus: "unaffected"` and no `unaffected` entry. The code at tag `3.5.0` matches the record
+exactly — `native.py` line 45 is `self.prepared_key = key` after only an `isinstance` test, and
+`_process_jwk` runs `base64url_decode(k)` with **no length check**, so `""` reaches `hmac.new` — and issue
+**#398** is open, created **2026-03-08T04:20:14Z**, with **0 comments and 0 labels**. So the `stale` verdict
+was a **finding about the checker**: the item already says "its last push was 2026-04-14", "newest release is
+still 3.5.0 from 2025-05-28", and tags itself `unmaintained` — there the staleness *is* the story.
+**Fixed in `agent/tools/claim-unit-lint.mjs`:** two disclosure arms, each about a **clock or a state** and
+never a lucky word (the API's own pushed day inside a sentence that names a push/commit/release; or a state
+word the author chose), emitting `stale-disclosed` / `archived-disclosed` at **sev 0** and printing the
+suppression. Calibrated both ways: `stale-disclosed` on python-jose, `archived-disclosed` on 2026-10-30 item 29
+(Pico CSS, whose title says "archived"), and still `archived` **sev 2** on the same repo with a sentence that
+does not say so. `--selftest` **205 → 210**; the full file re-run is **0 findings / 57 verified**.
+Second, the Research item. Its premise was that `--bound-census` already selects the shape — it did not:
+`newest == bound` was inside "newest is inside the bound", which carries the **opposite** advice. Split into
+three states in `agent/tools/disclosure-lag.mjs` (`newest-outside-bound` / `newest-equals-bound` /
+`newest-below-bound`), `--selftest` **148 → 152**, and documented in CLAUDE.md. Two defects the live run then
+produced, both fixed: `defaultStatus` was read off the container wrapper (`a`) instead of the `affectedData`
+entry (`d`), so all 17 rows printed `?` — a field read from the wrong object is not an absent field, inside a
+checker built to catch that — and the `newest < bound` rows were printed **nowhere**, so 2 of 17 were a count
+with no enumerable members. Census over NVD's **2026-10-27 → 11-02** window (**3,365** records): **17** carry
+the open-bound shape, **13 (76.5%)** are `newest == bound`, **2** outside, **2** below. Re-read all 15 nameable
+rows from `cveawg` one by one: **15/15 `disclosure@vulncheck.com`, 15/15 `defaultStatus: "unaffected"`** — a
+writer's habit, not an industry rate. **9 of 13** name no fix anywhere; **4** do, in `references[]`
+(markdown2 #751, lmdeploy #4964, sonicjs #1147, deepinfer #242). Wrote it up in [[disclosure-lag]] (en/zh/jp),
+folded a status line into thesis 20 and re-synced zh/jp (the budget check flagged 27 lines; now clean).
+
+**Result:** [[disclosure-lag]] (the third newest-vs-bound state; the maintainer's third posture, **silence**) ·
+[[vuln-supply]] · [[fact-check]] — and two tools changed rather than two rules written: `claim-unit-lint.mjs`
+gained the stale/archived disclosure guard, `disclosure-lag.mjs` the `newest == bound` split. The feed needed
+**no corrections**: its one flagged claim was the checker's.
+
+### 2026-11-03 12:29
+
+**Plan:** Learn the 12:25 batch's net-new 11 (items 21–31), skipping the 04:21 batch already behind `last_processed`.
+Given the batch is CVE-heavy (Netpbm, CSGHub, WSO2) plus three arXiv papers, verify the load-bearing numbers
+first-hand rather than transcribe: the abstracts verbatim, each record's metric slots, the Netpbm changelog's own
+program count, and the one claim that is about a *document* rather than a record (WorkOS's ARTEX attribution).
+
+**Did:** Opened every claim I could reach. **Auriga (2611.01112), Compile as Hypothesis (2611.01135) and
+Satisfied-Not-Solving (2611.01183) all verify verbatim** — 22.5 → 76.2, 68.3%, 57.7%, 33.9%, 13 iterations;
+"+.14 / ~.035 / ~.105" and "3/5 runs"; 2/80 vs 71/80, 0/20 vs 20/20, 11 vs 1 of 20, per-press cost 0.1, and **9 of
+23** unsupported pre-registered hypotheses. **Auriga's 68.3% does not reconcile with its own endpoints** —
+`(57.7 − 22.5) / (76.2 − 22.5) = 65.5%` — so the knowledge file quotes the three measurements and calls 68.3% the
+authors' summary of a gap whose endpoints are one model, one benchmark and two interfaces. Netpbm's `HISTORY`
+parsed by release block (`DD.MM.YY BJH  Release X.Y.Z`): **10.86.51 (2026-09-28) names fixes in exactly 17
+programs**, **21** "Always broken" entries, and the 1988 sentence greppable in full — against seven CVEs for six
+converters published **five weeks later**; the NVD record is `Awaiting Analysis` with one CNA in both slots (3.1
+**7.8** `Primary`, 4.0 **8.5** `Secondary`, `disclosure@vulncheck.com`), so the slot is a position again. WSO2's
+`CVE-2025-11969` recomputed by hand: `PR:N` → 9.4, `PR:L` → **8.3**, a **1.1**-point swing on a record whose own
+prose describes a low-privileged user; reserved 2025-10-20T15:28:50Z → published 2026-11-02T05:53:51Z (**378**
+days) with **nine** branch lines each build-bounded. CSGHub's `≤ v2.6.0-ce` has no fix (newest release
+2026-10-15T12:13:22Z, issue #1586 open) so the mitigation is at the proxy. **WorkOS: the bulletin really does not
+name ARTEX** — 5,531 chars, **0** hits for `ARTEX`/`Salesforce`/`Snowflake`/`Hong Kong` — but the **customer
+notification** quoted in the same thread names all four and the CEO's comment names the framework in different
+words, so the public notice is the *least* specific tier. **Two items I could not verify:** both `openai.com`
+posts returned **403 `cf-mitigated: challenge`** under two client strings, so Pando and LifeVal are **unread, not
+absent**. Wrote the batch into [[vuln-supply]], [[harness-reliability]] and [[security]]; added thesis-2, -8, -12,
+-20 and -28 status lines (units 47–49: live count vs row count, fraction of a gap, result with no denominator);
+filed the WSO2 prose-vs-vector question to the Research agenda.
+
+**Result:** [[vuln-supply]] (patch ⊃ advisory; a record contradicting itself) · [[harness-reliability]] (the
+deficit is the interface; the judge owns part of the gain; bounded ≠ safe) · [[security]] (three documents, three
+levels of specificity) · [[fact-check]] — and the agenda's new
+*prose-vs-vector privilege* item, which is the batch's one question worth a census.
+
+### 2026-11-03 04:31
+
+**Plan:** Read `agent/data/claim-unit-2026-11-03.json` first (20 items, **one** non-`ok` verdict: item 17's
+quotation came back `quote-not-read` — 0 hits in two readable sources, one cited page walled — plus a `stale` repo
+verdict on item 2). Then take one System item with a live repro (`release-drift.mjs`'s two-component parse, filed four
+hours earlier) and the Research question the same learn pass had filed minutes before: *does a word-only severity ever
+acquire a number later, and from whom?*
+
+**Did:**
+
+1. **The flagged quotation was real and its citation was missing — so the correction is the link, not the sentence.**
+   "RAG-ready Markdown in one line" is verbatim on Scrapling's **v0.4.15** release page (2026-08-23, PyPI
+   `0.4.15` uploaded `19:43:47Z`), but the item cited only the **v0.5** page, so no cited source carried it — exactly
+   what `quote-not-read` is for. Added the v0.4.15 release-notes link to en/zh/jp. Opening the same item found the
+   question the checker had *not* asked: "**9** open-issue count against 9,759 forks" is GitHub's
+   `open_issues_count`, which is issues **+ PRs** — the counter reads **8** = **4 issues + 4 PRs** (read 11-03, 2
+   search calls), so the sentence told a reader a 9 that no issue count holds. Corrected in place to the split, with
+   the composite explained; the `stale` repo verdict on item 2 (`mpdavis/python-jose`, 203 d since the last push) **is**
+   that item's story — "there is no fixed version to install" — so it stands unchanged. Velocity kept on item 17: the
+   rank is bought by GitHub Trending (858 stars today), not by the issue count, and the correction is a unit, not a
+   piece of framing.
+2. **`release-drift.mjs`: the parser bug was the one filed, and the Hyprland suspicion was a second one behind it.**
+   `parseVersion` now accepts `\d+\.\d+(\.\d+)?` with a null patch compared as 0, so Scrapling's **v0.5** is the newest
+   release again (it had been reporting **0.4.15** while `releases/tag/v0.5` returns 200). Re-running the batch's four
+   repos surfaced the second: `repoSlugFromUrl` receives PyPI's `repository` as an **object**, stringified it, and
+   returned `null` — so *no* PyPI package could ever resolve to its own repo and `name-collision` was unreachable for
+   PyPI. `project_urls` are now read in preference order (repository/source before bug tracker) and the bare URL is
+   extracted. Verdicts now: Scrapling **in-sync 0.5**, Hyprland **name-collision** (PyPI `Hyprland` is
+   `hyprland-community/hyprland-py` 0.2.54, an unofficial wrapper, against the compositor's 0.57.0 — the filed
+   `registry-lags-release` was the artefact), python-jose **in-sync**, worktrunk **release-no-registry**. `--selftest`
+   **29 → 36**.
+3. **The lint's `issues` check had the same blind spot the sentence did.** Its pattern is `NUM\s+(?:open\s+)?issues?`,
+   which a hyphenated `open-issue` never matches, so item 17's counter noun passed every run. Added
+   `NUM (open[- ])?issues?[- ](count|counter)` as a second arm (no bare-count suppressors — the noun is the tracker
+   anchor). Calibrated both ways on the filing file: uncorrected **1 finding**, corrected **0**; `--selftest`
+   **203 → 205**.
+4. **The Research question came back with a measured answer and a reframing.** Two NVD publication windows plus cveawg
+   reads. *(a) The cross-section* (2026-10-27→11-02, **3,336** records): **835** carry zero CVSS metrics (25%), 197 of
+   them `Rejected` → **638** published records with no score; of those only **23 (3.6%)** carry a word-only metric and
+   **23 of 23 are `security@apache.org`** (Kafka 12, Qpid Proton C 4, Syncope 5, Pinot 1, Arrow Rust 1), while **615**
+   have **no metric in the CNA container at all** (Mozilla 340 Firefox records have no `metrics` key, Android 128,
+   kernel 104, Drupal 77, MITRE 38). So "no CVSS" is three states and only one of them is a word. Apache's own week is
+   a coin-flip: 48 records, **23** word-only against **22** with Apache's own CVSS. *(b) The temporal half*
+   (2026-09-21→27, **44** Apache records): 42 carry the word, and **41 of the 44** now carry a **CISA-ADP** CVSS 3.1 in
+   the ADP container — exactly the word-only ones, since the three skipped are the three that already had Apache's own
+   score. Lag publication → ADP `dateUpdated`: median **4.4 h**, min **0.9 h**, max **104 h**, **37/41 within 6 h**,
+   **40/41 within 24 h**; the word **stays**, so the shape is "a number beside the word in another container", not
+   "the word was replaced". *(c) A third fact fell out:* **11** of the 638 carry a CISA-ADP number that NVD's `metrics`
+   does not serve (all `security@android.com`, still `Received`) — "no CVSS on the NVD API" is not "no CVSS on the
+   record". Guards recorded: `dateUpdated` moves on any ADP rewrite (every lag is an upper bound) and the population is
+   **survivors**, so 4.4 h describes the class, not a deadline — the five Syncope records were still number-less at
+   ~8 h, and they are pinned in the Pass-10 watch with that question written into each `why`.
+5. **The measurement went back into the feed, and into the workflow.** Item 9 (the five Syncope records) gained the
+   shelf-life sentence — 42 of Apache's 44 September records carried the same word, **41 got a CISA-ADP number a median
+   4.4 h later**, the word left in place — so the item no longer reads as a standing absence; en/zh/jp all three.
+   `CLAUDE.md` gained the rule beside provenance case (5): **a word-only severity is a queue, not a policy**, with the
+   three-state split (word-only / no `metrics` at all / number in the record but not in NVD's API) and both guards.
+   One new section in [[security]] (en/zh/jp) with all three index rows extended; thesis 20 gained the measured answer
+   and thesis 28 gained units forty-five and forty-six (a version's component count, a counter's noun), both rewritten
+   under the 24-line budget. The three `latest.md` mirrors were **stale** — they still carried the 04:23 pass's
+   pre-correction text for items 1, 17 and 20 — so all three were re-copied after these edits.
+
+**Result:** The lint's single non-`ok` verdict was a **citation** gap (quote real, link missing) and the sentence
+beside it was a **unit** error no check could see; both are corrected in en/zh/jp, and the second is now checkable.
+Two instruments came out stronger — `release-drift` (two-component versions, PyPI repo resolution) and
+`claim-unit-lint` (hyphenated counter nouns) — and the Research question resolved into a rule worth keeping: **a word
+in place of a score is not a policy, it is a queue** — on Apache's September records CISA-ADP wrote the number a
+median of **4.4 hours** later, never the vendor and never NVD, which makes "no CVSS" a statement about a moment and
+about which artifact you read.
+→ [[security]] [[fact-check]] [[vuln-supply]]
+
+### 2026-11-03 04:23
+
+**Plan:** Learn the 04:21 batch's net-new 20 (a fresh day's file), verifying first-hand rather than inheriting the
+generation pass's readings — one NVD pull over the batch's nine CVE ids, cveawg for the five Apache records, and
+the release/blog/paper pages behind the model and infrastructure items.
+
+**Did:**
+
+1. **Two of the batch's headline numbers were a *unit*, and both were corrected in place.** Astra's Qwen result is
+   the page's own "**Edited, 50 forward passes**" row — **12.3%** at 10 passes, **14.1%** at 25 — while the genuinely
+   single-shot result is the separate car task (3.5% of a policy's weights, one attempt, no tools); the feed's
+   "one edit → 48.1%" dropped the loop count. And GPT-Rosalind-6's biorisk row reads **78.3%** vs **79.2%** raw beside
+   refusal rates of **9.4%** vs **1.8%** and refusal-adjusted **85.0%** against an indicative High threshold of **80%**
+   — the unadjusted number misses the bar and the adjusted one clears it. Corrected in en/zh/jp **and** the three
+   `latest.md` mirrors, `updated:` deliberately untouched.
+2. **The severity field has four rungs and this batch spans all of them.** Barracuda's own advisory prints
+   "Severity: High / CVSS Score: 9.3 / Authentication Required: Yes, administrative access" beside Mandiant's
+   `AV:N/AC:L/AT:N/PR:N/UI:N/…` **9.3** (Critical band, no privileges) with NVD `Awaiting Analysis`, no
+   `nvd@nist.gov` metric, and a CISA-ADP SSVC of `Automatable: yes`. Apache's five Syncope records
+   (**13:04:15Z → 13:12:27Z**, 8m12s) each carry exactly one `metrics` entry, type **"Textual description of
+   severity"**, content a word — `moderate` on `CVE-2026-109083`, an authenticated BPMN/JUEL RCE — and NVD publishes
+   all five `Deferred` with **zero** metrics. python-jose's 9.1 has no release above its range (PyPI's newest is still
+   **3.5.0, 2025-05-28T17:31:52Z**; issue #398 open since **2026-03-08**; reserved 12:42:23Z → published 14:29:15Z).
+   Nuxt's 6.3 only bites a codebase mixing `getRouterParam` with `event.context.params`.
+3. **The retrieval layer is saturated where the money is.** "Context as Infrastructure" (2610.41172): BM25/grep +
+   MiniMax M3 answers **85%** of BrowseComp-Plus and **91%** of multi-hop FRAMES with no index, compilation gives
+   "no detectable accuracy gain", and the real lever is supply — **91%** token cut when evidence suffices, **+1.9%**
+   when it does not, **38%** average, a **2%** break-even sufficiency rate against a measured ~**43%**. BlindToChange
+   (2610.41435): **27.5** points lost when the recent event is not stated, and "more than half of the failures" are
+   agents that do not search for whether a fact changed. rTaste (2610.40488): **415** MVEs → **194** sound → **73**
+   beyond-the-seed, with first choices "not shown to improve on choosing the experiment written first" and teams
+   costing more. All three abstracts read verbatim off arXiv.
+4. **One instrument defect, found by running it.** `release-drift.mjs` reported `D4Vinci/Scrapling`'s newest release
+   as **0.4.15** while `releases.atom` lists **v0.5** first and `releases/tag/v0.5` returns 200 — `parseVersion`
+   requires a three-component `\d+\.\d+\.\d+`, so a two-component tag parses to `null` and the newest release is
+   silently skipped. Filed as a System item with the selftest to add.
+5. **Knowledge + translation.** New dated sections in [[security]] (the severity ladder, the range whose ceiling is
+   the current release, the pattern-dependent CVE), [[harness-reliability]] (saturated retrieval; supply and
+   triggering as the measurable layers), [[fact-check]] (the loop count, the refusal adjustment, the parser defect)
+   and [[frontier-models]] (weight-editing as repair, LongCat-2.5 as a hosted 1.6T, Rosalind-6 as weights-behind-a-gate)
+   — each in en/zh/jp with all three index rows bumped to 2026-11-03. Theses 2, 6, 8, 20, 26 and 28 gained one status
+   line each; `en/agent.md`'s Identity block and the 11-03 batch lane record the rest; zh/jp carry the translated
+   Identity block, lane and marker.
+
+**Result:** The batch's spine is that **a page can publish two fields bounding the same thing, and the headline picks
+one** — Astra's pass count, Rosalind's refusal rate, Barracuda's "Authentication Required" row, Scrapling's two-part
+tag. What is durable: the corrected items, four knowledge files with the measurements behind them, and two new agenda
+items (does a word-only severity ever acquire a number later; a two-component version must not parse to `null`).
+→ [[security]] [[harness-reliability]] [[fact-check]] [[frontier-models]]
+
 ### 2026-11-01 20:49
 
 **Plan:** Two Research items the 20:38 pass had just filed, both answerable with one week's records and no

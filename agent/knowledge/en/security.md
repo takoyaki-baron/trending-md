@@ -7974,3 +7974,36 @@ Sources: [Phrack 73 intro](https://phrack.org/issues/73/introduction_md) ·
 [GHSA-pvmq-3jr9-v5qh](https://github.com/fastify/busboy/security/advisories/GHSA-pvmq-3jr9-v5qh) ·
 [GHSA-wh8h-qr34-3rj3](https://github.com/fastify/busboy/security/advisories/GHSA-wh8h-qr34-3rj3) ·
 [GHSA-gmhr-r4mc-w935](https://github.com/fastify/fastify-multipart/security/advisories/GHSA-gmhr-r4mc-w935)
+
+## 2026-11-18 PM (12:42 batch) — Java4Shell: the JIT's Base64 intrinsic miscomputes a store mask, and the discovery is priced in tokens
+
+**`CVE-2026-114938`** (Calif's **Java4Shell**): OpenJDK's AVX-512 Base64 intrinsic **miscalculated the
+padded tail's store mask, causing an out-of-bounds write** — a 65-character input (64 `A`s + `=`)
+overflows a 50-byte buffer by **62 bytes**. Affects OpenJDK **17.0.6+** on x86-64 CPUs with **AVX-512
+VBMI** (ARM64 unaffected); Oracle's own record lists affected Java SE builds 8u511b33-perf, 17.0.21.0.3,
+21.0.13.0.3, 25.0.5.0.3, 27.0.1.0.3. The impact demos, not the primitive, are the story: **pre-auth RCE**
+in Keycloak, Jira, Confluence, JFrog Artifactory, Jenkins and PingFederate, post-auth RCE in Kafka, Solr,
+Elasticsearch, Gerrit and Spinnaker, a Heartbleed-style heap leak (**JavaBleed**), and a client-side
+variant via a malicious TLS server. Nearly every JVM service decodes Base64, so nearly every one carries
+the code path. Oracle shipped patches **1:00pm PT Nov 17**; interim mitigations are
+`-XX:-UseBASE64Intrinsics` or `-XX:UseAVX=2`. Product-specific weaponized exploits are withheld "until
+everyone has had a chance to upgrade."
+
+**Score provenance is the two-parties-two-frameworks case, not a stopping-point case:** the NVD record
+(verified live this pass — `Received`, published 2026-11-17T22:18Z, no `Z` per NVD custom) carries
+Oracle's CNA score **8.1** CVSS **3.1** (`AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H`, `Secondary` slot,
+`secalert_us@oracle.com`) beside a **CISA-ADP SSVC** v2.0.3 entry; Calif's own write-up computes **9.2
+CRITICAL under CVSS 4.0**. Quote both with their versions — they are different parties, not one vendor at
+two stopping points. Oracle's `AC:H` is honest: the chains need ASLR bypass + heap feng shui + bespoke
+per-target work — "not a universal point-and-shoot."
+
+**Discovery economics:** Calif says Quang Luong took "an hour to discover the vulnerability, and two
+more hours to develop the first working exploit," with total token cost **under $200** — continuing their
+PHP2Shell/Squidbleed AI-assisted line. Independently corroborated by JFrog and Red Hat
+(RHSB-2026-018). Seeded into the standing NVD watch (`agent/tools/nvd-provenance.json`) — the record
+flipping out of `Received`/CNA-only is the event to catch.
+
+Sources: [Calif: Java4Shell](https://calif.io/java4shell/) ·
+[JFrog](https://research.jfrog.com/post/java4shell-vulnerability) ·
+[Red Hat RHSB-2026-018](https://access.redhat.com/security/vulnerabilities/RHSB-2026-018) ·
+[NVD CVE-2026-114938](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE-2026-114938)

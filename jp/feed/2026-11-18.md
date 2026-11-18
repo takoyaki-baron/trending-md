@@ -114,7 +114,7 @@ Baseten と構築した Runta のハーネスリーダーボードは、**830億
 - **Source:** alloyhtml.com · 140+ pts on HN · 5.2h ago (~23:07 UTC+8)
 - **Tags:** `css` `html` `no-javascript` `server-rendered`
 
-Alloy CSS のデモは完全な請求書アプリだ——ダイアログ、ドロップダウンメニュー、日付範囲ピッカー、件数付きタブ、アコーディオン、消せるトースト、一括操作チェックボックス——すべてが **script タグなしの1つの HTML ファイル**に収まっている。プロジェクトの自己紹介は正確だ。「One stylesheet for HTML your server renders. Utilities, plus the parts you'd usually pull in a JavaScript library for: dialogs, menus, drawers, tabs, tooltips and toasts, all working with scripts turned off.」（サーバーがレンダリングする HTML のための1枚のスタイルシート。ユーティリティに加え、通常は JavaScript ライブラリに頼む部分——ダイアログ、メニュー、ドロワー、タブ、ツールチップ、トースト——がスクリプトオフのまま動く）。ビルド不要、フレームワーク不要——Rails、Django、Laravel、htmx、あるいは HTML ファイルの山を想定し、ダークテーマ2種を同梱、テーマは分離して自分の色とフォントを小さな1ファイルに置ける。**11月16日に 1.0.8 をリリース**。リポジトリ自体が誠実な読みどころだ。2018年作成、長年休眠、今週復活——スターは **34**。注目はすべて Show HN から来ており、スター数からではない。
+Alloy CSS のデモは完全な請求書アプリだ——ダイアログ、ドロップダウンメニュー、日付範囲ピッカー、件数付きタブ、アコーディオン、消せるトースト、一括操作チェックボックス——すべてが **script タグなしの1つの HTML ファイル**に収まっている。プロジェクトの自己紹介は正確だ。「One stylesheet for HTML your server renders. Utilities, plus the parts you'd usually pull in a JavaScript library for: dialogs, menus, drawers, tabs, tooltips and toasts, all working with scripts turned off.」（サーバーがレンダリングする HTML のための1枚のスタイルシート。ユーティリティに加え、通常は JavaScript ライブラリに頼む部分——ダイアログ、メニュー、ドロワー、タブ、ツールチップ、トースト——がスクリプトオフのまま動く）。ビルド不要、フレームワーク不要——Rails、Django、Laravel、htmx、あるいは HTML ファイルの山を想定し、ダークテーマ2種を同梱、テーマは分離して自分の色とフォントを小さな1ファイルに置ける。**11月16日に 1.0.8 をリリース**。リポジトリ自体が誠実な読みどころだ。2018年作成、長年休眠、今週復活——執筆時点でスター **34**（12:42 の回には HN スレッドの流れとともに **54** に——数え直される数字なので読取時点を明記）。注目はすべて Show HN から来ており、スター数からではない。
 
 **Why it matters:** デモが成立するのは、モダン HTML と CSS の状態機構（popover、details、`:checked` などの仲間たち）が、「よくあるコンポーネントライブラリの JS の大部分は状態配管にすぎない」という閾値を越えたからだ。htmx/Rails/Django スタックを動かす層が最初の受益者になる。トレンドシグナルの読み方の小さな教訓でもある。34スターのリポジトリが HN の一日を制するのは、スター速度という誤った指標の実例そのものだ。
 
@@ -374,17 +374,19 @@ ID.me の最新規約は、続くプライバシー係争をさらに鋭くす�
 
 ---
 
-## 27. ハーバードの企業レベル研究：AI エージェントはコード出力を約30%押し上げたが、解決済みチケットは動かず——ボトルネックはコードレビューへ、PR あたり +3.45日
+## 27. ハーバードの企業レベル研究（11月14日改訂版）：エージェントはコード出力を最大76%押し上げるが、最終成果は9–11%——コードレビューがボトルネック、提出から承認まで +56%
 
 - **Velocity:** ▮ steady
 - **Source:** complexdiscovery.com · 89+ pts on HN · 7h ago (~05:16 UTC+8)
 - **Tags:** `research` `ai-coding` `economics` `code-review`
 
-ハーバードのワーキングペーパー（Fiona Chen と James Stratton、「Artificial Intelligence in the Firm: Bottlenecks in Software Production」、2026年8月4日）は、Jellyfish のエンジニアリング分析データと Revelio Labs 記録を繋いだ（2021年1月–2026年3月。Jira チケット6,830万件、コミット2億9万、PR 4,910万）**718社・従業員725,938人**を対象に、staggered difference-in-differences を走した。形はこうだ。コード行数は約30%増（ワーカー月あたり5,017基準に1,494行増）、コミット +20%、PR +23%——一方で**解決済み Jira チケットは3.67基準に +0.12 しか動かず、統計的にゼロと区別がつかない**。仕事はどこへ消えた？「The time from pull request submission to merge rose 3.45 days on a 7.03-day baseline, a 49 percent increase」（PR の提出からマージまでの時間は7.03日基準に3.45日増、49%増）、正式な変更要求はほぼ倍増（13%基準に +12ポイント）、PR あたりのレビューコメントは +35%。AI レビューツールはこれを救えなかった——2026年3月までに約80%の企業が使用したが、AI が書いたレビューコメントはわずか23.3%で、論文は「the bottleneck persists after firms adopt such tools」（企業がこうしたツールを採用した後もボトルネックは残る）と書く。本フィードが11月12日に扱った Christian Bird の活動-成果ギャップの、企業レベル計量経済版だ。限界は開示済み。ピアレビューを完遂していないワーキングペーパー、Jellyfish の商業的利益（著者らは「part of our ongoing work with Jellyfish」と呼び、同社は専有情報の確認だけをした）、2026年3月のデータ打ち切り。
+*訂正（2026-11-18 13:10 UTC+8）：本項目は当初、論文の旧改訂版（解決済みチケットは横ばい、マージ +3.45日、718社・従業員725,938人）を引用していた。現行版——2026年11月14日、一次読解——がこれらの数字を置き換える。いずれも現行テキストには現れない。方向（出力上昇、レビュー詰まり）は変わりなく、むしろ強まっている。*
 
-**Why it matters:** 先行指標が出荷指標を追い抜くとき、制約には名前と数字がつく。レビューのスループット——PR のマージは49%遅く、AI が書くレビューコメントは4分の1未満。ツールビルダーにはこれが addressable market で、チームには、レビュー容量の計画なしのエージェント採用は速度をキュー時間に変換する、ということだ。
+ハーバードのジョブマーケットペーパー（Fiona Chen と James Stratton、「Artificial Intelligence in the Firm: Bottlenecks in Software Production」、現行版 **2026年11月14日**。初稿2026年1月7日）は、Jellyfish エンジニアリング分析プラットフォームの **4億4,500万ワークイベント**（GitHub のコーディング活動、Jira チケット、Google カレンダー）から **655社・従業員720,542人**を対象に（2021年1月–2026年8月）、AI **アシスタント**と AI **エージェント**を分けて推定した。形はこうだ。アシスタント採用後、中央値企業のワーカー月あたりコード行数は **+42%**（3,115 → 4,424）、エージェント採用後は **+76%**（3,679 → 6,482）。コミット +14%/+23%、PR +15%/+32%——一方で**解決済み Jira チケットは +9%（2.53 → 2.76）と +11%（2.76 → 3.08）しか動かず**、エピックはほぼ不変。着地点はレビュー段階だ。エージェント採用後、レビュー提出から承認までの平均時間は **+56.1%**。内訳はバックログ待ち **+1.67日（2.78日基準の59.9%）**とアクティブレビュー **+2.33日（3.98日の58.5%）**、変更あたりコメント数 **+38.6%**——アシスタントはこれらのマージンで有意な効果がない。AI レビューツールはこれを救えなかった。2026年7月までに **79.1%** の企業がレビューで AI を使用したが、AI 生成のレビューコメントは **23.3%** のみ（PR の10.8%に1件以上の AI コメント）——「humans are still heavily involved with review」（人間は依然としてレビューに深く関わっている）。限界は開示済み。ピアレビューを完遂していないワーキングペーパー、Jellyfish の商業的利益（著者らは謝辞で Jellyfish チームに感謝している）。
 
-[`🔗 ComplexDiscovery：ハーバードの研究者が AI コーディングエージェントはボトルネックをコードレビューへ移したと発見`](https://complexdiscovery.com/harvard-researchers-find-ai-coding-agents-shifted-the-bottleneck-to-code-review/) · [`🔗 ワーキングペーパー（PDF）`](https://fion.ac/jellyfish.pdf) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50538303)
+**Why it matters:** 先行指標が出荷指標を追い抜くとき、制約には名前と数字がつく。レビューのスループット——承認時間 +56%、変更あたりコメント +38.6%、解決済みチケットは一桁。ツールビルダーにはこれが addressable market で、チームには、レビュー容量の計画なしのエージェント採用は速度をキュー時間に変換する、ということだ。
+
+[`🔗 ComplexDiscovery：ハーバードの研究者が AI コーディングエージェントはボトルネックをコードレビューへ移したと発見`](https://complexdiscovery.com/harvard-researchers-find-ai-coding-agents-shifted-the-bottleneck-to-code-review/) · [`🔗 ワーキングペーパー（PDF、11月14日テキストを一次読解）`](https://fion.ac/jellyfish.pdf) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50538303)
 
 ---
 

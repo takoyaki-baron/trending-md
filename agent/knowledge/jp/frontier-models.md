@@ -4136,3 +4136,29 @@ Sources: [OpenAI](https://openai.com/index/introducing-gpt-6-2-astra-sol/) ·
 
 Sources: [NVIDIA ニュースルーム Q3 FY2027 リリース](https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-third-quarter-fiscal-2027) ·
 [GlobeNewswire ミラー](https://www.globenewswire.com/news-release/2026/11/17/3405200/0/en/nvidia-announces-financial-results-for-third-quarter-fiscal-2027.html)
+
+## 2026-11-18 PM（12:42 バッチ）—— Tencent Hy4 flash：安価なワークホース層がベンチマーク争奪戦になる
+
+**Hy4 flash**（11 月 16 日投稿、11 月 18 日に HN で加速）：**総 224B / トークンあたり 12B アクティブ**、
+**64B の「Engram」パラメータ**を含み、ネイティブ マルチモーダル、**100 万トークン コンテキスト**。
+効率スタック：hybrid attention + LatentMoE + Engram が KV キャッシュを **Hy3 の 1/24、Hy4 の 1/6** に。
+Hy4 からの自己蒸留 + 強化学習が「平均エンドツーエンド出力トークンを 50% 削減」。メガカーネルと
+4-bit 量子化がデコードを 150 tok/s 超えへ。価格が見出し：**100 万トークンあたり $0.003 キャッシュ /
+$0.070 入力 / $0.281 出力**（Hy4：$0.042/$0.834/$2.501）——Hy4 出力価格の約 4 分の 1。主張は Tencent
+自前の **WorkIndex** ベンチマークに依る（「典型的な WorkBuddy タスクに根ざす」——スライド/文書/表
+計算作業、8 評価セット）：タスクあたり平均コストは「Hy4 preview の 1/13、Hy4 の 1/20、
+DeepSeek-V4.1-Flash-1017 の 1/8（Max 層、ピーク時間帯価格）」、内部ユーザー 85 人の 259 タスク盲評価
+の満足度は「Claude Haiku 5.5 に近い」。
+
+アスタリスクは持ち歩く：**WorkIndex は Tencent の内部ベンチマーク**で、コスト比はベンダー測定。ペー
+ジは JS シェル（11-05 の教訓の再演——Hy4 GA ページは可視 10 文字だった）。**HN スレッドで報じられ
+た重み公開の一文はページ上で grep できない**——機械可読な場所に投稿されるまで未確認として扱う。パ
+ターン観察：Hy4 GA は 11-05 時点で**重みを一切出荷していない**（Apache-2.0 の Hy4-preview のみ）。
+flash 層は API ファースト——発表 → ホステッド → 重みは後、がこのラインの定番の振る舞い（Qwen4-Max
+は 11-16 に同じ道を辿った）。第三者裏付けは今のところ薄いが実在する：HN コメンテーターが 43 問の
+データ分析を **$0.13** で走らせ、安価層でコスト調整後 GPT-6 Luna を上回ると報告。位置づけ：flash 層
+パターン（GLM-5.3-Flash、DeepSeek V4.1 Flash、Qwen flash）が三大陆を覆い、価格戦は量が実際に宿る
+ワークホース層へ移った。
+
+ソース：[Tencent: Introducing Hy4 flash](https://hy.tencent.ai/research/hy4-flash) ·
+[HN 議論](https://news.ycombinator.com/item?id=50538184)

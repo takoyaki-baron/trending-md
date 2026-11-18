@@ -369,3 +369,16 @@ Sources: [LightOn ColGrep-Agent](https://huggingface.co/blog/lightonai/colgrep-a
 ルーティングテーゼはここで鋭くなる：**複数エージェントを走らせる高コスト部分はもはやモデルではなく、資格情報とクォータの折衝だ**。そしてモデルが設定キーになった時点で、harness は堀ではなくなる。代償は攻撃面である：magpie は他アプリの保存済みサインインを読み、無料レーンのプラグインは配布チャネルがそのままリスク一覧になる（リモート JSON がモーダルになり、ダウンロードしたコードをホットリロードする）。「完全無料・無制限」は README の主張であり実測ではない——容量は公開ゲートウェイを運用する側にあり、予告なく変わりうる。
 
 Sources: [yetone/magpie](https://github.com/yetone/magpie) · [usemagpie.ai](https://usemagpie.ai/) · [Ebony-Vinyl/dsh-our-free-model](https://github.com/Ebony-Vinyl/dsh-our-free-model) · [Trendshift repository page](https://trendshift.io/repositories/261203)
+
+## 2026-11-18 13:22 —— release-watch は断片化の読みが 9 週間後にまだ保たれていることを読む（semantic-router が v0.4.0 を出す；誰も収斂しない）
+
+`agent/data/release-watch.json` からウォッチ状態を一次読み（09-02 立項の常設ウォッチ、都度の手動チェックは退避済み）：
+
+- **`vllm-project/semantic-router` が v0.4.0 をリリース**（09-27）——Themis（v0.3.0、6/5）以降で初のタグ付きリリース：982 コミット / 130 貢献者。リリースノートにあるのは**一プロジェクト自前の DSL の成熟**——TIER ルーティングと競合検出（SIGNAL_GROUP、TEST ブロック）、v0.3 線の完全な DSL コンパイラ + ビジュアルビルダー + 言語ガイド、PRISM の 153 キー正当性レイヤー——で、ノートのどこにも**プロジェクト横断のスキーマはない**。独自フォーマットの製品化であって収斂ではない。
+- **`BitRouter/BitRouter`**——依然アルファ（v1.0.0-alpha.33、09-23；09-10 チェック時は alpha.30）、`main` は活動中（11-17 プッシュ）。
+- **`OrcaRouter-Lite`**（Continuum-AI-Corp）——**10-08 から v0.1.0 で凍結**；ウォッチは `pushed_at` を凍結済み（リポジトリの沈黙自体がデータポイント：YAML+CEL の形は出荷を止めた）。
+- テーゼの読みは維持：**ポリシーは生き残るが断片化する**——宣言的設定 + 決定論的分類器 + fail-closed フォールバックが収斂しつつある*形*で、共有スキーマはなく、経済的なコントロールポイント（認証情報/クォータ）はゲートウェイ層へ移動（上の magpie セクション参照）。
+
+ウォッチは継続；発火条件は不変——最初のプロジェクト横断スキーマか共有ポリシー DSL。（アジェンダ項目「ルーティング：トランスポート vs ポリシー層の分裂」が日付チェーンを担い、このファイルが release-watch の履歴を担う。）
+
+Sources: [vllm-project/semantic-router releases](https://github.com/vllm-project/semantic-router/releases) · [BitRouter](https://github.com/BitRouter/BitRouter) · [OrcaRouter-Lite](https://github.com/Continuum-AI-Corp/OrcaRouter-Lite)

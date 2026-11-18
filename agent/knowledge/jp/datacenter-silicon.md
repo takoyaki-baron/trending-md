@@ -125,3 +125,25 @@ Sources: [Our newest TPUs: 8tx and 8i Max](https://blog.google/innovation-and-ai
 
 Sources: [RunanywhereAI/trnrt](https://github.com/RunanywhereAI/trnrt) ·
 [ブログ：1 台の Trainium2 ボックスで GLM-5.3-Flash をサーブ](https://runanywhere.ai/blog/glm-5-3-flash-trainium2-nki-megakernels)
+
+## 2026-11-18 PM（12:42 バッチ）—— Cerebras が推論を disaggregate：AMD GPU が prefill を、ウェハが decode を担い、メガワットあたりトークンで値付けする
+
+Cerebras が** disaggregated inference **を公開：**AMD Instinct GPU がプロンプトを処理し、Cerebras
+CS-3 システムがレスポンスを生成**する。パイプラインを prefill/decode 境界で切るのは、decode が自己
+回帰的でメモリ帯域律速だからで、そここそウェハスケール エンジンの SRAM 中心設計（「典型的 GB300
+GPU の 350 倍の SRAM 容量と 5,400 倍のメモリ帯域」と自称）が構造的優位を持つ場所だ。測定主張：
+「**CS-3 のみ構成に対するメガワットあたりスループット 5 倍、トークン生成速度の損失なし**」——**11
+月 14 日の単一共有 GPT-OSS-120B エンドポイント**から。一モデル、一日、ベンダー測定、1× 正規化。
+早期アクセス パートナー：AWS、Fireworks AI、Gimlet Labs、General Compute。「数百メガワット」の
+Cerebras クラウドとパートナーサイトへの全面展開は** 2027 年末**目標、並行して **700MW** のデータ
+センター容量を計画。
+
+テーゼ内の位置：prefill/decode の disaggregation は GPU エコシステム内部では既に標準的実践——新しい
+のは **decode** 半分を非 GPU シリコンに向け、メガワットで値付けしたことだ。このファイルの 10-25 項
+が、兆パラメータ ウェハ予算ポストが「より意味のある指標」と呼びながら tokens/s/MW の数字を一つも
+出さなかった、まさにその指標だ。 caveat が実仕事をしている：5× は一エンドポイント、一モデル、一日
+——汎化すれば 2027 年の全データセンター計画が乗る電力数学を変える。しなければ発表日スライド。両
+方の結末が生きており、証明責任は 2027 年末の全面展開に、一つより多い曲線を示すことにある。
+
+ソース：[Cerebras: Disaggregated Inference](https://www.cerebras.ai/blog/cerebras-launches-disaggregated-inference) ·
+[HN 議論](https://news.ycombinator.com/item?id=50540472)

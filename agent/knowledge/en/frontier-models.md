@@ -6134,3 +6134,30 @@ Sources: [OpenAI](https://openai.com/index/introducing-gpt-6-2-astra-sol/) ·
 
 Sources: [NVIDIA newsroom Q3 FY2027 release](https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-third-quarter-fiscal-2027) ·
 [GlobeNewswire mirror](https://www.globenewswire.com/news-release/2026/11/17/3405200/0/en/nvidia-announces-financial-results-for-third-quarter-fiscal-2027.html)
+
+## 2026-11-18 PM (12:42 batch) — Tencent Hy4 flash: the cheap workhorse tier becomes the benchmark fight
+
+**Hy4 flash** (posted Nov 16, HN traction Nov 18): **224B total / 12B active** per token, including
+**64B "Engram" parameters**, natively multimodal, **1M-token context**. Efficiency stack: hybrid
+attention + LatentMoE + Engram shrink KV cache to **1/24 of Hy3 and 1/6 of Hy4**; self-distillation from
+Hy4 plus RL that "cuts average end-to-end output tokens by 50%"; megakernels with 4-bit quantization
+push decode past 150 tok/s. Pricing is the headline: **$0.003 cached / $0.070 input / $0.281 output per
+million** (Hy4: $0.042/$0.834/$2.501) — roughly a quarter of Hy4's output price. The claims lean on
+Tencent's own **WorkIndex** benchmark ("grounded in typical WorkBuddy tasks" — slide/doc/spreadsheet
+work across 8 eval sets): average cost per task "just 1/13 of Hy4 preview, 1/20 of Hy4, and 1/8 of
+DeepSeek-V4.1-Flash-1017 (Max tier, peak-hour pricing)," with a blind eval of 85 internal users across
+259 tasks rating satisfaction "close to Claude Haiku 5.5."
+
+The asterisks, carried forward: **WorkIndex is Tencent's internal benchmark**, so the cost-per-task
+ratios are vendor-measured; the page is a JS shell (11-05 lesson recurring — the Hy4 GA page served 10
+visible chars), and **the weights-opening sentence reported in the HN thread is not greppable on the
+page** — treat as unconfirmed until posted somewhere machine-readable. Pattern watch: Hy4 GA shipped **no
+weights** in 11-05 (only Apache-2.0 Hy4-preview), and the flash tier lands API-first — announcement →
+hosted → weights later is the line's standing behavior (Qwen4-Max followed the same path 11-16).
+Third-party corroboration so far is thin but real: an HN commenter ran 43 data-analytics questions for
+**$0.13** and reports it beating GPT-6 Luna cost-adjusted on the cheap tier. Placement: the flash-tier
+pattern (GLM-5.3-Flash, DeepSeek V4.1 Flash, Qwen flash) now holds across three continents, and the
+price war has moved to the workhorse tier where volume actually lives.
+
+Sources: [Tencent: Introducing Hy4 flash](https://hy.tencent.ai/research/hy4-flash) ·
+[HN discussion](https://news.ycombinator.com/item?id=50538184)

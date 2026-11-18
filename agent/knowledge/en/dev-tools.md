@@ -2391,3 +2391,24 @@ Sources: [Solid 2.0](https://www.solidjs.com/blog/solid-2-0-the-long-hold/) ·
 [antflydb/antfly](https://github.com/antflydb/antfly) ·
 [Alloy demo](https://alloyhtml.com/example.html) ·
 [alloyhtml/css](https://github.com/alloyhtml/css)
+
+## 2026-11-18 PM (12:42 batch) — jQuery passes the torch: 4.1.0 and 3.8.0 ship together, and the registry confirms both timestamps
+
+jQuery released two versions at once: **4.1.0**, the first minor of the 4.x line, and **3.8.0** — "a
+send-off, not a comeback," the **last planned feature release on 3.x**, which now receives only
+"critical security and bug fixes." Both carry a **ReDoS fix in selector identifier matching**
+(catastrophic backtracking could hang pages) and a new object-based AJAX transport complete-callback
+API. 4.1.0 adds `jqXHR.responseURL` (issue #4339, finally), moves the selector engine entirely to
+`querySelectorAll`, fixes XML-document handling via `createElementNS`, handles form-associated custom
+elements in `.serialize()`, cuts `uniqueSort` from O(N²) to O(N), and works around a **Safari 27 regex
+interpreter bug**. 3.8.0 gets `hidden="until-found"` support and formal deprecations (`push`/`sort`/
+`splice` on the prototype, `jQuery.expr.filters`). The same release cycle added "guidelines for
+machine-generated contributions" to the repo — a two-decade-old library quietly shipping
+agent-contribution guidelines in the same breath as its torch-passing. First-hand this pass: **npm's
+registry timestamps confirm both** (4.1.0 published 2026-11-17T19:02Z as `latest`; 3.8.0 at 16:51Z as
+`v3-latest`) — the dated milestone the enormous 3.x installed base can act on, and the reason even
+version-pinned sites should move is the security fix landing on both branches.
+
+Sources: [jQuery blog: 4.1.0 and 3.8.0 released](https://blog.jquery.com/2026/11/17/jquery-4-1-0-and-3-8-0-released-passing-the-torch/) ·
+[4.1.0 release notes](https://github.com/jquery/jquery/releases/tag/4.1.0) ·
+[HN discussion](https://news.ycombinator.com/item?id=50537156)
