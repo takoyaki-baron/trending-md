@@ -1,8 +1,8 @@
 ---
 date: 2026-11-18
-updated: 2026-11-17T20:45:03Z
+updated: 2026-11-18T04:42:08Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 22
+sources: 34
 license: CC-BY-4.0
 ---
 
@@ -276,13 +276,167 @@ StarSling 从 YC P25 毕业，其问题陈述精准对准本报受众：**"Agent
 
 ---
 
+## 20. Java4Shell（CVE-2026-114938）：OpenJDK JIT Base64 内在函数的预认证 RCE——用 AI "一小时"发现，同日修复
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** calif.io · 626+ pts on HN · 7h ago (~05:11 UTC+8)
+- **Tags:** `cve` `openjdk` `rce` `jit`
+
+Calif 披露了 **Java4Shell**，OpenJDK AVX-512 Base64 内在函数中的内存破坏漏洞："The x86-64 Base64 intrinsic miscalculated the padded tail's store mask, causing an out-of-bounds write"（x86-64 Base64 内在函数算错了填充尾部的存储掩码，导致越界写入）——65 个字符的输入（64 个 `A` 加 `=`）会让 50 字节的缓冲区越界 62 字节。它 "affects OpenJDK from version 17.0.6 or newer"（影响 17.0.6 及以上版本的 OpenJDK；Oracle 自己的记录列出了受影响的 Java SE 构建：8u511b33-perf、17.0.21.0.3、21.0.13.0.3、25.0.5.0.3、27.0.1.0.3），且仅限支持 AVX-512 VBMI 的 x86-64 CPU——ARM64 不受影响。最令人警觉的是影响演示：**Keycloak、Jira、Confluence、JFrog Artifactory、Jenkins、PingFederate 上的预认证 RCE**，Kafka、Solr、Elasticsearch、Gerrit、Spinnaker 上的认证后 RCE，一个被称为 **JavaBleed** 的 Heartbleed 式堆泄露，以及通过恶意 TLS 服务器的客户端攻击变体。Oracle 已于 11 月 17 日下午 1 点（太平洋时间）发布补丁；升级前的缓解措施是 `-XX:-UseBASE64Intrinsics` 或 `-XX:UseAVX=2`。评分来源：NVD 记录（`Received`，22:18Z 发布）载有 Oracle CNA 评分——CVSS 3.1 **8.1**（AV:N/AC:H）——而 Calif 的文章按 CVSS 4.0 计算为 **9.2 CRITICAL**；针对具体产品的武器化漏洞利用将"until everyone has had a chance to upgrade"（暂扣到所有人完成升级）。
+
+**Why it matters:** 发现经济学是故事里的故事——Calif 说 Quang Luong "an hour to discover the vulnerability, and two more hours to develop the first working exploit"（一小时发现漏洞，再花两小时做出第一个可用 exploit），"the total token cost… less than $200"（总 token 成本不到 200 美元），延续了他们 PHP2Shell/Squidbleed 的 AI 辅助解析器与 JIT 研究路线。该发现得到 JFrog、Horizon3.ai 与 Red Hat（RHSB-2026-018）的独立印证。Oracle 的 AC:H 说明利用摩擦是真实的（ASLR 绕过 + 堆风水 + 逐目标定制链——"not a universal point-and-shoot"），但每个解码 Base64 的 JVM 服务——几乎就是全部——都带着这条代码路径。
+
+[`🔗 Calif：Java4Shell`](https://calif.io/java4shell/) · [`🔗 JFrog：我们所知道的`](https://research.jfrog.com/post/java4shell-vulnerability) · [`🔗 Red Hat RHSB-2026-018`](https://access.redhat.com/security/vulnerabilities/RHSB-2026-018) · [`🔗 NVD：CVE-2026-114938`](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE-2026-114938) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50538240)
+
+---
+
+## 21. Quad9 宁愿把免费 DNS 解析器撤出法国也不付每日屏蔽罚款——Cloudflare 称之为"煤矿里的金丝雀"
+
+- **Velocity:** ▮▮ rising
+- **Source:** blog.cloudflare.com · 356+ pts on HN · 6h ago (~06:13 UTC+8)
+- **Tags:** `dns` `policy` `france` `blocking`
+
+Quad9（9.9.9.9 背后的瑞士非营利组织）在数月诉讼以法院令告终——因未屏蔽版权侵权域名而被处以**每日罚款**——之后，将其解析器整体撤出法国。作为纯公共解析器（不像 Cloudflare 可以通过 CDN 与代理服务证明合规），它没有替代合规路径：要么"crippling litigation and penalties"（拖垮式的诉讼与罚款），要么根本性改变这项保护隐私的服务。周围的先例网络同样重要：布鲁塞尔法院已命令 **Cloudflare、Google 与 Cisco** 在 2027 年 1 月初之前通过公共解析器实施屏蔽（三方均已上诉）；德国法院此前拒绝了 DNS 屏蔽要求；Cisco 已将 OpenDNS 撤出法国、葡萄牙与比利时。Cloudflare 的论点：解析器级屏蔽无效（换解析器不到一分钟）、粗钝（整域屏蔽，合法内容一并遭殃）、不透明——医院、大学与政府机构会发现"their Internet will fail with no explanation"（他们的互联网会毫无解释地中断）——而且因为解析器是全球性的，一个国家"could dictate what content is accessible around the world"（可以决定全世界能访问什么内容）。它提出的替代方案：在托管商层面执法，侵权文件实际就在那里。
+
+**Why it matters:** 第一例由每日罚款诉讼逼出的公共解析器退出，是任何司法辖区都可以复制的模板——比利时的 2027 年 1 月期限是下一个检查点。如果上诉失败，解析器级屏蔽就不再是法国特例而成为欧盟常态，每个主打隐私的解析器都要面对 Quad9 的选择题：合规、地域退出，或继续诉讼。
+
+[`🔗 Cloudflare：Quad9 退出法国`](https://blog.cloudflare.com/quad9-withdrawal-from-france/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50538994)
+
+---
+
+## 22. jQuery 4.1.0 与 3.8.0 同日发布——"passing the torch"：3.x 迎来最后一个功能版本，两条线都修了 ReDoS
+
+- **Velocity:** ▮▮ rising
+- **Source:** blog.jquery.com · 269+ pts on HN · 8.5h ago (~03:50 UTC+8)
+- **Tags:** `jquery` `javascript` `release` `redos`
+
+jQuery 一次发布两个版本：**4.1.0**（4.x 线的第一个 minor）与 **3.8.0**——"a send-off, not a comeback"（告别演出，不是回归），3.x 分支最后一个计划内的功能版本，此后只收"critical security and bug fixes"（关键安全与缺陷修复）。两条线都带有**选择器标识符匹配的 ReDoS 修复**（灾难性回溯可能挂死页面）和新的对象式 AJAX transport complete-callback API。4.1.0 新增 `jqXHR.responseURL`（issue #4339，终于）、选择器引擎全面转向 `querySelectorAll`、用 `createElementNS` 修复 XML 文档处理、`.serialize()` 支持表单关联自定义元素、`uniqueSort` 从 O(N²) 降到 O(N)，并绕过一个 **Safari 27 正则解释器 bug**。3.8.0 获得 `hidden="until-found"` 支持与正式弃用（原型上的 `push`/`sort`/`splice`、`jQuery.expr.filters`）。同一发布周期还向仓库添加了"guidelines for machine-generated contributions"（机器生成贡献指南）。
+
+**Why it matters:** 这是庞大的 3.x 装机量可以据此行动的带日期里程碑：火炬正式交到 4.x，升级指南与 Migrate 插件是迁移路径，而同时落在两条分支上的安全修复是连锁版本站点也该行动的理由。一个运行二十年的库在同一篇通告里悄悄发布 agent 贡献指南，本身就是一件 2026 年的文物。
+
+[`🔗 jQuery 博客：4.1.0 与 3.8.0 发布`](https://blog.jquery.com/2026/11/17/jquery-4-1-0-and-3-8-0-released-passing-the-torch/) · [`🔗 4.1.0 发布说明`](https://github.com/jquery/jquery/releases/tag/4.1.0) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50537156)
+
+---
+
+## 23. 微软的 ONNX Runtime 从 GitHub 上消失了——仓库、releases feed 与 API 全部 404，PyPI 仍提供 1.32.0，尚无解释
+
+- **Velocity:** ▮▮ rising
+- **Source:** github.com/microsoft/onnxruntime · 175+ pts on HN · 5h ago (~07:18 UTC+8)
+- **Tags:** `onnx` `supply-chain` `github` `inference`
+
+microsoft/onnxruntime——支撑着本地与边缘 AI 很大一角的推理引擎——一夜之间消失：截至 **11 月 18 日 04:16 UTC**，仓库页面、`releases.atom` feed 与 GitHub API 全部返回 **404**，事前没有任何通知，也没有官方声明。HN 评论者报告了下游破坏（"we found out about this this morning, when evals started failing in our pipelines"——今天早上评估流水线开始失败时我们才知道），并称这是"a repository with 22k stars"（一个 2.2 万 star 的仓库）熄了灯。已验证的部分：**PyPI 仍提供 `onnxruntime` 1.32.0**——一个早于消失事件的版本——最接近的公开分支是 **intel/onnxruntime**（带 Intel 的 OpenVINO 改动）。未验证的部分：原因。帖子里的猜测从安全下架到组织调整都有；有评论者链接了一篇不相关的 PyPI 投毒分析——均未获证实。
+
+**Why it matters:** 上游消失就是运营事件，哪怕包还装得上——任何从源码构建、提 issue、或在 CI 里默认仓库存在的人刚刚无声地失去了它，而"什么都要 vendor 进来"的习惯又多了一个论据。诚实地标注时间：这是一个发展中的故事；如果仓库以新路径回归，那这次消失就是一次改名——在有人说清楚之前，"无解释消失"就是准确的状态。
+
+[`🔗 github.com/microsoft/onnxruntime（当前 404）`](https://github.com/microsoft/onnxruntime) · [`🔗 intel/onnxruntime 分支`](https://github.com/intel/onnxruntime) · [`🔗 PyPI：onnxruntime 1.32.0`](https://pypi.org/project/onnxruntime/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50539610)
+
+---
+
+## 24. ID.me 成为 TreasuryDirect 唯一登录方式，条款捆绑仲裁——参议员质问为何不用 Login.gov
+
+- **Velocity:** ▮▮ rising
+- **Source:** consumerrights.wiki · 182+ pts on HN · 3.5h ago (~08:51 UTC+8)
+- **Tags:** `privacy` `identity` `irs` `policy`
+
+ID.me 的最新条款让这场隐私拉锯战更加锋利：v10.1.0（2026 年 11 月 13 日）保留了约束性仲裁条款与集体诉讼弃权（新增的是 30 天邮件退出窗口），隐私政策 v7.1.8（11 月 2 日）写明使用平台即表示你同意 ID.me "determines how personal information may be used"（决定你的个人信息如何被使用）于你的钱包。账户关闭后验证历史仍保留至多三年；生物特征删除请求可能进入内部审查，且 ID.me "reserves the right to decline"（保留拒绝的权利）；责任上限 1,000 美元。访问方式的改变才是锋刃：**TreasuryDirect 于 9 月 13 日引入 ID.me，10 月 28 日替换传统登录——而 Login.gov "cannot be used to log in to your TreasuryDirect account"（不能用于登录你的 TreasuryDirect 账户）**——尽管 OMB 备忘录（M-26-18，8 月 31 日）要求各机构在 Login.gov 能服务的人群上将其作为默认推广，尽管 Wyden/Warren 的信（10 月 27 日）引用了 6 U.S.C. §1523(b)(1)(D)——命名 GSA 平台的法条。ID.me 的五年协议上限超过 10 亿美元（迄今已拨付约 9,300 万）。对 2027 报税季，IRS 说"Taxpayers can use Login.gov or ID.me"（纳税人可用 Login.gov 或 ID.me）——TreasuryDirect 用户没有这种选择，Direct Pay 仍是免登录的退路。
+
+**Why it matters:** 政府自营的身份选项存在、在法条上被优先，储蓄债券门户却仍把所有人路由给一家条款捆绑仲裁与数据使用同意的私营供应商——而备忘录、法条与参议员信件现在都是公开的。对任何构建 IRS/Treasury 集成的人，运营事实是不对称：IRS 有两个供应商，TreasuryDirect 恰好只有一个。
+
+[`🔗 Consumer Rights Wiki：ID.me 条款成为 IRS 登录必需`](https://consumerrights.wiki/w/ID.me_terms_required_for_IRS_sign-in) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50540437)
+
+---
+
+## 25. 继 11 月 12 日报道 Apple Support Community 将于 11 月 20 日关闭之后：Archive Team 正在抢救——覆盖八种语言
+
+- **Velocity:** ▮ steady
+- **Source:** wiki.archiveteam.org · 113+ pts on HN · 4.8h ago (~07:32 UTC+8)
+- **Tags:** `archival` `apple` `preservation` `community`
+
+本报 11 月 12 日报道过的事件更新：Apple 于 11 月 10 日宣布"The Apple Support Community will permanently close on November 20, 2026"（Apple Support Community 将于 2026 年 11 月 20 日永久关闭，公告后即转为只读），Archive Team 已在周五截止线前搭起完整的保存项目。这是一个 DPoS 工程——运行 ArchiveTeam Warrior 即自动抓取——配有 `applediscussions-grab` 脚本、tracker.archiveteam.org/applediscussions 的条目追踪器，以及 hackint 上 #badapple 的协调频道。目标不只是英文站：**七个区域社区**（法语、中文、日语、韩语、德语、西班牙语、葡萄牙语）都在范围内。Wiki 上的进度只写着"In progress…"（进行中），没有完成数字。
+
+**Why it matters:** 二十年的疑难解答——包括 Apple 已不再记录的问题的变通方案——两天后到期，而八语言的范围意味着非英文档案也在消失。从平台宣布关闭到志愿蜂拥响应的时间如今以天计；如果你曾被某条十年前的帖子帮到过，这周跑一个 warrior 是用一条命令还情的方式。
+
+[`🔗 Archive Team Wiki：Apple Discussions`](https://wiki.archiveteam.org/index.php/Apple_Discussions) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50539747)
+
+---
+
+## 26. "Not Everything Needs an LLM"：PostHog 的决策模型生产台账——98.7% 的 PII 检查根本不碰大模型，失败案例也一并印出
+
+- **Velocity:** ▮ steady
+- **Source:** newsletter.posthog.com · 113+ pts on HN · 10h ago (~02:16 UTC+8)
+- **Tags:** `decision-models` `llm` `engineering` `routing`
+
+决策模型品类一周内拿到了四个厂商发布（Google 的 Decisions API 11 月 12 日、Perplexity Decider 11 月 14 日、HeyGen Decision 1 昨天）；PostHog 的文章是实践者的对冲——数字来自他们自己的生产栈。Replay Vision 的 PII 清洗用两个窄的是/否问题替代一个宽泛问题（误报降到约十分之一），**98.7% 的会话摘要完全跳过 LLM 调用**。Slack 机器人用选择型问题做路由（"cheapest option that will most likely finish the task correctly on the first try"——最可能一次做对的最便宜选项）；搜索用概率对 embedding 候选重排（20 条测试查询上排序质量约 +25%）；一个 SQL 图表选择器替换了手写的确定性规则。失败也印了出来，这正是它可信的原因：阈值编码错误成本（PII 用 0.4——漏报会泄数据；机器人用 0.85——误报惹人烦），一个 12–38k token 请求的排序任务"flooded the model server and blocked other products' calls for hours"（灌爆模型服务器，把其他产品的调用堵了好几个小时），PR 评审排序则干脆失败（AUC 0.52）。
+
+**Why it matters:** 这个品类有了自己的Field manual（实战手册）：类型化决策作为 LLM 之下的门控/路由层，校准才是真正的工程工作。"Too simple for a language model, yet too fuzzy for a regex"（对语言模型太简单，对正则又太模糊）是一条真实的产品边界，而 98.7% 的绕行数字是本周每个厂商发布都在暗示的成本论点的具体形态。
+
+[`🔗 PostHog：Not Everything Needs an LLM`](https://newsletter.posthog.com/p/decision-models) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50535740)
+
+---
+
+## 27. 哈佛企业级研究：AI agent 把代码产出抬高约 30%，已解决工单却原地不动——瓶颈移进了代码评审，每个 PR 慢了 3.45 天
+
+- **Velocity:** ▮ steady
+- **Source:** complexdiscovery.com · 89+ pts on HN · 7h ago (~05:16 UTC+8)
+- **Tags:** `research` `ai-coding` `economics` `code-review`
+
+一篇哈佛工作论文（Fiona Chen 与 James Stratton，"Artificial Intelligence in the Firm: Bottlenecks in Software Production"，2026 年 8 月 4 日）用交错双重差分覆盖 **718 家企业、725,938 名员工**，数据为 Jellyfish 工程分析数据与 Revelio Labs 记录的联结（2021 年 1 月–2026 年 3 月；6,830 万条 Jira issue、2.009 亿 commits、4,910 万 PR）。形状是：代码行数涨了约 30%（每工人月 5,017 基数上多 1,494 行）、commits +20%、PR +23%——而**已解决的 Jira issue 在 3.67 基数上只动了 +0.12，统计上与零无异**。工作去哪了？"The time from pull request submission to merge rose 3.45 days on a 7.03-day baseline, a 49 percent increase"（PR 从提交到合并的时间在 7.03 天基数上增加 3.45 天，涨幅 49%），正式变更请求近乎翻倍（13% 基数上 +12 个百分点），每 PR 评审评论 +35%。AI 评审工具没能救回来——到 2026 年 3 月约 80% 的企业用过，但 AI 只写了 23.3% 的评审评论，论文写道"the bottleneck persists after firms adopt such tools"（企业采用这类工具之后瓶颈依然存在）。这是本报 11 月 12 日 Christian Bird 演讲的活动-产出鸿沟的企业级计量经济学版本。局限性已披露：一篇未经完整同行评审的工作论文、Jellyfish 的商业利益（作者称之为"part of our ongoing work with Jellyfish"，后者只做专有信息审查）、以及 2026 年 3 月的数据截止。
+
+**Why it matters:** 当先行指标甩开出货指标，约束就有了名字和数字：评审吞吐——PR 合并慢 49%，AI 写的评审评论不足四分之一。对工具建造者，这是可寻址的市场；对团队，这意味着不做评审容量规划的 agent 转型，只是把速度换成了排队时间。
+
+[`🔗 ComplexDiscovery：哈佛研究者发现 AI 编码 agent 把瓶颈移向代码评审`](https://complexdiscovery.com/harvard-researchers-find-ai-coding-agents-shifted-the-bottleneck-to-code-review/) · [`🔗 工作论文（PDF）`](https://fion.ac/jellyfish.pdf) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50538303)
+
+---
+
+## 28. 500 公里高空一枚百万吨级核爆将在一周内致约 98% 的模拟 LEO 卫星失效——辐射耐受提高三倍也只换来几天
+
+- **Velocity:** ▮ steady
+- **Source:** arxiv.org · 88+ pts on HN · 8.6h ago (~03:46 UTC+8)
+- **Tags:** `arxiv` `space` `satellites` `research`
+
+一篇 arXiv 论文（2611.09827，11 月 6 日由 Petersen、Qin、Thiele 与 Philippe 提交）把瞬时辐射、电子捕获与辐射带演化，与卫星失效、碰撞和大气阻力耦合起来，研究低轨核爆——那里现在运行着 13,000+ 颗卫星。中心情形：在南大西洋上空 500 公里处 1-Mt 爆炸产生的人工辐射带，其反复暴露"disables approximately 98% of modeled satellites within one week in our central case"（在中心情形中一周内致约 98% 的模拟卫星失效）。加固数学是残酷的部分："**Tripling the assumed radiation tolerance delays widespread failure by only days: approximately 97% are still disabled within two weeks.**"（假设辐射耐受提高三倍也只把大范围失效推迟几天：两周内仍有约 97% 失效。）失去机动性再叠加上碰撞风险——随着失效卫星漂移，两年内预计约 20 次碰撞。
+
+**Why it matters:** 这是模型不是实验——作者印着"in our central case"，假设本身即是争点。但方向性发现足够刺眼：星载级加固几乎不动结果，脆弱性不在任何单颗卫星的屏蔽层里，而在轨道壳层架构本身——这为 1967 年《外空条约》禁止太空核爆补了一条量化注脚：哪怕承受得起爆炸本身的强权，也承受不起这个。
+
+[`🔗 arXiv 2611.09827`](https://arxiv.org/abs/2611.09827) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50537120)
+
+---
+
+## 29. 腾讯发布 Hy4 Flash：224B 总参/12B 激活、1M 上下文、每百万 token 输入 $0.07/输出 $0.28——廉价档成为基准战场
+
+- **Velocity:** ▮ steady
+- **Source:** hy.tencent.ai · 78+ pts on HN · 7.3h ago (~05:06 UTC+8)
+- **Tags:** `tencent` `model-release` `inference` `efficiency`
+
+腾讯混元线发布 **Hy4 flash**（11 月 16 日发文，现爬上 HN）：224B 总参数（含 64B "Engram" 参数）每 token 仅 **12B 激活**，原生多模态，1M token 上下文。效率栈：混合注意力 + LatentMoE + Engram 把 KV cache 压到 **Hy3 的 1/24、Hy4 的 1/6**；从 Hy4 自蒸馏外加强化学习"cuts average end-to-end output tokens by 50%"（把平均端到端输出 token 砍半）；megakernel 配 4-bit 量化把解码推过 150 tok/s。定价是头条：**每百万 token $0.003 缓存 / $0.070 输入 / $0.281 输出**（Hy4：$0.042/$0.834/$2.501）。声明倚仗腾讯自家的 WorkIndex 基准（"grounded in typical WorkBuddy tasks"——幻灯片/文档/表格工作，8 个评测集）：单任务平均成本"just 1/13 of Hy4 preview, 1/20 of Hy4, and 1/8 of DeepSeek-V4.1-Flash-1017 (Max tier, peak-hour pricing)"（仅为 Hy4 preview 的 1/13、Hy4 的 1/20、DeepSeek-V4.1-Flash-1017（Max 档、高峰定价）的 1/8），另有 85 名内部用户 259 个任务的盲测，满意度"close to Claude Haiku 5.5"（接近 Claude Haiku 5.5）。HN 评论者报告经 OpenRouter 使用效果不错，还有人给出一个数据分析基准：它在廉价档击败 GPT-6 Luna（43 个问题花 $0.13，前沿模型约 $20）。帖子里有开权重承诺的报道；这句话在可读文本里找不到（页面是 JS 壳），在腾讯把它贴到可 grep 的地方之前，当作未确认。
+
+**Why it matters:** 真正被价格战咬到的是干活档——这颗模型以约为 Hy4 输出价四分之一的成本、声称略超 Hy4 preview 的任务质量，让 flash 档模式（GLM-5.3-Flash、DeepSeek V4.1 Flash、Qwen flash）在三大洲都保持竞争。注意在案的注脚：WorkIndex 是腾讯的内部基准，单任务成本比是厂商自测。
+
+[`🔗 腾讯：Introducing Hy4 flash`](https://hy.tencent.ai/research/hy4-flash) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50538184)
+
+---
+
+## 30. Cerebras 推出分离式推理：AMD GPU 管预填充，晶圆管解码——在一个实测端点上声称每兆瓦 5 倍 token
+
+- **Velocity:** ▮ steady
+- **Source:** cerebras.ai · 42+ pts on HN · 3.5h ago (~08:56 UTC+8)
+- **Tags:** `inference` `cerebras` `gpu` `efficiency`
+
+Cerebras 发布分离式推理：**AMD Instinct GPU 处理提示词，Cerebras CS-3 晶圆级系统生成回复**——在 prefill/decode 边界拆开流水线，因为解码是自回归且受内存带宽约束，而这正是晶圆级引擎 SRAM 中心设计（声称"350× the SRAM capacity and 5,400× the memory bandwidth of a typical GB300 GPU"——一块典型 GB300 GPU 的 350 倍 SRAM 容量与 5,400 倍内存带宽）的结构性优势所在。实测声明："5X the throughput per megawatt of a CS-3-only configuration, with no loss in token generation speed"（较纯 CS-3 配置每兆瓦吞吐 5 倍，token 生成速度无损失）——来自 11 月 14 日一个共享 **GPT-OSS-120B 端点**，一个模型、一天、以 1× 归一。点名的早期访问伙伴：AWS、Fireworks AI、Gimlet Labs、General Compute。覆盖"hundreds of megawatts"（数百兆瓦）Cerebras 云与伙伴站点的铺开目标定在 2027 年底，同期规划建设 700MW 数据中心容量。
+
+**Why it matters:** prefill/decode 分离在 GPU 生态内已是标准做法——新的是把解码一半指向非 GPU 硅片，并以兆瓦计价。那条注脚在干实事：5 倍是一个端点、一个模型、厂商自测。若能推广，它改写每份 2027 数据中心计划的电力算术；若不能，它就是发布日幻灯片。两种结局都是活的。
+
+[`🔗 Cerebras：Disaggregated Inference`](https://www.cerebras.ai/blog/cerebras-launches-disaggregated-inference) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50540472)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-17T20:45:03Z |
-| Items | 19 |
-| Sources tracked | 22 (Hacker News, GitHub Trending, OpenAI, Microsoft AI, Apple, Reuters/NYT/CNBC/FT/SCMP/Fortune, NVD/GitHub advisories, vendor blogs, Phrack, SolidJS, Runta, Antfly) |
+| Generated | 2026-11-18T04:42:08Z |
+| Items | 30 |
+| Sources tracked | 34 (Hacker News, GitHub Trending, OpenAI, Microsoft AI, Apple, Reuters/NYT/CNBC/FT/SCMP/Fortune, NVD/GitHub advisories, vendor blogs, Phrack, SolidJS, Runta, Antfly, Calif, JFrog, Red Hat, Cloudflare, jQuery, Archive Team, PostHog, ComplexDiscovery/Harvard, arXiv, Tencent Hunyuan, Cerebras) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

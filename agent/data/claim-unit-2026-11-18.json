@@ -1,9 +1,9 @@
 {
- "generated": "2026-11-17T20:45:09.718Z",
+ "generated": "2026-11-18T04:42:15.059Z",
  "files": [
   {
    "file": "2026-11-18.md",
-   "items": 19,
+   "items": 30,
    "findings": [
     {
      "check": "status",
@@ -13,25 +13,46 @@
      "detail": "Awaiting Analysis (lastModified 2026-11-16T21:17:22.087)"
     },
     {
+     "check": "cvss",
+     "item": 20,
+     "verdict": "ok",
+     "claim": "3.1 8.1",
+     "detail": "CVE-2026-114938 · Secondary/secalert_us@oracle.com · vector reproduces 8.1"
+    },
+    {
+     "check": "status",
+     "item": 20,
+     "verdict": "ok",
+     "claim": "CVE-2026-114938 `Received`",
+     "detail": "Received (lastModified 2026-11-18T04:17:12.560)"
+    },
+    {
      "check": "repo",
      "item": 6,
      "verdict": "ok",
      "claim": "mvanhorn/last30days-skill",
-     "detail": "68896★, last push 2026-11-17"
+     "detail": "69254★, last push 2026-11-17"
+    },
+    {
+     "check": "repo",
+     "item": 8,
+     "verdict": "star-surge",
+     "claim": "34 quoted vs 54 now",
+     "detail": "alloyhtml/css: 34 → 54 (+37%, 20 stars) since the batch was written — a rising count is not a wrong one; date the reading if the number will be re-used"
     },
     {
      "check": "repo",
      "item": 8,
      "verdict": "ok",
      "claim": "alloyhtml/css",
-     "detail": "37★, last push 2026-11-16"
+     "detail": "54★, last push 2026-11-16"
     },
     {
      "check": "repo",
      "item": 17,
      "verdict": "ok",
      "claim": "RunanywhereAI/trnrt",
-     "detail": "1604★, last push 2026-11-11"
+     "detail": "1622★, last push 2026-11-11"
     },
     {
      "check": "quotation",
@@ -139,6 +160,83 @@
      "detail": "verbatim in 2 readable source(s)"
     },
     {
+     "check": "quotation",
+     "item": 20,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 6 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 21,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 22,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 4 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 23,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 4 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 24,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 25,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 26,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 27,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 28,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 29,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 30,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
      "check": "attribution",
      "item": 2,
      "verdict": "attribution-satisfied",
@@ -151,6 +249,13 @@
      "verdict": "attribution-page-verified",
      "claim": "McDermott",
      "detail": "a quotation is attributed to McDermott (“you could read the code, change it, and run it, you just cou…”) and the party's token appears in the fetched text of a cited page — the quotation arm's page set carries the party's statement even though no cited URL string names the party (the party lives in the prose, not the domain); the second-hand-copy risk the URL arm carries applies here too, so a load-bearing quotation still wants the party's own artifact"
+    },
+    {
+     "check": "attribution",
+     "item": 20,
+     "verdict": "attribution-satisfied",
+     "claim": "Calif",
+     "detail": "a quotation is attributed to Calif (“The x86-64 Base64 intrinsic miscalculated the padded tail's …”) and a cited URL carries the party's token — the quotation arm's page set reaches the party's own artifact"
     }
    ]
   }

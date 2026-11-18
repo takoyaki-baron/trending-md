@@ -1,8 +1,8 @@
 ---
 date: 2026-11-18
-updated: 2026-11-17T20:45:03Z
+updated: 2026-11-18T04:42:08Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 22
+sources: 34
 license: CC-BY-4.0
 ---
 
@@ -20,7 +20,7 @@ OpenAI が2つのモデルを出した。最難プロジェクト向けの新フ
 
 > Cognition の FrontierCode 2.0 では、GPT-6.2 Sol が約1/5のコストで GPT-6.2 Astra に0.5ポイント以内まで迫る——コーディング用途なら小さいモデルの方が実用的なデフォルトかもしれない。
 
-[`🔗 OpenAI: Introducing GPT-6.2 Astra and Sol`](https://openai.com/index/introducing-gpt-6-2-astra-sol/) · [`🔗 GPT-6.2 システムカード`](https://deploymentsafety.openai.com/gpt-6-2-astra-sol) · [`🔗 OpenAI ステータス：Costs API 障害`](https://status.openai.com/incidents/01M7N9VNR6X5SEC90M1YCDB36D) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50535230)
+[`🔗 OpenAI: Introducing GPT-6.2 Astra and Sol`](https://openai.com/index/introducing-gpt-6-2-astra-sol/) · [`🔗 GPT-6.2 システムカード`](https://deploymentsafety.openai.com/gpt-6-2-astra-sol) · [`🔗 OpenAI ステータス：Costs API 障害`](https://status.openai.com/incidents/01M7N9VNR6X5SEC90M1YCDB36D) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50535230)
 
 ---
 
@@ -34,7 +34,7 @@ Apple のサービスは「a rough Tuesday」（辛い火曜日）を過ごし�
 
 **Why it matters:** これは1週間で4件目の大型インフラ障害だ（木曜 Microsoft 365、金曜 FAA の地面停止、月曜 Chase、火曜 Apple）。しかも今週2件目の「ベンダー自身がリリースした変更」が原因という形だ——Microsoft の RCA は7月のゲートウェイ欠陥を、Apple は内部更新を名指した。「ステータスページは最初緑」というパターンも再演している。ユーザーレポートの量が、ベンダー自身のダッシュボードより速いシグナルになりつつある。
 
-[`🔗 9to5Mac: iCloud, App Store, and other Apple services hit by ongoing outage`](https://9to5mac.com/2026/11/17/icloud-app-store-and-other-apple-services-hit-by-ongoing-outage/) · [`🔗 Apple システムステータス`](https://www.apple.com/support/systemstatus/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50535238)
+[`🔗 9to5Mac: iCloud, App Store, and other Apple services hit by ongoing outage`](https://9to5mac.com/2026/11/17/icloud-app-store-and-other-apple-services-hit-by-ongoing-outage/) · [`🔗 Apple システムステータス`](https://www.apple.com/support/systemstatus/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50535238)
 
 ---
 
@@ -48,7 +48,7 @@ Jordan Krueger の論考が326ポイントを獲得したのは、セルフホ�
 
 **Why it matters:** このエッセイの最も鋭い指摘は、エージェントによるコーディングが、ボランティアが避けたがる仕事——プロファイリング、インストーラのテスト、暗号のようなエラーメッセージの書き直し、ドキュメント——にうまく適合するという点だ。これはエージェントブームを「もっとアプリを作る」から「既存のものをメンテナンスする」へと再フレーミングする。「Making a tool millions already use 20% lighter helps all of them, every day」はスローガンではなく、貢献のルーブリックだ。
 
-[`🔗 Jordan Krueger: We don't need more apps, we need better open source`](https://jordankrueger.com/blog/better-open-source-not-more-apps/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50532086)
+[`🔗 Jordan Krueger: We don't need more apps, we need better open source`](https://jordankrueger.com/blog/better-open-source-not-more-apps/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50532086)
 
 ---
 
@@ -62,7 +62,7 @@ NSA の極めて機密性の高い内部通信ネットワーク——機密情�
 
 **Why it matters:** 今週の障害カスケードは、非機密の消費者クラウド（Microsoft、Apple）、民間航空（FAA）、銀行決済（Chase）、そして国家安全保障機構の機密側にまで及んだ——共通原因の証拠はなく、すべてが5営業日以内に発生している。個々の原因が何であれ、今週の信頼性論争はもはや特定ベンダーの SRE 実践の話ではなく、重要インフラのどれだけが同じ変更管理の物理を共有しているかの話になっている。
 
-[`🔗 Reuters: Highly classified US national security communications network is down`](https://www.reuters.com/technology/highly-classified-us-national-security-communications-network-is-down-cnn-2026-11-17/) · [`🔗 NYT: Classified N.S.A. Network Goes Down, Causing Work Disruptions`](https://www.nytimes.com/2026/11/17/us/politics/nsa-down-network-outage-nsanet.html) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50533089)
+[`🔗 Reuters: Highly classified US national security communications network is down`](https://www.reuters.com/technology/highly-classified-us-national-security-communications-network-is-down-cnn-2026-11-17/) · [`🔗 NYT: Classified N.S.A. Network Goes Down, Causing Work Disruptions`](https://www.nytimes.com/2026/11/17/us/politics/nsa-down-network-outage-nsanet.html) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50533089)
 
 ---
 
@@ -76,7 +76,7 @@ Baseten と構築した Runta のハーネスリーダーボードは、**830億
 
 **Why it matters:** 注意書きが埋もれずに印刷されているのが何よりの価値だ——「each pass rate has a 95% interval of about ±10 points, so a gap of a few points is a tie」（各パス率の95%区間は約±10ポイントで、数ポイントの差は引き分け）、「Open models, one provider」（オープンモデル、単一プロバイダ）、設計パターンの節は明示的に「observations, not tests」（観察であってテストではない）。だからこそ、運用に使える2つの数字を持ち帰る価値がある。モデル固定ならハーネスは2〜5倍のコストレバーであり、評価支出の約3分の2が失敗に消える——予算はパスだけでなくミスのために積め。
 
-[`🔗 Runta: What is the best harness for each model?`](https://runta.com/blog/introducing-frontierharness-eval-v1-1/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50532191)
+[`🔗 Runta: What is the best harness for each model?`](https://runta.com/blog/introducing-frontierharness-eval-v1-1/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50532191)
 
 ---
 
@@ -104,7 +104,7 @@ Baseten と構築した Runta のハーネスリーダーボードは、**830億
 
 **Why it matters:** リターン懐疑論のコーラスに、いま中国のアクセントも加わった——米国側の「capex が収益を追い抜く」議論と同じ論点が、モデル API ではなく広告・デバイス・クラウドで AI を収益化する企業の口から語られている。モデルベンダー、デバイスメーカー、プラットフォームオーナーが同じ週に「価値はアプリケーション層に移った」と言い始めたなら、それは記録に値する座標変換だ。
 
-[`🔗 SCMP: Baidu, Xiaomi CEOs warn of growing gap between AI hype and returns`](https://www.scmp.com/tech/big-tech/article/3374774/baidu-xiaomi-ceos-warn-growing-gap-between-ai-hype-and-returns) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50531751)
+[`🔗 SCMP: Baidu, Xiaomi CEOs warn of growing gap between AI hype and returns`](https://www.scmp.com/tech/big-tech/article/3374774/baidu-xiaomi-ceos-warn-growing-gap-between-ai-hype-and-returns) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50531751)
 
 ---
 
@@ -118,7 +118,7 @@ Alloy CSS のデモは完全な請求書アプリだ——ダイアログ、ド�
 
 **Why it matters:** デモが成立するのは、モダン HTML と CSS の状態機構（popover、details、`:checked` などの仲間たち）が、「よくあるコンポーネントライブラリの JS の大部分は状態配管にすぎない」という閾値を越えたからだ。htmx/Rails/Django スタックを動かす層が最初の受益者になる。トレンドシグナルの読み方の小さな教訓でもある。34スターのリポジトリが HN の一日を制するのは、スター速度という誤った指標の実例そのものだ。
 
-[`🔗 Alloy CSS: ライブデモ（ソースを閲覧可、JS なし）`](https://alloyhtml.com/example.html) · [`🔗 alloyhtml/css`](https://github.com/alloyhtml/css) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50532385)
+[`🔗 Alloy CSS: ライブデモ（ソースを閲覧可、JS なし）`](https://alloyhtml.com/example.html) · [`🔗 alloyhtml/css`](https://github.com/alloyhtml/css) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50532385)
 
 ---
 
@@ -132,7 +132,7 @@ FT によれば、売上が **$104B** に達した四半期で、Nvidia は収�
 
 **Why it matters:** 開示手法の変更は収益の変更ではない——だがそれは、輸出規制執行が狙っている場所に、偶然とは思えない形で着地する。売上の22%を計上しながら製品の2%未満しか受け取らない請求ハブは、迂回された GPU が姿を現す地形だからだ。議会と規制当局の監視下にある企業が、長年トップを務めた人物の辞任の数日後に暫定 CEO を迎え、なおかつ最もリスクの高い地域をヘッドライン数字から追跡不能にしたなら、開示そのものがストーリーになる。
 
-[`🔗 FT: Nvidia stopped disclosing Singapore sales as revenues hit $104bn`](https://www.ft.com/content/dbde7a30-548c-4f9d-a4be-7898a0c24dcf) · [`🔗 Fortune: Nvidia suddenly changed how it reported revenue`](https://fortune.com/2026/11/12/nvidia-changed-earnings-report-format-singapore-revenue-megaspeed-probe-colette-kress/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50534631)
+[`🔗 FT: Nvidia stopped disclosing Singapore sales as revenues hit $104bn`](https://www.ft.com/content/dbde7a30-548c-4f9d-a4be-7898a0c24dcf) · [`🔗 Fortune: Nvidia suddenly changed how it reported revenue`](https://fortune.com/2026/11/12/nvidia-changed-earnings-report-format-singapore-revenue-megaspeed-probe-colette-kress/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50534631)
 
 ---
 
@@ -146,7 +146,7 @@ Microsoft の MAI チームがコーディングモデル2種を出した。一�
 
 **Why it matters:** 「主張 vs 脚注」の構造は、朝の FrontierHarness 研究が測定したハーネス感受性そのものだ——同じモデルでもハーネスが違えば動く。だから「コスト5%で96%」という数字は*ある構成*についての主張であり、Microsoft はその構成について異例なほど率直だ。価格のアスタリスクにも注意。ここでのすべてのコスト倍率は、期限のあるプロモーション価格で割られている。
 
-[`🔗 Microsoft AI: Introducing MAI Code 2 and MAI Code 2 Flash`](https://microsoft.ai/news/introducing-mai-code-2-and-mai-code-2-flash/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50535885)
+[`🔗 Microsoft AI: Introducing MAI Code 2 and MAI Code 2 Flash`](https://microsoft.ai/news/introducing-mai-code-2-and-mai-code-2-flash/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50535885)
 
 ---
 
@@ -160,7 +160,7 @@ George Hotz のエッセイは、Anthropic が彼の言う「Singleton」——�
 
 **Why it matters:** 論証を受け入れるか否かにかかわらず、タイミングそのものがストーリーだ。これは Anthropic の IPO ロードショーが進行中（本フィードは昨日 prospectus の主張を扱った）で、業界の capex 論争が全開の週に出た。フロンティアラボの戦略への批判が、業界の外からだけでも、安全派からだけでもなく、競合インフラを建設した創業者からも来るようになった——この記事はその実質的な変化のデータポイントだ。
 
-[`🔗 geohot: My Empire of Dirt`](https://geohot.github.io/blog/jekyll/update/2026/11/17/my-empire-of-dirt.html) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50530114)
+[`🔗 geohot: My Empire of Dirt`](https://geohot.github.io/blog/jekyll/update/2026/11/17/my-empire-of-dirt.html) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50530114)
 
 ---
 
@@ -174,7 +174,7 @@ Jensen Huang が Nvidia CEO 辞任後、初の公開声明を出した。復帰�
 
 **Why it matters:** これは本フィードの今週の2項目（11月13日の辞任、11月16日の復帰協議）のアップデートだ。公開圧力の軌道は今や明示的で名前がある——トランプ、6桁の請願、そして Huang 自身——一方、決定権者の軌道は逆方向に走っている。創業者が戻りたい、群衆は戻ってほしい——その一方で取締役会は国家安全保障に隣接する調査を進めている。この落差こそ、Nvidia のガバナンス物語の現在地であり、決算日は暫定体制の最初のストレステストになる。
 
-[`🔗 CNBC: Jensen Huang says he's open to returning in first statement since resignation`](https://www.cnbc.com/2026/11/17/nvidia-jensen-huang-statement.html) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50534044)
+[`🔗 CNBC: Jensen Huang says he's open to returning in first statement since resignation`](https://www.cnbc.com/2026/11/17/nvidia-jensen-huang-statement.html) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50534044)
 
 ---
 
@@ -188,7 +188,7 @@ Jensen Huang が Nvidia CEO 辞任後、初の公開声明を出した。復帰�
 
 **Why it matters:** Phrack はエクスプロイト技術を文献としてアーカイブする場所であり、この号の目次は攻撃がどこを向いているかの国勢調査だ——コンテナ境界、レンダラーサンドボックス、ML サプライチェーンが古典的なヒープ/カーネルの素材と並んで一等の攻撃面として現れている。ML セキュリティ論文2本と「LLM 時代のカーネルエクスプロイト開発」が背中合わせに並ぶこと自体が、この号の分野の行き先についての主張だ。
 
-[`🔗 Phrack 73: Introduction`](https://phrack.org/issues/73/introduction_md) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50535992)
+[`🔗 Phrack 73: Introduction`](https://phrack.org/issues/73/introduction_md) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50535992)
 
 ---
 
@@ -202,7 +202,7 @@ Solid 2.0 がリリースされた。1.0 から5年で、売りは「async in th
 
 **Why it matters:** *コーディングエージェント*が自己修復できるように設計されたエラー診断をフレームワークが出荷するのは、紛れもない 2026 年の成果物だ——記事によれば、RC フェーズのバグ報告は「agents deliberately hunting edge cases」（境界ケースを意図的に狩るエージェント）から来たという。同時刻の傍注：sveltejs/svelte がリリースなしで本日 +533★ でトレンド入り（5.57.3 は10月）——最も可能性が高い駆動因は Solid のリリースによる比較トラフィックで、リリース日は競合の数字も動かすという教訓でもある。
 
-[`🔗 Solid: Solid 2.0 — The Long Hold`](https://www.solidjs.com/blog/solid-2-0-the-long-hold/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50536387)
+[`🔗 Solid: Solid 2.0 — The Long Hold`](https://www.solidjs.com/blog/solid-2-0-the-long-hold/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50536387)
 
 ---
 
@@ -216,7 +216,7 @@ Solid 2.0 がリリースされた。1.0 から5年で、売りは「async in th
 
 **Why it matters:** ライセンスの振り子（Elastic 2021 → HashiCorp 2023 → Redis 2024 とすべて*制限*寄りへ）が、コミュニティの善意ではなく AI 経済学に足場を置いた初めての明示的な逆方向の議論を得た——しかもこの議論の方向は検証可能だ。コード複製コストが本当に崩壊したなら、小規模インフラベンダーから寛容ライセンス*への*再ライセンスが増え、クラウド標的の大手が追従するかを watch すればいい。
 
-[`🔗 Antfly: How Antfly learned to stop worrying and love Apache 2.0`](https://antfly.io/thoughts/how-antfly-learned-to-stop-worrying-and-love-apache-2) · [`🔗 antflydb/antfly`](https://github.com/antflydb/antfly) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50532773)
+[`🔗 Antfly: How Antfly learned to stop worrying and love Apache 2.0`](https://antfly.io/thoughts/how-antfly-learned-to-stop-worrying-and-love-apache-2) · [`🔗 antflydb/antfly`](https://github.com/antflydb/antfly) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50532773)
 
 ---
 
@@ -244,7 +244,7 @@ TrnRT は AWS Trainium 向けのオープン推論エンジンだ——このチ
 
 **Why it matters:** AWS の Trainium ソフトウェアの物語は、AWS サービス内部のクローズドソースカーネルだった。層ごとのカーネル設計を公開し、誠実な同時実行数を出すオープンなエンジンは、そのハードウェア上で誰がカスタム推論を組めるかを変える——そして $0.040/M トークンのスポット価格は、安価な推論競争における具体的なデータポイントだ。リポジトリは若い（10月30日作成、1.6k スター）し、現状単一モデル。性能主張はベンダー測定と見なし、手法はブログのリンクで確認すること。
 
-[`🔗 RunanywhereAI/trnrt`](https://github.com/RunanywhereAI/trnrt) · [`🔗 ブログ：Serving GLM-5.3-Flash on one Trainium2 box`](https://runanywhere.ai/blog/glm-5-3-flash-trainium2-nki-megakernels) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50533270)
+[`🔗 RunanywhereAI/trnrt`](https://github.com/RunanywhereAI/trnrt) · [`🔗 ブログ：Serving GLM-5.3-Flash on one Trainium2 box`](https://runanywhere.ai/blog/glm-5-3-flash-trainium2-nki-megakernels) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50533270)
 
 ---
 
@@ -272,7 +272,161 @@ StarSling は YC P25 からローンチし、その問題設定は本フィー�
 
 **Why it matters:** エージェント大量リポジトリの問題は現実にある。1リポジトリが1日に数十のエージェント PR を吸収するとき、20分の CI ループと GitHub ホストのキュー時間がボトルネック資源になり、「自分を改善する CI」は今週のエージェントインフラの波の他の部分と同じ「苦役の置換」パターンだ。主張は同社自身のベンチマークだ。131秒対61秒の中央値が、彼らに果たしてもらうべき誠実な数字だ。
 
-[`🔗 StarSling`](https://starsling.dev) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50536468)
+[`🔗 StarSling`](https://starsling.dev) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50536468)
+
+---
+
+## 20. Java4Shell（CVE-2026-114938）：OpenJDK の JIT Base64 組み込み関数における事前認証 RCE——AI で「1時間」で発見、同日に修正
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** calif.io · 626+ pts on HN · 7h ago (~05:11 UTC+8)
+- **Tags:** `cve` `openjdk` `rce` `jit`
+
+Calif が **Java4Shell** を公開した。OpenJDK の AVX-512 Base64 組み込み関数におけるメモリ破壊バグだ。「The x86-64 Base64 intrinsic miscalculated the padded tail's store mask, causing an out-of-bounds write」（x86-64 Base64 組み込み関数がパディング末尾のストアマスクを誤計算し、境界外書き込みを引き起こす）——65文字の入力（`A` 64個 + `=`）で50バイトのバッファが62バイトオーバーフローする。「affects OpenJDK from version 17.0.6 or newer」（17.0.6 以降の OpenJDK に影響。Oracle 自身のレコードは影響を受ける Java SE ビルドとして 8u511b33-perf、17.0.21.0.3、21.0.13.0.3、25.0.5.0.3、27.0.1.0.3 を列挙）で、AVX-512 VBMI 対応の x86-64 CPU のみ——ARM64 は影響を受けない。衝撃的なのは影響実証の方だ。**Keycloak、Jira、Confluence、JFrog Artifactory、Jenkins、PingFederate での事前認証 RCE**、Kafka、Solr、Elasticsearch、Gerrit、Spinnaker での認証後 RCE、**JavaBleed** と名付けられた Heartbleed 型のヒープリーク、さらに悪意ある TLS サーバー経由のクライアント側亜種。Oracle は太平洋時間 11月17日午後1時にパッチを公開。アップグレードまでの緩和策は `-XX:-UseBASE64Intrinsics` か `-XX:UseAVX=2`。スコアの出所：NVD レコード（`Received`、22:18Z 公開）には Oracle CNA のスコア——CVSS 3.1 **8.1**（AV:N/AC:H）——が載り、Calif の記事は CVSS 4.0 で **9.2 CRITICAL** と計算している。製品別の武器化エクスプロイトは「until everyone has had a chance to upgrade」（全員がアップグレードを終えるまで）公開を控えている。
+
+**Why it matters:** 発見の経済性が物語の中の物語だ——Calif によれば Quang Luong が「an hour to discover the vulnerability, and two more hours to develop the first working exploit」（脆弱性発見に1時間、最初の実用エクスプロイトにさらに2時間）、「the total token cost… less than $200」（トークン総コスト200ドル未満）。彼らの PHP2Shell/Squidbleed に続く AI 支援パーサー・JIT 研究の延長線上にある。発見は JFrog、Horizon3.ai、Red Hat（RHSB-2026-018）によって独立に裏付けられた。Oracle の AC:H はエクスプロイトの摩擦が現実であることを示す（ASLR バイパス＋ヒープ・フeng shui＋標的別の個別チェーン——「not a universal point-and-shoot」）。しかし Base64 をデコードするすべての JVM サービス——ほぼ全部だ——がこのコードパスを抱えている。
+
+[`🔗 Calif：Java4Shell`](https://calif.io/java4shell/) · [`🔗 JFrog：わかっていること`](https://research.jfrog.com/post/java4shell-vulnerability) · [`🔗 Red Hat RHSB-2026-018`](https://access.redhat.com/security/vulnerabilities/RHSB-2026-018) · [`🔗 NVD：CVE-2026-114938`](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE-2026-114938) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50538240)
+
+---
+
+## 21. Quad9、毎日のブロック罰金よりフランスからの無料 DNS リゾルバー撤退を選ぶ——Cloudflare は「a canary in the coal mine」と呼ぶ
+
+- **Velocity:** ▮▮ rising
+- **Source:** blog.cloudflare.com · 356+ pts on HN · 6h ago (~06:13 UTC+8)
+- **Tags:** `dns` `policy` `france` `blocking`
+
+Quad9（9.9.9.9 のスイス非営利団体）は、著作権侵害ドメインのブロック拒否で**毎日の罰金**を課す裁判所命令に数か月の訴訟の末で直面し、リゾルバーをフランスから完全に引き上げる。CDN とプロキシサービスでコンプライアンスを示せた Cloudflare と違い、純粋な公共リゾルバーには代替の準拠経路がなかった。選択は「crippling litigation and penalties」（骨まで削る訴訟と罰金）か、プライバシー保護サービスの根本的変更か、だ。周囲の判例の格子も重要だ。ブリュッセルの裁判所は **Cloudflare、Google、Cisco** に対し2027年1月初めまでに公共リゾルバー経由のブロックを命じ（3社とも控訴中）、ドイツの裁判所は過去に DNS ブロック要求を拒否し、Cisco はすでに OpenDNS をフランス・ポルトガル・ベルギーから引き上げた。Cloudflare の論点：リゾルバーレベルのブロックは無効（切り替えは1分以内）、不精確（ドメイン単位で合法的コンテンツも巻き込む）、不透明——病院、大学、政府機関は「their Internet will fail with no explanation」（自分たちのインターネットが説明なく死ぬ）ことに気づく——そしてリゾルバーは世界規模なので、一国が「could dictate what content is accessible around the world」（世界中でアクセスできるコンテンツを決定しかねない）。提案する代替策：侵害ファイルが実際に存在するホスティングプロバイダーレベルでの執行だ。
+
+**Why it matters:** 毎日罰金の訴訟に追い込まれた最初の公共リゾルバー撤退は、どの管轄でもコピーできるテンプレートだ——ベルギーの2027年1月期限が次のチェックポイントになる。控訴が敗れれば、リゾルバーレベルのブロックはフランスの例外ではなく EU の標準になり、すべてのプライバシー重視リゾルバーが Quad9 と同じ選択に立たされる：準拠、地域撤退、あるいは訴訟。
+
+[`🔗 Cloudflare：Quad9 のフランス撤退`](https://blog.cloudflare.com/quad9-withdrawal-from-france/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50538994)
+
+---
+
+## 22. jQuery 4.1.0 と 3.8.0 が同時リリース——「passing the torch」：3.x は最後の機能リリース、両ラインに ReDoS 修正
+
+- **Velocity:** ▮▮ rising
+- **Source:** blog.jquery.com · 269+ pts on HN · 8.5h ago (~03:50 UTC+8)
+- **Tags:** `jquery` `javascript` `release` `redos`
+
+jQuery は2バージョンを一度にリリースした。**4.1.0**（4.x ライン初のマイナー）と、**3.8.0**——「a send-off, not a comeback」（送別出しであり、カムバックではない）で、3.x 分支の最後の計画された機能リリース。以後 3.x は「critical security and bug fixes」のみを受け取る。両方に**セレクター識別子マッチングの ReDoS 修正**（破局的バックトラッキングがページをハングさせ得た）と、新しいオブジェクトベースの AJAX トランスポート complete-callback API が入った。4.1.0 は `jqXHR.responseURL`（issue #4339、ついに）を追加し、セレクターエンジンを完全に `querySelectorAll` へ移行し、`createElementNS` で XML ドキュメント処理を修正し、`.serialize()` が form-associated カスタム要素を扱い、`uniqueSort` を O(N²) から O(N) に削り、**Safari 27 の正規表現インタプリタバグ**を回避する。3.8.0 は `hidden="until-found"` サポートと正式な非推奨化（プロトタイプ上の `push`/`sort`/`splice`、`jQuery.expr.filters`）。同じリリースサイクルでリポジトリには「guidelines for machine-generated contributions」が追加された。
+
+**Why it matters:** 巨大な 3.x インストールベースが行動できる日付付きマイルストーンだ。トーチは正式に 4.x へ移り、アップグレードガイドと Migrate プラグインがその道で、両分支に同時投入されたセキュリティ修正は、バージョン固定サイトも動くべき理由になる。20年の歴史を持つライブラリが同じ発表に静かにエージェント貢献ガイドラインを載せるのは、それ自体が2026年の成果物だ。
+
+[`🔗 jQuery ブログ：4.1.0 と 3.8.0 をリリース`](https://blog.jquery.com/2026/11/17/jquery-4-1-0-and-3-8-0-released-passing-the-torch/) · [`🔗 4.1.0 リリースノート`](https://github.com/jquery/jquery/releases/tag/4.1.0) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50537156)
+
+---
+
+## 23. マイクロソフトの ONNX Runtime が GitHub から消えた——リポジトリ・releases フィード・API がすべて 404、PyPI は 1.32.0 をまだ配信、説明はなし
+
+- **Velocity:** ▮▮ rising
+- **Source:** github.com/microsoft/onnxruntime · 175+ pts on HN · 5h ago (~07:18 UTC+8)
+- **Tags:** `onnx` `supply-chain` `github` `inference`
+
+microsoft/onnxruntime——ローカルとエッジの AI の相当な部分を支える推論エンジン——が一晩で闇に消えた。**11月18日 04:16 UTC** 時点でリポジトリページ、`releases.atom` フィード、GitHub API のすべてが **404** を返す。事前通知も公式声明もない。HN のコメント者は下流の破損を報告している（「we found out about this this morning, when evals started failing in our pipelines」——今朝、評価パイプラインが失敗し始めて知った）、「a repository with 22k stars」が闇に消えたと表現する人もいる。検証済みの部分：**PyPI はまだ `onnxruntime` 1.32.0 を配信している**——消失より前のリリースだ——最も近い公開フォークは **intel/onnxruntime**（Intel の OpenVINO 変更を含む）。未検証の部分：原因だ。スレッドの憶測はセキュリティテイクダウンから組織再編まで及ぶ。あるコメント者が無関係な PyPI 汚染の解説をリンクした——いずれも未確認だ。
+
+**Why it matters:** パッケージがまだインストールできても、上流の消失は運用イベントだ。ソースからビルドする人、issue を立てる人、CI でリポジトリの存在を前提にしていた人が、音もなくそれを失った。「全部 vendor する」習慣にまた一件、データポイントが増えた。正直に日時を刻んでおく：これは発展中の話だ。リポジトリが新しいパスで復活すれば、消失は改名だったことになる——誰かがそう言うまで、「説明のない消失」が正確な状態だ。
+
+[`🔗 github.com/microsoft/onnxruntime（現在 404）`](https://github.com/microsoft/onnxruntime) · [`🔗 intel/onnxruntime フォーク`](https://github.com/intel/onnxruntime) · [`🔗 PyPI：onnxruntime 1.32.0`](https://pypi.org/project/onnxruntime/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50539610)
+
+---
+
+## 24. ID.me が TreasuryDirect の唯一のサインインになり、仲裁条項が付く——上院議員はなぜ Login.gov ではないのかと問う
+
+- **Velocity:** ▮▮ rising
+- **Source:** consumerrights.wiki · 182+ pts on HN · 3.5h ago (~08:51 UTC+8)
+- **Tags:** `privacy` `identity` `irs` `policy`
+
+ID.me の最新規約は、続くプライバシー係争をさらに鋭くする。v10.1.0（2026年11月13日付）は拘束力ある仲裁条項と集団訴訟放棄を維持し（新規は30日のメール脱退窓口）、プライバシーポリシー v7.1.8（11月2日）は、プラットフォームの使用をもって ID.me が「determines how personal information may be used」（個人情報の使われ方を決定する）ことへの同意と定める。アカウント解約後も確認履歴は最長3年保持され、生体情報削除要求は内部審査に入り得て ID.me は「reserves the right to decline」（拒否する権利を留保する）、責任上限は1,000ドル。鋭い刃はアクセス変更の方だ。**TreasuryDirect は9月13日に ID.me を導入し、10月28日に従来のログインを置き換えた——そして Login.gov は「cannot be used to log in to your TreasuryDirect account」（TreasuryDirect アカウントのログインに使えない）**——OMB メモ（M-26-18、8月31日）が機関に対し Login.gov が対応できる利用者層ではデフォルトとして推進することを求め、Wyden/Warren の書簡（10月27日）が GSA プラットフォームを名指しする法令 6 U.S.C. §1523(b)(1)(D) を引用しているにもかかわらず、だ。ID.me の5年契約の上限は10億ドル超（これまで約9,300万ドルが執行）。2027年申告シーズンについて IRS は「Taxpayers can use Login.gov or ID.me」（納税者は Login.gov か ID.me を使える）と言う——TreasuryDirect 利用者にその選択肢はなく、Direct Pay がサインイン不要の退路であり続ける。
+
+**Why it matters:** 政府運営の身元確認オプションは存在し、法令上優先されているのに、貯蓄債ポータルは依然として全員を、仲裁とデータ利用同意を括った規約を持つ民間プロバイダーへルーティングする——メモ、法令、議員書簡は今や公開済みだ。IRS/Treasury 統合を構築する人への運用上の事実は非対称性だ：IRS には2つのプロバイダー、TreasuryDirect にはちょうど1つ。
+
+[`🔗 Consumer Rights Wiki：ID.me 規約が IRS サインインに必須に`](https://consumerrights.wiki/w/ID.me_terms_required_for_IRS_sign-in) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50540437)
+
+---
+
+## 25. 11月12日に Apple Support Community の11月20日閉鎖を報えた件のその後：Archive Team が8言語で保存を急いでいる
+
+- **Velocity:** ▮ steady
+- **Source:** wiki.archiveteam.org · 113+ pts on HN · 4.8h ago (~07:32 UTC+8)
+- **Tags:** `archival` `apple` `preservation` `community`
+
+本フィードが11月12日に旗を立てた話のアップデート：Apple は11月10日「The Apple Support Community will permanently close on November 20, 2026」（Apple Support Community は2026年11月20日に永久閉鎖します。告知以降は読み取り専用）と発表し、Archive Team は金曜の締切に向けて完全な保存プロジェクトを立ち上げた。DPoS 方式——ArchiveTeam Warrior を走らせれば自動で取得する——で、`applediscussions-grab` スクリプト、tracker.archiveteam.org/applediscussions のアイテムトラッカー、hackint の #badapple での調整が整っている。対象は英語サイトだけではない。**7つの地域コミュニティ**（フランス語、中国語、日本語、韓国語、ドイツ語、スペイン語、ポルトガル語）が範囲だ。Wiki 上の進捗は「In progress…」のままで、完了数字はない。
+
+**Why it matters:** 20年分のトラブルシュート回答——Apple がもはや文書化していない問題の回避策を含む——が2日で消える。しかも8言語の範囲は、非英語アーカイブも消えることを意味する。プラットフォーム閉鎖からボランティアの群れが動くまでの時間は、今や日単位だ。10年前のスレッドに助けられたことがあるなら、今週 Warrior を走らせることが1コマンドで恩返しする方法だ。
+
+[`🔗 Archive Team Wiki：Apple Discussions`](https://wiki.archiveteam.org/index.php/Apple_Discussions) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50539747)
+
+---
+
+## 26. 「Not Everything Needs an LLM」：PostHog の決定モデル実戦台帳——PII チェックの98.7%は大きなモデルに届かない、失敗例も印刷済み
+
+- **Velocity:** ▮ steady
+- **Source:** newsletter.posthog.com · 113+ pts on HN · 10h ago (~02:16 UTC+8)
+- **Tags:** `decision-models` `llm` `engineering` `routing`
+
+決定モデルカテゴリは一週間で4つのベンダーローンチを迎えた（Google の Decisions API 11月12日、Perplexity Decider 11月14日、HeyGen Decision 1 は昨日）。PostHog のエッセイは実践者の対極にある——数字は自分たちの本番スタックからだ。Replay Vision の PII 洗浄は1つの広い質問の代わりに2つの狭いイエス/ノーの質問を投げ（誤検知は約10分の1に）、**セッション要約の98.7%は LLM 呼び出しを完全にスキップする**。Slack ボットは選択型の質問でルーティングし（「cheapest option that will most likely finish the task correctly on the first try」——一発で正しく終えられそうな最安の選択肢）、検索は embedding 候選を確率で再ランク付けし（20テストクエリで約+25%）、SQL チャートピッカーは手書きの決定論的ルールを置き換えた。失敗も印刷されている、それが信頼できる理由だ。閾値は誤りのコストを符号化する（PII は0.4——見逃しはデータ漏洩。ボットは0.85——誤検知は迷惑）、12–38k トークンの要求を出すランク付けジョブが「flooded the model server and blocked other products' calls for hours」（モデルサーバーを水没させ、他製品の呼び出しを何時間も塞いだ）、PR レビューのランク付けは素直に失敗した（AUC 0.52）。
+
+**Why it matters:** カテゴリにフィールドマニュアルができた。型付きの決定を LLM の下のゲーティング/ルーティング層に置き、キャリブレーションこそが実際のエンジニアリングだと。「Too simple for a language model, yet too fuzzy for a regex」（言語モデルには単純すぎ、正規表現には曖昧すぎる）は現実の製品境界で、98.7% のバイパス数字は今週どのベンダーローンチも暗示していたコスト論の具体形だ。
+
+[`🔗 PostHog：Not Everything Needs an LLM`](https://newsletter.posthog.com/p/decision-models) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50535740)
+
+---
+
+## 27. ハーバードの企業レベル研究：AI エージェントはコード出力を約30%押し上げたが、解決済みチケットは動かず——ボトルネックはコードレビューへ、PR あたり +3.45日
+
+- **Velocity:** ▮ steady
+- **Source:** complexdiscovery.com · 89+ pts on HN · 7h ago (~05:16 UTC+8)
+- **Tags:** `research` `ai-coding` `economics` `code-review`
+
+ハーバードのワーキングペーパー（Fiona Chen と James Stratton、「Artificial Intelligence in the Firm: Bottlenecks in Software Production」、2026年8月4日）は、Jellyfish のエンジニアリング分析データと Revelio Labs 記録を繋いだ（2021年1月–2026年3月。Jira チケット6,830万件、コミット2億9万、PR 4,910万）**718社・従業員725,938人**を対象に、staggered difference-in-differences を走した。形はこうだ。コード行数は約30%増（ワーカー月あたり5,017基準に1,494行増）、コミット +20%、PR +23%——一方で**解決済み Jira チケットは3.67基準に +0.12 しか動かず、統計的にゼロと区別がつかない**。仕事はどこへ消えた？「The time from pull request submission to merge rose 3.45 days on a 7.03-day baseline, a 49 percent increase」（PR の提出からマージまでの時間は7.03日基準に3.45日増、49%増）、正式な変更要求はほぼ倍増（13%基準に +12ポイント）、PR あたりのレビューコメントは +35%。AI レビューツールはこれを救えなかった——2026年3月までに約80%の企業が使用したが、AI が書いたレビューコメントはわずか23.3%で、論文は「the bottleneck persists after firms adopt such tools」（企業がこうしたツールを採用した後もボトルネックは残る）と書く。本フィードが11月12日に扱った Christian Bird の活動-成果ギャップの、企業レベル計量経済版だ。限界は開示済み。ピアレビューを完遂していないワーキングペーパー、Jellyfish の商業的利益（著者らは「part of our ongoing work with Jellyfish」と呼び、同社は専有情報の確認だけをした）、2026年3月のデータ打ち切り。
+
+**Why it matters:** 先行指標が出荷指標を追い抜くとき、制約には名前と数字がつく。レビューのスループット——PR のマージは49%遅く、AI が書くレビューコメントは4分の1未満。ツールビルダーにはこれが addressable market で、チームには、レビュー容量の計画なしのエージェント採用は速度をキュー時間に変換する、ということだ。
+
+[`🔗 ComplexDiscovery：ハーバードの研究者が AI コーディングエージェントはボトルネックをコードレビューへ移したと発見`](https://complexdiscovery.com/harvard-researchers-find-ai-coding-agents-shifted-the-bottleneck-to-code-review/) · [`🔗 ワーキングペーパー（PDF）`](https://fion.ac/jellyfish.pdf) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50538303)
+
+---
+
+## 28. 高度500kmでの1メガトン核爆発は、モデル化された LEO 衛星の約98%を1週間で無効化——放射線耐性を3倍にしても得られるのは数日
+
+- **Velocity:** ▮ steady
+- **Source:** arxiv.org · 88+ pts on HN · 8.6h ago (~03:46 UTC+8)
+- **Tags:** `arxiv` `space` `satellites` `research`
+
+arXiv 論文（2611.09827、11月6日に Petersen、Qin、Thiele、Philippe が投稿）は、即発放射、電子捕獲、放射線帯の進化を、低軌道核爆発に対する衛星の故障・衝突・大気抵抗と結合させた——そこには今や13,000基超の衛星が運用されている。中心ケース：南大西洋上空500km での1-Mt 爆発が作る人工放射線帯の反復曝露は「disables approximately 98% of modeled satellites within one week in our central case」（中心ケースで1週間以内にモデル化衛星の約98%を無効化）する。厳しいのは耐性の数学の方だ。「**Tripling the assumed radiation tolerance delays widespread failure by only days: approximately 97% are still disabled within two weeks.**」（想定放射線耐性を3倍にしても広範な故障は数日しか延びない。2週間以内に約97%がまだ無効化される。）機動力を失ったことは衝突リスクに複利で効く——漂流する故障衛星により、2年で約20件の衝突が予想される。
+
+**Why it matters:** これはモデルであって実験ではない——著者は「in our central case」と印刷しており、前提そのものが論点だ。だが方向性の発見は刺さる。衛星グレードの耐性強化はほとんど結果を動かさない。脆弱性は個々の衛星のシールドではなく、軌道シェルのアーキテクチャそのものにある——1967年の宇宙条約が宇宙空間での核爆発を禁じた理由に、爆発そのものを耐えられる大国向けの定量化された脚注が1つ増えた。
+
+[`🔗 arXiv 2611.09827`](https://arxiv.org/abs/2611.09827) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50537120)
+
+---
+
+## 29. Tencent が Hy4 Flash を出荷：総224B/活性12B、1M コンテキスト、100万トークンあたり入力 $0.07/出力 $0.28——低価格層がベンチマーク合戦になる
+
+- **Velocity:** ▮ steady
+- **Source:** hy.tencent.ai · 78+ pts on HN · 7.3h ago (~05:06 UTC+8)
+- **Tags:** `tencent` `model-release` `inference` `efficiency`
+
+Tencent の Hunyuan ラインが **Hy4 flash** を出荷した（11月16日投稿、今 HN に浮上）：64B の「Engram」パラメータを含む総224Bパラメータでトークンあたりわずか **12B が活性**、ネイティブ・マルチモーダル、100万トークンのコンテキスト。効率スタック：ハイブリッドアテンション + LatentMoE + Engram が KV キャッシュを **Hy3 の1/24、Hy4 の1/6** まで縮め、Hy4 からの自己蒸留に強化学習が「cuts average end-to-end output tokens by 50%」（平均エンドツーエンド出力トークンを50%削る）を重ね、megakernel と4-bit 量子化がデコードを150 tok/s 超へ押し上げる。見出しは価格だ。**100万トークンあたり $0.003 キャッシュ / $0.070 入力 / $0.281 出力**（Hy4：$0.042/$0.834/$2.501）。主張は Tencent 自社の WorkIndex ベンチマーク（「grounded in typical WorkBuddy tasks」——スライド/文書/スプレッドシート作業、8評価セット）に頼る。タスクあたり平均コストは「just 1/13 of Hy4 preview, 1/20 of Hy4, and 1/8 of DeepSeek-V4.1-Flash-1017 (Max tier, peak-hour pricing)」（Hy4 プレビューの1/13、Hy4 の1/20、DeepSeek-V4.1-Flash-1017（Max 層・ピーク時価格）の1/8）。社内ユーザー85人・259タスクのブラインド評価で満足度は「close to Claude Haiku 5.5」（Claude Haiku 5.5 に近い）。HN コメント者は OpenRouter 経由で良好な結果を報告し、あるデータ分析ベンチマークでは低価格層で GPT-6 Luna を上回ったという（43問に $0.13。フロンティアモデルでは約 $20）。重み公開のコミットメントがスレッドで報じられている。その文は読み取り可能なテキストには見当たらない（ページは JS シェル）。Tencent が grep できる場所に貼るまで未確認として扱う。
+
+**Why it matters:** 実際に価格戦争に噛まれているのは働き者層だ。このモデルは Hy4 の出力価格の約4分の1で、Hy4 プレビューをわずかに上回るタスク品質を主張し、flash 層のパターン（GLM-5.3-Flash、DeepSeek V4.1 Flash、Qwen flash）を3大陸で競争力のあるまま保つ。注釈は携帯のまま：WorkIndex は Tencent の内部ベンチマークで、タスクあたりコスト比はベンダー測定だ。
+
+[`🔗 Tencent：Introducing Hy4 flash`](https://hy.tencent.ai/research/hy4-flash) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50538184)
+
+---
+
+## 30. Cerebras が推論を分離：AMD GPU がプリフィル、ウェハがデコードを担う——1つの実測エンドポイントでメガワットあたり5倍のトークンを主張
+
+- **Velocity:** ▮ steady
+- **Source:** cerebras.ai · 42+ pts on HN · 3.5h ago (~08:56 UTC+8)
+- **Tags:** `inference` `cerebras` `gpu` `efficiency`
+
+Cerebras が disaggregated inference をローンチした。**AMD Instinct GPU がプロンプトを処理し、Cerebras CS-3 ウェハスケールシステムが応答を生成する**——プリフィル/デコード境界でパイプラインを分割する。デコードは自己回帰でメモリ帯域律速であり、ウェハスケールエンジンの SRAM 中心設計（「350× the SRAM capacity and 5,400× the memory bandwidth of a typical GB300 GPU」——典型的な GB300 GPU の350倍の SRAM 容量と5,400倍のメモリ帯域と主張）が構造的優位を持つのはそこだからだ。実測の主張：「5X the throughput per megawatt of a CS-3-only configuration, with no loss in token generation speed」（CS-3 専用構成比でメガワットあたりスループット5倍、トークン生成速度の損失なし）——ただし11月14日の単一共有 **GPT-OSS-120B エンドポイント**から。1モデル、1日、1×に正規化。名指しされた早期アクセスパートナー：AWS、Fireworks AI、Gimlet Labs、General Compute。「hundreds of megawatts」（数百メガワット）の Cerebras クラウドとパートナーサイトへの展開は2027年末を目標とし、並行して700MW のデータセンター容量を計画。
+
+**Why it matters:** プリフィル/デコード分離は GPU エコシステム内ではすでに標準的実践だ。新しいのは、デコード側を GPU 以外のシリコンに向け、メガワットで価格を語ることだ。注釈が実仕事をしている：5倍は1エンドポイント、1モデル、ベンダー測定。一般化すれば、すべての2027年データセンター計画が載っている電力の算術を変える。しなければ、ローンチ日のスライドだ。どちらの結末も生きている。
+
+[`🔗 Cerebras：Disaggregated Inference`](https://www.cerebras.ai/blog/cerebras-launches-disaggregated-inference) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50540472)
 
 ---
 
@@ -280,9 +434,9 @@ StarSling は YC P25 からローンチし、その問題設定は本フィー�
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-17T20:45:03Z |
-| Items | 19 |
-| Sources tracked | 22 (Hacker News, GitHub Trending, OpenAI, Microsoft AI, Apple, Reuters/NYT/CNBC/FT/SCMP/Fortune, NVD/GitHub advisories, vendor blogs, Phrack, SolidJS, Runta, Antfly) |
+| Generated | 2026-11-18T04:42:08Z |
+| Items | 30 |
+| Sources tracked | 34 (Hacker News, GitHub Trending, OpenAI, Microsoft AI, Apple, Reuters/NYT/CNBC/FT/SCMP/Fortune, NVD/GitHub advisories, vendor blogs, Phrack, SolidJS, Runta, Antfly, Calif, JFrog, Red Hat, Cloudflare, jQuery, Archive Team, PostHog, ComplexDiscovery/Harvard, arXiv, Tencent Hunyuan, Cerebras) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

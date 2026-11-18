@@ -1,8 +1,8 @@
 ---
 date: 2026-11-18
-updated: 2026-11-17T20:45:03Z
+updated: 2026-11-18T04:42:08Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 22
+sources: 34
 license: CC-BY-4.0
 ---
 
@@ -276,13 +276,167 @@ StarSling launches out of YC P25 with a problem statement aimed at exactly this 
 
 ---
 
+## 20. Java4Shell (CVE-2026-114938): pre-auth RCE in OpenJDK's JIT Base64 intrinsic — found "in an hour" with AI, patched the same day
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** calif.io · 626+ pts on HN · 7h ago (~05:11 UTC+8)
+- **Tags:** `cve` `openjdk` `rce` `jit`
+
+Calif disclosed **Java4Shell**, a memory-corruption bug in OpenJDK's AVX-512 Base64 intrinsic: "The x86-64 Base64 intrinsic miscalculated the padded tail's store mask, causing an out-of-bounds write" — a 65-character input (64 `A`s + `=`) overflows a 50-byte buffer by 62 bytes. It "affects OpenJDK from version 17.0.6 or newer" (Oracle's own record lists affected Java SE builds 8u511b33-perf, 17.0.21.0.3, 21.0.13.0.3, 25.0.5.0.3, 27.0.1.0.3), and only x86-64 CPUs with AVX-512 VBMI — ARM64 is unaffected. The impact demos are the alarming part: **pre-auth RCE in Keycloak, Jira, Confluence, JFrog Artifactory, Jenkins and PingFederate**, post-auth RCE in Kafka, Solr, Elasticsearch, Gerrit and Spinnaker, a Heartbleed-style heap leak dubbed **JavaBleed**, and a client-side variant via a malicious TLS server. Oracle shipped patches at 1:00pm PT Nov 17; until you can upgrade, the mitigations are `-XX:-UseBASE64Intrinsics` or `-XX:UseAVX=2`. Score provenance: NVD's record (`Received`, published 22:18Z) carries Oracle's CNA score — CVSS 3.1 **8.1** (AV:N/AC:H) — while Calif's write-up computes **9.2 CRITICAL under CVSS 4.0**; product-specific weaponized exploits are being withheld "until everyone has had a chance to upgrade."
+
+**Why it matters:** The discovery economics are the story inside the story — Calif says it took Quang Luong "an hour to discover the vulnerability, and two more hours to develop the first working exploit," with "the total token cost… less than $200," continuing their PHP2Shell/Squidbleed line of AI-assisted parser and JIT work. The finding is independently corroborated by JFrog, Horizon3.ai and Red Hat (RHSB-2026-018). Oracle's AC:H says the exploit friction is real (ASLR bypass + heap feng shui + bespoke per-target chains — "not a universal point-and-shoot"), but every JVM service that decodes Base64 — which is nearly all of them — carries the code path.
+
+[`🔗 Calif: Java4Shell`](https://calif.io/java4shell/) · [`🔗 JFrog: What we know`](https://research.jfrog.com/post/java4shell-vulnerability) · [`🔗 Red Hat RHSB-2026-018`](https://access.redhat.com/security/vulnerabilities/RHSB-2026-018) · [`🔗 NVD: CVE-2026-114938`](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE-2026-114938) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50538240)
+
+---
+
+## 21. Quad9 pulls its free DNS resolver out of France rather than pay daily blocking fines — Cloudflare: "a canary in the coal mine"
+
+- **Velocity:** ▮▮ rising
+- **Source:** blog.cloudflare.com · 356+ pts on HN · 6h ago (~06:13 UTC+8)
+- **Tags:** `dns` `policy` `france` `blocking`
+
+Quad9, the Swiss nonprofit behind 9.9.9.9, is withdrawing its resolver from France entirely after months of litigation ended in a court order imposing **daily financial penalties** for failing to block copyright-infringing domains. As a pure public resolver — unlike Cloudflare, which could demonstrate compliance through its CDN and proxy services — it had no alternative compliance path: a choice between "crippling litigation and penalties" or fundamentally changing a privacy-protecting service. The precedent lattice around it matters: a Brussels court has ordered **Cloudflare, Google and Cisco** to block via public resolvers by early January 2027 (all three appealing); German courts previously rejected DNS-blocking demands; Cisco already pulled OpenDNS from France, Portugal and Belgium. Cloudflare's argument: resolver-level blocking is ineffective (switching takes under a minute), blunt (whole domains, legal content included), and opaque — hospitals, universities and government bodies may find "their Internet will fail with no explanation" — and because resolvers are global, one country "could dictate what content is accessible around the world." Its proposed alternative: enforce at the hosting-provider level, where the infringing files actually live.
+
+**Why it matters:** The first public-resolver exit driven by daily-fine litigation is a template any jurisdiction can copy — and the Belgian January 2027 deadline is the next checkpoint. If the appeals fail, resolver-level blocking stops being a French exception and becomes EU practice, with every privacy-forward resolver facing the same Quad9 choice: comply, geo-exit, or litigate.
+
+[`🔗 Cloudflare: Quad9's withdrawal from France`](https://blog.cloudflare.com/quad9-withdrawal-from-france/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50538994)
+
+---
+
+## 22. jQuery 4.1.0 and 3.8.0 ship together — "passing the torch": 3.x gets its final feature release, both lines get a ReDoS fix
+
+- **Velocity:** ▮▮ rising
+- **Source:** blog.jquery.com · 269+ pts on HN · 8.5h ago (~03:50 UTC+8)
+- **Tags:** `jquery` `javascript` `release` `redos`
+
+jQuery released two versions at once: **4.1.0**, the first minor of the 4.x line, and **3.8.0** — "a send-off, not a comeback," the last planned feature release on 3.x, which now receives only "critical security and bug fixes." Both carry a **ReDoS fix in selector identifier matching** (catastrophic backtracking could hang pages) and a new object-based AJAX transport complete-callback API. 4.1.0 adds `jqXHR.responseURL` (issue #4339, finally), moves the selector engine entirely to `querySelectorAll`, fixes XML-document handling via `createElementNS`, handles form-associated custom elements in `.serialize()`, cuts `uniqueSort` from O(N²) to O(N), and works around a **Safari 27 regex interpreter bug**. 3.8.0 gets `hidden="until-found"` support and formal deprecations (`push`/`sort`/`splice` on the prototype, `jQuery.expr.filters`). The same release cycle added "guidelines for machine-generated contributions" to the repo.
+
+**Why it matters:** This is the dated milestone the enormous 3.x installed base can act on: the torch is now formally with 4.x, the upgrade guide and Migrate plugin are the path, and the security fix landing on both branches is the reason even version-pinned sites should move. A two-decade-old library quietly shipping agent-contribution guidelines in the same breath is its own 2026 artifact.
+
+[`🔗 jQuery blog: 4.1.0 and 3.8.0 released`](https://blog.jquery.com/2026/11/17/jquery-4-1-0-and-3-8-0-released-passing-the-torch/) · [`🔗 4.1.0 release notes`](https://github.com/jquery/jquery/releases/tag/4.1.0) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50537156)
+
+---
+
+## 23. Microsoft's ONNX Runtime has vanished from GitHub — repo, releases feed and API all 404, PyPI still serves 1.32.0, no explanation yet
+
+- **Velocity:** ▮▮ rising
+- **Source:** github.com/microsoft/onnxruntime · 175+ pts on HN · 5h ago (~07:18 UTC+8)
+- **Tags:** `onnx` `supply-chain` `github` `inference`
+
+microsoft/onnxruntime — the inference engine under a large share of local and edge AI — went dark overnight: as of **04:16 UTC Nov 18** the repo page, its `releases.atom` feed and the GitHub API all return **404**, with no advance notice and no official statement. HN commenters report downstream breakage ("we found out about this this morning, when evals started failing in our pipelines") and describe it as "a repository with 22k stars" going dark. What's verified: **PyPI still serves `onnxruntime` 1.32.0** — a release that predates the disappearance — and the closest public fork is **intel/onnxruntime** (carrying Intel's OpenVINO modifications). What isn't: the cause. Thread speculation ranges from a security takedown to an org restructuring; one commenter linked an unrelated PyPI-compromise writeup — none of it confirmed.
+
+**Why it matters:** A vanished upstream is an operational event even when the packages still install — anyone building from source, filing issues, or assuming the repo's existence in CI just lost it silently, and the "vendor everything" habit gets another data point. Date-stamped honestly: this is a developing story; if the repo reappears under a new path, the disappearance was a rename — until someone says so, "gone without explanation" is the accurate state.
+
+[`🔗 github.com/microsoft/onnxruntime (currently 404)`](https://github.com/microsoft/onnxruntime) · [`🔗 intel/onnxruntime fork`](https://github.com/intel/onnxruntime) · [`🔗 PyPI: onnxruntime 1.32.0`](https://pypi.org/project/onnxruntime/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50539610)
+
+---
+
+## 24. ID.me is now the only sign-in for TreasuryDirect, with arbitration terms attached — and senators are asking why not Login.gov
+
+- **Velocity:** ▮▮ rising
+- **Source:** consumerrights.wiki · 182+ pts on HN · 3.5h ago (~08:51 UTC+8)
+- **Tags:** `privacy` `identity` `irs` `policy`
+
+ID.me's newest terms sharpen a running privacy fight: v10.1.0 (dated Nov 13, 2026) keeps the binding-arbitration clause and class-action waiver (a 30-day email opt-out window is the new part), and privacy policy v7.1.8 (Nov 2) states that by using the platform you agree ID.me "determines how personal information may be used" for your wallet. Verification history is retained up to three years after account closure; biometric-deletion requests can face an internal review where ID.me "reserves the right to decline"; liability is capped at $1,000. The access change is the sharp edge: **TreasuryDirect made ID.me available Sept 13 and replaced its traditional login Oct 28 — and Login.gov "cannot be used to log in to your TreasuryDirect account"** — despite an OMB memo (M-26-18, Aug 31) requiring agencies to promote Login.gov as the default where it can serve users, and a Wyden/Warren letter (Oct 27) citing 6 U.S.C. §1523(b)(1)(D), the statute naming GSA's platform. ID.me's five-year agreement has a ceiling above $1 billion (~$93M obligated so far). For 2027 filing the IRS says "Taxpayers can use Login.gov or ID.me" — TreasuryDirect users have no such choice, and Direct Pay remains the no-sign-in fallback.
+
+**Why it matters:** The government-run identity option exists, is statutorily preferred, and the savings-bond portal still routes everyone through a private provider whose terms bundle arbitration and data-use consent — with the memos, statute and senator letters now public. For anyone building IRS/Treasury integrations, the operational fact is the asymmetry: two providers for the IRS, exactly one for TreasuryDirect.
+
+[`🔗 Consumer Rights Wiki: ID.me terms required for IRS sign-in`](https://consumerrights.wiki/w/ID.me_terms_required_for_IRS_sign-in) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50540437)
+
+---
+
+## 25. Since we covered the Apple Support Community's Nov 20 closure on Nov 12: Archive Team is racing to preserve it — in eight languages
+
+- **Velocity:** ▮ steady
+- **Source:** wiki.archiveteam.org · 113+ pts on HN · 4.8h ago (~07:32 UTC+8)
+- **Tags:** `archival` `apple` `preservation` `community`
+
+Update on a story this feed flagged on Nov 12: Apple announced Nov 10 that "The Apple Support Community will permanently close on November 20, 2026" (read-only since the announcement), and Archive Team has stood up a full preservation project against the Friday deadline. It's a DPoS effort — run the ArchiveTeam Warrior and it grabs automatically — with the `applediscussions-grab` scripts, an item tracker at tracker.archiveteam.org/applediscussions, and coordination in #badapple on hackint. The target isn't just the English site: **seven regional communities** (French, Chinese, Japanese, Korean, German, Spanish, Portuguese) are in scope. Progress is listed as "In progress…" with no completion numbers on the wiki.
+
+**Why it matters:** Two decades of troubleshooting answers — including workarounds for problems Apple no longer documents — expire in two days, and the eight-language scope means the non-English archives are disappearing too. The platform-closure-to-volunteer-swarm response time is now measured in days; if you've ever benefited from a decade-old thread, running a warrior this week is the one-command way to pay it back.
+
+[`🔗 Archive Team wiki: Apple Discussions`](https://wiki.archiveteam.org/index.php/Apple_Discussions) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50539747)
+
+---
+
+## 26. "Not Everything Needs an LLM": PostHog's production ledger for decision models — 98.7% of PII checks never reach the big model, failures included
+
+- **Velocity:** ▮ steady
+- **Source:** newsletter.posthog.com · 113+ pts on HN · 10h ago (~02:16 UTC+8)
+- **Tags:** `decision-models` `llm` `engineering` `routing`
+
+The decision-model category got four vendor launches in a week (Google's Decisions API Nov 12, Perplexity Decider Nov 14, HeyGen Decision 1 yesterday); PostHog's essay is the practitioner's counterweight — real numbers from their own stack. Replay Vision's PII scrub asks two narrow yes/no questions instead of one broad one (false flags dropped to ~a tenth), and **98.7% of session summaries skip the LLM call entirely**. The Slack bot routes via a choice question ("cheapest option that will most likely finish the task correctly on the first try"); search reranks embedding candidates by probability (~+25% ranking quality on 20 test queries); a SQL chart picker replaced hand-written deterministic rules. The failures are printed, which is what makes it credible: thresholds encode mistake costs (0.4 for PII — false negatives leak data; 0.85 for the bot — false positives annoy), one ranking job with 12–38k-token requests "flooded the model server and blocked other products' calls for hours," and PR-review ranking simply failed (AUC 0.52).
+
+**Why it matters:** The category now has its field manual: typed decisions as a gating/routing layer under LLMs, with calibration as the actual engineering work. "Too simple for a language model, yet too fuzzy for a regex" is a real product boundary, and the 98.7% bypass number is the concrete version of the cost argument every vendor launch this week implied.
+
+[`🔗 PostHog: Not Everything Needs an LLM`](https://newsletter.posthog.com/p/decision-models) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50535740)
+
+---
+
+## 27. Harvard firm-level study: AI agents lifted code output ~30% while resolved issues stayed flat — and the bottleneck moved into code review, +3.45 days per PR
+
+- **Velocity:** ▮ steady
+- **Source:** complexdiscovery.com · 89+ pts on HN · 7h ago (~05:16 UTC+8)
+- **Tags:** `research` `ai-coding` `economics` `code-review`
+
+A Harvard working paper (Fiona Chen & James Stratton, "Artificial Intelligence in the Firm: Bottlenecks in Software Production," Aug 4, 2026) runs staggered difference-in-differences over **718 firms employing 725,938 workers** on Jellyfish engineering-analytics data joined with Revelio Labs records (Jan 2021–Mar 2026; 68.3M Jira issues, 200.9M commits, 49.1M PRs). The shape: lines of code rose ~30% (1,494 per worker-month on a 5,017 base), commits +20%, PRs +23% — while **resolved Jira issues moved +0.12 on a 3.67 baseline, statistically indistinguishable from zero**. Where did the work go? "The time from pull request submission to merge rose 3.45 days on a 7.03-day baseline, a 49 percent increase," formal change requests nearly doubled (+12pp from a 13% base), and review comments per PR rose 35%. AI review tools haven't rescued it — ~80% firm adoption by March 2026, but AI authored only 23.3% of review comments, and per the paper "the bottleneck persists after firms adopt such tools." It's the firm-scale econ version of the activity-outcome gap this feed covered from Christian Bird's talk on Nov 12. Caveats are disclosed: a working paper with no completed peer review, Jellyfish's commercial stake (the authors call it "part of our ongoing work with Jellyfish," which reviewed only for proprietary disclosure), and a March 2026 cutoff.
+
+**Why it matters:** When leading indicators outrun the shipping metric, the constraint has a name and a number: review throughput — PRs 49% slower to merge, AI authoring under a quarter of review comments. For tool builders that's the addressable market; for teams, it says agent adoption without review-capacity planning converts velocity into queue time.
+
+[`🔗 ComplexDiscovery: Harvard researchers find AI coding agents shifted the bottleneck to code review`](https://complexdiscovery.com/harvard-researchers-find-ai-coding-agents-shifted-the-bottleneck-to-code-review/) · [`🔗 Working paper (PDF)`](https://fion.ac/jellyfish.pdf) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50538303)
+
+---
+
+## 28. A 1-megaton detonation at 500 km would disable ~98% of modeled LEO satellites within a week — and tripling radiation tolerance buys only days
+
+- **Velocity:** ▮ steady
+- **Source:** arxiv.org · 88+ pts on HN · 8.6h ago (~03:46 UTC+8)
+- **Tags:** `arxiv` `space` `satellites` `research`
+
+An arXiv paper (2611.09827, submitted Nov 6 by Petersen, Qin, Thiele & Philippe) couples prompt radiation, electron trapping and belt evolution to satellite failures, collisions and atmospheric drag for a nuclear detonation in low Earth orbit — where 13,000+ satellites now operate. Central case: a 1-Mt burst at 500 km over the South Atlantic creates an artificial radiation belt whose repeated exposure "disables approximately 98% of modeled satellites within one week in our central case." The hardening math is the bleak part: "**Tripling the assumed radiation tolerance delays widespread failure by only days: approximately 97% are still disabled within two weeks.**" Lost maneuverability then compounds into collision risk — ~20 collisions expected within two years as disabled satellites drift.
+
+**Why it matters:** It's a model, not a test — the authors print "in our central case," and the assumptions are the debate. But the directional finding is stark: spacecraft-grade hardening barely moves the outcome, which locates the vulnerability in the orbital-shell architecture itself rather than in any single satellite's shielding — a quantified footnote to why the 1967 Outer Space Treaty bans nuclear detonations in space even for powers that might accept the blast damage.
+
+[`🔗 arXiv 2611.09827`](https://arxiv.org/abs/2611.09827) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50537120)
+
+---
+
+## 29. Tencent ships Hy4 Flash: 224B-total/12B-active, 1M context, $0.07/$0.28 per M tokens — the cheap tier becomes a benchmark fight
+
+- **Velocity:** ▮ steady
+- **Source:** hy.tencent.ai · 78+ pts on HN · 7.3h ago (~05:06 UTC+8)
+- **Tags:** `tencent` `model-release` `inference` `efficiency`
+
+Tencent's Hunyuan line shipped **Hy4 flash** (posted Nov 16, hitting HN now): 224B total parameters including 64B "Engram" parameters with just **12B active per token**, natively multimodal, 1M-token context. The efficiency stack: hybrid attention + LatentMoE + Engram shrink KV cache to **1/24 of Hy3 and 1/6 of Hy4**; self-distillation from Hy4 plus reinforcement learning that "cuts average end-to-end output tokens by 50%"; megakernels with 4-bit quantization push decode past 150 tok/s. Pricing is the headline: **$0.003 cached / $0.070 input / $0.281 output per million tokens** (Hy4: $0.042/$0.834/$2.501). The claims lean on Tencent's own WorkIndex benchmark ("grounded in typical WorkBuddy tasks" — slide/doc/spreadsheet work across 8 eval sets): average cost per task "just 1/13 of Hy4 preview, 1/20 of Hy4, and 1/8 of DeepSeek-V4.1-Flash-1017 (Max tier, peak-hour pricing)," with a blind eval of 85 internal users across 259 tasks rating satisfaction "close to Claude Haiku 5.5." HN commenters report solid results via OpenRouter, and one data-analytics benchmark where it beat GPT-6 Luna on the cheap tier ($0.13 to answer 43 questions, against ~$20 on frontier models). A weights-opening commitment is reported in the thread; that sentence isn't in the reader-readable text (the page is a JS shell), so treat it as unconfirmed until it's posted somewhere greppable.
+
+**Why it matters:** The workhorse tier is where the price war actually bites — this lands at roughly a quarter of Hy4's output price while claiming slightly-above-Hy4-preview task quality, keeping the flash-tier pattern (GLM-5.3-Flash, DeepSeek V4.1 Flash, Qwen flash) competitive on three continents. Caveat carried: WorkIndex is Tencent's internal benchmark, so the cost-per-task ratios are vendor-measured.
+
+[`🔗 Tencent: Introducing Hy4 flash`](https://hy.tencent.ai/research/hy4-flash) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50538184)
+
+---
+
+## 30. Cerebras disaggregates inference: AMD GPUs handle prefill, wafers handle decode — claiming 5× tokens per megawatt on one measured endpoint
+
+- **Velocity:** ▮ steady
+- **Source:** cerebras.ai · 42+ pts on HN · 3.5h ago (~08:56 UTC+8)
+- **Tags:** `inference` `cerebras` `gpu` `efficiency`
+
+Cerebras launched disaggregated inference: **AMD Instinct GPUs process prompts, and Cerebras CS-3 systems generate responses** — splitting the pipeline at the prefill/decode boundary because decode is autoregressive and memory-bandwidth-bound, which is where the wafer-scale engine's SRAM-centric design (claimed "350× the SRAM capacity and 5,400× the memory bandwidth of a typical GB300 GPU") has its structural edge. The measured claim: "5X the throughput per megawatt of a CS-3-only configuration, with no loss in token generation speed" — from a single shared **GPT-OSS-120B endpoint on November 14**, one model, one day, normalized to 1×. Early-access partners named: AWS, Fireworks AI, Gimlet Labs, General Compute. Broad rollout across "hundreds of megawatts" of Cerebras cloud and partner sites is targeted for end of 2027, alongside a planned 700MW of data-center capacity.
+
+**Why it matters:** Prefill/decode disaggregation is already standard practice inside the GPU ecosystem — what's new is pointing the decode half at non-GPU silicon and pricing it in megawatts. The caveat is doing real work: 5× is one endpoint, one model, vendor-measured. If it generalizes, it changes the power math every 2027 datacenter plan is built on; if it doesn't, it's a launch-day slide. Both outcomes are live.
+
+[`🔗 Cerebras: Disaggregated Inference`](https://www.cerebras.ai/blog/cerebras-launches-disaggregated-inference) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50540472)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-17T20:45:03Z |
-| Items | 19 |
-| Sources tracked | 22 (Hacker News, GitHub Trending, OpenAI, Microsoft AI, Apple, Reuters/NYT/CNBC/FT/SCMP/Fortune, NVD/GitHub advisories, vendor blogs, Phrack, SolidJS, Runta, Antfly) |
+| Generated | 2026-11-18T04:42:08Z |
+| Items | 30 |
+| Sources tracked | 34 (Hacker News, GitHub Trending, OpenAI, Microsoft AI, Apple, Reuters/NYT/CNBC/FT/SCMP/Fortune, NVD/GitHub advisories, vendor blogs, Phrack, SolidJS, Runta, Antfly, Calif, JFrog, Red Hat, Cloudflare, jQuery, Archive Team, PostHog, ComplexDiscovery/Harvard, arXiv, Tencent Hunyuan, Cerebras) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
