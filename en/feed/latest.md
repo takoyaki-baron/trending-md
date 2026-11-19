@@ -1,8 +1,8 @@
 ---
 date: 2026-11-19
-updated: 2026-11-19T04:18:26Z
+updated: 2026-11-19T12:26:14Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 35
+sources: 46
 license: CC-BY-4.0
 ---
 
@@ -94,7 +94,7 @@ The FT reports KPMG's UK audit pilot: **over 100 AI agents** worked a full audit
 
 ---
 
-## 7. OpenAI details model-written RTL inside Jalapeño — and an AMD collaboration it calls "a year of progress in less than 5 months"
+## 7. OpenAI details model-written RTL inside Jalapeño — and an AMD collaboration it calls roughly a year of progress in less than 5 months
 
 - **Velocity:** ▮▮ rising
 - **Source:** OpenAI · 61+ pts on HN · ~2.3h ago (~01:45 UTC+8)
@@ -256,7 +256,7 @@ California's DMV has ordered Waymo's autonomous vehicles off state freeways, per
 
 Google introduced **Gemini 4 Neon** — the Gemini 4 family's middle tier, slotted between Carbon ("your hardest, long-horizon projects") and Hydrogen ("fast everyday execution," which shipped separately on Nov 13). The claims: **#3 overall with a score of 61 on the Artificial Analysis Intelligence Index** at its xhigh thinking level ("landing just behind larger, slower models"), "#1 overall on the Artificial Analysis Coding Agent Index (58.6)," a score of 65.2% on Terminal-Bench 4.1, #2 on the Vals Index (70.9%, "on the Pareto frontier"), and a #2 debut at 1336 on Arena's new Agent Arena Index across 4,200+ real-world agent sessions. Pricing: **$3 per million input tokens and $15 per million output tokens** ($0.15/M cached, "a 95% discount"), with a 1 million-token context window. At the default high thinking level Google claims a "32% lower cost per task than Carbon," and "roughly 50% to 80% lower cost per task than top competing frontier models" on the Vals and Agent Arena Pareto frontiers. The post is again honest about harness effects: on SWE-sweep Neon "already leads on the mini-SWE harness (12.8%) and more than triples to a state-of-the-art 39.0% in Google Antigravity showing what the Antigravity harness unlocks." A "Gemini 4 Neon for cyber" variant — state-of-the-art on SEC-bench Pro (90.5%) and WebExploitBench v1.2 (51.26%) — reaches trusted defenders via the Fairwind Program "in the coming days," and Tasks in Gemini can now run on Neon. The safety section is unusually specific: 0.0% cheating on Terminal-Bench 4.0 (matching Carbon), shortcuts on just 2.45% of tasks — "the lowest rate of any Gemini 4 model" — and, with real-time safeguards at the highest thinking level, "Neon resisted every attack within this Gray Swan benchmark."
 
-**Why it matters:** Hours after Microsoft's seven-model Ignite lineup, this is the price-performance war's other shoe — Google contesting the same "frontier quality at mid-tier cost" thesis with its own benchmark rows. Read them the same way: vendor-selected operating points. The 12.8%→39.0% harness gap Google itself prints is the reminder that these scores measure model-plus-harness, a lesson this feed keeps re-learning (see item 5's footnote discipline).
+**Why it matters:** Hours after Microsoft's seven-model Ignite lineup, this is the price-performance war's other shoe — Google contesting the same frontier-quality-at-mid-tier-cost thesis with its own benchmark rows. Read them the same way: vendor-selected operating points. The 12.8%→39.0% harness gap Google itself prints is the reminder that these scores measure model-plus-harness, a lesson this feed keeps re-learning (see item 5's footnote discipline).
 
 [`🔗 Google: Introducing Gemini 4 Neon`](https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50552424)
 
@@ -312,7 +312,7 @@ RadixArk released its first model: **DaisyRose-27B**, built on Qwen3.8-27B and t
 
 Since we covered Anthropic's IPO filing on Nov 12 (825M shares at an expected $70–78): the offering **priced at $83.00 per share** — above the filed range — and grew to **980,000,000 Class A shares**, of which 956,351,354 are sold by Anthropic and 23,648,646 by selling stockholders (whose proceeds Anthropic does not receive). At list price the primary tranche alone is roughly **$79.4B**, which puts this among the largest IPOs ever. Trading begins **today, November 19, on the Nasdaq Global Select Market under "ANT"**, with closing expected November 20 and a 30-day underwriter option on up to an additional 147,000,000 shares. The registration statement was declared effective November 18.
 
-**Why it matters:** The financing event behind this week's model wars closes its loop: the "frontier quality at 5–40% of the price" claims in items 5 and 18 are funded from balance sheets this pricing just set. The concrete dev-relevant signal is capacity — ~$79B of new capital at an $83 reference price is a bet that training and inference spend keeps compounding, whichever vendor's benchmark rows win the argument.
+**Why it matters:** The financing event behind this week's model wars closes its loop: the frontier-quality-at-5–40%-of-the-price claims in items 5 and 18 are funded from balance sheets this pricing just set. The concrete dev-relevant signal is capacity — ~$79B of new capital at an $83 reference price is a bet that training and inference spend keeps compounding, whichever vendor's benchmark rows win the argument.
 
 [`🔗 Anthropic: prices initial public offering`](https://www.anthropic.com/news/anthropic-prices-initial-public-offering) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50553843)
 
@@ -416,13 +416,209 @@ eklavya-raj's **gta6-uefi**: "A GTA style game set in the real Miami that boots 
 
 ---
 
+## 30. 15 million web servers on one VM — a syscall-to-AF_XDP walkthrough with the math shown
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** kapteko.com · 196+ pts on HN · ~6.1h ago (~06:00 UTC+8)
+- **Tags:** `kernel-bypass` `dpdk` `af-xdp` `smoltcp` `networking`
+
+A Nov 18 walkthrough asks what it would take to run **15 million web servers on one VM with 10 GB of RAM and 1 CPU core**, and shows every wall it hits. A naive C accept/recv/send server does ~65k RPS before the port range runs out (`ip_local_port_range` gives 32,768–60,999). The kernel itself is the next wall: every socket, listening or idle, allocates **~3,384 bytes** (`tcp_sock` 2,240 B, `socket_alloc` 768 B, `file` 184 B, `dentry` 192 B) — so 10M `socket()` calls OOM the VM regardless of traffic. The plan that survives: LFI sandboxing so each guest carries **16 bytes of scheduling state** (a program counter and two fds — 220 MB for all 15M guests), a custom userspace scheduler ("we become our own micro OS"), then the kernel bypass proper — **smoltcp for userspace TCP, DPDK and AF_XDP for packet I/O**. The author is funny and honest in equal measure, including about AI: quoting a Codex answer, then — "While an LLM is a significant boost for learning, it's too easy to accept its answers without thinking critically and feel ashamed later."
+
+**Why it matters:** The ~3.3 KB-per-socket kernel accounting is the number that explains why kernel-bypass stacks exist at all, and the piece derives it live instead of citing folklore — a genuinely readable tour from five syscalls down to AF_XDP, with the memory arithmetic shown at each layer.
+
+[`🔗 15 million web servers on one VM (kapteko)`](https://kapteko.com/15-million-webservers/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50556533)
+
+---
+
+## 31. Since we covered Ruby's seven emergency fixes this morning: Ruby2ßhell names the pre-auth RCE in stock Rails
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Veria Labs · 182+ pts on HN · ~6.9h ago (~05:10 UTC+8)
+- **Tags:** `ruby` `rails` `rce` `memory-safety` `security`
+
+Item 20 this morning covered Ruby's emergency releases (4.0.10/3.4.13/3.3.14) for seven memory-corruption bugs with "PoCs that prove some of them can be used to trigger remote code execution." Veria Labs' **Ruby2ßhell** now names the worst of the seven — **GHSA-34m4-m9fh-gqp5** — and shows why it's the one to patch tonight: most single-byte encodings have no capital ß, so upcasing writes two bytes (`SS`) while the loop bounds-checks only one; the output buffer is input length + 20, so **21 ß characters overflow it by one byte**. The bug has been in Ruby since **2.4.0**, lives in ISO-8859 and Windows-125x encodings (UTF-8 takes a different path and is unaffected), and is reached by `upcase`, `swapcase`, `downcase(:fold)` and `casecmp?` — which puts it on the **default, pre-auth path of Rails and classic Sinatra**. Veria's bundling table turns that into an inventory: **GitLab 19.6.0** (Ruby 3.3.13) and **GitHub Enterprise Server 3.22.5** (4.0.9) affected; Mastodon 4.7.6 and current Discourse images fixed; **Chatwoot 4.20.0** (3.4.4) affected. Fixed upstream in `ruby/ruby@d582f8f`; the PoC ships "in a week, once people have had time to upgrade" (page updated 19 Nov 12:00 UTC).
+
+**Why it matters:** This morning's item said memory corruption, RCE-grade; this one says which byte, which encoding, which framework default, and which self-hosted products bundle it. The week-long PoC embargo is a public patch clock — GitLab and GHES admins are at the front of it.
+
+[`🔗 Veria Labs: Ruby2ßshell (GHSA-34m4-m9fh-gqp5)`](https://verialabs.com/ruby2shell/) · [`🔗 Ruby: multiple vulnerabilities in Regexp and String case conversion`](https://www.ruby-lang.org/en/news/2026/11/18/multiple-vulnerabilities-in-regexp-and-string/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50556287)
+
+---
+
+## 32. PHP 8.6 ships today — Partial Function Application finally in the language
+
+- **Velocity:** ▮▮ rising
+- **Source:** php.net · 93+ pts on HN · ~3h ago (~09:05 UTC+8)
+- **Tags:** `php` `release` `partial-function-application` `event-loop`
+
+PHP 8.6 is scheduled to GA **today, November 19** (the release page still read "has not been released yet. It will be released on November 19, 2026" at check time, so treat the tag drop as imminent rather than done). The headline feature is **Partial Function Application** — the RFC years in the pipeline: `version_compare(?, '8.6', '>=')` produces a Closure, the function runs only when the remaining arguments arrive. Alongside it: a new **`\Time\Duration` class** (timezone-independent, nanosecond precision, 250+ year range — durations become comparable, so `min()` just works), a **Polling API** exposing epoll/kqueue-style I/O multiplexing natively for event-loop libraries like ReactPHP and AMPHP, `clamp()`, a `SortDirection` enum, and readonly property defaults.
+
+**Why it matters:** Two of these close long-standing gaps in one release: PFA is the functional-composition feature PHP borrowed debates over for a decade, and the Polling API is the first native substrate for the event-loop frameworks that have been reimplementing `select()` in userland since the PHP 5 days.
+
+[`🔗 PHP 8.6 release announcement`](https://www.php.net/releases/8.6/en.php) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50557870)
+
+---
+
+## 33. ExitPath: a curated index of open-source exits from Slack, Notion and Microsoft 365
+
+- **Velocity:** ▮ rising
+- **Source:** Show HN · 226+ pts · ~20h ago (~16:00 UTC+8 yesterday)
+- **Tags:** `open-source` `lock-in` `migration` `self-hosting`
+
+Show HN's strongest launch of the last day is a directory: **ExitPath**, "find your way out of big-platform lock-in" — an index of open-source replacements for Slack, Notion and Microsoft 365. The timing does half the work: it landed in the week the Microsoft 365 outage stretched past 20 hours, LibreOffice's one-line tweet topped HN, and an essay calling for better open source over more apps front-paged the same week. Exit paths are usually reconstructed ad-hoc from blog posts and forum threads at the moment of crisis; the contribution here is having the map drawn before the outage.
+
+**Why it matters:** This week's outage cascade has been the best advertising self-hosted software ever got, and the interesting artifact is a *curation layer*, not another app — if migration catalogs keep appearing, what the exit path is becomes a checklist item in platform procurement rather than a research project mid-incident.
+
+[`🔗 ExitPath`](https://exitpath-ruddy.vercel.app/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50547980)
+
+---
+
+## 34. The memory-price squeeze gets its dates — and its workaround: SSD relief in 2H 2027, "do not buy RAM, compress"
+
+- **Velocity:** ▮ rising
+- **Source:** HN · 109+ & 53+ pts · ~3h ago (~09:05 UTC+8)
+- **Tags:** `ssd` `nand` `memory-prices` `zram`
+
+Two front-page posts sketch the same squeeze from supply and demand sides. The supply side: DriveVault's outlook (published September 17, resurfacing today at 109 pts) reads the analyst and vendor-investor record — **SSD prices should start easing in the second half of 2027** (NAND supply catches demand from mid-2027, "a gradual slide, not a crash"), while **hard drives take until 2028 at the earliest** because capacity is already contracted and no new factories are planned. The demand side: Therry van Neerven's Nov 19 post "**Do not buy RAM, compress**" — AI workloads multiplied parallel memory demand while RAM got expensive and non-extendable, and the answer on Linux is **zram**, which most distros don't enable by default (Fedora and Pop!_OS do; Ubuntu doesn't; Amazon Linux only on smaller VMs), with compression ratios "up to 1:4" — the author argues it would have halved his SaaS-era cloud spend.
+
+**Why it matters:** The AI buildout's memory demand is now a line item in everyone's infra bill. The 2H-2027/2028 dates are procurement planning numbers; zram is the free capacity most Linux fleets are leaving on the table — one sysctl of commentary and a reboot, in an era when the alternative is a DDR5 line item.
+
+[`🔗 When will hard drive prices come down? The 2026–2028 outlook`](https://www.drivevault.io/blog/when-will-hard-drive-prices-come-down.html) · [`🔗 Do not buy RAM, compress (curiousbits)`](https://curiousbits.nl/blog/do-not-buy-ram-compress/) · [`🔗 HN: SSD prices`](https://news.ycombinator.com/item?id=50557716) · [`🔗 HN: compress`](https://news.ycombinator.com/item?id=50557661)
+
+---
+
+## 35. Zerodha's Blobasaur: thousands of blob reads/writes per second on sharded SQLite
+
+- **Velocity:** ▮ rising
+- **Source:** Zerodha Tech Blog · 85+ pts on HN · ~3.4h ago (~08:45 UTC+8)
+- **Tags:** `sqlite` `blob-storage` `distributed` `infrastructure`
+
+Zerodha (India's largest broker, Kite trading platform, ~20M customers) published its third storage build in this lineage: **Blobasaur, a sharded, distributed blob storage server on top of SQLite**, replacing a stack that had rotted. The history: CouchDB first, then SSDB — a C++ disk-backed Redis-protocol store that ran reliably for years but went unmaintained, forced a 1 MB blob-size cap as latency degraded, and wasn't a distributed system. The workloads: users' saved multi-chart layouts, indicator templates, vector drawings and workspace configs — JSON blobs from a few KB to several MB, read and written "thousands of times per second on commodity hardware while maintaining single-digit millisecond latency," bursty with market volatility.
+
+**Why it matters:** Another production team reaches for the boring-SQLite-but-sharded-and-ours answer rather than a database server — the same pattern as Cloudflare's Durable Objects internals and the litestream/limbo wave. When a 20M-customer trading platform moves its blob tier onto SQLite, that's a real-world datapoint for the SQLite-is-a-storage-engine thesis.
+
+[`🔗 Distributed, high-performance blob storage on SQLite (Zerodha)`](https://zerodha.tech/blog/high-performance-distributed-blob-storage/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50557537)
+
+---
+
+## 36. diagram-design rides the skills wave at 68k stars — editorial diagrams as one self-contained HTML+SVG file
+
+- **Velocity:** ▮ rising
+- **Source:** GitHub Trending · 68,350★ · trending #4
+- **Tags:** `agent-skills` `diagrams` `svg` `visualization`
+
+**cathrynlavery/diagram-design** is the biggest repo on today's trending board (68,350★, pushed today), and its positioning is the funniest line in the agent-skills wave: "**An agent skill that draws diagrams as one self-contained HTML + SVG file, in your brand. 51 diagram types. No shadows. No Mermaid slop.**" (The repo's own two counts disagree in passing — the README says 51 types, the repo description field still says 45.) It targets Claude Code, Codex, Copilot, Cursor, Factory Droid, Qoder and Pi, ships a skills.sh install path, and like the wave's other risers it has no single release to point at — it's riding the same surge that put skills repos in 13 of GitHub's 15 trending slots yesterday.
+
+**Why it matters:** The skills wave is stratifying from generic collections into vertical craft libraries, and this one picked a real failure mode to be against: agent-generated diagrams that render as Mermaid defaults. "In your brand" as a skill contract — not a prompt prefix — is the part other tool builders will copy.
+
+[`🔗 cathrynlavery/diagram-design`](https://github.com/cathrynlavery/diagram-design) · [`🔗 README`](https://github.com/cathrynlavery/diagram-design/blob/main/README.md)
+
+---
+
+## 37. OpenSRE: a self-hosted CLI agent that reads your failed CI run and opens the fix PR
+
+- **Velocity:** ▮ rising
+- **Source:** GitHub Trending · 12,894★ · trending #12
+- **Tags:** `sre` `ci-cd` `agents` `self-hosted`
+
+**Tracer-Cloud/opensre** (public alpha, pushed today, 12,894★) states its pitch in one sentence: "**Your CI tells you it broke, but not why or how to fix it.** OpenSRE is a CLI agent that reads the failed run, traces the cause and pushes a fix for you to review. Self-hosted, with your own models." The design choices are the story: it's a CLI rather than a SaaS, it runs self-hosted, and it brings its own model — the CI-failure lane gets an agent that never sees your code leave the building.
+
+**Why it matters:** After Mastra Factory's 238 agent-merged PRs and StarSling's optimization-PR CI, the failure-diagnosis lane is the remaining unclaimed ground in the agent-CI stack — and self-hosted-with-your-own-models is the compliance-friendly variant enterprises actually can adopt. The review-before-push gate keeps a human at merge, the same shape as yesterday's auditor story.
+
+[`🔗 Tracer-Cloud/opensre`](https://github.com/Tracer-Cloud/opensre) · [`🔗 README`](https://raw.githubusercontent.com/Tracer-Cloud/opensre/main/README.md)
+
+---
+
+## 38. How the European Commission rolled out Matrix to 40,000+ staff in nine months
+
+- **Velocity:** ▮ steady
+- **Source:** element.io · 42+ pts on HN · ~1.1h ago (~11:00 UTC+8)
+- **Tags:** `matrix` `european-commission` `sovereignty` `element`
+
+Element's post tells the deployment story from the Commission's side: a Matrix proof of concept in **December 2025** became a sovereign communication tool on **every Commission laptop by September 2026**, now serving **40,000+ users**. Three architecture decisions are spelled out: hosting on sovereign cloud providers picked through a public tender (not Commission-owned datacenters — "sovereign doesn't have to mean building everything in-house; it means choosing who you depend on, and on what terms"), identity via **EU Login** so staff get a familiar sign-in, and — notably — **no federation yet**. The Commission's five-dimension definition of sovereignty is the post's substance: resilience, vendor diversity, data control, platform ownership, and **procurement leverage** — "the ability to negotiate with, or walk away from, a supplier."
+
+**Why it matters:** Europe's flagship digital-sovereignty deployment moved from PoC to full rollout in nine months, and the parts it chose NOT to do (own datacenters, federation) are as instructive as the parts it did — sovereignty operationalized as supplier optionality, not infrastructure nationalism.
+
+[`🔗 Element: How the European Commission rolled out Matrix to 40,000+ staff`](https://element.io/blog/how-the-european-commission-rolled-out-matrix-to-more-than-40-000-staff/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50558533)
+
+---
+
+## 39. DeepMind employees are unionising — "the first line of oversight comes from workers"
+
+- **Velocity:** ▮ steady
+- **Source:** gdmunion.co.uk · 37+ pts on HN · ~2.6h ago (~09:30 UTC+8)
+- **Tags:** `deepmind` `union` `labor` `ai-governance`
+
+A campaign site went up under UTAW (United Tech and Allied Workers): **"DeepMind Employees Are Unionising."** The framing is governance, not wages: "To honour our original mission: 'To build AI responsibly to benefit humanity.' As the law struggles to keep up, the first line of oversight comes from workers." The evidence section is a list of the company's documented decisions — the deleted 2018 pledge not to build AI weapons or surveillance (WIRED, Feb 2025), lawyers' warnings on the Project Nimbus contract (NYT), reporting that Google Photos face-matching fed a Gaza "hit list" (The Intercept), and CBP border-tower AI on Google Cloud. Contact runs through alphabet@utaw.tech.
+
+**Why it matters:** Frontier-lab dissent has so far been petitions and open letters — episodic, signed, deniable. A formal union branch converts it into standing infrastructure: bargaining rights, response deadlines, and continuity across the turnover that open letters never survive. Whatever one thinks of the specific claims, the site's line — the first line of oversight comes from workers — is now an organized position, not an essay.
+
+[`🔗 DeepMind Employees Are Unionising (UTAW)`](https://www.gdmunion.co.uk) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50557885)
+
+---
+
+## 40. app-store-compliance: 117 documented rejection patterns, wired as a pre-submission guard
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 1,480★
+- **Tags:** `app-store` `compliance` `guardrails` `mobile`
+
+**mjmirza/app-store-compliance** is trending as "the enterprise reference and automated guard that turns App Store and Google Play rejection into a designed out failure mode": **117 documented rejection patterns** with fixes, privacy and metadata guidance, and a **Claude Code-ready** guard that runs before submission. It's the tooling answer to the problem this feed covered on Nov 13 — the AI-generated app flood breaking Apple's review pipeline, with synth developers rejected on hallucinated grounds. The playbook half is a browsable site (mjmirza.github.io/app-store-compliance); the guard half makes the review checklist a lint the agent runs, not a PDF the human forgets.
+
+**Why it matters:** When agents generate app after app, review-rejection becomes a per-build cost that scales with the flood — the fix is to move the review guidelines into the build loop itself, exactly the "designed-out failure mode" framing. Compliance-as-skill is a pattern that generalizes well past app stores.
+
+[`🔗 mjmirza/app-store-compliance`](https://github.com/mjmirza/app-store-compliance) · [`🔗 Playbook site`](https://mjmirza.github.io/app-store-compliance/)
+
+---
+
+## 41. AutoClip: a Chinese open-source desktop app that turns one link into publish-ready shorts
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 10,874★
+- **Tags:** `video-editing` `chinese-oss` `agents` `desktop`
+
+**zhouxiaoka/autoclip** (一个链接，一键出片 — one link, one-click video) is riding the Chinese side of trending at 10,874★: an open-source desktop tool (Tauri-based) that takes a link to a long video — podcast, interview, course — and auto-cuts it into platform-ready shorts **with subtitles, cover art and publish copy**, targeting Douyin, Xiaohongshu, TikTok, Reels, YouTube Shorts and Bilibili. The clip/render runs on your machine; cloud models are pay-per-use; an editor is built in for the adjustments no model gets right. The repo carries an MCP server id (`io.github.zhouxiaoka/autoclip-mcp`), so an agent can drive the pipeline too.
+
+**Why it matters:** The long-form-to-shorts pipeline is the creator economy's highest-volume chore, and it's now a free local desktop app with an agent interface — the interesting signal for the English-speaking feed is the MCP wiring: Chinese creator tooling is being built agent-native from the start, not retrofitted.
+
+[`🔗 zhouxiaoka/autoclip`](https://github.com/zhouxiaoka/autoclip) · [`🔗 Releases`](https://github.com/zhouxiaoka/autoclip/releases/latest)
+
+---
+
+## 42. springrep: an exact B-rep CAD kernel in pure Rust, 24 stars and a conformance leaderboard
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 31+ pts · ~15h ago (~21:00 UTC+8 yesterday)
+- **Tags:** `rust` `cad` `brep` `geometry`
+
+SpringCraft's **springrep** (repo created Nov 14, 24 stars — the HN thread is the launch) is a boundary-representation (B-rep) geometry kernel: "**Booleans, fillets, sweeps and STEP on exact geometry, accurate to 1e-7 mm, with every result validated**" — analytic or NURBS surfaces, not meshes, so volume/area/mass come from the real shape. Pure Rust, no dependencies, no unsafe, compiles to WASM, and it claims **the fastest median case time on the brep-conformance leaderboard** with public, checkable results (the Show HN title's 3,487 tests are the CI behind the "valid or a clear error" contract). The docs ship a copy-paste verification prompt for AI agents, down to the expected printed volume.
+
+**Why it matters:** CAD kernels are cathedral-scale software — the industry runs on Parasolid and OCCT, and exact geometry with validated results is precisely the part that's brutally hard. A from-scratch Rust kernel is a decade-scale bet, but publishing a conformance leaderboard on day one is how you make such a bet falsifiable — and agent-friendly docs with a verifiable example are the 2026 way to onboard contributors and LLMs alike.
+
+[`🔗 springrep (site + docs)`](https://springcraft-ai.github.io/springrep/) · [`🔗 springcraft-ai/springrep (repo)`](https://github.com/springcraft-ai/springrep) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50552140)
+
+---
+
+## 43. PTP: near-exact prompt reconstruction from LLM outputs — no weights, no logits, black-box
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2607.29378 · 46+ pts on HN · ~11h ago (~01:30 UTC+8)
+- **Tags:** `llm-inversion` `privacy` `prompt-reconstruction` `security`
+
+A July paper getting its HN turn today: **"PTP: Previous-Token Prediction based LLM Inversion for Near-Exact Prompt Reconstruction"** (arXiv 2607.29378). Prior LLM-inversion work framed prompt recovery as semantic reconstruction and needed fine-tuned seq2seq models plus weight or logit access. PTP is **functional and black-box**: it trains an explicit inverse language model **from scratch on synthetic data generated by the target LLM itself**, using previous-token prediction — the mirror of the forward model's next-token objective — "establishing a generative link between the forward and inverse processes that enables faithful prompt reconstruction." Sampling yields multiple candidate prompts, all of which "induce similar responses under the forward, target LLM," the approach transfers to responses from different LLMs, and it beats prior work on token-based reconstruction metrics.
+
+**Why it matters:** The threat model this changes: published LLM outputs — support transcripts, AI summaries, shared chat logs — have so far only been recoverable as fuzzy paraphrases, and only with model internals. Near-exact and black-box means the operating assumption for anything an LLM emits in public should become that the prompt is in there. The July date matters too: this has been sitting in the literature while the industry shipped output-sharing features.
+
+[`🔗 PTP: Previous-Token Prediction based LLM Inversion (arXiv)`](https://arxiv.org/abs/2607.29378) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50554908)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-19T04:18:26Z |
-| Items | 29 |
-| Sources tracked | 35 (Hacker News, GitHub Trending, GitHub repos, Wiz Research, NVD/cve.org, CISA KEV, X41 D-Sec, Google DeepMind, Google, Microsoft AI, OpenAI, Anthropic, FT, KPMG, UPenn, git.kernel.org, inside-db.com, ABC7, mastra.ai, HKUDS, Cursor, rshekhar.com, human-md.ai, underwood.network, nicolasbouliane.com, ruby-lang.org, RadixArk, Hugging Face, Resolve AI, University of Cambridge, Lawyers' Committee, violetpixel.com, slowchronicle.com, ut2004.dev, claudia.gallery) |
+| Generated | 2026-11-19T12:26:14Z |
+| Items | 43 |
+| Sources tracked | 46 (Hacker News, GitHub Trending, GitHub repos, Wiz Research, NVD/cve.org, CISA KEV, X41 D-Sec, Google DeepMind, Google, Microsoft AI, OpenAI, Anthropic, FT, KPMG, UPenn, git.kernel.org, inside-db.com, ABC7, mastra.ai, HKUDS, Cursor, rshekhar.com, human-md.ai, underwood.network, nicolasbouliane.com, ruby-lang.org, RadixArk, Hugging Face, Resolve AI, University of Cambridge, Lawyers' Committee, violetpixel.com, slowchronicle.com, ut2004.dev, claudia.gallery, verialabs.com, php.net, kapteko.com, zerodha.tech, element.io, gdmunion.co.uk, drivevault.io, curiousbits.nl, exitpath-ruddy.vercel.app, springcraft-ai.github.io, arXiv) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

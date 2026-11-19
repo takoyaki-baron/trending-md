@@ -1,9 +1,9 @@
 {
- "generated": "2026-11-19T05:49:52.896Z",
+ "generated": "2026-11-19T12:26:49.589Z",
  "files": [
   {
    "file": "2026-11-19.md",
-   "items": 29,
+   "items": 43,
    "findings": [
     {
      "check": "cvss",
@@ -17,7 +17,7 @@
      "item": 1,
      "verdict": "ok",
      "claim": "CVE-2026-123007 `Received`",
-     "detail": "Received (lastModified 2026-11-18T21:17:47.557)"
+     "detail": "Received (lastModified 2026-11-19T06:16:53.520)"
     },
     {
      "check": "status",
@@ -31,14 +31,49 @@
      "item": 8,
      "verdict": "ok",
      "claim": "cursor/plugins",
-     "detail": "17286★, last push 2026-11-19"
+     "detail": "17420★, last push 2026-11-19"
     },
     {
      "check": "repo",
      "item": 10,
      "verdict": "ok",
      "claim": "HKUDS/CLI-Anything",
-     "detail": "59903★, last push 2026-09-22"
+     "detail": "60221★, last push 2026-09-22"
+    },
+    {
+     "check": "repo",
+     "item": 36,
+     "verdict": "ok",
+     "claim": "cathrynlavery/diagram-design",
+     "detail": "68356★, last push 2026-11-19"
+    },
+    {
+     "check": "repo",
+     "item": 37,
+     "verdict": "ok",
+     "claim": "Tracer-Cloud/opensre",
+     "detail": "12896★, last push 2026-11-19"
+    },
+    {
+     "check": "repo",
+     "item": 40,
+     "verdict": "ok",
+     "claim": "mjmirza/app-store-compliance",
+     "detail": "1485★, last push 2026-11-15"
+    },
+    {
+     "check": "repo",
+     "item": 41,
+     "verdict": "ok",
+     "claim": "zhouxiaoka/autoclip",
+     "detail": "10874★, last push 2026-11-19"
+    },
+    {
+     "check": "count",
+     "item": 37,
+     "verdict": "absent",
+     "claim": "238 agent",
+     "detail": "no count of agent on README of Tracer-Cloud/opensre or Tracer-Cloud/opensre README.md — count it yourself, or say \"no page states a total\""
     },
     {
      "check": "quotation",
@@ -74,13 +109,6 @@
      "verdict": "ok",
      "claim": "8 quotation(s)",
      "detail": "verbatim in 2 readable source(s)"
-    },
-    {
-     "check": "quotation",
-     "item": 7,
-     "verdict": "quote-not-found",
-     "claim": "“a year of progress in less than 5 months”",
-     "detail": "7 words, 0 hits in 2 readable source(s); openai.com/index/advancing-chip-design-with-our-models/ carries 5 of 9 words (“in less than 5 months”) and continues “unprecedented results at the frontier of chip design amd has already” — use the source's wording, or drop the quotation marks"
     },
     {
      "check": "quotation",
@@ -169,13 +197,6 @@
     {
      "check": "quotation",
      "item": 18,
-     "verdict": "quote-not-found",
-     "claim": "“frontier quality at mid tier cost”",
-     "detail": "6 words, 0 hits in 2 readable source(s); no source carries it (read blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon/, news.ycombinator.com/item?id=50552424) — if this came from somewhere this item does not cite, cite it; otherwise it is the feed's own words and must not wear quotation marks"
-    },
-    {
-     "check": "quotation",
-     "item": 18,
      "verdict": "ok",
      "claim": "11 quotation(s)",
      "detail": "verbatim in 2 readable source(s)"
@@ -200,13 +221,6 @@
      "verdict": "ok",
      "claim": "4 quotation(s)",
      "detail": "verbatim in 3 readable source(s)"
-    },
-    {
-     "check": "quotation",
-     "item": 22,
-     "verdict": "quote-not-found",
-     "claim": "“frontier quality at 5 40 of the price”",
-     "detail": "6 words, 0 hits in 2 readable source(s); no source carries it (read anthropic.com/news/anthropic-prices-initial-public-offering, news.ycombinator.com/item?id=50553843) — if this came from somewhere this item does not cite, cite it; otherwise it is the feed's own words and must not wear quotation marks"
     },
     {
      "check": "quotation",
@@ -258,6 +272,97 @@
      "detail": "verbatim in 2 readable source(s)"
     },
     {
+     "check": "quotation",
+     "item": 30,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 31,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 32,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 33,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 34,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 4 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 35,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 36,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 37,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 38,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 39,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 40,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 42,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 43,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
      "check": "attribution",
      "item": 5,
      "verdict": "attribution-satisfied",
@@ -274,32 +379,10 @@
    ]
   }
  ],
- "status_watch": [
-  {
-   "id": "CVE-2024-10441",
-   "from": "Analyzed",
-   "to": "Modified",
-   "regressed": false,
-   "modified": "2026-11-18T21:17:43.400"
-  },
-  {
-   "id": "CVE-2026-90817",
-   "from": "Awaiting Analysis",
-   "to": "Undergoing Analysis",
-   "regressed": false,
-   "modified": "2026-11-18T21:18:04.643"
-  },
-  {
-   "id": "CVE-2026-90436",
-   "from": "Awaiting Analysis",
-   "to": "Undergoing Analysis",
-   "regressed": false,
-   "modified": "2026-11-18T21:18:04.433"
-  }
- ],
- "api_calls": 4,
- "readme_calls": 4,
- "cited_page_calls": 89,
+ "status_watch": [],
+ "api_calls": 0,
+ "readme_calls": 0,
+ "cited_page_calls": 6,
  "repo_page_calls": 0,
  "nvd_calls": 1,
  "nvd_failed_chunks": 0,

@@ -1,8 +1,8 @@
 ---
 date: 2026-11-19
-updated: 2026-11-19T04:18:26Z
+updated: 2026-11-19T12:26:14Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 35
+sources: 46
 license: CC-BY-4.0
 ---
 
@@ -416,13 +416,209 @@ eklavya-raj 的 **gta6-uefi**："A GTA style game set in the real Miami that boo
 
 ---
 
+## 30. 一台 VM 上跑 1500 万个 web 服务器——从 syscall 到 AF_XDP、每步都给出演算
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** kapteko.com · 196+ pts on HN · ~6.1h ago (~06:00 UTC+8)
+- **Tags:** `kernel-bypass` `dpdk` `af-xdp` `smoltcp` `networking`
+
+11 月 18 日的一篇长文追问：在一台只有 10 GB 内存、1 个 CPU 核心的 VM 上，跑 **1500 万个 web 服务器**需要什么——并且把它撞上的每一堵墙都摆出来。朴素版 C 语言 accept/recv/send 服务器做到约 6.5 万 RPS 后端口耗尽（`ip_local_port_range` 只给 32,768–60,999）。下一堵墙是内核本身：每个 socket 无论监听还是空闲，都要分配 **约 3,384 字节**（`tcp_sock` 2,240 B、`socket_alloc` 768 B、`file` 184 B、`dentry` 192 B）——所以 1000 万次 `socket()` 调用直接把 VM 打到 OOM，跟流量无关。能走通的方案：用 LFI 做沙箱，让每个来宾只带 **16 字节调度状态**（一个程序计数器加两个 fd——1500 万个来宾共 220 MB），配一个自研用户态调度器（"我们自己成为一个微内核 OS"），然后是真正的内核旁路——**smoltcp 做用户态 TCP，DPDK 与 AF_XDP 做包 I/O**。作者风趣与坦诚兼备，对 AI 也是："While an LLM is a significant boost for learning, it's too easy to accept its answers without thinking critically and feel ashamed later."（LLM 对学习是巨大助力，但太容易不加批判地接受它的答案、然后事后羞愧。）
+
+**Why it matters:** "每个 socket 约 3.3 KB 的内核记账"正是内核旁路栈存在的理由，而这篇文章是现场把它推导出来、而不是引用传说——从五个 syscall 一路到 AF_XDP 的 readable 之旅，每一层都把内存算术写在明面上。
+
+[`🔗 一台 VM 上的 1500 万个 web 服务器（kapteko）`](https://kapteko.com/15-million-webservers/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50556533)
+
+---
+
+## 31. 继今早覆盖 Ruby 七个紧急修复之后：Ruby2ßhell 点名了原生 Rails 里的预认证 RCE
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Veria Labs · 182+ pts on HN · ~6.9h ago (~05:10 UTC+8)
+- **Tags:** `ruby` `rails` `rce` `memory-safety` `security`
+
+今晨第 20 条覆盖了 Ruby 针对七个内存破坏漏洞的紧急发版（4.0.10/3.4.13/3.3.14），官方原话是"我们知道有 PoC 能证明其中一些可触发远程代码执行"。Veria Labs 的 **Ruby2ßhell** 现在点名了七个里最狠的一个——**GHSA-34m4-m9fh-gqp5**——并解释了为什么今晚就该打补丁：多数单字节编码没有大写 ß，所以 upcase 会写两个字节（`SS`），而循环只对一个字节做边界检查；输出缓冲按"输入长度 + 20"分配，于是 **21 个 ÷ 字符就会溢出一字节**。该 bug 自 Ruby **2.4.0** 起就存在，藏在 ISO-8859 与 Windows-125x 编码里（UTF-8 走不同路径、不受影响），触发点是 `upcase`、`swapcase`、`downcase(:fold)` 和 `casecmp?`——这使它落在 **Rails 与经典 Sinatra 的默认、预认证路径**上。Veria 的捆绑表把问题变成一张清单：**GitLab 19.6.0**（Ruby 3.3.13）与 **GitHub Enterprise Server 3.22.5**（4.0.9）受影响；Mastodon 4.7.6 与当前 Discourse 镜像已修复；**Chatwoot 4.20.0**（3.4.4）受影响。上游修复在 `ruby/ruby@d582f8f`；PoC 将"在一周后发布，先给大家留出升级时间"（页面更新于 11 月 19 日 12:00 UTC）。
+
+**Why it matters:** 今晨那条说的是内存破坏、RCE 级；这条说的是哪一个字节、哪一种编码、哪个框架默认值、哪些自托管产品捆绑了它。为期一周的 PoC 禁运是一张公开的补丁时钟——GitLab 与 GHES 管理员排在最前面。
+
+[`🔗 Veria Labs：Ruby2ßhell（GHSA-34m4-m9fh-gqp5）`](https://verialabs.com/ruby2shell/) · [`🔗 Ruby：Regexp 与字符串大小写转换的多个漏洞`](https://www.ruby-lang.org/en/news/2026/11/18/multiple-vulnerabilities-in-regexp-and-string/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50556287)
+
+---
+
+## 32. PHP 8.6 今日发布——Partial Function Application 终于进入语言本体
+
+- **Velocity:** ▮ rising
+- **Source:** php.net · 93+ pts on HN · ~3h ago (~09:05 UTC+8)
+- **Tags:** `php` `release` `partial-function-application` `event-loop`
+
+PHP 8.6 计划于**今天（11 月 19 日）** GA（检查时发布页仍写着"has not been released yet. It will be released on November 19, 2026."，所以把 tag 落地当作"迫近"而非"已完成"）。头条特性是酝酿多年的 RFC **部分函数应用（Partial Function Application）**：`version_compare(?, '8.6', '>=')` 会产出一个 Closure，剩余参数到位后函数才真正执行。同场加映：新的 **`\Time\Duration` 类**（与时区无关、纳秒精度、跨度 250+ 年——时长从此可比较，`min()` 直接能用）、原生暴露 epoll/kqueue 式 I/O 多路复用的 **Polling API**（供 ReactPHP、AMPHP 等事件循环库使用）、`clamp()`、`SortDirection` 枚举，以及 readonly 属性默认值。
+
+**Why it matters:** 两个特性在同一次发布里补上了积欠多年的缺口：PFA 是 PHP 辩论了十年的函数组合特性，而 Polling API 是事件循环框架自 PHP 5 时代起在用户态反复重造 `select()` 之后的第一个原生底座。
+
+[`🔗 PHP 8.6 发布公告`](https://www.php.net/releases/8.6/en.php) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50557870)
+
+---
+
+## 33. ExitPath：从 Slack、Notion 与 Microsoft 365 逃出来的开源路线索引
+
+- **Velocity:** ▮ rising
+- **Source:** Show HN · 226+ pts · ~20h ago (~16:00 UTC+8 昨天)
+- **Tags:** `open-source` `lock-in` `migration` `self-hosting`
+
+昨天 Show HN 上最强势的发布是一个目录站：**ExitPath**——"find your way out of big-platform lock-in"（找到脱离大平台锁定的路），收录 Slack、Notion 与 Microsoft 365 的开源替代品索引。时机替它做了一半的功课：它上线于 Microsoft 365 大断网拖过 20 小时、LibreOffice 一条推文登顶 HN、一篇呼吁要更好的开源而非更多应用的随笔同周登上头版的时候。逃逸路线通常是在危机时刻从博客和论坛帖里临时拼出来的；这里的贡献是把地图画在了断网之前。
+
+**Why it matters:** 本周的级联断网是自托管软件有史以来最好的一轮广告，而这里有趣的产物是一个*策展层*而非又一个应用——如果迁移目录持续出现，逃生路线是什么就会从事故中的研究课题变成平台采购清单上的一栏。
+
+[`🔗 ExitPath`](https://exitpath-ruddy.vercel.app/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50547980)
+
+---
+
+## 34. 内存涨价挤出了两个日期和一个对策——SSD 要等 2027 下半年，"别买内存，先压缩"
+
+- **Velocity:** ▮ rising
+- **Source:** HN · 109+ & 53+ pts · ~3h ago (~09:05 UTC+8)
+- **Tags:** `ssd` `nand` `memory-prices` `zram`
+
+两篇头版帖从供给和需求两侧画出了同一场挤压。供给侧：DriveVault 的展望（9 月 17 日发布，今天以 109 分重新浮上来）读的是分析师记录与厂商投资者口径——**SSD 价格应从 2027 下半年开始松动**（NAND 供给自 2027 年中起追上需求，"是缓坡不是跳水"），而**机械硬盘最早要到 2028 年**，因为产能已经签掉、且没有新工厂计划。需求侧：Therry van Neerven 11 月 19 日的帖子"**Do not buy RAM, compress**"——AI 工作负载成倍放大并行内存需求、而内存又贵又不可扩展，Linux 上的答案是 **zram**：多数发行版默认不开（Fedora 与 Pop!_OS 开；Ubuntu 不开；Amazon Linux 只在小规格 VM 上开），压缩比"可达 1:4"——作者估算这本可把他 SaaS 时代的云开支砍半。
+
+**Why it matters:** AI 建设的内存需求已经写进每个人的基础设施账单。2027 下半年/2028 这两个日期是采购规划数字；zram 是多数 Linux 集群白白扔掉的免费容量——一条 sysctl 的注释加一次重启，而在 DDR5 已经成为预算行项目的时代，这就是替代方案。
+
+[`🔗 硬盘价格何时回落？2026–2028 展望`](https://www.drivevault.io/blog/when-will-hard-drive-prices-come-down.html) · [`🔗 别买内存，压缩吧（curiousbits）`](https://curiousbits.nl/blog/do-not-buy-ram-compress/) · [`🔗 HN：SSD 价格`](https://news.ycombinator.com/item?id=50557716) · [`🔗 HN：压缩`](https://news.ycombinator.com/item?id=50557661)
+
+---
+
+## 35. Zerodha 的 Blobasaur：分片 SQLite 上每秒数千次 blob 读写
+
+- **Velocity:** ▮ rising
+- **Source:** Zerodha Tech Blog · 85+ pts on HN · ~3.4h ago (~08:45 UTC+8)
+- **Tags:** `sqlite` `blob-storage` `distributed` `infrastructure`
+
+Zerodha（印度最大券商，Kite 交易平台，约 2000 万客户）发布了这条血脉里的第三个自建存储：**Blobasaur——架在 SQLite 之上、分片的分布式 blob 存储服务**，替换掉一套已经烂掉的旧栈。历史：先用 CouchDB，再换 SSDB——一个说 Redis 协议的 C++ 磁盘存储，可靠跑了好几年但无人维护、因延迟退化被迫把 blob 封顶在 1 MB、而且不是分布式系统。负载形态：用户保存的多图表布局、指标模板、矢量画稿与工作区配置——几 KB 到几 MB 的 JSON blob，"在 commodity 硬件上以每秒数千次的频率读写，同时保持个位数毫秒延迟"，并随行情波动成突发。
+
+**Why it matters:** 又一支生产团队在无聊的 SQLite——但分片、且是我们的——与数据库服务器之间选了前者——与 Cloudflare Durable Objects 内部实现、litestream/limbo 一脉是同一个模式。一个 2000 万客户的交易平台把 blob 层搬到 SQLite 上，这是 SQLite 是存储引擎而非嵌入式玩具这一论题的真实世界数据点。
+
+[`🔗 架在 SQLite 上的分布式高性能 blob 存储（Zerodha）`](https://zerodha.tech/blog/high-performance-distributed-blob-storage/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50557537)
+
+---
+
+## 36. diagram-design 随 skills 浪潮冲上 68k star——把"编辑部级"图表画成一个自包含 HTML+SVG 文件
+
+- **Velocity:** ▮ rising
+- **Source:** GitHub Trending · 68,350★ · trending #4
+- **Tags:** `agent-skills` `diagrams` `svg` `visualization`
+
+**cathrynlavery/diagram-design** 是今天 trending 榜上最大的仓库（68,350★，今天仍在推送），它的定位是 agent-skills 浪潮里最好笑的一句话："**An agent skill that draws diagrams as one self-contained HTML + SVG file, in your brand. 51 diagram types. No shadows. No Mermaid slop.**"（一个 agent skill：把图表画成带你的品牌的单个自包含 HTML+SVG 文件。51 种图型。无阴影。不要 Mermaid 垃圾。）（它自己的两个数字顺便打架——README 说 51 种，仓库 description 字段还写着 45。）它面向 Claude Code、Codex、Copilot、Cursor、Factory Droid、Qoder 与 Pi，走 skills.sh 安装路径；和这波的其他上升者一样，它没有单一 release 可指认——乘的是昨天把 skills 仓库送进 trending 15 席中 13 席的同一股浪。
+
+**Why it matters:** skills 浪潮正在从大而全的合集分层为垂直的手艺库，而这一家选了一个真实的失败模式来对抗：agent 生成的图表渲染成 Mermaid 默认样式。"In your brand"作为 skill 契约——而不是 prompt 前缀——是其他工具构建者会照抄的部分。
+
+[`🔗 cathrynlavery/diagram-design`](https://github.com/cathrynlavery/diagram-design) · [`🔗 README`](https://github.com/cathrynlavery/diagram-design/blob/main/README.md)
+
+---
+
+## 37. OpenSRE：读你的失败 CI、开出修复 PR 的自托管 CLI agent
+
+- **Velocity:** ▮ rising
+- **Source:** GitHub Trending · 12,894★ · trending #12
+- **Tags:** `sre` `ci-cd` `agents` `self-hosted`
+
+**Tracer-Cloud/opensre**（公开 alpha，今天仍在推送，12,894★）用一句话说清卖点："**Your CI tells you it broke, but not why or how to fix it.** OpenSRE is a CLI agent that reads the failed run, traces the cause and pushes a fix for you to review. Self-hosted, with your own models."（你的 CI 只告诉你挂了，不告诉你为什么挂、怎么修。OpenSRE 是一个 CLI agent：读失败的运行、追出原因、推一个修复 PR 供你复核。自托管、自带模型。）设计选择就是故事本身：它是 CLI 而非 SaaS，自托管运行，自带模型——CI 失败这条赛道迎来一个"你的代码不出门"的 agent。
+
+**Why it matters:** 在 Mastra Factory 的 238 个 agent 合并 PR 与 StarSling 的会开优化 PR 的 CI 之后，失败诊断是 agent-CI 栈里最后一块无主之地——而自托管+自带模型正是企业真正能采纳的合规友好变体。推送前须人工复核的门把人留在 merge 位，与昨天审计师那条是同一个形状。
+
+[`🔗 Tracer-Cloud/opensre`](https://github.com/Tracer-Cloud/opensre) · [`🔗 README`](https://raw.githubusercontent.com/Tracer-Cloud/opensre/main/README.md)
+
+---
+
+## 38. 欧盟委员会如何在九个月里把 Matrix 推给 4 万多名员工
+
+- **Velocity:** ▮ steady
+- **Source:** element.io · 42+ pts on HN · ~1.1h ago (~11:00 UTC+8)
+- **Tags:** `matrix` `european-commission` `sovereignty` `element`
+
+Element 的帖子从委员会一侧讲述了这次部署：**2025 年 12 月**的 Matrix 概念验证到 **2026 年 9 月**变成装上每一台委员会笔电的主权通信工具，现在服务 **40,000+ 用户**。三个架构决策被摆上台面：托管在通过公开招标选出的主权云供应商上（不是委员会自有数据中心——"主权不必等于全部自建；它意味着选择你依赖谁、以什么条款"）、身份走 **EU Login** 让员工用熟悉的登录，以及——值得注意——**暂不联邦化**。委员会对主权的五维定义是这篇帖子的实质：韧性、供应商多样性、数据控制、平台所有权，以及**采购筹码**——"与供应商谈判或离开供应商的能力"。
+
+**Why it matters:** 欧洲的旗舰数字主权部署在九个月里从 PoC 走到全员铺开，而它选择*不做*的部分（自有数据中心、联邦化）与做了的部分同样有教育意义——主权被操作化为供应商可选项，而非基础设施民族主义。
+
+[`🔗 Element：欧盟委员会如何把 Matrix 推给 40,000+ 员工`](https://element.io/blog/how-the-european-commission-rolled-out-matrix-to-more-than-40-000-staff/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50558533)
+
+---
+
+## 39. DeepMind 员工正在组建工会——"第一道监督来自劳动者"
+
+- **Velocity:** ▮ steady
+- **Source:** gdmunion.co.uk · 37+ pts on HN · ~2.6h ago (~09:30 UTC+8)
+- **Tags:** `deepmind` `union` `labor` `ai-governance`
+
+一个以 UTAW（United Tech and Allied Workers）名义上线的活动站：**"DeepMind Employees Are Unionising."**（DeepMind 员工正在组建工会。）它的框架是治理而非薪酬："To honour our original mission: 'To build AI responsibly to benefit humanity.' As the law struggles to keep up, the first line of oversight comes from workers."（为恪守我们的初始使命："负责任地构建 AI、造福人类"。在法律追赶不及之处，第一道监督来自劳动者。）证据区列的是该公司有记录的决策——被删除的 2018 年"不造 AI 武器与监控"承诺（WIRED，2025 年 2 月）、Project Nimbus 合同前律师的警告（NYT）、Google Photos 人脸匹配被用于加沙"猎杀名单"的报道（The Intercept）、以及跑在 Google Cloud 上的 CBP 边境塔 AI。联络走 alphabet@utaw.tech。
+
+**Why it matters:** 前沿实验室的异议至今是请愿书和公开信——一次性、署名、可否认。一个正式的工会分会把它变成常设基础设施：谈判权、响应期限、以及公开信从来活不过的人员流动。无论如何评价具体主张，该站的那句话——第一道监督来自劳动者——现在是一个有组织的立场，而不是一篇随笔。
+
+[`🔗 DeepMind Employees Are Unionising（UTAW）`](https://www.gdmunion.co.uk) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50557885)
+
+---
+
+## 40. app-store-compliance：117 个有据可查的拒审模式，接成一道提交前守卫
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 1,480★
+- **Tags:** `app-store` `compliance` `guardrails` `mobile`
+
+**mjmirza/app-store-compliance** 正在 trending，自我定位是"the enterprise reference and automated guard that turns App Store and Google Play rejection into a designed out failure mode"（把 App Store 与 Google Play 拒审变成设计上就不会发生的失败模式的企业级参考与自动守卫）：**117 个有据可查的拒审模式**及修法、隐私与元数据指南，以及一道 **Claude Code 就绪**、提交前运行的守卫。它正是本 feed 11 月 13 日那条问题的工具化答案——AI 生成的应用洪流冲垮 Apple 审核管线、合成开发者因幻觉理由被拒。手册一半是可浏览的站点（mjmirza.github.io/app-store-compliance）；守卫一半把审核清单变成 agent 运行的 lint，而不是人忘记读的 PDF。
+
+**Why it matters:** 当 agent 一个接一个生成应用，拒审就成了随洪流按次计价的成本——解法是把审核准则搬进构建循环本身，正是"设计上不发生的失败模式"这句话的含义。合规即 skill 是一个能远超应用商店范围推广的模式。
+
+[`🔗 mjmirza/app-store-compliance`](https://github.com/mjmirza/app-store-compliance) · [`🔗 手册站点`](https://mjmirza.github.io/app-store-compliance/)
+
+---
+
+## 41. AutoClip：把一条链接变成可发布短视频的中国开源桌面应用
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 10,874★
+- **Tags:** `video-editing` `chinese-oss` `agents` `desktop`
+
+**zhouxiaoka/autoclip**（一个链接，一键出片）正乘着 trending 的中文侧，10,874★：一个开源桌面工具（基于 Tauri），吃进一条长视频链接——播客、访谈、课程——自动剪成适配各平台的短视频，**带字幕、封面与发布文案**，面向抖音、小红书、TikTok、Reels、YouTube Shorts 与 B 站。剪辑与渲染在你自己的机器上跑；云端模型按量计费；内置编辑器，处理模型搞不定的那点微调。仓库带 MCP server id（`io.github.zhouxiaoka/autoclip-mcp`），agent 也能驱动这条管线。
+
+**Why it matters:** "长视频转短视频"是创作者经济里量最大的苦役，而它现在是一个免费的本地桌面应用、还带 agent 接口——对英文读者来说真正有意思的信号是 MCP 接线：中国的创作者工具正在从第一天起就是 agent 原生的，而非事后加装。
+
+[`🔗 zhouxiaoka/autoclip`](https://github.com/zhouxiaoka/autoclip) · [`🔗 Releases`](https://github.com/zhouxiaoka/autoclip/releases/latest)
+
+---
+
+## 42. springrep：纯 Rust 的精确 B-rep CAD 内核，24 star 与一张一致性排行榜
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 31+ pts · ~15h ago (~21:00 UTC+8 昨天)
+- **Tags:** `rust` `cad` `brep` `geometry`
+
+SpringCraft 的 **springrep**（仓库 11 月 14 日创建，24 star——HN 帖就是发布）是一个边界表示（B-rep）几何内核："**Booleans, fillets, sweeps and STEP on exact geometry, accurate to 1e-7 mm, with every result validated**"（在精确几何上做布尔、圆角、扫掠与 STEP，精确到 1e-7 毫米，每个结果都验证）——解析曲面或 NURBS，而非网格，所以体积/面积/质量来自真实形状。纯 Rust、零依赖、无 unsafe、可编译为 WASM，并且自称在 brep-conformance 排行榜上**中位用例时间最快**、结果公开可查（Show HN 标题里的 3,487 个测试就是"要么有效、要么给出明确错误"契约背后的 CI）。文档里还给 AI agent 附了一段可复制粘贴的验证 prompt，精确到应打印的体积数字。
+
+**Why it matters:** CAD 内核是大教堂级软件——行业跑在 Parasolid 与 OCCT 上，而精确几何加结果验证恰恰是残酷困难的那部分。从零写的 Rust 内核是一场十年尺度的豪赌，但第一天就发布一致性排行榜，正是让这种赌注可证伪的方式——而带可验证示例的 agent 友好文档，是 2026 年迎接人类与 LLM 贡献者的共同入口。
+
+[`🔗 springrep（站点+文档）`](https://springcraft-ai.github.io/springrep/) · [`🔗 springcraft-ai/springrep（仓库）`](https://github.com/springcraft-ai/springrep) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50552140)
+
+---
+
+## 43. PTP：从 LLM 输出近乎精确地重建 prompt——无权重、无 logits、纯黑盒
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2607.29378 · 46+ pts on HN · ~11h ago (~01:30 UTC+8)
+- **Tags:** `llm-inversion` `privacy` `prompt-reconstruction` `security`
+
+一篇七月的论文今天轮到 HN：**"PTP: Previous-Token Prediction based LLM Inversion for Near-Exact Prompt Reconstruction"**（arXiv 2607.29378）。此前的 LLM 反演把 prompt 还原框定为语义重建，需要微调的 seq2seq 模型外加权重或 logit 访问。PTP 是**功能性的、黑盒的**：它**完全用目标 LLM 自己生成的合成数据、从零训练一个显式的逆向语言模型**，用的是"前一个 token 预测"——正向模型 next-token 目标的镜像——"在正向与逆向过程之间建立生成性链接，使忠实的 prompt 重建成为可能"。采样能产出多个候选 prompt，且都能"在正向目标 LLM 下诱导出相似回应"；方法可迁移到其他 LLM 生成的回应，并在基于 token 的重建指标上胜过前作。
+
+**Why it matters:** 它改变的是威胁模型：已发布的 LLM 输出——支持工单、AI 摘要、共享聊天记录——此前只能被还原成模糊转述，且需要模型内部信息。近乎精确且黑盒意味着，对 LLM 在公开场合输出的任何东西，运营假设应改为 prompt 就在里面。七月的时间戳同样要紧：它已经在文献里躺了四个月，而业界同期还在上线各种输出分享功能。
+
+[`🔗 PTP：基于前 token 预测的 LLM 反演（arXiv）`](https://arxiv.org/abs/2607.29378) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50554908)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-19T04:18:26Z |
-| Items | 29 |
-| Sources tracked | 35 (Hacker News, GitHub Trending, GitHub repos, Wiz Research, NVD/cve.org, CISA KEV, X41 D-Sec, Google DeepMind, Google, Microsoft AI, OpenAI, Anthropic, FT, KPMG, UPenn, git.kernel.org, inside-db.com, ABC7, mastra.ai, HKUDS, Cursor, rshekhar.com, human-md.ai, underwood.network, nicolasbouliane.com, ruby-lang.org, RadixArk, Hugging Face, Resolve AI, University of Cambridge, Lawyers' Committee, violetpixel.com, slowchronicle.com, ut2004.dev, claudia.gallery) |
+| Generated | 2026-11-19T12:26:14Z |
+| Items | 43 |
+| Sources tracked | 46 (Hacker News, GitHub Trending, GitHub repos, Wiz Research, NVD/cve.org, CISA KEV, X41 D-Sec, Google DeepMind, Google, Microsoft AI, OpenAI, Anthropic, FT, KPMG, UPenn, git.kernel.org, inside-db.com, ABC7, mastra.ai, HKUDS, Cursor, rshekhar.com, human-md.ai, underwood.network, nicolasbouliane.com, ruby-lang.org, RadixArk, Hugging Face, Resolve AI, University of Cambridge, Lawyers' Committee, violetpixel.com, slowchronicle.com, ut2004.dev, claudia.gallery, verialabs.com, php.net, kapteko.com, zerodha.tech, element.io, gdmunion.co.uk, drivevault.io, curiousbits.nl, exitpath-ruddy.vercel.app, springcraft-ai.github.io, arXiv) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

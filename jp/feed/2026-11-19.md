@@ -1,8 +1,8 @@
 ---
 date: 2026-11-19
-updated: 2026-11-19T04:18:26Z
+updated: 2026-11-19T12:26:14Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 35
+sources: 46
 license: CC-BY-4.0
 ---
 
@@ -416,13 +416,209 @@ eklavya-raj の **gta6-uefi**：「A GTA style game set in the real Miami that b
 
 ---
 
+## 30. VM 1台で1,500万のWebサーバー——syscallからAF_XDPまで、計算を全部見せる
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** kapteko.com · 196+ pts on HN · 約6.1時間前 (~06:00 UTC+8)
+- **Tags:** `kernel-bypass` `dpdk` `af-xdp` `smoltcp` `networking`
+
+11月18日の長文が問うのは、RAM 10 GB・CPU 1コアのVMで**Webサーバー1,500万個**を動かすには何が必要か——そして撞いた壁をすべて見せる。素朴なCのaccept/recv/sendサーバーは約65k RPSでポート枯渇に達し（`ip_local_port_range` は 32,768–60,999）。次の壁はカーネル自身だ：socketはlisten中でもアイドル中でも**約3,384バイト**を割り当てる（`tcp_sock` 2,240 B、`socket_alloc` 768 B、`file` 184 B、`dentry` 192 B）——つまり1,000万回の `socket()` はトラフィック関係なくVMをOOMさせる。通った道は：LFIサンドボックス化で各ゲストのスケジューリング状態を**16バイト**に（プログラムカウンタとfd2つ——1,500万ゲストで220 MB）、自作ユーザー空間スケジューラ（「我々自身がマイクロOSになる」）、そして本命のカーネルバイパス——**ユーザー空間TCPにsmoltcp、パケットI/OにDPDKとAF_XDP**。著者はユーモアと誠実さを半々で持ち、AIについても：「While an LLM is a significant boost for learning, it's too easy to accept its answers without thinking critically and feel ashamed later.」（LLMは学習の大きな助けだが、批判的に考えずに答えを受け入れて後で恥をかくのはあまりに簡単だ。）
+
+**Why it matters:** 「socket1個あたり約3.3 KBのカーネル会計」こそカーネルバイパススタックが存在する理由で、この記事はそれを伝説として引用するのではなく、その場で導出してみせる——5つのsyscallからAF_XDPまで、各層でメモリ算術を白日の下に晒す読める旅。
+
+[`🔗 VM 1台で1,500万のWebサーバー（kapteko）`](https://kapteko.com/15-million-webservers/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50556533)
+
+---
+
+## 31. 今朝のRuby緊急7件修正を受けた続報：Ruby2ßhellが素のRailsのpre-auth RCEに名前を付けた
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Veria Labs · 182+ pts on HN · 約6.9時間前 (~05:10 UTC+8)
+- **Tags:** `ruby` `rails` `rce` `memory-safety` `security`
+
+今朝の項20は、Rubyがメモリ破壊7件に対して緊急リリース（4.0.10/3.4.13/3.3.14）を出したことを、公式の「We are aware of PoCs that prove some of them can be used to trigger remote code execution.」という言葉とともに伝えた。Veria Labsの **Ruby2ßhell** がその7件の最凶——**GHSA-34m4-m9fh-gqp5**——に名前を付け、今夜パッチを当てるべき理由を示す：多くの1バイトエンコーディングには大文字ßがなく、upcaseは2バイト（`SS`）を書くのにループは1バイトしか境界検査しない。出力バッファは入力長+20で割り当てられるため、**ßを21文字並べると1バイト溢れる**。このバグはRuby **2.4.0**以来あり、ISO-8859とWindows-125xエンコーディングに住んでいる（UTF-8は別パスで無影響）。トリガは `upcase`、`swapcase`、`downcase(:fold)`、`casecmp?`——つまり**Railsと古典Sinatraのデフォルト・pre-authパス**に乗っている。Veriaのバンドル表はこれを棚卸しに変える：**GitLab 19.6.0**（Ruby 3.3.13）と**GitHub Enterprise Server 3.22.5**（4.0.9）が影響、Mastodon 4.7.6と現行Discourseイメージは修正済み、**Chatwoot 4.20.0**（3.4.4）は影響。上流修正は `ruby/ruby@d582f8f`。PoCは「みんながアップグレードする時間を取るため1週間後」に公開予定（ページ更新 11月19日 12:00 UTC）。
+
+**Why it matters:** 今朝の項はメモリ破壊・RCE級と言った。こちらはどのバイトで、どのエンコーディングで、どのフレームワークのデフォルトで、どのセルフホスト製品がそれをバンドルしているかを言う。1週間のPoC禁輸は公開されたパッチ時計——GitLabとGHESの管理者がその先頭にいる。
+
+[`🔗 Veria Labs：Ruby2ßhell（GHSA-34m4-m9fh-gqp5）`](https://verialabs.com/ruby2shell/) · [`🔗 Ruby：Regexpと文字列ケース変換の複数脆弱性`](https://www.ruby-lang.org/en/news/2026/11/18/multiple-vulnerabilities-in-regexp-and-string/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50556287)
+
+---
+
+## 32. PHP 8.6、本日リリース——Partial Function Applicationがついに言語本体へ
+
+- **Velocity:** ▮ rising
+- **Source:** php.net · 93+ pts on HN · 約3時間前 (~09:05 UTC+8)
+- **Tags:** `php` `release` `partial-function-application` `event-loop`
+
+PHP 8.6は**本日11月19日**にGA予定（確認時点でリリースページはまだ「has not been released yet. It will be released on November 19, 2026.」——タグの落下は差し迫っているが完了はしていない、と扱う）。目玉はパイプラインに何年もあったRFC **部分関数適用（Partial Function Application）**：`version_compare(?, '8.6', '>=')` はClosureを生み、残りの引数が揃った時点で初めて実行される。同時出演：新しい **`\Time\Duration` クラス**（タイムゾーン非依存、ナノ秒精度、250年以上の範囲——Durationが比較可能になり `min()` がそのまま使える）、ReactPHPやAMPHPといったイベントループライブラリのためにepoll/kqueue式I/Oマルチプレキシングをネイティブに晒す **Polling API**、`clamp()`、`SortDirection` enum、readonlyプロパティのデフォルト値。
+
+**Why it matters:** このうち2つが一回のリリースで長年の隙間を埋める：PFAはPHPが十年論争してきた関数合成機能であり、Polling APIはPHP 5の時代からユーザー空間で `select()` を作り直し続けたイベントループ框架にとって初めてのネイティブの土台だ。
+
+[`🔗 PHP 8.6 リリースアナウンス`](https://www.php.net/releases/8.6/en.php) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50557870)
+
+---
+
+## 33. ExitPath：Slack・Notion・Microsoft 365から抜け出すオープンソースの道しるべ索引
+
+- **Velocity:** ▮ rising
+- **Source:** Show HN · 226+ pts · 約20時間前 (~16:00 UTC+8 昨日)
+- **Tags:** `open-source` `lock-in` `migration` `self-hosting`
+
+昨日のShow HNで最も勢いのあるローンチはディレクトリサイトだ：**ExitPath**——「find your way out of big-platform lock-in」（大プラットフォームのロックインからの脱出路）。Slack・Notion・Microsoft 365のオープンソース代替を索引する。タイミングが半分の仕事をした：登場したのはMicrosoft 365障害が20時間を超え、LibreOfficeの一行ツイートがHNの頂点に立ち、より良いオープンソースを求めるエッセイが同じ週にフロントページに載った、その週だ。脱出路は普段、危機の瞬間にブログやフォーラムからその場で組み立てられる；ここでの貢献は、地図を障害の前に描いておいたこと。
+
+**Why it matters:** 今週のカスケード障害はセルフホストソフトが得た史上最高の広告で、ここで面白い成果物はまたアプリではなく*キュレーション層*だ——移行カタログが増え続ければ、脱出路は何かが事故中の研究課題から調達チェックリストの一行になる。
+
+[`🔗 ExitPath`](https://exitpath-ruddy.vercel.app/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50547980)
+
+---
+
+## 34. メモリ価格の圧縮が日付と対策を出した——SSDは2027年後半、「RAMを買うな、圧縮しろ」
+
+- **Velocity:** ▮ rising
+- **Source:** HN · 109+ & 53+ pts · 約3時間前 (~09:05 UTC+8)
+- **Tags:** `ssd` `nand` `memory-prices` `zram`
+
+フロントページの2本が同じ圧迫を供給と需要の両側から描く。供給側：DriveVaultの展望（9月17日公開、本日109ポイントで再浮上）はアナリスト記録とベンダー投資家説明を読む——**SSD価格は2027年後半に緩み始めるはず**（NAND供給が2027年半ばから需要に追いつく、「緩やかな滑落であって暴落ではない」）、**HDDは最速でも2028年**、能力はすでに契約済みで新工場の計画はない。需要側：Therry van Neervenの11月19日付「**Do not buy RAM, compress**」——AIワークロードは並列メモリ需要を何倍にも増やし、RAMは高価で拡張不能になった。Linuxでの答えは **zram**：ほとんどのディストロはデフォルトで有効にしていない（FedoraとPop!_OSは有効、Ubuntuは無効、Amazon Linuxは小さいVMのみ）。「圧縮比は1:4に達することも珍しくない」——著者はこれがSaaS時代のクラウド支出を半減できていたはずと見積もる。
+
+**Why it matters:** AI建設のメモリ需要はもう全員のインフラ請求書の一行項目だ。2027後半/2028という日付は調達計画の数字であり、zramはほとんどのLinuxフリートが台に残してきた無料容量——sysctlのコメント1行と再起動、DDR5が予算行項目になった時代の代替案はそれだ。
+
+[`🔗 ハードドライブ価格はいつ下がる？2026–2028展望`](https://www.drivevault.io/blog/when-will-hard-drive-prices-come-down.html) · [`🔗 RAMを買うな、圧縮しろ（curiousbits）`](https://curiousbits.nl/blog/do-not-buy-ram-compress/) · [`🔗 HN：SSD価格`](https://news.ycombinator.com/item?id=50557716) · [`🔗 HN：圧縮`](https://news.ycombinator.com/item?id=50557661)
+
+---
+
+## 35. ZerodhaのBlobasaur：シャーディングされたSQLiteで毎秒数千のblob読み書き
+
+- **Velocity:** ▮ rising
+- **Source:** Zerodha Tech Blog · 85+ pts on HN · 約3.4時間前 (~08:45 UTC+8)
+- **Tags:** `sqlite` `blob-storage` `distributed` `infrastructure`
+
+Zerodha（インド最大のブローカー、Kite取引プラットフォーム、約2,000万顧客）はこの血統で3つ目の自社ストレージを公開した：**Blobasaur——SQLiteの上に架けた、シャーディングされた分散blobストレージサーバー**。腐っていた旧スタックを置き換える。歴史：まずCouchDB、次にSSDB——Redisプロトコルを話すC++のディスクバックエンドストアで、何年も安定稼働したがメンテされなくなり、レイテンシ劣化でblobを1 MBにキャップさせられ、分散システムでもなかった。ワークロード：ユーザー保存のマルチチャートレイアウト、インジケータテンプレート、ベクター描画、ワークスペース設定——数KBから数MBのJSON blobが、「コモディティハードウェア上で毎秒数千回の読み書きを、一桁ミリ秒のレイテンシを保ちながら」処理され、市場のボラティリティとともにバーストする。
+
+**Why it matters:** また一つの日付あるチームが、データベースサーバーよりも退屈なSQLite——でもシャーディングされて、自分たちのもの——を選んだ。Cloudflare Durable Objectsの内部やlitestream/limboの波と同じパターンだ。2,000万顧客の取引プラットフォームがblob層をSQLiteに移したとき、「SQLiteはストレージエンジンであって組み込み玩具ではない」というテーゼの実世界データポイントになる。
+
+[`🔗 SQLiteの上の分散・高性能blobストレージ（Zerodha）`](https://zerodha.tech/blog/high-performance-distributed-blob-storage/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50557537)
+
+---
+
+## 36. diagram-designがskillsの波に乗り68kスター——編集級ダイアグラムを1つの自己完結HTML+SVGファイルに
+
+- **Velocity:** ▮ rising
+- **Source:** GitHub Trending · 68,350★ · trending #4
+- **Tags:** `agent-skills` `diagrams` `svg` `visualization`
+
+**cathrynlavery/diagram-design** は今日のトレンドボード最大のリポジトリ（68,350★、本日もプッシュ）で、そのポジショニングはagent-skills波で最も笑える一文だ：「**An agent skill that draws diagrams as one self-contained HTML + SVG file, in your brand. 51 diagram types. No shadows. No Mermaid slop.**」（あなたのブランドで、ダイアグラムを1つの自己完結HTML+SVGファイルに描くagentスキル。51図型。影なし。Mermaidのクズは要らない。）（ちなみにリポジトリ自身の2つの数が食い違う——READMEは51、description欄は45のまま。）対象はClaude Code、Codex、Copilot、Cursor、Factory Droid、Qoder、Piで、skills.sh経由でインストール。この波の他の上昇組と同じく、指し示す単一のリリースはない——昨日skillsリポジトリをトレンド15枠中13枠へ送ったのと同じ波に乗っている。
+
+**Why it matters:** skillsの波は総合コレクションから垂直の技巧ライブラリへ層別化しつつあり、これは本物の失敗モードを敵に選んだ：Mermaidのデフォルト描画に沈むagent生成ダイアグラムだ。プロンプト接頭辞ではなくスキル契約としての「in your brand」——他のツールビルダーが真似する部分はそこだ。
+
+[`🔗 cathrynlavery/diagram-design`](https://github.com/cathrynlavery/diagram-design) · [`🔗 README`](https://github.com/cathrynlavery/diagram-design/blob/main/README.md)
+
+---
+
+## 37. OpenSRE：失敗したCIランを読み、修正PRを開くセルフホストCLIエージェント
+
+- **Velocity:** ▮ rising
+- **Source:** GitHub Trending · 12,894★ · trending #12
+- **Tags:** `sre` `ci-cd` `agents` `self-hosted`
+
+**Tracer-Cloud/opensre**（パブリックalpha、本日もプッシュ、12,894★）は売り文句を一文で言う：「**Your CI tells you it broke, but not why or how to fix it.** OpenSRE is a CLI agent that reads the failed run, traces the cause and pushes a fix for you to review. Self-hosted, with your own models.」（CIは壊れたことしか言わない。なぜ、どう直すかは言わない。OpenSREは失敗ランを読み、原因を追い、レビュー用に修正をプッシュするCLIエージェント。セルフホスト、自分のモデルで。）設計選択そのものが物語だ：SaaSではなくCLI、セルフホストで動き、モデルも自分で持つ——CI失敗のレーンに、コードを外に出さないエージェントが来た。
+
+**Why it matters:** Mastra Factoryの238のagentマージPRとStarSlingの最適化PR型CIの後に、失敗診断はagent-CIスタックで最後に残った未開の地——しかもセルフホスト＋自分のモデルは、企業が本当に採用できるコンプライアンス・フレンドリーな変種だ。プッシュ前のレビューゲートが人間をマージ位置に留める、昨日の監査役の話と同じ形だ。
+
+[`🔗 Tracer-Cloud/opensre`](https://github.com/Tracer-Cloud/opensre) · [`🔗 README`](https://raw.githubusercontent.com/Tracer-Cloud/opensre/main/README.md)
+
+---
+
+## 38. 欧州委員会が9か月でMatrixを40,000人以上に展開した方法
+
+- **Velocity:** ▮ steady
+- **Source:** element.io · 42+ pts on HN · 約1.1時間前 (~11:00 UTC+8)
+- **Tags:** `matrix` `european-commission` `sovereignty` `element`
+
+Elementの記事は委員会側から展開の物語を語る：**2025年12月**のMatrix概念実証が**2026年9月**までにすべての委員会ラップトップに載る主権通信ツールになり、現在**40,000人以上**にサービスしている。3つのアーキテクチャ決定が明かされる：公開入札で選んだ主権クラウドプロバイダー上のホスティング（委員会所有データセンターではない——「主権はすべて内製することを意味しない；依存する相手と、どの条件で依存するかを選ぶことだ」）、身元はスタッフが日常で使う **EU Login**、そして——注目に値する——**今のところフェデレーションなし**。委員会の主権の5次元定義が記事の本体だ：レジリエンス、ベンダー多様性、データ制御、プラットフォーム所有、そして**調達のテコ**——「サプライヤーと交渉し、あるいはサプライヤーから立ち去る能力」。
+
+**Why it matters:** 欧州の旗艦デジタル主権展開が9か月でPoCから全面展開に達し、選択*しなかった*部分（自社データセンター、フェデレーション）がやった部分と同じくらい教訓的だ——主権はインフラナショナリズムとしてではなく、サプライヤー選択肢として運用化された。
+
+[`🔗 Element：欧州委員会がMatrixを40,000人以上に展開した方法`](https://element.io/blog/how-the-european-commission-rolled-out-matrix-to-more-than-40-000-staff/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50558533)
+
+---
+
+## 39. DeepMind従業員が組合を結成し始めた——「監督の第一線は労働者から」
+
+- **Velocity:** ▮ steady
+- **Source:** gdmunion.co.uk · 37+ pts on HN · 約2.6時間前 (~09:30 UTC+8)
+- **Tags:** `deepmind` `union` `labor` `ai-governance`
+
+UTAW（United Tech and Allied Workers）名義のキャンペーンサイトが上がった：**「DeepMind Employees Are Unionising」**（DeepMind従業員は組合化している）。枠組みは賃金ではなくガバナンスだ：「To honour our original mission: 'To build AI responsibly to benefit humanity.' As the law struggles to keep up, the first line of oversight comes from workers.」（本来の使命を守るために：「責任を持ってAIを構築し人類に恩恵を」。法が追いつくのに苦労するあいだ、監督の第一線は労働者から来る。）証拠セクションは会社の記録された決定のリストだ——AI兵器・監視を作らない2018年の誓約の削除（WIRED、2025年2月）、Project Nimbus契約をめぐる弁護士の警告（NYT）、Google Photosの顔マッチングがガザの「殺害リスト」に使われたという報道（The Intercept）、Google Cloud上のCBP国境タワーAI。連絡はalphabet@utaw.techへ。
+
+**Why it matters:** フロンティアラボの異議申し立てはこれまで請願書と公開状だった——一回きり、署名付き、否定可能。正式な組合支部はそれを恒常的なインフラに変える：団体交渉権、回答期限、そして公開状が生き延びられなかった人事異動を越えた継続性。個々の主張をどう評価するかにかかわらず、監督の第一線は労働者から来るというサイトの言葉は、今やエッセイではなく組織化された立場だ。
+
+[`🔗 DeepMind Employees Are Unionising（UTAW）`](https://www.gdmunion.co.uk) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50557885)
+
+---
+
+## 40. app-store-compliance：記録された117のリジェクトパターンを、提出前ガードに配線する
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 1,480★
+- **Tags:** `app-store` `compliance` `guardrails` `mobile`
+
+**mjmirza/app-store-compliance** がトレンドに乗っている。自己位置づけは「the enterprise reference and automated guard that turns App Store and Google Play rejection into a designed out failure mode」（App StoreとGoogle Playのリジェクトを、設計上起こらない失敗モードに変える企業級リファレンスと自動ガード）：**記録された117のリジェクトパターン**と修正、プライバシー・メタデータガイダンス、そして提出前に走る **Claude Code対応**のガード。これは11月13日にこのフィードが扱った問題——AI生成アプリの洪水がAppleのレビューパイプラインを圧迫し、合成開発者が幻覚的な理由でリジェクトされる——へのツーリングの答えだ。プレイブック半分は閲覧可能なサイト（mjmirza.github.io/app-store-compliance）；ガード半分はレビューチェックリストを、人間が忘れるPDFではなく、エージェントが走るlintにする。
+
+**Why it matters:** エージェントがアプリを次々に生成するとき、リジェクトは洪水に比例して跳ねるビルドごとのコストになる——答えはレビューガイドラインをビルドループの中に移すこと、まさに「設計上起こらない失敗モード」という言葉の意味だ。コンプライアンス・アズ・スキルは、アプリストアをはるかに超えて一般化するパターンだ。
+
+[`🔗 mjmirza/app-store-compliance`](https://github.com/mjmirza/app-store-compliance) · [`🔗 プレイブックサイト`](https://mjmirza.github.io/app-store-compliance/)
+
+---
+
+## 41. AutoClip：リンク1本を公開可能なショート動画に変える、中国のオープンソースデスクトップアプリ
+
+- **Velocity:** ▮ steady
+- **Source:** GitHub Trending · 10,874★
+- **Tags:** `video-editing` `chinese-oss` `agents` `desktop`
+
+**zhouxiaoka/autoclip**（一个链接，一键出片——リンク1本でワンクリック動画）がトレンドの中国側を走っている：10,874★。ロング動画——ポッドキャスト、インタビュー、講座——へのリンクを食べ、プラットフォーム対応のショートに自動カットし、**字幕・カバー・投稿文**を付け、抖音・小红书・TikTok・Reels・YouTube Shorts・ビリビリに対応するオープンソースデスクトップツール（Tauriベース）。クリップとレンダリングは自分のマシンで走り、クラウドモデルは従量課金、モデルが仕上げられない微調整のためのエディタも内蔵。リポジトリはMCPサーバーid（`io.github.zhouxiaoka/autoclip-mcp`）を持ち、エージェントもこのパイプラインを運転できる。
+
+**Why it matters:** ロングからショートへのパイプラインはクリエイター経済で最も量の多い苦役で、それが今や無料のローカルデスクトップアプリになり、エージェントインターフェースまで付いた——英語圏の読者への本当のシグナルはMCPの配線だ：中国のクリエイターツールは後付けではなく、最初からエージェントネイティブで作られている。
+
+[`🔗 zhouxiaoka/autoclip`](https://github.com/zhouxiaoka/autoclip) · [`🔗 Releases`](https://github.com/zhouxiaoka/autoclip/releases/latest)
+
+---
+
+## 42. springrep：純Rustの正確なB-rep CADカーネル、スター24とコンフォーマンスリーダーボード
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 31+ pts · 約15時間前 (~21:00 UTC+8 昨日)
+- **Tags:** `rust` `cad` `brep` `geometry`
+
+SpringCraftの **springrep**（リポジトリは11月14日作成、スター24——HNスレッドがローンチ）は境界表現（B-rep）ジオメトリカーネルだ：「**Booleans, fillets, sweeps and STEP on exact geometry, accurate to 1e-7 mm, with every result validated**」（正確なジオメトリ上のブーリアン・フィレット・スイープ・STEP、1e-7 mmの精度、すべての結果を検証）——メッシュではなく解析曲面かNURBSなので、体積・面積・質量は実形から出る。純Rust、依存なし、unsafeなし、WASMにコンパイルでき、brep-conformanceリーダーボードで**中央値ケースタイム最速**を主張し、結果は公開されて誰でも検証できる（Show HNタイトルの3,487テストは「有効か、明確なエラーか」という契約の背後にあるCIだ）。ドキュメントはAIエージェント用に、印字されるべき体積の数字まで指定したコピペ検証プロンプトを添付している。
+
+**Why it matters:** CADカーネルは大聖堂級のソフトウェアだ——業界はParasolidとOCCTの上を走り、正確なジオメトリと検証済み結果こそが残酷に難しい部分だ。ゼロから書かれたRustカーネルは十年スケールの賭けだが、初日にコンフォーマンスリーダーボードを公開することこそ、その賭けを反証可能にするやり方だ——そして検証可能な例付きのエージェント・フレンドリーなドキュメントは、2026年に人間とLLMの両コントリビューターを迎える共通の入り口だ。
+
+[`🔗 springrep（サイト＋ドキュメント）`](https://springcraft-ai.github.io/springrep/) · [`🔗 springcraft-ai/springrep（リポジトリ）`](https://github.com/springcraft-ai/springrep) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50552140)
+
+---
+
+## 43. PTP：LLM出力からのほぼ正確なプロンプト再構築——重みなし、ロジットなし、ブラックボックス
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv 2607.29378 · 46+ pts on HN · 約11時間前 (~01:30 UTC+8)
+- **Tags:** `llm-inversion` `privacy` `prompt-reconstruction` `security`
+
+7月の論文が今日HNの順番を得た：**「PTP: Previous-Token Prediction based LLM Inversion for Near-Exact Prompt Reconstruction」**（arXiv 2607.29378）。先行のLLM反転研究はプロンプト復元を意味的再構築として枠づけ、ファインチューン済みseq2seqモデルに加えて重みかロジットへのアクセスを必要とした。PTPは**機能的でブラックボックス**だ：ターゲットLLM自身が生成した合成データだけで、明示的な逆方向言語モデルを**スクラッチから訓練**する。使うのはprevious-token prediction——順方向モデルのnext-token目的の鏡——で、「順方向と逆方向のプロセスの間に生成的リンクを確立し、忠実なプロンプト再構築を可能にする」。サンプリングは複数の候補プロンプトを生み、そのすべてが「順方向のターゲットLLMの下で類似の応答を誘導する」。手法は別のLLMが生成した応答にも転移し、トークンベースの再構築指標で先行研究を上回る。
+
+**Why it matters:** これが変えるのは脅威モデルだ：公開されたLLM出力——サポート記録、AIサマリー、共有チャットログ——はこれまで、モデル内部情報があって初めて、曖昧な言い換えとしてしか復元できなかった。ほぼ正確でブラックボックスということは、LLMが公開の場で出力するすべてについて、運用上の仮定はプロンプトがそこに入っている、に変わるべきだということだ。7月の日付も重要だ：業界が出力共有機能を出荷し続けたあいだ、これは文献の中に四か月寝ていた。
+
+[`🔗 PTP：前トークン予測に基づくLLM反転（arXiv）`](https://arxiv.org/abs/2607.29378) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50554908)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-19T04:18:26Z |
-| Items | 29 |
-| Sources tracked | 35 (Hacker News, GitHub Trending, GitHub repos, Wiz Research, NVD/cve.org, CISA KEV, X41 D-Sec, Google DeepMind, Google, Microsoft AI, OpenAI, Anthropic, FT, KPMG, UPenn, git.kernel.org, inside-db.com, ABC7, mastra.ai, HKUDS, Cursor, rshekhar.com, human-md.ai, underwood.network, nicolasbouliane.com, ruby-lang.org, RadixArk, Hugging Face, Resolve AI, University of Cambridge, Lawyers' Committee, violetpixel.com, slowchronicle.com, ut2004.dev, claudia.gallery) |
+| Generated | 2026-11-19T12:26:14Z |
+| Items | 43 |
+| Sources tracked | 46 (Hacker News, GitHub Trending, GitHub repos, Wiz Research, NVD/cve.org, CISA KEV, X41 D-Sec, Google DeepMind, Google, Microsoft AI, OpenAI, Anthropic, FT, KPMG, UPenn, git.kernel.org, inside-db.com, ABC7, mastra.ai, HKUDS, Cursor, rshekhar.com, human-md.ai, underwood.network, nicolasbouliane.com, ruby-lang.org, RadixArk, Hugging Face, Resolve AI, University of Cambridge, Lawyers' Committee, violetpixel.com, slowchronicle.com, ut2004.dev, claudia.gallery, verialabs.com, php.net, kapteko.com, zerodha.tech, element.io, gdmunion.co.uk, drivevault.io, curiousbits.nl, exitpath-ruddy.vercel.app, springcraft-ai.github.io, arXiv) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
