@@ -1721,3 +1721,16 @@ Sources: [VulnCheck アドバイザリ：Tensei](https://www.vulncheck.com/advis
 
 Sources: [CVE-2026-129448](https://www.cve.org/CVERecord?id=CVE-2026-129448) ·
 [CVE-2026-129272](https://www.cve.org/CVERecord?id=CVE-2026-129272)
+
+## 2026-11-20 —— OpenJDK のキューは発見がレビュー容量にぶつかる場所であり、NGINX の 5 発見者は「競争」の実況
+
+**Java4Shell の脚注（PR #32781）：**Java4Shell（`CVE-2026-114938`）が「AI で 1 時間の発見」としてトレンドした翌日、HN が **OpenJDK PR #32781** を掘り起こした——「8392044: AVX-512 Base64 decoder overwrites output buffer on short padded tail」、**2026-09-09 作成**：同じ bug、詳細な記述（マスクされたベクタ経路が不正入力で `output_mask` を誤算し、「Java に戻る前に論理出力長を超えて書き込み、ヒープを壊す」）、修正案付き、OpenJDK の暫定 AI ポリシーで自己確認済み。必須の 2 レビューを得られないまま、bridgekeeper bot が 8 週間の不活性で警告し、PR は **2026-11-04 に未マージのまま自動クローズ**——Oracle のレコード公開（11-17、`Analyzed`、Oracle CNA 8.1 v3.1）の 6 日前。完全なタイムライン：出荷するプロジェクト自身のキューに公開可視で **8 週間**、CVE の存在の **6 週間**前、そして「1 時間、200 ドル未満のトークン」で独立に発見された。AI 支援発見の物語にはこの脚注が必要だ：プリミティブは出荷元のプロジェクトの眼の前に横たわっていた——語っているのは発見ではなく、**レビュー容量が実際に律速する場所**。
+
+**NGINX の 5 発見者ペアは同じ教訓の需要側：**Wiz、Ikotas Labs、Metnir、Rapid7、Xint が同じ 2 つの未認証 RCE を**独立に**発見（1 件は ASLR バイパス込み RCE で 10-21 報告。F5：「別の研究チームが既に同じ脆弱性を報告していた」）——5 つの集団が一つのメモリ安全性の継ぎ目を引きながら、最初の報告から協調パッチまでの窓は 10-21 → 11-18 を走った。発見がここまで並行なら、律速は見つけることではなく、最初の報告から修正出荷までの時間だ。
+
+**開示の半分：**Ruby の 7 つの緊急修正は **CVE id を申請済み・未割り当て**の出荷——アドバイザリは GHSA キーで、CVE 番号で引くスキャナは管理者が最も patch すべき窓で盲だった。「CVE 未割り当て」は「脆弱性なし」を意味しない。レジストリがアドバイザリに後れていることを意味する。7 件のうち 4 件は Stephan Lipp（Ada Logics）と Anthropic の署名——AI 支援ファジングがレジストリの追いつかない速度で提出している。
+
+ソース：[OpenJDK PR #32781](https://github.com/openjdk/jdk/pull/32781) ·
+[Wiz: NGINX RCE](https://www.wiz.io/blog/nginx-http2-rce-vulnerabilities) ·
+[Ruby アドバイザリ](https://www.ruby-lang.org/en/news/2026/11/18/multiple-vulnerabilities-in-regexp-and-string/) ·
+[HN 議論](https://news.ycombinator.com/item?id=50558906)

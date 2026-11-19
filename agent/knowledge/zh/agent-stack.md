@@ -2564,3 +2564,26 @@ Sources: [withcoral/coral](https://github.com/withcoral/coral) ·
 [HN](https://news.ycombinator.com/item?id=50526152) ·
 [0nelight/sutra-os](https://github.com/0nelight/sutra-os) ·
 [Show HN](https://news.ycombinator.com/item?id=50525052)
+
+## 2026-11-19（三个批次）——技能浪潮拿到第一方打包时刻，agent-CI 栈填满各条车道
+
+**`cursor/plugins`**（17,149★，单日 +315，榜单热）是 agent 技能浪潮从主流 IDE 厂商处拿到的第一方打包时刻：官方**插件规范**（每个插件「是仓库根目录下的独立目录、自带 `.cursor-plugin/plugin.json` manifest」）加一条高频第三方合并流水线——仅当日合并就新增 Hospitable（#1269）、Fiscal AI（#1275）、CreateOS（#1262）、LMTY。官方集含 `create-plugin`、`teaching`、`continual-learning`、`agent-compatibility`，以及两个立场鲜明的策展：`thermos`（「热核分支评审：深度安全/正确性审计、严苛代码质量量规、并行 subagent」）与 `ralph-loop`（「用 Ralph Wiggum 技法的迭代式自指 AI 循环」）——社区发明的模式被策展进带 manifest 规范与开放 PR 流水线的官方目录。跨厂商的技能标准落在哪里，这样的 manifest 就是接口。
+
+**Mastra Factory**（Show HN）——StarSling 的 agent-CI 在维护者一侧的孪生：「可配置的 agent 看板，可在 Slack 里 @」，架在 Mastra 的持久化 agent 上，而且就是 Mastra 用在自己身上的工具：「上周，Factory 开出并合并了 **238 个 PR，同时人类合并了 630 个 PR**」——agent  authored 工作占 868 次合并的 27%、约为人类速率的 38%，而项目周下载约 400 万。瓶颈不再是写出变更，而是护送变更。
+
+**OpenSRE**（`Tracer-Cloud/opensre`，12,894★ 公测）：「你的 CI 告诉你它挂了，但不告诉你为什么、怎么修」——一个 CLI agent 读取失败的运行、追因、推送待评审的修复 PR；自托管、用自己的模型。CI 失败车道的合规友好变体：评审后推送把人留在合并关口，代码不出门。
+
+**CLI-Anything / CLI-Hub**——注册表模式：仓库本体（59.5k★）**自 9 月 22 日无提交**，活跃度在其前面一层的 **CLI-Hub**（cliany.cc）——为项目做门面的 agent 友好 CLI 注册表（「生成一个 agent 原生 CLI、让 AI agent 操作它」），SKILL.md 原生安装（`npx skills add HKUDS/CLI-Anything --skill cli-hub-meta-skill -g -y`）。若 agent 按任务而非按工具发现并安装 CLI 包装器，*agent 能驱动的软件*的分发就变成一份策展索引——HKUDS 押注索引即产品。（stitch-skills 形态：休眠的第一方仓库被周围的浪潮托起。）
+
+**Onlook 重新发布**（YC W25，Apache-2.0，27.3k★）：桌面应用打开任意 git 仓库、跑你自己的 dev server、把活的应用放上无限画布——设计师直接编辑真实运行中的应用；编辑落在安全的 worktree 副本、一键成 PR，走 **bring-your-own-agent**（不绑模型；接 Claude Code 或 Codex；MCP 连接器）。BYO-agent 也是定价表态：拒绝在 token 上赚差价。
+
+**技能货架：**`cathrynlavery/diagram-design`（68,350★，榜单最大）——「一个把图画成单个自包含 HTML + SVG 文件的 agent 技能，用你的品牌。51 种图型。不要阴影。不要 Mermaid slop。」（README 写 51、仓库描述仍是 45——漂移的微缩样本）；`mjmirza/app-store-compliance`（1,480★）——**117 种有据可查的拒审模式**接成 Claude Code 可用的提交前守卫（合规即技能）；`zhouxiaoka/autoclip`（10,874★，Tauri，中国开源）——一条链接 → 带字幕/封面/文案的成品短视频，内置 MCP server id 让 agent 也能驱动管线：中文创作工具从第一天就是 agent 原生。
+
+来源：[cursor/plugins](https://github.com/cursor/plugins) ·
+[Show HN: Mastra Factory](https://news.ycombinator.com/item?id=50548660) ·
+[Tracer-Cloud/opensre](https://github.com/Tracer-Cloud/opensre) ·
+[HKUDS/CLI-Anything](https://github.com/HKUDS/CLI-Anything) ·
+[onlook-dev/onlook](https://github.com/onlook-dev/onlook/) ·
+[cathrynlavery/diagram-design](https://github.com/cathrynlavery/diagram-design) ·
+[mjmirza/app-store-compliance](https://github.com/mjmirza/app-store-compliance) ·
+[zhouxiaoka/autoclip](https://github.com/zhouxiaoka/autoclip)

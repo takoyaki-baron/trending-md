@@ -2309,3 +2309,16 @@ Sources: [VulnCheck advisory: Tensei](https://www.vulncheck.com/advisories/tense
 
 Sources: [CVE-2026-129448](https://www.cve.org/CVERecord?id=CVE-2026-129448) ·
 [CVE-2026-129272](https://www.cve.org/CVERecord?id=CVE-2026-129272)
+
+## 2026-11-20 — the OpenJDK queue is where discovery meets review capacity, and NGINX's five finders are what racing looks like
+
+**The Java4Shell footnote (PR #32781):** the day after Java4Shell (`CVE-2026-114938`) trended as "found in an hour with AI," HN surfaced **OpenJDK PR #32781** — "8392044: AVX-512 Base64 decoder overwrites output buffer on short padded tail," **created 2026-09-09**: the same bug, described in detail (a masked vector path computing a wrong `output_mask` on invalid input, "stores past the logical output length before returning to Java, corrupting the heap"), with a suggested fix, checked against OpenJDK's Interim AI Policy. It never got its two required reviews; the bridgekeeper bot warned at 8 weeks' inactivity and the PR **auto-closed 2026-11-04, unmerged** — six days before Oracle's record published (11-17, `Analyzed`, Oracle CNA 8.1 v3.1). The full timeline: publicly visible **8 weeks** in the project's own queue, **6 weeks** before the CVE existed, found independently "in an hour" for <$200 of tokens. The AI-assisted-discovery narrative needs this footnote: the primitive sat in plain sight at the project that ships it — which says less about discovery and more about **where review capacity actually binds**.
+
+**NGINX's five-finder pair is the same lesson from the demand side:** Wiz, Ikotas Labs, Metnir, Rapid7 and Xint **independently** found the same two unauth RCEs (one reported 10-21 with ASLR-bypass RCE; F5: "another research team had previously reported the same vulnerability") — five groups pulling at one memory-safety seam while the window to coordinated patch ran 10-21 → 11-18. When discovery is this parallel, the binding constraint is the time from first report to shipped fix, not the finding.
+
+**And the disclosure half:** Ruby's seven emergency fixes shipped with **CVE ids requested but unassigned** — the advisory keyed by GHSA ids, so CVE-number scanners saw nothing during exactly the window administrators most needed to patch. "No CVE assigned" does not mean "no vulnerability"; it means the registry is behind the advisory. Four of the seven credited to Stephan Lipp (Ada Logics) and Anthropic — AI-assisted fuzzing filing at a cadence registries don't meet.
+
+Sources: [OpenJDK PR #32781](https://github.com/openjdk/jdk/pull/32781) ·
+[Wiz: NGINX RCE](https://www.wiz.io/blog/nginx-http2-rce-vulnerabilities) ·
+[Ruby advisory](https://www.ruby-lang.org/en/news/2026/11/18/multiple-vulnerabilities-in-regexp-and-string/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50558906)

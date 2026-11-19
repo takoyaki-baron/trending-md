@@ -350,6 +350,22 @@ const GH_PATH_SEGMENTS = new Set([
 const TECHNICAL_NOUN = /\b(?:models?|model\s+ids?|endpoints?|parameters?|params?|routes?|paths?|headers?|APIs?|fields?|ids?|identifiers?|fallbacks?|prompts?|temperature|URLs?|payloads?|arguments?|args?|query\s+string|slugs?)\b/i;
 const PROJECT_TERMS = /\b(?:repos?(?:itory)?s?|README|releases?|stars?|open[-\s]?source|github|projects?|librar(?:y|ies)|packages?|SDKs?|CLIs?|source\s+code|maintainers?|commits?)\b/i;
 
+/* A backticked `a/b` can also be an INSTRUCTION IDIOM (`dec/jnz`, 2026-11-20 item 15: "its 5-stage
+ * pipeline flipped optimization rules (LOOP became slower than `dec/jnz`)" — the x86
+ * decrement-and-jump-if-not-zero loop pair). The slug reader spent an `api.github.com` call on
+ * `repos/dec/jnz`, got the 404 that shape deserves, and filed `unreadable` against a TRUE claim —
+ * the 11-01 class again, one layer deeper: not a model id, not an endpoint, an assembly mnemonic.
+ * The tell is TWO-sided so the guard stays narrow: the slug's own sentence must talk
+ * instruction-level topics (the word list below), AND both segments must be 1–5 lowercase letters
+ * — the shape of a mnemonic, never of a slug worth a call. Real short repos are shielded three
+ * ways: PROJECT_TERMS in the sentence (a `cli/cli` sentence almost always says "CLI" — which the
+ * slug itself matches, so the slug's own name protects it), a github.com link, or a title mention;
+ * any of those keeps the repo. `dec/jnz` with no instruction context also stays a repo —
+ * defaulting to the check is the safe direction; the guard only ever suppresses. Reported as
+ * `not-a-repo` with the matched tell, never silent. */
+const INSTRUCTION_CONTEXT = /\b(?:instructions?|mnemonics?|opcodes?|assembly|assembler|disassembly|disassembler|pipelines?|microarchitecture|x86|x64|x86-64|cpus?)\b/i;
+const MNEMONIC_SLUG = /^[a-z]{1,5}\/[a-z]{1,5}$/;
+
 /* A backticked `a/b` can also be a PATH inside a repository. The measured counterexample
  * (2026-11-10, item 3): "shipped in **`contrib/e_means`**" — a module directory inside
  * `facebookresearch/faiss` (verified first-hand: `repos/facebookresearch/faiss/contents/contrib`
@@ -518,6 +534,14 @@ function parseItems(text) {
            as an ARTIFACT to read a card from, which a model id supports and a repository claim does
            not. Dropping it here would also have cost item 5 its table-row verification. */
         it.notRepo.push({ slug, why: why.toLowerCase() });
+        repos.add(slug);
+      } else if (!linked && !subject && MNEMONIC_SLUG.test(slug)
+                 && sents.some((s) => INSTRUCTION_CONTEXT.test(s))
+                 && !sents.some((s) => PROJECT_TERMS.test(s))) {
+        /* An INSTRUCTION IDIOM, not a repository (`dec/jnz`, 2026-11-20 item 15). Also kept in
+           `repos` for the same reason as above — the `count` check may still want to read a card. */
+        const tell = sents.map((s) => (s.match(INSTRUCTION_CONTEXT) ?? [])[0]).find(Boolean);
+        it.notRepo.push({ slug, why: `instruction idiom: ${String(tell ?? 'mnemonic').toLowerCase()}` });
         repos.add(slug);
       } else if (!linked && !subject && REPO_DIR_PREFIXES.has(slug.split('/')[0].toLowerCase())) {
         /* A PATH inside a repository, not a repository (`contrib/e_means`, 2026-11-10 item 3).
@@ -6007,6 +6031,19 @@ if (SELFTEST) {
   t('path entry: a module family matches the files it ships', pathVerdict([{ name: 'e_means.py' }, { name: 'ivf_flat.py' }], 'e_means').hit, 'e_means.py');
   t('path entry: an unrelated listing is absent', pathVerdict([{ name: 'unrelated' }], 'e_means').verdict, 'path-absent');
   t('path entry: a failed request verifies nothing', pathVerdict(null, 'e_means'), { verdict: 'path-absent', hit: null });
+  /* 2026-11-20 item 15: a backticked `a/b` can be an INSTRUCTION IDIOM — `dec/jnz` is the x86
+     decrement-and-jump loop pair in "LOOP became slower than `dec/jnz`" (a pipeline sentence),
+     and the slug reader spent an api.github.com call on `repos/dec/jnz`, got the 404 that shape
+     deserves, and filed `unreadable` against a TRUE claim. Classified now, two-sided: instruction
+     context in the sentence AND both segments ≤5 lowercase letters. */
+  const notRepos = (s) => parseItems(`## 1. t\n\n${s}\n`)[0].notRepo?.map((x) => x.slug) ?? [];
+  t('an instruction idiom in a pipeline sentence is classified',
+    notRepos('its 5-stage pipeline flipped optimization rules (LOOP became slower than `dec/jnz`)'), ['dec/jnz']);
+  t('the idiom slug stays in repos for count/ratio',
+    slugs('its 5-stage pipeline flipped optimization rules (LOOP became slower than `dec/jnz`)'), ['dec/jnz']);
+  t('no instruction context keeps the repo', notRepos('pair it with `dec/jnz` in your build'), []);
+  t('long segments are not mnemonics', notRepos('the pipeline stage compares against `editor/junzi`'), []);
+  t('project talk shields a short slug', notRepos('the pipeline for our `cli/cli` release ships'), []);
   // a dated star quote is a surge signal, not a stale number (2026-10-28 item 5: 56 → 114)
   t('dated quote detected', DATED_QUOTE.test('at the time of writing holds 56 stars and one commit'), true);
   // 2026-10-30 item 15: the item already quoted the second reading, and the advice said to add it

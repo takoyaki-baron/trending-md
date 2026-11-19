@@ -636,3 +636,16 @@ ONNX Runtime Web、無数のオンデバイス パイプライン）——が一
 [intel/onnxruntime フォーク](https://github.com/intel/onnxruntime) ·
 [PyPI: onnxruntime 1.32.0](https://pypi.org/project/onnxruntime/) ·
 [HN 議論](https://news.ycombinator.com/item?id=50539610)
+
+## 2026-11-19 → 11-20 —— ローカル AI の経済性が代弁者を得て、メモリ逼迫に日付が付く
+
+**Warden の論証**（The Data Exchange インタビュー。TensorFlow Lite/Moonshine）：ローカルモデルはフロンティアの能力に「数か月遅れ」で、差は**マーケティングとパッケージング、品質ではない**——Apache と Postgres を専有の対抗に勝たせた経済学が再び適用される。ハードウェアの算術：9B モデルは 4 bit で 4 GB に収まり、Apple の 256GB ユニファイドメモリ機は既に数百億パラメータのモデルを実用速度で動かす。注視すべき予測——豊富で速いユニファイドメモリ + 推論専用の加速は、統合グラフィックスが表示においてディスクリート GPU を任意にしたのと同じ仕方で、推論においてそうし得る。音声：レイテンシ予算は **200ms** 付近、インターフェースのリトマス試験は「部屋の向こうのパートナーに話しかけるか」、Moonshine は **500KB RAM の Pico** で完全な音声インターフェースを走らせる。彼は複合 AI 陣営（専用小モデルのパイプライン。end-to-end 音声は「どちらかといえばマーケティング用語」）にいて、**Chrome は既に JavaScript から呼べる ~4B パラメータのモデルを積む**——LLM にとって「iPhone の瞬間」か——と述べ、GPU 推論を「買い物に油槽船を使うようなもの」と呼び、注目部品として高帯域フラッシュを指す。クラウドガードレール問題の彼の証拠：善意の制限につまずく白帽リサーチャー（同じ週の safeguards エッセイ）。
+
+**メモリ逼迫に調達の日付が付く**（DriveVault 展望、11-19 に再浮上）：**SSD 価格は 2027 年下期から緩み始めるはず**（NAND 供給が 2027 年半ばから需要を追い上げる——「緩やかな滑りであって暴落ではない」）。**HDD は最速で 2028 年**（容量は契約済み、新工場の計画なし）。需要側の回避策：**zram**（「RAM を買うな、圧縮せよ」）——圧縮比は最大 1:4 だが、多くの distro は既定で有効化していない（Fedora と Pop!_OS はする。Ubuntu はしない。Amazon Linux は小さい VM のみ）。AI ワークロードが並列メモリ需要を倍増させたのは、RAM が安くなくなったのと同じ時だった——この項目は今や誰のインフラ請求にも載る。
+
+**オンデバイス AI の下り帯域の問い**（Perishable Press）：一人の管理者が、Chrome の「AI innovations」とオンデバイス AI 設定（彼の報告では既定で有効）が月「文字通り数百 GB」を動かし、無効化後にトラフィックが「ほぼフラットライン」したと報告。証拠の基盤は率直に記されている——設定ページのスクリーンショットとアクティビティモニタ、ログなし、手法なし——ゆえに規模は未検証として扱う。実行可能な内容は監査すべき設定ページと一晩の再現実験。根底の問いはそれでも生きている：モデル同期機能はフリート規模の下りトラフィックを動かし、企業管理者は請求でそれを見る。
+
+ソース：[The Data Exchange: Pete Warden](https://thedataexchange.media/pete-warden-moonshine/) ·
+[DriveVault: 2026–2028 展望](https://www.drivevault.io/blog/when-will-hard-drive-prices-come-down.html) ·
+[RAM を買うな、圧縮せよ](https://curiousbits.nl/blog/do-not-buy-ram-compress/) ·
+[Perishable Press: Chrome AI 帯域](https://perishablepress.com/chrome-ai-wasting-much-bandwidth/)

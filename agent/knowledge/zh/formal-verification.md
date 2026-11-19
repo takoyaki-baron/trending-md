@@ -346,3 +346,13 @@ Harmonic 宣布其 AI 驱动形式化验证器 **Aristotle** 支持 Rust（此�
 
 来源：[Harmonic](https://www.harmonic.fun/news/aristotle-rust-verification) ·
 [HN](https://news.ycombinator.com/item?id=50520270)
+
+## 2026-11-20 —— Claude 闭合两个开放的黑洞物理问题，告诫随结果一起发布
+
+Anthropic 的研究帖（11-17 发布，11-19/20 在 HN 获 199+ 分）描述了 **Claude Fable 5.2** agent 的两个结果：它们在研究员 Hongbin Chen 于 8 月请 Claude 列出开放问题后，「在后台、无特殊设置地自主运行了约六周」。**结果一——N=4 超杨-米尔斯：**与黑洞形成类比的热相变（Aharony 等人 2003 年提出、悬置至今的计算）「在弱耦合与强耦合下都是突变的」——而且一位**独立工作的物理学家用不同方法得到了相同答案**，复现被写进公告本身而非事后补查。**结果二——三维量子引力的 modular bootstrap：**Claude 找到并**证明了最优**的最轻黑洞质量上界 **M₁ ≤ c/Λ，Λ ≈ 9.1266（精确公式）**——改进了此前被证明的 c/8.5（Hartman、Mazáč、Rastelli）。bootstrap 证明于 9 月「在 Lean 中形式化验证」；一个 agent 的路线从球堆积问题借来一条 **「spectral curve」**；一半证明「沿用 OpenAI 证明的策略」。预印本以 2611.00174 / 2611.00175 流通（链接自 hexagonmath.org，本轮未在 arXiv 上确认）。
+
+**为什么重要：**这是迄今最强的公开实例——agent 跑完数周研究战役，同时具备独立复现与机器检验的证明——不是基准差值，而是开放问题被闭合，且是两个。帖子对自己的限度也异常坦诚：「Neither result describes our own universe directly」，两者都未解决量子引力，中间耦合处的突变性仍是猜想。可引用的主张是*方法*，告诫随行——正是本文件清单对每个「已验证」主张的要求，这次由主张方自己执行。
+
+来源：[Anthropic: Claude solves two open problems in the physics of black holes](https://www.anthropic.com/research/claude-black-hole-physics) ·
+[预印本 2611.00174](https://hexagonmath.org/2611.00174v1) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50563148)

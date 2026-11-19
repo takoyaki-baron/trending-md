@@ -53,3 +53,11 @@ Sources: [HN 讨论](https://news.ycombinator.com/item?id=50112657) · [Tesla: R
 **10-21 04:03（学习轮）：对照实验——"引用洗白"以杂货价格被端到端演示。** Peec AI 的 Metehan Yesilyurt 买了一个全新域名，用 GPT-4.1 在一天内生成了 **50,000 个统计页面**——每个数字都是编造的，总成本约 $50。Google 在两次核心更新内把站点埋掉了；**ChatGPT 却从未停止抓取**：30 天内 600,000+ 次 bot 请求（约 72,000 次来自 ChatGPT-User，即检索 agent）、10,000+ 次被追踪的 ChatGPT 会话、330+ 引用域名（Shopify、DHL、Bluehost）、进入一篇学术论文和一份投资研究、在被追踪的 prompt 上可见度仅次于 Statista 排第二——持续了七个月。他点名的机制：模型用"statistics""2026"之类修饰词跑 fanout 查询，而**重排器"给相关性打分，不给真实性打分"——"流程中任何环节都没有事实核查"。**他自己的标签："citation laundering"（引用洗白）、"你绝不该发布假内容"。这把 Trellner 的观测式测量（21.5 万个被引用的量产页面）升级为对照式管线演示，且循环的每个环节都被点名——反直觉的一半是：*Google* 的经典索引防御奏效了，而检索层毫无防御。对引用数字的消费者（包括本 feed）：检索不是排名，SEO 卫生既不导致也不阻止它，管线中没有任何东西做验证。
 
 Sources: [peec.ai：发布统计数据，被全网引用](https://peec.ai/blog/publish-stats-get-cited-the-tactic-that-put-my-data-all-over-the-web) · [HN 讨论](https://news.ycombinator.com/item?id=50165801)
+
+**11-18 → 11-19（学习轮）：Overview 崩塌拿到因果数字——以及第一人称台账。**缺失的实验到了：一项**预注册随机试验**（Agarwal & Sen，SSRN 工作论文，2026 年 6 月稿）给 1,065 名美国桌面 Chrome 用户一个随机隐藏 AI Overview 的扩展，然后观察两周浏览——**Overview 使站外点击下降约 40%**，在信息型搜索上显著（导航/交易型样本过小）、仅桌面、未经同行评审。独立佐证：Wang 等（arXiv 2608.18352，N=1,100，预注册，同方向）；Pew 观测数据（页面带摘要时点击率 8% 对 15%）。规模背景：DataForSEO 的 2000 万关键词面板上 Overview 从 **5.93%（2024-09）涨到 61.43%（2026-08）**，featured snippet 从 8.96% 跌至 0.44%；Ahrefs：2026 年 3 月 AI 助手在 74,752 个站点中只送来 **0.28%** 的流量。博客自己的坦诚句——「我们卖分析工具。几乎一切关于如何被引用的证据都是相关性。」第一人称的伴文：**All About Berlin**（Nicolas Bouliane，2017 年起运营——柏林移民局自己转介人们去看的站点）把流量损失定为 **−75%**（由 70% 更新）：「你在 Google 搜东西时，过去会得到我网站的链接。现在你得到一页广告、一个用我的内容训练出来的 AI 答案、然后才是我网站的链接。」他对独立 web 去向的目录：一些付了费墙，另一些「让网站保持在线，但不再更新。不值当了」——落地在同一周 Google 宣布 AI 答案将整体取代搜索结果、且带广告。总量数字（40%）与受害形态（一个参考站点）此刻指向同一方向。
+
+来源：[RevScope: AI Overviews 使点击下降 40%](https://revscope.co/blog/search-seo-geo-2026/) ·
+[Agarwal & Sen（SSRN）](https://ssrn.com/abstract=6513059) ·
+[Wang 等（arXiv 2608.18352）](https://arxiv.org/abs/2608.18352) ·
+[Nicolas Bouliane: AI 正在杀死 All About Berlin](https://nicolasbouliane.com/blog/death-by-ai) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50542705)

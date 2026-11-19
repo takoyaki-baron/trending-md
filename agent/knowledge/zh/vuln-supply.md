@@ -1588,3 +1588,16 @@ Sources: [VulnCheck 公告：Tensei](https://www.vulncheck.com/advisories/tensei
 
 来源：[CVE-2026-129448](https://www.cve.org/CVERecord?id=CVE-2026-129448) ·
 [CVE-2026-129272](https://www.cve.org/CVERecord?id=CVE-2026-129272)
+
+## 2026-11-20 —— OpenJDK 队列是发现撞上评审容量的地方，NGINX 的五个发现者则是「赛跑」的实况
+
+**Java4Shell 的脚注（PR #32781）：**Java4Shell（`CVE-2026-114938`）以「AI 一小时找到」上热榜的次日，HN 翻出了 **OpenJDK PR #32781**——「8392044: AVX-512 Base64 decoder overwrites output buffer on short padded tail」，**创建于 2026-09-09**：同一个 bug、详尽描述（掩码向量路径在非法输入上算错 `output_mask`，「在返回 Java 前写到逻辑输出长度之外、破坏堆」）、带建议修复、且按 OpenJDK 临时 AI 政策自查过。它始终没等到必需的两份评审；bridgekeeper 机器人在 8 周不活跃时发出警告，PR 于 **2026-11-04 自动关闭、未合并**——比 Oracle 记录发布（11-17，`Analyzed`，Oracle CNA 8.1 v3.1）早六天。完整时间线：在出货项目自己的队列里公开可见 **8 周**、CVE 存在之前 **6 周**、然后被「一小时、不到 200 美元 token」独立找到。AI 辅助发现的叙事需要这条脚注：原语就躺在出货项目的眼皮底下——这说明的与其是发现，不如说是**评审容量实际卡在哪里**。
+
+**NGINX 的五发现者对是同一课的需求侧：**Wiz、Ikotas Labs、Metnir、Rapid7、Xint **独立**找到同两个未认证 RCE（其一 10-21 上报、含 ASLR 绕过 RCE；F5：「另一研究团队此前已上报同一漏洞」）——五路人马拉同一条内存安全接缝，而首报到协同补丁的窗口是 10-21 → 11-18。当发现如此并行时，约束是从首报到修复出货的时间，不是找到。
+
+**披露的那一半：**Ruby 的七个紧急修复出货时 **CVE 编号已申请、未分配**——咨询以 GHSA 为键，CVE 检索的扫描器恰在管理员最需要打的窗口里失明。「无 CVE 编号」不等于「无漏洞」；它意味着注册表落后于咨询。七个中四个署名 Stephan Lipp（Ada Logics）与 Anthropic——AI 辅助模糊测试按注册表跟不上的节奏提交。
+
+来源：[OpenJDK PR #32781](https://github.com/openjdk/jdk/pull/32781) ·
+[Wiz: NGINX RCE](https://www.wiz.io/blog/nginx-http2-rce-vulnerabilities) ·
+[Ruby 咨询](https://www.ruby-lang.org/en/news/2026/11/18/multiple-vulnerabilities-in-regexp-and-string/) ·
+[HN 讨论](https://news.ycombinator.com/item?id=50558906)

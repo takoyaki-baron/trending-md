@@ -514,3 +514,16 @@ PostHog 的"**Not Everything Needs an LLM**"是品类发布帖不随附的实操
 
 来源：[PostHog: Not Everything Needs an LLM](https://newsletter.posthog.com/p/decision-models) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50535740)
+
+## 2026-11-18 → 11-19 —— 发布周的余波：超大规模厂商的价格点、一个垂直 SRE 模型、学进架构里的停止
+
+**微软 Decision 1.1**（Ignite 全家桶，11-19）：「比 GPT-6.1 Sol 快 50 倍、便宜 79 倍」——第五个第一方入局者的升级（Microsoft-Decision-1 于 10-10 以 $0.042/M 出货），以价格主张形式出现、发布行里未点名任何基准。发布周现横跨 Google（11-12）、Perplexity（11-14）、HeyGen（11-17）、微软（11-18/19）——有界决策已是默认产品形态，清算价持续崩落。
+
+**Resolve SRE-1**（Resolve AI Labs，11-19）：「一个用强化学习训练来定位生产告警根因的 27B 模型」——Qwen3.8-27B 基座、改良 CISPO 目标、200 步、至多 512 卡、**1,549 起独立事故**。论文主张：在 **49 个困难线上生产案例**上 SRE-1「在通过率对成本的 Pareto 前沿上占优」（RL 把单次调查从 6.9% 提到 38.8%），且**五个 SRE-1 调查的集成以 71% 通过率追平 Fable 5.2、成本省 37%**——集成之所以成立，还因为 SRE-1「在综合已保存的调查上胜过前沿模型」。告诫随行：49 个案例是自选演示队列、基准自发布、而运维恰是垂直模式该成立的地方——值得别人复现的是集成追平前沿那一行。
+
+**Energy-Based Reasoners**（arXiv 2611.08977，Duke/UIUC/Harvard，11-06 提交）：在潜在推理态上学一个**能量函数**，把循环更新表述为对它的梯度下降——能量为候选打分而无需外部验证器，其梯度引导细化，其值提供「天然的停止信号」：**何时停变成学出来的量**而非采样器预算。数字：**Sudoku-Extreme 99.9%、推理算力比次优模型省 345×**、训练算力相当（HN 标题写 385×；论文写 345×）；N-Queens 与图着色上 SOTA 覆盖。参数量 **1.8M**。告诫：四个基准全是小循环模型历来占优的经典循环递归地盘；对自然语言任务的泛化未测。代码：`wwillchen/ebr`。
+
+来源：[Microsoft AI: Ignite 2026](https://microsoft.ai/news/microsoft-ignite-2026/) ·
+[Resolve AI: SRE-1 论文](https://resolve.ai/labs/sre-1/paper) ·
+[Energy-Based Reasoners](https://energy-based-reasoners.github.io/) ·
+[arXiv 2611.08977](https://arxiv.org/abs/2611.08977)

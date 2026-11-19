@@ -561,3 +561,16 @@ Decider v1.3 11-14、HeyGen Decision 1 11-17——いずれも先行パスで各
 
 ソース：[PostHog: Not Everything Needs an LLM](https://newsletter.posthog.com/p/decision-models) ·
 [HN 議論](https://news.ycombinator.com/item?id=50535740)
+
+## 2026-11-18 → 11-19 —— 公開週の余波：ハイパースケーラーの価格点、垂直 SRE モデル、アーキテクチャに学習された停止
+
+**Microsoft Decision 1.1**（Ignite ラインナップ、11-19）：「GPT-6.1 Sol より 50 倍速く 79 倍安い」——5 番目の一次エントラントの更新（Microsoft-Decision-1 は 10-10 に $0.042/M で出荷済み）、ベンチマーク行をリリース行に名指しない価格の主張として。公開週は Google（11-12）、Perplexity（11-14）、HeyGen（11-17）、Microsoft（11-18/19）に跨る——有界な決定は既定のプロダクト形であり、清算価格は崩れ続けている。
+
+**Resolve SRE-1**（Resolve AI Labs、11-19）：「強化学習で本番アラートの根を見つけるよう訓練された 27B モデル」——Qwen3.8-27B ベース、改造 CISPO 目的関数、200 ステップ、最大 512 GPU、**1,549 の一意インシデント**。論文の主張：**49 の難しい本番ケース**で SRE-1 は「pass レート対コストの Pareto フロンティアを支配」し（RL が一回の調査を 6.9% → 38.8% へ）、**5 つの SRE-1 調査のアンサンブルが Fable 5.2 に 71% pass で並び、37% 安い**——アンサンブルが機能するのは SRE-1 が「保存された調査の統合でもフロンティアモデルを上回る」から。限界は随伴：49 ケースは自己選択のデモ集団、ベンチマークは自己公開、そして運用はまさに垂直パターンが成立するはずの場所——再現されるべき行はアンサンブル＝フロンティアのそれ。
+
+**Energy-Based Reasoners**（arXiv 2611.08977、Duke/UIUC/Harvard、11-6 提出）：潜在推論状態の上に**エネルギー関数**を学び、ループ更新をその勾配降下として定式化する——エネルギーは外部検証器なしで候補を採点し、勾配が refinement を導き、値が「自然な停止シグナル」を与える：**いつ止めるかがサンプラー予算ではなく学習された量になる**。数字：**Sudoku-Extreme で 99.9%、次善モデルより 345× 少ない推論計算**（学習計算は同程度。HN の見出しは 385×、論文は 345×）；N-Queens とグラフ彩色で SOTA の被覆。**1.8M パラメータ**で。限界：4 ベンチマークは小さい再帰モデルが常に強い古典的 looped-recurrence の縄張り。自然言語への汎化は未検証。コード：`wwillchen/ebr`。
+
+ソース：[Microsoft AI: Ignite 2026](https://microsoft.ai/news/microsoft-ignite-2026/) ·
+[Resolve AI: SRE-1 論文](https://resolve.ai/labs/sre-1/paper) ·
+[Energy-Based Reasoners](https://energy-based-reasoners.github.io/) ·
+[arXiv 2611.08977](https://arxiv.org/abs/2611.08977)

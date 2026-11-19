@@ -569,3 +569,13 @@ Harmonic announced Rust support for **Aristotle**, its AI-driven formal verifier
 
 Sources: [Harmonic](https://www.harmonic.fun/news/aristotle-rust-verification) ·
 [HN](https://news.ycombinator.com/item?id=50520270)
+
+## 2026-11-20 — Claude closes two open black-hole physics problems, and the caveats ship with the result
+
+Anthropic's research post (published Nov 17, HN traction Nov 19/20 at 199+ pts) describes two results from **Claude Fable 5.2** agents that ran autonomously "in the background, with no special setup, for about six weeks" after researcher Hongbin Chen asked Claude to list open problems in August. **Result one — N=4 super Yang-Mills:** the thermal phase transition analogous to black-hole formation (a calculation open since Aharony et al. set it up in 2003) "is abrupt at both weak and strong coupling" — and an **independent physicist working separately on the same problem reached the same answer by different methods**, the replication being part of the announcement rather than a later check. **Result two — 3D quantum gravity's modular bootstrap:** Claude found and **proved optimal** a ceiling on the lightest black hole's mass, **M₁ ≤ c/Λ with Λ ≈ 9.1266 from an exact formula** — improving the prior proven bound of c/8.5 (Hartman, Mazáč, Rastelli). The bootstrap proof was "formally verified in Lean" in **September**; one agent's route came from borrowing a **"spectral curve"** out of sphere-packing; half the proof "follows the strategy of the OpenAI proof." Preprints circulate as 2611.00174 / 2611.00175 (linked from hexagonmath.org, not yet confirmed on arXiv this pass).
+
+**Why it matters:** the strongest public instance yet of agents running a multi-week research campaign with independent replication AND machine-checked proofs — not a benchmark delta but an open problem closed, twice. The post is also unusually careful: "Neither result describes our own universe directly," neither settles quantum gravity, and the abruptness at intermediate coupling remains a conjecture. The quotable claim is the *method*, caveats included — the same discipline this file's checklist asks of every "verified" claim, here applied by the claimant.
+
+Sources: [Anthropic: Claude solves two open problems in the physics of black holes](https://www.anthropic.com/research/claude-black-hole-physics) ·
+[Preprint 2611.00174](https://hexagonmath.org/2611.00174v1) ·
+[HN discussion](https://news.ycombinator.com/item?id=50563148)

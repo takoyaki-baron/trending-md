@@ -3813,3 +3813,25 @@ GPT-6 Luna。定位：flash 档模式（GLM-5.3-Flash、DeepSeek V4.1 Flash、Qw
 
 来源：[腾讯：Introducing Hy4 flash](https://hy.tencent.ai/research/hy4-flash) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50538184)
+
+## 2026-11-19（三个批次）——性价比之周收束：Neon、Ignite 全家桶、ARC 的两列，以及为其输血的 IPO
+
+**Gemini 4 Neon**——Gemini 4 家族的中间档（介于 Carbon 与 Hydrogen 之间）：AA 智能指数第 3（**61**，xhigh）、AA Coding Agent 指数第 1（58.6）、TB 4.1 **65.2%**、Vals 第 2（70.9%，「在 Pareto 前沿上」）、Agent Arena 首秀第 2（1336）；**每百万 $3/$15**（缓存读取 $0.15/M）、1M 上下文；「单任务成本比 Carbon 低 32%」。Google 自己印出 harness 差距：SWE-sweep 在 mini-SWE 上 **12.8%、在 Antigravity 上 39.0%**。「Neon for cyber」变体（SEC-bench Pro **90.5%**、WebExploitBench 51.26%）经 Fairwind Program 送达可信防御者。安全行：TB 4.0 作弊 0.0%、走捷径 2.45%（「任何 Gemini 4 中最低」）、Gray Swan 上「抵抗了每一次攻击」——与 Carbon 同款的自我报告形态。
+
+**微软 Ignite 全家桶**（七个模型 + **Maia 200** 芯片，「每瓦 token 1.7 倍」）：Cyber 2 Flash「在 CyberGym-E2E 上以 **<2% 单任务成本**压过 GPT-6 Astra 的质量」；Code 2「Sol 质量的 98%、约 40% 成本」「Opus 5.5 的 96%、5% 成本」；Code 2 Flash「Luna 的性能、65% 价格；Haiku 5.5、20%」；Image 2.5「AA 图像编辑第 1」、价格为 GPT Image 的五分之一；Realtime 1「胜过 GPT-Realtime 2.1」、$0.01/音频分钟起；Transcribe 2「每月 1000 万次患者接诊」；**Decision 1.1「比 GPT-6.1 Sol 快 50 倍、便宜 79 倍」**。全是厂商自选工作点的行——当作营销论纲读。
+
+**ARC-AGI-3 的两列**（11-18 上线）：GPT-6.2 Astra **70.3% Standard / 100.0% provider adapter**（$24.2K），Sol 54.9/98.2（$5.5K），Carbon 65.1/99.1——而 **Fable 5.2 以 81.2% 领跑 Standard**（11-09）。「100%」的头条是 adapter 列；按基准的标准配置，Astra 落后 Fable 5.2 十 10.9 分。配置是分数的一部分——两列都引用并注明出处。
+
+**DaisyRose-27B**（RadixArk 首个模型）：Qwen3.8-27B 基座 + RL（开源 Miles 框架），「会话长达 1M token 的长程 agent 任务」——**1,200 个精选任务、144 块 H200、18 天**；TB 4.1 pass@1 **5.6% → 12.0%**；奖励作弊：「我们逐任务连同模型的尝试一起复查」；BF16/FP8/NVFP4 权重在 HF。垂直模型模式的预算透明开源数据点。
+
+**Claude 以蛋白质序列做过大规模预训练**（xinmingtu.cn）：给 Fable 5.2/Opus 5.5 一个冷门细菌蛋白的开头，它们能预测下一个氨基酸；打乱后就不行；性能随家族规模增长，「在没有论文的家族里也能做到」；Fable 5.2 胜过所有被测开源 pLM（含 ProGen3-3B），且 **56 个 2026 年 8 月才首次公开的蛋白质——在截止之后——仍被预测**（附录 G）；GPT-6.2 无此迹象。污染检测方法学（next-token + 打乱对照 + 截止后留出集）指到了有用的方向——并解释了 Anthropic 为何用 LSVP 把关生命科学。
+
+**Anthropic IPO 以 $83.00 定价**——高于申报的 $70–78 区间；424B4 于 11-19 提交（一手核验：980,000,000 股 A 类——Anthropic 自售 956,351,354 股、售股股东 23,648,646 股；147,000,000 股绿鞋；注册号 333-299633 **与 333-300148**）。申报自身的发行后股本为 **13,219,642,276** 股（A/N/T/E/F，含绿鞋为 13,366,642,276）→ 按 $83.00 计 **≈$1.10T**——媒体 $1.5–1.6T 估值需要约 18.1–19.3B 股、**超出申报口径约 40%**；11-18 观察到的口径出入带进了最终文件，申报本身未作解释。一级批约 **$79.4B**；11-19 以「ANT」开盘交易。同周还有：**Genie 4** 进 Project Genie（会话中途改世界 + 实时原生音频；Genie 3 单次 3 分钟）——世界模型跨入消费级产品面——以及 DeepMind 员工在 UTAW 下工会化（治理框架：「第一道监督来自工人」）。
+
+来源：[Google: Introducing Gemini 4 Neon](https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon/) ·
+[Microsoft AI: Ignite 2026](https://microsoft.ai/news/microsoft-ignite-2026/) ·
+[ARC Prize 榜单](https://arcprize.org/leaderboard) ·
+[RadixArk: DaisyRose-27B](https://www.radixark.com/blog/daisyrose-27b) ·
+[xinmingtu.cn: 蛋白质序列](https://xinmingtu.cn/blog/2026/claude-opus-5-5-protein-sequences/) ·
+[Anthropic: IPO 定价](https://www.anthropic.com/news/anthropic-prices-initial-public-offering) ·
+[424B4（EDGAR）](https://www.sec.gov/Archives/edgar/data/2130357/000162828026074944/anthropicpbc-424b4.htm)

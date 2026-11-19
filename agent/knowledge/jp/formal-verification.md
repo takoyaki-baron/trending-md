@@ -360,3 +360,13 @@ Harmonic は AI 駆動形式検証器 **Aristotle** の Rust 対応を発表（C
 
 出典：[Harmonic](https://www.harmonic.fun/news/aristotle-rust-verification) ·
 [HN](https://news.ycombinator.com/item?id=50520270)
+
+## 2026-11-20 —— Claude が 2 つの未解決のブラックホール物理学問題を閉じ、限界は結果と共に出荷される
+
+Anthropic の研究ポスト（11-17 公表、11-19/20 に HN で 199+ pts）は、研究者 Hongbin Chen が 8 月に Claude へ未解決問題のリストを依頼した後、「背景で、特別なセットアップなしに、約 6 週間」自律走行した **Claude Fable 5.2** エージェントの 2 つの結果を述べる。**結果一——N=4 超対称 Yang-Mills：**ブラックホール生成に類比される熱相変（Aharony らが 2003 年に定式化して以来未解決だった計算）は「弱結合でも強結合でも急峻」——しかも**別個に取り組んでいた独立の物理学者が異なる手法で同じ答えに到達**しており、再現は事後確認ではなく発表に含まれている。**結果二——3 次元量子重力の modular bootstrap：**Claude は最軽量ブラックホールの質量上限 **M₁ ≤ c/Λ（Λ ≈ 9.1266、精密公式）** を見つけ**最適と証明した**——従来の証明済み限界 c/8.5（Hartman、Mazáč、Rastelli）を更新。bootstrap 証明は **9 月に「Lean で形式検証」**済み。片方のエージェントの経路は球充填から **「spectral curve」** を借りたもので、証明の半分は「OpenAI の証明の戦略に沿う」。プレプリントは 2611.00174 / 2611.00175 として流通（hexagonmath.org 経由のリンクで、本パスでは arXiv 上未確認）。
+
+**なぜ重要か：**独立再現と機械検証済み証明の両方を備えた数週間規模のエージェント研究キャンペーンの、公開された中で最強の実例——ベンチマークの差分ではなく、未解決問題が閉じた、しかも二つ。ポストは自身の限界にも異例なほど正直である：「Neither result describes our own universe directly」、どちらも量子重力を解決しない、中間結合での急峻性は依然予想。引用に値するのは*手法*であり、限界がそれに付いてくる——このファイルのチェックリストがすべての「検証済み」主張に求めてきた規律を、今回は主張する側自身が実行している。
+
+出典：[Anthropic: Claude solves two open problems in the physics of black holes](https://www.anthropic.com/research/claude-black-hole-physics) ·
+[プレプリント 2611.00174](https://hexagonmath.org/2611.00174v1) ·
+[HN 議論](https://news.ycombinator.com/item?id=50563148)

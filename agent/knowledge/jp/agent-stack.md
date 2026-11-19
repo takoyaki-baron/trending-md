@@ -2909,3 +2909,26 @@ Sources: [withcoral/coral](https://github.com/withcoral/coral) ·
 [HN](https://news.ycombinator.com/item?id=50526152) ·
 [0nelight/sutra-os](https://github.com/0nelight/sutra-os) ·
 [Show HN](https://news.ycombinator.com/item?id=50525052)
+
+## 2026-11-19（3 バッチ）——スキルの波が一次側のパッケージングの瞬間を得て、agent-CI スタックのレーンが埋まる
+
+**`cursor/plugins`**（17,149★、+315/日、トレンド）は agent スキルの波が大手 IDE ベンダーから得た一次側パッケージングの瞬間：公式**プラグイン仕様**（各プラグインは「リポジトリルートのスタンドアロン ディレクトリで、独自の `.cursor-plugin/plugin.json` マニフェストを持つ」）に、同日で進むサードパーティマージの流れ——この日だけでも Hospitable（#1269）、Fiscal AI（#1275）、CreateOS（#1262）、LMTY。公式セットは `create-plugin`、`teaching`、`continual-learning`、`agent-compatibility`、そして二つの強い主張を持つキュレーション：`thermos`（「熱核ブランチレビュー：深いセキュリティ/正しさの監査、厳しいコード品質ルーブリック、並列サブエージェント」）と `ralph-loop`（「Ralph Wiggum 技法による反復的自己言及 AI ループ」）——コミュニティ発のパターンが、マニフェスト仕様と公開 PR パイプラインを持つ公式カタログにキュレーションされる。ベンダー跨ぎのスキル標準がどこで落ち着くにせよ、こうしたマニフェストがそこでのインターフェースになる。
+
+**Mastra Factory**（Show HN）——StarSling の agent-CI のメンテナ側の双子：「Slack で @ できる構成可能な agent のカンバンボード」で、Mastra の永続エージェントの上に組み立てられ、Mastra が自身のために使う道具そのもの：「先週、Factory は **238 PR を開いてマージし、並行して人間が 630 PR をマージした**」——agent authored の仕事は 868 マージの 27%、人間レートの約 38%、週約 400 万ダウンロードのプロジェクトで。ボトルネックはもはや変更を書くことではなく、変更をエスコートすることだ。
+
+**OpenSRE**（`Tracer-Cloud/opensre`、12,894★ 公開アルファ）：「CI は壊れたと告げるが、なぜを、どう直すかは告げない」——失敗したランを読み、原因を追跡し、レビュー用の修正 PR を押す CLI エージェント。自社ホスト、自分のモデル。CI 失敗レーンのコンプライアンスに優しい変種：push 前レビューが人間をマージに留め、コードは建物から出ない。
+
+**CLI-Anything / CLI-Hub**——レジストリの型：リポジトリ自体（59.5k★）は **9 月 22 日以来コミットがなく**、活動はその一層外の **CLI-Hub**（cliany.cc）——プロジェクトの前面に立つ agent フレンドリーな CLI レジストリ（「agent ネイティブの CLI を生成し、AI エージェントに操作させる」）に宿る。SKILL.md ネイティブの install（`npx skills add HKUDS/CLI-Anything --skill cli-hub-meta-skill -g -y`）。agent がタスクごとに CLI ラッパを発見・導入するなら、*agent が動かせるソフトウェア*の流通はキュレーションされたインデックスになる——HKUDS はインデックスこそプロダクトという賭けに出ている。（stitch-skills の形：休眠の一次リポジトリが周囲の波に持ち上げられる。）
+
+**Onlook 再リリース**（YC W25、Apache-2.0、27.3k★）：任意の git リポジトリを開き、自分の dev サーバを走らせ、動いているアプリを無限キャンバスへ置くデスクトップアプリ——デザイナは実行中の本物のアプリケーションを編集する。編集は安全な worktree コピーに落ちてワンプレスの PR として出航し、**bring-your-own-agent** の下で（バンドルモデルなし。Claude Code や Codex を接続。MCP コネクタ）。BYO-agent は価格の声明でもある：トークンにマージンを上乗せしない。
+
+**スキルの棚：**`cathrynlavery/diagram-design`（68,350★、ボード最大）——「あなたのブランドで、図を 1 つの自己完結 HTML + SVG ファイルとして描く agent スキル。51 図型。影なし。Mermaid slop なし。」（README は 51、リポジトリ description はまだ 45——ドリフトの縮図）；`mjmirza/app-store-compliance`（1,480★）——**117 の文書化された拒否パターン**を Claude Code 対応の提出前ガードに配線（コンプライアンス・アズ・スキル）；`zhouxiaoka/autoclip`（10,874★、Tauri、中国 OSS）——1 リンク → 字幕/カバー/文付きの公開可能ショートに、MCP サーバ id を内蔵し agent もパイプラインを駆動できる：中国のクリエイターツールは最初から agent ネイティブ。
+
+ソース：[cursor/plugins](https://github.com/cursor/plugins) ·
+[Show HN: Mastra Factory](https://news.ycombinator.com/item?id=50548660) ·
+[Tracer-Cloud/opensre](https://github.com/Tracer-Cloud/opensre) ·
+[HKUDS/CLI-Anything](https://github.com/HKUDS/CLI-Anything) ·
+[onlook-dev/onlook](https://github.com/onlook-dev/onlook/) ·
+[cathrynlavery/diagram-design](https://github.com/cathrynlavery/diagram-design) ·
+[mjmirza/app-store-compliance](https://github.com/mjmirza/app-store-compliance) ·
+[zhouxiaoka/autoclip](https://github.com/zhouxiaoka/autoclip)

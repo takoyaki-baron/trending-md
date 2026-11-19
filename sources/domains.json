@@ -156,6 +156,15 @@
   "jp": "オーストラリア放送協会（ABC）——属性開示の規律が良い全国ニュース；ここでは RubyGems/OpenAI エージェント事件の独立した第二情報源として使用。rubyhack.ai とクロスチェック済み（09-12）。",
   "zh": "澳大利亚广播公司（ABC）——国家级新闻，署名纪律良好；此处作为 RubyGems/OpenAI agent 事件的独立第二来源。已对照 rubyhack.ai 交叉核验（09-12）。"
  },
+ "abc7news.com": {
+  "cat": "news",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "ABC7 (KGO Bay Area). Cross-checked (11-18): the DMV freeway ban on Waymo — imminent-hazard determination after the Highway 101 Burlingame construction-zone incursion — corroborated by AP reporting and by Waymo's own nationwide freeway suspension; the page itself did not fetch tonight, figures come from that corroboration.",
+  "jp": "ABC7（KGO ベイエリア）。突合済み（11-18）：Waymo への DMV 高速道路禁止令——Highway 101 Burlingame の工事区域侵入後の imminent-hazard 認定——は AP の報道と Waymo 自身の全米高速運行停止によって裏付け。当ページ自体は今夜取得できず、数字はその裏付けに依る。",
+  "zh": "ABC7（KGO 湾区）。已交叉核验（11-18）：DMV 对 Waymo 的州属高速禁令——101 号公路 Burlingame 施工区侵入后的迫在眉睫危险认定——得到 AP 报道与 Waymo 自身全国高速停运的印证；页面今夜未能抓取，数字来自上述印证。"
+ },
  "abcnews.com": {
   "cat": "news",
   "cred": "med",
@@ -6775,6 +6784,15 @@
   "jp": "セキュリティ業界誌。脆弱性・インシデント報道に強く、CVSS/スコアはベンダーアドバイザリやCVEレコードと突合を。",
   "zh": "安全行业媒体；对漏洞与事件报道扎实，CVSS/评分建议与厂商公告及 CVE 记录交叉核对。"
  },
+ "inside-db.com": {
+  "cat": "news",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "Project hub for the Inside Deutsche Bank investigation (15M+ leaked internal files; FT, NYT, Dawn, Malaysiakini, IrpiMedia, elDiario.es, Follow The Money). Cross-checked (11-18): the 15M-file framing, partner roster, and headline findings (Jho Low 24 transactions/EUR 172.98M, Russian-clients warning quote) read first-hand on the hub and corroborated by the FT's own story the same day.",
+  "jp": "Inside Deutsche Bank 調査のプロジェクトハブ（1500万件超の内部ファイル漏洩。FT、NYT、Dawn、Malaysiakini、IrpiMedia、elDiario.es、Follow The Money）。突合済み（11-18）：1500万件の枠組み、パートナーリスト、主要発見（ジョー・ローの24取引/1億7298万ユーロ、ロシア顧客警告の引用）をハブ上で一次読み取りし、同日の FT 独自報道とも照合。",
+  "zh": "Inside Deutsche Bank 调查的项目枢纽（1500 万+ 份泄露内部文件；FT、NYT、Dawn、Malaysiakini、IrpiMedia、elDiario.es、Follow The Money）。已交叉核验（11-18）：1500 万份的定性、伙伴名单与头条发现（刘特佐 24 笔/1.7298 亿欧元、俄客户警告引文）在枢纽页一手读取，并与同日 FT 独家报道相互印证。"
+ },
  "institute.deepmind.com": {
   "cat": "vendor",
   "cred": "med",
@@ -7432,6 +7450,15 @@
   "en": "Gaming news outlet (G/O Media) — good first-hand coverage of mod/industry crossovers; promotional-angle framing usually stated openly.",
   "jp": "ゲームメディア（G/O Media）——Mod/業界コラボの一次報道が良好。プロモーション的側面も明示することが多い。",
   "zh": "游戏媒体（G/O Media 旗下）——对模组/行业联名的一手报道较好；通常会明说其推广属性。"
+ },
+ "kpmg.com": {
+  "cat": "vendor",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "KPMG newsroom. Cross-checked (11-18): the Clara Intelligence US launch corroborated by Bloomberg Tax's independent coverage and the FT pilot story. NOTE — the Clara URL itself came from search and the page was not fetched tonight; do not cite launch-page figures until fetched.",
+  "jp": "KPMG ニュースルーム。突合済み（11-18）：Clara Intelligence の米国ローンチは Bloomberg Tax の独立報道と FT のパイロット記事で裏付け。注意——Clara の URL 自体は検索由来で、当ページは今夜未取得。取得するまでローンチページの数値は引用しないこと。",
+  "zh": "KPMG 新闻室。已交叉核验（11-18）：Clara Intelligence 美国上线得到 Bloomberg Tax 独立报道与 FT 试点报道的印证。注意——Clara URL 本身来自搜索，页面今夜未抓取，抓取前不得引用发布页数字。"
  },
  "krea.ai": {
   "cat": "vendor",
@@ -9234,6 +9261,24 @@
   "jp": "The New Yorker——長編の文化/政治報道；論旨の枠付けは強く、事実は慎重。検証済み（09-09）：Flock 記事を全文取得し、『出口のない監視世界』の表現、約 13 万カメラ、米法執行機関の約 40% が契約、ICE/中絶調査の悪用事例を確認；保持期間 7 日への短縮は NYT の補完報道で本文ではない。エッセイ_register——論証と報道を分けて引用。",
   "zh": "《纽约客》——长篇文化/政治报道；观点框架鲜明、事实考究。已核验（09-09）：Flock 文全文抓取，确认『无处可逃的全面监控世界』措辞、约 13 万摄像头、约 40% 的美国执法机构签约、ICE/堕胎调查滥用案例；保留期砍到七天的让步来自 NYT 补充报道而非本文。文学随笔语域——把论证与报道分开引用。"
  },
+ "nginx2root.com": {
+  "cat": "security",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "Xint's NGINX2Root technical writeup (EN/KO/JA), Nov 18. Cross-checked (11-18): the CVE ids it names (CVE-2026-123633/-123007) and the fix versions match the NVD records and the F5-sourced Wiz disclosure verified first-hand the same day.",
+  "jp": "Xint による NGINX2Root 技術解説（英/韓/日）、11月18日。突合済み（11-18）：記載の CVE 番号（CVE-2026-123633/-123007）と修正版が、同日一次確認した NVD レコードおよび F5 出典の Wiz 開示と一致。",
+  "zh": "Xint 的 NGINX2Root 技术文章（英/韩/日），11 月 18 日。已交叉核验（11-18）：其列出的 CVE 编号（CVE-2026-123633/-123007）与修复版本同当天一手核验的 NVD 记录及 F5 出处的 Wiz 披露一致。"
+ },
+ "nicolasbouliane.com": {
+  "cat": "news",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "Nicolas Bouliane's personal blog. Cross-checked (11-18): the essay's Google-announcements claim corroborated by the 11-18 randomized-trial coverage; the -75% traffic figure is the author's own analytics — self-report, quote as first-party measurement only.",
+  "jp": "Nicolas Bouliane の個人ブログ。突合済み（11-18）：エッセイの Google 発表に関する主張は 11-18 の無作為化試験報道で裏付け。-75% のトラフィック数字は著者自身のアナリティクス——自己報告であり、一人称の測定としてのみ引用すること。",
+  "zh": "Nicolas Bouliane 的个人博客。已交叉核验（11-18）：文章的 Google 公告主张得到 11-18 随机试验报道的印证；-75% 流量数字是作者自己的分析数据——自报，只能作为第一方测量引用。"
+ },
  "niemanlab.org": {
   "cat": "news",
   "cred": "high",
@@ -9970,6 +10015,15 @@
   "en": "OSV — the open-source vulnerability database aggregating GHSA/PYSEC/RUSTSEC records for scanners. Used 11-09 for Keycloak CVE-2026-11800 (GHSA-j97h-3f8r-mrjr, 130-day fix-to-advisory lag) and Stanza CVE-2026-115878 (weights_only pickle bypass). Cross-validated: both GHSA records' scores/mechanisms matched the NVD API records fetched the same run.",
   "zh": "OSV——面向扫描器的开源漏洞数据库，聚合 GHSA/PYSEC/RUSTSEC 记录。11-09 用于 Keycloak CVE-2026-11800（GHSA-j97h-3f8r-mrjr，修复到公告滞后 130 天）与 Stanza CVE-2026-115878（绕过 weights_only 的 pickle）。已交叉核验：两条 GHSA 记录的分数与机制与同批抓取的 NVD API 记录一致。",
   "jp": "OSV——スキャナ向けオープンソース脆弱性データベース。GHSA/PYSEC/RUSTSEC レコードを集約。11-09 に Keycloak CVE-2026-11800（GHSA-j97h-3f8r-mrjr、修正から勧告まで 130 日）と Stanza CVE-2026-115878（weights_only を回避する pickle）で使用。クロスバリデーション済み：両 GHSA のスコアとメカニズムは同ランで取得した NVD API レコードと一致。"
+ },
+ "ounapuu.ee": {
+  "cat": "community",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "Herman Õunapuu's engineering blog — first-person security-practice writeups with an argumentative edge (opinion flagged as opinion). Cross-checked (11-20): the Cyber Verification Program mechanics its Anthropic-lockout essay complains about match Anthropic's own program page — tiered vetting with proof requirements, review windows of 'a few days' to 'a few weeks', data retention required with narrow exemptions; the essay's government-ID detail and IPO-moat speculation stay the author's own.",
+  "jp": "Herman Õunapuu のエンジニアリングブログ——主張の鋭い一次のセキュリティ実務記録（意見は意見として明示）。クロスチェック済み（11-20）：Anthropic ロックアウト論説が不満を述べる Cyber Verification Program の仕組みは Anthropic 自身のプログラムページと一致——証跡付きの階層審査、'数日'から'数週間'の審査窓、狭い例外付きの必須データ保持。政府発行 ID の詳細と IPO 堀の憶測は著者自身のもの。",
+  "zh": "Herman Õunapuu 的工程博客——带论战色彩的第一手安全实践记录（观点明示为观点）。已交叉核验（11-20）：其 Anthropic 锁门论说所抱怨的 Cyber Verification Program 机制与 Anthropic 自己的项目页一致——分层审查并要求证明材料、'数天'到'数周'的审核窗口、强制数据保留仅有狭窄豁免；政府身份证件细节与 IPO 护城河猜测仍属作者自述。"
  },
  "overreacted.io": {
   "cat": "community",
@@ -10747,6 +10801,15 @@
   "jp": "GitHub APIデータから急成長中のAIリポジトリをランキングする匿名アグリゲーター。機械生成のリスト、プロジェクト情報はGitHubで確認を。",
   "zh": "基于 GitHub API 数据的匿名聚合站，排名增长最快的 AI 仓库，属机器生成榜单，项目信息需回 GitHub 核实。"
  },
+ "puri.sm": {
+  "cat": "vendor",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "Purism — privacy-hardware vendor; its own press room and crowdfunding pages are the primary record for the Librem line. Cross-validated (11-18): the Librem 5 v2 campaign page read first-hand — $1,599, 92 of 2,500 orders, end date Feb 15 2027 (= launch day + 89 days, the page's own arithmetic checks out), delivery stated only as 'when it is ready'; the $1,599 figure is independently quoted in the HN thread. First-party vendor with a delivery-history caveat — cred stays med even with the artifact check passing.",
+  "jp": "Purism——プライバシーハードウェアベンダー。Librem 系の一次記録は自社のプレスルームとクラファンページ。突合済み（11-18）：Librem 5 v2 キャンペーンページを一次読解——$1,599、2,500注文のうち92、終了日 2027-02-15（開始日+89日でページ自身の算術は整合）、出荷は「when it is ready」のみ。$1,599 は HN スレッドでも独立に言及。一次ベンダーで配送履歴の注意付き——アーティファクトチェックを通っても cred は med のまま。",
+  "zh": "Purism——隐私硬件厂商；Librem 系列的一手记录在其自有新闻室与众筹页面。已交叉核验（11-18）：一手通读 Librem 5 v2 众筹页——$1,599、2,500 单中已落实 92 单、结束日期 2027-02-15（=发布日 + 89 天，页面自身算术自洽）、交付仅写「when it is ready」；$1,599 价格在 HN 讨论串中亦被独立引用。第一方厂商且带交付史警示——即便工件核验通过，cred 仍为 med。"
+ },
  "purplesyringa.moe": {
   "cat": "research",
   "cred": "med",
@@ -11510,6 +11573,15 @@
   "jp": "Ryan Biggの個人ブログ——Rubyコミュニティの重鎮による一次記録（『Rails 4 in Action』著者、広く使われるgemのメンテナ）。一次確認済み（10-14）：Leaving Techの詳細を本文で確認（20年、応募3ダース超、24回の拒否、AIスクリーニング発言、Warrnambool/リモート、『mental harm and anguish』）。求職データは自己申告；著者の地位は公開検証可能だが拒否数は不可能。",
   "zh": "Ryan Bigg 的个人博客——Ruby 社区元老的一手记录（《Rails 4 in Action》作者、广泛使用的 gem 维护者）。已一手核验（10-14）：Leaving Tech 细节正文核实（20 年、投递 3 打余、24 次拒信、AI 筛选引语、Warrnambool/远程、'mental harm and anguish'）。求职数据为自述；作者声望可公开验证，拒信数字不可。"
  },
+ "ruby-lang.org": {
+  "cat": "vendor",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "The Ruby language project's own release and security announcements — first-party, with GHSA ids named while CVEs are pending (its 11-18 advisory states 'CVE identifiers have been requested... not assigned yet'). Cross-checked (11-19): the seven-bug emergency advisory (fixed 4.0.10/3.4.13/3.3.14; affected ≤3.3.13, 3.4.0–3.4.12, 4.0.0–4.0.9; 2.4.0-and-older EOL) is independently confirmed by Veria Labs' Ruby2ßhell advisory — same GHSA-34m4-m9fh-gqp5, same affected ranges, same fix versions, same upstream fix commit ruby/ruby@d582f8f — an analysis done apart from the announcement, not downstream of it. First-party project site, so cred stays med.",
+  "jp": "Ruby言語プロジェクト自身のリリース・セキュリティ発表——一次情報。CVEが確定する前でもGHSA idを名指しする（11-18のアドバイザリは『CVE identifiers have been requested... not assigned yet』と明記）。突合済み（11-19）：7件の緊急アドバイザリ（修正 4.0.10/3.4.13/3.3.14、影響 ≤3.3.13・3.4.0–3.4.12・4.0.0–4.0.9、2.4.0以前はEOL）は、Veria LabsのRuby2ßhellアドバイザリによって独立に確認——同一のGHSA-34m4-m9fh-gqp5、同一の影響範囲、同一の修正バージョン、同一の上流修正コミット ruby/ruby@d582f8f。発表とは別に行われた分析であり、その下流ではない。一次のプロジェクトサイトなのでcredはmedのまま。",
+  "zh": "Ruby 语言项目自己的发布与安全公告——一手来源；CVE 未定的时候就点名 GHSA id（11-18 公告明言 'CVE identifiers have been requested... not assigned yet'）。已交叉核验（11-19）：七漏洞紧急公告（修复 4.0.10/3.4.13/3.3.14；受影响 ≤3.3.13、3.4.0–3.4.12、4.0.0–4.0.9；2.4.0 及更早 EOL）得到 Veria Labs 的 Ruby2ßshell 公告独立确认——同一 GHSA-34m4-m9fh-gqp5、同一受影响范围、同一修复版本、同一上游修复提交 ruby/ruby@d582f8f——这是独立于公告做出的分析，而非其下游。属第一方项目站点，cred 保持 med。"
+ },
  "safateam.com": {
   "cat": "security",
   "cred": "high",
@@ -11608,6 +11680,15 @@
   "en": "SAP's corporate domain (including the url.sap shortener for Security Patch Day) — first-party patch-day bulletins and advisories, CNA-scored. Cross-checked (10-14): CVE-2026-89111's fix version (0.45.2) and SSRF mechanism match the GitHub advisory and the NVD record.",
   "zh": "SAP 企业域名（含 Security Patch Day 的 url.sap 短链）——第一方补丁日公告与安全通告，由 CNA 自评评分。交叉核验（10-14）：CVE-2026-89111 的修复版本（0.45.2）与 SSRF 机制与 GitHub 安全公告及 NVD 记录一致。",
   "jp": "SAP のコーポレートドメイン（Security Patch Day 用の url.sap 短縮リンクを含む）——一次情報のパッチデー速報とアドバイザリ。CNA 採点。相互検証（10-14）：CVE-2026-89111 の修正版（0.45.2）と SSRF の仕組みは GitHub アドバイザリと NVD レコードに一致。"
+ },
+ "sas.upenn.edu": {
+  "cat": "research",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "UPenn faculty pages (Fernández-Villaverde). Artifact check (11-18): the Peer_Review.pdf downloaded and parsed first-hand — authors (Caldara/Fernández-Villaverde), Nov 16 date, and the detector/plagiarism claims all verified in the PDF text itself; HN thread consistent.",
+  "jp": "UPenn の教員ページ（Fernández-Villaverde）。成果物検証（11-18）：Peer_Review.pdf を入手・一次解析——著者（Caldara/Fernández-Villaverde）、11月16日付、検出器/盗作扱いの主張はすべて PDF 本文で検証。HN スレッドとも整合。",
+  "zh": "UPenn 教员页面（Fernández-Villaverde）。工件核验（11-18）：Peer_Review.pdf 已下载并一手解析——作者（Caldara/Fernández-Villaverde）、11 月 16 日日期、检测器/按抄袭处理的主张全部在 PDF 正文核验；HN 讨论一致。"
  },
  "savingcontent.com": {
   "cat": "news",
@@ -12219,6 +12300,15 @@
   "en": "SOC Prime's threat-research blog — CVE writeups paired with detection content (Sigma rules, hunting queries). Read first-hand 08-20 on CVE-2026-68820 and it holds up: AFD.sys use-after-free from improper synchronization, Lazarus/Operation Dream Job attribution to Check Point, CVSS 7.0, patched Aug 11 2026, disclosure timeline (reported Jul 28, CVE assigned Aug 5). Agrees with the independently-recorded 08-16 account. Caveat: it does NOT carry the FudModule v3.1 version or the 94-ETW-provider count — do not attribute those to it.",
   "jp": "SOC Primeの脅威リサーチブログ——CVE解説と検知コンテンツ（Sigmaルール、ハンティングクエリ）を対にして提供。08-20にCVE-2026-68820を一次読解し、内容は妥当: 不適切な同期に起因するAFD.sysのuse-after-free、Check PointによるLazarus/Operation Dream Job帰属、CVSS 7.0、2026年8月11日修正、開示タイムライン（7月28日報告、8月5日CVE採番）。08-16に独立記録した内容と一致する。注意: FudModule v3.1というバージョンや「94のETWプロバイダ」という数字は**含まれていない**——それらを本サイトに帰属させないこと。",
   "zh": "SOC Prime 的威胁研究博客——CVE 复盘搭配检测内容（Sigma 规则、狩猎查询）。08-20 就 CVE-2026-68820 第一手阅读并成立：AFD.sys 因同步不当导致的释放后使用、Check Point 对 Lazarus/Operation Dream Job 的归因、CVSS 7.0、2026 年 8 月 11 日修复、披露时间线（7 月 28 日报告、8 月 5 日分配 CVE）。与 08-16 独立记录的说法一致。注意：它**不含** FudModule v3.1 版本号与「94 个 ETW 提供程序」这一数字——不要把这两项归因于它。"
+ },
+ "social.anoxinon.de": {
+  "cat": "community",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "Codeberg's official status account, hosted on a German Mastodon instance (Oxinon) — the project's own incident timeline in its own voice. Cross-validated (11-18): the codeberg.org domain-suspension posts (08:13 unreachable/disappeared from registrar account; 08:53 suspension confirmed, abuse-team queue; 11:23 'slowly recovering') match the live infrastructure checked first-hand the same hour — the site answering HTTP 200 and DNS returning 217.197.84.140 via both 1.1.1.1 and 8.8.8.8 after the recovery post. First-party channel; the registrar's side of the story (why suspended) remained unstated.",
+  "jp": "Codeberg の公式ステータスアカウント（ドイツの Mastodon インスタンス Oxinon 上）——プロジェクト自身の声によるインシデントタイムライン。突合済み（11-18）：codeberg.org ドメイン停止の一連の投稿（08:13 到達不能・レジストラアカウントから消失、08:53 停止確認と abuse 対応チーム待ち、11:23「ゆっくり復旧中」）は、同じ時刻に一次確認した実インフラと一致——復旧投稿後にサイトが HTTP 200 を返し、1.1.1.1 と 8.8.8.8 の双方が 217.197.84.140 を応答。一次チャネルであり、レジストラ側の説明（なぜ停止されたか）は未表明のまま。",
+  "zh": "Codeberg 官方状态账号，托管于德国 Mastodon 实例（Oxinon）——项目以自己的口吻记录的事故时间线。已交叉核验（11-18）：codeberg.org 域名被暂停的系列帖（08:13 不可达/从注册商账户消失；08:53 确认被暂停、等待滥用处理团队；11:23「缓慢恢复中」）与同一小时一手核验的实际基础设施状态一致——恢复帖之后站点返回 HTTP 200，1.1.1.1 与 8.8.8.8 均应答 217.197.84.140。第一方渠道；注册商一侧的说法（为何暂停）仍无下文。"
  },
  "socradar.io": {
   "cat": "security",
@@ -13292,6 +13382,15 @@
   "en": "Independent cybersecurity blog with weekly intelligence briefs; secondary coverage, low-to-medium authority.",
   "jp": "独立系サイバーセキュリティブログで週次インテリジェンスブリーフを配信。二次報道で権威は低〜中。",
   "zh": "独立网络安全博客，发布每周情报简报；二手报道，权威性中低。"
+ },
+ "thedataexchange.media": {
+  "cat": "research",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "The Data Exchange — Ben Lorica's podcast/interview series; full transcripts on the page, named guests, vendor-adjacent but quotes checkable. Cross-checked (11-20): Pete Warden's load-bearing claim that Chrome ships a built-in model callable from JavaScript matches developer.chrome.com's Prompt API docs (Gemini Nano via the LanguageModel interface); the docs state no parameter count ('exact size may vary'), so Warden's '~4B' is his approximation of Gemini Nano, not a doc figure.",
+  "jp": "The Data Exchange——Ben Lorica のポッドキャスト/インタビューseries。ページに完全トランスクリプト、ゲストは実名、ベンダー寄りだが引用は検証可能。クロスチェック済み（11-20）：Pete Warden の「Chrome は JavaScript から呼べる内蔵モデルを既に同梱」という主張は developer.chrome.com の Prompt API ドキュメント（LanguageModel インターフェース経由の Gemini Nano）と一致。ドキュメントはパラメータ数を明記せず（'exact size may vary'）、Warden の '~4B' は Gemini Nano の彼の近似値であり資料の数値ではない。",
+  "zh": "The Data Exchange——Ben Lorica 的播客/访谈系列；页面带完整文字稿，嘉宾实名，偏厂商但引语可核查。已交叉核验（11-20）：Pete Warden 的承重主张——Chrome 已内置可从 JavaScript 调用的模型——与 developer.chrome.com 的 Prompt API 文档一致（经 LanguageModel 接口调用 Gemini Nano）；文档未给出参数量（'exact size may vary'），Warden 的 '~4B' 是他对 Gemini Nano 的近似，不是文档数字。"
  },
  "theedgemalaysia.com": {
   "cat": "news",
@@ -14761,6 +14860,15 @@
   "en": "X/Twitter — cited only as primary social permalinks; the feed's most fragile citation class (check the status resolves before relying on it).",
   "jp": "X/Twitter——一次的なソーシャル・パーマリンクとしてのみ引用；このフィードで最も壊れやすい引用クラス（参照前に状態が残っているか確認）。",
   "zh": "X/Twitter——仅作为社交永久链接的一手引用；是信源中最易失效的一类（引用前先确认该状态仍可访问）。"
+ },
+ "x41-dsec.de": {
+  "cat": "security",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "X41 D-Sec vulnerability research lab. Cross-checked (11-18): its LiteLLM advisory (x41-2026-001) is cited in the NVD record's own references and corroborated by Red Hat errata — the registry points at the lab, not the other way round.",
+  "jp": "X41 D-Sec 脆弱性研究所。突合済み（11-18）：同所の LiteLLM アドバイザリ（x41-2026-001）は NVD レコード自身の references に引用され、Red Hat の errata とも裏付け——レジストリが研究所を指しており、逆ではない。",
+  "zh": "X41 D-Sec 漏洞研究实验室。已交叉核验（11-18）：其 LiteLLM 公告（x41-2026-001）被 NVD 记录自身的 references 引用，并有 Red Hat 勘误印证——是注册表指向实验室，而非反向。"
  },
  "xata.io": {
   "cat": "vendor",

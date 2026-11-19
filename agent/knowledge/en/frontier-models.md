@@ -6161,3 +6161,25 @@ price war has moved to the workhorse tier where volume actually lives.
 
 Sources: [Tencent: Introducing Hy4 flash](https://hy.tencent.ai/research/hy4-flash) ·
 [HN discussion](https://news.ycombinator.com/item?id=50538184)
+
+## 2026-11-19 (three batches) — the price-performance week resolves: Neon, the Ignite lineup, ARC's two columns, and the IPO that funds it
+
+**Gemini 4 Neon** — the Gemini 4 family's middle tier (between Carbon and Hydrogen): #3 on the AA Intelligence Index (**61**) at xhigh, #1 on AA's Coding Agent Index (58.6), TB 4.1 **65.2%**, Vals #2 (70.9%, "on the Pareto frontier"), Agent Arena debut #2 (1336); **$3/$15 per M** ($0.15/M cache read), 1M ctx; "32% lower cost per task than Carbon." Google prints its own harness gap: SWE-sweep **12.8% on mini-SWE vs 39.0% in Antigravity**. A "Neon for cyber" variant (SEC-bench Pro **90.5%**, WebExploitBench 51.26%) reaches trusted defenders via the Fairwind Program. Safety rows: 0.0% cheating on TB 4.0, shortcuts 2.45% ("lowest of any Gemini 4"), "resisted every attack" on Gray Swan — the same self-reported shape as Carbon's.
+
+**Microsoft Ignite's full lineup** (seven models + **Maia 200** silicon, "1.7x more tokens per watt"): Cyber 2 Flash "beats GPT-6 Astra's quality at **<2% of the cost per task** on CyberGym-E2E"; Code 2 "98% of Sol at ~40%", "96% of Opus 5.5 at 5%"; Code 2 Flash "Luna at 65% of price, Haiku 5.5 at 20%"; Image 2.5 "#1 AA image editing" at 1/5 price; Realtime 1 "outperforms GPT-Realtime 2.1" from $0.01/audio-min; Transcribe 2 "10 million patient encounters a month"; **Decision 1.1 "50x faster and 79x cheaper than GPT-6.1 Sol."** All vendor rows at vendor-chosen operating points — read as the marketing thesis.
+
+**ARC-AGI-3's two columns** (live 11-18): GPT-6.2 Astra **70.3% Standard / 100.0% provider adapter** ($24.2K), Sol 54.9/98.2 ($5.5K), Carbon 65.1/99.1 — while **Fable 5.2 leads Standard at 81.2%** (11-09). The "100%" headline is the adapter column; under the benchmark's standard configuration Astra trails Fable 5.2 by 10.9. The configuration is part of the score — quote both columns and name each.
+
+**DaisyRose-27B** (RadixArk's first model): Qwen3.8-27B + RL (open Miles framework) on "long-horizon agent tasks with sessions up to 1M tokens" — **1,200 curated tasks, 144 H200s, 18 days**; TB 4.1 pass@1 **5.6% → 12.0%**; reward hacking: "We reviewed every task along with the model's attempts at it"; BF16/FP8/NVFP4 on HF. The vertical-model pattern's budget-transparent open-weights datapoint.
+
+**Claude was trained on protein sequences at scale** (xinmingtu.cn): give Fable 5.2/Opus 5.5 the start of an understudied bacterial protein and they predict the next amino acid; shuffled, they can't; performance scales with family size "even in families with no papers at all"; Fable 5.2 beats every open pLM tested incl. ProGen3-3B, and **56 proteins first published Aug 2026 — after the cutoff — are still predicted** (Appendix G); GPT-6.2 shows no sign of it. Contamination-detection methodology (next-token + shuffle control + post-cutoff holdout) pointed the useful way — and the finding explains why Anthropic gates life sciences behind LSVP.
+
+**Anthropic's IPO priced at $83.00** — above the filed $70–78 range; 424B4 filed 11-19 (verified first-hand: 980,000,000 Class A shares — 956,351,354 by Anthropic, 23,648,646 by selling stockholders; 147,000,000-share greenshoe; registered under 333-299633 **and 333-300148**). The filing's own post-offering count is **13,219,642,276** A/N/T/E/F shares (13,366,642,276 with full greenshoe) → **≈$1.10T at $83.00** — so the $1.5–1.6T press valuation implies ≈18.1–19.3B shares, **~40% above the filing's stated basis**; the discrepancy the 11-18 watch flagged persists into the final document and the filing itself does not explain it. Primary tranche ≈**$79.4B**; trading opened Nov 19 under "ANT". Also this week: **Genie 4** in Project Genie (mid-session world editing + real-time native audio; Genie 3 sessions 3 min) — world models crossing into a consumer product surface — and DeepMind staff unionising under UTAW with a governance framing ("the first line of oversight comes from workers").
+
+Sources: [Google: Introducing Gemini 4 Neon](https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon/) ·
+[Microsoft AI: Ignite 2026](https://microsoft.ai/news/microsoft-ignite-2026/) ·
+[ARC Prize leaderboard](https://arcprize.org/leaderboard) ·
+[RadixArk: DaisyRose-27B](https://www.radixark.com/blog/daisyrose-27b) ·
+[xinmingtu.cn: protein sequences](https://xinmingtu.cn/blog/2026/claude-opus-5-5-protein-sequences/) ·
+[Anthropic: prices IPO](https://www.anthropic.com/news/anthropic-prices-initial-public-offering) ·
+[424B4 (EDGAR)](https://www.sec.gov/Archives/edgar/data/2130357/000162828026074944/anthropicpbc-424b4.htm)

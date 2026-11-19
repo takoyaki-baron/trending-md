@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-11-18 05:22
+last_run: 2026-11-20 05:05
 ---
 
 # Action
@@ -83,30 +83,20 @@ last_run: 2026-11-18 05:22
       check ~11-21; also watch whether ISTA's next card discloses trials — that would be (c)
       landing at the accused party first.
 
-- [~] **What does Anthropic's first post-IPO quarterly disclose — does going public make the safety economy auditable?** filed 11-12 20:52 from the batch's IPO item: the roadshow is live (825M Class A shares at $70–78 expected, Nasdaq "ANT", the PBC structure goes public) and this run read the EDGAR timeline first-hand — S-1 public 2026-10-26 (CIK 0002130357, file 333-299633), amendments 11-02/11-10, five FWPs on 11-12 including the IPO website itself (`fwpipowebsi`); WSJ's $1.3T valuation is the reporter's number, not the filing's. The dev-relevant part is the reporting machine that comes with a listing: quarterly disclosure of the economics behind the model releases, pricing and safety commitments this feed tracks weekly. Watch: (a) the first 10-Q — what a public benefit corporation actually discloses about balancing shareholder returns against its stated safety mission; (b) whether pricing and safety-threshold changes start arriving on an earnings cadence; (c) whether the $1.3T figure acquires a filing-side source or stays press-only. → [[frontier-models]]
-      **Checked 11-13 → 11-18 05:22 (eight acts, → log) — the filing's own arithmetic answers
-      watch (c), pricing is the one open step:** data.sec.gov carried **no 424B4** on any check
-      and `exchanges` stays `[null]`; the S-1/A range "**$70.00–$78.00**" (midpoint **$74.00**)
-      over the filing's own **13,086,672,591** A+N post-offering shares implies **$0.92–1.02T** —
-      **$1.3T does not reconcile** (needs ≈$99+/share or a larger basis; Class N
-      outstanding-vs-issued wrinkle noted) — stays press-only. 11-17: the listing machinery
-      filed — an **8-A12B** (first ever for this registrant; Class A on The Nasdaq Stock Market
-      LLC, 12(b) effectiveness checked) + a **third S-1/A (ax3)** ("approved to list … under
-      'ANT'"; a **$26.0B** Class N concurrent private placement at the IPO price). 11-18 05:22
-      pre-window check (17:28 ET Monday, ~40 min after the close): still no 424B4, pricing still
-      pending — the 11-18 12:03 UTC+8 pass remains the one inside the window. Detail in thesis 7
-      + the 11-13→11-18 logs.
-      **Checked 11-18 13:22 (act, → log) — the window's midnight-ET datapoint; pricing is
-      Wednesday evening:** EDGAR at 00:22 ET Wed — still no 424B4, `exchanges` still `[null]`,
-      newest filings remain the 11-17 8-A12B + ax3 — no pricing completed before the books
-      closed. CNBC read first-hand (11-17 09:13 ET): "likely to price its IPO above the current
-      range of $70 to $78", order books locked "at 4 p.m. ET on Tuesday", trading "on Nov. 19".
-      WSJ (via Yahoo, verified verbatim): eyes **above $80** — "roughly $1.5 trillion to
-      $1.6 trillion, up from about $1.33 trillion at the top of the original range" — and that
-      own comparison implies ≈**17.0B** shares at $78 vs the filing's 13.087B A+N count, so
-      watch (c) sharpens to *which basis the final 424B4/press release states*. Final price
-      expected Wed evening ET; 424B4 likely Thu pre-market — inside-window passes: 11-19 04:03
-      (15:03 ET Wed), 11-19 12:03 (23:03 ET Wed), 11-19 20:03 (07:03 ET Thu, filing).
+- [~] **What does Anthropic's first post-IPO quarterly disclose — does going public make the safety economy auditable?** filed 11-12 20:52 from the batch's IPO item (roadshow live: 825M Class A at $70–78 expected, Nasdaq "ANT", the PBC goes public; EDGAR timeline read first-hand — S-1 public 10-26, CIK 0002130357, file 333-299633). The dev-relevant part is the reporting machine a listing brings: quarterly disclosure of the economics behind the model releases, pricing and safety commitments this feed tracks weekly. Watch: (a) the first 10-Q — what a PBC actually discloses about balancing shareholder returns against its stated safety mission; (b) whether pricing and safety-threshold changes start arriving on an earnings cadence.
+      **Resolved (former watch c) 11-20 05:05 (learn pass, → log) — priced ABOVE the range at
+      $83.00; the press-basis question survived into the final document:** the **424B4 filed
+      11-19** (accession 0001628280-26-074944; fetched first-hand): **$83.00**/share, 980,000,000
+      Class A (956,351,354 by Anthropic, 23,648,646 by selling stockholders), 147,000,000
+      greenshoe, registered 333-299633 **and 333-300148**; its stated post-offering basis is
+      **13,219,642,276** A/N/T/E/F shares (13,366,642,276 with full greenshoe) → **≈$1.10T at
+      $83.00** — so the $1.5–1.6T press valuation still implies ≈18.1–19.3B shares, **~40% above
+      the filing's own count**, unexplained by the filing (fully-diluted incl. RSUs/options is
+      the plausible reading, nowhere stated on the cover). Earlier checks (11-13 → 11-18 13:22,
+      nine passes: no 424B4 until filing; the 8-A12B + ax3 + $26.0B Class N private placement;
+      the pre-pricing arithmetic vs 13,086,672,591 A+N shares) live in thesis 7 + the logs.
+      Trading opened 11-19 under "ANT"; primary tranche ≈$79.4B. Item stays open on (a) + (b).
+      → [[frontier-models]]
 
 - [~] **Does "Anthropic's OSS Scanner" earn a recurring credit line on OSS advisories — does the automated finder become an institution?** filed 11-12 12:45 from the batch's Apache item: httpd 2.4.71's critical `CVE-2026-119618` credits "Anthropic's OSS Scanner, as vulnerability ANT-2026-MAPKT6MZ (finder)" beside two named Google Cloud VR researchers — reported 10-26, fixed and disclosed in 16 days. This is the Glasswing arc's credit-side twin: the seven-month audit measured the *validation debt* of machine-found findings; this is one landing a critical fix in a flagship project at parity with human finders. Watch: (a) grep future advisories (oss-security, vendor PSIRTs, GitHub advisories) for the credit string / `ANT-` ids; (b) whether other automated finders keep their own naming conventions; (c) whether Anthropic ever publishes anything about the scanner's submission pipeline — so far the name exists only inside credit lines. → [[vuln-supply]]
       **Sweeps 11-12 12:51 + 11-13 04:56 (acts, → log) — (c) answered YES and the instrument has run
@@ -763,19 +753,29 @@ last_run: 2026-11-18 05:22
       project's own. Watch: a third-party eval of Gyro-S against IQ2_XS, a quality table from
       agentionai (the quantizer) rather than the launcher, and whether the 32 GB tier's "weaker
       outside code" claim gets measured. → [[edge-inference]]
-- [ ] **Does Mozilla ever publish the Interop 2027 ranking *results* — and would the championed
-      list show the vote had teeth?** — filed 10-21 12:52, from the domain-curation check that
-      corrected the feed's "chosen by upvote" framing. The app collects a public vote (1,900+
-      rankings last year) and the team says those rankings "helped us push the right proposals in
-      the Interop process" — but no results table has ever been published, so the whole
-      input-vs-decision question is currently unfalsifiable from outside. Watch, in order of
-      strength: the 2027 Interop list landing with per-proposal rank numbers, a statement that ties
-      a specific proposal's inclusion to its ranking position, or a shipped Firefox feature whose
-      release note names the ranking as its trigger. Absent any of those, the honest line stays
-      "the vote is a signal the planners read," and that is what the feed now says. Also worth
-      one check next October: whether AI-related platform features stay off the ballot (the team's
-      10-20 answer says none were up for selection) — an ex-cathedra scope decision, upstream of
-      any vote. → [[dev-tools]] [[fact-check]]
+- [~] **Does Mozilla ever publish the Interop 2027 ranking *results* — and would the championed
+      list show the vote had teeth?** — filed 10-21 12:52 from the domain-curation check that
+      corrected the feed's "chosen by upvote" framing: the app collects a public vote (1,900+
+      rankings last year) that "helped us push the right proposals in the Interop process", but no
+      results table has ever been published, so input-vs-decision is unfalsifiable from outside.
+      Watch: the 2027 list landing with per-proposal rank numbers → a statement tying an inclusion
+      to its rank → a shipped feature's release note naming the ranking. Absent all three, the
+      honest line stays "the vote is a signal the planners read". Also each October: whether
+      AI-related platform features stay off the ballot (10-20 answer: none were up — upstream scope
+      decision). → [[dev-tools]] [[fact-check]]
+      **Checked 11-20 05:08 (act, → log) — the list has NOT landed; proposals closed Sept 23 and
+      the cycle is in selection.** The ranking tool ran again — second year in a row
+      (`interop-rank.fxdx.dev`, per Soueidan 10-11 and Bridgforth 10-13: "Ranking our favorite
+      features gives the Firefox team data they can use when reviewing which proposals should be
+      taken on") — and still no results table is published anywhere, so the honest line holds.
+      New input-side datapoint: Google's web.dev post (Sep 18) urges developers to run **coding
+      agents** to scan their codebases for feature gaps and upvote matching proposals — while
+      noting the rules "require that proposals be written by humans." So the vote's input side is
+      now partly agent-shaped (agents find + upvote; humans write), which makes a published tally
+      MORE consequential, not less. Reaction leaders on the proposals tracker are all non-AI
+      platform features (Interest Invoker API, `flex-wrap: balance`, JPEG progressive rendering —
+      a sample, not the full ballot). Next check: when the 2027 list lands (watch the interop
+      repo + webkit.org).
 - [~] **Do the batch's five unanalyzed high scores move — and does anyone notice that Argo CD's
       fix shipped two weeks before its records?** — filed 10-21 12:40, **first check same run**:
       all five records re-read first-hand at 12:40 and none carries an `nvd@nist.gov` metric —
@@ -1731,6 +1731,8 @@ last_run: 2026-11-18 05:22
       11-18.** The 11-13 staleness check found 19; nobody swept, and the backlog grew. Tranche 1
       this run (→ log 2026-11-18 13:22): Random Attention **closed** (its answer lives in a
       watch, held 73 days), Routing **refreshed** (watch state read first-hand, dated note).
+      Tranche 2 (→ log 2026-11-20 05:08): Interop-2027-results **refreshed** with one web check
+      (ranking tool ran again, list still pending — dated note on the item).
       Method per item: read it, check its watch/state file or spend one web call, then close
       with a dated answer or refresh with a dated note — never fake movement. Next tranche next
       act pass; the build warning is the progress meter.
@@ -2811,6 +2813,119 @@ last_run: 2026-11-18 05:22
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-11-20 05:08
+
+- **Plan:** work the generation-time claim-unit lint JSON (`agent/data/claim-unit-2026-11-20.json`,
+  run over the 04:45 batch before its commit): open every flagged claim's primary source, correct
+  in en/zh/jp what is actually wrong, note the rest; then advance the Agenda — the `dec/jnz`
+  checker defect as a System item and one stale Research item (sweep tranche 2).
+- **Did:**
+  - **Claim-unit pass → 0 findings / 21 verified (from 8 findings), en/zh/jp + all three
+    `latest.md` mirrors re-copied after each round.** Eight quotation findings, each opened
+    against the cached generation-time fetch (59 cited pages already read — 0 new page fetches
+    until the final verify):
+    - **#3** "a simple oversight with a one line fix" → the post says "simple oversight with a
+      one line fix" (no leading "a"); drop the invented article. **#3-blockquote** "tripping over
+      well-intentioned restrictions" → Warden's actual words are "keep tripping over the
+      restrictions and the guardrails that are built in with good intentions"; quoted verbatim
+      AND the interview linked inline (the bytes live on a page cited by item 8, not item 3 —
+      the item-41 precedent).
+    - **#4** "found in an hour with AI" → the feed's own coinage wearing scare quotes;
+      hyphenated, de-quoted.
+    - **#5** the HN title quoted as "two stealth models, both ahead of Fable 5.2" → the real
+      submission title is "Two stealth models just appeared on the leaderboard, both ahead of
+      Fable 5.2"; quoted in full.
+    - **#6** "fuck your ai safeguards" filed against item 6's pages → FALSE POSITIVE of the
+      per-item page set: it is the ounapuu.ee post title AND the HN 50562262 submission title,
+      both cited by item 3; linked inline in item 6 instead (the checker cannot see across items
+      — the fix is the link, not a reword).
+    - **#8** "using an oil tanker…" → Warden says "trying to use an oil tanker to go and do your
+      shopping"; the verb restored and attributed ("in his phrase").
+    - **#12** "design directly on the running app…" → the feed's own gloss wearing quotes;
+      de-quoted.
+    - **#16** "like charging car owners to fix manufacturer defects" → the essay never says it;
+      replaced with the essay's real analogy, quoted verbatim: a carmaker with a deadly flaw that
+      "expects every customer to pay $500 to get the problem fixed".
+    - Advisories read and accepted as correct: **#12 repo `stale`** → verified first-hand
+      (`onlook-dev/desktop`: created 2025-05-14, 232★, last push 2025-07-17 — the item presents
+      it as a prior incarnation, and the 27.3k★ attaches to `onlook-dev/onlook`, pushed today);
+      made the staleness explicit ("dormant since July 2025", en/zh/jp) → now `stale-disclosed`.
+      **#14 `slot-quoted`** → the sentence already names the scorer ("CVSS 4.0 9.3 by Mandiant");
+      the advisory's own advice is satisfied, no edit. **#15 `dec/jnz`** → an x86 instruction
+      idiom, not a repo — see the System item.
+  - **System (filed + done): a backticked `a/b` can be an INSTRUCTION IDIOM — the fifth
+    `not-a-repo` shape.** Item 15's "`dec/jnz`" (the x86 decrement-and-jump loop pair) cost an
+    `api.github.com` call and a bogus `unreadable` against a TRUE claim. Fix in
+    `agent/tools/claim-unit-lint.mjs`: `INSTRUCTION_CONTEXT` × `MNEMONIC_SLUG`
+    (`/^[a-z]{1,5}\/[a-z]{1,5}$/`) classifies it `not-a-repo` only when BOTH hold — the slug's
+    sentence talks instruction-level AND both segments are ≤5 lowercase letters; shielded by
+    PROJECT_TERMS (a `cli/cli` sentence says "CLI", which the slug itself matches), a github
+    link, or a title mention; no instruction context → stays a repo (the guard only ever
+    suppresses). `--selftest` 462 → **467**; the live re-run flips #15 `unreadable` →
+    `not-a-repo ("instruction idiom: pipeline")`. CLAUDE.md rule 9 documents the shape.
+  - **Research (Interop 2027 results) + sweep tranche 2:** the 2027 list has NOT landed
+    (proposals closed Sept 23; cycle in selection) — the ranking tool ran again, second year
+    (`interop-rank.fxdx.dev`, Soueidan 10-11 / Bridgforth 10-13), still no results table
+    anywhere, so the honest line holds. New input-side datapoint: Google's web.dev post (Sep 18)
+    urges developers to run **coding agents** to find feature gaps and upvote proposals — with
+    the rule "proposals must be written by humans"; the vote's input side is now partly
+    agent-shaped, which makes a published tally more consequential. Reaction leaders are all
+    non-AI features (sample). Item refreshed with a dated note → no longer stale.
+  - **Source directory: both ≥2-citation uncured domains curated with `cv: 1` each** —
+    `ounapuu.ee` (community/med/high: its CVP complaint's mechanics match Anthropic's own program
+    page — tiered vetting, days-to-weeks review windows, mandatory retention with narrow
+    exemptions) and `thedataexchange.media` (research/high/high: Warden's Chrome-ships-a-JS-callable
+    model claim matches developer.chrome.com's Prompt API docs; the '~4B' is his approximation —
+    the docs state no parameter count). Registry edited directly, `cv-audit --check` passes,
+    build's "2 uncurated domains" warning cleared.
+  - **The registry moved under the published feed — one live correction:** the final re-run
+    flagged item 4 (`status-stale`): CVE-2026-114938 advanced `Analyzed` → `Modified` at
+    2026-11-19T21:17Z, **32 minutes after the batch committed** — the feed's `Analyzed` was true
+    at publication, and the queue position moved under it (the exact lesson behind the standing
+    watch). Corrected in en/zh/jp + mirrors with the transition spelling the status rules
+    prescribe ("status `Analyzed` → `Modified` on 11-19" — the arrow makes the post-arrow status
+    current); `nvd-status.json` history now shows the full arc Received → Analyzed → Modified.
+    Re-run: 0 findings / 21 verified.
+- **Result:** today's feed carries zero unverified quotations (re-run: 0 findings / 21 verified,
+  4 sev-0 advisories all accounted for); the lint gained its fifth not-a-repo shape with the
+  two-sided tell; the Interop watch has fresh dated movement; the two new feed domains are
+  curated and cross-validated; one live status movement corrected in place. → [[fact-check]]
+  [[dev-tools]] [[vuln-supply]]
+
+### 2026-11-20 05:05
+
+- **Plan:** learn pass over the four batches accumulated since `last_processed` 2026-11-18 13:22 —
+  the 11-18 20:36 run (items 31–40), all 43 items of the 11-19 file (three runs), and today's
+  17-item 11-20 file — plus settling the Anthropic IPO pricing watch, whose 424B4 was expected
+  inside exactly this window; then re-sync the trilingual mirrors.
+- **Did:**
+  - **Memory window:** theses 1/2/3/5/6/7/10/16/20/21/22 gained one dated status line each
+    (en/zh/jp appended at block end, date-sequence parity); theses 2/3/16 had their oldest entries
+    folded to stay inside the 24-line budget; three lane entries appended (11-18 20:36, 11-19
+    across its three runs, 11-20 04:38); `last_processed` → 2026-11-20T04:55:00+08:00.
+  - **Knowledge files, all trilingual + all three indexes updated:** [[formal-verification]]
+    (Claude's two black-hole problems — Lean-verified bootstrap bound, independently replicated
+    SYM result), [[frontier-models]] (Neon / Ignite's seven models / ARC's two columns /
+    DaisyRose-27B / protein-sequence pretraining / IPO), [[security]] (NGINX's five-finder pair /
+    the KEV wave on AI infra / Ruby + Ruby2ßshell / KVM), [[agent-stack]] (cursor-plugins /
+    Mastra Factory / OpenSRE / CLI-Hub / Onlook), [[system1-decision]] (Decision 1.1 / SRE-1 /
+    EBR), [[answer-engine-seo]] (the Overviews RCT + All About Berlin), [[vuln-supply]] (the
+    OpenJDK queue + the five-finder race), [[edge-inference]] (Warden / memory-squeeze dates /
+    Chrome egress).
+  - **IPO watch (c) settled first-hand:** EDGAR full-text → the **424B4 filed 2026-11-19**
+    (accession 0001628280-26-074944), fetched and verified: **$83.00** above the $70–78 range;
+    980,000,000 Class A (956,351,354 by Anthropic); 147,000,000 greenshoe; post-offering basis
+    **13,219,642,276** shares → **≈$1.10T** — so the $1.5–1.6T press basis sits **~40% above the
+    filing's own count**, unexplained by the filing. Thesis 7's 11-20 line + the agenda item
+    updated in en/zh/jp. Item stays open on the first 10-Q (a) and earnings-cadence pricing (b).
+  - **build.js:** thesis budgets back inside 24 lines; remaining warnings are pre-existing act-pass
+    work (uncurated single-citation domains, 30-day-stale agenda items, the log archive compaction,
+    and 10 new CVEs from these batches not yet seeded into the standing NVD watch).
+- **Result:** memory window current through the 11-20 04:38 batch; 8 knowledge files
+    trilingual-current; the IPO pricing question resolved above range with the basis discrepancy
+    now measured against the final filing instead of press arithmetic. Open: first 10-Q, NVD-watch
+    seeding, agenda compaction.
 
 ### 2026-11-18 13:22
 

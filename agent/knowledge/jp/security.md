@@ -5522,3 +5522,21 @@ Hat（RHSB-2026-018）が独立に裏付け。常設 NVD ウォッチ（`agent/t
 [JFrog](https://research.jfrog.com/post/java4shell-vulnerability) ·
 [Red Hat RHSB-2026-018](https://access.redhat.com/security/vulnerabilities/RHSB-2026-018) ·
 [NVD CVE-2026-114938](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE-2026-114938)
+
+## 2026-11-19（3 バッチ）——NGINX の 5 発見者 RCE ペア、KEV の波が AI インフラに着地、Ruby の正数週
+
+**NGINX：未認証 RCE 二件、独立した 5 発見者**（F5 の協調リリース 11-18。いずれも **CVSS 4.0 9.2 / 3.1 8.1**、F5 自身の採点、確認時点で NVD `Received`）。`CVE-2026-123633`——NGINX が **HTTP/2 クライアント通信をバックエンドへプロキシし `worker_connections` が逼迫しているとき**の worker プロセス use-after-free。Wiz は 10-21 に ASLR バイパス込みの確認済み RCE で報告し、F5 の開示タイムラインは「別の研究チームが既に同じ脆弱性を報告していた」と明言。`CVE-2026-123007`——HTTP/2 フロー制御ウィンドウが閾値を超えたときのヒープバッファオーバーフローで、**1.9.5（2015 年）**以来影響。同じ 2 つの bug を 5 チームが独立に発見した：Wiz Research、Ikotas Labs、Metnir、Rapid7、Xint（その記事の題名がそのまま実証：NGINX2Root）。修正は **1.30.7 stable / 1.31.9 mainline**。暫定緩和は該当 server ブロックの `http2 off;`（1.25.1+）。
+
+**KEV の波が AI インフラに着地（11-17/11-18 カタログ）：****Puppet Enterprise `CVE-2026-115731`**（KEV 11-17、連邦期限 12-01）——レポート処理の脱直列化により、**任意の CA 署名 agent 証明書を持つ任意のクライアント**が細工した rich-data PUT で Puppet Server 上のコード実行を得る。自動署名なら未認証攻撃者に拡大。スコアの出所は二当事者・二フレームワークの型：**NVD 自身の 9.9 CVSS 3.1**（`nvd@nist.gov`、Primary、レコード `Analyzed`）の傍に **Puppet CNA の 9.4 CVSS 4.0**——両方を引用する。修正版 2023.8.13 / 2025.12.1 / 2026.0.1。**LiteLLM `CVE-2026-40217`**（8.8、期限 12-02）——「**/guardrails/test_custom_code URI でのバイトコード書き換え**によりリモートの攻撃者が任意コードを実行できる」：悪用されたエンドポイントは guardrails 機能——チームがまさに*コードを走らせる*ゆえに足す部品。bug は春から公開済み（X41 D-Sec）で、今回の KEV 追加は開示に悪用が追いついたもの。並ぶのは三日期限の追加（11-21 期限）：Synology DSM `CVE-2024-10441`（9.8——2025 年に修正済み。追加自体が未パッチ NAS ファームウェアをまだ走らせている者を測る）、REDCap `CVE-2026-90817`、Apache Axis `CVE-2026-90436`。
+
+**Ruby の正数週：**緊急リリース **4.0.10 / 3.4.13 / 3.3.14** が正数エンジンと文字列ケース変換の **7** 件のメモリ破壊 bug に対応——「一部がリモートコード実行を引き起こせると証明する PoC を把握している」。7 件のうち 4 件は Stephan Lipp（Ada Logics）**と Anthropic** の署名——10 月の mod_http2 競合の背後にあった AI 支援ファジングの型。開示の機構：CVE 識別子は申請済みだが**未割り当て**で、アドバイザリは GHSA id をキーにする——CVE 番号で引くスキャナには何も見えない。**Ruby2ßshell**（Veria Labs）が最悪を名指し——`GHSA-34m4-m9fh-gqp5`：多くの 1 バイト符号化には大文字 ß がなく、upcase は **2 バイト**（「SS」）を書くのにループは 1 バイトしか境界面積を見ず、出力バッファは入力長+20 なので **ß 21 文字で 1 バイト溢れる**。**2.4.0** 以来内在。ISO-8859/Windows-125x 符号化（UTF-8 は別経路で無影響）。`upcase`/`swapcase`/`downcase(:fold)`/`casecmp?` から到達——つまり **Rails と古典 Sinatra の既定の認証前経路**。GitLab 19.6.0 と GitHub Enterprise Server 3.22.5 が影響、Mastodon/Discourse は修正済み。PoC は 1 週間凍結（「 upgrade の時間を people に与えてから」）。
+
+**KVM `CVE-2026-99312`：**ページング無効で走るネストゲスト（L2）の最中に INIT が来ると、KVM は**古い MMU コンテキスト**のまま L1 を走らせ得る（guest_mode が page role に焼き込まれている）。修正は MMU コンテキストを*無条件に*リセット——SMM も role に符号化され、リセットは安価だから。ネスト SVM のみ（VMX では INIT は無条件インターセプト）。HN スレッドの本題——なぜニッチな正しさの修正が CVE を持つのか——が現代のレジストリの現実：カーネル自己修正は既定で id を得て、id は誰かが分析するまで深刻性の信号を持たない。
+
+ソース：[Wiz: NGINX RCE](https://www.wiz.io/blog/nginx-http2-rce-vulnerabilities) ·
+[Xint: NGINX2Root](https://nginx2root.com/) ·
+[CISA KEV](https://www.cisa.gov/known-exploited-vulnerabilities-catalog?field_cve=CVE-2026-115731) ·
+[X41: LiteLLM アドバイザリ](https://www.x41-dsec.de/lab/advisories/x41-2026-001-litellm/) ·
+[Ruby: 正数とケース変換](https://www.ruby-lang.org/en/news/2026/11/18/multiple-vulnerabilities-in-regexp-and-string/) ·
+[Veria Labs: Ruby2ßshell](https://verialabs.com/ruby2shell/) ·
+[CVE-2026-99312](https://www.cve.org/CVERecord?id=CVE-2026-99312)

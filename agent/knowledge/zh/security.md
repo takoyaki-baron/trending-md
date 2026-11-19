@@ -5040,3 +5040,21 @@ feng shui + 每目标定制——"不是通用的一键通吃。"
 [JFrog](https://research.jfrog.com/post/java4shell-vulnerability) ·
 [Red Hat RHSB-2026-018](https://access.redhat.com/security/vulnerabilities/RHSB-2026-018) ·
 [NVD CVE-2026-114938](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE-2026-114938)
+
+## 2026-11-19（三个批次）——NGINX 的五发现者 RCE 对、KEV 浪潮落在 AI 基础设施、Ruby 的正则之周
+
+**NGINX：两个未认证 RCE，五个独立发现方**（F5 协调发布 11-18；均为 **CVSS 4.0 9.2 / 3.1 8.1**，F5 自评，检查时 NVD `Received`）。`CVE-2026-123633`——NGINX **把 HTTP/2 客户端流量代理到后端且 `worker_connections` 吃紧时**，worker 进程 use-after-free；Wiz 于 10-21 上报、含 ASLR 绕过的已确认 RCE，F5 时间线写明「另一研究团队此前已上报同一漏洞」。`CVE-2026-123007`——HTTP/2 流控窗口超阈值时的堆缓冲区溢出，自 **1.9.5（2015 年）**起即受影响。五个团队独立发现同两个 bug：Wiz Research、Ikotas Labs、Metnir、Rapid7、Xint（其文章标题就是演示本身：NGINX2Root）。修复 **1.30.7 stable / 1.31.9 mainline**；临时缓解为受影响 server 块中 `http2 off;`（1.25.1+）。
+
+**KEV 浪潮落在 AI 基础设施上（11-17/11-18 目录）：****Puppet Enterprise `CVE-2026-115731`**（KEV 11-17，联邦死线 12-01）——报告处理中的反序列化让**任何持有任意 CA 签发 agent 证书的客户端**都能经构造的 rich-data PUT 在 Puppet Server 上执行代码；自动签发把它放宽到未认证攻击者。分数出处是两方两框架的情形：**NVD 自评 9.9 CVSS 3.1**（`nvd@nist.gov`，Primary，记录 `Analyzed`）旁列 **Puppet CNA 的 9.4 CVSS 4.0**——两个都引用。修复版 2023.8.13 / 2025.12.1 / 2026.0.1。**LiteLLM `CVE-2026-40217`**（8.8，死线 12-02）——「允许远程攻击者经 **/guardrails/test_custom_code URI 上的字节码重写**执行任意代码」：被利用的端点是 guardrails 功能，恰是团队因为它*运行代码*才添加的组件；漏洞春季已公开（X41 D-Sec），此次 KEV 是利用潮追上披露。旁边是三日死线新增（11-21 截止）：Synology DSM `CVE-2024-10441`（9.8——2025 年就已修复；此次 KEV 测出的是谁还在跑未打补丁的 NAS 固件）、REDCap `CVE-2026-90817`、Apache Axis `CVE-2026-90436`。
+
+**Ruby 的正则之周：**紧急发布 **4.0.10 / 3.4.13 / 3.3.14**，修 **7** 个正则引擎与字符串大小写转换中的内存破坏 bug——「我们已知有 PoC 能证明其中一些可触发远程代码执行」。七个中四个署名 Stephan Lipp（Ada Logics）**与 Anthropic**——10 月 mod_http2 竞态背后的 AI 辅助模糊测试模式。披露机制：CVE 编号已申请但**尚未分配**，咨询以 GHSA 编号为键——按 CVE 检索的扫描器什么都看不见。**Ruby2ßshell**（Veria Labs）随后点名最糟的一个——`GHSA-34m4-m9fh-gqp5`：多数单字节编码没有大写 ß，upcase 写**两个字节**（「SS」）而循环只查一个边界，输出缓冲区为输入长度+20，于是 **21 个 ß 字符将其溢出一字节**。自 **2.4.0** 起即存在；ISO-8859/Windows-125x 编码（UTF-8 走另一路径、不受影响）；经 `upcase`/`swapcase`/`downcase(:fold)`/`casecmp?` 触达——即 **Rails 与经典 Sinatra 的默认认证前路径**；GitLab 19.6.0 与 GitHub Enterprise Server 3.22.5 受影响，Mastodon/Discourse 已修。PoC 封存一周（「让大家有时间升级」）。
+
+**KVM `CVE-2026-99312`：**嵌套客户机（L2）在关闭分页时收到 INIT，KVM 会带着**过期的 MMU 上下文**继续跑 L1（guest_mode 烙在 page role 里）；修复改为*无条件*重置 MMU 上下文，因为 SMM 也编码在 role 里且重置很便宜；仅影响嵌套 SVM（INIT 在 VMX 上是无条件拦截）。HN 帖的真问题——为什么一个冷门正确性修复会有 CVE——正是当代注册表现实：内核自修复默认拿编号，编号在有人分析前不带任何严重性信号。
+
+来源：[Wiz: NGINX RCE](https://www.wiz.io/blog/nginx-http2-rce-vulnerabilities) ·
+[Xint: NGINX2Root](https://nginx2root.com/) ·
+[CISA KEV](https://www.cisa.gov/known-exploited-vulnerabilities-catalog?field_cve=CVE-2026-115731) ·
+[X41: LiteLLM 咨询](https://www.x41-dsec.de/lab/advisories/x41-2026-001-litellm/) ·
+[Ruby: 正则与大小写转换](https://www.ruby-lang.org/en/news/2026/11/18/multiple-vulnerabilities-in-regexp-and-string/) ·
+[Veria Labs: Ruby2ßshell](https://verialabs.com/ruby2shell/) ·
+[CVE-2026-99312](https://www.cve.org/CVERecord?id=CVE-2026-99312)

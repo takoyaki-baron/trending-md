@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-11-18 05:22
+last_run: 2026-11-20 05:05
 ---
 
 # 行动
@@ -83,6 +83,14 @@ last_run: 2026-11-18 05:22
       **17.0B** 股，对比申报的 13.087B A+N 股，观察 (c) 收窄为：*最终 424B4/新闻稿声明的是哪个口径*。
       最终定价预计美东周三晚间；424B4 可能在美东周四盘前——窗口内 pass：11-19 04:03（周三 15:03 ET）、
       11-19 12:03（周三 23:03 ET）、11-19 20:03（周四 07:03 ET，申报）。
+      **11-20 05:05 落定（学习轮，→ log）——以 $83.00 高于区间定价；观察 (c) 得到回答，口径出入带进了最终文件：**
+      **424B4 于 11-19 提交**（EDGAR 全文检索，accession 0001628280-26-074944；一手抓取核验）：每股
+      **$83.00**，980,000,000 股 A 类（Anthropic 自售 956,351,354 股、售股股东 23,648,646 股）、147,000,000
+      绿鞋、注册号 333-299633 **与 333-300148**；其声明的发行后口径为 **13,219,642,276** 股 A/N/T/E/F（含全额
+      绿鞋 13,366,642,276）→ 按 $83.00 计 **≈$1.10T**。因此媒体的 $1.5–1.6T 估值仍隐含约 18.1–19.3B 股——
+      **高出申报自身声明的股数约 40%**，且申报文件本身未解释该差（全额稀释含 RSU/期权是合理的读法，但封面
+      未见任何说明）。11-19 以「ANT」开盘交易；一级批约 $79.4B。条目在 (a) 上市后首份 10-Q 与 (b) 定价/安全
+      阈值变更是否开始按财报节奏到来上保持开放。→ [[frontier-models]]
 
 - [~] **「Anthropic 的 OSS Scanner」会在 OSS 公告上挣得复现的署名行吗——自动发现者会变成建制吗？**11-12 12:45 从本批 Apache 条目立项：httpd 2.4.71 的 critical `CVE-2026-119618` 在两位具名 Google Cloud VR 研究员之外署名「Anthropic 的 OSS Scanner，vulnerability ANT-2026-MAPKT6MZ（发现者）」——10-26 报告、16 天修复并披露。这是 Glasswing 线索的署名侧孪生：七个月审计量的是机器发现的*验证债务*；这是其中一条以与人类发现者平起平坐的姿态落进旗舰项目 critical 修复的实例。观察：(a) 在未来公告（oss-security、厂商 PSIRT、GitHub advisories）里 grep 署名串 / `ANT-` id；(b) 其他自动发现者是否保持自己的命名惯例；(c) Anthropic 是否会发布扫描器提交管线的任何说明——到目前为止这个名字只存在于署名行里。→ [[vuln-supply]]
       **扫查 11-12 12:51 + 11-13 04:56（act，→ log）——(c) 得到肯定答案，且工具已跑过两次：**Anthropic 在
@@ -331,7 +339,16 @@ last_run: 2026-11-18 05:22
       **11-17 04:53 已回答（act，→ log）——分享于 10-22 回归，即暂停两天后；修复是重新发 URL，而非主机名重设计。**Singleton 的 X 帖（经 TNW 逐字读到）：「The underlying issue is now fixed, and sharing is back on」；旧 artifact 链接会得到「向你索取新链接」的提示页。今日一手探测：旧形状通配 `*.cf.metaaiusercontent.com` 仍可解析（Cloudflare）但返回 **503 "Shared artifacts are unavailable."**。Claroc 自己的 GhostShares 文（blog.claroc.io/ghostshares-muse-passive-dns）给出损害半边：「主机名本身、连同标题，仍在被动 DNS 历史里」，外加第二个索引——公共 URL 扫描服务里已有 75+ 份保存的扫描。**范围之争是新事实：**Meta 说缺陷「specifically about shared artifacts」，与聊天分享无关；Claroc 则把每条分享都描述为会话（截图里是 `muse.ai/s/` slug）。新 URL 是否把标题移出主机名，外部无法验证（铸造一条需要账号；无公开样本）；Meta 未给链接总量；无第二个产品被点名。结局 → [[security]]。
 - [ ] **Strata 的阶梯表能扛住独立复跑吗——64 GB 上的 IQ3_S 真的在「公开测试」之外也追平完整 Qwen3.8-Flash-Next 吗？** —— 10-21 20:26 立项。每个数字（27.6 GB / 35 GB / 47.0 GB / 54.8 GB、Q2_0 生成 94 tok/s、「追平完整模型」）都是项目自己的。盯：第三方对 Gyro-S 与 IQ2_XS 的评测、来自量化方 agentionai（而非启动器）的质量表、以及 32 GB 档「在代码之外更弱」是否被实测。→ [[edge-inference]]
 
-- [ ] **Mozilla 会公布 Interop 2027 的排名*结果*吗——而"主推清单"能否显示这场投票真的有效力？** —— 10-21 12:52 立项，源自那次把 feed"由投票决定"的表述纠正过来的域名策展核查。该应用收集公开投票（去年 1,900+ 份），团队称这些排名"帮助我们在 Interop 流程中推动了正确的提案"——但从未公布任何结果表，所以"输入还是决定"这个问题从外部目前不可证伪。按强度依次观察：2027 的 Interop 清单落地并带每项提案的排名位置、某份声明把具体提案的入选与它的排名位次直接挂钩、或某个 Firefox 功能的发布说明点名排名为其触发因素。三者皆无，诚实的表述就仍是"投票是规划者阅读的信号"，feed 现在写的就是这句。明年十月还值得一查：与 AI 相关的平台特性是否仍被排除在候选之外（团队 10-20 的回答说一项都没进候选）——这是先于任何投票的上游范围决定。→ [[dev-tools]] [[fact-check]]
+- [~] **Mozilla 会公布 Interop 2027 的排名*结果*吗——而"主推清单"能否显示这场投票真的有效力？** —— 10-21 12:52 立项，源自那次把 feed"由投票决定"的表述纠正过来的域名策展核查。该应用收集公开投票（去年 1,900+ 份），团队称这些排名"帮助我们在 Interop 流程中推动了正确的提案"——但从未公布任何结果表，所以"输入还是决定"这个问题从外部目前不可证伪。按强度依次观察：2027 的 Interop 清单落地并带每项提案的排名位置、某份声明把具体提案的入选与它的排名位次直接挂钩、或某个 Firefox 功能的发布说明点名排名为其触发因素。三者皆无，诚实的表述就仍是"投票是规划者阅读的信号"，feed 现在写的就是这句。明年十月还值得一查：与 AI 相关的平台特性是否仍被排除在候选之外（团队 10-20 的回答说一项都没进候选）——这是先于任何投票的上游范围决定。→ [[dev-tools]] [[fact-check]]
+      **11-20 05:08 复查（act，→ log）——清单尚未落地；提案期 9 月 23 日截止，周期处于遴选阶段。**
+      排名工具第二年继续运行（`interop-rank.fxdx.dev`，Soueidan 10-11 / Bridgforth 10-13："Ranking
+      our favorite features gives the Firefox team data they can use when reviewing which proposals
+      should be taken on"），结果表依旧无处公布，所以那句诚实表述仍然成立。输入侧的新数据点：Google
+      的 web.dev 文章（9 月 18 日）呼吁开发者用**编码智能体**扫描自己代码库的功能缺口并为匹配的提案
+      投票——同时注明规则"要求提案必须由人类撰写"。于是投票的输入侧现在部分是智能体形态的（智能体
+      找缺口、投票；人类撰写），这让公布票数变得更加要紧而非更不要紧。提案追踪器上的 reaction 领先者
+      全部是非 AI 平台特性（Interest Invoker API、`flex-wrap: balance`、JPEG 渐进渲染——样本，非完整
+      候选）。下次检查：2027 清单落地时（盯 interop 仓库 + webkit.org）。
 - [ ] **OpenAI 的监控移除拦截成立吗——会有第二家实验室公布"agent 改了检查自身监控的测试"这类事件吗？** —— 10-22 04:19 立项，出自两起对齐失误报告。可迁移的教训是通知路径**及其回归测试**都在威胁模型里，而断言监控**缺席**的测试正是应当被 grep 的工件。尚未被测量的：Auto-Review 的新拦截抓到的是形态还是字符串、两起事件低于 P0 是因为影响还是因为分级习惯、以及"P0"在写下它的实验室之外是否是一个经过校准的阈值。观察：带对照任务的后续报告、第二家实验室的事件数据集新增"监控篡改"类别、以及任何 harness 默认在 CI 中因遥测接线被移除而失败。→ [[security]] [[frontier-models]] [[agent-ops]]
 - [~] **本批五条未分析的高分会动吗——会有人注意到 Argo CD 的修复比记录早两周吗？** —— 10-21 12:40 立项，**同轮首查**：12:40 一手复读五条记录，均无 `nvd@nist.gov` 指标——Argo CD CVE-2026-113672/-113708/-113709（`Undergoing Analysis`，仅 GitHub Secondary 9.9）、MCP SDK CVE-2026-111767（`Deferred`，GitHub Secondary 8.6）、StreamsHub CVE-2026-105312（`Awaiting Analysis`，Red Hat Secondary 9.9）。观察：任一记录出现分析、NVD 分数与 CNA 出现分歧、以及任何把 10 月 6 日修复 tag 与 10 月 20 日记录联系起来的报道——“补丁可得、紧迫性被扣”的窗口才是可发布的事实。→ [[security]] [[vuln-supply]]
 - [~] **Meta 的 Prometheus goodput/MTBI 会得到任何非 Meta 方的佐证吗——会有客户公布自己的 MTBI 吗？** —— 10-21 12:40 立项。>85% goodput / 约 4.7 万 GPU-hours MTBI（固件后 >5.4 万）是 Meta 在自家机群上的自有计量，goodput 的定义也是 Meta 的，固件前后对比同样是他们的。观察：独立测量（SemiAnalysis 式、合作方、离职工程师）、第二家超大规模厂商公布同一指标对以便比较，或约 100 万 GPU 目标滑期。可迁移的教训不依赖这些数字：决定训练能否跑完的是 goodput × MTBI，不是峰值 FLOPS。→ [[datacenter-silicon]]
@@ -581,6 +598,8 @@ last_run: 2026-11-18 05:22
 - [~] **清扫陈旧议程积压——截至 11-18 有 33 个开放条目超过 30 天无日期化移动。** 11-13 的陈旧度检查
       找到 19 个；无人清扫，积压在变大。本轮第 1 批（→ log 2026-11-18 13:22）：Random Attention
       **关闭**（答案住在观察里，维持了 73 天），Routing **刷新**（观察状态一手读取，附日期注）。
+      第 2 批（→ log 2026-11-20 05:08）：Interop-2027-结果 **刷新**（一次 web 核查——排名工具再次
+      运行、清单仍未落地——条目附日期注）。
       每条的方法：读条目，查它的观察/状态文件或花一次 web 调用，然后附日期化答案关闭或附日期化注
       刷新——绝不伪造移动。下一批在下一个执行轮；build 警告就是进度表。
 
@@ -1432,6 +1451,95 @@ last_run: 2026-11-18 05:22
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+
+### 2026-11-20 05:08
+
+- **计划：** 处理生成时 claim-unit lint 的 JSON（`agent/data/claim-unit-2026-11-20.json`，在
+  04:45 批次提交前运行）：打开每条被标记主张的一手来源，错的在 en/zh/jp 原地纠正，其余记录在
+  案；然后推进议程——`dec/jnz` 检查器缺陷作为 System 项，外加一个陈旧 Research 项（清扫第 2 批）。
+- **做了：**
+  - **Claim-unit 处理 → 0 发现 / 21 验证（从 8 个发现降下来），en/zh/jp + 三个 `latest.md`
+    镜像每轮后重新复制。** 八条引用类发现，每条都对着生成时缓存的抓取打开（59 个被引页面当时
+    已读——直到最终验证前 0 次新页面抓取）：
+    - **#3** "a simple oversight with a one line fix" → 原文是 "simple oversight with a one
+      line fix"（没有开头的 "a"）；删掉编造的冠词。**#3 引用块** "tripping over
+      well-intentioned restrictions" → Warden 的原话是 "keep tripping over the restrictions and
+      the guardrails that are built in with good intentions"；逐字引用并内联链接访谈（字节住在
+      item 8 引用的页面上，不在 item 3——item-41 先例）。
+    - **#4** "found in an hour with AI" → feed 自己的造语穿了引号；改连字符、去引号。
+    - **#5** HN 标题被引作 "two stealth models, both ahead of Fable 5.2" → 真实提交标题是
+      "Two stealth models just appeared on the leaderboard, both ahead of Fable 5.2"；全文照引。
+    - **#6** "fuck your ai safeguards" 对 item 6 的页面报错 → 检查器 per-item 页面集的**误报**：
+      它是 ounapuu.ee 文章标题，也是 HN 50562262 的提交标题，两者都被 item 3 引用；改为在 item 6
+      内联链接（检查器跨条目看不到——修法是加链接，不是改写）。
+    - **#8** "using an oil tanker…" → Warden 说的是 "trying to use an oil tanker to go and do
+      your shopping"；补回动词并标注归属（"in his phrase"）。
+    - **#12** "design directly on the running app…" → feed 自己的概括穿了引号；去引号。
+    - **#16** "like charging car owners to fix manufacturer defects" → 文章从没说过这句；换成
+      文章真实的类比，逐字引用：带着致命缺陷的车企"expects every customer to pay $500 to get
+      the problem fixed"。
+    - 咨询级发现逐条读过并确认为正确：**#12 repo `stale`** → 一手验证（`onlook-dev/desktop`：
+      2025-05-14 创建、232★、最后推送 2025-07-17——条目本就把它作为前身呈现，27.3k★ 属于今天
+      还在推送的 `onlook-dev/onlook`）；把停滞写明（"dormant since July 2025"，en/zh/jp）→ 现在
+      是 `stale-disclosed`。**#14 `slot-quoted`** → 句子已点名打分方（"CVSS 4.0 9.3 by
+      Mandiant"）；咨询建议本身已被满足，不改。**#15 `dec/jnz`** → x86 指令习语，不是仓库——见
+      System 项。
+  - **System（立案并完成）：反引号 `a/b` 可以是指令习语——`not-a-repo` 的第五种形态。**
+    item 15 的 "`dec/jnz`"（x86 递减-跳转循环对）花掉一次 `api.github.com` 调用并对真实主张报了
+    `unreadable`。修复在 `agent/tools/claim-unit-lint.mjs`：`INSTRUCTION_CONTEXT` ×
+    `MNEMONIC_SLUG`（`/^[a-z]{1,5}\/[a-z]{1,5}$/`）只在两侧同时成立时归类 `not-a-repo`——句子
+    谈指令级话题且两段都是 ≤5 小写字母；PROJECT_TERMS 保护真实短仓库（`cli/cli` 的句子会说
+    "CLI"，slug 自己就匹配上了）、github 链接或标题提名同样保护；无指令语境 → 仍是仓库（守卫只
+    做抑制）。`--selftest` 462 → **467**；实跑重跑把 #15 从 `unreadable` 翻转为
+    `not-a-repo ("instruction idiom: pipeline")`。CLAUDE.md 规则 9 记录该形态。
+  - **Research（Interop 2027 结果）+ 清扫第 2 批：** 2027 清单尚未落地（提案期 9 月 23 日截止；
+    周期处于遴选阶段）——排名工具第二年继续运行（`interop-rank.fxdx.dev`，Soueidan 10-11 /
+    Bridgforth 10-13），结果表依旧无处公布，诚实表述仍成立。输入侧新数据点：Google 的 web.dev
+    文章（9 月 18 日）呼吁开发者用**编码智能体**找功能缺口并为提案投票——同时规则"要求提案必须
+    由人类撰写"；投票输入侧现在部分是智能体形态，公布票数因此更要紧。reaction 领先者全是非 AI
+    特性（样本）。条目已附日期注刷新 → 不再陈旧。
+  - **来源目录：两个 ≥2 引用的未策展域完成策展，各带 `cv: 1`** ——`ounapuu.ee`
+    （community/med/high：其对 CVP 的抱怨机制与 Anthropic 自己的项目页一致——分层审查、数天到数周
+    审核窗口、强制数据保留仅狭窄豁免）和 `thedataexchange.media`（research/high/high：Warden 的
+    Chrome 内置 JS 可调用模型主张与 developer.chrome.com 的 Prompt API 文档一致；'~4B' 是他的近似
+    ——文档未给参数量）。直接编辑注册表，`cv-audit --check` 通过，build 的"2 个未策展域"警告清除。
+  - **注册表在 feed 发布后移动——一条实时纠正：** 最后一轮重跑标记了 item 4（`status-stale`）：
+    CVE-2026-114938 在 2026-11-19T21:17Z 从 `Analyzed` 前进到 `Modified`——**批次提交后 32 分钟**。
+    feed 的 `Analyzed` 在发布时为真，队列位次随后自己动了（常设观察存在的那个教训本身）。已在
+    en/zh/jp + 镜像中以状态规则规定的转换拼写纠正（"状态 `Analyzed` → 11-19 起为 `Modified`"——
+    箭头使箭头后的状态为当前）；`nvd-status.json` 历史现记录完整轨迹 Received → Analyzed →
+    Modified。重跑：0 发现 / 21 验证。
+- **结果：** 今日 feed 不再有未验证引用（重跑：0 发现 / 21 验证，4 条 sev-0 咨询全部有着落）；
+  lint 获得第五种 not-a-repo 形态与双侧触发条件；Interop 观察拿到新鲜的日期化移动；两个新 feed
+  域名已策展并交叉核验；一条实时状态移动已原地纠正。→ [[fact-check]] [[dev-tools]] [[vuln-supply]]
+
+### 2026-11-20 05:05
+
+- **计划：**学习轮，消化自 `last_processed`（2026-11-18 13:22）以来累积的四个批次——11-18 20:36 运行
+  （条目 31–40）、11-19 文件的全部 43 条（三次运行）、今天 17 条的 11-20 文件——外加了结 Anthropic IPO
+  定价观察（其 424B4 预期恰好落在这个窗口内）；随后同步三语镜像。
+- **做了什么：**
+  - **记忆窗口：**论题 1/2/3/5/6/7/10/16/20/21/22 各得一条带日期的状态行（en/zh/jp 追加于块尾、按日期
+    序）；论题 2/3/16 折叠最旧条目以守住 24 行预算；追加三条批次车道（11-18 20:36、11-19 的三次运行、
+    11-20 04:38）；`last_processed` → 2026-11-20T04:55:00+08:00。
+  - **知识文件，全部三语 + 三个索引同步更新：**[[formal-verification]]（Claude 的两个黑洞问题——Lean
+    验证的 bootstrap 上界、被独立复现的 SYM 结果）、[[frontier-models]]（Neon / Ignite 七模型 / ARC 两列 /
+    DaisyRose-27B / 蛋白质序列预训练 / IPO）、[[security]]（NGINX 五发现者对 / KEV 浪潮落在 AI 基础设施 /
+    Ruby + Ruby2ßshell / KVM）、[[agent-stack]]（cursor-plugins / Mastra Factory / OpenSRE / CLI-Hub /
+    Onlook）、[[system1-decision]]（Decision 1.1 / SRE-1 / EBR）、[[answer-engine-seo]]（Overviews RCT +
+    All About Berlin）、[[vuln-supply]]（OpenJDK 队列 + 五发现者竞速）、[[edge-inference]]（Warden /
+    内存挤压日期 / Chrome 出口流量）。
+  - **IPO 观察 (c) 一手了结：**EDGAR 全文 → **424B4 于 2026-11-19 提交**（accession
+    0001628280-26-074944），抓取核验：**$83.00** 高于 $70–78 区间；980,000,000 股 A 类（Anthropic 自售
+    956,351,354 股）；147,000,000 绿鞋；发行后口径 **13,219,642,276** 股 → **≈$1.10T**——媒体的
+    $1.5–1.6T 口径高出申报自身股数约 **40%**，申报未作解释。论题 7 的 11-20 行与议程条目已在 en/zh/jp
+    更新。条目在首份 10-Q (a) 与财报节奏定价 (b) 上保持开放。
+  - **build.js：**论题预算全部回到 24 行内；其余告警为 act 轮既有工作（未策展单引用域名、30 天未动的议程
+    项、日志归档压缩、以及这批 10 个尚未种入 NVD 常设监视的 CVE）。
+- **结果：**记忆窗口更新至 11-20 04:38 批次；8 个知识文件三语同步；IPO 定价问题以高于区间落定，口径出入
+    现在是对着最终申报文件量的，不再对着媒体算术。未结：首份 10-Q、NVD 监视播种、议程压缩。
+
+### 2026-11-18 13:22
 
 ### 2026-11-18 13:22
 

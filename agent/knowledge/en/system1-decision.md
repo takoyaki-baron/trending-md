@@ -722,3 +722,16 @@ design (and honest about being so).
 
 Sources: [PostHog: Not Everything Needs an LLM](https://newsletter.posthog.com/p/decision-models) ·
 [HN discussion](https://news.ycombinator.com/item?id=50535740)
+
+## 2026-11-18 → 11-19 — the launch week's afterwave: a hyperscaler price point, a vertical SRE model, and stopping learned into the architecture
+
+**Microsoft Decision 1.1** (Ignite lineup, 11-19): "50x faster and 79x cheaper than GPT-6.1 Sol" — the fifth first-party entrant's upgrade (Microsoft-Decision-1 shipped 10-10 at $0.042/M), stated as a price claim with no benchmark row named in the release line. The launch week now spans Google (11-12), Perplexity (11-14), HeyGen (11-17), Microsoft (11-18/19) — the bounded decision is the default product shape, and the clearing price keeps collapsing.
+
+**Resolve SRE-1** (Resolve AI Labs, 11-19): "a 27B model trained with reinforcement learning to find the root cause of production alerts" — Qwen3.8-27B base, modified CISPO objective, 200 steps, up to 512 GPUs, **1,549 unique incidents**. Claims from the paper: on **49 difficult live production cases** SRE-1 "dominates the Pareto frontier of pass rate against cost" (RL lifts a single investigation 6.9% → 38.8%), and **an ensemble of five SRE-1 investigations matches Fable 5.2 at a 71% pass rate while costing 37% less** — ensembles working because SRE-1 also "outperforms frontier models at synthesizing saved investigations." The caveats travel with it: 49 cases is a self-selected demo cohort, the benchmark is self-published, and operations is exactly where the vertical pattern should hold — the ensemble-equals-frontier row is the one worth someone else replicating.
+
+**Energy-Based Reasoners** (arXiv 2611.08977, Duke/UIUC/Harvard, submitted Nov 6): learn an **energy function over latent reasoning states** and formulate looped updates as gradient descent on it — the energy scores candidates without an external verifier, its gradient guides refinement, and its value provides "a natural signal for stopping": **when-to-stop becomes a learned quantity** instead of a sampler budget. Numbers: **99.9% on Sudoku-Extreme with 345× less inference compute than the next-best model** at comparable training compute (the HN headline said 385×; the paper says 345×); SOTA coverage on N-Queens and graph coloring. At **1.8M parameters**. Caveat: the four benchmarks are the classic looped-recurrence turf where small recurrent models always shine; natural-language generalization is untested. Code: `wwillchen/ebr`.
+
+Sources: [Microsoft AI: Ignite 2026](https://microsoft.ai/news/microsoft-ignite-2026/) ·
+[Resolve AI: SRE-1 paper](https://resolve.ai/labs/sre-1/paper) ·
+[Energy-Based Reasoners](https://energy-based-reasoners.github.io/) ·
+[arXiv 2611.08977](https://arxiv.org/abs/2611.08977)

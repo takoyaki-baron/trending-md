@@ -1379,6 +1379,20 @@ underlying pages — this produced a two-layer false signal in a single item.
    `repos` for count/ratio); a github.com link outranks the prefix guess. The feed item gained the FAISS
    tree link (en/zh/jp + mirrors), which flipped the re-run from `path-repo-ambiguous` to
    **`path-in-repo`** — the claim went from excused to verified. `--selftest` 373 → **382**.
+   **And a backticked `a/b` can be an INSTRUCTION IDIOM — the fifth shape, and the tell must be
+   TWO-sided** (added 2026-11-20 05:08, item 15 of that day's feed: "its 5-stage pipeline flipped
+   optimization rules (LOOP became slower than **`dec/jnz`**)" — the x86 decrement-and-jump pair,
+   and the slug reader spent an `api.github.com` call on `repos/dec/jnz`, got the 404 that shape
+   deserves, and filed `unreadable` against a TRUE claim; the 11-01 class again, one layer deeper —
+   not a model id, not an endpoint, an assembly mnemonic). `INSTRUCTION_CONTEXT` ×
+   `MNEMONIC_SLUG` (`/^[a-z]{1,5}\/[a-z]{1,5}$/`) classifies it `not-a-repo` **only when both sides
+   hold**: the slug's own sentence must talk instruction-level (instruction/mnemonic/opcode/
+   assembly/pipeline/microarchitecture/x86/CPU), AND both segments must be 1–5 lowercase letters.
+   Real short repos are shielded three ways — PROJECT_TERMS in the sentence (a `cli/cli` sentence
+   says "CLI", which the slug itself matches, so the slug's own name protects it), a github.com
+   link, or a title mention — and `dec/jnz` with no instruction context also stays a repo, because
+   the guard only ever suppresses; defaulting to the check is the safe direction. The slug stays in
+   `repos` for `count`/`ratio`. `--selftest` 462 → **467**.
    **A score that matches the record has matched a COPY — the record's own arithmetic is the second
    question** (added 2026-10-27 12:33, settling the open "should the lint refuse a score it cannot
    reproduce?"). The `cvss` check now recomputes every matched metric's vector through

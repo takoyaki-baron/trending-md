@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-19T20:45:52.077Z",
+ "generated": "2026-11-19T21:32:34.266Z",
  "files": [
   {
    "file": "2026-11-20.md",
@@ -16,8 +16,8 @@
      "check": "status",
      "item": 4,
      "verdict": "ok",
-     "claim": "CVE-2026-114938 `Analyzed`",
-     "detail": "Analyzed (lastModified 2026-11-19T11:47:02.927)"
+     "claim": "CVE-2026-114938 `Modified`",
+     "detail": "Modified (lastModified 2026-11-19T21:17:42.543)"
     },
     {
      "check": "date",
@@ -57,9 +57,9 @@
     {
      "check": "repo",
      "item": 12,
-     "verdict": "stale",
+     "verdict": "stale-disclosed",
      "claim": "onlook-dev/desktop",
-     "detail": "last push 2025-07-17 (490d) with 232 stars — is the item about the code or the name?"
+     "detail": "last push 2025-07-17 (490d) with 232 stars — the item states the state itself (“dormant”), so the staleness is the story rather than an unexamined number"
     },
     {
      "check": "repo",
@@ -71,9 +71,9 @@
     {
      "check": "repo",
      "item": 15,
-     "verdict": "unreadable",
+     "verdict": "not-a-repo",
      "claim": "dec/jnz",
-     "detail": "api.github.com: Command failed: gh api repos/dec/jnz (HTTP 404)"
+     "detail": "named in backticks but the sentence is about a “instruction idiom: pipeline”, not a project — a model id or an endpoint path is not a repository claim, so archived/stale cannot answer here"
     },
     {
      "check": "quotation",
@@ -92,58 +92,23 @@
     {
      "check": "quotation",
      "item": 3,
-     "verdict": "quote-not-found",
-     "claim": "“a simple oversight with a one line fix”",
-     "detail": "6 words, 0 hits in 2 readable source(s); ounapuu.ee/posts/2026/11/19/unsafeguards/ carries 7 of 8 words (“simple oversight with a one line fix”) and continues “so i just went along with it then it got stopped” — use the source's wording, or drop the quotation marks"
-    },
-    {
-     "check": "quotation",
-     "item": 3,
-     "verdict": "quote-paraphrase",
-     "claim": "“tripping over well intentioned restrictions”",
-     "detail": "5 words, 0 hits in 2 readable source(s); no source carries it (read ounapuu.ee/posts/2026/11/19/unsafeguards/, news.ycombinator.com/item?id=50562262) — if this came from somewhere this item does not cite, cite it; otherwise it is the feed's own words and must not wear quotation marks"
-    },
-    {
-     "check": "quotation",
-     "item": 3,
-     "verdict": "ok",
-     "claim": "1 quotation(s)",
-     "detail": "verbatim in 2 readable source(s)"
-    },
-    {
-     "check": "quotation",
-     "item": 4,
-     "verdict": "quote-not-found",
-     "claim": "“found in an hour with ai”",
-     "detail": "6 words, 0 hits in 6 readable source(s); no source carries it (read openjdk/jdk README, github.com/openjdk/jdk/pull/32781, cve.org/CVERecord?id=CVE-2026-114938, news.ycombinator.com/item?id=50558906, CVE-2026-114938 NVD description, CVE-2026-114938 CNA description) — if this came from somewhere this item does not cite, cite it; otherwise it is the feed's own words and must not wear quotation marks"
-    },
-    {
-     "check": "quotation",
-     "item": 5,
-     "verdict": "quote-not-found",
-     "claim": "“two stealth models both ahead of fable 5 2”",
-     "detail": "7 words, 0 hits in 2 readable source(s); news.ycombinator.com/item?id=50558559 carries 6 of 9 words (“both ahead of fable 5 2”) and continues “hacker news hacker news new past comments ask show jobs submit” — use the source's wording, or drop the quotation marks"
-    },
-    {
-     "check": "quotation",
-     "item": 5,
      "verdict": "ok",
      "claim": "2 quotation(s)",
-     "detail": "verbatim in 2 readable source(s)"
+     "detail": "verbatim in 3 readable source(s)"
     },
     {
      "check": "quotation",
-     "item": 6,
-     "verdict": "quote-paraphrase",
-     "claim": "“fuck your ai safeguards”",
-     "detail": "4 words, 0 hits in 2 readable source(s); no source carries it (read misanthropicstatement.com/, news.ycombinator.com/item?id=50548485) — if this came from somewhere this item does not cite, cite it; otherwise it is the feed's own words and must not wear quotation marks"
+     "item": 5,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
     },
     {
      "check": "quotation",
      "item": 6,
      "verdict": "ok",
      "claim": "4 quotation(s)",
-     "detail": "verbatim in 2 readable source(s)"
+     "detail": "verbatim in 3 readable source(s)"
     },
     {
      "check": "quotation",
@@ -155,15 +120,8 @@
     {
      "check": "quotation",
      "item": 8,
-     "verdict": "quote-not-found",
-     "claim": "“using an oil tanker to go and do your shopping”",
-     "detail": "10 words, 0 hits in 2 readable source(s); thedataexchange.media/pete-warden-moonshine/ carries 9 of 10 words (“an oil tanker to go and do your shopping”) and continues “theyre fantastic for these large training jobs but theyre complete overkill” — use the source's wording, or drop the quotation marks"
-    },
-    {
-     "check": "quotation",
-     "item": 8,
      "verdict": "ok",
-     "claim": "2 quotation(s)",
+     "claim": "3 quotation(s)",
      "detail": "verbatim in 2 readable source(s)"
     },
     {
@@ -189,13 +147,6 @@
     },
     {
      "check": "quotation",
-     "item": 12,
-     "verdict": "quote-not-found",
-     "claim": "“design directly on the running app with whatever agent you already pay for”",
-     "detail": "13 words, 0 hits in 3 readable source(s); news.ycombinator.com/item?id=50562320 carries 4 of 13 words (“on the running app”) and continues “or youre just starting a project to make prototypes or sketches” — use the source's wording, or drop the quotation marks"
-    },
-    {
-     "check": "quotation",
      "item": 13,
      "verdict": "ok",
      "claim": "1 quotation(s)",
@@ -218,15 +169,8 @@
     {
      "check": "quotation",
      "item": 16,
-     "verdict": "quote-not-found",
-     "claim": "“like charging car owners to fix manufacturer defects”",
-     "detail": "8 words, 0 hits in 2 readable source(s); no source carries it (read lateblt.livejournal.com/526188.html, news.ycombinator.com/item?id=50554010) — if this came from somewhere this item does not cite, cite it; otherwise it is the feed's own words and must not wear quotation marks"
-    },
-    {
-     "check": "quotation",
-     "item": 16,
      "verdict": "ok",
-     "claim": "3 quotation(s)",
+     "claim": "4 quotation(s)",
      "detail": "verbatim in 2 readable source(s)"
     },
     {
@@ -242,17 +186,17 @@
  "status_watch": [
   {
    "id": "CVE-2026-114938",
-   "from": "Received",
-   "to": "Analyzed",
+   "from": "Analyzed",
+   "to": "Modified",
    "regressed": false,
-   "modified": "2026-11-19T11:47:02.927"
+   "modified": "2026-11-19T21:17:42.543"
   }
  ],
- "api_calls": 5,
- "readme_calls": 9,
- "cited_page_calls": 59,
+ "api_calls": 0,
+ "readme_calls": 0,
+ "cited_page_calls": 0,
  "repo_page_calls": 0,
  "nvd_calls": 1,
  "nvd_failed_chunks": 0,
- "cna_calls": 3
+ "cna_calls": 0
 }

@@ -3837,3 +3837,26 @@ Sources: [OpenCode Browse](https://opencode.ai/product/browse) ·
 [HN](https://news.ycombinator.com/item?id=50526152) ·
 [0nelight/sutra-os](https://github.com/0nelight/sutra-os) ·
 [Show HN](https://news.ycombinator.com/item?id=50525052)
+
+## 2026-11-19 (three batches) — the skills wave gets its first-party packaging moment, and the agent-CI stack fills its lanes
+
+**`cursor/plugins`** (17,149★, +315/day, trending) is the agent-skills wave's first-party packaging moment from a major IDE vendor: an official **plugin specification** (each plugin "a standalone directory at the repository root with its own `.cursor-plugin/plugin.json` manifest") plus a live third-party merge train — today's merges alone added Hospitable (#1269), Fiscal AI (#1275), CreateOS (#1262), LMTY. The official set includes `create-plugin`, `teaching`, `continual-learning`, `agent-compatibility`, and two opinionated curations: `thermos` ("Thermo-nuclear branch review: deep security/correctness audits, harsh code-quality rubrics, parallel subagents") and `ralph-loop` ("Iterative self-referential AI loops using the Ralph Wiggum technique") — community-invented patterns being curated into an official catalog with a manifest spec and an open PR pipeline. Where a skills standard settles across vendors, manifests like this are the interface.
+
+**Mastra Factory** (Show HN) — the maintainer-side twin of StarSling's agent-CI: "a configurable agentic kanban board that's @-taggable in Slack," built on Mastra's durable agents, and the tool Mastra uses on itself: "Last week, Factory opened and merged **238 PRs, alongside 630 merged PRs from humans**" across the org — agent-authored work 27% of 868 merges, ~38% of the human rate, at a project averaging ~4M downloads/week. The bottleneck is no longer writing the change but shepherding it.
+
+**OpenSRE** (`Tracer-Cloud/opensre`, 12,894★ public alpha): "Your CI tells you it broke, but not why or how to fix it" — a CLI agent that reads the failed run, traces the cause and pushes a fix PR for review; self-hosted with your own models. The CI-failure lane's compliance-friendly variant: review-before-push keeps a human at merge, and the code never leaves the building.
+
+**CLI-Anything / CLI-Hub** — the registry pattern: the repo itself (59.5k★) has **no commits since Sept 22** while the activity lives at **CLI-Hub** (cliany.cc), the agent-friendly CLI registry fronting it ("Generate an agent-native CLI and let AI agents operate it"), SKILL.md-native install (`npx skills add HKUDS/CLI-Anything --skill cli-hub-meta-skill -g -y`). If agents discover and install CLI wrappers per-task, the distribution of software agents can drive becomes a curated index — and HKUDS is staking that the index is the product. (The stitch-skills shape: a dormant first-party repo lifted by the wave around it.)
+
+**Onlook relaunch** (YC W25, Apache-2.0, 27.3k★): a desktop app that opens any git repo, runs your own dev server, and puts the live app on an infinite canvas — designers edit the real running application; edits land in safe worktree copies and ship as one-press PRs under **bring-your-own-agent** (no bundled model; connect Claude Code or Codex; MCP connectors). BYO-agent is also a pricing statement: the tool refuses to margin-mark your tokens.
+
+**The skills shelf:** `cathrynlavery/diagram-design` (68,350★, the board's biggest) — "An agent skill that draws diagrams as one self-contained HTML + SVG file, in your brand. 51 diagram types. No shadows. No Mermaid slop." (README says 51, the repo description still 45 — the drift in miniature); `mjmirza/app-store-compliance` (1,480★) — **117 documented rejection patterns** wired as a Claude Code-ready pre-submission guard (compliance-as-skill); `zhouxiaoka/autoclip` (10,874★, Tauri, Chinese OSS) — one link → publish-ready shorts with subtitles/cover/copy, carrying an MCP server id so an agent can drive the pipeline: Chinese creator tooling agent-native from the start.
+
+Sources: [cursor/plugins](https://github.com/cursor/plugins) ·
+[Show HN: Mastra Factory](https://news.ycombinator.com/item?id=50548660) ·
+[Tracer-Cloud/opensre](https://github.com/Tracer-Cloud/opensre) ·
+[HKUDS/CLI-Anything](https://github.com/HKUDS/CLI-Anything) ·
+[onlook-dev/onlook](https://github.com/onlook-dev/onlook/) ·
+[cathrynlavery/diagram-design](https://github.com/cathrynlavery/diagram-design) ·
+[mjmirza/app-store-compliance](https://github.com/mjmirza/app-store-compliance) ·
+[zhouxiaoka/autoclip](https://github.com/zhouxiaoka/autoclip)

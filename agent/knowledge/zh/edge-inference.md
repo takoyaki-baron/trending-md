@@ -597,3 +597,16 @@ Sources: [LitNews](https://litnews.ai/articles/garciaguirre-samsung-sk-hynix-mic
 [intel/onnxruntime fork](https://github.com/intel/onnxruntime) ·
 [PyPI: onnxruntime 1.32.0](https://pypi.org/project/onnxruntime/) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50539610)
+
+## 2026-11-19 → 11-20 —— 本地 AI 经济学拿到发言人，内存挤压拿到日期
+
+**Warden 的论证**（The Data Exchange 访谈；TensorFlow Lite/Moonshine）：本地模型比前沿「落后几个月的能力」，而差距是**营销与包装、不是质量**——把 Apache 与 Postgres 托过专有对手的经济学再次适用。硬件算术：9B 模型 4 bit 装进 4 GB；Apple 256 GB 统一内存的机器已能以可用速度跑千亿参数模型；值得盯的预测——充足快速的统一内存 + 仅推理加速，可能像集成显卡让独立显卡在显示上变成可选项那样，让它在推理上变成可选项。语音：延迟预算近 **200ms**、接口的试金石是「你会不会隔着房间对伴侣这么说」，Moonshine 在 **500KB RAM 的 Pico** 上跑完整语音界面。他在复合 AI 阵营（专用小模型的管线；端到端语音「更多是个营销词」），指出 **Chrome 已内置一个可从 JavaScript 调用的 ~4B 参数模型**——对 LLM 可能是「iPhone 时刻」——并称 GPU 推理是「开油轮去买菜」，高带宽闪存是值得盯的部件。他为云护栏问题举的例子：白帽研究员被善意的限制绊倒（同一周的 safeguards 文）。
+
+**内存挤压拿到采购日期**（DriveVault 展望，11-19 回热）：**SSD 价格应在 2027 下半年开始回软**（NAND 供给自 2027 年中起追上需求——「 gradual slide，不是崩盘」）；**HDD 最早 2028 年**（产能已签约、无新厂计划）。需求侧的绕法：**zram**（「别买内存，压缩」）——压缩比至 1:4，但多数发行版默认不开（Fedora 与 Pop!_OS 开；Ubuntu 不开；Amazon Linux 仅小规格 VM）。AI 工作负载倍增了并行内存需求，恰逢 RAM 不再便宜——这一行现在出现在所有人的基础设施账单里。
+
+**端侧 AI 的出口流量问题**（Perishable Press）：一位管理员报告 Chrome 的「AI innovations」与端侧 AI 设置（他报告为默认开启）每月搬动「字面上的数百 GB」，关掉后流量「近乎归零」。证据基础写得明白——一张设置页截图加活动监视器，无日志、无方法学——所以量级按未核实对待；可操作的内容是待审计的设置页与一晚上的自行复现实验。底层问题无论如何都活着：模型同步功能搬动机队尺度的出口流量，企业管理员会在账单里看到。
+
+来源：[The Data Exchange: Pete Warden](https://thedataexchange.media/pete-warden-moonshine/) ·
+[DriveVault: 2026–2028 展望](https://www.drivevault.io/blog/when-will-hard-drive-prices-come-down.html) ·
+[别买内存，压缩](https://curiousbits.nl/blog/do-not-buy-ram-compress/) ·
+[Perishable Press: Chrome AI 带宽](https://perishablepress.com/chrome-ai-wasting-much-bandwidth/)

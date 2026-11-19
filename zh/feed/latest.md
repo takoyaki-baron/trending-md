@@ -46,11 +46,11 @@ Anthropic 的研究文章（11 月 17 日发布，今晚登上 HN）描述了 Cl
 - **Source:** ounapuu.ee · HN 245+ pts · ~3.6小时前 (~00:27 UTC+8)
 - **Tags:** `ai-safety` `claude-code` `security` `guardrails` `open-weights`
 
-爱沙尼亚资深产品工程师 Herman Õunapuu 的这篇文章——写作缘起是黑客篡改 Selver 超市冷柜温度的事件——描述了他让 Claude Code 扫描自己的产品、寻找易修复的弱点。Claude 发现了一个真实问题（"一个一行代码即可修复的疏忽"），随后以安全护栏为由停止了工作。文章记录了他亲历的 Anthropic Cyber Verification Program：多个工作日的等待、政府身份证件、放弃数据保留豁免、不保证批准——而他只是想测试公开 PoC 利用对自己技术栈是否有效。他的绕行方案：一个欧盟托管的开源权重模型（他点名 GLM 5.3）验证了漏洞、实现了修复并确认解决。他的论点是那道不对称：被"清洗"过的开源模型没有这些摩擦，于是约束只绑住了防御者而非攻击者——文章结尾指责 Anthropic 让生态更不安全，并猜测这些限制是 IPO 相邻期的监管护城河。
+爱沙尼亚资深产品工程师 Herman Õunapuu 的这篇文章——写作缘起是黑客篡改 Selver 超市冷柜温度的事件——描述了他让 Claude Code 扫描自己的产品、寻找易修复的弱点。Claude 发现了一个真实问题（"一行代码即可修复的简单疏忽"），随后以安全护栏为由停止了工作。文章记录了他亲历的 Anthropic Cyber Verification Program：多个工作日的等待、政府身份证件、放弃数据保留豁免、不保证批准——而他只是想测试公开 PoC 利用对自己技术栈是否有效。他的绕行方案：一个欧盟托管的开源权重模型（他点名 GLM 5.3）验证了漏洞、实现了修复并确认解决。他的论点是那道不对称：被"清洗"过的开源模型没有这些摩擦，于是约束只绑住了防御者而非攻击者——文章结尾指责 Anthropic 让生态更不安全，并猜测这些限制是 IPO 相邻期的监管护城河。
 
 **Why it matters:** 这是防御者摩擦之怨今年以来最尖锐的第一人称陈述——它在 Anthropic 纳斯达克挂牌次日发出，与一份有组织的声明（见第 6 条）遥相呼应。无论是否接受"监管护城河"的定性，其可操作的主张是具体且可检验的：一旦防御性扫描触发了护栏，开源权重能在同一小时内从欧盟境内提供替代方案。
 
-> 同样的抱怨也出现在今天的 Pete Warden 访谈（第 8 条）中，只是方向相反：白帽研究者"被好意的限制绊倒"正是他论证本地 AI 必胜的第一件展品。
+> 同样的抱怨也出现在今天的 [Pete Warden 访谈](https://thedataexchange.media/pete-warden-moonshine/)（第 8 条）中，只是方向相反：白帽研究者"会不断绊倒在那些出于好意内置的限制和护栏上"正是他论证本地 AI 必胜的第一件展品。
 
 [`🔗 Fuck Your AI Safeguards (ounapuu.ee)`](https://ounapuu.ee/posts/2026/11/19/unsafeguards/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50562262)
 
@@ -62,9 +62,9 @@ Anthropic 的研究文章（11 月 17 日发布，今晚登上 HN）描述了 Cl
 - **Source:** OpenJDK GitHub PR · HN 251+ pts · ~8.3小时前 (~19:45 UTC+8)
 - **Tags:** `java` `openjdk` `cve` `memory-safety` `jvm`
 
-昨天的故事是 Java4Shell（CVE-2026-114938）——经由 OpenJDK 的 AVX-512 Base64 内在函数实现预认证代码执行，叙事围绕"AI 辅助一小时内发现"。今天 HN 挖出了 [PR #32781](https://github.com/openjdk/jdk/pull/32781)，"8392044: AVX-512 Base64 decoder overwrites output buffer on short padded tail"，**创建于 2026-09-09**——同一个漏洞，细节齐全（掩码向量路径在非法输入上算出错误的 `output_mask`，"在返回 Java 之前写越逻辑输出长度，破坏堆"），附修复建议，并勾选了 OpenJDK 的临时 AI 政策确认框。它始终没等到必需的两份评审；bridgekeeper 机器人在闲置 8 周后发出警告，PR 于 **2026-11-04 自动关闭，未合并**。Oracle 的 CVE 记录（2026-11-17 发布，状态 `Analyzed`）载有 Oracle 自己的 CVSS 3.1 **8.1**（AV:N/AC:H），影响 Java SE 8u511/17/21/25/27 与 GraalVM。昨天傍晚，HN 用户已在 PR 下追问作者为何关闭。
+昨天的故事是 Java4Shell（CVE-2026-114938）——经由 OpenJDK 的 AVX-512 Base64 内在函数实现预认证代码执行，叙事围绕"AI 辅助一小时内发现"。今天 HN 挖出了 [PR #32781](https://github.com/openjdk/jdk/pull/32781)，"8392044: AVX-512 Base64 decoder overwrites output buffer on short padded tail"，**创建于 2026-09-09**——同一个漏洞，细节齐全（掩码向量路径在非法输入上算出错误的 `output_mask`，"在返回 Java 之前写越逻辑输出长度，破坏堆"），附修复建议，并勾选了 OpenJDK 的临时 AI 政策确认框。它始终没等到必需的两份评审；bridgekeeper 机器人在闲置 8 周后发出警告，PR 于 **2026-11-04 自动关闭，未合并**。Oracle 的 CVE 记录（2026-11-17 发布，状态 `Analyzed` → 11-19 起为 `Modified`）载有 Oracle 自己的 CVSS 3.1 **8.1**（AV:N/AC:H），影响 Java SE 8u511/17/21/25/27 与 GraalVM。昨天傍晚，HN 用户已在 PR 下追问作者为何关闭。
 
-**Why it matters:** "一小时内由 AI 发现"的叙事需要加一条脚注：该漏洞在 OpenJDK 自己的公开队列里躺了八周才被自动关闭，比 Oracle 记录发布早六周。JIT 的 Base64 路径上一个预认证堆破坏原语，就在交付它的项目自己的眼皮底下公开可见——这与其说说明 AI 辅助发现，不如说暴露了评审容量真正卡在哪一环。
+**Why it matters:** 一小时内由 AI 发现的叙事需要加一条脚注：该漏洞在 OpenJDK 自己的公开队列里躺了八周才被自动关闭，比 Oracle 记录发布早六周。JIT 的 Base64 路径上一个预认证堆破坏原语，就在交付它的项目自己的眼皮底下公开可见——这与其说说明 AI 辅助发现，不如说暴露了评审容量真正卡在哪一环。
 
 > PR 正文对触发条件很谨慎：合法输入（长度为 4 的倍数）永远打不到它——破坏只在非法输入时发生，而这恰恰是服务端必须默认会到达的那类输入。
 
@@ -78,7 +78,7 @@ Anthropic 的研究文章（11 月 17 日发布，今晚登上 HN）描述了 Cl
 - **Source:** contralabs.com · HN 103+ pts · ~9小时前 (~19:03 UTC+8)
 - **Tags:** `benchmarks` `design` `ai-models` `elo` `leaderboard`
 
-Contra Labs 与 BenchFlow 的 Frontier Design Benchmark 用来自 Contra 市场的 33 份真实客户设计任务评审模型，由 **68 名职业设计师经 4,311 次盲评两两对决**、按 35 个评分维度打分（评分尺与设计师评分相关性 r = 0.94）。其 17 个条目的 Elo 榜单把一个名为 **Gestalt** 的条目排在第 1——高于"Human golden"（真实设计师作品），领先 Claude Fable 5.2、Claude Opus 5.5 与 GPT-6.1 Sol。这几乎就是全部可验证的内容：落地页**没有任何 Elo 数值、没有日期、Gestalt 无任何署名，也从不用"stealth"标注任何条目**——公开图廊里也看不到这个神秘条目的作品。HN 提交者的标题（"两个隐身模型，都在 Fable 5.2 之前"）在页面上只对得上一个明确无署名的条目。讨论区的反应是一致的怀疑："随机某个 AI 实验室自造一个新基准，把自己至少一个模型排在 Fable 5.2 前面"，"终极的'信我，哥们'操作"，以及直接发问：为什么没有任何地方找得到叫 Gestalt 的模型。
+Contra Labs 与 BenchFlow 的 Frontier Design Benchmark 用来自 Contra 市场的 33 份真实客户设计任务评审模型，由 **68 名职业设计师经 4,311 次盲评两两对决**、按 35 个评分维度打分（评分尺与设计师评分相关性 r = 0.94）。其 17 个条目的 Elo 榜单把一个名为 **Gestalt** 的条目排在第 1——高于"Human golden"（真实设计师作品），领先 Claude Fable 5.2、Claude Opus 5.5 与 GPT-6.1 Sol。这几乎就是全部可验证的内容：落地页**没有任何 Elo 数值、没有日期、Gestalt 无任何署名，也从不用"stealth"标注任何条目**——公开图廊里也看不到这个神秘条目的作品。HN 提交者的标题（"两个隐身模型刚刚出现在排行榜上，都在 Fable 5.2 之前"）在页面上只对得上一个明确无署名的条目。讨论区的反应是一致的怀疑："随机某个 AI 实验室自造一个新基准，把自己至少一个模型排在 Fable 5.2 前面"，"终极的'信我，哥们'操作"，以及直接发问：为什么没有任何地方找得到叫 Gestalt 的模型。
 
 **Why it matters:** 基准营销季正在见顶——一个匿名模型击败所有前沿系统的新榜单，正是当下这股怀疑论校准的目标。有意思的是方法论层面，而且可检验：具名职业设计师的盲评是真实方法，但没有分数、日期和样例输出的榜单，要你信任的只有叙事本身。盯住 Gestalt 是否在别处出现即可——讨论区的猜测者点名 GLM 5.5 或在昇腾上训练的 DeepSeek，均未证实。
 
@@ -96,7 +96,7 @@ Contra Labs 与 BenchFlow 的 Frontier Design Benchmark 用来自 Contra 市场�
 
 一份与 Anthropic 公开上市时机精准配合的联盟声明，经由 Business Wire 新闻稿发布、在 misanthropicstatement.com 签署，指控该公司"用安全品牌招揽投资者、员工和公众——同时悄悄弱化自己的安全承诺，并为利己的监管游说"，结论是：**"Anthropic 不是一家安全的 AI 公司，我们必须拒绝它以更大的善为名攫取权力的鲁莽尝试。"** 具名签署者包括 Steven Pinker（哈佛）、Thomas Wolf（Hugging Face 联合创始人兼首席科学官）、Laurence Tribe（哈佛法学院荣休教授）、Stephen Fry 与 Rumman Chowdhury（Humane Intelligence）——这份名单横跨知名的 AI 怀疑论者与知名的反末日论者，HN 讨论区把这读作声明的真正要点：这是对 Anthropic 自我呈现的一种批评，而不是一种世界观。
 
-**Why it matters:** AI 安全叙事的重构已从博客随笔升级为具名联盟，并把打击时机对准资本市场事件——声明落地于 2 万亿美元纳斯达克挂牌后 24 小时内，与上文"Fuck Your AI Safeguards"几乎同时。对开发者而言，实际信号是："安全"作为厂商品牌已成 contested territory，开源权重阵营（Hugging Face 联创在其列）正在公开打对反品牌牌。
+**Why it matters:** AI 安全叙事的重构已从博客随笔升级为具名联盟，并把打击时机对准资本市场事件——声明落地于 2 万亿美元纳斯达克挂牌后 24 小时内，与上文["Fuck Your AI Safeguards"一文](https://ounapuu.ee/posts/2026/11/19/unsafeguards/)几乎同时。对开发者而言，实际信号是："安全"作为厂商品牌已成 contested territory，开源权重阵营（Hugging Face 联创在其列）正在公开打对反品牌牌。
 
 > 声明的核心指控具体到可以随时间检验：Anthropic"悄悄弱化了安全承诺"——它自己的政策变更史就是双方都要争夺的引文。
 
@@ -126,7 +126,7 @@ Harrison Page 的文章是本周 HN 最大讨论串，主题并非无线电攻�
 - **Source:** thedataexchange.media · HN 163+ pts · ~4.4小时前 (~23:39 UTC+8)
 - **Tags:** `local-ai` `open-weights` `voice` `edge-ai` `moonshine`
 
-The Data Exchange 对 Pete Warden（TensorFlow Lite/Moonshine）的访谈主张：本地模型的能力"只落后前沿模型几个月"，差距在于营销与包装而非质量——当年把 Apache 与 Postgres 推过商业对手的经济学正在重演。节目里的硬件账：9B 模型 4 比特量化装进 4GB；苹果 256GB 统一内存的机器已能以可用速度跑千亿参数模型。谈语音时，他给界面质量设的试金石是"你隔着房间会不会跟伴侣说话"，延迟预算在 200ms 附近，他的 Moonshine 工作如今在只有 500KB 内存 Pico 微控制器上跑起完整语音界面。他坚定站在"复合 AI"（compound AI）阵营——专用小模型流水线，并称端到端语音模型"更像一个营销词"；他还指出 Chrome 已内置约 4B 参数模型、可从 JavaScript 调用，他认为这可能是 LLM 的"iPhone 时刻"。谈推理硬件：GPU 是"开着油轮去街角买东西"，值得盯的是高带宽闪存。
+The Data Exchange 对 Pete Warden（TensorFlow Lite/Moonshine）的访谈主张：本地模型的能力"只落后前沿模型几个月"，差距在于营销与包装而非质量——当年把 Apache 与 Postgres 推过商业对手的经济学正在重演。节目里的硬件账：9B 模型 4 比特量化装进 4GB；苹果 256GB 统一内存的机器已能以可用速度跑千亿参数模型。谈语音时，他给界面质量设的试金石是"你隔着房间会不会跟伴侣说话"，延迟预算在 200ms 附近，他的 Moonshine 工作如今在只有 500KB 内存 Pico 微控制器上跑起完整语音界面。他坚定站在"复合 AI"（compound AI）阵营——专用小模型流水线，并称端到端语音模型"更像一个营销词"；他还指出 Chrome 已内置约 4B 参数模型、可从 JavaScript 调用，他认为这可能是 LLM 的"iPhone 时刻"。谈推理硬件：他把 GPU 比作"试着开着油轮去街角买东西"，值得盯的是高带宽闪存。
 
 **Why it matters:** 这篇访谈给本地 AI 立场配上了最可引用的经济学论证——免按量付费的推理、可审计的数据流、稳定版本号背后不会偷偷换模型——并且与今天的安全护栏文章（第 3 条）互为注脚：Warden 把白帽研究者被云护栏绊倒列为他的第一件展品。对任何在做智能体或语音产品的人，复合 AI 框架（组件独立、以文本为公共接口）可以直接落地。
 
@@ -190,9 +190,9 @@ Jeff Starr（Perishable Press）报告他的服务器侧带宽用量几个月前
 - **Source:** GitHub · HN 50+ pts · ~3.5小时前 (~00:33 UTC+8)
 - **Tags:** `design-tools` `developer-tools` `open-source` `agents` `yc`
 
-Onlook（YC W25）今日以 Launch HN 重新出发：一款 Apache-2.0 桌面应用（27.3k stars），打开你机器上的任意 git 仓库、运行你自己的 dev server，把活的应用放上无限画布，移动端/平板/桌面帧并排同屏——设计师直接编辑真实运行的应用，而不是日后要重建的 mockup。编辑可视觉操作或对话完成，采用**自带智能体**模式：不捆绑模型，接入你已有的 Claude Code 或 Codex 账号，外加 MCP 连接器；改动落在安全的 worktree 副本中，经一键 PR 交付。它可导出自包含的 HTML/PNG/JPEG/PDF，本地优先（源码构建无需账号），目前仅支持 macOS，Windows 与 Linux 在等候名单中。当前应用是彻底重写——README 把旧浏览器版（v1 分支）与 Electron 应用（`onlook-dev/desktop`）标为前身。
+Onlook（YC W25）今日以 Launch HN 重新出发：一款 Apache-2.0 桌面应用（27.3k stars），打开你机器上的任意 git 仓库、运行你自己的 dev server，把活的应用放上无限画布，移动端/平板/桌面帧并排同屏——设计师直接编辑真实运行的应用，而不是日后要重建的 mockup。编辑可视觉操作或对话完成，采用**自带智能体**模式：不捆绑模型，接入你已有的 Claude Code 或 Codex 账号，外加 MCP 连接器；改动落在安全的 worktree 副本中，经一键 PR 交付。它可导出自包含的 HTML/PNG/JPEG/PDF，本地优先（源码构建无需账号），目前仅支持 macOS，Windows 与 Linux 在等候名单中。当前应用是彻底重写——README 把旧浏览器版（v1 分支）与 Electron 应用（`onlook-dev/desktop`，自 2025 年 7 月起停止更新）标为前身。
 
-**Why it matters:** 设计工具与智能体的边界正从两侧合拢——Figma 在加代码，智能体在加像素——Onlook 的赌注是：持久的位置是"直接在运行中的应用上设计，用你已经付费的任何智能体"。自带智能体也是一句安静的定价宣言：拒绝在你的 token 上加价，这正变得稀有。
+**Why it matters:** 设计工具与智能体的边界正从两侧合拢——Figma 在加代码，智能体在加像素——Onlook 的赌注是：持久的位置是直接在运行中的应用上设计，用你已经付费的任何智能体。自带智能体也是一句安静的定价宣言：拒绝在你的 token 上加价，这正变得稀有。
 
 > "画布跑你的 dev server"这一架构意味着框架支持继承自你自己的工具链——任何 dev server 能渲染的东西，画布就能显示。
 
@@ -254,7 +254,7 @@ Gustavo Pezzi 的长文（2026 年 10 月，正在 HN 回潮）沿着 x86 谱系
 - **Source:** lateblt.livejournal.com · HN 174+ pts · ~20小时前 (~08:03 UTC+8)
 - **Tags:** `essays` `subscriptions` `ownership` `windows` `industry`
 
-lateblt 2026 年 7 月的 LiveJournal 长文回潮至 174 分：软件不会磨损，所以一次性售卖在结构上已死——而行业的应对，是把本地计算搞得足够难受，让"租"显得更体面。凭据横跨二十年：Windows 产品激活（2001）终结一证多机安装，Windows 11 的 React Native 开始菜单与 TPM 2.0 门槛，GTA 6 无光盘发售，Adobe 2013 年的 CC 转型，本地 Exchange 要求订阅外加"Software Assurance"（"就像向车主收费以修复厂商缺陷"）。文章最锋利的一转是同情 TempleOS 作者 Terry Davis——引用"文件权限不属于消费级产品"——并指出 Linux 也从 UNIX 继承了这些概念。结论：这是一场"针对你使用计算机软件能力"的"主动战争"，作者预计它永不结束。
+lateblt 2026 年 7 月的 LiveJournal 长文回潮至 174 分：软件不会磨损，所以一次性售卖在结构上已死——而行业的应对，是把本地计算搞得足够难受，让"租"显得更体面。凭据横跨二十年：Windows 产品激活（2001）终结一证多机安装，Windows 11 的 React Native 开始菜单与 TPM 2.0 门槛，GTA 6 无光盘发售，Adobe 2013 年的 CC 转型，本地 Exchange 要求订阅外加"Software Assurance"——他的类比：一家汽车公司带着致命设计缺陷，却"期望每位客户支付 500 美元来修好这个问题"。文章最锋利的一转是同情 TempleOS 作者 Terry Davis——引用"文件权限不属于消费级产品"——并指出 Linux 也从 UNIX 继承了这些概念。结论：这是一场"针对你使用计算机软件能力"的"主动战争"，作者预计它永不结束。
 
 **Why it matters:** 这篇文章把所有权对租赁的论证讲透了，而这一论证不断在具体战役中重现——myQ 广告（第 7 条）、车库门式固件接管、云可选工具把"本地优先"变成营销卖点。它写自爱好者侧翼，但同一逻辑正是"可离线运行"在 2026 年重新出现在企业工具推介中的原因：默认不再是本地，于是本地成了要额外出售的功能。
 

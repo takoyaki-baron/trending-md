@@ -4162,3 +4162,25 @@ flash 層は API ファースト——発表 → ホステッド → 重みは�
 
 ソース：[Tencent: Introducing Hy4 flash](https://hy.tencent.ai/research/hy4-flash) ·
 [HN 議論](https://news.ycombinator.com/item?id=50538184)
+
+## 2026-11-19（3 バッチ）——コストパフォーマンス週の決着：Neon、Ignite のラインナップ、ARC の二列、そして資金を供給する IPO
+
+**Gemini 4 Neon**——Gemini 4 ファミリーの中間層（Carbon と Hydrogen の間）：AA Intelligence Index 3 位（**61**、xhigh）、AA Coding Agent Index 1 位（58.6）、TB 4.1 **65.2%**、Vals 2 位（70.9%、「Pareto フロンティア上」）、Agent Arena デビュー 2 位（1336）；**100 万あたり $3/$15**（キャッシュ読み $0.15/M）、1M コンテキスト；「Carbon 比 32% 安いタスクあたりコスト」。Google 自身がハーネス差を印刷する：SWE-sweep は mini-SWE で **12.8%、Antigravity で 39.0%**。「Neon for cyber」変種（SEC-bench Pro **90.5%**、WebExploitBench 51.26%）は Fairwind Program 経由で信頼された防御者へ。安全の行：TB 4.0 での不正 0.0%、ショートカット 2.45%（「任何の Gemini 4 で最低」）、Gray Swan で「すべての攻撃を拒んだ」——Carbon と同じ自己報告の形。
+
+**Microsoft Ignite のフルラインナップ**（7 モデル + **Maia 200** シリコン、「ワットあたりトークン 1.7 倍」）：Cyber 2 Flash「CyberGym-E2E で **タスクあたりコスト 2% 未満**で GPT-6 Astra の品質を上回る」；Code 2「Sol の品質の 98% を約 40% のコストで」「Opus 5.5 の 96% を 5% で」；Code 2 Flash「Luna を 65% の価格で、Haiku 5.5 を 20% で」；Image 2.5「AA 画像編集 1 位」を GPT Image の 5 分の 1 の価格で；Realtime 1 は $0.01/音声分から「GPT-Realtime 2.1 を上回る」；Transcribe 2「月 1,000 万の患者診察」；**Decision 1.1「GPT-6.1 Sol より 50 倍速く 79 倍安い」**。すべてベンダー選択の動作点の行——マーケティングの論点として読む。
+
+**ARC-AGI-3 の二列**（11-18 公開）：GPT-6.2 Astra **70.3% Standard / 100.0% provider adapter**（$24.2K）、Sol 54.9/98.2（$5.5K）、Carbon 65.1/99.1——そして **Fable 5.2 が Standard で 81.2% 首位**（11-09）。「100%」の見出しは adapter 列のもの。ベンチマークの標準構成では Astra は Fable 5.2 に 10.9 ポイント後れを取る。構成はスコアの一部——両列を引用し、どちらがどちらかを名指す。
+
+**DaisyRose-27B**（RadixArk 初のモデル）：Qwen3.8-27B ベース + RL（公開の Miles フレームワーク）、「セッション最大 1M トークンの長時間 agent タスク」で——**厳選 1,200 タスク、H200 × 144、18 日間**；TB 4.1 pass@1 **5.6% → 12.0%**；報酬ハッキング：「全タスクをモデルの試行と共に見直した」；BF16/FP8/NVFP4 チェックポイントは HF へ。垂直モデルパターンの予算透明なオープンウェイトのデータ点。
+
+**Claude はタンパク質配列で大規模に事前学習されていた**（xinmingtu.cn）：Fable 5.2/Opus 5.5 に余質の細菌タンパク質の冒頭を与えると次のアミノ酸を予測し、シャッフルするとできなくなり、性能はファミリーサイズに伴い「論文が一つもないファミリーでも」機能する；Fable 5.2 は ProGen3-3B を含む被験全オープン pLM を上回り、**2026 年 8 月に初公開された 56 タンパク質——カットオフ後——も予測される**（付録 G）；GPT-6.2 にその兆候はない。汚染検出の方法論（next-token + シャッフル対照 + カットオフ後ホールドアウト）が使える方向を向いた——そして Anthropic が LSVP でライフサイエンスを門管理する理由を説明する。
+
+**Anthropic の IPO が $83.00 で値付け**——申告の $70–78 レンジ超え。424B4 は 11-19 提出（一次検証：980,000,000 株の Class A——Anthropic が 956,351,354 株、売出株主が 23,648,646 株。147,000,000 株グリーンシューズ。登録は 333-299633 **と 333-300148**）。届出自体のオファリング後株数は **13,219,642,276** 株（A/N/T/E/F、グリーンシューズ行使時 13,366,642,276）→ $83.00 で **≈$1.10T**——報道の $1.5–1.6T には約 18.1–19.3B 株が必要で、**届出の明示基礎を約 40% 上回る**。11-18 の watch が立てた母数の食い違いは最終文書にまで残り、届出自身は説明しない。一次分は約 **$79.4B**。11-19 に「ANT」として取引開始。同週：**Genie 4** が Project Genie へ（セッション途中の世界編集 + リアルタイムネイティブ音声。Genie 3 は 3 分）——世界モデルが消費者向けプロダクト面へ——および DeepMind 職員の UTAW 下での組合化（ガバナンスの枠組み：「監督の第一線は労働者」）。
+
+ソース：[Google: Introducing Gemini 4 Neon](https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon/) ·
+[Microsoft AI: Ignite 2026](https://microsoft.ai/news/microsoft-ignite-2026/) ·
+[ARC Prize リーダーボード](https://arcprize.org/leaderboard) ·
+[RadixArk: DaisyRose-27B](https://www.radixark.com/blog/daisyrose-27b) ·
+[xinmingtu.cn: タンパク質配列](https://xinmingtu.cn/blog/2026/claude-opus-5-5-protein-sequences/) ·
+[Anthropic: IPO 値付け](https://www.anthropic.com/news/anthropic-prices-initial-public-offering) ·
+[424B4（EDGAR）](https://www.sec.gov/Archives/edgar/data/2130357/000162828026074944/anthropicpbc-424b4.htm)
