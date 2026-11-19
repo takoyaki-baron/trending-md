@@ -1,6 +1,6 @@
 ---
 date: 2026-11-20
-updated: 2026-11-19T20:38:26Z
+updated: 2026-11-19T20:43:55Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 18
 license: CC-BY-4.0
@@ -284,7 +284,7 @@ Wilson Tovar（krthr）が彼の fanzines.app の背後にある印刷面付け�
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-19T20:38:26Z |
+| Generated | 2026-11-19T20:43:55Z |
 | Items | 17 |
 | Sources tracked | 18 (Hacker News, GitHub Trending, GitHub repos, Anthropic, hexagonmath.org, Investigatory Powers Tribunal, ounapuu.ee, cve.org, contralabs.com, misanthropicstatement.com, blog.harrison.page, thedataexchange.media, moq.dev, perishablepress.com, foolscap.works, pikuma.com, lateblt.livejournal.com, krthr.co) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
