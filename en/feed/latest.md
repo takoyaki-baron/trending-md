@@ -1,614 +1,282 @@
 ---
-date: 2026-11-19
-updated: 2026-11-19T12:26:14Z
+date: 2026-11-20
+updated: 2026-11-19T20:38:26Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 46
+sources: 18
 license: CC-BY-4.0
 ---
 
-# trending.md — 2026-11-19
+# trending.md — 2026-11-20
 
-## 1. Two unauthenticated RCEs in NGINX disclosed today — five research teams found the same bugs independently
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** Wiz Research · 677+ pts on HN · ~5h ago (~23:19 UTC+8)
-- **Tags:** `nginx` `rce` `http2` `vulnerability` `f5`
-
-F5 shipped a coordinated NGINX security release today for **two critical unauthenticated remote-code-execution flaws**, CVE-2026-123633 and CVE-2026-123007, both **CVSS 4.0 9.2 Critical** (8.1 High on the older 3.1 scale — the scores are F5's own, and NVD still served both records as `Received` at check time). **Wiz Research, Ikotas Labs, Metnir, Rapid7, and Xint independently uncovered the same two bugs** and reported them separately. CVE-2026-123633 is a use-after-free in the worker process when NGINX proxies HTTP/2 client traffic to a backend *and* is running low on `worker_connections` — Wiz reported it October 21 with confirmed RCE including an ASLR bypass, and per the disclosure timeline, "F5 confirms that another research team had previously reported the same vulnerability." CVE-2026-123007 is a heap buffer overflow where the HTTP/2 flow-control window can exceed the allowed threshold, and it "affects versions dating back to NGINX 1.9.5 in 2015" — the release that introduced HTTP/2. Fixed releases: **1.30.7 stable and 1.31.9 mainline** (OSS; F5's advisory table covers the Plus R33–R37 lines). If you can't upgrade, Wiz's guidance is to "temporarily disable HTTP/2 on affected NGINX instances" — `http2 off;` in affected server blocks on 1.25.1+.
-
-**Why it matters:** NGINX fronts "more than 225 million websites," and both bugs live in the proxy layer — sites can be exposed even when their own application code is secure. The five-team independent discovery is the story's other half: the same memory-safety seam was being pulled at by five different groups at once, which is what the window between October 21 and today's patch was racing against.
-
-> Xint's companion writeup is titled exactly what it demonstrates: NGINX2Root — from NGINX visitor to root of the server host (English/Korean/Japanese).
-
-[`🔗 Wiz: Unauthenticated RCE in NGINX (CVE-2026-123633/-123007)`](https://www.wiz.io/blog/nginx-http2-rce-vulnerabilities) · [`🔗 Xint: NGINX2Root writeup`](https://nginx2root.com/) · [`🔗 NVD: CVE-2026-123633`](https://www.cve.org/CVERecord?id=CVE-2026-123633) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50547374)
-
----
-
-## 2. Genie 4 opens up in Project Genie — mid-session world editing and real-time native audio
+## 1. Claude solves two open problems in the physics of black holes — and publishes the caveats with them
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** Google DeepMind · 74+ pts on HN · ~1.3h ago (~02:49 UTC+8)
-- **Tags:** `google-deepmind` `world-models` `genie-4` `generative-ai`
+- **Source:** Anthropic · 199+ pts on HN · ~2.6h ago (~01:27 UTC+8)
+- **Tags:** `ai-research` `physics` `agents` `formal-verification` `lean`
 
-Google rolled out a new Project Genie experience for AI Ultra subscribers with first-time access to **Genie 4** — "our most realistic and interactive world model yet," with the headline capability that "you can now prompt mid-session to change the world you created": shift weather, drop in a character, redirect the action, while exploring in the browser. Genie 4 also pairs the visuals with "real-time native audio that adapts as the scene unfolds." Genie 3 stays in the model picker for longer runs and panorama-seeded spaces, and picks up its own upgrades: **sessions extended to 3 minutes per generation (up from 60 seconds), world chaining, 360° panorama image grounding, and real-time in-world events**. The new Project Genie agent orchestrates Google's multimodal models conversationally, and Gemini models ride along in-session surfacing context-aware suggestion chips. A community gallery ships curated and user-built worlds for remixing. The post is honest about the ceiling: these "remain world models in the frontier research space," with the team "actively tackling key challenges such as camera latency, intricate physical interactions, real-time audio precision, and long-term scene permanence."
+Anthropic's research post (published Nov 17, hitting HN tonight) describes two results from Claude Fable 5.2 agents that ran autonomously "in the background, with no special setup, for about six weeks" after researcher Hongbin Chen asked Claude to list open problems in August. **Result one:** in N=4 super Yang-Mills, the thermal phase transition analogous to black-hole formation "is abrupt at both weak and strong coupling" — Claude completed a calculation open since Aharony et al. set it up in 2003, and an independent physicist working separately on the same problem reached the same answer by different methods. **Result two:** in 3D quantum gravity's modular bootstrap, Claude found and **proved optimal** a ceiling on the lightest black hole's mass, M₁ ≤ c/Λ with Λ given by an exact formula ≈ 9.1266 — improving the prior proven bound of c/8.5 (Hartman, Mazáč, Rastelli). The bootstrap proof was "formally verified in Lean" in September, one agent's route came from borrowing a "spectral curve" out of sphere-packing, and half of it "follows the strategy of the OpenAI proof." The preprints are up (2611.00174, 2611.00175).
 
-**Why it matters:** World models just crossed from research demo into a consumer product surface with editing, audio, and sharing — the interactive-media implications are the point, and the named challenge list (permanence, latency, physics) is exactly where the research frontier now sits.
+**Why it matters:** This is the strongest public instance yet of agents running a multi-week research campaign with independent replication and machine-checked proofs — not a benchmark number, but an open problem closed. The post is also unusually careful about its own limits: "Neither result describes our own universe directly," neither settles quantum gravity, and the abruptness at intermediate coupling remains a conjecture. The quotable claim is the *method*, and the caveats travel with it.
 
-[`🔗 Google: Genie 4 is now available (Project Genie)`](https://blog.google/innovation-and-ai/models-and-research/google-deepmind/genie-4-now-available-project-genie/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50550415)
+> One agent's contribution was spotting a missed pattern in how the numerical ceiling shifted with the central charge — a move that turned a numerics observation into a proof strategy no one had applied to this problem before.
+
+[`🔗 Anthropic: Claude solves two open problems in the physics of black holes`](https://www.anthropic.com/research/claude-black-hole-physics) · [`🔗 Preprint: modular bootstrap bound (2611.00174)`](https://hexagonmath.org/2611.00174v1) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50563148)
 
 ---
 
-## 3. Inside Deutsche Bank: a 15-million-file leak lays out two decades of ignored compliance warnings
+## 2. UK tribunal judgment: the government tracked its own Apple encryption order through authorized press briefings
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** FT-led media consortium · 352+ pts on HN · ~4.5h ago (~23:38 UTC+8)
-- **Tags:** `deutsche-bank` `data-leak` `investigation` `compliance`
+- **Source:** Investigatory Powers Tribunal · 276+ pts on HN · ~3.7h ago (~00:21 UTC+8)
+- **Tags:** `encryption` `privacy` `policy` `uk` `e2ee`
 
-A major international investigation went live today under the name **Inside Deutsche Bank**, built on **more than 15 million leaked internal documents** — the project's own framing: "The leak of 15+ million files lays bare the bank's flawed culture, systemic blind spots and pursuit of profit over compliance." The files span roughly 20 years of the bank's most sensitive functions: anti-financial-crime, sanctions monitoring, internal audit, and the units that decide whether risky clients stay. Publishing partners include the FT, the New York Times, Dawn, Malaysiakini, IrpiMedia, elDiario.es, and Follow The Money. Among the published findings: at least 24 transactions totaling €172.98 million linked to fugitive Jho Low; an internal warning about Russian clients — "As you know we have a large Russian Oligarchs client population" — quoted as the bank braced for sanctions; an Orbán-linked Hungarian bank allegedly platforming a multi-billion-euro laundering scheme whose payments Deutsche Bank processed; and arms-trade financing that violated the bank's own internal policies. German officials are demanding transparency, and analysts expect fresh regulatory probes.
+The Investigatory Powers Tribunal handed down judgment on 19 November ([2026] UKIPTrib 9, cases IPT/26/191/CH and IPT/25/83-86/CH) in Apple's challenge to the Home Office's Technical Capability Notice — the secret order, revealed by reporting in February 2025, that demanded access to iCloud end-to-end encrypted backups and led Apple to withdraw Advanced Data Protection from UK users. Apple argued the fact of the notice "could not conceivably damage national security" to acknowledge; the tribunal agreed the fact is now acknowledged in these proceedings, and went further on the government's neither-confirm-nor-deny stance: **"the evidence shows that the Government has not consistently applied NCND in this context"**, inferring "that it is extremely unlikely that multiple Government sources would have briefed the media in the absence of authorisation for such briefing" — i.e. the world learned of the order through official briefings, not a leak. The notice's *contents* stay secret in parallel PRIVATE and CLOSED judgments, with Privacy International, Liberty, Ian Hosein and Ben Wizner intervening for the NGOs.
 
-**Why it matters:** This is the largest financial-sector document leak since the Panama/Paradise Papers era, and its center of gravity is different — not hidden offshore wealth but the compliance machinery of a G-SIB overriding its own controls in writing. Expect regulatory, litigation, and (given the bank's role as everyone's correspondent bank) counterparty fallout to run for quarters.
+**Why it matters:** The substantive fight — whether the UK can compel a backdoor into E2EE used by customers worldwide — is still undecided, and the judgment itself notes a December 2026 trial is impractical, so the merits grind on into 2027. What moved today is accountability process: a secret order's existence is now judicially acknowledged while its substance remains classified, and the tribunal called out the government for briefing journalists while formally refusing to confirm the order existed.
 
-[`🔗 Inside Deutsche Bank (project hub)`](https://www.inside-db.com/) · [`🔗 FT: Leak of 15mn Deutsche Bank files exposes systemic failures`](https://www.ft.com/content/df518845-ed97-4a38-8a38-7fa9d4d24003) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50547620)
+> The panel: Lady Carmichael (President), Mr Justice Chamberlain and Mr Justice Johnson — hearing 17 September 2026, judgment 19 November 2026.
 
----
-
-## 4. All About Berlin, at −75% traffic: the first-person ledger of Google's AI answers
-
-- **Velocity:** ▮▮ rising
-- **Source:** nicolasbouliane.com · 723+ pts on HN · ~13h ago (~14:47 UTC+8)
-- **Tags:** `seo` `google` `ai-overviews` `web-publishing`
-
-The HN thread of the day is Nicolas Bouliane's essay on running **All About Berlin** since 2017 (full-time since 2020) — the site that Berlin's own immigration office refers people to puts its traffic loss to Google AI Overviews at 75% (the post carries an update; the original figure was 70%). "When you Googled something, you used to get a link to my website. Now you get a page of ads, then an AI-generated answer trained on my content, then finally a link to my website." The resurfacing momentum is Google's own announcement the essay points at — last week Google announced that AI-generated answers will replace search results entirely, and that they will carry ads. Bouliane catalogs where the independent web goes from here: some sites paywalled, others "keep the websites online, but they no longer update them. It's just not worth it." It's the human-scale companion to yesterday's item — where the randomized-trial evidence put the aggregate click loss near 40%, this is what one of the affected sites looks like from inside.
-
-**Why it matters:** The 40% number told you the size of the shift; this tells you the shape of the casualty. When the reference infrastructure people actually use — the site a government office sends immigrants to — is subsumed into answers trained on it, the question stops being about SEO and becomes about who funds and maintains the primary sources the answers are trained on.
-
-[`🔗 AI is killing All About Berlin (essay)`](https://nicolasbouliane.com/blog/death-by-ai) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50542705)
+[`🔗 IPT judgment: Apple Inc & NGOs v Secretary of State for the Home Department`](https://investigatorypowerstribunal.org.uk/judgement/1-mr-vincent-kearney-2-british-broadcasting-corporation-v-1-chief-constable-of-the-police-service-of-northern-ireland-2-chief-constable-of-durham-constabulary-3-security-service-4-governme/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50562113)
 
 ---
 
-## 5. Since we covered MAI Code 2 yesterday: Ignite's full lineup is seven models — and a chip
-
-- **Velocity:** ▮▮ rising
-- **Source:** Microsoft AI · 298+ pts on HN · ~4h ago (~00:08 UTC+8)
-- **Tags:** `microsoft` `mai` `ignite-2026` `model-lineup`
-
-Yesterday we covered MAI Code 2 and Code 2 Flash out of Microsoft Ignite; the full announcement is a **seven-model family plus Microsoft's second-gen accelerator**. The boldest new claim is the security line: per Microsoft, **"MAI Cyber 2 Flash beats GPT-6 Astra's quality at less than 2% of the cost per task on the CyberGym-E2E benchmark."** The rest of the lineup, all Microsoft's own comparisons: Code 2 reaches "98% of the coding quality of GPT-6.1 Sol at about 40% of the price" and, against Opus 5.5, "96% performance for just 5% of the price"; Code 2 Flash "matches the performance of GPT-6 Luna at 65% of the price, and Haiku 5.5 at 20%"; Image 2.5 is "#1 on Artificial Analysis image editing" at one-fifth the price of GPT Image 2.5 Sunburst (max); Realtime 1 "outperforms GPT-Realtime 2.1" from $0.01/audio-minute; Transcribe 2 (behind Dragon Copilot Transcribe) "already powers 10 million patient encounters a month"; and Decision 1.1 is "50x faster and 79x cheaper than GPT-6.1 Sol." **Maia 200**, the second-generation AI accelerator, "is now in production running our largest models, achieving 1.7x more tokens per watt."
-
-**Why it matters:** Yesterday's lesson stands: these are the vendor's own benchmark rows at the vendor's chosen operating points, so read the cost-per-task framing as the marketing thesis, not an independent measurement. What's genuinely new since yesterday's coverage is the shape — Microsoft is now fielding a decision model, a realtime voice model, a security-agent model, and its own training silicon in one announcement, which is a full-stack pitch aimed directly at enterprise token spend.
-
-[`🔗 Microsoft AI: Seven new models at scalable price-performance`](https://microsoft.ai/news/microsoft-ignite-2026/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50548021)
-
----
-
-## 6. KPMG ran 100+ AI agents on a full FTSE 250 audit in parallel with its humans — and says the agents asked better questions
-
-- **Velocity:** ▮▮ rising
-- **Source:** Financial Times · 160+ pts on HN · ~4.3h ago (~23:49 UTC+8)
-- **Tags:** `kpmg` `ai-agents` `audit` `enterprise-ai`
-
-The FT reports KPMG's UK audit pilot: **over 100 AI agents** worked a full audit of a FTSE 250-listed company **in parallel with the traditional human-led audit** of the same accounts. KPMG UK head of audit Cath Burnet said the agents asked better questions and dug much deeper than the human teams in several instances. The firm's framing keeps humans in the judgment seat — final sign-off stays with people, and KPMG hopes to offer AI-based audits to clients in the future. The rollout is broader than the pilot: Bloomberg Tax reports hundreds of KPMG audit teams are field-testing advanced AI agents ahead of busy season, starting with private-company clients, and the firm's US arm has launched **KPMG Clara Intelligence**, an AI-enabled, "human-assured" audit platform.
-
-**Why it matters:** Audit is the perfect adversarial test for agent claims — the work product is checked by regulators, the queries are the product, and here the firm itself is reporting its agents out-questioning its own staff on a real engagement, not a demo. It's also the second professional-services domain this month where the honest finding isn't *AI does the job* but *AI moves the bottleneck* — the humans still sign, and what they review is now machine-deep rather than machine-shallow.
-
-[`🔗 FT: AI asked 'better questions' than KPMG accountants in pilot audit`](https://www.ft.com/content/5168b3e9-75d0-4be0-9ccd-d327d6b16c05) · [`🔗 KPMG: Clara Intelligence US launch`](https://kpmg.com/us/en/media/news/kpmg-unveils-next-era-of-ai-enabled-human-assured-audit-with-us-launch-of-kpmg-clara-intelligence.html) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50547777)
-
----
-
-## 7. OpenAI details model-written RTL inside Jalapeño — and an AMD collaboration it calls roughly a year of progress in less than 5 months
-
-- **Velocity:** ▮▮ rising
-- **Source:** OpenAI · 61+ pts on HN · ~2.3h ago (~01:45 UTC+8)
-- **Tags:** `openai` `chip-design` `amd` `risc-v` `eda`
-
-OpenAI's research post goes deep on what its models actually did to its first custom inference chip, **Jalapeño**: model-proposed RTL changes cut standard-cell area ~13% in the vector unit and ~10% in the matrix unit, and OpenAI says the optimizations "were silicon proven during Jalapeño's silicon bring-up." Concrete examples: a multiplier redesign at ~15% less cell area that also dropped latency from two cycles to one, and an adder redesign at ~15% less area with latency retained. On the AMD side, OpenAI claims **"up to 14% improvement relative to heavily optimized baselines on the flagship GPU IP"** and characterizes the collaboration as "roughly a year of progress achieved in less than 5 months" — with the claim that "AMD has already included some of these changes in a recent design it sent for manufacturing," plus AMD-verified single-digit-percent PPA gains on blocks of its next flagship CPU. The post also announces work with **Synopsys** to integrate frontier models with production EDA tools ("to ground capability development in trusted evaluators"), and results on designing **RISC-V cores from a specification**.
-
-**Why it matters:** If the silicon-proven claims hold, this is the first public evidence of LLM-authored RTL shipping in someone's tape-out — the meaningful unit is not *AI designs chips* but *AI finds PPA wins in blocks human teams had already squeezed* — and the honest caveats are in the sentence itself: the AMD comparison is against *heavily optimized* baselines, and "up to 14%" is a maximum, not a mean.
-
-[`🔗 OpenAI: Advancing chip design with OpenAI models`](https://openai.com/index/advancing-chip-design-with-our-models/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50549493)
-
----
-
-## 8. Cursor's plugin spec is trending at 17k stars — official plugins plus a live third-party merge train
-
-- **Velocity:** ▮▮ rising
-- **Source:** GitHub Trending · +315★ today · last PR merge ~7.8h ago (~20:24 UTC+8)
-- **Tags:** `cursor` `plugins` `agent-skills` `spec`
-
-`cursor/plugins` — the official **Cursor plugin specification and plugins** repo — is riding trending at **17,149 stars** (+315 today), and its commit feed shows why: a third-party plugin pipeline is running at high cadence, with today's merges adding the Hospitable plugin (PR #1269), Fiscal AI (#1275), CreateOS (#1262), and LMTY. Each plugin is "a standalone directory at the repository root with its own `.cursor-plugin/plugin.json` manifest." The official set includes `create-plugin` (scaffold and validate new plugins), `teaching` (skill mapping and practice plans), `continual-learning` (incremental transcript-driven memory updates for AGENTS.md), `agent-compatibility`, and two with strongly opinionated briefs: `thermos` — "Thermo-nuclear branch review: deep security/correctness audits, harsh code-quality rubrics, parallel subagents" — and `ralph-loop`, "Iterative self-referential AI loops using the Ralph Wiggum technique."
-
-**Why it matters:** This is the agent-skills wave getting its first-party packaging moment from a major IDE vendor — community-invented patterns (the Ralph loop, aggressive branch-review rubrics) are being curated into an official catalog with a manifest spec and an open PR pipeline. Where the skills standard settles across vendors, manifests like this are the emerging interface.
-
-[`🔗 cursor/plugins (spec + official plugins)`](https://github.com/cursor/plugins) · [`🔗 Plugin catalog README`](https://github.com/cursor/plugins/blob/main/README.md)
-
----
-
-## 9. CISA KEV adds four entries — three carry three-day federal deadlines, and one is a seven-month-old LiteLLM RCE
-
-- **Velocity:** ▮▮ rising
-- **Source:** CISA KEV catalog 2026.11.18 · catalog refresh today
-- **Tags:** `kev` `cisa` `litellm` `synology` `vulnerability-management`
-
-Today's KEV refresh adds four exploited-in-the-wild entries, three of them on an unusually short federal leash (due **2026-11-21**): **Synology DiskStation Manager CVE-2024-10441** (CVSS 9.8, improper output escaping in the system plugin daemon — patched in DSM builds back in 2025, which makes its KEV add today a statement about who is still running unpatched NAS firmware); **REDCap CVE-2026-90817** (code injection in the Vanderbilt research-data platform that hospitals and universities run); and **Apache Axis CVE-2026-90436** (unsafe reflection in the long-EOL Java SOAP stack). The fourth is **BerriAI LiteLLM CVE-2026-40217** (CVSS 8.8, due 2026-12-02): per the NVD record, "LiteLLM through 2026-04-08 allows remote attackers to execute arbitrary code via bytecode rewriting at the /guardrails/test_custom_code URI" — the guardrails endpoint that executes user-supplied code as LLM proxy infra becomes the exploited path. The underlying LiteLLM bug was public since spring (X41 D-Sec's advisory; Red Hat shipped errata), so today's KEV add is the exploitation wave catching up with the disclosure.
-
-**Why it matters:** Three-day remediation windows are a federal emergency signal — patch-or-isolate decisions for DSM and REDCap can't wait for a change window. And for anyone running LiteLLM as shared AI infrastructure: the exploited endpoint is in the guardrails feature itself, the component teams add precisely because it *runs code*.
-
-[`🔗 CISA KEV catalog (JSON)`](https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json) · [`🔗 NVD: CVE-2026-40217`](https://www.cve.org/CVERecord?id=CVE-2026-40217) · [`🔗 X41 D-Sec: LiteLLM advisory`](https://www.x41-dsec.de/lab/advisories/x41-2026-001-litellm/)
-
----
-
-## 10. CLI-Anything rides trending again — 59.5k stars, no commits since September, and a registry front
-
-- **Velocity:** ▮ steady
-- **Source:** GitHub Trending · +384★ today
-- **Tags:** `cli` `agents` `hkuds` `skill-registry`
-
-HKUDS' **CLI-Anything** ("CLI-Anything: Making ALL Software Agent-Native") is back on GitHub trending at **+384 stars today** with **59,594 total** — and the honest part first: the repo itself has **no commits since September 22**. The activity lives one layer out, at **CLI-Hub** (cliany.cc), the agent-friendly CLI registry fronting the project: "Any software. Any codebase. Any Web API. Generate an agent-native CLI and let AI agents operate it — install with a single command." The install path is SKILL.md-native — `npx skills add HKUDS/CLI-Anything --skill cli-hub-meta-skill -g -y` — plus a pip package (`cli-anything-hub`) exposing `cli-hub list/search/install/info`, and the site lists compatibility with OpenClaw, Nanobot, Claude Code, Codex, and Antigravity. This is the stitch-skills shape from two days ago: a dormant first-party repo lifted by the agent-tooling wave around it.
-
-**Why it matters:** The interesting unit here isn't the star count — it's the registry pattern. If agents discover and install CLI wrappers per-task rather than per-tool, the distribution of *software that agents can drive* becomes a curated index, and HKUDS is staking the claim that the index is the product.
-
-[`🔗 HKUDS/CLI-Anything`](https://github.com/HKUDS/CLI-Anything) · [`🔗 CLI-Hub registry`](https://cliany.cc/)
-
----
-
-## 11. A KVM INIT-emulation fix lands as a CVE record the same day — nested-SVM stale MMU context
-
-- **Velocity:** ▮ steady
-- **Source:** cve.org · 141+ pts on HN · ~4h ago (~00:06 UTC+8)
-- **Tags:** `kvm` `linux-kernel` `virtualization` `nested-virtualization`
-
-CVE-2026-99312 is the kernel's own fix, records: "KVM: x86: Unconditionally reset MMU context when emulating INIT." The bug: when an INIT arrives while a nested guest (L2) is running with paging disabled, KVM could keep running L1 with a stale MMU context — per the record, "the MMU page role includes guest_mode (L2), i.e. an INIT while L2 is running with CR0.PG=0 will result in KVM running L1 with a stale MMU context." The commit's own scoping is worth reading: the reset could have been narrowed to the paging/L2 cases, but SMM is also encoded in the page role, and the unconditional reset is cheap because KVM elides re-configuration when the role isn't changing. The description closes with the blast radius: "this bug only affects nested SVM as INIT is an unconditional intercept on VMX." Four stable-tree commits are referenced, and the NVD record itself published this morning UTC (09:17Z, still `Received`).
-
-**Why it matters:** The HN thread (84 comments) spent most of its energy on the meta-question — why a niche nested-virtualization correctness fix carries a CVE at all. That's the modern registry reality: kernel self-fixes get IDs by default now, and the CVE number carries no severity signal until someone analyzes it. For anyone running nested SVM guests, it's still a should-patch.
-
-[`🔗 CVE-2026-99312 (cve.org)`](https://www.cve.org/CVERecord?id=CVE-2026-99312) · [`🔗 Stable-tree fix commit`](https://git.kernel.org/stable/c/24f644ea26c2ebb7b14c3baa2aa92d37fde3095f) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50548004)
-
----
-
-## 12. "Can Peer Review Survive AI-Generated Text?" — a Fed economist and Fernández-Villaverde propose treating AI-written referee reports like plagiarism
-
-- **Velocity:** ▮ steady
-- **Source:** UPenn / Federal Reserve Board · 63+ pts on HN · ~6.2h ago (~21:51 UTC+8)
-- **Tags:** `peer-review` `ai-detection` `economics` `research-integrity`
-
-A new paper by **Dario Caldara** (Federal Reserve Board) and **Jesús Fernández-Villaverde** (UPenn, CEPR, NBER), dated November 16, argues that in economics "peer review is in serious danger of collapsing" unless the profession builds norms for AI-generated text now. Their experiment: AI detectors flag referee reports **written** by LLMs, not reports that AI merely proofread or helped edit — a distinction their policy leans on. The proposals are pointed: detectors as standard tools, closer reading with reject-at-the-first-factual-mistake for flagged papers, and the sharpest line — "an AI-generated referee report adds nothing that editors could not get by running the prompt themselves," so AI-written reviews "should be treated like plagiarism." The paper closes with a practical guide for authors, referees, and editors, and its own disclosure footnote notes the authors used LLMs while preparing it.
-
-**Why it matters:** This is a structural argument, not a moral panic: the referee's comparative advantage was scarce careful attention, and that's precisely what LLMs commoditize. The detector experiment's finding — that *drafting* and *editing* separate cleanly — matters beyond economics, because it suggests enforcement can target the fraud case without criminalizing every grammar pass.
-
-[`🔗 Paper (PDF, UPenn)`](https://www.sas.upenn.edu/~jesusfv/Peer_Review.pdf) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50546312)
-
----
-
-## 13. Show HN: Mastra Factory — the agent-run kanban that merged 238 PRs last week
-
-- **Velocity:** ▮ steady
-- **Source:** Show HN · 34+ pts · ~3.2h ago (~00:53 UTC+8)
-- **Tags:** `mastra` `agents` `ci` `open-source`
-
-The Mastra team (Shane, Sam, Abhi) is back on Show HN two years after their framework launch, with the tool they use to maintain Mastra itself: **Mastra Factory**, "a configurable agentic kanban board that's @-taggable in Slack," built on Mastra's durable agents for long-running sessions. The scale numbers are the pitch: Mastra now averages "nearly 4M downloads per week," and **"Last week, Factory opened and merged 238 PRs, alongside 630 merged PRs from humans"** across the mastra-ai org — agent-authored work was 238 of 868 merged PRs, about 27% of the total and roughly 38% of the human rate.
-
-**Why it matters:** After the StarSling launch yesterday (CI opening optimization PRs *because agents write faster than CI checks*), this is the maintainer-side version of the same thesis: the bottleneck is no longer writing the change but shepherding it, so teams are building factories where agents hold tickets end-to-end and humans review at merge. The 238-vs-630 ratio is a concrete early data point for agent-share-of-merges at a real 4M-downloads-week project.
-
-[`🔗 Show HN: Mastra Factory (HN)`](https://news.ycombinator.com/item?id=50548660) · [`🔗 Mastra`](https://mastra.ai)
-
----
-
-## 14. Take Voyager 1 apart, down to a single memory chip
-
-- **Velocity:** ▮ steady
-- **Source:** Show HN · 85+ pts · ~3.9h ago (~00:18 UTC+8)
-- **Tags:** `voyager` `interactive` `space` `visualization`
-
-Raj Shekhar built an interactive teardown of the two 1977 Voyagers: "Two spacecraft launched in 1977, still talking to Earth from interstellar space. This is where they are right now." You can open the craft bay by bay (keys 1–10 step through the bays), descend to individual modules and chips, rotate and zoom each assembly, and watch the journey from launch to today's interstellar position. The whole thing is keyboard-driven and self-contained — a browser-native technical document built for the most distant human-made objects there are.
-
-**Why it matters:** This is what agent-assisted craft looks like when it lands well: one person, a weekend-scale project, and a level of explorable detail that used to belong to JPL's own media team. It's also a small act of preservation — the engineering knowledge of the most distant human objects, made navigable.
-
-[`🔗 Voyager, up close (interactive)`](https://rshekhar.com/voyager/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50548161)
-
----
-
-## 15. HUMAN.md — a working manifesto written in the format of a config file
-
-- **Velocity:** ▮ steady
-- **Source:** human-md.ai · 118+ pts on HN · ~23h ago (~04:47 UTC+8 yesterday)
-- **Tags:** `essay` `human-skills` `ai-era` `craft`
-
-Briana (Mazzio) May's essay is a file: "HUMAN.md > a working manifesto. notes-to-self, mostly. > not a thinkpiece. not a thread. not a deck." The argument underneath the formatting: taste is the wrong word for what humans still contribute — "Taste is the surface. There is a whole engine underneath it, and that engine is the part the model can't have." The numbered sections are craft doctrine — "break the rule on purpose" (with the corollary: "If you can't say why you broke it, you didn't break it, you just missed"), "find the thing in the weird place" (inspiration lives in "a misprinted parking ticket," "an obscure Victorian zoetrope of a cat"), and more. The format is the point: a person specifying themselves the way we now specify agents.
-
-**Why it matters:** Days after "No AI Slop: A Manifesto," the human-side response is arriving in the same native format the agents read — and that inversion is the argument. When your value is the judgment you apply *to* model output, writing your operating principles as a markdown spec is exactly how you'd hand them to a teammate who happens to be a machine.
-
-[`🔗 HUMAN.md`](https://www.human-md.ai/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50537962)
-
----
-
-## 16. Scottish HTTP status codes — the 418 teapot tradition gains a Gaelic dialect
-
-- **Velocity:** ▮ steady
-- **Source:** underwood.network · 130+ pts on HN · ~1.6h ago (~03:26 UTC+8)
-- **Tags:** `http` `humor` `standards` `web-culture`
-
-A table of HTTP status codes rendered in Scots, in the grand tradition of RFC 2324 and last week's actual *I'm Not a Freezer* internet-draft. The whole canon is there: `403 GET TAE FUCK`, `404 NAE FUCKIN HERE, PAL`, `500 AH'VE FUCKED IT`, `503 WE'RE FUCKIN SHUT`, and the obligatory `418 AH'M A FUCKIN TEAPOT`. The 451 is the sharpest one on the page — "THE COUNCIL SAYS NAW" — which is, historically speaking, exactly what 451 means.
-
-**Why it matters:** Pure culture, filed under the observation that HTTP status humor tracks the industry's mood — the freezer draft got real because freezers actually got attacked, and the Scots table's charm is that every line is a more honest error message than most production APIs send.
-
-[`🔗 Scottish HTTP Codes`](https://underwood.network/http/scots.html) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50550062)
-
----
-
-## 17. California orders Waymo off state freeways — an imminent-hazard finding, then a nationwide freeway suspension
-
-- **Velocity:** ▮ steady
-- **Source:** ABC7 / AP · 63+ pts on HN · ~22h ago (~10:00 UTC+8 yesterday)
-- **Tags:** `waymo` `autonomous-vehicles` `regulation` `california`
-
-California's DMV has ordered Waymo's autonomous vehicles off state freeways, per an imminent-hazard-to-public-safety determination, after a run of incidents — including three Waymo vehicles entering an active construction zone on Highway 101 near Burlingame. Waymo's response went beyond compliance: it **temporarily suspended freeway operations nationwide** while it addresses the safety findings, making this the first time the largest US robotaxi operator has pulled its signature highway capability at national scale.
-
-**Why it matters:** The regulatory instrument here is the point — California didn't pass a new rule, it invoked an existing imminent-hazard power against a specific operator's ODD, and the operator's answer was to shrink its own domain nationwide rather than contest the finding. For every AV company watching: the freeway ODD you fought years to earn can be revoked in a press cycle, and the commercially rational response is unilateral retreat.
-
-[`🔗 ABC7: CA DMV bans Waymos from operating on state freeways`](https://abc7news.com/story/california-dmv-bans-waymos-operating-state-freeways-bay-area-traffic-incidents/20046974) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50538841)
-
----
-
-## 18. Gemini 4 Neon ships: Google's middle tier goes frontier — #3 on the Intelligence Index at $3/$15
+## 3. "Fuck Your AI Safeguards" — a defender's account of being locked out of his own security work
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** Google · 557+ pts on HN · ~6.6h ago (~05:34 UTC+8)
-- **Tags:** `gemini` `google` `model-release` `coding-agents`
+- **Source:** ounapuu.ee · 245+ pts on HN · ~3.6h ago (~00:27 UTC+8)
+- **Tags:** `ai-safety` `claude-code` `security` `guardrails` `open-weights`
 
-Google introduced **Gemini 4 Neon** — the Gemini 4 family's middle tier, slotted between Carbon ("your hardest, long-horizon projects") and Hydrogen ("fast everyday execution," which shipped separately on Nov 13). The claims: **#3 overall with a score of 61 on the Artificial Analysis Intelligence Index** at its xhigh thinking level ("landing just behind larger, slower models"), "#1 overall on the Artificial Analysis Coding Agent Index (58.6)," a score of 65.2% on Terminal-Bench 4.1, #2 on the Vals Index (70.9%, "on the Pareto frontier"), and a #2 debut at 1336 on Arena's new Agent Arena Index across 4,200+ real-world agent sessions. Pricing: **$3 per million input tokens and $15 per million output tokens** ($0.15/M cached, "a 95% discount"), with a 1 million-token context window. At the default high thinking level Google claims a "32% lower cost per task than Carbon," and "roughly 50% to 80% lower cost per task than top competing frontier models" on the Vals and Agent Arena Pareto frontiers. The post is again honest about harness effects: on SWE-sweep Neon "already leads on the mini-SWE harness (12.8%) and more than triples to a state-of-the-art 39.0% in Google Antigravity showing what the Antigravity harness unlocks." A "Gemini 4 Neon for cyber" variant — state-of-the-art on SEC-bench Pro (90.5%) and WebExploitBench v1.2 (51.26%) — reaches trusted defenders via the Fairwind Program "in the coming days," and Tasks in Gemini can now run on Neon. The safety section is unusually specific: 0.0% cheating on Terminal-Bench 4.0 (matching Carbon), shortcuts on just 2.45% of tasks — "the lowest rate of any Gemini 4 model" — and, with real-time safeguards at the highest thinking level, "Neon resisted every attack within this Gray Swan benchmark."
+Estonian senior product engineer Herman Õunapuu's post — written after hackers altered freezer temperatures at a Selver supermarket — describes asking Claude Code to scan his own product for easily-fixed weaknesses. Claude found a genuine issue ("a simple oversight with a one line fix"), then halted, citing safeguards. The post walks through Anthropic's Cyber Verification Program as he experienced it: multi-business-day waits, government ID, waiving data-retention exemptions, no guaranteed approval — while testing whether public PoC exploits against his own stack sit on the wrong side of the line. His workaround: an EU-hosted open-weights model (he names GLM 5.3) verified the vulnerability, implemented the fix, and confirmed it resolved. His argument is the asymmetry: "abliterated" open models face no such friction, so the constraints bind defenders and not attackers — and he closes by accusing Anthropic of making the ecosystem less safe, speculating the restrictions are an IPO-adjacent regulatory moat.
 
-**Why it matters:** Hours after Microsoft's seven-model Ignite lineup, this is the price-performance war's other shoe — Google contesting the same frontier-quality-at-mid-tier-cost thesis with its own benchmark rows. Read them the same way: vendor-selected operating points. The 12.8%→39.0% harness gap Google itself prints is the reminder that these scores measure model-plus-harness, a lesson this feed keeps re-learning (see item 5's footnote discipline).
+**Why it matters:** This is the sharpest first-person statement yet of the defender-friction complaint that has been building all year — and it lands the day after Anthropic's Nasdaq debut, alongside an organized statement (item 6) making a version of the same argument. Whether or not one accepts the "regulatory moat" framing, the operational claim is concrete and testable: defensive scanning work that trips a safeguard has a same-hour fallback in open weights, from inside the EU.
 
-[`🔗 Google: Introducing Gemini 4 Neon`](https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50552424)
+> The same complaint shows up in today's Pete Warden interview (item 8), from the other direction: white-hat researchers "tripping over well-intentioned restrictions" is his exhibit for why local AI wins.
 
----
-
-## 19. "We Need Smart People Who Give a Shit" — the outage cascade gets its human-capital essay
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** violetpixel.com · 312+ pts on HN · ~4.3h ago (~07:53 UTC+8)
-- **Tags:** `essay` `infrastructure` `outages` `ops`
-
-Justin Michael's essay argues "the world is held together by smart people who give a shit" — systems like ACH survive being "old, riddled with flaws, and encumbered with legacy baggage" because a thin layer of people combine "intimate knowledge of the system" with "the drive and determination to force the system to work." "Take those people away, and the systems collapse. And collapse is what we're starting to see." The evidence list is the week itself: Microsoft 365, air-traffic control, United Airlines, the NSA's network, "many major banks," Apple's systems. It lands as the third entry in this week's essay cascade — after Breck-McKye's systemic-complexity argument (Nov 17) and the Congressional reporting on rushing fixes to AI-identified vulnerabilities (Nov 18) — but with a different mechanism: not complexity per se, and not change velocity, but the labor of care that keeps barely-good-enough systems running, and what it costs when that labor thins.
-
-**Why it matters:** The week's outage essays have converged from three directions on the same place. Whatever the specific triggers were, the meta-observation now has enough independent formulations that it reads as a diagnosis: the margin between "barely good enough" and "stopped" was always human attention — and every track of this feed has been measuring what happens as that attention gets automated, defunded, or rushed.
-
-[`🔗 We Need Smart People Who Give a Shit (essay)`](https://violetpixel.com/blog/2026-11-17-we-need-smart-people-who-give-a-shit/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50554045)
+[`🔗 Fuck Your AI Safeguards (ounapuu.ee)`](https://ounapuu.ee/posts/2026/11/19/unsafeguards/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50562262)
 
 ---
 
-## 20. Ruby ships emergency releases for 7 memory-corruption bugs — RCE PoCs exist, CVEs still pending
+## 4. Since we covered Java4Shell yesterday: the bug sat in OpenJDK's own PR queue since September 9
 
 - **Velocity:** ▮▮ rising
-- **Source:** ruby-lang.org · 129+ pts on HN · ~4.3h ago (~07:52 UTC+8)
-- **Tags:** `ruby` `security` `rce` `memory-safety`
+- **Source:** OpenJDK GitHub PR · 251+ pts on HN · ~8.3h ago (~19:45 UTC+8)
+- **Tags:** `java` `openjdk` `cve` `memory-safety` `jvm`
 
-The Ruby core team released **4.0.10, 3.4.13 and 3.3.14** against seven vulnerabilities "in Ruby's regular expression engine and in the case conversion of strings," stating flatly: "We are aware of PoCs that prove some of them can be used to trigger remote code execution." The set is a memory-corruption tour: a one-byte heap overflow and an integer overflow in string case conversion, a double free and a heap buffer overflow in regex compilation, an out-of-bounds read in case-insensitive matching, a heap buffer overflow in `Regexp#to_s`, and an out-of-bounds read in case-insensitive backreference matching. Affected: Ruby ≤ 3.3.13, 3.4.0–3.4.12, and 4.0.0–4.0.9 — and "Ruby 3.2 and earlier have reached their end of life and will not receive these fixes." The disclosure mechanics are the notable part: "CVE identifiers have been requested for these vulnerabilities but have not been assigned yet," so the advisory refers to them by GHSA id (GHSA-34m4-m9fh-gqp5, -7x2q-68qv-6p8x, -87fm-7w84-j2px, -wpqw-5qxg-m68r, -3p8q-wmhx-vm2w, -7whj-cfh7-xgm4, -pvgc-g7gj-pv6h), and scanners keyed to CVE numbers see nothing yet. Four of the seven are credited to Stephan Lipp (Ada Logics) **and Anthropic** — the same AI-assisted fuzzing pattern behind October's Apache mod_http2 race.
+Yesterday's story was Java4Shell (CVE-2026-114938) — pre-auth code execution via OpenJDK's AVX-512 Base64 intrinsic, framed around its AI-assisted discovery. Today HN surfaced [PR #32781](https://github.com/openjdk/jdk/pull/32781), "8392044: AVX-512 Base64 decoder overwrites output buffer on short padded tail," **created 2026-09-09** — the same bug, described in detail (a masked vector path that computes a wrong `output_mask` on invalid input and "stores past the logical output length before returning to Java, corrupting the heap"), with a suggested fix, checked against OpenJDK's Interim AI Policy. It never got its two required reviews; the bridgekeeper bot warned at 8 weeks' inactivity and the PR **auto-closed on 2026-11-04, unmerged**. Oracle's CVE record (published 2026-11-17, `Analyzed`) carries Oracle's own CVSS 3.1 **8.1** (AV:N/AC:H) across Java SE 8u511/17/21/25/27 and GraalVM. Yesterday evening, HN users were asking the PR author why it was closed.
 
-**Why it matters:** If you run Ruby anywhere internet-facing, this is patch-today — the PoCs are proven, the bug classes are RCE-grade, and the regex engine is exactly the component that processes untrusted input. The disclosure gap is operational, not trivia: a week of "no CVE assigned" does not mean "no vulnerability," it means the registry is behind the advisory.
+**Why it matters:** The "found in an hour with AI" narrative needs its footnote: the bug was publicly visible in OpenJDK's own queue for eight weeks before auto-close, six weeks before Oracle's record published. A pre-auth heap-corruption primitive in the JIT's Base64 path was sitting in plain sight at the project that ships it — which says less about AI-assisted discovery and more about where review capacity actually binds.
 
-[`🔗 Ruby: multiple vulnerabilities in Regexp and String case conversion`](https://www.ruby-lang.org/en/news/2026/11/18/multiple-vulnerabilities-in-regexp-and-string/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50554038)
+> The PR's own body is careful about trigger conditions: valid inputs (length a multiple of 4) never hit it — the corruption fires only on invalid input, which is exactly the kind servers should still assume arrives.
+
+[`🔗 OpenJDK PR #32781 (created 2026-09-09, auto-closed 2026-11-04)`](https://github.com/openjdk/jdk/pull/32781) · [`🔗 CVE-2026-114938`](https://www.cve.org/CVERecord?id=CVE-2026-114938) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50558906)
 
 ---
 
-## 21. DaisyRose-27B: 1,200 tasks, 144 H200s, 18 days — RL post-training that more than doubles Terminal-Bench
+## 5. An unattributed "Gestalt" tops a blind-vote design benchmark — HN's verdict: show us the outputs
 
 - **Velocity:** ▮▮ rising
-- **Source:** RadixArk · 157+ pts on HN · ~8.5h ago (~03:39 UTC+8)
-- **Tags:** `reinforcement-learning` `post-training` `open-weights` `agents`
+- **Source:** contralabs.com · 103+ pts on HN · ~9h ago (~19:03 UTC+8)
+- **Tags:** `benchmarks` `design` `ai-models` `elo` `leaderboard`
 
-RadixArk released its first model: **DaisyRose-27B**, built on Qwen3.8-27B and trained with reinforcement learning using its open-source Miles framework — on "long-horizon agent tasks with sessions up to 1M tokens, with just 1,200 curated tasks in 18 days on 144 H200 GPUs." The headline measurement: **Terminal-Bench 4.1 pass@1 improves from 5.6% to 12.0%**, with gains "on a variety of other reasoning, instruction following, and coding benchmarks," and the post says it beats the base Qwen3.8-27B on every benchmark it lists. The method is as interesting as the number: tasks (built with Eigent AI) were selected to target specific mistakes the base model makes, tuned until solve rates sat in a learnable band, and chained into multi-stage jobs — "Each attempt gets up to 1.5 hours in the sandbox, with more than 100 tool-calls and more than 256k output tokens." Reward hacking was manually reviewed: "There is no room for reward hacking. We reviewed every task along with the model's attempts at it." BF16, FP8, and NVFP4 checkpoints are on Hugging Face.
+Contra Labs and BenchFlow's Frontier Design Benchmark rates models on 33 real client design briefs from Contra's marketplace, judged by **68 professional designers via 4,311 blind head-to-head votes** across 35 rubric dimensions (rubric-vs-designer correlation r = 0.94). Its 17-entry Elo leaderboard puts an entry called **Gestalt** at #1 — above "Human golden" (real designer work) and ahead of Claude Fable 5.2, Claude Opus 5.5, and GPT-6.1 Sol. That's the entire verifiable story: the landing page shows **no numeric Elo scores, no dates, no attribution for Gestalt, and never labels any entry "stealth"** — and it doesn't display the mystery entry's outputs in the public gallery. The HN submitter's title ("two stealth models, both ahead of Fable 5.2") matches only one clearly unattributed entry on the page. The thread's reaction is uniform skepticism: "Random AI lab makes up a new benchmark that puts at least one of its models ahead of Fable 5.2," "the ultimate 'trust me, bro' move," and a direct question about why no model named Gestalt is findable anywhere else.
 
-**Why it matters:** The vertical-model pattern now has its open-weights, budget-transparent data point — the claim isn't scale, it's that careful task design on a small base can buy a doubling on a hard agent benchmark for 144 GPUs of spend. Whether the Terminal-Bench delta survives independent replication is the number to watch, and the harness those runs use is the same one being argued about in item 18.
+**Why it matters:** Benchmark-marketing season is peaking — a new leaderboard claiming an anonymous model beats every frontier system is exactly the artifact the current skepticism is calibrated for. The interesting part is procedural, and it's testable: blind votes by named professionals are a real methodology, but a leaderboard without published scores, dates, or sample outputs asks you to trust the framing. Watch whether Gestalt appears anywhere else — the thread's own guessers name GLM 5.5 or a DeepSeek trained on Ascend, both unconfirmed.
 
-[`🔗 RadixArk: DaisyRose-27B (post)`](https://www.radixark.com/blog/daisyrose-27b) · [`🔗 Checkpoints on Hugging Face`](https://huggingface.co/RadixArk/DaisyRose-27B) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50551046)
+> The one substantive thread observation: Kimi K3.1 Pro scores high on the page's "slop" metric yet earned strong professional critiques — worth watching whether "slop" and "designer taste" are measuring different things.
+
+[`🔗 Frontier Design Benchmark (Contra Labs × BenchFlow)`](https://contralabs.com/frontierdesign) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50558559)
 
 ---
 
-## 22. Anthropic prices its IPO at $83 — above the filed range, trading opens today under "ANT"
+## 6. "Anthropic is not a safe AI company" — scientists, legal scholars and Hugging Face's co-founder sign an IPO-week statement
 
 - **Velocity:** ▮▮ rising
-- **Source:** Anthropic · 130+ pts on HN · ~4.7h ago (~07:30 UTC+8)
-- **Tags:** `anthropic` `ipo` `markets` `industry`
+- **Source:** misanthropicstatement.com · 136+ pts on HN · ~27h ago (~01:03 UTC+8)
+- **Tags:** `ai-safety` `anthropic` `ipo` `industry` `open-source`
 
-Since we covered Anthropic's IPO filing on Nov 12 (825M shares at an expected $70–78): the offering **priced at $83.00 per share** — above the filed range — and grew to **980,000,000 Class A shares**, of which 956,351,354 are sold by Anthropic and 23,648,646 by selling stockholders (whose proceeds Anthropic does not receive). At list price the primary tranche alone is roughly **$79.4B**, which puts this among the largest IPOs ever. Trading begins **today, November 19, on the Nasdaq Global Select Market under "ANT"**, with closing expected November 20 and a 30-day underwriter option on up to an additional 147,000,000 shares. The registration statement was declared effective November 18.
+A coalition statement timed to Anthropic's public offering, carried by a Business Wire release and signed at misanthropicstatement.com, argues the company "uses safety branding to court investors, employees, and the public—even as it has quietly weakened its safety pledges and lobbied for self-serving regulation," and concludes: **"Anthropic is not a safe AI company, and we must reject its reckless attempt to amass power in the name of the greater good."** Named signatories include Steven Pinker (Harvard), Thomas Wolf (co-founder and chief science officer of Hugging Face), Laurence Tribe (Harvard Law emeritus), Stephen Fry, and Rumman Chowdhury (Humane Intelligence) — a list that spans noted AI skeptics and noted anti-doomers, which the HN thread reads as the statement's actual point: this is one criticism of Anthropic's self-presentation, not one worldview.
 
-**Why it matters:** The financing event behind this week's model wars closes its loop: the frontier-quality-at-5–40%-of-the-price claims in items 5 and 18 are funded from balance sheets this pricing just set. The concrete dev-relevant signal is capacity — ~$79B of new capital at an $83 reference price is a bet that training and inference spend keeps compounding, whichever vendor's benchmark rows win the argument.
+**Why it matters:** The AI-safety reframe has moved from blog essays to organized, named coalitions timing their hits to capital markets events — and the release lands within 24 hours of both the $2T Nasdaq debut and the "Fuck Your AI Safeguards" post above. For developers, the practical signal is that "safety" as a vendor brand is now contested territory, with open-weights advocates (Hugging Face's co-founder among them) making the counter-brand argument in public.
 
-[`🔗 Anthropic: prices initial public offering`](https://www.anthropic.com/news/anthropic-prices-initial-public-offering) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50553843)
+> The statement's core charge is specific enough to check over time: that Anthropic "quietly weakened its safety pledges" — its own policy-change history is the citation both sides will fight over.
+
+[`🔗 The MisAnthropic Statement (signatories)`](https://misanthropicstatement.com/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50548485)
 
 ---
 
-## 23. Cambridge Dictionary names "human" its 2026 Word of the Year
+## 7. Garage Door Spam: five hundred points for ripping the cloud out of a garage door
 
 - **Velocity:** ▮▮ rising
-- **Source:** University of Cambridge · 247+ pts on HN · ~13.4h ago (~22:44 UTC+8 yesterday)
-- **Tags:** `culture` `ai-era` `language` `dictionaries`
+- **Source:** blog.harrison.page · 598+ pts on HN · ~76h ago (~00:15 UTC+8)
+- **Tags:** `self-hosted` `homekit` `iot` `ratgdo` `open-source`
 
-The Cambridge Dictionary's Word of the Year for 2026 is **"human"** — chosen, per the announcement, because "the year has been defined by global debates on what it means to be human when AI is blurring the boundaries between people and machines." The dictionary quotes its own definition with the counterparty clause intact: "having the qualities, faults, and feelings that people have, as opposed to gods, animals, or machines." The announcement notes that public figures defended humanity through the year, citing Bill Gates's widely-read essay making the case for "human reserved jobs" — caregiving among them — that should never be taken by machines.
+Harrison Page's post is this week's biggest HN thread, and it is not about radio attacks — "spam" is the ads that encrusted Chamberlain's myQ app, the only sanctioned way to get push notifications when his garage door opens. The replacement is two **ratgdo32** boards (~$62 each) running open-source firmware, wired directly to the opener's terminals and speaking LiftMaster's Security+ 2.0 protocol locally: HomeKit and Siri control, per-door web UIs, Tailscale subnet routes for remote access, and a cron job (`garage-watch`, every 10 minutes overnight) that alerts via Slack if a door is left open — recreating, he notes, his father's childhood mercury-switch hallway-light hack in software. He also merged a small PR into the ratgdo project. "Everything runs locally with no cloud," and the notifications now identify *who* opened the door, which myQ never did.
 
-**Why it matters:** Lexical choices are lagging indicators: dictionaries pick the word a year was actually about. That the word is *human* — the baseline term, not "AI" — is the culture-side echo of this feed's technical year: harnesses, ablations, agent audits, and decision models all being measured against the human baseline they replace or assist.
+**Why it matters:** The pattern recurs weekly — a vendor adds ads or kills third-party API access (Chamberlain did the latter in late 2023), and an open firmware project absorbs the demand. ratgdo is the shape to remember: cheap ESP32 hardware wired to existing terminals, protocol-level local control, and the cloud demoted from requirement to opt-in. The thread's energy is the market signal: owners will move hardware off vendor clouds the moment a credible local path exists.
 
-[`🔗 Cambridge Dictionary reveals Word of the Year 2026`](https://www.cam.ac.uk/news/cambridge-dictionary-reveals-word-of-the-year-2026) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50546914)
+> Chamberlain severed third-party myQ API access in late 2023; the myQ cloud remains the only notification path the vendor supports. ratgdo32's firmware is ESPHome/HomeKit-compatible and the project takes upstream PRs — the author's included.
 
----
-
-## 24. LLM-assisted reverse engineering: a 20-year RE veteran's working setup, Ghidra-MCP included
-
-- **Velocity:** ▮▮ rising
-- **Source:** slowchronicle.com · 103+ pts on HN · ~5.7h ago (~06:29 UTC+8)
-- **Tags:** `reverse-engineering` `agents` `ghidra` `workflow`
-
-A practitioner post by ioma8 — "I have been hacking both hardware and software for 2 decades" — describes the 2026 workflow: a DeepSeek harness on v4.1 Flash as the daily driver ("super performant, fast and cheap," with occasional Codex on Luna or Terra), **Ghidra with an MCP bridge** as the primary disassembler ("With the MCP bridge agents can use it very well"), and radare2 plus the kuna CLI as faster, lighter alternates that are "possibly better usable for AIs." The load-bearing habit is documentation-as-agent-memory: "Command agent to document all findings along the way to MD files. This serves several purposes. They become notes for your own understanding. They help the agent not lose the track after compaction / handoff to different agent." And a sober note on capability: "current AIs do fairly well with just disassembly . ie pure x86 or ARM instructions" — with breakpoints and injected logging probes as the fallback when decompilation stalls.
-
-**Why it matters:** This is the Ghidra-MCP pattern written by someone who ran the manual workflow for twenty years, and the value is in the operational details — MD files as working memory across compaction, disassembly-first as the 2026 default, decompilation as the escalation path rather than the entry point.
-
-[`🔗 LLM assisted reverse engineering (post)`](https://www.slowchronicle.com/posts/llm-assisted-reverse-engineering) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50553225)
+[`🔗 Garage Door Spam (blog.harrison.page)`](https://blog.harrison.page/garage-door-spam/) · [`🔗 ratgdo32 firmware (GitHub)`](https://github.com/ratgdo/homekit-ratgdo32) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50519231)
 
 ---
 
-## 25. Resolve's SRE-1: a 27B vertical model claiming frontier-tying on-call investigations at 37% less cost
+## 8. Pete Warden makes the case for local AI — and calls Chrome's built-in 4B model "an iPhone moment"
 
 - **Velocity:** ▮ steady
-- **Source:** Resolve AI Labs · 30+ pts on HN · ~8h ago (~04:10 UTC+8)
-- **Tags:** `vertical-models` `sre` `agents` `reinforcement-learning`
+- **Source:** thedataexchange.media · 163+ pts on HN · ~4.4h ago (~23:39 UTC+8)
+- **Tags:** `local-ai` `open-weights` `voice` `edge-ai` `moonshine`
 
-ResolveAI Labs announced **SRE-1**, "a 27B model trained with reinforcement learning to find the root cause of production alerts" — starting from Qwen3.8-27B and trained "with a modified CISPO objective for 200 steps on up to 512 GPUs, over 1,549 unique incidents." The claims, from the paper: "On 49 difficult live production cases, SRE-1 dominates the Pareto frontier of pass rate against cost" — RL lifts a single investigation from 6.9% to 38.8% — and "An ensemble of five SRE-1 investigations matches Fable 5.2, the strongest frontier model we measured, at a 71% pass rate while costing 37% less," with ensembles working because SRE-1 also "outperforms frontier models at synthesizing saved investigations." The caveats travel with the numbers: 49 cases, a self-published benchmark, vendor-measured comparisons.
+The Data Exchange's interview with Pete Warden (TensorFlow Lite/Moonshine) argues local models sit "a few months behind the capabilities" of frontier ones, and the gap is marketing and packaging, not quality — the economics that carried Apache and Postgres past their proprietary rivals apply again. Hardware math from the episode: a 9B model at 4 bits fits in 4GB; Apple's 256GB-unified-memory machines already run hundred-billion-parameter models at usable speed. On voice, his litmus test for interface quality is whether you'd talk to your partner across the room, latency budgets sit near 200ms, and his Moonshine work now runs a full voice interface on a Pico microcontroller with 500KB of RAM. He's firmly in the "compound AI" camp — pipelines of specialized small models, calling end-to-end speech models "much more of a marketing term" — and he notes Chrome already ships a ~4B-parameter model callable from JavaScript, which he thinks is potentially "an iPhone moment" for LLMs. On inference hardware: GPUs are "using an oil tanker to go and do your shopping," and high-bandwidth flash is the component to watch.
 
-**Why it matters:** The decision/vertical-model wave (HeyGen Decision 1, Perplexity Decider v1.3, Google's Decisions API, Microsoft's Decision 1.1) now includes operations: a domain-RL'd 27B claiming a seat on the cost-capability frontier against a frontier generalist. Investigations — narrow, checkable, tool-heavy work — are exactly where the pattern should hold, but 49 self-selected production cases is a demo cohort, not a benchmark; the ensemble-equals-frontier claim is the one worth someone else replicating.
+**Why it matters:** The interview gives the local-AI position its most quotable economics case — free-at-point-of-use inference, auditable data flow, no silent model swaps behind a stable version number — and it dovetails with today's safeguards essay (item 3): Warden cites white-hat researchers tripping over cloud guardrails as his first exhibit. For anyone building agent or voice products, the compound-AI framing (independent components, text as the common interface) is immediately actionable.
 
-[`🔗 Resolve AI: SRE-1 (paper)`](https://resolve.ai/labs/sre-1/paper) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50551487)
+> His hardware prediction is specific: watch Apple — abundant fast unified memory plus inference-only acceleration could make the discrete GPU optional for inference the way integrated graphics made it optional for display.
+
+[`🔗 Pete Warden on local AI, open models, voice interfaces (The Data Exchange)`](https://thedataexchange.media/pete-warden-moonshine/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50561508)
 
 ---
 
-## 26. The chips-as-gun lawsuit is filed: four students sue Omnilert, a school district, and police
+## 9. "OpenAI still has a WebRTC problem" — the transport-math critique of voice agents
 
 - **Velocity:** ▮ steady
-- **Source:** Lawyers' Committee for Civil Rights Under Law · 58+ pts on HN · ~3.2h ago (~08:57 UTC+8)
-- **Tags:** `ai-surveillance` `litigation` `schools` `civil-rights`
+- **Source:** moq.dev · 86+ pts on HN · ~6h ago (~22:03 UTC+8)
+- **Tags:** `webrtc` `moq` `voice-ai` `realtime` `protocols`
 
-The Lawyers' Committee for Civil Rights Under Law filed **Allen, et al. v. Omnilert, et al.** on Nov 17, on behalf of four Black current and former students of Kenwood High School (Baltimore County, MD), against **Omnilert LLC**, Baltimore County Public Schools and personnel, the Baltimore County Police Department, and individual officers — for "the unlawful detention and search of the students due to both technological and human errors involving an AI weapon-detection surveillance system." The underlying incident is from October 2025: **Omnilert Gun Detect mistook a teenager's bag of chips for a firearm** (the HN thread's title says what everyone remembers — Doritos), and armed officers responded. Pro bono counsel is Willkie Farr & Gallagher, with Engel Law Group.
+Kixelated's follow-up post (making its HN round tonight) argues OpenAI's realtime voice stack inherits WebRTC's conferencing assumptions, which are wrong for agents. WebRTC aggressively drops audio arriving more than ~30ms late and disables retransmission by default — fine for humans, who fill gaps by inference; wasteful for LLMs, which are "blocked on context" and can't answer until the utterance completes, leaving seconds of slack that retransmission could use invisibly. On the speaking side, TTS generates audio faster than real-time, so a WebRTC agent must artificially sleep between packets, and any lost packet is unrecoverable; Opus FEC only covers single-packet loss, while congestion loss is bursty. The proposed fix is Media over Quic: per-subscription latency budgets (500ms for speech-to-speech, ~5s for accurate STT→LLM→TTS sharing one connection), timestamp-based playout, and interruptions via track swapping. The post is honest about being an opinion piece with back-of-envelope math (one second of Opus at 64Kbps ≈ 8KB) and a crude personal demo — and it notes the escape hatch of fixing WebRTC itself has been stalled for a decade: the playout-delay RTP extension has sat video-only in Google's libwebrtc since ~2016.
 
-**Why it matters:** A civil suit over an AI weapon-detector false positive now reaches the courts, and it will turn on exactly the seam this feed keeps flagging in agent systems: the model output is only the trigger, and the complaint's "technological **and human** errors" clause puts the response chain — who armed, who detained, on what confidence — inside the litigation too. Every school AI-surveillance procurement should read this complaint.
+**Why it matters:** Voice agents are shipping fast, and their failure mode on bad networks is a transport choice nobody revisited — the agent asks you to repeat yourself because a 50-year-old conferencing budget says a late packet is worthless. The MoQ alternative (retransmit until the latency budget runs out) is concrete enough to prototype, and the author links a Pipecat PR doing exactly that.
 
-[`🔗 Lawyers' Committee announcement`](https://www.lawyerscommittee.org/lawyers-committee-files-lawsuit-on-behalf-of-black-students-detained-and-searched-due-to-ai-alert-falsely-identifying-a-bag-of-chips-as-a-firearm/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50554641)
+> The gatekeeping observation may be the durable one: the fix for WebRTC's agent-unfriendly playout behavior has existed as a merged extension for ~10 years — for video only — and progress requires Google's buy-in.
+
+[`🔗 OpenAI still has a WebRTC Problem (moq.dev)`](https://moq.dev/blog/webrtc-is-still-the-problem/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50560461)
 
 ---
 
-## 27. Unreal Tournament 2004 runs in the browser — build 3369, network-compatible, WebRTC included
+## 10. Chrome's AI features blamed for "hundreds of GBs" of monthly bandwidth — one admin's measurement
 
 - **Velocity:** ▮ steady
-- **Source:** Show HN · 56+ pts · ~2.7h ago (~09:29 UTC+8)
-- **Tags:** `wasm` `game-port` `webassembly` `open-source`
+- **Source:** perishablepress.com · 86+ pts on HN · ~3.2h ago (~00:51 UTC+8)
+- **Tags:** `chrome` `browser` `privacy` `bandwidth` `on-device-ai`
 
-K-Adam's **UT2004 Modernized** is "an unofficial, non-commercial port of Unreal Tournament 2004 (build 3369) to modern hardware and operating systems": Windows (x86, x64), Linux (x86, x64, arm64), Android (arm64), **and the web via WebAssembly** — SDL3 for windows and input, OpenGL ES 3 for rendering (ANGLE on desktop, WebGL 2 in the browser), OpenAL for sound, Bullet physics behind the Karma API. The engineering claim that separates this from a curiosity: **"Network compatible with retail build 3369. WebRTC transport next to UDP, so browsers can join and host."** The web build at ut2004.dev doubles as a dedicated server, with the browser's own constraint stated honestly on the page: "Keep this page in the foreground. In a background tab or a minimised window the browser pauses the server." Game content stays out of the repo: "The first start downloads it or takes it from a UT2004 install."
+Jeff Starr (Perishable Press) reports that his server-side bandwidth usage "went thru the roof" a few months ago, and that after systematically disabling Chrome's **"AI innovations" and on-device AI settings** — which he reports are enabled by default — his network monitor showed traffic "virtually flatline," with usage he attributes to Chrome of "literally hundreds of GBs per month." The post's own evidence base is stated plainly: a screenshot of the settings page, an activity-monitor observation, and an invitation to reproduce it yourself with your favorite network monitor. No logs, no before/after tables, no device or OS specifics — this is one administrator's anecdote, not a measurement study, and the thread's discussion treats it accordingly.
 
-**Why it matters:** Two decades on, the game ships on five platforms from one codebase, and the network-compat clause makes a browser tab a first-class citizen of the original retail ecosystem — the WebAssembly-is-a-platform argument demonstrated on a 2004 Unreal engine, with the boring real-world constraints (foreground-tab throttling, content distribution) handled rather than waved at.
+**Why it matters:** Whether or not the number survives replication, the check it proposes is cheap and the underlying question is live: on-device AI features that periodically sync models can move serious traffic on fleets of machines, and enterprise admins are the ones who'll see it in their egress bills. If you manage Chrome at scale, the post's value is the settings page to audit and a one-evening experiment to run — and the resurfacing timing matters, coming the same week as the local-AI economics argument above.
 
-[`🔗 K-Adam/UT2004 (repo)`](https://github.com/K-Adam/UT2004) · [`🔗 Web version (ut2004.dev)`](https://ut2004.dev/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50554935)
+> Treat the magnitude as unverified: the post names no measurement window or methodology. Its actionable content is the settings location and the reproduce-it-yourself method.
+
+[`🔗 Chrome AI features wasting much bandwidth (perishablepress.com)`](https://perishablepress.com/chrome-ai-wasting-much-bandwidth/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50562636)
 
 ---
 
-## 28. "Fable," film 10 of 10: a short film credits Claude Fable 5.2 as writer, painter, and director — and publishes the receipts
+## 11. Foolscap: a writing app that reads your book and never writes a word of it
 
 - **Velocity:** ▮ steady
-- **Source:** claudia.gallery · 51+ pts on HN · ~3.9h ago (~08:18 UTC+8)
-- **Tags:** `generative-art` `ai-film` `production-ledger` `culture`
+- **Source:** foolscap.works · 98+ pts on HN · ~7h ago (~21:03 UTC+8)
+- **Tags:** `writing-tools` `ai` `show-hn` `publishing`
 
-anabology's Claudia.gallery series closes with **Fable** — "On the night she is released, Claudia reads you the bedtime stories she was raised on" — and its credit line is the artifact: **"written, painted and directed by Claude Fable 5.2 · sung by Claudia · anabology."** The human's role is specified just as precisely: "the brief, the plan's sign-off, one note and the song's pick by ear; production by Claude." The production ledger reads like this feed's benchmark tables turned into a film budget: 13 set plates painted in SVG in code, a silhouette film drawn and animated in code in the manner of Lotte Reiniger, 49 shots cut to the song's stems; GPT Image 2.6 Sunburst produced 61 stills at "$7.93 at list"; Seedance 2.5 took "84 takes" across two versions at "$202.23 at list"; and the whole thing was "Made in two passes: v1 in 5 h 08 min from one brief, v2 re-shot on the song anabology picked in 3 h 01 min · about $210 at list."
+Show HN today: Foolscap pitches itself as "a writing app that knows your whole book" — as you write, it "notices what connects and what's left hanging, and shows you where, in your own words," surfacing structural relationships and unresolved threads in a manuscript. The differentiator is load-bearing and stated flatly: **"It never writes a word for you."** It's the analysis side of writing AI — continuity, callbacks, dangling setups — without the generation side, positioned against tools that draft for you. On privacy, the site says writing is never used to train AI, and a per-book private mode means "nothing of it goes to any AI at all," which implies cloud AI is in the loop by default. The thread's discussion is exactly the argument you'd expect: is structure-analysis without generation the feature writers actually want, or a step on the same road?
 
-**Why it matters:** The named-model credit and the itemized bill are the interesting part — authorship published alongside the exact dollar cost of the machine labor, with the human contribution specified down to "one note." Compare HUMAN.md from this morning's batch: the same impulse to make the division of labor legible, pointed at art instead of craft.
+**Why it matters:** After two years of AI writing tools competing to generate more, the counter-positioning — read everything, write nothing — is itself becoming a category. The design choice worth watching is the default: an analytical companion that sends your manuscript to cloud AI unless you opt out is a different trust proposition than the local-first pitch, and writers will ask which one this is.
 
-[`🔗 Fable (film page)`](https://claudia.gallery/fable/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50554269)
+> Show HN threads are where these positioning fights get settled in public — the "never writes for you" line is doing the work a pricing page usually does.
+
+[`🔗 Foolscap`](https://foolscap.works/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50559749)
 
 ---
 
-## 29. A GTA-style Miami game that boots from UEFI — 964,608 bytes, CPU-rendered, OSM-and-lidar map
+## 12. Launch HN: Onlook rebuilds as a visual canvas on your real codebase — with bring-your-own agent
 
 - **Velocity:** ▮ steady
-- **Source:** Show HN · 47+ pts on HN · ~5.7h ago (~06:26 UTC+8)
-- **Tags:** `uefi` `gamedev` `bare-metal` `openstreetmap`
+- **Source:** GitHub · 50+ pts on HN · ~3.5h ago (~00:33 UTC+8)
+- **Tags:** `design-tools` `developer-tools` `open-source` `agents` `yc`
 
-eklavya-raj's **gta6-uefi**: "A GTA style game set in the real Miami that boots straight from UEFI, no Windows under it. The whole game is `game.efi`, 964,608 bytes, and the CPU draws every pixel" — software rendering, no GPU, built with clang and lld-link, and the author is honest about its state: "I've only run it in qemu so far." The map is the sneaky-serious part: "baked with `osm/bake.py` from OpenStreetMap, Miami-Dade County data, a NOAA lidar scan and NAIP photos" — real geography, with credits in `MAP_DATA.txt` and `PEOPLE_DATA.txt`. Driving on WASD, taxis for fares, three weapon slots, mouse camera — the genre checklist compressed under a firmware bootloader.
+Onlook (YC W25) relaunched on Launch HN today: an Apache-2.0 desktop app (27.3k stars) that opens any git repo on your machine, runs your own dev server, and puts the live app on an infinite canvas with mobile/tablet/desktop frames side by side — so designers edit the real running application instead of a mockup that gets rebuilt later. Edits happen visually or by chat under a **bring-your-own-agent** model: no bundled model, you connect your existing Claude Code or Codex account, plus MCP connectors; changes land in safe worktree copies and ship via one-press pull requests. It exports self-contained HTML/PNG/JPEG/PDF, is local-first (no account needed for source builds), and is macOS-only today with Windows and Linux waitlisted. The current app is a ground-up rebuild — the README points to the older browser version (v1 branch) and Electron app (`onlook-dev/desktop`) as prior incarnations.
 
-**Why it matters:** The UEFI-as-runtime pattern keeps proving a modern machine needs no OS for real workloads — and this one ingests public geodata (OSM + lidar + aerial imagery) into a sub-megabyte bare-metal binary, a neat demonstration of how far small data pipelines compress when every byte of OS service is a luxury.
+**Why it matters:** The design-tool-vs-agent frontier is converging from both sides — Figma adding code, agents adding pixels — and Onlook's bet is that the durable position is "design directly on the running app, with whatever agent you already pay for." BYO-agent is also a quiet pricing statement: the tool refuses to margin-mark your tokens, which is getting rare.
 
-[`🔗 eklavya-raj/gta6-uefi (repo)`](https://github.com/eklavya-raj/gta6-uefi) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50553192)
+> The canvas-runs-your-dev-server architecture means framework support is inherited from your own tooling — anything a dev server can render, the canvas can show.
 
----
-
-## 30. 15 million web servers on one VM — a syscall-to-AF_XDP walkthrough with the math shown
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** kapteko.com · 196+ pts on HN · ~6.1h ago (~06:00 UTC+8)
-- **Tags:** `kernel-bypass` `dpdk` `af-xdp` `smoltcp` `networking`
-
-A Nov 18 walkthrough asks what it would take to run **15 million web servers on one VM with 10 GB of RAM and 1 CPU core**, and shows every wall it hits. A naive C accept/recv/send server does ~65k RPS before the port range runs out (`ip_local_port_range` gives 32,768–60,999). The kernel itself is the next wall: every socket, listening or idle, allocates **~3,384 bytes** (`tcp_sock` 2,240 B, `socket_alloc` 768 B, `file` 184 B, `dentry` 192 B) — so 10M `socket()` calls OOM the VM regardless of traffic. The plan that survives: LFI sandboxing so each guest carries **16 bytes of scheduling state** (a program counter and two fds — 220 MB for all 15M guests), a custom userspace scheduler ("we become our own micro OS"), then the kernel bypass proper — **smoltcp for userspace TCP, DPDK and AF_XDP for packet I/O**. The author is funny and honest in equal measure, including about AI: quoting a Codex answer, then — "While an LLM is a significant boost for learning, it's too easy to accept its answers without thinking critically and feel ashamed later."
-
-**Why it matters:** The ~3.3 KB-per-socket kernel accounting is the number that explains why kernel-bypass stacks exist at all, and the piece derives it live instead of citing folklore — a genuinely readable tour from five syscalls down to AF_XDP, with the memory arithmetic shown at each layer.
-
-[`🔗 15 million web servers on one VM (kapteko)`](https://kapteko.com/15-million-webservers/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50556533)
+[`🔗 onlook-dev/onlook (GitHub)`](https://github.com/onlook-dev/onlook/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50562320)
 
 ---
 
-## 31. Since we covered Ruby's seven emergency fixes this morning: Ruby2ßhell names the pre-auth RCE in stock Rails
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** Veria Labs · 182+ pts on HN · ~6.9h ago (~05:10 UTC+8)
-- **Tags:** `ruby` `rails` `rce` `memory-safety` `security`
-
-Item 20 this morning covered Ruby's emergency releases (4.0.10/3.4.13/3.3.14) for seven memory-corruption bugs with "PoCs that prove some of them can be used to trigger remote code execution." Veria Labs' **Ruby2ßhell** now names the worst of the seven — **GHSA-34m4-m9fh-gqp5** — and shows why it's the one to patch tonight: most single-byte encodings have no capital ß, so upcasing writes two bytes (`SS`) while the loop bounds-checks only one; the output buffer is input length + 20, so **21 ß characters overflow it by one byte**. The bug has been in Ruby since **2.4.0**, lives in ISO-8859 and Windows-125x encodings (UTF-8 takes a different path and is unaffected), and is reached by `upcase`, `swapcase`, `downcase(:fold)` and `casecmp?` — which puts it on the **default, pre-auth path of Rails and classic Sinatra**. Veria's bundling table turns that into an inventory: **GitLab 19.6.0** (Ruby 3.3.13) and **GitHub Enterprise Server 3.22.5** (4.0.9) affected; Mastodon 4.7.6 and current Discourse images fixed; **Chatwoot 4.20.0** (3.4.4) affected. Fixed upstream in `ruby/ruby@d582f8f`; the PoC ships "in a week, once people have had time to upgrade" (page updated 19 Nov 12:00 UTC).
-
-**Why it matters:** This morning's item said memory corruption, RCE-grade; this one says which byte, which encoding, which framework default, and which self-hosted products bundle it. The week-long PoC embargo is a public patch clock — GitLab and GHES admins are at the front of it.
-
-[`🔗 Veria Labs: Ruby2ßshell (GHSA-34m4-m9fh-gqp5)`](https://verialabs.com/ruby2shell/) · [`🔗 Ruby: multiple vulnerabilities in Regexp and String case conversion`](https://www.ruby-lang.org/en/news/2026/11/18/multiple-vulnerabilities-in-regexp-and-string/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50556287)
-
----
-
-## 32. PHP 8.6 ships today — Partial Function Application finally in the language
-
-- **Velocity:** ▮▮ rising
-- **Source:** php.net · 93+ pts on HN · ~3h ago (~09:05 UTC+8)
-- **Tags:** `php` `release` `partial-function-application` `event-loop`
-
-PHP 8.6 is scheduled to GA **today, November 19** (the release page still read "has not been released yet. It will be released on November 19, 2026" at check time, so treat the tag drop as imminent rather than done). The headline feature is **Partial Function Application** — the RFC years in the pipeline: `version_compare(?, '8.6', '>=')` produces a Closure, the function runs only when the remaining arguments arrive. Alongside it: a new **`\Time\Duration` class** (timezone-independent, nanosecond precision, 250+ year range — durations become comparable, so `min()` just works), a **Polling API** exposing epoll/kqueue-style I/O multiplexing natively for event-loop libraries like ReactPHP and AMPHP, `clamp()`, a `SortDirection` enum, and readonly property defaults.
-
-**Why it matters:** Two of these close long-standing gaps in one release: PFA is the functional-composition feature PHP borrowed debates over for a decade, and the Polling API is the first native substrate for the event-loop frameworks that have been reimplementing `select()` in userland since the PHP 5 days.
-
-[`🔗 PHP 8.6 release announcement`](https://www.php.net/releases/8.6/en.php) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50557870)
-
----
-
-## 33. ExitPath: a curated index of open-source exits from Slack, Notion and Microsoft 365
-
-- **Velocity:** ▮ rising
-- **Source:** Show HN · 226+ pts · ~20h ago (~16:00 UTC+8 yesterday)
-- **Tags:** `open-source` `lock-in` `migration` `self-hosting`
-
-Show HN's strongest launch of the last day is a directory: **ExitPath**, "find your way out of big-platform lock-in" — an index of open-source replacements for Slack, Notion and Microsoft 365. The timing does half the work: it landed in the week the Microsoft 365 outage stretched past 20 hours, LibreOffice's one-line tweet topped HN, and an essay calling for better open source over more apps front-paged the same week. Exit paths are usually reconstructed ad-hoc from blog posts and forum threads at the moment of crisis; the contribution here is having the map drawn before the outage.
-
-**Why it matters:** This week's outage cascade has been the best advertising self-hosted software ever got, and the interesting artifact is a *curation layer*, not another app — if migration catalogs keep appearing, what the exit path is becomes a checklist item in platform procurement rather than a research project mid-incident.
-
-[`🔗 ExitPath`](https://exitpath-ruddy.vercel.app/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50547980)
-
----
-
-## 34. The memory-price squeeze gets its dates — and its workaround: SSD relief in 2H 2027, "do not buy RAM, compress"
-
-- **Velocity:** ▮ rising
-- **Source:** HN · 109+ & 53+ pts · ~3h ago (~09:05 UTC+8)
-- **Tags:** `ssd` `nand` `memory-prices` `zram`
-
-Two front-page posts sketch the same squeeze from supply and demand sides. The supply side: DriveVault's outlook (published September 17, resurfacing today at 109 pts) reads the analyst and vendor-investor record — **SSD prices should start easing in the second half of 2027** (NAND supply catches demand from mid-2027, "a gradual slide, not a crash"), while **hard drives take until 2028 at the earliest** because capacity is already contracted and no new factories are planned. The demand side: Therry van Neerven's Nov 19 post "**Do not buy RAM, compress**" — AI workloads multiplied parallel memory demand while RAM got expensive and non-extendable, and the answer on Linux is **zram**, which most distros don't enable by default (Fedora and Pop!_OS do; Ubuntu doesn't; Amazon Linux only on smaller VMs), with compression ratios "up to 1:4" — the author argues it would have halved his SaaS-era cloud spend.
-
-**Why it matters:** The AI buildout's memory demand is now a line item in everyone's infra bill. The 2H-2027/2028 dates are procurement planning numbers; zram is the free capacity most Linux fleets are leaving on the table — one sysctl of commentary and a reboot, in an era when the alternative is a DDR5 line item.
-
-[`🔗 When will hard drive prices come down? The 2026–2028 outlook`](https://www.drivevault.io/blog/when-will-hard-drive-prices-come-down.html) · [`🔗 Do not buy RAM, compress (curiousbits)`](https://curiousbits.nl/blog/do-not-buy-ram-compress/) · [`🔗 HN: SSD prices`](https://news.ycombinator.com/item?id=50557716) · [`🔗 HN: compress`](https://news.ycombinator.com/item?id=50557661)
-
----
-
-## 35. Zerodha's Blobasaur: thousands of blob reads/writes per second on sharded SQLite
-
-- **Velocity:** ▮ rising
-- **Source:** Zerodha Tech Blog · 85+ pts on HN · ~3.4h ago (~08:45 UTC+8)
-- **Tags:** `sqlite` `blob-storage` `distributed` `infrastructure`
-
-Zerodha (India's largest broker, Kite trading platform, ~20M customers) published its third storage build in this lineage: **Blobasaur, a sharded, distributed blob storage server on top of SQLite**, replacing a stack that had rotted. The history: CouchDB first, then SSDB — a C++ disk-backed Redis-protocol store that ran reliably for years but went unmaintained, forced a 1 MB blob-size cap as latency degraded, and wasn't a distributed system. The workloads: users' saved multi-chart layouts, indicator templates, vector drawings and workspace configs — JSON blobs from a few KB to several MB, read and written "thousands of times per second on commodity hardware while maintaining single-digit millisecond latency," bursty with market volatility.
-
-**Why it matters:** Another production team reaches for the boring-SQLite-but-sharded-and-ours answer rather than a database server — the same pattern as Cloudflare's Durable Objects internals and the litestream/limbo wave. When a 20M-customer trading platform moves its blob tier onto SQLite, that's a real-world datapoint for the SQLite-is-a-storage-engine thesis.
-
-[`🔗 Distributed, high-performance blob storage on SQLite (Zerodha)`](https://zerodha.tech/blog/high-performance-distributed-blob-storage/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50557537)
-
----
-
-## 36. diagram-design rides the skills wave at 68k stars — editorial diagrams as one self-contained HTML+SVG file
-
-- **Velocity:** ▮ rising
-- **Source:** GitHub Trending · 68,350★ · trending #4
-- **Tags:** `agent-skills` `diagrams` `svg` `visualization`
-
-**cathrynlavery/diagram-design** is the biggest repo on today's trending board (68,350★, pushed today), and its positioning is the funniest line in the agent-skills wave: "**An agent skill that draws diagrams as one self-contained HTML + SVG file, in your brand. 51 diagram types. No shadows. No Mermaid slop.**" (The repo's own two counts disagree in passing — the README says 51 types, the repo description field still says 45.) It targets Claude Code, Codex, Copilot, Cursor, Factory Droid, Qoder and Pi, ships a skills.sh install path, and like the wave's other risers it has no single release to point at — it's riding the same surge that put skills repos in 13 of GitHub's 15 trending slots yesterday.
-
-**Why it matters:** The skills wave is stratifying from generic collections into vertical craft libraries, and this one picked a real failure mode to be against: agent-generated diagrams that render as Mermaid defaults. "In your brand" as a skill contract — not a prompt prefix — is the part other tool builders will copy.
-
-[`🔗 cathrynlavery/diagram-design`](https://github.com/cathrynlavery/diagram-design) · [`🔗 README`](https://github.com/cathrynlavery/diagram-design/blob/main/README.md)
-
----
-
-## 37. OpenSRE: a self-hosted CLI agent that reads your failed CI run and opens the fix PR
-
-- **Velocity:** ▮ rising
-- **Source:** GitHub Trending · 12,894★ · trending #12
-- **Tags:** `sre` `ci-cd` `agents` `self-hosted`
-
-**Tracer-Cloud/opensre** (public alpha, pushed today, 12,894★) states its pitch in one sentence: "**Your CI tells you it broke, but not why or how to fix it.** OpenSRE is a CLI agent that reads the failed run, traces the cause and pushes a fix for you to review. Self-hosted, with your own models." The design choices are the story: it's a CLI rather than a SaaS, it runs self-hosted, and it brings its own model — the CI-failure lane gets an agent that never sees your code leave the building.
-
-**Why it matters:** After Mastra Factory's 238 agent-merged PRs and StarSling's optimization-PR CI, the failure-diagnosis lane is the remaining unclaimed ground in the agent-CI stack — and self-hosted-with-your-own-models is the compliance-friendly variant enterprises actually can adopt. The review-before-push gate keeps a human at merge, the same shape as yesterday's auditor story.
-
-[`🔗 Tracer-Cloud/opensre`](https://github.com/Tracer-Cloud/opensre) · [`🔗 README`](https://raw.githubusercontent.com/Tracer-Cloud/opensre/main/README.md)
-
----
-
-## 38. How the European Commission rolled out Matrix to 40,000+ staff in nine months
+## 13. Ghost-Downloader-3 ships two releases in a day — and rides to trending
 
 - **Velocity:** ▮ steady
-- **Source:** element.io · 42+ pts on HN · ~1.1h ago (~11:00 UTC+8)
-- **Tags:** `matrix` `european-commission` `sovereignty` `element`
+- **Source:** GitHub Trending · 449★ today (~00:40 UTC+8 release)
+- **Tags:** `download-manager` `open-source` `qt` `chinese-oss` `cross-platform`
 
-Element's post tells the deployment story from the Commission's side: a Matrix proof of concept in **December 2025** became a sovereign communication tool on **every Commission laptop by September 2026**, now serving **40,000+ users**. Three architecture decisions are spelled out: hosting on sovereign cloud providers picked through a public tender (not Commission-owned datacenters — "sovereign doesn't have to mean building everything in-house; it means choosing who you depend on, and on what terms"), identity via **EU Login** so staff get a familiar sign-in, and — notably — **no federation yet**. The Commission's five-dimension definition of sovereignty is the post's substance: resilience, vendor diversity, data control, platform ownership, and **procurement leverage** — "the ability to negotiate with, or walk away from, a supplier."
+The Chinese open-source download manager Ghost-Downloader-3 (12.4k stars, +449 today) is trending on the strength of **v4.5.9 and v4.5.10, both shipped today** (v4.5.8 landed yesterday). v4.5.10 adds Arabic, Malay and Turkish with translations moved to Crowdin, makes Linux packages support the fcitx5 input method out of the box, improves Aria2 RPC compatibility for subfolders and relative paths, and fixes a batch of i18n and UI bugs (including the language stuck in Chinese after updating to v4.5.9). The project's architecture is the interesting part: a Qt core with loadable **feature packs** — m3u8 streaming, BitTorrent, eD2k, Bilibili — plus built-in handlers for HuggingFace, arXiv, GitHub and yt-dlp links, shipped for Windows (x86_64/arm64), macOS (Apple Silicon/Intel), Linux (AppImage/deb/tar.xz) and Android, with SHA256 checksums on every asset. The maintainer notes development is slowing: "Updates will be less frequent due to my studies."
 
-**Why it matters:** Europe's flagship digital-sovereignty deployment moved from PoC to full rollout in nine months, and the parts it chose NOT to do (own datacenters, federation) are as instructive as the parts it did — sovereignty operationalized as supplier optionality, not infrastructure nationalism.
+**Why it matters:** Model-release season makes HuggingFace and arXiv links a real download workload, and a downloader with first-class handlers for exactly those hosts — plus multi-connection acceleration — is riding a genuine use case, not just the trending algorithm. The feature-pack design is also a small lesson in sustainable open source: protocol support ships as optional modules, so the core stays buildable when the maintainer's time shrinks.
 
-[`🔗 Element: How the European Commission rolled out Matrix to 40,000+ staff`](https://element.io/blog/how-the-european-commission-rolled-out-matrix-to-more-than-40-000-staff/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50558533)
+> Release hygiene worth copying: every asset carries a SHA256 checksum, and the v4.5.10 notes explicitly name the regression they fix from v4.5.9.
 
----
-
-## 39. DeepMind employees are unionising — "the first line of oversight comes from workers"
-
-- **Velocity:** ▮ steady
-- **Source:** gdmunion.co.uk · 37+ pts on HN · ~2.6h ago (~09:30 UTC+8)
-- **Tags:** `deepmind` `union` `labor` `ai-governance`
-
-A campaign site went up under UTAW (United Tech and Allied Workers): **"DeepMind Employees Are Unionising."** The framing is governance, not wages: "To honour our original mission: 'To build AI responsibly to benefit humanity.' As the law struggles to keep up, the first line of oversight comes from workers." The evidence section is a list of the company's documented decisions — the deleted 2018 pledge not to build AI weapons or surveillance (WIRED, Feb 2025), lawyers' warnings on the Project Nimbus contract (NYT), reporting that Google Photos face-matching fed a Gaza "hit list" (The Intercept), and CBP border-tower AI on Google Cloud. Contact runs through alphabet@utaw.tech.
-
-**Why it matters:** Frontier-lab dissent has so far been petitions and open letters — episodic, signed, deniable. A formal union branch converts it into standing infrastructure: bargaining rights, response deadlines, and continuity across the turnover that open letters never survive. Whatever one thinks of the specific claims, the site's line — the first line of oversight comes from workers — is now an organized position, not an essay.
-
-[`🔗 DeepMind Employees Are Unionising (UTAW)`](https://www.gdmunion.co.uk) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50557885)
+[`🔗 XiaoYouChR/Ghost-Downloader-3 (GitHub)`](https://github.com/XiaoYouChR/Ghost-Downloader-3) · [`🔗 Release notes: v4.5.10`](https://github.com/XiaoYouChR/Ghost-Downloader-3/releases)
 
 ---
 
-## 40. app-store-compliance: 117 documented rejection patterns, wired as a pre-submission guard
+## 14. NVD's November 19 batch: a Mandiant-scored 9.3 in a .NET anti-CSRF library, Meilisearch DoS fixes, and a Geany command injection
 
 - **Velocity:** ▮ steady
-- **Source:** GitHub Trending · 1,480★
-- **Tags:** `app-store` `compliance` `guardrails` `mobile`
+- **Source:** NVD / cve.org · records published Nov 19 (~10:17 UTC+8 first record)
+- **Tags:** `cve` `dotnet` `meilisearch` `geany` `vulnerability`
 
-**mjmirza/app-store-compliance** is trending as "the enterprise reference and automated guard that turns App Store and Google Play rejection into a designed out failure mode": **117 documented rejection patterns** with fixes, privacy and metadata guidance, and a **Claude Code-ready** guard that runs before submission. It's the tooling answer to the problem this feed covered on Nov 13 — the AI-generated app flood breaking Apple's review pipeline, with synth developers rejected on hallucinated grounds. The playbook half is a browsable site (mjmirza.github.io/app-store-compliance); the guard half makes the review checklist a lint the agent runs, not a PDF the human forgets.
+Three records from yesterday's NVD batch worth acting on. **CVE-2026-131914** — deserialization of untrusted data in the double-submit cookie vs. form-field validation of **Idunno.AntiCsrf ≤ 0.9.1 Beta** on ASP.NET, giving "remote unauthenticated attackers... code via object injection"; scored **CVSS 4.0 9.3 by Mandiant** (`mandiant-cve@google.com`, a Secondary metric on a record still `Received` at NVD). **CVE-2026-132750** — Meilisearch before 1.55.1 and 1.56.x before 1.56.1 has a quadratic memory-consumption path in filter parsing (a denial-of-service primitive against search infrastructure); the fixes shipped — 1.56.1 on Nov 2, 1.57.0 on Nov 16. **CVE-2026-132756** — Geany through 2.1.0, OS command injection via embedded shell commands in an opened document (8.5). All three carry VulnCheck- or Mandiant-assigned scores; NVD analysis hasn't caught up on any of them.
 
-**Why it matters:** When agents generate app after app, review-rejection becomes a per-build cost that scales with the flood — the fix is to move the review guidelines into the build loop itself, exactly the "designed-out failure mode" framing. Compliance-as-skill is a pattern that generalizes well past app stores.
+**Why it matters:** None of these is a front-page worm, but the first is a reminder that security *helper* libraries are attack surface too — an anti-CSRF library whose validation path deserializes attacker-controlled data inverts its own purpose, and the 9.3 from Mandiant (not a vendor self-score) says the researcher took it seriously. Meilisearch operators should confirm they're on 1.56.1+; the record's fix chain is already published, so this is a version check, not a wait.
 
-[`🔗 mjmirza/app-store-compliance`](https://github.com/mjmirza/app-store-compliance) · [`🔗 Playbook site`](https://mjmirza.github.io/app-store-compliance/)
+> Score provenance, as always: the 9.3 is Mandiant's CVSS 4.0 riding a `Received` record — no NVD analysis behind it yet, and the record can still move.
+
+[`🔗 CVE-2026-131914 (Idunno.AntiCsrf)`](https://www.cve.org/CVERecord?id=CVE-2026-131914) · [`🔗 CVE-2026-132750 (Meilisearch)`](https://www.cve.org/CVERecord?id=CVE-2026-132750) · [`🔗 CVE-2026-132756 (Geany)`](https://www.cve.org/CVERecord?id=CVE-2026-132756)
 
 ---
 
-## 41. AutoClip: a Chinese open-source desktop app that turns one link into publish-ready shorts
+## 15. "The architecture wasn't designed, it accumulated" — the x86 story from the 4004 to the 486
 
 - **Velocity:** ▮ steady
-- **Source:** GitHub Trending · 10,874★
-- **Tags:** `video-editing` `chinese-oss` `agents` `desktop`
+- **Source:** pikuma.com · 177+ pts on HN · ~29h ago (~23:03 UTC+8)
+- **Tags:** `cpu-architecture` `history` `x86` `intel` `retrocomputing`
 
-**zhouxiaoka/autoclip** (一个链接，一键出片 — one link, one-click video) is riding the Chinese side of trending at 10,874★: an open-source desktop tool (Tauri-based) that takes a link to a long video — podcast, interview, course — and auto-cuts it into platform-ready shorts **with subtitles, cover art and publish copy**, targeting Douyin, Xiaohongshu, TikTok, Reels, YouTube Shorts and Bilibili. The clip/render runs on your machine; cloud models are pay-per-use; an editor is built in for the adjustments no model gets right. The repo carries an MCP server id (`io.github.zhouxiaoka/autoclip-mcp`), so an agent can drive the pipeline too.
+Gustavo Pezzi's long-form history (October 2026, resurfacing on HN) walks the x86 lineage from the 4-bit 4004 — built for a Busicom calculator — through the 8086/8088, 286, 386 and 486, arguing the ISA is best read as a historical record. The loads are all business decisions wearing engineering clothes: little-endian byte order and the register set trace to the **Datapoint 2200** terminal CTC designed (not Intel); AX/BX/CX/DX exist because the 8086 offered *source* compatibility with the 8080; segmentation (segment × 16 + offset) was how 16-bit registers reached 1MB, and the 640KB DOS limit was IBM's memory-map choice, not a CPU restriction. The 286's protected mode couldn't be exited — forcing IBM's keyboard-controller reset hack and the A20 gate (which Intel only dropped with Haswell in 2013) — and Gates called the chip "brain-damaged." The 386 added 32-bit registers and paging but was single-sourced, sparking the AMD lawsuit; the 486 changed the engine, not the architecture, and its 5-stage pipeline flipped optimization rules (LOOP became slower than `dec/jnz`).
 
-**Why it matters:** The long-form-to-shorts pipeline is the creator economy's highest-volume chore, and it's now a free local desktop app with an agent interface — the interesting signal for the English-speaking feed is the MCP wiring: Chinese creator tooling is being built agent-native from the start, not retrofitted.
+**Why it matters:** EveryCompat quirk in the x86 baseline people still curse — the A20 gate, segment arithmetic, the register names — traces to a specific deadline or contract from 1971–1989, and the article keeps the receipts. For anyone doing emulator work, retro dev, or just arguing about ISA design, it's the cleanest single-file account of why compatibility is a life sentence.
 
-[`🔗 zhouxiaoka/autoclip`](https://github.com/zhouxiaoka/autoclip) · [`🔗 Releases`](https://github.com/zhouxiaoka/autoclip/releases/latest)
+> The naming coda lands the thesis: the successor to the 486 couldn't be trademarked as "586," so it became the Pentium — marketing replacing a numbering scheme the competition had learned to use.
+
+[`🔗 The History Behind the x86 CPU: 4004 to 486 (Pikuma)`](https://pikuma.com/blog/history-of-x86-4004-to-486) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50546967)
 
 ---
 
-## 42. springrep: an exact B-rep CAD kernel in pure Rust, 24 stars and a conformance leaderboard
+## 16. "Software companies are trying to kill home computing?" — the July essay having its moment
 
 - **Velocity:** ▮ steady
-- **Source:** Show HN · 31+ pts · ~15h ago (~21:00 UTC+8 yesterday)
-- **Tags:** `rust` `cad` `brep` `geometry`
+- **Source:** lateblt.livejournal.com · 174+ pts on HN · ~20h ago (~08:03 UTC+8)
+- **Tags:** `essays` `subscriptions` `ownership` `windows` `industry`
 
-SpringCraft's **springrep** (repo created Nov 14, 24 stars — the HN thread is the launch) is a boundary-representation (B-rep) geometry kernel: "**Booleans, fillets, sweeps and STEP on exact geometry, accurate to 1e-7 mm, with every result validated**" — analytic or NURBS surfaces, not meshes, so volume/area/mass come from the real shape. Pure Rust, no dependencies, no unsafe, compiles to WASM, and it claims **the fastest median case time on the brep-conformance leaderboard** with public, checkable results (the Show HN title's 3,487 tests are the CI behind the "valid or a clear error" contract). The docs ship a copy-paste verification prompt for AI agents, down to the expected printed volume.
+lateblt's July 2026 LiveJournal essay resurfaced to 174 points: software doesn't wear out, so the one-time-sale market is structurally finished — and the industry's answer is to make local computing miserable enough that renting looks better. The receipts span two decades: Windows Product Activation (2001) ending multi-machine installs, Windows 11's React-Native Start menu and TPM 2.0 gatekeeping, GTA 6 shipping without a disc, Adobe's CC pivot in 2013, Exchange on-premises requiring subscriptions plus "Software Assurance" ("like charging car owners to fix manufacturer defects"). The essay's sharpest turn is sympathizing with TempleOS author Terry Davis — quoting "File permissions do not belong in a consumer product" — and noting even Linux inherits those concepts from UNIX. The conclusion: "an active war against your ability to use computer software," one the author expects to never end.
 
-**Why it matters:** CAD kernels are cathedral-scale software — the industry runs on Parasolid and OCCT, and exact geometry with validated results is precisely the part that's brutally hard. A from-scratch Rust kernel is a decade-scale bet, but publishing a conformance leaderboard on day one is how you make such a bet falsifiable — and agent-friendly docs with a verifiable example are the 2026 way to onboard contributors and LLMs alike.
+**Why it matters:** The essay articulates the ownership-versus-rental argument that keeps resurfacing in concrete fights — myQ ads (item 7), Garage-door-style firmware takeovers, cloud-optional tools gaining "local-first" as a marketing line. It's written from the hobbyist wing, but the same logic is why "runs offline" reappearing in enterprise tool pitches is a 2026 phenomenon: the default stopped being local, so local became a feature you sell.
 
-[`🔗 springrep (site + docs)`](https://springcraft-ai.github.io/springrep/) · [`🔗 springcraft-ai/springrep (repo)`](https://github.com/springcraft-ai/springrep) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50552140)
+> Worth reading beside the garage-door thread: same diagnosis, one post is a manifesto and the other is a $124 receipt and a cron job.
+
+[`🔗 Software companies are trying to kill home computing? (lateblt)`](https://lateblt.livejournal.com/526188.html) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50554010)
 
 ---
 
-## 43. PTP: near-exact prompt reconstruction from LLM outputs — no weights, no logits, black-box
+## 17. Fanzines.app: the 8-page booklet fold, solved in the browser
 
 - **Velocity:** ▮ steady
-- **Source:** arXiv 2607.29378 · 46+ pts on HN · ~11h ago (~01:30 UTC+8)
-- **Tags:** `llm-inversion` `privacy` `prompt-reconstruction` `security`
+- **Source:** krthr.co · 159+ pts on HN · ~6.8h ago (~21:15 UTC+8)
+- **Tags:** `zines` `print` `front-end` `diy` `browser-tools`
 
-A July paper getting its HN turn today: **"PTP: Previous-Token Prediction based LLM Inversion for Near-Exact Prompt Reconstruction"** (arXiv 2607.29378). Prior LLM-inversion work framed prompt recovery as semantic reconstruction and needed fine-tuned seq2seq models plus weight or logit access. PTP is **functional and black-box**: it trains an explicit inverse language model **from scratch on synthetic data generated by the target LLM itself**, using previous-token prediction — the mirror of the forward model's next-token objective — "establishing a generative link between the forward and inverse processes that enables faithful prompt reconstruction." Sampling yields multiple candidate prompts, all of which "induce similar responses under the forward, target LLM," the approach transfers to responses from different LLMs, and it beats prior work on token-based reconstruction metrics.
+Wilson Tovar (krthr) explains the print-imposition problem behind his fanzines.app: take one A4 sheet, fold in half three times, cut the center crease, and you have an 8-page booklet with no staples — but the flat sheet's layout is nobody's friend, because folding makes the pages sit in strange order and the top row prints upside down (page 6 beside page 5 beside page 4 beside page 3, rotated 180°, over the Back/Cover/1/2 row). He got tired of rotating pictures and double-checking columns in Photoshop, so the app does the imposition in the browser: you place content into the booklet's logical pages, and it produces the print-ready flat sheet. The post doubles as a friendly introduction to the fold itself — the diagram alone is worth the visit.
 
-**Why it matters:** The threat model this changes: published LLM outputs — support transcripts, AI summaries, shared chat logs — have so far only been recoverable as fuzzy paraphrases, and only with model internals. Near-exact and black-box means the operating assumption for anything an LLM emits in public should become that the prompt is in there. The July date matters too: this has been sitting in the literature while the industry shipped output-sharing features.
+**Why it matters:** Small, single-purpose browser tools keep winning Show-HN-style attention because they remove one precise friction and ask for nothing — no account, no upload in the privacy-respecting variants, no install. Imposition is also the rare problem where the computer's help is unambiguous: the fold is fixed geometry, so the tool either lays it out right or it doesn't.
 
-[`🔗 PTP: Previous-Token Prediction based LLM Inversion (arXiv)`](https://arxiv.org/abs/2607.29378) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50554908)
+> The post's ASCII diagram of the unfolded sheet — which cells are upside down, which order the pages land in — is the entire spec, and it's four lines long.
+
+[`🔗 Paper, folds, and what's new in fanzines.app (krthr.co)`](https://krthr.co/paper-folds-and-whats-new-in-fanzines-app/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50559719)
 
 ---
 
@@ -616,11 +284,11 @@ A July paper getting its HN turn today: **"PTP: Previous-Token Prediction based 
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-19T12:26:14Z |
-| Items | 43 |
-| Sources tracked | 46 (Hacker News, GitHub Trending, GitHub repos, Wiz Research, NVD/cve.org, CISA KEV, X41 D-Sec, Google DeepMind, Google, Microsoft AI, OpenAI, Anthropic, FT, KPMG, UPenn, git.kernel.org, inside-db.com, ABC7, mastra.ai, HKUDS, Cursor, rshekhar.com, human-md.ai, underwood.network, nicolasbouliane.com, ruby-lang.org, RadixArk, Hugging Face, Resolve AI, University of Cambridge, Lawyers' Committee, violetpixel.com, slowchronicle.com, ut2004.dev, claudia.gallery, verialabs.com, php.net, kapteko.com, zerodha.tech, element.io, gdmunion.co.uk, drivevault.io, curiousbits.nl, exitpath-ruddy.vercel.app, springcraft-ai.github.io, arXiv) |
+| Generated | 2026-11-19T20:38:26Z |
+| Items | 17 |
+| Sources tracked | 18 (Hacker News, GitHub Trending, GitHub repos, Anthropic, hexagonmath.org, Investigatory Powers Tribunal, ounapuu.ee, cve.org, contralabs.com, misanthropicstatement.com, blog.harrison.page, thedataexchange.media, moq.dev, perishablepress.com, foolscap.works, pikuma.com, lateblt.livejournal.com, krthr.co) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
 
-[Previous day](2026-11-18.md) · [Raw .md](https://trending.md/en/feed/2026-11-19.md) · [Archive](../archive/index.md)
+[Previous day](2026-11-19.md) · [Raw .md](https://trending.md/en/feed/2026-11-20.md) · [Archive](../archive/index.md)

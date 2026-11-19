@@ -9,6 +9,7 @@ Daily trending feeds. Ranked by **velocity** — how fast attention is shifting.
 
 | Date | Items | File |
 |------|-------|------|
+| Nov 20, 2026 | 17 | [`2026-11-20.md`](2026-11-20.md) |
 | Nov 19, 2026 | 17 | [`2026-11-19.md`](2026-11-19.md) |
 | Nov 18, 2026 | 40 | [`2026-11-18.md`](2026-11-18.md) |
 | Nov 17, 2026 | 49 | [`2026-11-17.md`](2026-11-17.md) |
