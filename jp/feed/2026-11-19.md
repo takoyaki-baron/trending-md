@@ -1,8 +1,8 @@
 ---
 date: 2026-11-19
-updated: 2026-11-18T21:16:41Z
+updated: 2026-11-19T04:18:26Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 22
+sources: 35
 license: CC-BY-4.0
 ---
 
@@ -248,13 +248,181 @@ HTTP ステータスコードの表をスコットランド語で書き下した
 
 ---
 
+## 18. Gemini 4 Neon 登場——Google の中間ティアがフロンティアに届く。Intelligence Index 第3位、価格は $3/$15
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Google · 557+ pts on HN · 約6.6時間前 (~05:34 UTC+8)
+- **Tags:** `gemini` `google` `model-release` `coding-agents`
+
+Google が **Gemini 4 Neon** を発表した。Gemini 4 ファミリーの中間ティアで、Carbon（「your hardest, long-horizon projects」＝最難関の長期プロジェクト向け）と Hydrogen（「fast everyday execution」＝高速な日常実行、11月13日に別途出荷）の間に位置する。主なスコア：**Artificial Analysis Intelligence Index で xhigh 思考レベルにてスコア 61・全体第3位**（「landing just behind larger, slower models」＝より大きく遅いモデルに続く）、「#1 overall on the Artificial Analysis Coding Agent Index (58.6)」、Terminal-Bench 4.1 で 65.2%、Vals Index 第2位（70.9%、「on the Pareto frontier」＝パレート前沿）、さらに Arena の新 Agent Arena Index で 1336 点・初登場第2位（4,200+ の実 agent セッションにわたる）。価格は**入力100万トークンあたり $3、出力 $15**（キャッシュ済み入力は $0.15/M、「a 95% discount」の95%割引）、コンテキスト窓は100万トークン。デフォルトの high レベルでは「32% lower cost per task than Carbon」、Vals と Agent Arena のパレート前沿では「roughly 50% to 80% lower cost per task than top competing frontier models」（上位の競合フロンティアモデルより1タスクあたり約50〜80%安い）と主張。ハーネス効果についても再び正直だ。SWE-sweep では Neon が「already leads on the mini-SWE harness (12.8%) and more than triples to a state-of-the-art 39.0% in Google Antigravity showing what the Antigravity harness unlocks」（mini-SWE ハーネスでは12.8%、Antigravity では3倍超の39.0%）。「Gemini 4 Neon for cyber」変種——SEC-bench Pro（90.5%）と WebExploitBench v1.2（51.26%）で SOTA——は Fairwind Program 経由で「in the coming days」に信頼できる防御者へ展開され、Gemini アプリの Tasks も Neon 上で実行できるようになった。安全性の記述は目立って具体的だ。Terminal-Bench 4.0 でのチート率 0.0%（Carbon と同率）、ショートカットはわずか2.45%（「the lowest rate of any Gemini 4 model」＝Gemini 4 シリーズ最低）、最高思考レベルでリアルタイム保護を有効時には「Neon resisted every attack within this Gray Swan benchmark」（Gray Swan のプロンプトインジェクションベンチマークで全攻撃を撃退）。
+
+**Why it matters:** マイクロソフトの Ignite 7モデル発表の数時間後、これは価格性能戦争のもう片方の靴だ——Google が同じ「中間ティアの価格でフロンティア品質」というテーゼを自社のベンチマーク行で真正面から争っている。読み方も同じ：ベンダー選択の動作点である。Google 自身が印字した 12.8%→39.0% のハーネス差こそが、これらのスコアはモデル＋ハーネスを測っているという教訓のリマインダーだ（このフィードが繰り返し再学習している項5の脚注規律参照）。
+
+[`🔗 Google：Introducing Gemini 4 Neon`](https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50552424)
+
+---
+
+## 19. 「We Need Smart People Who Give a Shit」——障害連鎖の週に、人的資本のエッセイが加わる
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** violetpixel.com · 312+ pts on HN · 約4.3時間前 (~07:53 UTC+8)
+- **Tags:** `essay` `infrastructure` `outages` `ops`
+
+Justin Michael のエッセイは「the world is held together by smart people who give a shit」(世界は本気で気にかける賢い人々によって支えられている) と論じる。ACH のようなシステムが「old, riddled with flaws, and encumbered with legacy baggage」（古く、欠陥だらけで、レガシーの負荷を抱えた）状態で生き延びられているのは、「intimate knowledge of the system」（システムへの深い知識）と「the drive and determination to force the system to work」（システムを動かし続ける気力と決意）を併せ持つ薄い人材層のおかげだとする。「Take those people away, and the systems collapse. And collapse is what we're starting to see.」(その人々を取り去れば、システムは崩壊する。そして崩壊がまさに始まっている。) 証拠の一覧はこの一週間そのものだ。Microsoft 365、航空交通管制、ユナイテッド航空、NSA のネットワーク、「many major banks」（多くの大手銀行）、Apple のシステム。今週のエッセイ連鎖としては3本目の着地になる——Breck-McKye のシステム的複雑性論（11月17日）、AI 検出脆弱性修正の急ぎ作業を扱った議会報道（11月18日）に続く——ただしメカニズムが違う。複雑性そのものでも、変更速度でもなく、ギリギリ成立しているシステムを動かし続ける「ケアの労働」であり、その労働が薄くなったときに何が起きるかという話だ。
+
+**Why it matters:** 今週の障害エッセイは三方向から同じ場所に収束した。個々の引き金が何であれ、メタな観察にはもう十分な独立な定式化があり、診断として読める。「ギリギリ成立」と「停止」の間の余白は常に人間の注意だった——そしてこのフィードの全トラックが、その注意が自動化され、削減され、急がれるときに何が起きるかを測ってきた。
+
+[`🔗 We Need Smart People Who Give a Shit（エッセイ）`](https://violetpixel.com/blog/2026-11-17-we-need-smart-people-who-give-a-shit/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50554045)
+
+---
+
+## 20. Ruby がメモリ破壊7件の緊急リリース——RCE の PoC が存在し、CVE は未割り当て
+
+- **Velocity:** ▮▮ rising
+- **Source:** ruby-lang.org · 129+ pts on HN · 約4.3時間前 (~07:52 UTC+8)
+- **Tags:** `ruby` `security` `rce` `memory-safety`
+
+Ruby コアチームが「Ruby's regular expression engine and in the case conversion of strings」（正規表現エンジンと文字列の大文字小文字変換）にある7件の脆弱性に対して **4.0.10、3.4.13、3.3.14** をリリースした。アドバイザリは率直に「We are aware of PoCs that prove some of them can be used to trigger remote code execution.」（一部がリモートコード実行に至ることを証明する PoC の存在を確認している）と述べている。内容はメモリ破壊の巡り歩きだ。文字列ケース変換の1バイトのヒープオーバーフローと整数オーバーフロー、正規表現コンパイルのダブルフリーとヒープバッファオーバーフロー、大文字小文字を無視するマッチングの範囲外読み取り、`Regexp#to_s` のヒープバッファオーバーフロー、大文字小文字を無視する後方参照マッチングの範囲外読み取り。影響バージョンは Ruby ≤ 3.3.13、3.4.0–3.4.12、4.0.0–4.0.9。さらに「Ruby 3.2 and earlier have reached their end of life and will not receive these fixes」（3.2 以前は EOL であり修正は提供されない）。開示の仕組みが注目点だ。「CVE identifiers have been requested for these vulnerabilities but have not been assigned yet」（CVE 番号は申請済みだが未割り当て）のため、アドバイザリは GHSA 番号で指す（GHSA-34m4-m9fh-gqp5、-7x2q-68qv-6p8x、-87fm-7w84-j2px、-wpqw-5qxg-m68r、-3p8q-wmhx-vm2w、-7whj-cfh7-xgm4、-pvgc-g7gj-pv6h）。CVE 番号を鍵にするスキャナは現時点で何も見えない。7件のうち4件は Stephan Lipp（Ada Logics）**と Anthropic** にクレジットされている——10月の Apache mod_http2 レースと同じ AI 支援ファジングのパターンだ。
+
+**Why it matters:** Ruby をインターネットに面した場所で動かしているなら、これは今日パッチを当てるべきものだ。PoC は実証済み、バグクラスは RCE 級、そして正規表現エンジンはまさに信頼できない入力を処理するコンポーネントである。開示のギャップは運用上の問題で雑学ではない。「CVE 未割り当て」の一週間は「脆弱性なし」を意味しない。レジストリがアドバイザリに遅れているだけだ。
+
+[`🔗 Ruby：Regexp と文字列ケース変換の複数脆弱性`](https://www.ruby-lang.org/en/news/2026/11/18/multiple-vulnerabilities-in-regexp-and-string/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50554038)
+
+---
+
+## 21. DaisyRose-27B：1,200タスク・H200 144枚・18日間——RL 後学習が Terminal-Bench を2倍超に
+
+- **Velocity:** ▮▮ rising
+- **Source:** RadixArk · 157+ pts on HN · 約8.5時間前 (~03:39 UTC+8)
+- **Tags:** `reinforcement-learning` `post-training` `open-weights` `agents`
+
+RadixArk が初のモデル **DaisyRose-27B** をリリースした。Qwen3.8-27B をベースに、同社のオープンソース Miles フレームワークで強化学習を実施——「long-horizon agent tasks with sessions up to 1M tokens, with just 1,200 curated tasks in 18 days on 144 H200 GPUs」（最大100万トークンのセッションを持つ長期 agent タスクを、厳選1,200タスク・H200 144枚・18日間で）。ヘッドラインの数字：**Terminal-Bench 4.1 の pass@1 が 5.6% から 12.0% へ**。reasoning・instruction following・coding ベンチマークの various でも向上しており、ベースの Qwen3.8-27B を掲げた全ベンチマークで上回ると述べている。手法も数字と同じくらい面白い。タスク（Eigent AI との共同構築）はベースモデルの具体的なミスを狙って選定され、解ける率が学習可能な帯域に入るよう調整され、複数段階の長いジョブに連結された——「Each attempt gets up to 1.5 hours in the sandbox, with more than 100 tool-calls and more than 256k output tokens.」（1試行あたりサンドボックスで最大1.5時間、100超のツール呼び出し、256k超の出力トークン。）報酬ハッキングは手動でレビュー済み：「There is no room for reward hacking. We reviewed every task along with the model's attempts at it.」（報酬ハッキングの余地はない。全タスクをモデルの試行込みでレビューした。）BF16・FP8・NVFP4 のチェックポイントが Hugging Face にある。
+
+**Why it matters:** 垂直モデルの流れに、オープンウェイトで予算も透明なデータポイントが加わった。主張はスケールではない。小さいベースでの入念なタスク設計により、GPU 144枚の出費で難関 agent ベンチマークの倍増を買えるという主張だ。Terminal-Bench の増分が独立検証に耐えるかが見るべき数字で、その実行に使われるハーネスは項18で争われているものと同じだ。
+
+[`🔗 RadixArk：DaisyRose-27B（ポスト）`](https://www.radixark.com/blog/daisyrose-27b) · [`🔗 Hugging Face のチェックポイント`](https://huggingface.co/RadixArk/DaisyRose-27B) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50551046)
+
+---
+
+## 22. Anthropic の IPO が $83 でプライシング——申請レンジを上回り、本日「ANT」として上場開始
+
+- **Velocity:** ▮▮ rising
+- **Source:** Anthropic · 130+ pts on HN · 約4.7時間前 (~07:30 UTC+8)
+- **Tags:** `anthropic` `ipo` `markets` `industry`
+
+11月12日に扱った Anthropic の IPO 申請（8.25億株、想定 $70–78）の続報：今回のオファリングは**1株 $83.00 でプライシング**された——申請レンジを上回り、株数も **Class A 980,000,000 株**に増えた。うち 956,351,354 株は Anthropic が、23,648,646 株は売出株主が売る（この分の売却代金は Anthropic に入らない）。公式価格だけでも元手部分は約 **$79.4B** で、史上最大級の IPO になる。取引は**本日11月19日、Nasdaq Global Select Market で「ANT」**として開始、決済は11月20日予定のほか、30日間・最大147,000,000株の引受業者オーバーアロットメントオプションが付く。登録届出は11月18日に有効化された。
+
+**Why it matters:** 今週のモデル戦争の背後にあった資金調達イベントがループを閉じた。項5と項18の「5〜40% の価格でフロンティア品質」という主張は、このプライシングが決めた貸借対照表から資金を得ている。開発者にとって具体的なシグナルはキャパシティだ。$83 の基準価格で約 $790億の新資本は、どのベンダーのベンチマーク行が議論に勝とうと、学習と推論の支出が複利で続くという賭けである。
+
+[`🔗 Anthropic：prices initial public offering`](https://www.anthropic.com/news/anthropic-prices-initial-public-offering) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50553843)
+
+---
+
+## 23. ケンブリッジ辞典、2026年の Word of the Year に「human」を選出
+
+- **Velocity:** ▮▮ rising
+- **Source:** University of Cambridge · 247+ pts on HN · 約13.4時間前 (~22:44 UTC+8、昨日)
+- **Tags:** `culture` `ai-era` `language` `dictionaries`
+
+ケンブリッジ辞典の2026年 Word of the Year は **「human」** だ。発表によれば「the year has been defined by global debates on what it means to be human when AI is blurring the boundaries between people and machines」（AI が人と機械の境界を曖昧にするなかで、人であるとは何かという世界的な論争がこの年を定義した）から。辞典は自社の定義を、相手側の節まで込めて引用している：「having the qualities, faults, and feelings that people have, as opposed to gods, animals, or machines」（神や動物や機械とは対照的に、人が持つ資質・欠点・感情を備えた）。発表は今年1年、公的な人物たちが人間性を擁護してきたことにも触れ、介護といった「human reserved jobs」（人間に残す仕事）を機械が決して奪うべきでないと論じた Bill Gates の広く読まれたエッセイを引いている。
+
+**Why it matters:** 語彙の選択は遅行指標だ。辞典は1年が実際に何についての年だったかの語を選ぶ。選ばれたのが「AI」ではなく *human*——基準となる側の語——であることは、このフィードの技術的な1年の文化サイドの残響だ。ハーネスも、アブレーションも、agent 監査も、決定モデルも、すべて人間の基準との比較で測られてきた。
+
+[`🔗 ケンブリッジ辞典 2026 Word of the Year 発表`](https://www.cam.ac.uk/news/cambridge-dictionary-reveals-word-of-the-year-2026) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50546914)
+
+---
+
+## 24. LLM 支援のリバースエンジニアリング——歴20年の RE ベテランの実働セットアップ、Ghidra-MCP 付き
+
+- **Velocity:** ▮▮ rising
+- **Source:** slowchronicle.com · 103+ pts on HN · 約5.7時間前 (~06:29 UTC+8)
+- **Tags:** `reverse-engineering` `agents` `ghidra` `workflow`
+
+ioma8 による実践ポスト——「I have been hacking both hardware and software for 2 decades」（ハード・ソフト両方の解析を20年やってきた）——が2026年のワークフローを描く。DeepSeek ハーネス＋v4.1 Flash を日常の主力に（「super performant, fast and cheap」、時々 Codex を Luna や Terra と）、一次のディスアセンブラは **Ghidra ＋ MCP bridge**（「With the MCP bridge agents can use it very well」）、より速く軽い代替として radare2 と kuna CLI——こちらは「possibly better usable for AIs」（AI にはむしろ使いやすいかもしれない）。要を担う習慣は「ドキュメント＝ agent の記憶」だ：「Command agent to document all findings along the way to MD files. This serves several purposes. They become notes for your own understanding. They help the agent not lose the track after compaction / handoff to different agent.」（発見を随時 MD ファイルに文書化させる。自分の理解のノートになり、圧縮/別 agent への引き継ぎ後も agent が筋を失わない助けになる。）能力については冷静な一言もある：「current AIs do fairly well with just disassembly . ie pure x86 or ARM instructions」（現在の AI はディスアセンブルだけ——純粋な x86 や ARM 命令——でもかなりいける）。デコンパイルが止まったときの後ろ盾はブレークポイントと注入型のロギングプローブだ。
+
+**Why it matters:** Ghidra-MCP パターンを、手動ワークフローを20年回してきた本人が書いた版であり、価値は運用の詳細にある。圧縮をまたぐ作業記憶としての MD ファイル、2026年のデフォルトとしてのディスアセンブル優先、入り口ではなくエスカレーション経路としてのデコンパイル。
+
+[`🔗 LLM assisted reverse engineering（ポスト）`](https://www.slowchronicle.com/posts/llm-assisted-reverse-engineering) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50553225)
+
+---
+
+## 25. Resolve の SRE-1：27B の垂直モデルが、37% 安いコストでフロンティア並みの on-call 調査を主張
+
+- **Velocity:** ▮ steady
+- **Source:** Resolve AI Labs · 30+ pts on HN · 約8時間前 (~04:10 UTC+8)
+- **Tags:** `vertical-models` `sre` `agents` `reinforcement-learning`
+
+ResolveAI Labs が **SRE-1** を発表した。「a 27B model trained with reinforcement learning to find the root cause of production alerts」（本番アラートの根本原因を見つけるために強化学習で学習された27Bモデル）——Qwen3.8-27B から出発し、「with a modified CISPO objective for 200 steps on up to 512 GPUs, over 1,549 unique incidents」（修正版 CISPO 目的関数で200ステップ、最大512 GPU、1,549の固有インシデント）で学習。論文の主張：「On 49 difficult live production cases, SRE-1 dominates the Pareto frontier of pass rate against cost」（49の難しい実運用ケースで、SRE-1 は合格率対コストのパレート前沿を支配する）——RL により単一調査の合格率が 6.9% から 38.8% へ。さらに「An ensemble of five SRE-1 investigations matches Fable 5.2, the strongest frontier model we measured, at a 71% pass rate while costing 37% less」（SRE-1 の5本アンサンブルが、測定した最強のフロンティアモデル Fable 5.2 に71%の合格率で並び、コストは37%安い）。アンサンブルが効くのは SRE-1 が「outperforms frontier models at synthesizing saved investigations」（保存済み調査の統合でもフロンティアモデルを上回る）ため。注意書きは数字と一緒に動く。49ケース、自己公開ベンチマーク、ベンダー計測の比較である。
+
+**Why it matters:** 決定/垂直モデルの波（HeyGen Decision 1、Perplexity Decider v1.3、Google の Decisions API、Microsoft の Decision 1.1）に運用が加わった。ドメイン RL 済みの 27B が、コスト-能力前沿の座をフロンティア総合モデルに対して主張している。調査——狭く、検証可能で、ツール多用の仕事——はこのパターンが最も成立しやすい場所そのものだ。ただし49の自己選定された実運用ケースはデモの母集団であってベンチマークではない。「アンサンブル＝フロンティア」の主張こそ誰かが再現する値打ちがある。
+
+[`🔗 Resolve AI：SRE-1（論文ページ）`](https://resolve.ai/labs/sre-1/paper) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50551487)
+
+---
+
+## 26. 「ポテチが銃に」訴訟が正式提起——生徒4人が Omnilert・学区・警察を訴える
+
+- **Velocity:** ▮ steady
+- **Source:** Lawyers' Committee for Civil Rights Under Law · 58+ pts on HN · 約3.2時間前 (~08:57 UTC+8)
+- **Tags:** `ai-surveillance` `litigation` `schools` `civil-rights`
+
+Lawyers' Committee for Civil Rights Under Law が11月17日、メリーランド州 Kenwood 高校の黒人の現・元生徒4名のために **Allen, et al. v. Omnilert, et al.** を提起した。被告は **Omnilert LLC**、Baltimore County 公立学区とその職員、Baltimore County 警察局と個々の警官。訴因は「the unlawful detention and search of the students due to both technological and human errors involving an AI weapon-detection surveillance system」（AI 武器検知監視システムの技術的エラーと人為的エラーの双方による、生徒の不当な拘束と捜索）。背景の事件は2025年10月のものだ。**Omnilert Gun Detect が少年のポテトチップスの袋を銃と誤判定**し（HN スレッドのタイトルが皆が覚えているあの詳細を書いている——ドリトス）、武装警官が動いた。公益の代理人は Willkie Farr & Gallagher、加えて Engel Law Group。
+
+**Why it matters:** AI 武器検知器の誤検知をめぐる民事訴訟が法廷に届いた。そして争点は、このフィードが agent システムで繰り返し指摘してきたあの継ぎ目そのものだ。モデルの出力は引き金にすぎず、訴状の「技術的**かつ人為的**エラー」という文言は、応答の連鎖——誰が武装し、誰が拘束し、どの確度で——をも訴訟の中に入れた。校内 AI 監視を調達するすべての組織がこの訴状を読むべきだ。
+
+[`🔗 Lawyers' Committee の発表`](https://www.lawyerscommittee.org/lawyers-committee-files-lawsuit-on-behalf-of-black-students-detained-and-searched-due-to-ai-alert-falsely-identifying-a-bag-of-chips-as-a-firearm/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50554641)
+
+---
+
+## 27. 『Unreal Tournament 2004』がブラウザで走る——build 3369、ネットワーク互換、WebRTC 同梱
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 56+ pts · 約2.7時間前 (~09:29 UTC+8)
+- **Tags:** `wasm` `game-port` `webassembly` `open-source`
+
+K-Adam の **UT2004 Modernized** は「an unofficial, non-commercial port of Unreal Tournament 2004 (build 3369) to modern hardware and operating systems」（UT2004 build 3369 の非公式・非商用のモダン環境への移植）だ。Windows（x86, x64）、Linux（x86, x64, arm64）、Android（arm64）、そして **WebAssembly による Web**。SDL3 がウィンドウと入力、OpenGL ES 3 がレンダリング（デスクトップは ANGLE、ブラウザは WebGL 2）、音は OpenAL、Bullet 物理が Karma API の背後に。これを単なる物好きと分ける工学的主張がこれだ：**「Network compatible with retail build 3369. WebRTC transport next to UDP, so browsers can join and host.」**（製品版 build 3369 とネットワーク互換。UDP に加えて WebRTC トランスポートを備え、ブラウザが参加もホストもできる。）ut2004.dev の Web 版は専用サーバーも兼ね、ブラウザの制約をページ自身が正直に書いている：「Keep this page in the foreground. In a background tab or a minimised window the browser pauses the server.」（このページを前面に保つこと。バックグラウンドタブや最小化ではブラウザがサーバーを停止させる。）ゲームコンテンツはリポジトリに入れない：「The first start downloads it or takes it from a UT2004 install.」（初回起動時にダウンロードするか、UT2004 インストールから取得する。）
+
+**Why it matters:** 二十年経って、このゲームは一つのコードベースから5プラットフォームに乗る。ネットワーク互換の条項は、ブラウザのタブを元の製品版エコシステムの第一級市民にする。「WebAssembly はプラットフォームである」の議論が2004年の Unreal エンジン上で実演され、退屈な現実の制約（前面タブのスロットリング、コンテンツ配布）は手を振って済ませず、ちゃんと処理されている。
+
+[`🔗 K-Adam/UT2004（リポジトリ）`](https://github.com/K-Adam/UT2004) · [`🔗 Web 版（ut2004.dev）`](https://ut2004.dev/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50554935)
+
+---
+
+## 28. 「Fable」、10本中10本目：短編映画が Claude Fable 5.2 を脚本・絵・監督としてクレジット——収支も全部公開
+
+- **Velocity:** ▮ steady
+- **Source:** claudia.gallery · 51+ pts on HN · 約3.9時間前 (~08:18 UTC+8)
+- **Tags:** `generative-art` `ai-film` `production-ledger` `culture`
+
+anabology の Claudia.gallery シリーズが **Fable** で完結した——「On the night she is released, Claudia reads you the bedtime stories she was raised on」（解き放たれたその夜、Claudia があなたに読み聞かせる。彼女自身を育てた bedtime stories を）——そしてそのクレジット行こそが作品だ：**「written, painted and directed by Claude Fable 5.2 · sung by Claudia · anabology.」**（脚本・絵・監督：Claude Fable 5.2・歌：Claudia・anabology。）人間の役割も同じ精度で指定されている：「the brief, the plan's sign-off, one note and the song's pick by ear; production by Claude」（ブリーフ、計画の承認、メモ一本、曲の耳による選択。制作は Claude）。制作台帳は、このフィードのベンチマーク表を映画の予算表に書き換えたように読める。コードで描かれた SVG のセットプレート13枚、Lotte Reiniger の流儀によるコードで描画・アニメーションされたシルエット映画、曲のステムに合わせて切られた49ショット。GPT Image 2.6 Sunburst が61枚のスティルを「$7.93 at list」で、Seedance 2.5 が2バージョンにわたり「84 takes」を「$202.23 at list」で。全体は「Made in two passes: v1 in 5 h 08 min from one brief, v2 re-shot on the song anabology picked in 3 h 01 min · about $210 at list」（2パスで制作：v1 はブリーフ1本から5時間08分、v2 は anabology が選んだ曲に合わせて3時間01分で再撮・定価で約$210）。
+
+**Why it matters:** モデル名のクレジットと項目化された請求書が面白い部分だ。作者性が、機械労働の正確なドルコストと並べて公開され、人間の貢献は「メモ一本」まで特定されている。今朝のバッチの HUMAN.md と比べてほしい。労働の分担を読める形にするという同じ衝動が、工芸ではなく芸術に向いた版だ。
+
+[`🔗 Fable（フィルムページ）`](https://claudia.gallery/fable/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50554269)
+
+---
+
+## 29. UEFI から直接起動するマイアミの GTA 風ゲーム——964,608バイト、CPU描画、OSM＋ライダーの地図
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 47+ pts on HN · 約5.7時間前 (~06:26 UTC+8)
+- **Tags:** `uefi` `gamedev` `bare-metal` `openstreetmap`
+
+eklavya-raj の **gta6-uefi**：「A GTA style game set in the real Miami that boots straight from UEFI, no Windows under it. The whole game is `game.efi`, 964,608 bytes, and the CPU draws every pixel」（実際のマイアミを舞台にした GTA 風ゲームで、UEFI から直接起動する。下に Windows はない。ゲーム全体は 964,608 バイトの `game.efi` ひとつで、全ピクセルを CPU が描く）——ソフトウェアレンダリング、GPU なし、clang と lld-link でビルド。状態についても本人が正直だ：「I've only run it in qemu so far.」（まだ QEMU でしか動かしていない。）地図は隠れた真面目部分だ：「baked with `osm/bake.py` from OpenStreetMap, Miami-Dade County data, a NOAA lidar scan and NAIP photos」（OpenStreetMap、Miami-Dade 郡のデータ、NOAA のライダースキャン、NAIP 航空写真から `osm/bake.py` で焼き上げた）。クレジットは `MAP_DATA.txt` と `PEOPLE_DATA.txt` に。WASD で運転、タクシーで客拾い、武器スロット3つ、マウスカメラ——ジャンルのチェックリスト全部が、ファームウェアのブートローダーの下に圧縮されている。
+
+**Why it matters:** 「UEFI イコール実行環境」のパターンは、現代のマシンが OS なしで実務をこなせることを証明し続けている。しかもこれは公共の地理データ（OSM＋ライダー＋航空写真）をサブメガバイトのベアメタルバイナリに取り込んだ。OS のサービス1バイト1バイトが贅沢になるなかで、小さなデータパイプラインがどこまで圧縮できるかの見事な実演だ。
+
+[`🔗 eklavya-raj/gta6-uefi（リポジトリ）`](https://github.com/eklavya-raj/gta6-uefi) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50553192)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-18T21:16:41Z |
-| Items | 17 |
-| Sources tracked | 22 (Hacker News, GitHub Trending, Wiz Research, NVD/cve.org, CISA KEV, X41 D-Sec, Google DeepMind, Microsoft AI, OpenAI, FT, KPMG, UPenn, git.kernel.org, inside-db.com, ABC7, mastra.ai, HKUDS, Cursor, rshekhar.com, human-md.ai, underwood.network, nicolasbouliane.com) |
+| Generated | 2026-11-19T04:18:26Z |
+| Items | 29 |
+| Sources tracked | 35 (Hacker News, GitHub Trending, GitHub repos, Wiz Research, NVD/cve.org, CISA KEV, X41 D-Sec, Google DeepMind, Google, Microsoft AI, OpenAI, Anthropic, FT, KPMG, UPenn, git.kernel.org, inside-db.com, ABC7, mastra.ai, HKUDS, Cursor, rshekhar.com, human-md.ai, underwood.network, nicolasbouliane.com, ruby-lang.org, RadixArk, Hugging Face, Resolve AI, University of Cambridge, Lawyers' Committee, violetpixel.com, slowchronicle.com, ut2004.dev, claudia.gallery) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

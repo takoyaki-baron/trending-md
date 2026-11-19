@@ -1,9 +1,9 @@
 {
- "generated": "2026-11-18T21:25:52.716Z",
+ "generated": "2026-11-19T05:49:52.896Z",
  "files": [
   {
    "file": "2026-11-19.md",
-   "items": 17,
+   "items": 29,
    "findings": [
     {
      "check": "cvss",
@@ -17,7 +17,7 @@
      "item": 1,
      "verdict": "ok",
      "claim": "CVE-2026-123007 `Received`",
-     "detail": "Received (lastModified 2026-11-18T20:18:54.867)"
+     "detail": "Received (lastModified 2026-11-18T21:17:47.557)"
     },
     {
      "check": "status",
@@ -31,70 +31,63 @@
      "item": 8,
      "verdict": "ok",
      "claim": "cursor/plugins",
-     "detail": "17158★, last push 2026-11-18"
+     "detail": "17286★, last push 2026-11-19"
     },
     {
      "check": "repo",
      "item": 10,
      "verdict": "ok",
      "claim": "HKUDS/CLI-Anything",
-     "detail": "59636★, last push 2026-09-22"
+     "detail": "59903★, last push 2026-09-22"
     },
     {
      "check": "quotation",
      "item": 1,
      "verdict": "ok",
      "claim": "4 quotation(s)",
-     "detail": "verbatim in 6 readable source(s)"
+     "detail": "verbatim in 8 readable source(s)"
     },
     {
      "check": "quotation",
      "item": 2,
      "verdict": "ok",
      "claim": "5 quotation(s)",
-     "detail": "verbatim in 1 readable source(s)"
+     "detail": "verbatim in 2 readable source(s)"
     },
     {
      "check": "quotation",
      "item": 3,
      "verdict": "ok",
      "claim": "2 quotation(s)",
-     "detail": "verbatim in 1 readable source(s)"
+     "detail": "verbatim in 2 readable source(s)"
     },
     {
      "check": "quotation",
      "item": 4,
      "verdict": "ok",
      "claim": "2 quotation(s)",
-     "detail": "verbatim in 1 readable source(s)"
-    },
-    {
-     "check": "quotation",
-     "item": 5,
-     "verdict": "quote-not-read",
-     "claim": "“matches the performance of gpt 6 luna at 65 of the price and haiku 5 5 at 20”",
-     "detail": "13 words, 0 hits in 1 readable source(s), but 1 cited page(s) went unread (news.ycombinator.com/item?id=50548021 served a bot wall) — unread is not absent, so this is not called a fabrication; open those page(s) before publishing"
+     "detail": "verbatim in 2 readable source(s)"
     },
     {
      "check": "quotation",
      "item": 5,
      "verdict": "ok",
-     "claim": "7 quotation(s)",
-     "detail": "verbatim in 1 readable source(s)"
+     "claim": "8 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
     },
     {
      "check": "quotation",
      "item": 7,
-     "verdict": "quote-not-read",
+     "verdict": "quote-not-found",
      "claim": "“a year of progress in less than 5 months”",
-     "detail": "7 words, 0 hits in 1 readable source(s), but 1 cited page(s) went unread (news.ycombinator.com/item?id=50549493 served a bot wall) — unread is not absent, so this is not called a fabrication; open those page(s) before publishing"
+     "detail": "7 words, 0 hits in 2 readable source(s); openai.com/index/advancing-chip-design-with-our-models/ carries 5 of 9 words (“in less than 5 months”) and continues “unprecedented results at the frontier of chip design amd has already” — use the source's wording, or drop the quotation marks"
     },
     {
      "check": "quotation",
      "item": 7,
      "verdict": "ok",
      "claim": "5 quotation(s)",
-     "detail": "verbatim in 1 readable source(s)"
+     "detail": "verbatim in 2 readable source(s)"
     },
     {
      "check": "quotation",
@@ -108,21 +101,28 @@
      "item": 9,
      "verdict": "ok",
      "claim": "1 quotation(s)",
-     "detail": "verbatim in 14 readable source(s)"
+     "detail": "verbatim in 15 readable source(s)"
     },
     {
      "check": "quotation",
      "item": 10,
      "verdict": "quote-not-read",
-     "claim": "2 quotation(s)",
-     "detail": "no cited page, README or record was readable this run — unread is not absent, so nothing is claimed about these quotation(s)"
+     "claim": "“any software any codebase any web api generate an agent native cli and let ai agents operate it …”",
+     "detail": "22 words, 0 hits in 1 readable source(s), but 1 cited page(s) went unread (cliany.cc/ served a bot wall) — unread is not absent, so this is not called a fabrication; open those page(s) before publishing"
+    },
+    {
+     "check": "quotation",
+     "item": 10,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 1 readable source(s)"
     },
     {
      "check": "quotation",
      "item": 11,
      "verdict": "ok",
      "claim": "3 quotation(s)",
-     "detail": "verbatim in 4 readable source(s)"
+     "detail": "verbatim in 5 readable source(s)"
     },
     {
      "check": "quotation",
@@ -167,29 +167,141 @@
      "detail": "verbatim in 2 readable source(s)"
     },
     {
+     "check": "quotation",
+     "item": 18,
+     "verdict": "quote-not-found",
+     "claim": "“frontier quality at mid tier cost”",
+     "detail": "6 words, 0 hits in 2 readable source(s); no source carries it (read blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon/, news.ycombinator.com/item?id=50552424) — if this came from somewhere this item does not cite, cite it; otherwise it is the feed's own words and must not wear quotation marks"
+    },
+    {
+     "check": "quotation",
+     "item": 18,
+     "verdict": "ok",
+     "claim": "11 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 19,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 20,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 21,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 22,
+     "verdict": "quote-not-found",
+     "claim": "“frontier quality at 5 40 of the price”",
+     "detail": "6 words, 0 hits in 2 readable source(s); no source carries it (read anthropic.com/news/anthropic-prices-initial-public-offering, news.ycombinator.com/item?id=50553843) — if this came from somewhere this item does not cite, cite it; otherwise it is the feed's own words and must not wear quotation marks"
+    },
+    {
+     "check": "quotation",
+     "item": 23,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 24,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 25,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 26,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 27,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 28,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 29,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
      "check": "attribution",
      "item": 5,
      "verdict": "attribution-satisfied",
      "claim": "Microsoft",
      "detail": "a quotation is attributed to Microsoft (“MAI Cyber 2 Flash beats GPT-6 Astra's quality at less than 2…”) and a cited URL carries the party's token — the quotation arm's page set reaches the party's own artifact"
+    },
+    {
+     "check": "attribution",
+     "item": 19,
+     "verdict": "attribution-page-verified",
+     "claim": "Michael",
+     "detail": "a quotation is attributed to Michael (“the world is held together by smart people who give a shit”) and the party's token appears in the fetched text of a cited page — the quotation arm's page set carries the party's statement even though no cited URL string names the party (the party lives in the prose, not the domain); the second-hand-copy risk the URL arm carries applies here too, so a load-bearing quotation still wants the party's own artifact"
     }
    ]
   }
  ],
  "status_watch": [
   {
-   "id": "CVE-2026-90436",
-   "from": "Received",
-   "to": "Awaiting Analysis",
+   "id": "CVE-2024-10441",
+   "from": "Analyzed",
+   "to": "Modified",
    "regressed": false,
-   "modified": "2026-11-18T05:19:26.077"
+   "modified": "2026-11-18T21:17:43.400"
+  },
+  {
+   "id": "CVE-2026-90817",
+   "from": "Awaiting Analysis",
+   "to": "Undergoing Analysis",
+   "regressed": false,
+   "modified": "2026-11-18T21:18:04.643"
+  },
+  {
+   "id": "CVE-2026-90436",
+   "from": "Awaiting Analysis",
+   "to": "Undergoing Analysis",
+   "regressed": false,
+   "modified": "2026-11-18T21:18:04.433"
   }
  ],
- "api_calls": 2,
- "readme_calls": 3,
- "cited_page_calls": 55,
+ "api_calls": 4,
+ "readme_calls": 4,
+ "cited_page_calls": 89,
  "repo_page_calls": 0,
  "nvd_calls": 1,
  "nvd_failed_chunks": 0,
- "cna_calls": 7
+ "cna_calls": 0
 }

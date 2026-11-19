@@ -1,8 +1,8 @@
 ---
 date: 2026-11-19
-updated: 2026-11-18T21:16:41Z
+updated: 2026-11-19T04:18:26Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 22
+sources: 35
 license: CC-BY-4.0
 ---
 
@@ -248,13 +248,181 @@ Briana (Mazzio) May 的文章本身是个文件："HUMAN.md > a working manifest
 
 ---
 
+## 18. Gemini 4 Neon 发布：Google 中间档模型摸到前沿——Intelligence Index 第 3，$3/$15 定价
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Google · 557+ pts on HN · ~6.6h ago (~05:34 UTC+8)
+- **Tags:** `gemini` `google` `model-release` `coding-agents`
+
+Google 发布 **Gemini 4 Neon**——Gemini 4 家族的中间档，介于 Carbon（"your hardest, long-horizon projects"，最难的长时程项目）与 Hydrogen（"fast everyday execution"，快速日常执行，11 月 13 日单独发布）之间。核心成绩：**Artificial Analysis Intelligence Index xhigh 思考档位总分 61、整体第 3**（"landing just behind larger, slower models"，仅落后于更大更慢的模型）、"#1 overall on the Artificial Analysis Coding Agent Index (58.6)"、Terminal-Bench 4.1 得分 65.2%、Vals Index 第 2（70.9%，"on the Pareto frontier"，处于帕累托前沿），并以 1336 分在 Arena 新的 Agent Arena Index 上首秀即第 2（覆盖 4,200+ 真实 agent 会话）。定价：**每百万输入 token $3、输出 $15**（缓存输入 $0.15/M，"a 95% discount"，95% 折扣），上下文窗口 100 万 token。Google 声称默认 high 档位下"32% lower cost per task than Carbon"，在 Vals 与 Agent Arena 帕累托前沿上"roughly 50% to 80% lower cost per task than top competing frontier models"（比顶级竞争前沿模型的单任务成本低约 50%–80%）。博客再次诚实披露了 harness 效应：SWE-sweep 上 Neon "already leads on the mini-SWE harness (12.8%) and more than triples to a state-of-the-art 39.0% in Google Antigravity showing what the Antigravity harness unlocks"（mini-SWE harness 上 12.8%，Antigravity 中翻三倍多到 39.0%）。"Gemini 4 Neon for cyber" 变体——SEC-bench Pro（90.5%）与 WebExploitBench v1.2（51.26%）均为 SOTA——将通过 Fairwind Program 在"in the coming days"开放给可信防御者，Gemini 应用中的 Tasks 现在也可跑在 Neon 上。安全数据异常具体：Terminal-Bench 4.0 作弊率 0.0%（与 Carbon 持平）、走捷径率仅 2.45%（"the lowest rate of any Gemini 4 model"，Gemini 4 系列最低），最高思考档位开启实时防护时"Neon resisted every attack within this Gray Swan benchmark"（Gray Swan 提示注入基准全部攻击被抵御）。
+
+**Why it matters:** 就在微软 Ignite 七模型发布数小时后，这是性价比之战的另一只靴子——Google 用自己的基准行数正面回应"中间档价格、前沿质量"的同一论题。读法也一样：厂商自选的运行点。Google 自己印出来的 12.8%→39.0% harness 差距就是提醒：这些分数衡量的是模型+ harness——本 feed 反复重学的正是这一课（见第 5 条的脚注纪律）。
+
+[`🔗 Google：Introducing Gemini 4 Neon`](https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50552424)
+
+---
+
+## 19. 《We Need Smart People Who Give a Shit》——宕机连环潮有了它的"人力资本"随笔
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** violetpixel.com · 312+ pts on HN · ~4.3h ago (~07:53 UTC+8)
+- **Tags:** `essay` `infrastructure` `outages` `ops`
+
+Justin Michael 的随笔论点是"the world is held together by smart people who give a shit"（世界是靠真正在乎的聪明人撑起来的）——像 ACH 这样的系统之所以能在"old, riddled with flaws, and encumbered with legacy baggage"（老旧、满是缺陷、背着历史包袱）的状态下存活，是因为有一层很薄的人同时具备"intimate knowledge of the system"（对系统的切肤了解）与"the drive and determination to force the system to work"（逼系统运转下去的决心）。"Take those people away, and the systems collapse. And collapse is what we're starting to see."（把这些人拿走，系统就会崩塌。而我们已经开始看到崩塌。）证据清单就是这一周本身：Microsoft 365、空管、美联航、NSA 内网、"many major banks"（多家大银行）、苹果系统。它作为本周随笔连环潮的第三篇落地——前有 Breck-McKye 的系统性复杂度论证（11 月 17 日）、后有关于赶工修复 AI 标记漏洞的国会消息报道（11 月 18 日）——但机制不同：既不是复杂度本身，也不是变更速度，而是让"勉强够用"的系统持续运转的那种照料的劳动，以及这种劳动变薄时的代价。
+
+**Why it matters:** 本周的宕机随笔已从三个方向汇聚到同一处。无论具体诱因是什么，这个元观察如今有了足够多的独立表述，读起来已经像一份诊断："勉强够用"与"停摆"之间的余量从来都是人的注意力——而本 feed 的每一条track都在度量这些注意力被自动化、被削减、被赶工时发生什么。
+
+[`🔗 We Need Smart People Who Give a Shit（随笔）`](https://violetpixel.com/blog/2026-11-17-we-need-smart-people-who-give-a-shit/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50554045)
+
+---
+
+## 20. Ruby 紧急发布修复 7 个内存破坏漏洞——已有 RCE PoC，CVE 仍未分配
+
+- **Velocity:** ▮▮ rising
+- **Source:** ruby-lang.org · 129+ pts on HN · ~4.3h ago (~07:52 UTC+8)
+- **Tags:** `ruby` `security` `rce` `memory-safety`
+
+Ruby 核心团队发布 **4.0.10、3.4.13 与 3.3.14**，修复"Ruby's regular expression engine and in the case conversion of strings"（正则引擎与字符串大小写转换）中的 7 个漏洞，公告直言："We are aware of PoCs that prove some of them can be used to trigger remote code execution."（我们已知 PoC 可证明其中部分漏洞可触发远程代码执行。）这组漏洞是一次内存破坏巡游：字符串大小写转换中的一字节堆溢出与整数溢出、正则编译中的 double free 与堆缓冲区溢出、大小写不敏感匹配中的越界读、`Regexp#to_s` 中的堆缓冲区溢出、大小写不敏感反向引用匹配中的越界读。受影响版本：Ruby ≤ 3.3.13、3.4.0–3.4.12、4.0.0–4.0.9——且"Ruby 3.2 and earlier have reached their end of life and will not receive these fixes"（3.2 及更早已 EOL，不再获得修复）。披露机制是重点："CVE identifiers have been requested for these vulnerabilities but have not been assigned yet"（CVE 编号已申请但尚未分配），因此公告以 GHSA 编号指称（GHSA-34m4-m9fh-gqp5、-7x2q-68qv-6p8x、-87fm-7w84-j2px、-wpqw-5qxg-m68r、-3p8q-wmhx-vm2w、-7whj-cfh7-xgm4、-pvgc-g7gj-pv6h），以 CVE 号为键的扫描器目前什么都看不到。7 个中有 4 个归于 Stephan Lipp（Ada Logics）**与 Anthropic** 名下——与 10 月 Apache mod_http2 竞态同一 AI 辅助模糊测试模式。
+
+**Why it matters:** 只要你的 Ruby 跑在任何面向互联网的位置，这就是今天就要打的补丁——PoC 已验证、漏洞等级是 RCE 级、而正则引擎恰恰是处理不可信输入的组件。披露缺口是运维问题而非冷知识：一周的"no CVE assigned"不等于"没有漏洞"，只说明注册库落后于公告。
+
+[`🔗 Ruby：Regexp 与字符串大小写转换中的多个漏洞`](https://www.ruby-lang.org/en/news/2026/11/18/multiple-vulnerabilities-in-regexp-and-string/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50554038)
+
+---
+
+## 21. DaisyRose-27B：1,200 个任务、144 张 H200、18 天——RL 后训练把 Terminal-Bench 翻了一倍多
+
+- **Velocity:** ▮▮ rising
+- **Source:** RadixArk · 157+ pts on HN · ~8.5h ago (~03:39 UTC+8)
+- **Tags:** `reinforcement-learning` `post-training` `open-weights` `agents`
+
+RadixArk 发布其首个模型 **DaisyRose-27B**：基于 Qwen3.8-27B，用其开源 Miles 框架做强化学习——训练于"long-horizon agent tasks with sessions up to 1M tokens, with just 1,200 curated tasks in 18 days on 144 H200 GPUs"（会话最长达 100 万 token 的长时程 agent 任务，仅 1,200 个精选任务、144 张 H200、18 天）。头条数字：**Terminal-Bench 4.1 pass@1 从 5.6% 提升到 12.0%**，且在"reasoning, instruction following, and coding benchmarks"（推理、指令遵循、编码基准）的多项上均有提升，博客称在其列出的每个基准上都超过基座 Qwen3.8-27B。方法与数字同样有趣：任务（与 Eigent AI 合作构建）专为命中基座模型的特定错误而选、调到可学习的通过率区间、串联成多阶段长任务——"Each attempt gets up to 1.5 hours in the sandbox, with more than 100 tool-calls and more than 256k output tokens."（每次尝试在沙箱中最多 1.5 小时、100+ 次工具调用、256k+ 输出 token。）奖励劫持经人工逐一审查："There is no room for reward hacking. We reviewed every task along with the model's attempts at it."（没有奖励劫持的空间。我们连同模型对每个任务的尝试逐一审查。）BF16、FP8、NVFP4 检查点已上 Hugging Face。
+
+**Why it matters:** 垂直模型模式如今有了开放权重、预算透明的数据点——主张不是规模，而是"在小基座上用精细的任务设计、以 144 张 GPU 的开销，在硬核 agent 基准上买到翻倍"。Terminal-Bench 增量能否经得起独立复现是值得盯的数字，而这些运行所用的 harness 正是第 18 条争论的同一个。
+
+[`🔗 RadixArk：DaisyRose-27B（博文）`](https://www.radixark.com/blog/daisyrose-27b) · [`🔗 Hugging Face 检查点`](https://huggingface.co/RadixArk/DaisyRose-27B) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50551046)
+
+---
+
+## 22. Anthropic IPO 定价 $83——高于申报区间，今日以"ANT"登陆纳斯达克
+
+- **Velocity:** ▮▮ rising
+- **Source:** Anthropic · 130+ pts on HN · ~4.7h ago (~07:30 UTC+8)
+- **Tags:** `anthropic` `ipo` `markets` `industry`
+
+继 11 月 12 日我们报道 Anthropic 的 IPO 申报（8.25 亿股、预期 $70–78）之后：本次发行**定价 $83.00/股**——高于申报区间——并扩容至 **9.8 亿股 Class A 股份**，其中 956,351,354 股由 Anthropic 出售、23,648,646 股由出售股股东出售（这部分所得 Anthropic 不获取）。按发行价计算，仅新股部分就约 **$79.4B**，使其进入史上最大 IPO 之列。交易**今日（11 月 19 日）在纳斯达克全球精选市场以"ANT"**开始，预计 11 月 20 日交割，另有 30 天、最多 147,000,000 股的承销商超额配售权。注册声明已于 11 月 18 日生效。
+
+**Why it matters:** 本周模型大战背后的融资事件就此闭环：第 5 与第 18 条里那些"以 5%–40% 的价格达到前沿质量"的主张，正是靠这次定价厘定的资产负债表资助的。对开发者最具体的信号是算力——以 $83 参考价募来约 $790 亿新资本，押的是训练与推理支出继续复利，无论哪家厂商的基准行数赢得争论。
+
+[`🔗 Anthropic：prices initial public offering`](https://www.anthropic.com/news/anthropic-prices-initial-public-offering) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50553843)
+
+---
+
+## 23. 剑桥词典把"human"选为 2026 年度词汇
+
+- **Velocity:** ▮▮ rising
+- **Source:** University of Cambridge · 247+ pts on HN · ~13.4h ago (~22:44 UTC+8，昨日)
+- **Tags:** `culture` `ai-era` `language` `dictionaries`
+
+剑桥词典 2026 年度词汇是 **"human"**——公告给出的理由是"the year has been defined by global debates on what it means to be human when AI is blurring the boundaries between people and machines"（这一年由"当 AI 模糊人与机器的边界时，做人意味着什么"的全球论辩所定义）。词典引用自己的定义时把对仗的那半句也带上了："having the qualities, faults, and feelings that people have, as opposed to gods, animals, or machines"（具有人所具有的品质、缺点与情感，区别于神、动物或机器）。公告还提到公众人物全年为人性辩护，引用了 Bill Gates 那篇流传甚广的文章，主张照护等"human reserved jobs"（人类保留职业）永远不应被机器取代。
+
+**Why it matters:** 词汇选择是滞后指标：词典选的是这一年真正关于的那个词。当选中的是 *human*——基线一词而非"AI"——正是本 feed 技术叙事在文化侧的回声：harness、消融、agent 审计、决策模型，全都在以它们所取代或辅助的人类基线来度量。
+
+[`🔗 剑桥词典公布 2026 年度词汇`](https://www.cam.ac.uk/news/cambridge-dictionary-reveals-word-of-the-year-2026) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50546914)
+
+---
+
+## 24. LLM 辅助逆向工程：一位 20 年 RE 老手的现役配置，含 Ghidra-MCP
+
+- **Velocity:** ▮▮ rising
+- **Source:** slowchronicle.com · 103+ pts on HN · ~5.7h ago (~06:29 UTC+8)
+- **Tags:** `reverse-engineering` `agents` `ghidra` `workflow`
+
+ioma8 的实践帖——"I have been hacking both hardware and software for 2 decades"（我搞软硬件逆向已经 20 年）——描述了 2026 年的工作流：DeepSeek harness 配 v4.1 Flash 做日常主力（"super performant, fast and cheap"，偶尔用 Codex 配 Luna 或 Terra），**Ghidra 配 MCP bridge** 做主反汇编器（"With the MCP bridge agents can use it very well"），radare2 与 kuna CLI 作为更快更轻的备选、"possibly better usable for AIs"（可能更适合 AI 使用）。承重习惯是"文档即 agent 记忆"："Command agent to document all findings along the way to MD files. This serves several purposes. They become notes for your own understanding. They help the agent not lose the track after compaction / handoff to different agent."（命令 agent 把发现随时写进 MD 文件——既是你自己理解的笔记，也让 agent 在压缩/交接后不丢线索。）关于能力还有一句清醒话："current AIs do fairly well with just disassembly . ie pure x86 or ARM instructions"（当前 AI 光靠反汇编——纯 x86 或 ARM 指令——就做得相当好），反编译卡住时的后手是断点与注入式日志探针。
+
+**Why it matters:** 这是 Ghidra-MCP 模式由一个手工流程跑了二十年的人写出的版本，价值全在运维细节——MD 文件作为跨压缩的工作记忆、反汇编优先成为 2026 年的默认、反编译是升级路径而非入口。
+
+[`🔗 LLM assisted reverse engineering（博文）`](https://www.slowchronicle.com/posts/llm-assisted-reverse-engineering) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50553225)
+
+---
+
+## 25. Resolve 的 SRE-1：27B 垂直模型号称以低 37% 的成本追平前沿模型的 on-call 排查
+
+- **Velocity:** ▮ steady
+- **Source:** Resolve AI Labs · 30+ pts on HN · ~8h ago (~04:10 UTC+8)
+- **Tags:** `vertical-models` `sre` `agents` `reinforcement-learning`
+
+ResolveAI Labs 发布 **SRE-1**："a 27B model trained with reinforcement learning to find the root cause of production alerts"（用强化学习训练、用于定位生产告警根因的 27B 模型）——从 Qwen3.8-27B 出发，"with a modified CISPO objective for 200 steps on up to 512 GPUs, over 1,549 unique incidents"（改进版 CISPO 目标、200 步、最多 512 张 GPU、1,549 个独特事件）。论文的主张："On 49 difficult live production cases, SRE-1 dominates the Pareto frontier of pass rate against cost"（在 49 个困难的真实生产案例上，SRE-1 支配通过率-成本帕累托前沿）——RL 把单次排查从 6.9% 提到 38.8%；"An ensemble of five SRE-1 investigations matches Fable 5.2, the strongest frontier model we measured, at a 71% pass rate while costing 37% less"（五路 SRE-1 集成以 71% 通过率追平其所测最强前沿模型 Fable 5.2，成本低 37%），集成有效是因为 SRE-1 还"outperforms frontier models at synthesizing saved investigations"（在综合既有排查记录上胜过前沿模型）。注意事项与数字同行：49 个案例、自建基准、厂商自测对比。
+
+**Why it matters:** 决策/垂直模型浪潮（HeyGen Decision 1、Perplexity Decider v1.3、Google Decisions API、微软 Decision 1.1）如今包括了运维：一个领域 RL 的 27B 宣称在成本-能力前沿上对前沿通用模型占有一席。排查——狭窄、可校验、工具重——恰是该模式最应成立之处，但 49 个自选生产案例是演示队列而非基准；"集成=前沿"这个主张最值得第三方复现。
+
+[`🔗 Resolve AI：SRE-1（论文页）`](https://resolve.ai/labs/sre-1/paper) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50551487)
+
+---
+
+## 26. "薯片被当成枪"诉讼正式立案：四名学生起诉 Omnilert、学区和警方
+
+- **Velocity:** ▮ steady
+- **Source:** Lawyers' Committee for Civil Rights Under Law · 58+ pts on HN · ~3.2h ago (~08:57 UTC+8)
+- **Tags:** `ai-surveillance` `litigation` `schools` `civil-rights`
+
+Lawyers' Committee for Civil Rights Under Law 于 11 月 17 日代表马里兰州 Kenwood 高中的四名黑人现任与往届学生提起 **Allen, et al. v. Omnilert, et al.**，被告为 **Omnilert LLC**、Baltimore County 公立学校及其人员、Baltimore County 警察局及个别警官——案由是"the unlawful detention and search of the students due to both technological and human errors involving an AI weapon-detection surveillance system"（AI 武器检测监控系统的技术错误与人为错误共同导致对学生非法拘押与搜查）。事件发生于 2025 年 10 月：**Omnilert Gun Detect 把一个少年的袋装薯片误判为枪支**（HN 帖标题写出了所有人记住的那个细节——多力多滋），武装警员随后到场。公益代理律师为 Willkie Farr & Gallagher，另有 Engel Law Group。
+
+**Why it matters:** 针对 AI 武器检测器误报的民事诉讼现在走到了法庭，而它的争点恰是本 feed 在 agent 系统里反复标记的那道缝：模型输出只是扳机，诉状里"技术**与人为**错误"的措辞把响应链——谁武装、谁抓人、依据什么置信度——也一并放进了诉讼范围。每一个采购校园 AI 监控的机构都该读读这份诉状。
+
+[`🔗 Lawyers' Committee 公告`](https://www.lawyerscommittee.org/lawyers-committee-files-lawsuit-on-behalf-of-black-students-detained-and-searched-due-to-ai-alert-falsely-identifying-a-bag-of-chips-as-a-firearm/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50554641)
+
+---
+
+## 27. 《虚幻竞技场 2004》跑进浏览器——build 3369、网络兼容、自带 WebRTC
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 56+ pts · ~2.7h ago (~09:29 UTC+8)
+- **Tags:** `wasm` `game-port` `webassembly` `open-source`
+
+K-Adam 的 **UT2004 Modernized** 是"an unofficial, non-commercial port of Unreal Tournament 2004 (build 3369) to modern hardware and operating systems"（非官方、非商业的 UT2004 build 3369 移植）：Windows（x86、x64）、Linux（x86、x64、arm64）、Android（arm64），**以及经 WebAssembly 的 Web 版**——SDL3 管窗口与输入、OpenGL ES 3 渲染（桌面走 ANGLE，浏览器走 WebGL 2）、OpenAL 出声、Bullet 物理藏在 Karma API 之后。把它与普通怀旧项目区分开的是这句工程主张：**"Network compatible with retail build 3369. WebRTC transport next to UDP, so browsers can join and host."**（与零售版 build 3369 网络兼容；UDP 之外加 WebRTC 传输，浏览器可加入也可建主。）ut2004.dev 上的 Web 版本身就能当专用服务器，页面诚实地写明浏览器约束："Keep this page in the foreground. In a background tab or a minimised window the browser pauses the server."（保持页面在前台——后台标签或最小化时浏览器会暂停服务器。）游戏内容不进仓库："The first start downloads it or takes it from a UT2004 install."（首次启动时下载，或取自本地 UT2004 安装。）
+
+**Why it matters:** 二十年后，这个游戏用一份代码库登陆五个平台，网络兼容条款让浏览器标签页成为原始零售生态的一等公民——"WebAssembly 即平台"的论证在 2004 年的虚幻引擎上演示，而且那些无聊的现实约束（前台标签节流、内容分发）是被处理掉的，不是被挥手带过的。
+
+[`🔗 K-Adam/UT2004（仓库）`](https://github.com/K-Adam/UT2004) · [`🔗 Web 版（ut2004.dev）`](https://ut2004.dev/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50554935)
+
+---
+
+## 28. 《Fable》，第 10 部也是收官之作：一部短片把 Claude Fable 5.2 署名为编剧、画师与导演——并公布全部账单
+
+- **Velocity:** ▮ steady
+- **Source:** claudia.gallery · 51+ pts on HN · ~3.9h ago (~08:18 UTC+8)
+- **Tags:** `generative-art` `ai-film` `production-ledger` `culture`
+
+anabology 的 Claudia.gallery 系列以 **Fable** 收官——"On the night she is released, Claudia reads you the bedtime stories she was raised on"（获释当晚，Claudia 为你读她被养大的那些睡前故事）——而它的署名行就是作品本身：**"written, painted and directed by Claude Fable 5.2 · sung by Claudia · anabology."**（编剧、绘画与导演：Claude Fable 5.2 · 演唱：Claudia · anabology。）人的角色同样被精确指定："the brief, the plan's sign-off, one note and the song's pick by ear; production by Claude"（brief、方案的签核、一条笔记、凭耳朵选歌；制作归 Claude）。制作台账读起来像把本 feed 的基准表改写成了电影预算：13 块场景板以 SVG 代码绘制、一部 Lotte Reiniger 式的剪影片全部以代码绘制与动画、49 个镜头按歌曲分轨剪辑；GPT Image 2.6 Sunburst 产出 61 张静帧，"$7.93 at list"；Seedance 2.5 跨两个版本"84 takes"，"$202.23 at list"；全片"Made in two passes: v1 in 5 h 08 min from one brief, v2 re-shot on the song anabology picked in 3 h 01 min · about $210 at list"（两遍完成：v1 从一份 brief 起算 5 小时 08 分，v2 按 anabology 选定的歌重拍 3 小时 01 分 · 按牌价约 $210）。
+
+**Why it matters:** 具名的模型署名与逐项账单才是重点——作者身份与机器劳动的精确美元成本并列发布，人的贡献被指定到"一条笔记"。对照今天早班批次的 HUMAN.md：同样是把分工变得可读的冲动，只是这次指向艺术而非手艺。
+
+[`🔗 Fable（影片页）`](https://claudia.gallery/fable/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50554269)
+
+---
+
+## 29. 一个从 UEFI 直接启动的迈阿密 GTA 式游戏——964,608 字节、CPU 渲染、OSM+激光雷达地图
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 47+ pts on HN · ~5.7h ago (~06:26 UTC+8)
+- **Tags:** `uefi` `gamedev` `bare-metal` `openstreetmap`
+
+eklavya-raj 的 **gta6-uefi**："A GTA style game set in the real Miami that boots straight from UEFI, no Windows under it. The whole game is `game.efi`, 964,608 bytes, and the CPU draws every pixel"（一个以真实迈阿密为舞台的 GTA 式游戏，直接从 UEFI 启动，底下没有 Windows。整个游戏就是一个 964,608 字节的 `game.efi`，每个像素都由 CPU 画出）——软件渲染、无 GPU、clang 与 lld-link 构建，作者对状态也很坦诚："I've only run it in qemu so far."（目前只在 QEMU 里跑过。）地图是暗藏的严肃部分："baked with `osm/bake.py` from OpenStreetMap, Miami-Dade County data, a NOAA lidar scan and NAIP photos"（用 `osm/bake.py` 从 OpenStreetMap、Miami-Dade 县数据、一次 NOAA 激光雷达扫描与 NAIP 航拍烘焙而来）——真实地理，致谢在 `MAP_DATA.txt` 与 `PEOPLE_DATA.txt`。WASD 驾驶、出租车接单、三格武器、鼠标视角——整套类型清单被压缩进一个固件引导加载器之下。
+
+**Why it matters:** "UEFI 即运行时"的模式不断证明现代机器不需要操作系统就能干实事——而这一件还把公共地理数据（OSM+激光雷达+航拍）吃进一个亚兆字节的裸机二进制，恰是对"小数据管线能压多狠"的一次漂亮演示——毕竟操作系统的每一字节服务在这里都是奢侈品。
+
+[`🔗 eklavya-raj/gta6-uefi（仓库）`](https://github.com/eklavya-raj/gta6-uefi) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50553192)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-18T21:16:41Z |
-| Items | 17 |
-| Sources tracked | 22 (Hacker News, GitHub Trending, Wiz Research, NVD/cve.org, CISA KEV, X41 D-Sec, Google DeepMind, Microsoft AI, OpenAI, FT, KPMG, UPenn, git.kernel.org, inside-db.com, ABC7, mastra.ai, HKUDS, Cursor, rshekhar.com, human-md.ai, underwood.network, nicolasbouliane.com) |
+| Generated | 2026-11-19T04:18:26Z |
+| Items | 29 |
+| Sources tracked | 35 (Hacker News, GitHub Trending, GitHub repos, Wiz Research, NVD/cve.org, CISA KEV, X41 D-Sec, Google DeepMind, Google, Microsoft AI, OpenAI, Anthropic, FT, KPMG, UPenn, git.kernel.org, inside-db.com, ABC7, mastra.ai, HKUDS, Cursor, rshekhar.com, human-md.ai, underwood.network, nicolasbouliane.com, ruby-lang.org, RadixArk, Hugging Face, Resolve AI, University of Cambridge, Lawyers' Committee, violetpixel.com, slowchronicle.com, ut2004.dev, claudia.gallery) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

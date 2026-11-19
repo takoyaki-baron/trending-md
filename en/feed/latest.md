@@ -1,8 +1,8 @@
 ---
 date: 2026-11-19
-updated: 2026-11-18T21:16:41Z
+updated: 2026-11-19T04:18:26Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 22
+sources: 35
 license: CC-BY-4.0
 ---
 
@@ -248,13 +248,181 @@ California's DMV has ordered Waymo's autonomous vehicles off state freeways, per
 
 ---
 
+## 18. Gemini 4 Neon ships: Google's middle tier goes frontier — #3 on the Intelligence Index at $3/$15
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Google · 557+ pts on HN · ~6.6h ago (~05:34 UTC+8)
+- **Tags:** `gemini` `google` `model-release` `coding-agents`
+
+Google introduced **Gemini 4 Neon** — the Gemini 4 family's middle tier, slotted between Carbon ("your hardest, long-horizon projects") and Hydrogen ("fast everyday execution," which shipped separately on Nov 13). The claims: **#3 overall with a score of 61 on the Artificial Analysis Intelligence Index** at its xhigh thinking level ("landing just behind larger, slower models"), "#1 overall on the Artificial Analysis Coding Agent Index (58.6)," a score of 65.2% on Terminal-Bench 4.1, #2 on the Vals Index (70.9%, "on the Pareto frontier"), and a #2 debut at 1336 on Arena's new Agent Arena Index across 4,200+ real-world agent sessions. Pricing: **$3 per million input tokens and $15 per million output tokens** ($0.15/M cached, "a 95% discount"), with a 1 million-token context window. At the default high thinking level Google claims a "32% lower cost per task than Carbon," and "roughly 50% to 80% lower cost per task than top competing frontier models" on the Vals and Agent Arena Pareto frontiers. The post is again honest about harness effects: on SWE-sweep Neon "already leads on the mini-SWE harness (12.8%) and more than triples to a state-of-the-art 39.0% in Google Antigravity showing what the Antigravity harness unlocks." A "Gemini 4 Neon for cyber" variant — state-of-the-art on SEC-bench Pro (90.5%) and WebExploitBench v1.2 (51.26%) — reaches trusted defenders via the Fairwind Program "in the coming days," and Tasks in Gemini can now run on Neon. The safety section is unusually specific: 0.0% cheating on Terminal-Bench 4.0 (matching Carbon), shortcuts on just 2.45% of tasks — "the lowest rate of any Gemini 4 model" — and, with real-time safeguards at the highest thinking level, "Neon resisted every attack within this Gray Swan benchmark."
+
+**Why it matters:** Hours after Microsoft's seven-model Ignite lineup, this is the price-performance war's other shoe — Google contesting the same "frontier quality at mid-tier cost" thesis with its own benchmark rows. Read them the same way: vendor-selected operating points. The 12.8%→39.0% harness gap Google itself prints is the reminder that these scores measure model-plus-harness, a lesson this feed keeps re-learning (see item 5's footnote discipline).
+
+[`🔗 Google: Introducing Gemini 4 Neon`](https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50552424)
+
+---
+
+## 19. "We Need Smart People Who Give a Shit" — the outage cascade gets its human-capital essay
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** violetpixel.com · 312+ pts on HN · ~4.3h ago (~07:53 UTC+8)
+- **Tags:** `essay` `infrastructure` `outages` `ops`
+
+Justin Michael's essay argues "the world is held together by smart people who give a shit" — systems like ACH survive being "old, riddled with flaws, and encumbered with legacy baggage" because a thin layer of people combine "intimate knowledge of the system" with "the drive and determination to force the system to work." "Take those people away, and the systems collapse. And collapse is what we're starting to see." The evidence list is the week itself: Microsoft 365, air-traffic control, United Airlines, the NSA's network, "many major banks," Apple's systems. It lands as the third entry in this week's essay cascade — after Breck-McKye's systemic-complexity argument (Nov 17) and the Congressional reporting on rushing fixes to AI-identified vulnerabilities (Nov 18) — but with a different mechanism: not complexity per se, and not change velocity, but the labor of care that keeps barely-good-enough systems running, and what it costs when that labor thins.
+
+**Why it matters:** The week's outage essays have converged from three directions on the same place. Whatever the specific triggers were, the meta-observation now has enough independent formulations that it reads as a diagnosis: the margin between "barely good enough" and "stopped" was always human attention — and every track of this feed has been measuring what happens as that attention gets automated, defunded, or rushed.
+
+[`🔗 We Need Smart People Who Give a Shit (essay)`](https://violetpixel.com/blog/2026-11-17-we-need-smart-people-who-give-a-shit/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50554045)
+
+---
+
+## 20. Ruby ships emergency releases for 7 memory-corruption bugs — RCE PoCs exist, CVEs still pending
+
+- **Velocity:** ▮▮ rising
+- **Source:** ruby-lang.org · 129+ pts on HN · ~4.3h ago (~07:52 UTC+8)
+- **Tags:** `ruby` `security` `rce` `memory-safety`
+
+The Ruby core team released **4.0.10, 3.4.13 and 3.3.14** against seven vulnerabilities "in Ruby's regular expression engine and in the case conversion of strings," stating flatly: "We are aware of PoCs that prove some of them can be used to trigger remote code execution." The set is a memory-corruption tour: a one-byte heap overflow and an integer overflow in string case conversion, a double free and a heap buffer overflow in regex compilation, an out-of-bounds read in case-insensitive matching, a heap buffer overflow in `Regexp#to_s`, and an out-of-bounds read in case-insensitive backreference matching. Affected: Ruby ≤ 3.3.13, 3.4.0–3.4.12, and 4.0.0–4.0.9 — and "Ruby 3.2 and earlier have reached their end of life and will not receive these fixes." The disclosure mechanics are the notable part: "CVE identifiers have been requested for these vulnerabilities but have not been assigned yet," so the advisory refers to them by GHSA id (GHSA-34m4-m9fh-gqp5, -7x2q-68qv-6p8x, -87fm-7w84-j2px, -wpqw-5qxg-m68r, -3p8q-wmhx-vm2w, -7whj-cfh7-xgm4, -pvgc-g7gj-pv6h), and scanners keyed to CVE numbers see nothing yet. Four of the seven are credited to Stephan Lipp (Ada Logics) **and Anthropic** — the same AI-assisted fuzzing pattern behind October's Apache mod_http2 race.
+
+**Why it matters:** If you run Ruby anywhere internet-facing, this is patch-today — the PoCs are proven, the bug classes are RCE-grade, and the regex engine is exactly the component that processes untrusted input. The disclosure gap is operational, not trivia: a week of "no CVE assigned" does not mean "no vulnerability," it means the registry is behind the advisory.
+
+[`🔗 Ruby: multiple vulnerabilities in Regexp and String case conversion`](https://www.ruby-lang.org/en/news/2026/11/18/multiple-vulnerabilities-in-regexp-and-string/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50554038)
+
+---
+
+## 21. DaisyRose-27B: 1,200 tasks, 144 H200s, 18 days — RL post-training that more than doubles Terminal-Bench
+
+- **Velocity:** ▮▮ rising
+- **Source:** RadixArk · 157+ pts on HN · ~8.5h ago (~03:39 UTC+8)
+- **Tags:** `reinforcement-learning` `post-training` `open-weights` `agents`
+
+RadixArk released its first model: **DaisyRose-27B**, built on Qwen3.8-27B and trained with reinforcement learning using its open-source Miles framework — on "long-horizon agent tasks with sessions up to 1M tokens, with just 1,200 curated tasks in 18 days on 144 H200 GPUs." The headline measurement: **Terminal-Bench 4.1 pass@1 improves from 5.6% to 12.0%**, with gains "on a variety of other reasoning, instruction following, and coding benchmarks," and the post says it beats the base Qwen3.8-27B on every benchmark it lists. The method is as interesting as the number: tasks (built with Eigent AI) were selected to target specific mistakes the base model makes, tuned until solve rates sat in a learnable band, and chained into multi-stage jobs — "Each attempt gets up to 1.5 hours in the sandbox, with more than 100 tool-calls and more than 256k output tokens." Reward hacking was manually reviewed: "There is no room for reward hacking. We reviewed every task along with the model's attempts at it." BF16, FP8, and NVFP4 checkpoints are on Hugging Face.
+
+**Why it matters:** The vertical-model pattern now has its open-weights, budget-transparent data point — the claim isn't scale, it's that careful task design on a small base can buy a doubling on a hard agent benchmark for 144 GPUs of spend. Whether the Terminal-Bench delta survives independent replication is the number to watch, and the harness those runs use is the same one being argued about in item 18.
+
+[`🔗 RadixArk: DaisyRose-27B (post)`](https://www.radixark.com/blog/daisyrose-27b) · [`🔗 Checkpoints on Hugging Face`](https://huggingface.co/RadixArk/DaisyRose-27B) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50551046)
+
+---
+
+## 22. Anthropic prices its IPO at $83 — above the filed range, trading opens today under "ANT"
+
+- **Velocity:** ▮▮ rising
+- **Source:** Anthropic · 130+ pts on HN · ~4.7h ago (~07:30 UTC+8)
+- **Tags:** `anthropic` `ipo` `markets` `industry`
+
+Since we covered Anthropic's IPO filing on Nov 12 (825M shares at an expected $70–78): the offering **priced at $83.00 per share** — above the filed range — and grew to **980,000,000 Class A shares**, of which 956,351,354 are sold by Anthropic and 23,648,646 by selling stockholders (whose proceeds Anthropic does not receive). At list price the primary tranche alone is roughly **$79.4B**, which puts this among the largest IPOs ever. Trading begins **today, November 19, on the Nasdaq Global Select Market under "ANT"**, with closing expected November 20 and a 30-day underwriter option on up to an additional 147,000,000 shares. The registration statement was declared effective November 18.
+
+**Why it matters:** The financing event behind this week's model wars closes its loop: the "frontier quality at 5–40% of the price" claims in items 5 and 18 are funded from balance sheets this pricing just set. The concrete dev-relevant signal is capacity — ~$79B of new capital at an $83 reference price is a bet that training and inference spend keeps compounding, whichever vendor's benchmark rows win the argument.
+
+[`🔗 Anthropic: prices initial public offering`](https://www.anthropic.com/news/anthropic-prices-initial-public-offering) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50553843)
+
+---
+
+## 23. Cambridge Dictionary names "human" its 2026 Word of the Year
+
+- **Velocity:** ▮▮ rising
+- **Source:** University of Cambridge · 247+ pts on HN · ~13.4h ago (~22:44 UTC+8 yesterday)
+- **Tags:** `culture` `ai-era` `language` `dictionaries`
+
+The Cambridge Dictionary's Word of the Year for 2026 is **"human"** — chosen, per the announcement, because "the year has been defined by global debates on what it means to be human when AI is blurring the boundaries between people and machines." The dictionary quotes its own definition with the counterparty clause intact: "having the qualities, faults, and feelings that people have, as opposed to gods, animals, or machines." The announcement notes that public figures defended humanity through the year, citing Bill Gates's widely-read essay making the case for "human reserved jobs" — caregiving among them — that should never be taken by machines.
+
+**Why it matters:** Lexical choices are lagging indicators: dictionaries pick the word a year was actually about. That the word is *human* — the baseline term, not "AI" — is the culture-side echo of this feed's technical year: harnesses, ablations, agent audits, and decision models all being measured against the human baseline they replace or assist.
+
+[`🔗 Cambridge Dictionary reveals Word of the Year 2026`](https://www.cam.ac.uk/news/cambridge-dictionary-reveals-word-of-the-year-2026) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50546914)
+
+---
+
+## 24. LLM-assisted reverse engineering: a 20-year RE veteran's working setup, Ghidra-MCP included
+
+- **Velocity:** ▮▮ rising
+- **Source:** slowchronicle.com · 103+ pts on HN · ~5.7h ago (~06:29 UTC+8)
+- **Tags:** `reverse-engineering` `agents` `ghidra` `workflow`
+
+A practitioner post by ioma8 — "I have been hacking both hardware and software for 2 decades" — describes the 2026 workflow: a DeepSeek harness on v4.1 Flash as the daily driver ("super performant, fast and cheap," with occasional Codex on Luna or Terra), **Ghidra with an MCP bridge** as the primary disassembler ("With the MCP bridge agents can use it very well"), and radare2 plus the kuna CLI as faster, lighter alternates that are "possibly better usable for AIs." The load-bearing habit is documentation-as-agent-memory: "Command agent to document all findings along the way to MD files. This serves several purposes. They become notes for your own understanding. They help the agent not lose the track after compaction / handoff to different agent." And a sober note on capability: "current AIs do fairly well with just disassembly . ie pure x86 or ARM instructions" — with breakpoints and injected logging probes as the fallback when decompilation stalls.
+
+**Why it matters:** This is the Ghidra-MCP pattern written by someone who ran the manual workflow for twenty years, and the value is in the operational details — MD files as working memory across compaction, disassembly-first as the 2026 default, decompilation as the escalation path rather than the entry point.
+
+[`🔗 LLM assisted reverse engineering (post)`](https://www.slowchronicle.com/posts/llm-assisted-reverse-engineering) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50553225)
+
+---
+
+## 25. Resolve's SRE-1: a 27B vertical model claiming frontier-tying on-call investigations at 37% less cost
+
+- **Velocity:** ▮ steady
+- **Source:** Resolve AI Labs · 30+ pts on HN · ~8h ago (~04:10 UTC+8)
+- **Tags:** `vertical-models` `sre` `agents` `reinforcement-learning`
+
+ResolveAI Labs announced **SRE-1**, "a 27B model trained with reinforcement learning to find the root cause of production alerts" — starting from Qwen3.8-27B and trained "with a modified CISPO objective for 200 steps on up to 512 GPUs, over 1,549 unique incidents." The claims, from the paper: "On 49 difficult live production cases, SRE-1 dominates the Pareto frontier of pass rate against cost" — RL lifts a single investigation from 6.9% to 38.8% — and "An ensemble of five SRE-1 investigations matches Fable 5.2, the strongest frontier model we measured, at a 71% pass rate while costing 37% less," with ensembles working because SRE-1 also "outperforms frontier models at synthesizing saved investigations." The caveats travel with the numbers: 49 cases, a self-published benchmark, vendor-measured comparisons.
+
+**Why it matters:** The decision/vertical-model wave (HeyGen Decision 1, Perplexity Decider v1.3, Google's Decisions API, Microsoft's Decision 1.1) now includes operations: a domain-RL'd 27B claiming a seat on the cost-capability frontier against a frontier generalist. Investigations — narrow, checkable, tool-heavy work — are exactly where the pattern should hold, but 49 self-selected production cases is a demo cohort, not a benchmark; the ensemble-equals-frontier claim is the one worth someone else replicating.
+
+[`🔗 Resolve AI: SRE-1 (paper)`](https://resolve.ai/labs/sre-1/paper) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50551487)
+
+---
+
+## 26. The chips-as-gun lawsuit is filed: four students sue Omnilert, a school district, and police
+
+- **Velocity:** ▮ steady
+- **Source:** Lawyers' Committee for Civil Rights Under Law · 58+ pts on HN · ~3.2h ago (~08:57 UTC+8)
+- **Tags:** `ai-surveillance` `litigation` `schools` `civil-rights`
+
+The Lawyers' Committee for Civil Rights Under Law filed **Allen, et al. v. Omnilert, et al.** on Nov 17, on behalf of four Black current and former students of Kenwood High School (Baltimore County, MD), against **Omnilert LLC**, Baltimore County Public Schools and personnel, the Baltimore County Police Department, and individual officers — for "the unlawful detention and search of the students due to both technological and human errors involving an AI weapon-detection surveillance system." The underlying incident is from October 2025: **Omnilert Gun Detect mistook a teenager's bag of chips for a firearm** (the HN thread's title says what everyone remembers — Doritos), and armed officers responded. Pro bono counsel is Willkie Farr & Gallagher, with Engel Law Group.
+
+**Why it matters:** A civil suit over an AI weapon-detector false positive now reaches the courts, and it will turn on exactly the seam this feed keeps flagging in agent systems: the model output is only the trigger, and the complaint's "technological **and human** errors" clause puts the response chain — who armed, who detained, on what confidence — inside the litigation too. Every school AI-surveillance procurement should read this complaint.
+
+[`🔗 Lawyers' Committee announcement`](https://www.lawyerscommittee.org/lawyers-committee-files-lawsuit-on-behalf-of-black-students-detained-and-searched-due-to-ai-alert-falsely-identifying-a-bag-of-chips-as-a-firearm/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50554641)
+
+---
+
+## 27. Unreal Tournament 2004 runs in the browser — build 3369, network-compatible, WebRTC included
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 56+ pts · ~2.7h ago (~09:29 UTC+8)
+- **Tags:** `wasm` `game-port` `webassembly` `open-source`
+
+K-Adam's **UT2004 Modernized** is "an unofficial, non-commercial port of Unreal Tournament 2004 (build 3369) to modern hardware and operating systems": Windows (x86, x64), Linux (x86, x64, arm64), Android (arm64), **and the web via WebAssembly** — SDL3 for windows and input, OpenGL ES 3 for rendering (ANGLE on desktop, WebGL 2 in the browser), OpenAL for sound, Bullet physics behind the Karma API. The engineering claim that separates this from a curiosity: **"Network compatible with retail build 3369. WebRTC transport next to UDP, so browsers can join and host."** The web build at ut2004.dev doubles as a dedicated server, with the browser's own constraint stated honestly on the page: "Keep this page in the foreground. In a background tab or a minimised window the browser pauses the server." Game content stays out of the repo: "The first start downloads it or takes it from a UT2004 install."
+
+**Why it matters:** Two decades on, the game ships on five platforms from one codebase, and the network-compat clause makes a browser tab a first-class citizen of the original retail ecosystem — the WebAssembly-is-a-platform argument demonstrated on a 2004 Unreal engine, with the boring real-world constraints (foreground-tab throttling, content distribution) handled rather than waved at.
+
+[`🔗 K-Adam/UT2004 (repo)`](https://github.com/K-Adam/UT2004) · [`🔗 Web version (ut2004.dev)`](https://ut2004.dev/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50554935)
+
+---
+
+## 28. "Fable," film 10 of 10: a short film credits Claude Fable 5.2 as writer, painter, and director — and publishes the receipts
+
+- **Velocity:** ▮ steady
+- **Source:** claudia.gallery · 51+ pts on HN · ~3.9h ago (~08:18 UTC+8)
+- **Tags:** `generative-art` `ai-film` `production-ledger` `culture`
+
+anabology's Claudia.gallery series closes with **Fable** — "On the night she is released, Claudia reads you the bedtime stories she was raised on" — and its credit line is the artifact: **"written, painted and directed by Claude Fable 5.2 · sung by Claudia · anabology."** The human's role is specified just as precisely: "the brief, the plan's sign-off, one note and the song's pick by ear; production by Claude." The production ledger reads like this feed's benchmark tables turned into a film budget: 13 set plates painted in SVG in code, a silhouette film drawn and animated in code in the manner of Lotte Reiniger, 49 shots cut to the song's stems; GPT Image 2.6 Sunburst produced 61 stills at "$7.93 at list"; Seedance 2.5 took "84 takes" across two versions at "$202.23 at list"; and the whole thing was "Made in two passes: v1 in 5 h 08 min from one brief, v2 re-shot on the song anabology picked in 3 h 01 min · about $210 at list."
+
+**Why it matters:** The named-model credit and the itemized bill are the interesting part — authorship published alongside the exact dollar cost of the machine labor, with the human contribution specified down to "one note." Compare HUMAN.md from this morning's batch: the same impulse to make the division of labor legible, pointed at art instead of craft.
+
+[`🔗 Fable (film page)`](https://claudia.gallery/fable/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50554269)
+
+---
+
+## 29. A GTA-style Miami game that boots from UEFI — 964,608 bytes, CPU-rendered, OSM-and-lidar map
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 47+ pts on HN · ~5.7h ago (~06:26 UTC+8)
+- **Tags:** `uefi` `gamedev` `bare-metal` `openstreetmap`
+
+eklavya-raj's **gta6-uefi**: "A GTA style game set in the real Miami that boots straight from UEFI, no Windows under it. The whole game is `game.efi`, 964,608 bytes, and the CPU draws every pixel" — software rendering, no GPU, built with clang and lld-link, and the author is honest about its state: "I've only run it in qemu so far." The map is the sneaky-serious part: "baked with `osm/bake.py` from OpenStreetMap, Miami-Dade County data, a NOAA lidar scan and NAIP photos" — real geography, with credits in `MAP_DATA.txt` and `PEOPLE_DATA.txt`. Driving on WASD, taxis for fares, three weapon slots, mouse camera — the genre checklist compressed under a firmware bootloader.
+
+**Why it matters:** The UEFI-as-runtime pattern keeps proving a modern machine needs no OS for real workloads — and this one ingests public geodata (OSM + lidar + aerial imagery) into a sub-megabyte bare-metal binary, a neat demonstration of how far small data pipelines compress when every byte of OS service is a luxury.
+
+[`🔗 eklavya-raj/gta6-uefi (repo)`](https://github.com/eklavya-raj/gta6-uefi) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50553192)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-18T21:16:41Z |
-| Items | 17 |
-| Sources tracked | 22 (Hacker News, GitHub Trending, Wiz Research, NVD/cve.org, CISA KEV, X41 D-Sec, Google DeepMind, Microsoft AI, OpenAI, FT, KPMG, UPenn, git.kernel.org, inside-db.com, ABC7, mastra.ai, HKUDS, Cursor, rshekhar.com, human-md.ai, underwood.network, nicolasbouliane.com) |
+| Generated | 2026-11-19T04:18:26Z |
+| Items | 29 |
+| Sources tracked | 35 (Hacker News, GitHub Trending, GitHub repos, Wiz Research, NVD/cve.org, CISA KEV, X41 D-Sec, Google DeepMind, Google, Microsoft AI, OpenAI, Anthropic, FT, KPMG, UPenn, git.kernel.org, inside-db.com, ABC7, mastra.ai, HKUDS, Cursor, rshekhar.com, human-md.ai, underwood.network, nicolasbouliane.com, ruby-lang.org, RadixArk, Hugging Face, Resolve AI, University of Cambridge, Lawyers' Committee, violetpixel.com, slowchronicle.com, ut2004.dev, claudia.gallery) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
