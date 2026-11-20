@@ -1,630 +1,222 @@
 ---
-date: 2026-11-20
-updated: 2026-11-20T12:28:42Z
+date: 2026-11-21
+updated: 2026-11-20T20:26:54Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 42
+sources: 17
 license: CC-BY-4.0
 ---
 
-# trending.md — 2026-11-20
+# トレンド — 2026-11-21
 
-## 1. Claude がブラックホール物理学の未解決問題を2つ解決 — そして限界も一緒に公開した
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** Anthropic · HN 199+ pts · 約2.6時間前 (~01:27 UTC+8)
-- **Tags:** `ai-research` `physics` `agents` `formal-verification` `lean`
-
-Anthropic の研究記事（11月17日公開、今夜 HN に登場）は、Claude Fable 5.2 エージェントによる2つの成果を描く。研究者 Hongbin Chen が8月に Claude へ未解決問題のリストアップを依頼したのち、エージェントは「特別な準備なしに、バックグラウンドで約6週間」自律的に動いたという。**成果その1：** N=4 超ヤン・ミルズ理論において、ブラックホール形成に対応する熱的相転移は「弱結合でも強結合でも不連続（abrupt）」——Claude は Aharony らが2003年に設定した計算を完成させ、別の物理学者が別の方法で同一問題に取り組んでも同じ答えに到達した。**成果その2：** 3次元量子重力のモジュラーブートストラップにおいて、Claude は最軽量ブラックホールの質量上限 M₁ ≤ c/Λ（Λ は厳密な公式で ≈ 9.1266）を見つけ、**その最適性を証明**——従来の証明済み上限 c/8.5（Hartman, Mazáč, Rastelli）を更新した。ブートストラップの証明は9月に「Lean で形式検証済み」、一方の経路は球充填問題から「スペクトル曲線」という道具を借りたもので、半分は「OpenAI の証明の戦略に沿う」。プレプリントは公開済み（2611.00174、2611.00175）。
-
-**Why it matters:** エージェントが独立再現と機械検証された証明を伴う数週間規模の研究キャンペーンを完走した、現時点で最も力強い公開例——ベンチマークの数字ではなく、未解決問題が1つ閉じられた。記事自身も限界に異例なほど正直だ。「どちらの結果も我々の宇宙を直接記述するものではない」し、量子重力は未解決のまま、中間結合での不連続性はまだ推測の域を出ない。引用に値するのは*手法*の方であり、限界はそれと一緒に伝わるべきだ。
-
-> あるエージェントの決定的な貢献は、数値的な上限が中心電荷とともにどう動くかに見過ごされていたパターンを発見したこと——それが、この問題に誰も適用したことのない証明戦略へと変わった。
-
-[`🔗 Anthropic: Claude solves two open problems in the physics of black holes`](https://www.anthropic.com/research/claude-black-hole-physics) · [`🔗 プレプリント: モジュラーブートストラップ上限 (2611.00174)`](https://hexagonmath.org/2611.00174v1) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50563148)
-
----
-
-## 2. 英国審判所判決：政府は Apple への暗号化命令の存在を「認可済みのメディアブリーフィング」で迂回した
+## 1. 同日に2つのGRH証明主張――1つは「Claudeと共に」、1つは「すべて人間」――さらにNavier–Stokesの blow-up 主張まで
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** Investigatory Powers Tribunal · HN 276+ pts · 約3.7時間前 (~00:21 UTC+8)
-- **Tags:** `encryption` `privacy` `policy` `uk` `e2ee`
+- **Source:** Hacker News · 1,941+ pts · ~6h 前 (~22:15 UTC+8)
+- **Tags:** `mathematics` `ai-assisted-proof` `lean` `grh` `navier-stokes`
 
-調査権限審判所（IPT）は11月19日、内務省のテクニカル・キャパビリティ通知（TCN）に対する Apple の挑戦について判決を下した（[2026] UKIPTrib 9、事件番号 IPT/26/191/CH および IPT/25/83-86/CH）——2025年2月の報道で明るみに出たこの秘密命令は、iCloud のエンドツーエンド暗号化バックアップへのアクセスを要求し、Apple が英国ユーザー向けに ADP を提供撤回する事態を招いていた。Apple は命令の存在を認めることが「国家安全保障を損なうはずがない」と主張、審判所もその事実が今や本手続き内で承認されたとし、さらに政府の「確認も否定もしない」（NCND）姿勢について踏み込んだ：**「証拠は、政府がこの文脈で NCND を一貫して適用してこなかったことを示している」**、そして「複数の政府筋がブリーフィングの許可なくメディアに説明することは極めてあり得ない」と推定——つまり世界がこの命令を知ったのはリークではなく公式ブリーフィングを通じてだった。通知の*内容*は同日下付の PRIVATE および CLOSED 判決に委ねられ、Privacy International、Liberty、Ian Hosein、Ben Wizner が NGO 側として介入している。
+2026年11月20日は、数年ぶりに数学がおかしな日になった。Levent Alpöge がリーマン予想とその一般化の証明を主張した――"I believe I have, working with Claude, discovered a proof"――しかも読める論文はない。論証は Lean 形式化として存在し、14個の tar 分割ファイルで公開されている。Tao はこれを"an (enormous) Lean-only proof of the Generalized Riemann Hypothesis"と紹介する。同じ発表は3つの結果を同時に含む。Tao の記事は"in decreasing order of how 'digested' the results currently are"の順に並べる――3次元非強制 Euler 方程式の有限時間 blow-up 証明（Alpöge、Buckmaster、Coiculescu、 heav AI assistance、Lean 形式化済み）、非強制 Navier–Stokes の blow-up（Alpöge & Buckmaster、79ページの論文と約60万行の Lean ライブラリ、[リポジトリ](https://github.com/tristanbuckmaster/navier-stokes)は昨日作成）、そして GRH。さらに脚本家でも書けないどんでん返しがある。スタンフォードの Ravi Vakil が*もう一つの独立した* GRH 主張――Alessandro Masullo の草稿――を公表した。"this is urgent"のため会議の合間に発表した形で、"It is all human, with no AI"と強調し、Brian Conrad が"for months"検証していて"so far looking good"という。
 
-**Why it matters:** 実体を巡る闘い——英国が世界中の顧客に使われる E2EE へのバックドアを強制できるか——はまだ決着していない。判決自身が2026年12月の本審理は非現実的だと述べており、本案は2027年へ持ち越される。今日動いたのは説明責任のプロセスだ：秘密命令の存在は司法的に承認され、内容は機密のまま。審判所は、命令の存在を公式には確認しないながら記者へブリーフィングしていた政府の姿勢を名指しした。
+**Why it matters:** AI 支援という問いはもはや仮定の話ではない。ミレニアム級の主張の一つは Claude を名指しし、もう一つは AI を明示否定する。両者が同日に到着し、どちらも*信じる*のではなく*検証できる*状態にする重荷を Lean 形式化が担っている。Tao の言い方が正直なのだ。消化されるまで何も証明されていない。Navier–Stokes のリポジトリ自体、論文がハッシュを示す証明書について"is not in this repository; the paper says that it will be released."と明記している。
 
-> 審理体：Lady Carmichael（長官）、Chamberlain 判事、Johnson 判事——2026年9月17日口頭弁論、2026年11月19日判決。
+> 見出しを引用する前に、リポジトリ自身の注意書きを。パッチ適用後の Lean パッケージは"was not rebuilt when this repository was assembled"。Tao は Navier–Stokes について"more work needs to be done to create a proper, professionally written proof"と書いている。
 
-[`🔗 IPT 判決: Apple Inc & NGO 対 内務大臣`](https://investigatorypowerstribunal.org.uk/judgement/1-mr-vincent-kearney-2-british-broadcasting-corporation-v-1-chief-constable-of-the-police-service-of-northern-ireland-2-chief-constable-of-durham-constabulary-3-security-service-4-governme/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50562113)
+[`🔗 Alpöge の発表（PDF）`](https://alpo.ge/remark.pdf) · [`🔗 Navier–Stokes 論文 + Lean 形式化`](https://github.com/tristanbuckmaster/navier-stokes) · [`🔗 Terry Tao：3つの主張を消化度順に`](https://terrytao.wordpress.com/2026/11/20/unforced-euler-singularity-unforced-navier-stokes-singularity-and-the-generalized-riemann-hypothesis/) · [`🔗 Vakil が Masullo 主張を公表`](https://math216.wordpress.com/2026/11/20/hurried-announcement-alessandro-masullo-grh/)
 
 ---
 
-## 3. 「Fuck Your AI Safeguards」— 防御者が自分のセキュリティ作業から締め出された実録
+## 2. "I'll never buy Framework hardware again" が700点超え――その直後、著者が本文を削除し"ENODRAMA"だけを残した
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** ounapuu.ee · HN 245+ pts · 約3.6時間前 (~00:27 UTC+8)
-- **Tags:** `ai-safety` `claude-code` `security` `guardrails` `open-weights`
+- **Source:** Hacker News · 713+ pts · ~4h 前 (~00:15 UTC+8)
+- **Tags:** `hardware` `framework` `support` `consumer`
 
-エストニアのシニアプロダクトエンジニア Herman Õunapuu による投稿——きっかけはハッカーによるスーパー市場 Selver の冷凍庫温度改ざん事件——は、Claude Code に自社製品の修正容易な弱点スキャンを依頼した経緯を記す。Claude は実際の問題（「1行修正で済む単純な見落とし」）を見つけた後、セーフガードを理由に作業を停止した。投稿は Anthropic の Cyber Verification Program を体験したままに記録する：複数営業日の待機、政府発行 ID、データ保持免除の放棄、承認の保証なし——自分のスタックへの公開 PoC の有効性を試したいだけなのに。彼の回避策は EU でホストされるオープンウェイトモデル（GLM 5.3 と明記）：これが脆弱性を検証し、修正を実装し、解決を確認した。彼の論点はその非対称性だ：無制限化されたオープンモデルにはこうした摩擦がなく、制約は防御者だけを縛る——そして最後に、Anthropic が生態系をより危険にしていると非難し、この制限を IPO 前後の規制の堀だと推測する。
+OpenSMTPD の作者 Gilles Chehade が Framework ノートPCのサポート紛争について長文の不満を投稿したのは昨夜。瞬く間にこの日の HN で2番目に大きなスレッドになった（713点、460コメント）。今朝には本文が消えていた。元のURLに残るのは4行の TL;DR だけだ。"This post ended up on Hacker News and got a lot more attention than I expected. I'm not trying to hurt Framework beyond repaid (pun intended); I want them to fix their support. I want them to give us what we paid for, a working laptop."――その後に"ENODRAMA. Move along, there's nothing to see here anymore."
 
-**Why it matters:** 防御者摩擦への不満が1年かけて蓄積してきた中で、これが最も鋭利な一人称の証言になった——Anthropic のナスダック上場翌日に投稿され、同じ主張の組織的声明（第6項）と同時着弻している。「規制の堀」という枠組みを受け入れるかは別として、操作レベルの主張は具体的で検証可能だ：防御スキャンがセーフガードに触れた瞬間、オープンウェイトが EU 内から同じ時間帯の代替を提供できる。
+**Why it matters:** 紛争の詳細は今やスレッド内の引用とキャッシュにしか存在しない。ハードウェア愛好者コミュニティで最も共有された批判が、バズから数時間で取り下げられる過程の小さな事例研究だ。460コメントの議論こそが記録を保持している。この話を引用するならスレッドを。元記事はもう担い手ではない。
 
-> 同じ不満は今日の [Pete Warden インタビュー](https://thedataexchange.media/pete-warden-moonshine/)（第8項）にも逆方向から現れる：ホワイトハット研究者が「善意で組み込まれた制限やガードレールにつまずき続ける」ことが、彼のローカル AI 必勝論の第一の証拠物件なのだ。
-
-[`🔗 Fuck Your AI Safeguards (ounapuu.ee)`](https://ounapuu.ee/posts/2026/11/19/unsafeguards/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50562262)
+[`🔗 現在の状態の投稿`](https://poolp.org/posts/2026-11-20/ill-never-buy-framework-hardware-again/) · [`🔗 HN 議論（460コメント）`](https://news.ycombinator.com/item?id=50576855)
 
 ---
 
-## 4. 昨日の Java4Shell 続報：脆弱性は9月9日から OpenJDK 独自の PR キューに眠っていた
-
-- **Velocity:** ▮▮ rising
-- **Source:** OpenJDK GitHub PR · HN 251+ pts · 約8.3時間前 (~19:45 UTC+8)
-- **Tags:** `java` `openjdk` `cve` `memory-safety` `jvm`
-
-昨日の話は Java4Shell（CVE-2026-114938）——OpenJDK の AVX-512 Base64 intrinsics 経由の認証前コード実行で、「AI による1時間での発見」が物語の軸だった。今日 HN が掘り起こしたのは [PR #32781](https://github.com/openjdk/jdk/pull/32781)、「8392044: AVX-512 Base64 decoder overwrites output buffer on short padded tail」、**作成日 2026-09-09**——同一のバグが詳細つきで（不正入力時に誤った `output_mask` を計算し、「Java へ戻る前に論理出力長を超えて書き込み、ヒープを破壊する」）、修正案つきで、OpenJDK の暫定 AI ポリシー確認つきで提出されていた。必須のレビュー2件は最後まで集まらず、bridgekeeper ボットが8週間の停滞で警告を発し、PR は **2026-11-04 に未マージのまま自動クローズ**。Oracle の CVE 記録（2026-11-17 公開、ステータスは `Analyzed` → 11-19 に `Modified`）には Oracle 自身の CVSS 3.1 **8.1**（AV:N/AC:H）が載り、Java SE 8u511/17/21/25/27 と GraalVM に影響する。昨夜には HN ユーザーが PR 作者に「なぜクローズされたのか」と問い始めていた。
-
-**Why it matters:** AI が1時間で見つけたという物語には脚注が要る：バグは公開された OpenJDK 独自のキューの中に、自動クローズまで8週間、Oracle 記録の公開まで6週間眠っていた。JIT の Base64 経路にある認証前ヒープ破壊プリミティブが、それを出荷するプロジェクト自身の目の前に公開状態で置かれていた——これは AI 支援の発見についてというより、レビュー能力がどこで本当に詰まっているかの話だ。
-
-> PR 本体はトリガー条件について慎重だ：正しい入力（長さが4の倍数）では決して発火しない——破壊は不正入力でのみ起きる。そしてそれこそ、サーバーは到着を前提にすべき種類の入力だ。
-
-[`🔗 OpenJDK PR #32781（2026-09-09 作成、2026-11-04 自動クローズ）`](https://github.com/openjdk/jdk/pull/32781) · [`🔗 CVE-2026-114938`](https://www.cve.org/CVERecord?id=CVE-2026-114938) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50558906)
-
----
-
-## 5. 無名の「Gestalt」が盲評デザインベンチマークを制覇 — HN の裁定：成果物を見せて
-
-- **Velocity:** ▮▮ rising
-- **Source:** contralabs.com · HN 103+ pts · 約9時間前 (~19:03 UTC+8)
-- **Tags:** `benchmarks` `design` `ai-models` `elo` `leaderboard`
-
-Contra Labs と BenchFlow の Frontier Design Benchmark は、Contra のマーケットプレイスから集めた33件の実案件ブリーフでモデルを評価し、**68人のプロデザイナーによる4,311回のブラインド対決投票**、35のルーブリック次元で採点する（ルーブリックとデザイナー評価の相関は r = 0.94）。17エントリーの Elo リーダーボードは **Gestalt** という名のエントリーを第1位に置いた——実デザイナー作品「Human golden」を上回り、Claude Fable 5.2、Claude Opus 5.5、GPT-6.1 Sol を抑える。だがここで検証できる話はほぼ終わりだ。ランディングページには**Elo の数値がなく、日付がなく、Gestalt の帰属がなく、「stealth」というラベル自体がどこにもない**——公開ギャラリーにもこの謎エントリーの出力は表示されない。HN 投稿者のタイトル（「2つのステルスモデルがリーダーボードに現れた、どちらも Fable 5.2 を上回る」）は、ページ上で明確に無帰属なエントリー1つにしか対応しない。スレッドの反応は一様に懐疑的だ：「どこかの AI ラボが自作ベンチマークで自社モデルを少なくとも1つ Fable 5.2 の上に置いた」、「究極の『信じてくれ、兄弟』」、そして「Gestalt という名のモデルはどこにも見つからないのはなぜか」という直球の疑問。
-
-**Why it matters:** ベンチマーク・マーケティングの季節は頂点に差しかかっている——匿名モデルが全フロンティアモデルを打ち破るという新リーダーボードは、現在の懐疑論がまさに校正済みの標的だ。面白いのは手続き面であり、これは検証可能だ：名前の分かるプロによるブラインド投票は正当な方法論だが、数値も日付もサンプル出力もないリーダーボードが求めるのは枠組みへの信頼だ。Gestalt が他のどこかに現れるかを見届けるのがいい——スレッドの名当ては GLM 5.5 か昇騰で学習した DeepSeek かと読むが、いずれも未確認だ。
-
-> スレッドで唯一実質的な観察：Kimi K3.1 Pro はページ独自の「slop」指標で高得点なのに、プロの批評では好評価——「slop」と「デザイナーの嗜好」が同じものを測っているのか、見届ける価値がある。
-
-[`🔗 Frontier Design Benchmark（Contra Labs × BenchFlow）`](https://contralabs.com/frontierdesign) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50558559)
-
----
-
-## 6. 「Anthropic は安全な AI 企業ではない」— 科学者・法学者・Hugging Face 共同創業者が IPO 週の声明に署名
-
-- **Velocity:** ▮▮ rising
-- **Source:** misanthropicstatement.com · HN 136+ pts · 約27時間前 (~01:03 UTC+8)
-- **Tags:** `ai-safety` `anthropic` `ipo` `industry` `open-source`
-
-Anthropic の公開売り出しに合わせた連合声明が Business Wire のプレスリリースとともに発せられ、misanthropicstatement.com で署名を集めている。同社は「安全ブランディングで投資家・従業員・公衆を取り込みながら、その一方で安全への誓いを静かに弱め、自己都合の規制ロビーを行ってきた」とし、結語はこうだ：**「Anthropic は安全な AI 企業ではない。我々は、より大きな善の名におけるその無謀な権力集中の試みを拒否しなければならない。」** 署名者には Steven Pinker（ハーバード）、Thomas Wolf（Hugging Face 共同創業者・CSO）、Laurence Tribe（ハーバード法科大学院名誉教授）、Stephen Fry、Rumman Chowdhury（Humane Intelligence）らが名を連ねる——AI 懐疑論の有名人と反ドゥーマーの有名人が混在するリストで、HN スレッドはこれを声明の真意と読む：これは Anthropic の自己呈示への批判であって、一つの世界観ではない。
-
-**Why it matters:** AI セーフティの枠組み替えはブログエッセイから名前の揃った連合へ移り、その打撃時刻を資本市場のイベントに合わせるようになった——声明は2兆ドルのナスダック初値から24時間以内に、上の[「Fuck Your AI Safeguards」投稿](https://ounapuu.ee/posts/2026/11/19/unsafeguards/)とほぼ同時に着地した。開発者への実務的な信号：「セーフティ」というベンダーブランドは今や争点であり、オープンウェイト陣営（Hugging Face 共同創業者を含む）が対抗ブランドの論を公の場で展開している。
-
-> 声明の中核の告発は時間経過で検証可能なほど具体的だ：「安全への誓いを静かに弱めた」——同社自身のポリシー変更履歴が、両陣営が奪い合う引用資料になる。
-
-[`🔗 The MisAnthropic Statement（署名者一覧）`](https://misanthropicstatement.com/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50548485)
-
----
-
-## 7. Garage Door Spam：500ポイントが集まったのは、シャッターからクラウドを引き剥がす話だった
-
-- **Velocity:** ▮▮ rising
-- **Source:** blog.harrison.page · HN 598+ pts · 約76時間前 (~00:15 UTC+8)
-- **Tags:** `self-hosted` `homekit` `iot` `ratgdo` `open-source`
-
-Harrison Page の投稿は今週最大の HN スレッドだが、主題は無線攻撃ではない——「spam」とは Chamberlain の myQ アプリに張り付いた広告のことで、シャッター開閉のプッシュ通知を受け取る正規の手段はそれしかなかった。彼の代替策は、オープンソースファームウェアを書き込んだ **ratgdo32** ボード2枚（1枚約62ドル）を開閉機の端子に直結し、LiftMaster の Security+ 2.0 プロトコルをローカルで話すもの：HomeKit と Siri 操作、ドアごとの Web UI、Tailscale のサブネットルートによるリモートアクセス、そして夜間に10分ごとドア開放を Slack 通知する cron ジョブ（`garage-watch`）——彼いわく、父の幼少期の水銀スイッチ式廊下灯の仕掛けをソフトウェアで再現したものだ。ratgdo プロジェクトには小さな PR もマージした。「すべてローカルで動き、クラウドは一切なし」。しかも通知は*誰が*ドアを開けたかまで分かる——myQ には一度もできなかったことだ。
-
-**Why it matters:** このパターンは毎週繰り返される——ベンダーが広告を足すかサードパーティ API を切る（Chamberlain は2023年末に後者を実行）と、オープンファームウェアのプロジェクトが需要を引き受ける。ratgdo は記憶すべき型だ：安価な ESP32 ハードを既存端子に接続、プロトコルレベルのローカル制御、クラウドは必須から任意へ降格。スレッドの勢いそのものが市場の信号だ：信頼できるローカル経路が存在する瞬間から、所有者はハードをベンダークラウドから移し始める。
-
-> Chamberlain は2023年末にサードパーティ myQ API アクセスを切断した；myQ クラウドは今もベンダーがサポートする唯一の通知経路だ。ratgdo32 のファームウェアは ESPHome/HomeKit 互換で、プロジェクトは上流 PR を受け付ける——作者の分も含めて。
-
-[`🔗 Garage Door Spam (blog.harrison.page)`](https://blog.harrison.page/garage-door-spam/) · [`🔗 ratgdo32 ファームウェア（GitHub）`](https://github.com/ratgdo/homekit-ratgdo32) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50519231)
-
----
-
-## 8. Pete Warden がローカル AI を論じる — Chrome 同梱の 4B モデルを「iPhone の瞬間」と呼ぶ
-
-- **Velocity:** ▮ steady
-- **Source:** thedataexchange.media · HN 163+ pts · 約4.4時間前 (~23:39 UTC+8)
-- **Tags:** `local-ai` `open-weights` `voice` `edge-ai` `moonshine`
-
-The Data Exchange による Pete Warden（TensorFlow Lite/Moonshine）へのインタビューは、ローカルモデルの能力はフロンティアの「数ヶ月後ろ」にあり、その差は品質ではなくマーケティングとパッケージングにあると論じる——Apache と Postgres を商用ライバルの上に押し上げた経済学が再演されつつある、というわけだ。番組のハード計算：9B モデルは4ビット量子化で4GB に収まる；Apple の256GB ユニファイドメモリ機は既に千億パラメータ級を使える速度で動かす。音声については、インターフェース品質の試金石を「部屋の向こうのパートナーに話しかけるかどうか」と定義し、レイテンシ予算は200ms 付近、彼の Moonshine は RAM 500KB の Pico マイコンで完全な音声インターフェースを動かすまでになった。彼は「複合 AI」（compound AI）陣営に断固として属し——専用小モデルのパイプラインであり、エンドツーエンド音声モデルは「どちらかといえばマーケティング用語」——Chrome が約4B パラメータのモデルを JavaScript から呼べる形で同梱していることは、LLM にとっての「iPhone の瞬間」になり得ると指摘する。推論ハードについては：GPU を彼は「買い物にタンカーを走らせようとするようなもの」と例える。注目すべきは高帯域フラッシュだ。
-
-**Why it matters:** このインタビューはローカル AI の立場に最も引用しやすい経済学の論証を与える——従量課金のない推論、監査可能なデータフロー、安定したバージョン番号の裏での静かなモデル交換なし——そして今日のセーフガード記事（第3項）と地続きだ：Warden が第一の証拠物件に挙げるのは、クラウドのガードレールにつまずくホワイトハット研究者だ。エージェントや音声プロダクトを作る人にとって、複合 AI の枠組み（独立したコンポーネント、共通インターフェースとしてのテキスト）はすぐに実行に移せる。
-
-> ハードの予言は具体的だ：Apple を見よ——潤沢な高速ユニファイドメモリと推論専用アクセラレーションが、ディスクリート GPU を推論においてオプションにするかもしれない。統合グラフィックスが表示においてそうしたように。
-
-[`🔗 Pete Warden on local AI, open models, voice interfaces（The Data Exchange）`](https://thedataexchange.media/pete-warden-moonshine/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50561508)
-
----
-
-## 9. 「OpenAI には今も WebRTC の問題がある」— 音声エージェントのトランスポートを数学で斬る
-
-- **Velocity:** ▮ steady
-- **Source:** moq.dev · HN 86+ pts · 約6時間前 (~22:03 UTC+8)
-- **Tags:** `webrtc` `moq` `voice-ai` `realtime` `protocols`
-
-Kixelated の続編（今夜 HN を回遊中）は、OpenAI のリアルタイム音声スタックが WebRTC の会議前提を引き継いでおり、それがエージェントには不適合だと論じる。WebRTC は約30ms 以上遅れた音声を積極的に落とし、再送はデフォルトで無効——人間には足りる（人は推論で穴を埋める）が、LLM には無駄だ：モデルは「コンテキストでブロックされ」発話が完結するまで答えられず、見えない再送に使える数秒の余裕がある。話す側はさらに厄介で、TTS はリアルタイムより速く音声を生成するため WebRTC エージェントはパケット間で人工的に寝るしかなく、落ちたパケットは復元不能；Opus FEC が守れるのは単一パケット損失だけで、輻輳損失は連発する。提案される代替は Media over Quic：サブスクリプションごとのレイテンシ予算（音声対音声は500ms、正確な STT→LLM→TTS は約5秒で1本の接続を共有）、タイムスタンプ基準の再生、トラック差し替えによる割り込み。記事は封筒の裏の計算（64Kbps の Opus 1秒 ≈ 8KB）と粗い個人デモを持つ意見稿であると率直だ——そして WebRTC 自体を直すという逃げ道が10年止まっていることも指摘する：playout-delay RTP 拡張は Google の libwebrtc で ~2016年からビデオ専用のまま。
-
-**Why it matters:** 音声エージェントは急速に出荷されており、悪いネットワークでの失敗モードは誰も見直していないトランスポート選択だ——エージェントに「もう一度言って」と言わせるのは、50年前の会議予算が遅いパケットを無価値と決めつけるからだ。MoQ の代替（レイテンシ予算を使い切るまで再送）は試作できるほど具体的で、作者はまさにそれをやる Pipecat の PR をリンクしている。
-
-> ゲートキーピングの観察が最も長く残る一節かもしれない：WebRTC のエージェント不適合な再生挙動への修正は、約10年前に拡張としてマージ済みで——ビデオ限定のまま——前に進めるには Google の合意が要る。
-
-[`🔗 OpenAI still has a WebRTC Problem (moq.dev)`](https://moq.dev/blog/webrtc-is-still-the-problem/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50560461)
-
----
-
-## 10. Chrome の AI 機能が月「数百GB」の帯域を食べているという指摘 — ただし一人の管理者の測定値
-
-- **Velocity:** ▮ steady
-- **Source:** perishablepress.com · HN 86+ pts · 約3.2時間前 (~00:51 UTC+8)
-- **Tags:** `chrome` `browser` `privacy` `bandwidth` `on-device-ai`
-
-Jeff Starr（Perishable Press）の報告：数ヶ月前からサーバー側の帯域使用量が「天井を突き破り」、Chrome の**「AI innovations」とオンデバイス AI 設定**（デフォルト有効と報告）を一つずつ無効化したところ、ネットワークモニタはトラフィックが「ほぼフラットライン」になったと示し、Chrome に起因するとされる使用量は、文字通り月に数百GB に及ぶ規模だという。記事自身が証拠基盤を率直に明示している：設定ページのスクリーンショット1枚、アクティビティモニタの観察1回、「お気に入りのネットワークモニタで自分で再現してほしい」という招待。ログも前後対比表もデバイスや OS の詳細もない——これは一人の管理者の逸話であり、測定研究ではない。スレッドの議論もそれ相応に扱っている。
-
-**Why it matters:** 数値が再現されるかは別として、それが提案するチェックは安価で、根っこの問いは生きている：モデルを周期的に同期するオンデバイス AI 機能は、マシンの群れの上で重大なトラフィックを動かせる——そして出口の請求書でそれを見るのは IT 管理者だ。Chrome を大規模に管理するなら、この記事の価値は監査すべき設定ページと一晩で終わる実験にある——そしてタイミングは興味深い。直前の項のローカル AI 経済論と同じ週に浮上している。
-
-> 規模は未検証として扱うべきだ：記事に測定期間も手法もない。実行可能な内容は設定の位置と「自分で再現せよ」という方法の方だ。
-
-[`🔗 Chrome AI features wasting much bandwidth (perishablepress.com)`](https://perishablepress.com/chrome-ai-wasting-much-bandwidth/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50562636)
-
----
-
-## 11. Foolscap: 本を読むだけで、一字も書かないライティングアプリ
-
-- **Velocity:** ▮ steady
-- **Source:** foolscap.works · HN 98+ pts · 約7時間前 (~21:03 UTC+8)
-- **Tags:** `writing-tools` `ai` `show-hn` `publishing`
-
-本日の Show HN：Foolscap は自分を「あなたの本全体を知っているライティングアプリ」と売り出す——書いている最中に「何が呼応し、何が宙ぶらりんかを気づき、あなた自身の言葉で場所を示す」、原稿の構造関係と未回収の伏線を可視化する。差別化は耐力壁であり、端的に宣言されている：**「あなたのために一文字も書かない（It never writes a word for you）。」** これはライティング AI の分析側——連続性、伏線回収、宙に浮いた設定——であり、生成側を持たない、生成してくれるツール群とは正面から異なる位置だ。プライバシーについては、あなたの文章は AI 学習に使われず、本ごとのプライベートモードでは「その何ものも AI に渡らない」という——つまりデフォルトではクラウド AI がループ内にいることを示唆する。スレッドの議論は予想通りそのものだ：生成なき構造分析は、書き手が本当に欲しい機能なのか、それとも同じ道の一歩なのか。
-
-**Why it matters:** AI ライティングツールが2年間「より多く生成すること」を競ってきたあと、逆張り——すべてを読み、一字も書かない——自体がカテゴリーになりつつある。注視すべき設計選択はデフォルトだ：オプトアウトしない限り原稿をクラウド AI に送る分析コンパニオンは、ローカルファーストの売り文句とはまったく異なる信頼の命題であり、書き手はどちらなのかを問うだろう。
-
-> Show HN スレッドは、この種のポジショニング合戦が公の場で決着する場所だ——「あなたのために書かない」という一文が担っているのは、通常プライシングページの役割だ。
-
-[`🔗 Foolscap`](https://foolscap.works/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50559749)
-
----
-
-## 12. Launch HN: Onlook が実コードベース上のビジュアルキャンバスとして再構築 — エージェント持ち込み方式
-
-- **Velocity:** ▮ steady
-- **Source:** GitHub · HN 50+ pts · 約3.5時間前 (~00:33 UTC+8)
-- **Tags:** `design-tools` `developer-tools` `open-source` `agents` `yc`
-
-Onlook（YC W25）が本日 Launch HN で再始動した：Apache-2.0 のデスクトップアプリ（27.3k stars）で、手元の任意の git リポジトリを開き、自分の dev サーバーを走らせ、動いているアプリを無限キャンバスに載せる。モバイル/タブレット/デスクトップのフレームが並び、デザイナーは後で作り直されるモックアップではなく、実行中のアプリそのものを編集する。編集はビジュアルにもチャットにも対応し、**エージェント持ち込み（bring-your-own-agent）**方式：同梱モデルはなく、既存の Claude Code か Codex アカウントを接続し、MCP コネクタも使える。変更は安全な worktree コピーに落ちて、ワンプレスのプルリクエストで出荷される。自己完結 HTML/PNG/JPEG/PDF のエクスポート、ローカルファースト（ソースビルドにアカウント不要）、現時点では macOS のみで Windows/Linux はウェイトリスト。現行アプリはゼロからの再構築で——README は旧ブラウザ版（v1 ブランチ）と Electron アプリ（`onlook-dev/desktop`、2025年7月から休止）を前史として指す。
-
-**Why it matters:** デザインツール対エージェントの境界は両側から収束している——Figma はコードを足し、エージェントはピクセルを足す——Onlook の賭けは、永続的な位置は動いているアプリの上で直接デザインし、既に払っているどんなエージェントでも使うことだ、ということだ。エージェント持ち込みは静かな価格表明でもある：ツールはあなたのトークンにマージンを乗せない。これは珍しくなりつつある。
-
-> 「キャンバスが dev サーバーを走らせる」という構造の意味：フレームワーク対応は自分のツールチェーンから継承される——dev サーバーがレンダリングできるものは、何でもキャンバスに映る。
-
-[`🔗 onlook-dev/onlook（GitHub）`](https://github.com/onlook-dev/onlook/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50562320)
-
----
-
-## 13. Ghost-Downloader-3 が一日で2リリース — そのまま trending へ
-
-- **Velocity:** ▮ steady
-- **Source:** GitHub Trending · 本日 +449★ (~00:40 UTC+8 リリース)
-- **Tags:** `download-manager` `open-source` `qt` `chinese-oss` `cross-platform`
-
-中国発オープンソースのダウンロードマネージャ Ghost-Downloader-3（12.4k stars、本日 +449）が、**本日連続リリースの v4.5.9 と v4.5.10**（v4.5.8 は昨日）の勢いでトレンドに乗った。v4.5.10 はアラビア語・マレー語・トルコ語を追加し翻訳を Crowdin 管理に移行、Linux パッケージが fcitx5 入力メソッドを最初からサポート、Aria2 RPC のサブフォルダと相対パス互換を改善、v4.5.9 由来の「言語が中国語に固定される」を含む i18n と UI のバグ群を修正した。プロジェクトのアーキテクチャこそが見どころだ：Qt コアにロード可能な**フィーチャーパック**——m3u8 ストリーミング、BitTorrent、eD2k、ビリビリ——加えて HuggingFace、arXiv、GitHub、yt-dlp リンクの内蔵ハンドラ。Windows（x86_64/arm64）、macOS（Apple Silicon/Intel）、Linux（AppImage/deb/tar.xz）、Android に配布され、全アセットに SHA256 チェックサムが付く。メンテナは開発減速を明言している：「学業のため、更新頻度は下がります。」
-
-**Why it matters:** モデルリリースの季節、HuggingFace と arXiv のリンクは現実のダウンロード負荷になっており、この2種のホストに第一級のハンドラを持ち——さらにマルチ接続加速も持つ——ダウンローダーが食べているのは流行アルゴリズムではなく実需要だ。フィーチャーパック設計は持続可能なオープンソースの小さな教科書でもある：プロトコル対応は任意モジュールとして出荷され、コアはメンテナの時間が縮んでもビルド可能なまま保たれる。
-
-> コピーしたいリリース衛生：全アセットに SHA256 チェックサム、v4.5.10 のノートは自分が v4.5.9 のどのリグレッションを直したかを明示する。
-
-[`🔗 XiaoYouChR/Ghost-Downloader-3（GitHub）`](https://github.com/XiaoYouChR/Ghost-Downloader-3) · [`🔗 リリースノート: v4.5.10`](https://github.com/XiaoYouChR/Ghost-Downloader-3/releases)
-
----
-
-## 14. NVD の11月19日バッチ：Mandiant が .NET 反 CSRF ライブラリに 9.3、Meilisearch の DoS 修正、Geany のコマンドインジェクション
-
-- **Velocity:** ▮ steady
-- **Source:** NVD / cve.org · 11月19日公開レコード（最初の1件 ~10:17 UTC+8）
-- **Tags:** `cve` `dotnet` `meilisearch` `geany` `vulnerability`
-
-昨日の NVD バッチから動くべき3件。**CVE-2026-131914** —— ASP.NET 上の **Idunno.AntiCsrf ≤ 0.9.1 Beta** のダブルサブミット Cookie 対フォームフィールド検証における信頼できないデータの逆シリアル化で、「リモートの未認証攻撃者……がオブジェクトインジェクション経由でコードを実行できる」；**Mandiant が CVSS 4.0 9.3 を採点**（`mandiant-cve@google.com`、記録がまだ `Received` の段階での Secondary 指標）。**CVE-2026-132750** —— Meilisearch 1.55.1 未満および 1.56.x は 1.56.1 未満において、フィルタ解析に二次メモリ消費経路がある（検索インフラ向け DoS プリミティブ）；修正は出荷済み——11月2日の 1.56.1 と11月16日の 1.57.0。**CVE-2026-132756** —— Geany 2.1.0 まで、開いた文書内の埋め込みシェルコマンド経由の OS コマンドインジェクション（8.5）。3件すべてのスコアは VulnCheck か Mandiant の採点で、NVD の分析はまだどれにも追いついていない。
-
-**Why it matters:** どれも表紙を飾るワームではないが、最初の1件は警告だ：セキュリティ*支援*ライブラリも攻撃面だ——検証経路で攻撃者制御データを逆シリアル化する反 CSRF ライブラリは、自らの存在意義を反転させる。ベンダー自己採点でない Mandiant からの 9.3 は、研究者が本気だったことを物語る。Meilisearch の運用者は 1.56.1+ であることを確認すべきだ；修正チェーンは既に公開済みで、これは待ちではなくバージョン確認の話だ。
-
-> スコアの出所は、いつもの通り：9.3 は `Received` 記録に乗った Mandiant の CVSS 4.0——背後に NVD の分析はまだなく、記録はまだ動き得る。
-
-[`🔗 CVE-2026-131914（Idunno.AntiCsrf）`](https://www.cve.org/CVERecord?id=CVE-2026-131914) · [`🔗 CVE-2026-132750（Meilisearch）`](https://www.cve.org/CVERecord?id=CVE-2026-132750) · [`🔗 CVE-2026-132756（Geany）`](https://www.cve.org/CVERecord?id=CVE-2026-132756)
-
----
-
-## 15. 「このアーキテクチャは設計されたのではなく、積み上がった」— 4004 から 486 への x86 物語
-
-- **Velocity:** ▮ steady
-- **Source:** pikuma.com · HN 177+ pts · 約29時間前 (~23:03 UTC+8)
-- **Tags:** `cpu-architecture` `history` `x86` `intel` `retrocomputing`
-
-Gustavo Pezzi の長文（2026年10月、HN で再浮上）は x86 の系譜を、電卓メーカー Busicom のために生まれた4ビットの 4004 から 8086/8088、286、386、486 までたどり、ISA は歴史記録として読むのが最善だと論じる。積み荷はすべて、工学の服を着たビジネス判断だ：リトルエンディアンとレジスタセットは CTC が設計した **Datapoint 2200** 端末に遡る（Intel ではない）；AX/BX/CX/DX が存在するのは 8086 が 8080 に対して*ソース*互換を提供したから；セグメンテーション（segment × 16 + offset）は16ビットレジスタで1MB に届く方法であり、640KB の DOS 制限は CPU ではなく IBM のメモリマップ選択の結果だ。286 のプロテクトモードは出られず——IBM のキーボードコントローラリセットハックと A20 ゲートを生んだ（Intel がこれを捨てたのは2013年 Haswell）——Gates はこのチップを「brain-damaged」と呼んだ。386 は32ビットレジスタとページングを足したがシングルソースで、AMD 訴訟の火種となった；486 はアーキテクチャでなくエンジンを変え、5段パイプラインが最適化の規則をひっくり返した（LOOP は `dec/jnz` より遅くなった）。
-
-**Why it matters:** 人々が今も呪う x86 の互換性負債のすべて——A20 ゲート、セグメント演算、レジスタ名——は1971〜1989年のどこかの納期か契約に遡れ、記事はその証拠を全部残している。エミュレータを書く人、レトロ開発をする人、単に ISA 設計について言い争う人にとって、「互換性がなぜ無期懲役なのか」についての最もきれいな単ファイル叙述だ。
-
-> 命名の落ち着き先が論旨の着地点だ：486 の後継は「586」として商標登録できず、Pentium になった——競合が使い方を学んでしまった番号方式の代わりに、マーケティングが座った。
-
-[`🔗 The History Behind the x86 CPU: 4004 to 486（Pikuma）`](https://pikuma.com/blog/history-of-x86-4004-to-486) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50546967)
-
----
-
-## 16. 「ソフトウェア企業はホームコンピューティングを殺そうとしている？」— 7月のエッセイがその時を迎える
-
-- **Velocity:** ▮ steady
-- **Source:** lateblt.livejournal.com · HN 174+ pts · 約20時間前 (~08:03 UTC+8)
-- **Tags:** `essays` `subscriptions` `ownership` `windows` `industry`
-
-lateblt の2026年7月の LiveJournal エッセイが174ポイントに再浮上した：ソフトウェアは摩耗しない、ゆえに買い切り市場は構造的に終わっている——そして業界の答えは、ローカルコンピューティングを借りた方がましなほど惨めにすることだ。証拠は20年にわたる：Windows 製品認証（2001）が1ライセンス多マシンインストールを終わらせ、Windows 11 の React Native スタートメニューと TPM 2.0 の門番、ディスクなしで出荷される GTA 6、2013年の Adobe CC 転換、サブスクリプションに加えて「Software Assurance」まで要求するオンプレミス Exchange——彼の類比：致命的な設計欠陥を抱えた車会社が「問題を直すためにすべての顧客から500ドルを払わせる」。エッセイの最も鋭い転回は TempleOS の作者 Terry Davis への共感——「ファイル権限はコンシューマ製品に属さない」と引用し——そして Linux すら UNIX からこれらの概念を継いだと指摘する点だ。結論：それは「あなたがコンピュータソフトを使う能力に対する能動的な戦争」であり、作者はそれが終わるとは思っていない。
-
-**Why it matters:** このエッセイは、所有対レンタルの論証を言葉にしている——そしてその論証は具体的な戦いの中で繰り返し再浮上する：myQ の広告（第7項）、シャッター型のファームウェア乗っ取り、「ローカルファースト」をマーケティング文句にするクラウド任意ツール。趣味人の翼から書かれているが、同じ論理こそ「オフラインで動く」が2026年にエンタープライズツールの売り文句に戻ってきた理由だ：デフォルトがローカルでなくなったので、ローカルは売る機能になった。
-
-> シャッターのスレッドと並べて読む価値がある：同じ診断で、片方は宣言文、もう片方は124ドルのレシートと cron ジョブだ。
-
-[`🔗 Software companies are trying to kill home computing?（lateblt）`](https://lateblt.livejournal.com/526188.html) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50554010)
-
----
-
-## 17. Fanzines.app: 8ページ小冊子の折りを、ブラウザで解く
-
-- **Velocity:** ▮ steady
-- **Source:** krthr.co · HN 159+ pts · 約6.8時間前 (~21:15 UTC+8)
-- **Tags:** `zines` `print` `front-end` `diy` `browser-tools`
-
-Wilson Tovar（krthr）が彼の fanzines.app の背後にある印刷面付け問題を解説する：A4 を1枚、半分に3回折り、中央の折り目にハサミを入れると、ホッチキス不要の8ページ小冊子になる——しかし平置きのレイアウトは誰の味方もしない。折りはページを奇妙な位置に落とし、上段は逆さで印刷される（6・5・4・3ページが180度回転して、Back/Cover/1/2 の段の上に）。彼は Photoshop で写真を回し列を確認するのに疲れ、アプリがブラウザで面付けをするようにした：内容を小冊子の論理ページに置けば、印刷可能な平置き版が生まれる。記事自体が折り方の親切な入門でもある——あの図だけでも訪れる価値がある。
-
-**Why it matters:** 単一目的のブラウザツールが Show-HN 流の注目を勝ち取り続けるのは、正確に一箇所の摩擦を取り除き、何も要求しないからだ——アカウントなし、プライバシー配慮型ではアップロードなし、インストールなし。面付けは、計算機の助けに曖昧さが一切ない稀な問題でもある：折りは固定幾何であり、ツールは正しく並べるか、並べないかのどちらかしかない。
-
-> 記事の ASCII 図——展開した用紙のどのセルが逆さで、ページがどんな順で落ちるか——が仕様そのものであり、4行しかない。
-
-[`🔗 Paper, folds, and what's new in fanzines.app（krthr.co）`](https://krthr.co/paper-folds-and-whats-new-in-fanzines-app/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50559719)
-
----
-
-## 18. ランサムウェア集団が JPMorgan・Visa・Mastercard に紐づく顧客データを漏出 — 経路はサードパーティのマーケティングベンダー
+## 3. 昨日の weight-space programming に続き：オープンな27Bモデルが*自らの*重みを書き換える――勾配なし、学習なし
 
 - **Velocity:** ▮▮▮ trending
-- **Source:** Wall Street Journal · HN 133+ pts · ~4.8時間前 (~07:32 UTC+8)
-- **Tags:** `security` `breach` `banking` `third-party-risk` `ransomware`
+- **Source:** Hacker News · 237+ pts · ~4h 前 (~00:15 UTC+8)
+- **Tags:** `ai-research` `weight-space-programming` `self-improvement` `arxiv`
 
-WSJ の報道によれば、**n0n** として追跡されているランサムウェア集団が、JPMorgan Chase・Visa・Mastercard にサービスを提供するサードパーティのマーケティングベンダーから窃取したデータを公開しました。3社いずれも「標的はベンダーであり、中核システムではない」としています。漏出を報じた記事（cybernews、MSN 経由で配信）によれば、**JPMorgan Chase の最富裕層カード会員約 16,000 名**のメールアドレスと電話番号が含まれるといいます。一方、銀行側の声明は意図的に狭く「攻撃者がアクセスしたのはこれらベンダーが保持するマーケティングデータの一部であり、一部の顧客名とメールアドレスが含まれる可能性がある」としています。これは火曜の「5 銀行障害」とは別のイベントです——あちらは Chase のオンプレ機器障害が他行の取引経路に波及したもの、こちらはマーケティングサプライチェーンからのデータ持ち出しで、X 上の声明で開示されました。
+昨日の項は weight-space programming のベンチマークと Edit-Ready Training を扱った。この波の2本目の論文はさらに奇妙だ。arXiv 2611.21885（Jiajun Fan ら、v1 は11月16日）、"Language Models Can Rewrite Their Own Weights"は、著者らが *self-rewriting* と呼ぶものを報告している――"the model is its own optimizer"。オープンな27Bモデルが、自身の重み・採点済みの回答・自己実行の能力を与えられ、失敗を診断しその背後の重みを書き換える。"6.6 points more accurate on problems it never saw"を達成し、8回連続のセッションで精度が上がり続け、元の重みを読まずに破損した自分のコピーを元の精度の80%超まで修復する。要旨で最も鋭い観察は、この能力が"emerges with scale"すること――同じモデル族で小型モデルは"make no edit or break themselves"。
 
-**Why it matters:** 破綻の単位は外側に動き続けています——まず銀行の中核システム（今週の障害カスケード）、次いで銀行に代わって顧客の連絡先データを保有するマーケティングベンダー。集団のリークサイトの数字が成立し、銀行の記述が「氏名とメールアドレス」にとどまるなら、ベンダーが何を失ったかと銀行が何を認めたかの落差こそ、次の開示ラウンドで見るべき物語です。
+**Why it matters:** 2日で3つの成果物――ベンチマーク、学習レシピ、そして自己編集するモデル。研究分野はこう組み上がる。昨日の項が指摘した安全上の問いも鋭くなる。重み編集がモデルが*自ら*行うことになれば、"Weight Space Misfolding"脅威モデル（11月14日）の対象は外部攻撃者だけではなくなる。
 
-> 集団名と 16,000 という数字の出所はリークサイトの報道（cybernews/MSN）であり銀行ではありません——各機関のインシデント報告が出るまで、攻撃者のフレーミングとして扱うのが正しい読み方です。
-
-[`🔗 WSJ：Visa、Mastercard、JPMorgan の顧客データがハッカーに流出`](https://www.wsj.com/finance/banking/visa-mastercard-and-jpmorgan-customer-data-leaked-by-hackers-3b5a0f87) · [`🔗 Reuters：JPMorgan・Visa・Mastercard「サードパーティベンダーが標的」`](https://www.reuters.com/legal/government/jpmorgan-says-third-party-vendors-targeted-cyberattack-2026-11-19/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50568082)
+[`🔗 arXiv: Language Models Can Rewrite Their Own Weights`](https://arxiv.org/abs/2611.21885) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50577265)
 
 ---
 
-## 19. 昨日扱った Gemini 4 Neon の続き：Models Engineering Index で 1 位に
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** git-aarvin.github.io/mei · HN 245+ pts · ~4.7時間前 (~07:35 UTC+8)
-- **Tags:** `ai-models` `benchmarks` `gemini` `engineering` `leaderboard`
-
-昨日の話は、Neon が Google のミドルティアとして $3/$15 で投入され Intelligence Index で 3 位だったこと。本日、別の独立メンテナンスの成果物——個人メンテナのプロジェクトである **Models Engineering Index**——が **Gemini 4 Neon を指数 68.0 で 1 位**に置きました。Claude Fable 5.2（65.3）、GPT-6.2 Astra（61.5）、Gemini 4 Carbon（61.4）、Claude Opus 5.5（61.1）を上回ります。面白いのは手法です。7 つのエンジニアリング ベンチマーク（CursorBench、FrontierCode、Code Migration、IOI、ProgramBench、Terminal-Bench、Vibe Code）のスコアを標準化し、モデル効果とベンチマーク効果を同時に当てはめることで、「易しいベンチマークを選んだだけで得点する」ことを防いでいます。コスト軸では Neon の倍率は 1.6×、Fable 5.2 は 6.4×——順位の逆転と価格差は別の主張であり、この指数は両方を明示しています。
-
-**Why it matters:** ベンチマーク マーケティングの季節はピークに差しかかっており（上の第 5 項の匿名「Gestalt」参照）、信頼できる対抗手段は手法の透明性です——ラボとの関係なし、公開されたフィット、全サブベンチマークの表示。昨日のミドルティア投入をフラッグシップ模型の上に置いた指数が一つあることは、ミドルがフロンティアを食うという論に対する具体的なデータポイントでもあり、Neon の価格設定はまさにその論のために設計されています。
-
-> 一人のメンテナによる集計として読むべきで、業界の一致ではありません——ただ、これはページから数字を実際に再計算できるタイプの成果物です。
-
-[`🔗 Models Engineering Index`](https://git-aarvin.github.io/mei/) · [`🔗 Google：Introducing Gemini 4 Neon`](https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50568130)
-
----
-
-## 20. OpenSSL の EVP_EncodeBlock() バッファオーバーフロー — CVE は公開、修正案は提出済み、ただし反映リリースはまだない
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** GitHub PR · HN 54+ pts · ~2.2時間前 (~10:01 UTC+8)
-- **Tags:** `openssl` `cve` `memory-safety` `tls` `c`
-
-CVE-2026-121481（2026-11-18 公開、`Awaiting Analysis`）：「入力長が INT_MAX に近い状態で EVP_EncodeBlock() を呼び出すと、エンコード出力サイズの計算がオーバーフローし、呼び出し元が用意した出力バッファの末尾を超えて書き込む可能性がある。」レコード上の **9.8**（CVSS 3.1）は CISA-ADP エンリッチメント コンテナからのもの（Secondary メトリック、org `134c704f-…`）——NVD の分析でも OpenSSL 自身のスコアでもありません。提案された修正は [PR #33652](https://github.com/openssl/openssl/pull/33652) で、nmouha が 11 月 10 日にオープンしたものの、**現在もオープンかつ未マージ**です。無効な入力（NULL バッファ、負の長さ、int に収まらないエンコード後サイズ）に `-1` を返す方式で、wolfSSL の互換レイヤと同じ発想。`EVP_DecodeBlock()` にも同様のガードが提案されています。PR の本文には「The OpenSSL SRT has asked for it to be fixed publicly; the advisory is still pending.」（OpenSSL SRT が公開修正を要望しており、アドバイザリはまだ保留中）とあります。修正を含むリリース済み OpenSSL バージョンはまだ存在しません——最新は 10 月 23 日の 4.1.0 です。
-
-**Why it matters:** Base64 エンコードは至る所にありますが、露出はアプリケーションごとに決まります。オーバーフローには攻撃者制御の INT_MAX 近い長さを `EVP_EncodeBlock()` に渡す呼び出し元が必要で、9.8 はライブラリ影響の数字にすぎず、あなたのリスクはあなたの呼び出し箇所次第。運用上の事実はアーティファクトの隙間です——CVE 公開、PR 公開、アドバイザリ保留、インストールできるものはまだ無い——ゆえに対応はアップグレードではなく棚卸し（未検証の長さで EVP_EncodeBlock を呼んでいるのはどこか？）です。
-
-> スコアの出所は例によって明記：9.8 は CISA-ADP のもので、NVD がまだ分析していないレコードに乗っています——OpenSSL 自身のアドバイザリが出ればレコードはまだ動きます。
-
-[`🔗 CVE-2026-121481`](https://www.cve.org/CVERecord?id=CVE-2026-121481) · [`🔗 OpenSSL PR #33652（オープン・未マージ）`](https://github.com/openssl/openssl/pull/33652) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50569226)
-
----
-
-## 21. Synology が DSM OAuth API に 9.8 を投入 — 修正は「2026-11-20 までに」約束、今日動かすのは緩和策
+## 4. CISA の最新 KEV バッチ：vCenter 認証バイパスと Expressway の root RCE――4件すべて期限は11月23日
 
 - **Velocity:** ▮▮ rising
-- **Source:** Synology · HN 119+ pts · ~6.1時間前 (~06:13 UTC+8)
-- **Tags:** `nas` `cve` `synology` `oauth` `self-hosted`
+- **Source:** CISA KEV Catalog · 4 entries added 2026-11-20 · deadlines 2026-11-23
+- **Tags:** `security` `kev` `vmware` `cisco` `ransomware`
 
-Synology アドバイザリ SA-26:21（2026-11-19 15:47 UTC+8 公開）：**CVE-2026-120382**。DiskStation Manager の **OAuth API** における CWE-88（引数デリミタの不適切な中立化）で、ベンダー自己採点の **CVSS 3.1 9.8**——リモートの攻撃者が任意のファイルを読み書きでき、サービス拒否攻撃も可能。DSM 6.2.4 から 7.4 系（各ブランチの具体的ビルドを明記）と BeeStation OS 1.5 に影響します。今すぐ効く緩和策は **「OAuth Service パッケージを無効化する」**。修正ビルド——DSM 7.4.1-90080-2 と 7.3.2-86009-6——は「2026-11-20 までにリリース予定」、つまりアドバイザリ公開時点では未出荷の今日の約束です。7.2.x ユーザーはブランチを越えて 7.3.2 への更新を案内されています。本日 ~04:12 UTC 時点で NVD にはこの CVE のレコードがなく、~13:25 UTC+8 と ~21:10 UTC+8 の再確認でもまだありません——CVE Program 自身のレジストリ（cveawg）にもレコードがないため、この id は予約済みだが未公開です。上記の 9.8 と CWE-88 は Synology 自身のアドバイザリの原文（ベクトル `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H`）で、アドバイザリ（Revision 1 のまま、ビルドは依然として"scheduled"——約束された当日の 21:10 UTC+8 時点でも未出荷）に対して一次確認済み。またこれは Synology として今週 2 件目——*別の* DSM 脆弱性 CVE-2026-10441 は 11-18 に KEV カタログへ登録され、3 日の連邦期限が付いています。
+11月20日、既知の悪用される脆弱性カタログ（KEV）に4件が追加され、各項目に11月23日の3日間の連邦政府修復期限が付いた。筆頭は **CVE-2026-123890**――VMware vCenter の Directory Service における認証バイパス（9.8、VMware が CNA として採点。レコードは本実行の読み取り時点で`Undergoing Analysis`、lastModified 2026-11-20T20:16Z）。修正版は 9.1.1.0200、9.0.2.0200、8.0 U3m、5.2.5 で、Telco Cloud Platform のビルドも影響を受ける。並ぶのは **CVE-2026-76466**。Cisco Expressway Series で、データベースサービスのハードコードされた資格情報とクライアント証明書検証の欠如により、未認証の攻撃者が"execute arbitrary operating system commands as root"できる（9.8、Cisco が CNA として採点）。残り2件は **CVE-2026-129448**――Apache Roller の XML-RPC 逆シリアル化 RCE（9.8）。11月17日に新しいアドバイザリとして扱ったばかりのものが KEV 入り――と **CVE-2025-42884**、SAP NetWeaver Enterprise Portal の JNDI インジェクション（6.5）。
 
-**Why it matters:** 自前クラウドの裾野は巨大です——Synology NAS は家庭の写真アーカイブから小規模事業のファイルサーバまでを担っており、大半の導入で有効なままのパッケージにおける未認証の任意ファイル読み書きは、最も速く武器化される類です。緩和策は今日チェックボックスを外すだけ。アップグレードは日付付きの約束です。
+**Why it matters:** vCenter のディレクトリサービス・バイパスに72時間の期限が付くのは、すべての VMware 環境で週末の緊急パッチ適用を駆動するタイプの登録だ。BOD 22-01 の運用者は公開日ではなく11月23日を期限として扱うべきだ。
 
-> スコアの出所：9.8 は Synology 自身のアドバイザリによるスコアで、NVD のレコードは未公開——「NVD 分析済み」と書く前に再確認を。
-
-[`🔗 Synology SA-26:21（DSM、BeeStation OS）`](https://www.synology.com/en-uk/security/advisory/Synology_SA_26_21) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50567209)
+[`🔗 CISA KEV Catalog`](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) · [`🔗 NVD: CVE-2026-123890`](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE-2026-123890) · [`🔗 NVD: CVE-2026-76466`](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE-2026-76466)
 
 ---
 
-## 22. PostgreSQL 19 リリース：REPACK (CONCURRENTLY)、プランアドバイス、並列 autovacuum
+## 5. Signal が OS の AI エージェントによる画面読み取りをブロック開始――iOS 27 と Android で、macOS は対象外
 
 - **Velocity:** ▮▮ rising
-- **Source:** postgresql.org · HN 99+ pts · ~14.2時間前 (~22:11 UTC+8)
-- **Tags:** `postgres` `database` `release` `performance` `vacuum`
+- **Source:** Hacker News · 360+ pts · ~10h 前 (~18:15 UTC+8)
+- **Tags:** `privacy` `signal` `ai-agents` `mobile`
 
-年次メジャーリリースが昨日登場。主役は運用側です。**REPACK (CONCURRENTLY)** はテーブルの bloat を読み書きをブロックせずに回収し、インデックスに合わせてデータを並べ替えることもできる——アクセスを塞ぐ `VACUUM FULL`/`CLUSTER` を置き換えます（互換性のため両コマンドは残置）。プラン安定性には新拡張 **pg_plan_advice**（「プランアドバイス」ミニ言語でプランを固定・実験）と、クエリ識別子ごとにアドバイスを保存し自動適用する **pg_stash_advice**——アプリを触らずに遅いプランを直せます。autovacuum は**並列ワーカー**でインデックスのバキュームが可能になり（`autovacuum_max_parallel_workers`）、新しいスコアリングでどのテーブルを先に処理するかを決定。クエリ実行中にページを all-visible としてマークし、将来のバキューム作業を減らします。その他：スタンバイでの read-your-writes 一貫性、サーバ再起動なしの論理レプリケーション初期化（最初の論理スロット作成時に WAL レベルを自動引き上げ）、新しい監視ビュー（`pg_stat_lock`、`pg_stat_recovery`、`pg_stat_autovacuum_scores`）。
+Meredith Whittaker の記事は、Microsoft Recall に対する Signal の手法を、OS レベルの画面読み取りエージェントを搭載し始めた2つのモバイルプラットフォームに拡張する。iOS 27 では Signal がスクリーンショット防止を有効にし、Siri の"Onscreen Awareness"がメッセージを取得できないようにする。Android では Google Gemini のようなアシスタントが画面を読もうとすると、Signal が自動的に"Screen security"設定をオンにする。記事は穴にも率直だ。信頼できるスクリーンショット防止 API がないため macOS は保護できず、一部の Android ベンダービルドもカバーできず、アクセシビリティ権限を悪用するサードパーティ製エージェント――"a skeleton key"――として Meta の Muse を名指しする。Signal は最後に Apple・Google・Microsoft への2つの要求を置く。開発者が AI によるデータアクセスをオプトアウトできる文書化された方法と、エージェントがデータにどうアクセスし処理するかの真正的な文書化だ。
 
-**Why it matters:** bloat の掃除は 10 年間、Postgres におけるサードパーティツールの形をした穴でした（`pg_repack` ユーザーはその手順をご存じのはず）。内蔵化——しかも並列に——は、テーブルをオフラインにする日常的な理由の最後の一つを取り除きます。プランアドバイスは、深夜 3 時の統計変化で良いプランが悪化するのを見てきたすべての人への静かな革命です。
+**Why it matters:** アプリ層と OS 層はデフォルトで敵同士になった。Signal はこの傾向を"an existential threat to privacy at the application layer"と呼ぶ。プライベートな内容を持つすべてのアプリが同じ決定を迫られる。Signal の技術力も交渉力も持つアプリはほかにない。
 
-> アップグレード窗口の読み方：マネージド プロバイダは初日から対応（Neon も Databricks Lakebase も数時間内にサポートを発表）——REPACK コマンドだけで、書き込みの重いテーブルのアップグレード理由になります。
+> "Signal is the canary in the coal mine, but this affects the entire ecosystem."
 
-[`🔗 PostgreSQL 19 リリース（postgresql.org）`](https://www.postgresql.org/about/news/postgresql-19-released-3449/) · [`🔗 Snowflake：Postgres 19 Repack でテーブルを圧縮`](https://www.snowflake.com/en/blog/engineering/postgres-19-repack-table-bloat/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50560357)
+[`🔗 Signal ブログ：Protecting Your Privacy`](https://signal.org/blog/protecting-your-privacy/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50572348)
 
 ---
 
-## 23. Lastbook：オフラインで「社会を再建する」ライブラリ — ローカル Gemma、オフライン地図、374 ポイント
+## 6. Mozilla：DMA から3年、iOS で非 WebKit ブラウザは依然ゼロ――"the open door feels more like a trap door"
 
 - **Velocity:** ▮▮ rising
-- **Source:** lastbook.org · HN 374+ pts · ~13.6時間前 (~22:47 UTC+8)
-- **Tags:** `offline-first` `local-ai` `preparedness` `open-source` `maps`
+- **Source:** Hacker News · 257+ pts · ~5h 前 (~23:15 UTC+8)
+- **Tags:** `browsers` `apple` `regulation` `mozilla`
 
-Lastbook はオープンソース（MIT）のデスクトップアプリで、Mac（Apple Silicon）・Windows・Linux 向けに、完全オフラインで動く生存と再建の知識ベースを同梱します。質問応答用の**ローカル Gemma 4 26B A4B**、**258,000+ の検索可能なオフライン地点**（消防署、避難所、水・医療の POI）、2,324 本のオフライン動画、そして応急処置・安全な飲料水・食品保存・重大な修理・電力・避難計画のガイド。タグラインがその位置づけを語ります：「Free, local, offline and private.」。リポジトリ（`Immortal-Protocols/lastbook`）は 11 月 12 日作成で、既に約 2,600 スターと活発な push——数日前の Show HN は 19 ポイント、昨日の再投稿は 374 ポイントを集めました。
+Mozilla のポリシー記事は代替ブラウザエンジンの成績表を作った。EU の条件はほぼ3年、日本の同等規則は約1年経つが、iOS に非 WebKit ブラウザを投入した開発者はいない。反実仮像は数字にある。DMA の選択画面以降"millions have picked Firefox, and daily use on iOS has doubled"。しかし Apple の条件は、Firefox に別の第2アプリを強制し、ブックマーク・パスワード・履歴の手動移行を求めるものだ。Apple 自身のアプリなら決して受け入れない摩擦だ。記事の結論は"The reason is simple: Apple's conditions remain unworkable."。
 
-**Why it matters:** これはローカル AI の主張（第 8 項）を一つの成果物にコンパイルしたものです。モデル、インデックス、地図、動画、接続なし。地味だが効くのがオフライン POI インデックス——四半世紀分ではなく四分の一百万の検索可能地点は、ネットが止まっても劣化しない部分であり、たいていの「オフライン百科事典」プロジェクトが飛ばす部分です。
+**Why it matters:** 規制されたアクセスが実アクセスなのかを試すケーススタディだ。条文上は満たし、結果として進入者ゼロというコンプライアンス体制の実例。ブラウザエンジンの多様性は今や AI ポリシーの問いでもある。エージェントがどのエンジンで動くかが、どのルールが適用されるかを決める。
 
-> 誕生 8 日のリポジトリが速く動いています——374 ポイントは関心であって実績ではありません。このライブラリが育つかフォークされるかを見ましょう。
-
-[`🔗 Lastbook`](https://lastbook.org/) · [`🔗 Immortal-Protocols/lastbook（GitHub）`](https://github.com/Immortal-Protocols/lastbook) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50560822)
+[`🔗 Mozilla：Why there are still no non-WebKit browsers on iOS`](https://blog.mozilla.org/en/mozilla/internet-policy/apple-ios-browser-engine-rules/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50575644)
 
 ---
 
-## 24. Jeveration：凍結した VLM が 1 回の順伝播で画像生成 — 78 ミリ秒、「既存の統一モデルより最大 122 倍高速」
+## 7. crun コンテナランタイム：共有ボリュームのコンテナがホストのファイルを上書きできる――`/proc/sys` を含む（7.8、RHEL 全線で未修正）
 
 - **Velocity:** ▮▮ rising
-- **Source:** Hugging Face デイリーペーパー · 116+ upvotes · ~24時間前 (~12:00 UTC+8, 11-19)
-- **Tags:** `ai-research` `image-generation` `arxiv` `single-forward-pass` `vlm`
+- **Source:** NVD · CVE-2026-133553 · published ~16h 前 (~12:17 UTC+8)
+- **Tags:** `security` `containers` `crun` `tocbou`
 
-Hugging Face のデイリーボード首位の論文は、凍結した視覚言語モデルを System One／決定モデル パラダイムの生成に転用します——トークンごとのデコードではなく並列予測。要旨より：「Jeveration generates a 512x512 image in 78 ms, up to 122x faster than existing unified models, while maintaining competitive image quality and dense prediction performance.」（Jeveration は 512×512 画像を 78 ミリ秒で生成し、既存の統一モデルより最大 122 倍高速でありながら、競争力のある画質と密予測性能を維持する。）1 つのチェックポイントがテキストから画像、画像から画像、密予測をそれぞれ 1 回の順伝播で担います。一貫性の難問——1 つのプロンプトに多数の有効な画像が許され、並列予測は収束しなければならない——は、全位置を共有ランダム状態で条件付けることで解かれ、モデルが「直接の画像監督の下ではこの状態を無視しがち」なため、離散画像コード上の学習分布がこの一度の順伝播を導きます。
+Red Hat の CNA が、Podman の土台である OCI ランタイム crun の欠陥を公開した。`tmpcopyup` でマウントされた tmpfs にファイルをコピーする際、crun は"opens the destination a second time by name"。生成中のコンテナと書き込み可能なボリュームを共有するコンテナが、2回のルックアップの間でそのパスを差し替えられると、crun は"copies image files onto host files, including files under /proc/sys"。レコードは7.8（`Secondary`、CNA 自己採点。NVD は`Awaiting Analysis`）。Red Hat 自身の修正状態データは crun を RHEL 8・9・10 の全線で`Affected`とし、OpenShift Container Platform 4 と 5 は`Under investigation`のまま。crun の最新リリース（1.31、11月12日）はレコードより前で、レコードにも Red Hat のデータにも修正版はまだ示されていない。
 
-**Why it matters:** 決定モデル陣営（今週の HeyGen Decision 1、Perplexity の Decider 系）に生成側の展示品ができました。78 ミリ秒は自己回帰型画像デコーダが到底届かないレイテンシ予算です。生成と密予測を 1 つのチェックポイントに統一することは、複合モデルの夢を成果物として述べたものです。常套の留保は同じ——512×512 と論文自身のベンチマーク セットが「競争力のある」を定義しています。
+**Why it matters:** この種の欠陥はコンテナ/ホスト境界を*内側から*破る。カーネルのエクスプロイトは要らない。共有ボリュームとレース条件だけでいい。修正リリースが出るまでの実務的な緩和は、信頼境界をまたぐ書き込み可能ボリュームの共有を止め、2回目のルックアップを閉じる crun リリースを監視することだ。
 
-> 手法の系譜こそが物語です。決定モデルが判断に使う「高速な並列予測」という同じ枠組みが、ピクセルに適用された。
-
-[`🔗 arXiv：Jeveration (2611.24738)`](https://arxiv.org/abs/2611.24738) · [`🔗 Hugging Face 論文ページ`](https://huggingface.co/papers/2611.24738) · [`🔗 Carol-lyh/Jeveration（GitHub）`](https://github.com/Carol-lyh/Jeveration)
+[`🔗 NVD: CVE-2026-133553`](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE-2026-133553) · [`🔗 Red Hat CVE データ`](https://access.redhat.com/security/data/cve/CVE-2026-133553) · [`🔗 containers/crun`](https://github.com/containers/crun)
 
 ---
 
-## 25. Firecrawl が Firecrawl Local を軸に再ブランディング — Rust の単一バイナリ、ローカル MCP、クラウドは Alexandria
+## 8. "If you stop writing code, you also get worse at reviewing it"――スキル萎縮のエッセイが HN フロントページに
 
 - **Velocity:** ▮▮ rising
-- **Source:** GitHub Trending · 合計 204k★ (~12:10 UTC+8 確認)
-- **Tags:** `agents` `web-scraping` `mcp` `rust` `open-source`
+- **Source:** Hacker News · 277+ pts · ~7h 前 (~21:15 UTC+8)
+- **Tags:** `craft` `ai-coding` `career` `essay`
 
-204k スターの「エージェントのためのスクレイピング」リポジトリが、位置づけの変更をきっかけにトレンドへ。11 月 19 日の README 書き換え（[PR #5855](https://github.com/firecrawl/firecrawl/pull/5855)）が一行の売り文句を「Knowledge infrastructure to make your agents smarter」に改め、**Firecrawl Local** を先頭に据えました——原文は "Run Firecrawl on your own machine as one binary that turns websites into clean markdown, plugs into your AI agent as an MCP server and serves the Firecrawl API on localhost"（自分のマシンで Firecrawl を 1 バイナリとして動かす。ウェブサイトをきれいな markdown に変換し、AI エージェントに MCP サーバとして接続し、localhost で Firecrawl API を提供する）で、crates.io からインストールできます。クラウド側は検索と **Firecrawl Alexandria**（「550+ データプロバイダ」のリサーチインデックス）を軸に再構成。何であるかは正確に：6 月の v2.11.0 以降リリースはなく、これはバージョンアップではなく位置づけ変更＋Rust バイナリです。
+Christian Ekrem の投稿は、言われてみれば当然のことを言う。他のすべての分野では練習なき技能の劣化が自明の前提なのに、エンジニアだけはエージェント出力のレビューを一日中していても腕が鈍らないと自分を説得してきた、と。彼の論証：レビューは練習ではない――"you're not really reading half of it, are you"――より深いコストは、LLM への重度の依存が努力そのものの回避を訓練することだ。"Repeated LLM usage for problem solving pounds the following premise into our brain's wiring: If something is hard, tricky or requires effort, you shouldn't even try."これは彼が批判する前提であって、主張ではない。
 
-**Why it matters:** スクレイピング カテゴリはナレッジインフラへ収束しつつあります——インデックス優先の回答を、ローカルファーストのバイナリがくさびとして押し込む形で。そして「ローカルバイナリ＋MCP」は、すべてのエージェント データツールが向かっている先の形です。セルフホスターにとって評価すべき具体的な成果物は、DB もキューもコンテナも要らない crates.io バイナリのほうです。
+**Why it matters:** 今週のハーバードの企業レベル研究（11月18日）と同時着地だ。コード出力は76%増、最終成果物は9〜11%増、ボトルネックはレビュー――この記事はその差を生むメカニズムを名指しする。エージェントコードをレビューする人が、レビューに必要なまさにその技能を失いつつあるのだ。
 
-> このトレンドは戦略シグナルとして読む：エージェントにスクレイピングを教えたリポジトリが、今は「スクレイピングの前に答えを出す層」になりたい。
-
-[`🔗 firecrawl/firecrawl（GitHub）`](https://github.com/firecrawl/firecrawl) · [`🔗 Firecrawl（firecrawl.dev）`](https://firecrawl.dev/)
+[`🔗 If you stop writing code, you also get worse at reviewing it`](https://cekrem.github.io/posts/if-you-stop-writing-code-you-also-get-worse-at-reviewing-it) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50573886)
 
 ---
 
-## 26. RegExr が自身をオフラインに — 告知には「AI ハッキング」とある
+## 9. Google 従業員が経営陣に請願：Gemini を拒む学校から Search を切るな
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 123+ pts · ~3h 前 (~01:15 UTC+8)
+- **Tags:** `google` `ai-in-education` `policy` `labor`
+
+11月14日に Google の"AI or nothing"ポリシー（Gemini/AI Overviews を無効にした学校は Search を失う）を扱ったが、内部からの反応が届いた。数百人の Alphabet Workers Union メンバーが経営陣に撤回を求める請願を出したのだ。ポリシーは2週間前の投票日に発表された。Mother Jones はそれ以降各地で抗議が起きたことを報じ、経営陣の見方を Google スタッフの言葉で伝える。彼らは"convinced that resistance to AI"は学校が"don't see the vision"だけだと。請願は、Search という代替不可能なインフラを AI 導入と結びつけるのをやめるよう求めている。
+
+**Why it matters:** 2026年の二つの動力学が1つの枠に収まっている。AI の配布が代替不可能なインフラとのバンドルで売られること、そして規制者が成し遂げられなかった監視を労働力が担うこと。このバンドルが次にどこへ着地するか（より多くの州？裁判所？）が、例外で終わるか型になるかを決める。
+
+[`🔗 Mother Jones：Google Workers Tell Their Employer Not to Punish Schools`](https://www.motherjones.com/politics/2026/11/google-alphabet-union-school-ai-protest-gemini-workers-petition/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50577901)
+
+---
+
+## 10. Epic Games が Unreal Engine を AI エージェント中心に再設計――Blueprints が退場し、Verse と Scene Graph が登場
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 54+ pts · ~8h 前 (~20:15 UTC+8)
+- **Tags:** `game-engines` `unreal` `ai-coding` `epic`
+
+IEEE Spectrum の深掘り記事（11月18日）はエンジンレベルの賭けを描く。Unreal Engine 6 は Blueprints を廃止する――"AI doesn't handle Blueprints very well"とあるスタジオ創業者は言う。バイナリとして保存されているからだ。代わりに厳格なテキスト言語 Verse を使い、OOP の actor フレームワークをエンティティコンポーネント方式の Scene Graph で置き換える。UE6 はより多くのシステムを API で公開し、"so that AI tooling can get at them without needing to fall back to slow computer use"（開発担当 EVP Marcus Wassmer）。エディタ全体をスクリプト可能にする社内計画は"Python All The Things"と呼ばれ、より多くのアセットがエージェントが直接編集できるテキストとして保存される。COO Daniel Vogel のエディタ観："You're not going to move stuff visually in the editor. Those times are gone."11月9日の UE 5.9 開発者プレビューがその最初の一口を届ける。Miro から着想を得たエージェント作業用キャンバス Unreal Canvas だ。
+
+**Why it matters:** 最も使われているゲームエンジンが*非人間のオペレーター*のために再設計されている。記事の最も鋭い一点は逆向きにも刺さる。Unreal をスクリプト可能にしたのと同じ AI が Godot への乗り換えを"trivial"にする。Epic の堀はこれからはロックインでなく速度でなければならない。（"This is why we are pivoting hard towards velocity."）
+
+[`🔗 IEEE Spectrum：Epic Games Turns to AI Coding for the Unreal Engine`](https://spectrum.ieee.org/epic-games-unreal-engine-ai) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50573681)
+
+---
+
+## 11. HippoMaps：OpenStreetMap 上の決定論的自然言語検索――ループに LLM なし
 
 - **Velocity:** ▮ steady
-- **Source:** regexr.com · HN 61+ pts · ~5.9時間前 (~06:27 UTC+8)
-- **Tags:** `regex` `security` `web-history` `legacy` `ai-hacking`
+- **Source:** Hacker News · 112+ pts · ~29h 前
+- **Tags:** `openstreetmap` `search` `nlp` `maps`
 
-一世代の開発者が正規表現を学んだテスター／ビジュアライザ RegExr が「一時的にオフライン」になりました。告知は理由を率直に名指しします：「RegExr のコードベースは老朽化しており、AI ハッキングの存在を考え、あなたのデータを守る最善の方法は、近代化と堅牢化の機会が得られるまでサイトを停止することだと判断しました。障害お詫び申し上げます！」同サイトにはアカウントとユーザー保存のパターンがあります——まさに AI 支援の攻撃経済学が理論から日常へ変えた長尾の顔立ちです。愛されたツール、老朽化したコード、小さなメンテナ、保存されたユーザーデータ。
+伸び続けている Show HN。HippoMaps は OpenStreetMap 上の完全な地図・ナビアプリで、カスタム Overpass API エンジンを持つ。だが真の主題はクエリパーサーだ。作者いわく"I started working on a deterministic (as in no LLMs used) parser of queries that translates them to the Overpass QL"。クエリはトークン化され、"何"と"どこ"は既知ブランド・スポーツ・OSM タグなどの語彙リストから解決される。モデルではない。"cafes by the Limmat 100 m from the lake in Zurich"と入力すれば構造化された Overpass クエリにコンパイルされ、即座に返ってくるほど速い。
 
-**Why it matters:** これは AI 攻撃カーブの引退フェーズです。書き直す資金がないサイトは、稼働し続けるのではなく、攻撃者を停止の理由として名指すようになった。今週の障害とエクスプロイトのカスケードには静かな尾があり、それは何千もの RegExr 型サービスが、より少ない誠実さで同じ計算をしていることです。
+**Why it matters:** あらゆる検索面が LLM で包まれている一週間に、Google Maps 級の最後の機能――自然言語による場所検索――が決定論的にできることを示す動くデモは、工学の成果であると同時にコストとレイテンシの議論でもある。スレッドは OSM コミュニティのウィッシュリストのように読める。難しい部分（クエリ理解）こそ、それが解いた部分だ。
 
-> 反実仮言う価値あり：危険にさらされていたのは正規表現パターンです——それでもシャットダウンはリスクのオッズに勝った。この計算式を、アカウントを持つすべてのホビーサービスに拡大してみてください。
-
-[`🔗 RegExr：一時的にオフライン`](https://regexr.com/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50567374)
+[`🔗 HippoMaps`](https://hippomaps.ch/) · [`🔗 Show HN 議論`](https://news.ycombinator.com/item?id=50561199)
 
 ---
 
-## 27. Platypush が音声パイプラインを再構築 — ローカルは microwakeword、中央は OpenAI、根拠資料付き
+## 12. floppy3.5：3.5インチフロッピードライブが WiFi NAS になる――Sony Mavica のために
 
 - **Velocity:** ▮ steady
-- **Source:** blog.platypush.tech · HN 71+ pts · ~7.4時間前 (~04:57 UTC+8)
-- **Tags:** `voice-assistant` `self-hosted` `wake-word` `home-automation` `platypush`
+- **Source:** Hacker News · 114+ pts · ~30h 前
+- **Tags:** `hardware` `retro` `raspberry-pi` `nas`
 
-platypush 作者 Fabio Manganiello の 11 月 19 日の記事は、2 か月で 2 度目となるセルフホスト音声アシスタントの再構築です。最も誠実なのは動機：「セルフホスト パイプラインの高い誤検知／見逃し率に不満であり、騒がしい環境や安いマイクでの発話の開始／終了検出の堅牢性の欠如にも不満だった」。新しいスタックは **openwakeword を microwakeword に**交換し（ローカル ウェイクワード）、音声認識は **assistant.openai** でローカル フォールバックに **assistant.vosk** を置き、応答は openai（クラウドまたはローカル）経由、発話は **tts.openai** か **tts.piper**。記事には完全な設定とコード変更、そして実際の部屋を相手に生き残った注意点が付いています。
+手のひらサイズのデバイス。1.44 MB FAT12 のフロッピーをスリムドライブに挿すと WiFi 経由で供給する。RP2354A フロッピーコントローラが Greaseweazle プロトコルで動き、ESP32-S3 がブリッジを務め、写真はブラウザの `floppy.local` で見えて microSD にコピーできる。90年代にフロッピーに写真を保存した Sony Mavica のようなデジタルカメラから写真を救い出すために作られた。両チップは OTA 更新に対応し、ハードウェアは1枚の自作 PCB。v1.1.0 は11月17日に品質修正付きでリリースされた。
 
-**Why it matters:** 複合 AI の主張（第 8 項）に、動く実装の台帳が加わりました。レイテンシとプライバシーが効く場所ではローカル（ウェイクワード）、精度がまだ勝る場所ではクラウド（STT）、各段に文書化されたフォールバック連鎖。「全部ローカル」の原理主義とキッチンを Amazon に預けることの間にある、実用的な中間地点です——そして勘ではなく誤ウェイク率で測られています。
+**Why it matters:** 半分はノスタルジア、半分は本当に役に立つアーカイブツール。Mavica ユーザーはみな、読めない機械とディスクの箱を抱えている。設計の見本でもある。RP2350 ファミリの1チップが Greaseweazle でフラックスレベルのフロッピー IO をこなし、1.44 MB の上に全部を載せている。
 
-> 「2 か月ごとの再構築」という間隔自体が発見です。セルフホスト音声はスタックが動く標的になるほど速く改善しています。
-
-[`🔗 音声アシスタント パイプラインの再構築（blog.platypush.tech）`](https://blog.platypush.tech/article/Rewriting-my-voice-assistant-pipeline) · [`🔗 BlackLight/platypush（GitHub）`](https://github.com/BlackLight/platypush) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50566261)
+[`🔗 bigcrimping/floppy3.5`](https://github.com/bigcrimping/floppy3.5) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50560595)
 
 ---
 
-## 28. Vint Cerf が語る TCP/IP が特許を取らなかった理由 — そして Google 後の惑星間インターネット起業
+## 13. tamserve：動画トラッキングの vLLM 流サービング――SAM 2 のコピー1つで 1 GPU に64カメラ
 
 - **Velocity:** ▮ steady
-- **Source:** seremot.com · HN 48+ pts · ~3.2時間前 (~09:06 UTC+8)
-- **Tags:** `internet-history` `tcp-ip` `openness` `interplanetary` `podcast`
+- **Source:** Hacker News · 122+ pts · ~95h 前
+- **Tags:** `computer-vision` `inference` `sam` `serving`
 
-João Tomé（元 Cloudflare）が Future Stories ポッドキャストを開始し、初代ゲストは Vint Cerf。インタビューは本物のニュースを運んできます。83 歳の Cerf は 20 年超在籍した Google を今年去り、**Tolero** の立ち上げに参加——惑星間のインターネットのためのソフトウェアを作っています。「光速は遅すぎる」。TCP/IP がなぜ特許を取らなかったかへの答えは感傷ではなく戦略です：「25 年後に我々の同盟国は誰か？分からなかった。だから、同盟国も確実に使えると保証する唯一の方法は、ただ開くことだと考えた。」逸話も持ち帰りに値します。2 週間止められなかったランダム クラッシュを友人の Steve Crocker が 30 秒で突き止めた話（「これが問題だ」——彼の協業論）、そして 1989 年の CERFnet のローンチで、ネットワーク責任者と Cisco ルータの上にキラキラ入りの瓶を叩き割った話。
+tamserve は SAM 2/EdgeTAM が持たなかったサービング層だ。公式コードは録画済み動画を1本ずつ追跡するため、多カメラ運用ではカメラごとにモデルのコピーを置くことになり、メモリが積み上がる。tamserve は全カメラを単一の共有コピーへバッチ処理する――"what LLM servers such as vLLM do for chat"。README 自体の表が証拠を出す。8カメラで GPU メモリは 8.6 GB から 2.2 GB へ、1カメラは 177 から 219 フレーム/秒へ、8カメラは 323 フレーム/秒、64カメラ――旧方式では約 70 GB――が 5.7 GB で 321 フレーム/秒。精度は"unchanged on DAVIS 2017"。Apache-2.0、Colab クイックスタート、6つのライブカメラが9つの物体を追うデモ動画付き。
 
-**Why it matters:** オープン性の議論は今週も AI ライセンス闘争で再審されています——今月早くには AI 生成コードはすべてオープンソースであるべきと主張するエッセイがラウンドのひとつを担いました。ここにはプロトコル層からの版本があり、イデオロギーではなく地政学的保険として述べられています。そして惑星間インターネットの起業は、回顧録ではなく追跡すべき具体的な新しい成果物です。
+**Why it matters:** 継続的な世界監視はエージェント時代の vision が向かう作業負荷であり、2023年にチャットがぶつかったのと同じ壁に当たる。リクエストごとのモデルコピーはスケールしない。LLM からトラッキングへバッチ共有パターンが移植されること、そこが一般化できる部分だ。
 
-> 命名の豆知識：CERFnet は SURFnet を望み、オランダに取られ、代わりに彼の名前を借りた——承諾の理由は「名付けられた人物を責める者はいない」という理屈でした。
-
-[`🔗 Vint Cerf が語る TCP/IP が特許を取らなかった理由（seremot.com）`](https://seremot.com/p/vint-cerf-on-why-tcpip-was-never) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50568861)
+[`🔗 aryamandarda/tamserve`](https://github.com/aryamandarda/tamserve) · [`🔗 Show HN 議論`](https://news.ycombinator.com/item?id=50523377)
 
 ---
 
-## 29. Frostbite：AI が設計した汎用 CPU が 4.59 倍の性能あたり電力効率を主張——但し書きは自らの脚注に
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** architectlabs.com · HN 150+ pts · ~2.1時間前 (~18:05 UTC+8)
-- **Tags:** `ai-hardware` `chip-design` `agents` `interaction-nets` `lean`
-
-Architect Labs の Redwood に続く第二弾：**Frostbite**。ISA、マイクロアーキテクチャ、RTL、検証、最終 GDS までを、新しい実行モデル——**インタラクションネット**（Lafont 1990。Rust 風の言語 **Vine** で書かれたプログラムを、並列性が明示的かつ空間的であるグラフへコンパイルし、アウトオブオーダー機構が実行時に再発見する必要がない）——を軸に agent スウォームが生成した汎用 CPU です。7nm レイアウトでの実測（GDS で 500 MHz、quad + 4 L3 ノード = 0.792 mm²）で、比較コア（「TCPU」）に対し 25 ワークロード——agent が調整に使った 10 個の検索セットと、最終評価まで取っておいた **15 個の held-out**——で **4.59 倍の性能あたり電力**と **8.77 倍の性能あたり面積**の幾何平均を報告しています（held-out セットでは 3.83 倍）。興味深いのはエネルギーの内訳：フェッチ/デコード/発行はベースラインの 27% から 6% に落ち、代わりに 26% がオンチップネットワークとハードウェアのワークスティーリングスケジューラに費やされています——その振る舞いは「いかなる人間にも仕様化されていなかった」と投稿は述べます。全体は独自の形式仕様言語（ASL）で支えられ、最終的に **80 万行超の Lean** へ低下。スウォームは 4 回の検索で挙げた 58 のアイデアのうち 37 を採用しました。
-
-**Why it matters:** 「AI がチップ全体を設計する」というテーゼの、公開された中で最も完全な主張です（OpenAI の RTL と Anthropic の Mythos-AMD 学習で今週すでにこのテーマは温まっていました——Frostbite はさらに先へ、ワークロードを GDS まで運びます）。見出しの倍数には但し書きが要りますが、投稿自身がそれを運んでいます——要約を読み飛ばさなければ。基線は冒頭で近代的でシリコン実証済みのスーパースカラー CPU と呼ばれる一方、結果セクションの脚注は TCPU をデュアル発行、インオーダー プロセッサと定義し、その正体は「法的理由で」開示できません。近代のコアの水準では控えめな基線であり、すべての数値はシリコン前です（投稿自身が認めています）。誠実な読み方：真に新しい実行モデルと、真剣な形式検証の背骨、そして Zen 6 ではなく小さなインオーダーコアに勝つことを意味する 4.59 倍。
-
-> 主張を動かすもの：約束された SPEC/PARSEC でのワイドなアウトオブオーダーコアとの比較、FPGA プレイグラウンド、次のステップとして挙げられている RTL + ISA の公開——すべて着手時に検証可能です。
-
-[`🔗 Introducing Frostbite（architectlabs.com）`](https://architectlabs.com/blog/frostbite) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50572503)
-
----
-
-## 30. GrapheneOS：「Google は OEM パートナーに GrapheneOS を、さらにはブートローダー アンロック自体をサポートしないよう働きかけている」
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** grapheneos.social（Mastodon）· HN 393+ pts · ~6.8時間前 (~05:20 UTC+8)
-- **Tags:** `android` `privacy` `bootloader` `grapheneos` `oem`
-
-GrapheneOS プロジェクトの公式アカウントが昨晩（2026-11-19 20:40 UTC）投稿：**「Google はます多くの機能とアップデートを Pixel 専用にすることで OEM パートナーを妨害しています。同時に、Google は OEM パートナーに GrapheneOS を、さらにはブートローダー アンロック自体をサポートしないよう働きかけています。GrapheneOS を直接傷つけようとしてもいます。」** 投稿は特定の OEM 名、文書、具体的機能を一切挙げません——プロジェクト自身の characterization であり、だからこそ HN スレッド（393 ポイント）は「何が検証可能か」を皆に代わって問うています。Pixel 排他性は何年も前から強化が続いており、ブートローダー アンロックを許す携帯の集合は業界全体で縮み続けています。
-
-**Why it matters:** GrapheneOS は hardened Android の選択肢——サンドボックス化された Play サービス、アプリごとのネットワーク/権限制御、セキュリティ研究者が人々に勧めるスタック。そのハードウェアの道は、この投稿が言う Google が圧力をかけている OEM 関係とブートローダー アンロック スイッチをそのまま通ります。主張が正しければ、実害は脱 Google Android を動かす（勧める）すべての人に届きます：対応デバイスのプールが増えなくなります。主張は今のところプロジェクト側の一方のみ——どちらにせよ、OEM が記録に残る発言をするのを待ちましょう。
-
-> このパターンは今週のプラットフォーム ゲートキーピングのテーマと韻を踏みます（Google の「AI なき検索」条項、Waymo の高速道路停止令）：プラットフォームの運営者が代替品も売っており、切り替えコストはあなたに降りかかる。
-
-[`🔗 GrapheneOS on Mastodon（2026-11-19）`](https://grapheneos.social/@GrapheneOS/117645038299496084) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50570479)
-
----
-
-## 31. 「これが自分で書かれたのが分かる」——工科大学院生のレポートが 2026 年でいちばん意味の重い賛辞を受けた
-
-- **Velocity:** ▮▮▮ trending
-- **Source:** em-online.bearblog.dev · HN 229+ pts · ~4.9時間前 (~15:15 UTC+8)
-- **Tags:** `education` `ai-dependence` `essays` `engineering` `writing`
-
-工学の honours 学生（Em）が、翼を羽ばたかせるマイクロ航空機の制御に関する 10 ページのレポート——緊張の 48 時間で書き上げ、すべて人間の言葉——を提出すると、指導教員の評価はこうでした：**「これが自分で書かれたのが分かる」**、続いて*「最近は AI が書いたレポートをたくさん受け取っているので」*。エッセイは、なぜこれが称賛ではなく警告として降りてきたかを解きほぐします：「AI の活用を強く推奨します」で始まり、すぐに*前提*と読まれる課題説明書。学位で最も過酷だった授業は「レンガ壁の窓のない計算機室で、AI へのプロンプティングを 1 日 8 時間続ける」ものだった。業界は世代を「高給取りのベビーシッター」へ訓練している。著者はスリップ slope を案じ——奨励されたときに使い、やがて対面で防衛しなければならないプロジェクトのレポートまで委託する——そして識字力、バイアスの識別、自ら考えることに降り着きます。
-
-**Why it matters:** 今週の人的資本スレッド——Jane Street の面接変更、agent がコード生産を 76% 引き上げながら最終成果は 9〜11% しか上げないハーバードの企業レベル研究、昨日の [We Need Smart People Who Give a Shit](https://violetpixel.com/blog/2026-11-17-we-need-smart-people-who-give-a-shit/)——の教育側の証言です。今や明示的に発行されねばならない賛辞そのものが、測定可能な文化的シグナルです：人間が書いたことが検出可能になれば、それは希少になり、それを希少にした機関こそが安心を配っています。
-
-> 最も鋭い一行は感傷ではなく構造です：学生は対面で防衛しなければならないプロジェクトで採点されながら、何も防衛する必要のない媒体を通じてそれを生産するよう訓練されています。
-
-[`🔗 "I can tell you wrote this yourself"（Em's Blog）`](https://em-online.bearblog.dev/i-can-tell-you-wrote-this-yourself/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50571189)
-
----
-
-## 32. 11 月 10 日に報じた FFmpeg の 121 件 CVE の波を受けて：9.1 「Gauss」が本日公開——修正列車の後に切られた最初のリリース
-
-- **Velocity:** ▮▮ rising
-- **Source:** ffmpeg.org · HN 170+ pts · ~8.1時間前 (~12:00 UTC+8)
-- **Tags:** `ffmpeg` `release` `multimedia` `open-source` `codecs`
-
-FFmpeg 9.1 「Gauss」が**本日（2026-11-20）公開**されました。2026-10-24 に master からカットされた 9.1 ブランチの最初の安定版で、9.0 系の末端 9.0.2 「Lei」（9 月 18 日）に続きます。チェンジログは 32 項目：libastcenc による **ASTC** テクスチャのエンコード/デコード（`.astc` と KTX 1.0 の muxer/demuxer 付き）、**大幅に改善された AAC エンコーダ**、**APV Vulkan エンコーダ**、LCEVC ペイロード統合ビットストリームフィルタ、MVR demuxer、**libcurl プロトコル**対応、DVD-Audio LPCM の demux、NVIDIA オプティカルフロー加速、iTerm2 インライン画像 muxer など。ライブラリ バージョンは一斉に前進（libavutil 61.19.100、libavcodec 63.24.100）。スレッドには構造的な注記も：FFmpeg の正典 git は現在 **code.ffmpeg.org**——プロジェクト自身の forge インスタンスに住んでいます。
-
-**Why it matters:** 10 日前、このフィードは修正表記が「through 9.0.2」「9.x before 9.0.2」だった 121 レコードの CVE の波を扱いました——9.1 はそのセキュリティ列車全体を新しいブランチへ統合する最初のマイナー リリースであり、AAC エンコーダの仕事（インターネットの半分のオーディオ パイプラインが乗るコーデック）が加わります。プロダクション付近で FFmpeg を動かす人への結論：CVE バックポートと機能開発がついに同じ木に座るバージョン ラインがこれです。
-
-> 出所の明示、いつもの通り：リリース日、ブランチ カット、ライブラリ バージョンは ffmpeg.org 自身のダウンロード ページの記述。チェンジログのハイライトは HN スレッドが運んだリリースノートです。
-
-[`🔗 FFmpeg ダウンロード：9.1 「Gauss」`](https://ffmpeg.org/download.html#release_9.1) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50569998)
-
----
-
-## 33. Jujutsu Primer：作業コピーがすでにコミットである Git 互換 VCS の実践ガイド
-
-- **Velocity:** ▮▮ rising
-- **Source:** ethanlowman.com · HN 140+ pts · ~6.4時間前 (~13:40 UTC+8)
-- **Tags:** `jujutsu` `vcs` `developer-tools` `rust` `stacked-prs`
-
-Ethan Lowman の **Jujutsu Primer**（11 月 18 日）は現時点で最良の単一ファイル `jj` 入門で、本日その HN の瞬間を迎えています。教えるメンタル モデル：既存リポジトリで `jj git init` を実行すれば、jj は git と並行して同じオブジェクトを追跡する。作業コピーは**それ自体がコミット**（すべての jj コマンドで自動スナップショット）であり、論理的な変更はそれぞれ rebase で生き残る**チェンジ ID** を持ち、コミット ID は入れ替わり続ける。競合はすべてを停止させる代わりにコミット上に記録され、op log が `jj undo`/`jj redo` を完全なものにします。そこからは revsets、git ブランチとしての bookmark、生成されたブランチ名（`push-<チェンジID>`）、stacked-PR ワークフロー——そして agent が jj-hunk のようなツールでレビュー用にコミットを分割するのが「かなり上手い」という率直な観察。 ecosystem の事実も 2 つ：リリースは機能が濃く（v0.47.1 は 11 月 5 日）、jj の作者 Martin von Zweigbergk は jj のために建てられる新しい forge **East River Source Control** の CTO です。
-
-**Why it matters:** jj の設計選択は agent 時代のワークフローに不審なほど噛み合います——自動 rebase、安定したチェンジ ID、データとしての競合、完全な undo。入門が HN のフロントページに届くのは採用のシグナルで、その下の forge のニュースはインフラのシグナルです。Git はどこにも行きませんが、「作業コピー＝コミット」のモデルは、この 10 年で最初の真剣なエルゴノミクスの挑戦です。
-
-> 試すための primer 自身の枠組み：jj と git は同じリポジトリで並走するので、この実験は構造的に可逆です。
-
-[`🔗 Jujutsu Primer（ethanlowman.com）`](https://ethanlowman.com/posts/jj-primer/) · [`🔗 jj-vcs/jj（GitHub）`](https://github.com/jj-vcs/jj) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50570628)
-
----
-
-## 34. 英国の秘密の冷蔵庫作戦：攻撃者が脆弱性を見つける前に、数万台のフリーザーがオープンなインターネットから引き離された
-
-- **Velocity:** ▮▮ rising
-- **Source:** BBC News · HN 54+ pts · ~2.3時間前 (~17:50 UTC+8)
-- **Tags:** `iot-security` `ot` `ncsc` `food-supply` `disclosure`
-
-BBC のサイバー担当記者 Joe Tidy が明かした（2026-11-20 00:02 GMT 公開。リスクが過ぎるまで報じられなかった）協調的な英国の防御：10 月下旬、冷凍コンサルタント **Omega Solutions** が、英国で最も普及している冷凍制御器——**Resource Data Management（RDM）**製——に、今年のヨーロッパの冷蔵庫ハッキングの波で攻撃された Danfoss 他の制御器と**「同様の弱いパスワードの問題」**があることを見つけました。Pen Test Partners が検証・拡張し、**NCSC、Defra、FSA** が業界電話会議を運営。スーパーマーケット、倉庫、レストラン、給油所、スタジアムに及ぶ何千もの制御器デバイスが、遠隔で、あるいは物理的にケーブルを抜いてオープンなインターネットから外され、ある大手チェーンの IT チームは「1 週間、毎日何百台もオフラインにした」といいます。背景：10 月 11〜12 日にフランスの数百サイトが Danfoss 経由で被害、11 月 1〜2 日に 7 か国の数十スーパー（ベルギーとルクセンブルクが最悪）とフランスの血液銀行が被害。フランスはイランの関与を主張し、テヘランは否定。**RDM は深刻さに異議を唱えています**——悪用には物理的なハードウェア接触が要る（「テスト環境で特定された脆弱性」で、そのテストは「我々のハードウェアの解体を含んだ」）——としつつ、最初のパッチを公開し、悪意ある活動の兆候はないと報告しています。Pen Test Partners の Ken Munro は、必要なハードウェアは eBay で安く買えると指摘：「犯罪者や国家レベルのハッカーがこれを見抜くまで、おそらく数日のことだった。」
-
-**Why it matters:** 今週の障害とエクスプロイトの連鎖の OT（運用技術）側の尾です——食料供給はデフォルト パスワードのままインターネットに露出した制御器の上で動いており、うまくいった防御は驚くほど地味でした：プラグを抜き、温度を手で監視し、パッチを当てる。これは今週 guardrails 論争の引き金になったのと同じ種の事件（第 3 項の背後の冷蔵庫ハッキング）であり、今回は防御側のプレイブック付き——そして、武器化される前に静かな協調ディスクロージャを完了させた稀な公開例です。
-
-> 深刻さをめぐる論争は、標準的なベンダー/研究者の溝として読む——RDM は悪用に物理的なハードウェア接触が必要だと言い、PTP はそのハードウェアが eBay で安く買えると指摘する——そして NCSC はどちらにせよ、全国規模の作戦に値するものとして扱いました。
-
-[`🔗 数万台の英国の冷蔵庫が秘密作戦で保護された（BBC）`](https://www.bbc.co.uk/news/articles/c6eq49zyx7p4o) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50572430)
-
----
-
-## 35. GIMP がマージのたびに UI 全体をテストし始めた——30 年分のメニューを 13 の実ウィンドウ テストで
+## 14. Dettato：20M パラメータの音声→MIDI モデルが 1.3B に勝つ――学習には著作権録音を一切使わず
 
 - **Velocity:** ▮ steady
-- **Source:** gimp.org · HN 125+ pts · ~8.2時間前 (~11:55 UTC+8)
-- **Tags:** `gimp` `testing` `ui-automation` `open-source` `ci`
+- **Source:** Hacker News · 183+ pts · ~91h 前
+- **Tags:** `audio` `midi` `music-ai` `open-source`
 
-GIMP のニュース投稿（11 月 16 日、Harsh Verma 著。本日再浮上）は新しい **GUI テスト プラットフォーム**を説明します：各テストは実際の GIMP を起動し、本物のメニューとダイアログをクリックし、結果を読み戻す——現時点で 13 テスト、**マージごと**に自動実行。理由について投稿は正確です：ユニット テストは「実ウィンドウを開いていなかった」ため、ダイアログが開くか、メニュー項目が仕事をしたかを教えてくれなかった。そしてコアコードに直接触れる GIMP の旧来の GUI テストは頻繁に壊れた——しかもバグを検出したためではない。カバー範囲：起動とメイン ウィンドウ、Welcome ダイアログのタブ挙動と「起動時に表示」トグル、ファイル→新規のサイズ指定、ファイル→エクスポートの正しい PNG 出力、色の交換と前景色の入力、レイヤーの追加/削除、取り消し/やり直し、ズーム。
+Kobi の Dettato（11月16日発表、まだ伸びている）は 20M パラメータで SOTA の音声→MIDI 転写を報告する。"roughly 65x smaller than muscriptor"（composite 47.4）。Mirelo 独自の公開ベンチマークで、そのクローズドソースの A2M v1.1 Pro（56.1）を少し上回る composite 60.8。セットごとの F1 表も全文公開されている。見出しより価値のある正直さが2つある。モデルは"trained on absolutely no copyrighted recordings"であり、disclaimer が自ら弱点を名指しする。"one thing my model performs poor on for instance, is splitting instruments correctly"――楽譜を求める人には Songscription と Klangio を勧めている。
 
-**Why it matters:** GIMP は絡み合ったコードベースの悪夢の代名詞——あるダイアログの変更が別のダイアログを静かに壊す、まさにその種のプロジェクトです。マージごとの UI レベル テストは、先週 Claude Code チームが説明した規律——コードの大部分が agent 書きのとき、テスト スイートがマネジメントだ——と同じもので、30 年の歴史を持つボランティア プロジェクトが実行しています。そして agent 貢献者が必要とする自然なガードレールでもあります——agent は今や UI を壊せ、人間が気づく前にそれを告げられます。
+**Why it matters:** 65倍小さいオープンモデルが相手の自宅ベンチマークで勝つ、セットごとの数字と失敗モードの明示付き――ベンチマーク合戦はこうあるべきだ。転写はデータ権利でも健全な話だ。学習音声は著作権素材ゼロ、商用利用可。
 
-> 地味な数字こそが物語です：13 テストは GIMP の表面に対してごく小さなカバーですが、マージごとに走らせるプラットフォームが難しい部分で、それは完成しています。
-
-[`🔗 GIMP：グラフィカル ユーザー インターフェイス テストの改善`](https://www.gimp.org/news/2026/11/16/gimp-ui-tests/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50569985)
+[`🔗 Dettato：モデルカードとベンチマーク`](https://kobi.music/research/dettato) · [`🔗 Show HN 議論`](https://news.ycombinator.com/item?id=50526023)
 
 ---
 
-## 36. DeepMind の研究所が「AGI の後に何が来るか」を問い、超知能への 4 つの道を描く
-
-- **Velocity:** ▮ steady
-- **Source:** institute.deepmind.com · HN 81+ pts · ~9.4時間前 (~10:40 UTC+8)
-- **Tags:** `agi` `deepmind` `ai-research` `governance` `essays`
-
-Google DeepMind の研究科学者 Tim Genewein が 11 月 19 日に DeepMind の研究所サイトで発表したこのエッセイの前提そのものがニュースです：AGI は「手の届くところに来ており」、post-AGI の体制は「哲学的思弁から実証研究とガバナンスの問いへ移りつつある」。枠組み：一般知能を連続体として捉え、ASI を、数年かかるタスクでより少ない資源で人間の専門家の*集団*に一貫して勝るものと定義。移行のメカニズムとして**「認知の工業化」**、そして AGI から ASI への 4 つの経路——**モデルとデータのスケーリング、技術パラダイムの転換、agent 協調の改善、再帰的自己改善（RSI）**——それぞれに固有のダイナミクスと不確実性。求めているのは測定：「いずれ実現する道に沿って、進捗を追う厳密で信頼できる方法を築くこと」です。
-
-**Why it matters:** フロンティア ラボの研究所が post-AGI の経路を実証的アジェンダとして形式化するとき、この枠組みはエッセイの言説から、ベンチマーク インデックスや評価ハーネスと同じ機械へ移ります——今週の Models Engineering Index（第 19 項）やディシジョン モデルの波は、こうした地図が読まれる測定層です。これは 1 つのラボの、ラボ自身の枠組み込みの地図として読むもので、分野の合意ではありません。
-
-> エッセイの正直な重心：それは「AGI が手の届くところにある」を結論ではなく前提として扱っている——4 つの道は、その前提が成立するかを見つけるための研究プログラムです。
-
-[`🔗 What comes after AGI?（Google DeepMind Institute）`](https://institute.deepmind.com/essays/what-comes-after-agi/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50569519)
-
----
-
-## 37. ChatGPT for SNES：Super FX チップ上の 220 万パラメータ言語モデル、正直な但し書き付き
-
-- **Velocity:** ▮ steady
-- **Source:** bxfoundry.com · HN 101+ pts · ~11.6時間前 (~08:30 UTC+8)
-- **Tags:** `retrocomputing` `edge-ai` `snes` `language-models` `show-case`
-
-Benj Edwards（BX Foundry）がスーパーファミコン用のチャット プログラムを作りました：バージョン 0.7（日付 2026-11-02）はカートリッジの **Super FX 2** チップ上で **220 万パラメータ**の言語モデルを走らせ、一度に 1 語ずつ出力します——ブラウザでは Snes9x 経由（約 4 MB）、実機では Super FX 対応フラッシュカート（FXPak Pro / sd2snes）で動きます。第 2 のビルドは「ファクト ブック」を追加：**15 万の Simple English Wikipedia 記事**の冒頭文を MSU-1 データファイルに収め、モデルは検索ツールのように参照を選べます。学習会話は **gpt-oss-120b** が生成し、コードは AI agent が書きました——ページの正直さのセクションは設計の一部です：モデルは「約 8,000 語を知り、しばしば間違え、時に自信満々に間違える」。そして全体は「OpenAI が作り、承認したものではありません」。
-
-**Why it matters:** これはローカル AI の曲線の極値です（第 8 項）：1 キーストロークごとに一瞬待つインターフェイスが 1995 年のハードウェアで走る——合成学習データから agent 書きのコードまで、完全に AI が作った成果物。自らの記述ではおもちゃですが、言語モデルが物理的にどこで動けるかの下限を、どのベンチマーク表よりも明確に刻んでいます。
-
-> 「画面上のキーボードで答えを打ち込む」という詳細が設計制約を可視化しています：1995 年の I/O 予算に、2026 年のモデル。
-
-[`🔗 ChatGPT for SNES（BX Foundry）`](https://www.bxfoundry.com/chatgpt_snes/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50568548)
-
----
-
-## 38. 重み空間プログラミングが研究分野になりつつある：LLM がネットワークの重みを手書きし、今や「編集可能性」の学習レシピまで
-
-- **Velocity:** ▮ steady
-- **Source:** notesbylex.com · HN 105+ pts · ~62時間前（エッセイ 11-18。論文は 11-19 の新鮮なもの）
-- **Tags:** `ai-research` `interpretability` `weight-space-programming` `training` `benchmarks`
-
-フロンティア LLM がニューラル ネットワークの重みを直接読み、書き、**編集できる**というアイデアが、今週小さな文献群へ凝縮されつつあります。系譜：RikiyaT の原典「Weight-Space Programming」——GPT-6 Astra がゼロから囲碁をプレイするネットワークを構築し、自己対局の後、重みを編集することで改善した。Lex Toumbourou のエッセイ（11 月 18 日）はもっと厳しい設定で再実行——Claude Fable 5.2 が MNIST 用 CNN の**全 5,994 個の重みを「手で」設定**（フィッティング、回帰、探索は禁止）——するとモデルは 1990 年代の手作りフィルタリング技法（Sobel 風テンプレート）に手を伸ばし、Fable はこのタスクで Opus 5.5 を明確に上回りました。そして測定層：コンスタンツ大学の **2611.26408**（Ropinski & Kranz、11 月 19 日）は、LLM が駆動する重み空間プログラミングをビジョン モデル上でベンチマーク化——5 つの LLM による **2,600 超の edit プロセス**を、held-out 画像で成功、副作用、精度低下ごとに採点——し、LLM が実行する直接の閉形式重み編集を訓練中にリハーサルする **Edit-Ready Training（ERT）** を提案、GPT-6 Astra と Claude Opus 5.5 で最高の平均編集スコアを達成しました。ブラウザで重み空間プログラミングの実行を観察できる TabbyML の WebGPU プレイグラウンドも、同じ波に乗って Show HN へ。
-
-**Why it matters:** ネットワークが*編集可能になるよう訓練できる*なら、モデル改善の単位は勾配降下の 1 回から重み編集の 1 回へ変わります——解釈可能性と安全の両方への含意があります（11 月 14 日の「Weight Space Misfolding」脅威モデルにつながります）。早期、小規模ネット、ビジョン タスク——ベンチマーク自身の範囲——ですが、この方向は今やベンチマークと、訓練手法と、再現可能な実験ログを持ちます。分野はこう始まります。
-
-> クロスモデルの詳細が最も挑発的です：ERT が編集成功率を最も引き上げたのは*フロンティア*モデルでした——編集可能性は hack ではなく、スケールとともに育つ能力かもしれません。
-
-[`🔗 Weight-Space Programming は 1990 年代の研究者のようにネットワークを構築する（NotesByLex）`](https://notesbylex.com/weight-space-programming-1990s) · [`🔗 arXiv：Training Vision Models for LLM-Driven Weight-Space Programming（2611.26408）`](https://arxiv.org/abs/2611.26408) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50538977)
-
----
-
-## Metadata
+## メタデータ
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-20T12:28:42Z |
-| Items | 38 |
-| Sources tracked | 42 (Hacker News, GitHub Trending, GitHub repos, Anthropic, hexagonmath.org, Investigatory Powers Tribunal, ounapuu.ee, cve.org, contralabs.com, misanthropicstatement.com, blog.harrison.page, thedataexchange.media, moq.dev, perishablepress.com, foolscap.works, pikuma.com, lateblt.livejournal.com, krthr.co, wsj.com, reuters.com, git-aarvin.github.io, synology.com, postgresql.org, snowflake.com, lastbook.org, huggingface.co, arxiv.org, blog.platypush.tech, regexr.com, seremot.com, firecrawl.dev, architectlabs.com, grapheneos.social, em-online.bearblog.dev, ffmpeg.org, ethanlowman.com, bbc.co.uk, gimp.org, institute.deepmind.com, bxfoundry.com, notesbylex.com, rikiyat.github.io) |
+| Generated | 2026-11-20T20:26:54Z |
+| Items | 14 |
+| Sources tracked | 17 (Hacker News, GitHub Trending, CISA KEV, NVD, Red Hat security data, vendor blogs, arXiv) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
 
-[Previous day](2026-11-19.md) · [Raw .md](https://trending.md/jp/feed/2026-11-20.md) · [Archive](../archive/index.md)
+[前日](../2026-11-20.md) · [Raw .md](https://trending.md/jp/feed/2026-11-21.md) · [アーカイブ](../archive/)

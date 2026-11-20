@@ -1,0 +1,145 @@
+{
+ "generated": "2026-11-20T20:26:42.248Z",
+ "files": [
+  {
+   "file": "2026-11-21.md",
+   "items": 14,
+   "findings": [
+    {
+     "check": "status",
+     "item": 4,
+     "verdict": "ok",
+     "claim": "CVE-2026-123890 `Undergoing Analysis`",
+     "detail": "Undergoing Analysis (lastModified 2026-11-20T20:16:32.093)"
+    },
+    {
+     "check": "field",
+     "item": 5,
+     "verdict": "field-unknown-name",
+     "claim": "“no macOS”",
+     "detail": "“macOS” is not a CVE record field this check knows — the claim is about something else, or FIELD_VOCAB needs the name"
+    },
+    {
+     "check": "status",
+     "item": 7,
+     "verdict": "ok",
+     "claim": "CVE-2026-133553 `Awaiting Analysis`",
+     "detail": "Awaiting Analysis (lastModified 2026-11-20T05:18:54.487)"
+    },
+    {
+     "check": "quotation",
+     "item": 1,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 4 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 2,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 3,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 4,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 15 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 5,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 6,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 7,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 5 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 8,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 9,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 10,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 11,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 13,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 14,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "attribution",
+     "item": 6,
+     "verdict": "attribution-satisfied",
+     "claim": "Apple",
+     "detail": "a quotation is attributed to Apple (“millions have picked Firefox, and daily use on iOS has doubl…”) and a cited URL carries the party's token — the quotation arm's page set reaches the party's own artifact"
+    },
+    {
+     "check": "attribution",
+     "item": 9,
+     "verdict": "attribution-satisfied",
+     "claim": "Jones",
+     "detail": "a quotation is attributed to Jones (“convinced that resistance to AI”) and a cited URL carries the party's token — the quotation arm's page set reaches the party's own artifact"
+    }
+   ]
+  }
+ ],
+ "status_watch": [],
+ "api_calls": 0,
+ "readme_calls": 0,
+ "cited_page_calls": 0,
+ "repo_page_calls": 0,
+ "nvd_calls": 1,
+ "nvd_failed_chunks": 0,
+ "cna_calls": 0
+}
