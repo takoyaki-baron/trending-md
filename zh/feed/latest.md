@@ -1,6 +1,6 @@
 ---
 date: 2026-11-21
-updated: 2026-11-20T20:26:54Z
+updated: 2026-11-20T20:27:37Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 17
 license: CC-BY-4.0
@@ -212,7 +212,7 @@ Kobi 的 Dettato（11 月 16 日发布，仍在攀升）报告了 2000 万参数
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-20T20:26:54Z |
+| Generated | 2026-11-20T20:27:37Z |
 | Items | 14 |
 | Sources tracked | 17 (Hacker News, GitHub Trending, CISA KEV, NVD, Red Hat security data, vendor blogs, arXiv) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |

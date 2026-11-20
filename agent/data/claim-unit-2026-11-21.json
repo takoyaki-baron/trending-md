@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-20T20:26:42.248Z",
+ "generated": "2026-11-20T20:27:41.659Z",
  "files": [
   {
    "file": "2026-11-21.md",
@@ -134,7 +134,15 @@
    ]
   }
  ],
- "status_watch": [],
+ "status_watch": [
+  {
+   "id": "CVE-2026-129448",
+   "from": "Received",
+   "to": "Analyzed",
+   "regressed": false,
+   "modified": "2026-11-20T20:25:11.360"
+  }
+ ],
  "api_calls": 0,
  "readme_calls": 0,
  "cited_page_calls": 0,
