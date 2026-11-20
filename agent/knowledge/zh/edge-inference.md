@@ -610,3 +610,15 @@ Sources: [LitNews](https://litnews.ai/articles/garciaguirre-samsung-sk-hynix-mic
 [DriveVault: 2026–2028 展望](https://www.drivevault.io/blog/when-will-hard-drive-prices-come-down.html) ·
 [别买内存，压缩](https://curiousbits.nl/blog/do-not-buy-ram-compress/) ·
 [Perishable Press: Chrome AI 带宽](https://perishablepress.com/chrome-ai-wasting-much-bandwidth/)
+
+## 2026-11-20（12:43 批次）——本地 AI 论点编译成两个工件：一座离线「重建社会」图书馆、一本复合语音台账
+
+**Lastbook**（[Immortal-Protocols/lastbook](https://github.com/Immortal-Protocols/lastbook)，MIT；重提交 374 HN 分）：一款桌面应用（macOS Apple Silicon / Windows / Linux），把一套离线运行的生存与重建知识库打包在一起——用于问答的**本地 Gemma 4 26B A4B**、**258,000+ 个可搜索的离线地点**（消防站、避难所、水与医疗 POI）、2,324 个离线视频，以及从急救到疏散规划的手册。标语定位：「Free, local, offline and private」。仓库 11 月 12 日创建、已有约 2,600★ 且持续推送；几前的 Show HN 只有 19 分，昨天的重新提交拿到 374。沉睡的功能是离线 POI 索引——四分之一百万个可搜索地点是断网时不降级的部分，也是多数离线百科项目跳过的部分。八天大的仓库跑得很快：374 分是兴趣、不是履历——看它是长大还是分叉。
+
+**Platypush 两个月内第二次重建语音管线**（blog.platypush.tech，71+ 分）：作者诚实的原因——「unhappy with the high rates of false positives/negatives of my self-hosted pipeline, as well as its lack of robustness in detecting start/end of speech, especially in noisy environments and using cheap microphones」。新栈：**microwakeword** 替换 openwakeword（本地唤醒词）、**assistant.openai** 做 STT、**assistant.vosk** 作本地回退、回复经 openai 路由（云或本地）、语音用 **tts.openai** 或 **tts.piper**——完整配置与代码改动都公布了，还带着接触真实房间后幸存的那些注意事项。复合 AI 论点的可用实现台账：时延与隐私约束的地方用本地（唤醒词）、精度仍然获胜的地方用云（STT）、每段都有成文的回退链——用误唤醒率度量、不是凭感觉。两次重建间隔两个月这件事本身就是发现：自托管语音改进得足够快，整条栈是个移动靶。
+
+Sources: [Lastbook](https://lastbook.org/) ·
+[Immortal-Protocols/lastbook](https://github.com/Immortal-Protocols/lastbook) ·
+[HN](https://news.ycombinator.com/item?id=50560822) ·
+[Platypush: Rewriting my voice assistant pipeline](https://blog.platypush.tech/article/Rewriting-my-voice-assistant-pipeline) ·
+[HN](https://news.ycombinator.com/item?id=50566261)

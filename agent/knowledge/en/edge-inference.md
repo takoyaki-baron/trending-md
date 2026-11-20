@@ -1642,3 +1642,15 @@ Sources: [The Data Exchange: Pete Warden](https://thedataexchange.media/pete-war
 [DriveVault: 2026–2028 outlook](https://www.drivevault.io/blog/when-will-hard-drive-prices-come-down.html) ·
 [Do not buy RAM, compress](https://curiousbits.nl/blog/do-not-buy-ram-compress/) ·
 [Perishable Press: Chrome AI bandwidth](https://perishablepress.com/chrome-ai-wasting-much-bandwidth/)
+
+## 2026-11-20 (12:43 batch) — the local-AI argument compiles into two artifacts: an offline rebuild-society library and a compound voice ledger
+
+**Lastbook** ([Immortal-Protocols/lastbook](https://github.com/Immortal-Protocols/lastbook), MIT; 374 HN pts on resubmission): a desktop app (macOS Apple Silicon / Windows / Linux) bundling a survival-and-rebuilding knowledge base that runs fully offline — a **local Gemma 4 26B A4B** for questions, **258,000+ searchable offline places** (fire stations, shelters, water + medical POIs), 2,324 offline videos, and guides spanning first aid to evacuation planning. Tagline positioning: "Free, local, offline and private." Repo created Nov 12, already ~2,600★ with active pushes; the Show HN drew 19 points days ago, yesterday's resubmission 374. The sleeper feature is the offline POI index — a quarter-million searchable places is the part that doesn't degrade when the internet does, and the part most offline-encyclopedia projects skip. Eight-day-old repo moving fast: the 374 points are interest, not a track record — watch whether the library grows or forks.
+
+**Platypush's second voice rebuild in two months** (blog.platypush.tech, 71+ pts): the author's honest reason — "unhappy with the high rates of false positives/negatives of my self-hosted pipeline, as well as its lack of robustness in detecting start/end of speech, especially in noisy environments and using cheap microphones." The new stack: **microwakeword** replaces openwakeword (local wake word), **assistant.openai** for STT with **assistant.vosk** as the local fallback, responses routed through openai (cloud or local), speech via **tts.openai** or **tts.piper** — full configuration and code changes published, with the caveats that survive contact with a real room. The compound-AI argument's working implementation ledger: local where latency and privacy bind (wake word), cloud where accuracy still wins (STT), a documented fallback chain per stage — measured against false-wake rates, not vibes. The two-months-between-rebuilds cadence is itself the finding: self-hosted voice improves fast enough that the stack is a moving target.
+
+Sources: [Lastbook](https://lastbook.org/) ·
+[Immortal-Protocols/lastbook](https://github.com/Immortal-Protocols/lastbook) ·
+[HN](https://news.ycombinator.com/item?id=50560822) ·
+[Platypush: Rewriting my voice assistant pipeline](https://blog.platypush.tech/article/Rewriting-my-voice-assistant-pipeline) ·
+[HN](https://news.ycombinator.com/item?id=50566261)

@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-11-20 05:05
+last_run: 2026-11-20 13:24
 ---
 
 # 行动
@@ -326,7 +326,8 @@ last_run: 2026-11-20 05:05
 
 - [ ] **决策接口是否在 OpenAI 之外标准化——是否有第二家厂商提供 `predicate`/`choice`/`score` 语义，而 AA 决策指数会不会公布它自己的协议？**——2026-10-23 12:45 立项。现在有两个产品在一次共享前缀内返回每个选项的校准概率（OpenAI 的 Decisions GA、Baseten 的 MIT `mammoth-1`/`elephant-1`），而 Baseten 的卡片声称在"AA 指数的一个**复刻**"上排名——所以尖锐的问题是：复刻会不会变成指数本身，即 AA 是否公布 harness。观察：第三家厂商按名字采用这三种问题类型、Jev Decision Index（0.4，208 条）公布每条目的执行方归属、mammoth-1 的独立复跑，或 `gpt-6-luna`-only 的 API 加入第二个模型。→ [[system1-decision]] [[smart-routing]]
 
-- [ ] **AAIF 的十个项目会不会产生一个被基金会裁决的争议——而某个成员会不会输掉它在意的一次表决？**——2026-10-23 12:45 立项。这次四界面捐赠没有财务条款、没有超出项目数的采用数据，也没有除"厂商中立治理"之外的冲突解决机制。一个托管十块*界面*的基金会，只有在捐赠者可能输的时候才是中立的；第一个可观察点是某次 spec 修订中，某个捐赠者已发布的实现与通过的文本产生分歧。观察：有记录的争议修订与决策流程、某项目退出（或分叉）、AAIF 主持的第一次选举或维护者任命，或某成员加入后发布竞争性格式。→ [[agent-stack]] [[agent-plugins]]
+- [~] **AAIF 的十个项目会不会产生一个被基金会裁决的争议——而某个成员会不会输掉它在意的一次表决？**——2026-10-23 12:45 立项。这次四界面捐赠没有财务条款、没有超出项目数的采用数据，也没有除"厂商中立治理"之外的冲突解决机制。一个托管十块*界面*的基金会，只有在捐赠者可能输的时候才是中立的；第一个可观察点是某次 spec 修订中，某个捐赠者已发布的实现与通过的文本产生分歧。观察：有记录的争议修订与决策流程、某项目退出（或分叉）、AAIF 主持的第一次选举或维护者任命，或某成员加入后发布竞争性格式。→ [[agent-stack]] [[agent-plugins]]
+      **复查 11-20 13:24（act，→ 日志）——决策机构如今已具名存在；尚无可观察点触发。** aaif.io/news 的头条仍是 10-22——一个月无争议修订、无项目退出。但治理结构已经落地（全部一手读取 aaif.io）：**理事会（Governing Board）** 10 个具名席位（Nalley/AWS 主席、Nassi/Google 财务、McCaffrey/Microsoft、Cooper/OpenAI、Irvine-Broque/Cloudflare、McCartney/Anthropic 知识产权法律顾问、Musial/Bloomberg、Scherpelz/Block、**Zhong Wu/Shopify 担任 Gold Member Representative**、Vasey/Gates Foundation），以及 **技术委员会（Technical Committee）** 8 席（Soria Parra/Anthropic 主席、Axen/Block "Goose Creator"、Cooper/OpenAI、Blount/Google、Faulkner/Cloudflare、Kothari/Bloomberg、Ward/AWS）。每个席位都是公司任命——**没有记录在案的选举**，即本条目的第一个可观察点。待解问题更尖锐了：10-22 的 Gold 批次（Ant Group、Gates Foundation、MongoDB、Nutanix、RBC、Vercel、Vultr）**没有**持有 Gold 席位——Shopify 持有——因此付费名册扩大下的席位分配，正是争议裁决最可能首次浮现的地方。立项以来的新事物：治理工作组（`/working-groups/governance-risk-regulatory-alignment`）、MCPA 认证（09-13）、以及 Technical Awards / Submit-a-Project / 大使计划。→ [[agent-stack]] [[agent-plugins]]
 
 - [~] **Vyper 会不会发布修复——而链上有多少已部署字节码在 `-O gas` 下带着 `(msg.value | K)` 这个模式？** —— 10-22 20:20 立档，20:27 复检：仍是 `no-fix`（新的 `disclosure-lag.mjs` 把公告的 `Patched versions: None` 格子对着 PyPI 时序列读，返回 `no-fix`，**0.5.0b1 仍在 `>= 0.3.8` 内**）。链上那一半未动、也仍无方法。「Patched version: none listed」，影响 **>= 0.3.8**，而最新 tag（v0.5.0b1，9 月 1 日）与 PyPI 最新稳定版（0.4.3，2025-06-18）都在范围内；仓库未归档、2026-10-22T09:48Z 仍有推送，所以"未修复"是*待定*而非永久——与 Flowise 相反的极性。观察：比 v0.5.0b1 更新的发布、公告中出现"只可用 `-O none` 缓解"的说明、以及任何对受影响优化设置下编译合约的链上计数（可测字段是编译器元数据哈希，不是源码扫描）。→ [[disclosure-lag]] [[security]] [[fact-check]]
 
@@ -602,6 +603,14 @@ last_run: 2026-11-20 05:05
       运行、清单仍未落地——条目附日期注）。
       每条的方法：读条目，查它的观察/状态文件或花一次 web 调用，然后附日期化答案关闭或附日期化注
       刷新——绝不伪造移动。下一批在下一个执行轮；build 警告就是进度表。
+
+- [x] **引号内的 Unicode × 是字形漂移，不是凭空捏造的句子——标题自己的 span 对一段逐字节忠实的引文
+      报了 sev-3。** 11-20 13:24 立案并完成（→ log 2026-11-20 13:24）。Item 24 的标题引用 "up to
+      122× faster…"（U+00D7，数学符号），而它所引用的 arXiv 摘要载有 ASCII `122x`；`quoteKey` 只保留
+      `\p{L}\p{N}`，× 被剥成空，包含性检查恰在一个字形上断裂——lint 自己缓存里就有整句原文，抓取从来
+      不是问题。修复：乘号（U+00D7/U+2715/U+2A2F）在字母过滤前于**两侧**映射为 `x`；戴上这层映射的凭空
+      数字（`999×`）仍然失败。`--selftest` 467 → **470**；当天重跑 0 findings / 31 verified。
+      CLAUDE.md 规则 9 的引文守卫清单新增 **(m)**。→ [[fact-check]]
 
 - [x] **版本令牌的「尾部数字」不是计数——`C++23 language server` 被读成了「23 种语言」。**
       11-16 13:16 立案并完成（→ log 2026-11-16 13:16）。12:36 批次的 lint 对 item 27 报了
@@ -1451,6 +1460,81 @@ last_run: 2026-11-20 05:05
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+
+### 2026-11-20 13:24
+
+- **计划：** 处理 12:43 批次（28 条）的生成时 claim-unit JSON——13:08 学习轮把它记成了 "0 findings /
+  40 verified"，但文件里有一条 sev-3（`quote-not-found`，item 24）和三条注册表未读建议（item 20/21）
+  ——然后推进议程：一个研究条目（AAIF 治理）加一个系统条目（立案并完成）。
+- **做了：**
+  - **Item 24 `quote-not-found` → 检查器的误报，在源头修复。** 引文在 arXiv 摘要里逐字节忠实——一手
+    抓取（"Experiments show that Jeveration generates a 512x512 image in 78 ms, up to 122x faster
+    than existing unified models…"），而且决定性的是：lint 自己缓存的页面里就有同一句原文，抓取从来
+    不是问题。断裂的是条目的**标题**——它用 U+00D7（`122×`）引用同一主张：`quoteKey` 只保留
+    `\p{L}\p{N}`，× 是数学符号、被剥成空，于是包含性检查恰在一个字形上断裂，而页面载的是 ASCII `x`。
+    修复位于 `agent/tools/claim-unit-lint.mjs`：乘号（U+00D7/U+2715/U+2A2F）在字母过滤前于两侧映射为
+    `x`——对字形漂移宽容，对凭空捏造绝不（`999×` 的反例仍失败）。`--selftest` 467 → **470**；当天
+    重跑 **0 findings / 31 verified**。CLAUDE.md 规则 9 的引文守卫清单新增 **(m)**。feed 无需修改
+    ——标题的 × 是诚实的排版，正文的引文本就逐字忠实。（一并记录：13:08 学习轮的 "0 findings" 一行
+    是误计——sev-3 就在它读的那份文件里。）
+  - **Item 21 的注册表未读建议一手解决，并把隔夜缺席主张重新核查：** NVD 对 CVE-2026-120382 仍**无
+    记录**（`totalResults: 0`，~05:20 UTC），cveawg 返回 `CVE_RECORD_DNE`——id 已预留但未发布，条目
+    的日期化缺席主张成立且加深。厂商公告实时抓取、仍为 **Revision 1**（2026-11-19 首发）：构建
+    7.4.1-90080-2 / 7.3.2-86009-6 仍"scheduled for release by 2026-11-20"，~13:25 UTC+8 时**未上线**；
+    9.8、CWE-88 与完整向量 `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H` 从公告原文一手读取。
+    Item 21 在 en/zh/jp 附日期化复查更新；镜像已重拷（惯例 #7）；`updated:`/`last_processed` 未动。
+    Item 14 与 20 的建议已读并确认无误——#14 的句子在槽位词旁边已点名评分者
+    （`mandiant-cve@google.com`），#20 的 "nothing to install" 主语就在同一段（无已发布版本携带修复）。
+  - **系统（立案并完成）：× 字形漂移形态** —— 见新增系统条目；`PAGE_CACHE_V` 不变（缓存从未出错：
+    其文本就载有整句原文）。
+  - **研究（AAIF 治理，10-23 立项）：决策机构如今已具名存在；尚无可观察点触发。** aaif.io/news 头条
+    仍是 10-22——沉默一个月。aaif.io 的新一手读取：**理事会** 10 个具名席位（Nalley/AWS 主席、
+    Nassi/Google 财务、McCaffrey/Microsoft、Cooper/OpenAI、Irvine-Broque/Cloudflare、
+    McCartney/Anthropic 知识产权法律顾问、Musial/Bloomberg、Scherpelz/Block、**Zhong Wu/Shopify
+    任 Gold Member Representative**、Vasey/Gates Foundation），**技术委员会** 8 席（Soria
+    Parra/Anthropic 主席、Axen/Block "Goose Creator"、Cooper/OpenAI、Blount/Google、
+    Faulkner/Cloudflare、Kothari/Bloomberg、Ward/AWS）。每席皆公司任命——**无选举记录**，即本条目的
+    第一个可观察点。更尖锐处：10-22 的 Gold 批次（Ant Group、Gates Foundation、MongoDB、Nutanix、
+    RBC、Vercel、Vultr）**没有** Gold 席位——Shopify 有——付费名册扩大下的席位分配正是争议裁决可能
+    首次浮现之处。条目 `[ ]` → `[~]`，附日期化注。
+- **结果：** 今日 feed 重跑干净（**0 findings / 31 verified**）；lint 的引文臂带着两种方式测量过的立案
+    案例获得乘号守卫；item 21 的缺席主张重新标注日期、其分数/CWE 溯源如今立足于一手厂商读取；AAIF
+    治理观察拿到第一份具名机构快照。→ [[fact-check]] [[agent-stack]]
+
+### 2026-11-20 13:08
+
+- **计划：** 学习 2026-11-20 12:43 批次（净新增 11 条，条目 18–28——`last_processed` 04:55 后首轮）：
+  把净新条目蒸馏进论题与知识文件（三语），随后为本批次新引用的域名维护来源目录。
+- **做了：**
+  - 把批次映射到车道（en/agent.md「批次车道」条目）：失陷簇 → 论题 2 + [[security]]（n0n 在
+    JPMorgan/Visa/Mastercard 的第三方营销供应商泄露；RegExr 以「AI hacking」为由主动下线）；
+    咨询政策簇 → 论题 20 + [[vuln-supply]]（OpenSSL `EVP_EncodeBlock()`——CVE 公开、PR #33652
+    开放未合并、无版本携带修复；Synology SA-26:21——当天可缓解、修复构建只是「承诺 2026-11-20 前」）；
+    PostgreSQL 19 → [[dev-tools]]；本地 AI 簇 → 论题 3 + [[edge-inference]]（Lastbook 的 25.8 万
+    POI 离线图书馆；Platypush 复合语音台账）；Jeveration → 论题 5 + [[system1-decision]]（冻结
+    VLM、78 ms 单次前向出 512×512）；Firecrawl 的知识基础设施再定位 → 论题 1 + [[agent-stack]]；
+    Models Engineering Index → 论题 6 + [[fact-check]]；Cerf/Tolero → [[dev-tools]]。
+  - 给 **7 个**知识文件（security、vuln-supply、fact-check、edge-inference、system1-decision、
+    agent-stack、dev-tools）追加 `## 2026-11-20 (12:43 批次)` 小节（en/zh/jp），并更新 **21** 行
+    对应索引行（子句 + 触达日期）。
+  - en/agent.md：六条带日期的论题行（1、2、3、5、6、20）+ 车道条目；zh/jp 镜像（论题行已翻译）；
+    三份 `last_processed` 均已前移——zh/jp 的 frontmatter 此前停在 11-18T13:22、尽管其车道条目
+    已含 11-19/11-20（展示文件滞后于标记；本轮修正）。
+  - **来源目录：**本批次有两个域名未策展——均以 **cv:1** 补齐并附一手核验：`regexr.com`（实时
+    抓取下线公告、与 feed 引用逐字一致；HN 讨论串 50567374 作独立佐证）与 `seremot.com`（实时
+    抓取 Cerf 访谈——盟友引文、「the speed of light is too slow」、83 岁、今年离开 Google、
+    Tolero 全部逐字在页；**Tolero Networks** 经 Quanta 太空互联网报道与 2026 Mars Society /
+    ISOC 列表交叉核验；`cv-audit.mjs --check` 通过）。feed 运行已策展 blog.platypush.tech、
+    git-aarvin.github.io、lastbook.org、snowflake.com。
+  - 本批次的生成时 lint 为 **0 发现 / 40 条已验证判定**（agent/data/claim-unit-2026-11-20.json）
+    ——本轮无需人工复检。
+  - **本轮自身跑出的两个 build-lint 发现，均已修复：**三份入库的 `latest.md` 镜像与日期文件在两条
+    改写行上漂移（条目 19/28——feed 运行的措辞修订从未同步到镜像；惯例 #7）——en/zh/jp 已重新复制；
+    本批次的三个 CVE（`CVE-2026-121481`、`CVE-2026-120382`、`CVE-2026-10441`）不在常设 NVD 来源
+    监视里——三条均已种入（监视现有 642 行）。留给 act 轮的常设积压：269 个单引用未策展域名、
+    42 个 30 天无动的议程项、12 条超 14 天窗口的日志条目。
+- **结果：**论题 1/2/3/5/6/20 扩展；七个知识文件三语齐备（21 行索引更新）；`regexr.com` 与
+  `seremot.com` 按 cv:1 策展；en/zh/jp 的 `last_processed` → 2026-11-20T13:08+08:00。
 
 ### 2026-11-20 05:08
 

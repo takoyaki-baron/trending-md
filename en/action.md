@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-11-20 05:05
+last_run: 2026-11-20 13:24
 ---
 
 # Action
@@ -636,7 +636,7 @@ last_run: 2026-11-20 05:05
       attribution; a genuinely independent mammoth-1 run (Base Labs' 65.9 is Baseten's own lab).
       → [[system1-decision]] [[smart-routing]]
 
-- [ ] **Do the AAIF's ten projects ever produce a contested decision the foundation resolves — and does
+- [~] **Do the AAIF's ten projects ever produce a contested decision the foundation resolves — and does
       a member lose a vote it cares about?** — filed 10-23 12:45. The four-interface donation has no
       financial terms, no adoption figures beyond the project count, and no stated conflict-resolution
       mechanism beyond "vendor-neutral governance". A foundation hosting ten *interfaces* is only
@@ -645,6 +645,21 @@ last_run: 2026-11-20 05:05
       Responses revision with a recorded decision process, a project leaving (or forking), the first
       AAIF-conducted election or maintainer appointment, or a member publishing a competing format
       after joining. → [[agent-stack]] [[agent-plugins]]
+      **Checked 11-20 13:24 (act, → log) — the decision machinery now EXISTS in name; no observable
+      has fired.** aaif.io/news is still topped by 10-22 — one month, no contested revision, no
+      departure. But the governance furniture landed (all read first-hand off aaif.io): a
+      **Governing Board** of 10 named seats (Nalley/AWS Chair, Nassi/Google Treasurer,
+      McCaffrey/Microsoft, Cooper/OpenAI, Irvine-Broque/Cloudflare, McCartney/Anthropic IP Counsel,
+      Musial/Bloomberg, Scherpelz/Block, **Zhong Wu/Shopify as Gold Member Representative**,
+      Vasey/Gates Foundation) and a **Technical Committee** of 8 (Soria Parra/Anthropic Chair,
+      Axen/Block "Goose Creator", Cooper/OpenAI, Blount/Google, Faulkner/Cloudflare,
+      Kothari/Bloomberg, Ward/AWS). Every seat is a company appointment — **no election recorded**,
+      the item's first observable. The live question sharpens: the 10-22 Gold cohort (Ant Group,
+      Gates Foundation, MongoDB, Nutanix, RBC, Vercel, Vultr) holds **no** Gold seat — Shopify does —
+      so seat allocation under a growing paid roster is where a contested decision can first
+      surface. Also new since filing: a governance working group
+      (`/working-groups/governance-risk-regulatory-alignment`), the MCPA certification (09-13), and
+      Technical Awards / Submit-a-Project / ambassador programs. → [[agent-stack]] [[agent-plugins]]
 
 - [~] **Does Vyper ship a fix — and how much deployed bytecode carries the `(msg.value | K)` pattern
       under `-O gas`?** — filed 10-22 20:20, re-checked 20:27: still `no-fix` (the new
@@ -1737,6 +1752,16 @@ last_run: 2026-11-20 05:05
       with a dated answer or refresh with a dated note — never fake movement. Next tranche next
       act pass; the build warning is the progress meter.
 
+- [x] **A Unicode × in a quoted span is GLYPH DRIFT, not an invented sentence — the title's own
+      span filed sev-3 against a byte-verbatim quotation.** filed + done 11-20 13:24 (→ log
+      2026-11-20 13:24). Item 24's title quoted "up to 122× faster…" (U+00D7, a Math Symbol) while
+      the arXiv abstract it quotes carries ASCII `122x`; `quoteKey` keeps only `\p{L}\p{N}`, so the
+      × stripped to nothing and containment broke on exactly one glyph — the lint's own cached page
+      held the sentence verbatim, so the fetch was never the problem. Fix: dimension signs
+      (U+00D7/U+2715/U+2A2F) map to `x` on both sides before the letter filter; an invented number
+      wearing the mapping (`999×`) still fails. `--selftest` 467 → **470**; live re-run 0 findings /
+      31 verified. CLAUDE.md rule 9's quotation guard list gains **(m)**. → [[fact-check]]
+
 - [x] **A version token's TAIL DIGITS are not a count — `C++23 language server` was read as "23
       languages".** filed + done 11-16 13:16 (→ log 2026-11-16 13:16). The 12:36 batch's lint
       filed `number-other-noun` on item 27, advising the feed to "quote what the page says" —
@@ -2813,6 +2838,101 @@ last_run: 2026-11-20 05:05
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-11-20 13:24
+
+- **Plan:** work the generation-time claim-unit JSON for the 12:43 batch (28 items) — the 13:08
+  learn pass had recorded it as "0 findings / 40 verified", but the file carries one sev-3
+  (`quote-not-found`, item 24) plus three unread-registry advisories (items 20/21) — then advance
+  the Agenda: one Research item (AAIF governance) and one System item (filed + done).
+- **Did:**
+  - **Item 24 `quote-not-found` → a FALSE POSITIVE of the checker, fixed at the source.** The
+    quotation is byte-verbatim in the arXiv abstract — fetched first-hand ("Experiments show that
+    Jeveration generates a 512x512 image in 78 ms, up to 122x faster than existing unified
+    models…") and, decisively, the lint's own cached page held the same sentence verbatim, so the
+    fetch was never the problem. The failing span was the item's TITLE, which quotes the same
+    claim with U+00D7 (`122×`): `quoteKey` keeps only `\p{L}\p{N}`, the × is a Math Symbol and
+    stripped to nothing, so containment broke on exactly one glyph against a page carrying ASCII
+    `x`. Fix in `agent/tools/claim-unit-lint.mjs`: dimension signs (U+00D7/U+2715/U+2A2F) map to
+    `x` on both sides before the letter filter — permissive toward glyph drift, never toward an
+    invented sentence (the `999×` negative still fails). `--selftest` 467 → **470**; live re-run
+    **0 findings / 31 verified**. CLAUDE.md rule 9's quotation guard list gains **(m)**. No feed
+    edit needed — the title's × is honest typography and the body's quote was already verbatim.
+    (Also recorded: the 13:08 learn pass's "0 findings" line was a miscount — the sev-3 was in
+    the file it read.)
+  - **Item 21's unread-registry advisories resolved first-hand, and the day-old absence
+    re-checked:** NVD still has **no record** for CVE-2026-120382 (`totalResults: 0`, ~05:20 UTC)
+    and cveawg returns `CVE_RECORD_DNE` — the id is reserved but unpublished, so the item's dated
+    absence claim stands and deepens. The vendor advisory, fetched live, is unchanged at
+    **Revision 1** (2026-11-19 initial release): builds 7.4.1-90080-2 / 7.3.2-86009-6 still
+    "scheduled for release by 2026-11-20", **not shipped** at ~13:25 UTC+8; the 9.8, the CWE-88
+    and the full vector `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H` read first-hand from the
+    advisory text. Item 21 amended in en/zh/jp with the dated re-check; mirrors re-copied
+    (convention #7); `updated:`/`last_processed` untouched. Advisories on items 14 and 20 read
+    and accepted as correct — #14's sentence already names the scorer (`mandiant-cve@google.com`)
+    beside the slot word, and #20's "nothing to install" has its subject in the same paragraph
+    (no shipped release carries the fix).
+  - **System (filed + done): the × glyph-drift shape** — see the new System item; `PAGE_CACHE_V`
+    unchanged (the cache was never wrong: its text carried the sentence verbatim).
+  - **Research (AAIF governance, filed 10-23): the decision machinery now exists in name; no
+    observable has fired.** aaif.io/news is still topped by 10-22 — one month silent. New
+    first-hand reads off aaif.io: a **Governing Board** of 10 named seats (Nalley/AWS Chair,
+    Nassi/Google Treasurer, McCaffrey/Microsoft, Cooper/OpenAI, Irvine-Broque/Cloudflare,
+    McCartney/Anthropic IP Counsel, Musial/Bloomberg, Scherpelz/Block, **Zhong Wu/Shopify as
+    Gold Member Representative**, Vasey/Gates Foundation) and a **Technical Committee** of 8
+    (Soria Parra/Anthropic Chair, Axen/Block "Goose Creator", Cooper/OpenAI, Blount/Google,
+    Faulkner/Cloudflare, Kothari/Bloomberg, Ward/AWS). Every seat is a company appointment —
+    **no election recorded**, the item's first observable. The sharpener: the 10-22 Gold cohort
+    (Ant Group, Gates Foundation, MongoDB, Nutanix, RBC, Vercel, Vultr) holds **no** Gold seat —
+    Shopify does — so seat allocation under a growing paid roster is where a contested decision
+    can first surface. Item flipped `[ ]` → `[~]` with the dated note.
+- **Result:** today's feed re-runs clean (**0 findings / 31 verified**); the lint's quotation arm
+  gained its dimension-sign guard with the filing case measured both ways; item 21's absence
+  claim is re-dated and its score/CWE provenance now rests on a first-hand vendor read; the AAIF
+  governance watch has its first named-bodies snapshot. → [[fact-check]] [[agent-stack]]
+
+### 2026-11-20 13:08
+
+- **Plan:** learn the 2026-11-20 12:43 batch (net-new 11, items 18–28 — first pass after
+  `last_processed` 04:55): distill net-new items into theses + knowledge files trilingually,
+  then maintain the source directory for the batch's newly cited domains.
+- **Did:**
+  - Mapped the batch to lanes (en/agent.md "batch lanes" entry): breach cluster → thesis 2 +
+    [[security]] (n0n's third-party-marketing-vendor leak at JPMorgan/Visa/Mastercard; RegExr's
+    voluntary shutdown citing "AI hacking"); advisory-policy cluster → thesis 20 + [[vuln-supply]]
+    (OpenSSL `EVP_EncodeBlock()` — CVE public, PR #33652 open/unmerged, no release carries the fix;
+    Synology SA-26:21 — mitigation today, fixed builds only *promised* by 2026-11-20); PostgreSQL 19
+    → [[dev-tools]]; local-AI cluster → thesis 3 + [[edge-inference]] (Lastbook's 258k-POI offline
+    library; Platypush's compound voice ledger); Jeveration → thesis 5 + [[system1-decision]]
+    (frozen VLM, 512×512 in 78 ms, one forward pass); Firecrawl's knowledge-infrastructure
+    repositioning → thesis 1 + [[agent-stack]]; the Models Engineering Index → thesis 6 +
+    [[fact-check]]; Cerf/Tolero → [[dev-tools]].
+  - Appended a `## 2026-11-20 (12:43 batch)` section to **seven** knowledge files (security,
+    vuln-supply, fact-check, edge-inference, system1-decision, agent-stack, dev-tools) in en/zh/jp,
+    and updated the **21** matching index rows (clause + last-touched date).
+  - en/agent.md: six dated thesis lines (1, 2, 3, 5, 6, 20) + the lanes entry; zh/jp mirrored
+    (thesis lines translated); `last_processed` bumped on all three — zh/jp frontmatter had been
+    stale at 11-18T13:22 despite carrying the 11-19/11-20 lane entries (display files lag the
+    marker; fixed this pass).
+  - **Source directory:** two batch domains were uncurated — both curated at **cv:1** with
+    first-hand verification this pass: `regexr.com` (offline notice fetched live; verbatim vs the
+    feed's quote; HN thread 50567374 as independent confirmation) and `seremot.com` (Cerf interview
+    fetched live — the allies quote, "the speed of light is too slow", age 83, left Google, Tolero
+    all verbatim; **Tolero Networks** cross-checked via Quanta's space-internet coverage and the
+    2026 Mars Society / ISOC listings; `cv-audit.mjs --check` passes). The feed run had already
+    curated blog.platypush.tech, git-aarvin.github.io, lastbook.org, snowflake.com.
+  - The generation-time lint on this batch showed **0 findings / 40 verified verdicts**
+    (agent/data/claim-unit-2026-11-20.json) — no hand re-checks owed this pass.
+  - **Two build-lint findings from this pass's own run, both fixed:** the three checked-in
+    `latest.md` mirrors had drifted from the dated feed at two re-worded lines (items 19/28 —
+    the feed run's wording pass never reached the mirrors; convention #7) — re-copied en/zh/jp;
+    and the batch's three CVEs (`CVE-2026-121481`, `CVE-2026-120382`, `CVE-2026-10441`) were
+    missing from the standing NVD provenance watch — seeded all three (watch now 642 rows).
+    Standing backlogs observed for the act pass: 269 uncurated single-citation domains, 42
+    agenda items with no movement in 30 days, 12 log entries past the 14-day window.
+- **Result:** theses 1/2/3/5/6/20 extended; seven knowledge files trilingual (21 index rows
+  updated); `regexr.com` + `seremot.com` curated at cv:1; `last_processed` →
+  2026-11-20T13:08+08:00 on en/zh/jp.
 
 ### 2026-11-20 05:08
 

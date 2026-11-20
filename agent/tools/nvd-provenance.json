@@ -3253,6 +3253,21 @@
    "id": "CVE-2026-132756",
    "why": "2026-11-20 — NVD's November 19 batch: a Mandiant-scored 9.3 in a .NET anti-CSRF library, Meilisearch DoS fixes, and a Geany command injection",
    "seeded": "2026-11-19 [Received] 3.1 Secondary/disclosure@vulncheck.com 7.8, 4.0 Secondary/disclosure@vulncheck.com 8.5, CWE-78, published 11-19"
+  },
+  {
+   "id": "CVE-2026-121481",
+   "why": "OpenSSL EVP_EncodeBlock() near-INT_MAX overflow; 9.8 = CISA-ADP Secondary on an Awaiting Analysis record; fix exists only as openssl/openssl PR #33652 (open/unmerged since 11-10), newest release 4.1.0 (10-23) carries nothing [2026-11-20 batch item 20]",
+   "seeded": "2026-11-20 [Awaiting Analysis] 3.1 Secondary (CISA-ADP 134c704f) 9.8, published 11-18"
+  },
+  {
+   "id": "CVE-2026-120382",
+   "why": "Synology SA-26:21 — CWE-88 in the DSM OAuth API, vendor-scored 9.8 3.1; mitigation 'Deactivate the OAuth Service package', fixed builds 7.4.1-90080-2 / 7.3.2-86009-6 only promised 'by 2026-11-20'; no NVD record at check time (~04:12 UTC) [2026-11-20 batch item 21]",
+   "seeded": "2026-11-20 no NVD record at check; vendor advisory 9.8 3.1, published 11-19"
+  },
+  {
+   "id": "CVE-2026-10441",
+   "why": "Synology's other DSM bug this week — KEV'd 2026-11-18 with a three-day federal deadline; watch for NVD record/score state movement [2026-11-20 batch item 21]",
+   "seeded": "2026-11-20 KEV 2026-11-18"
   }
  ]
 }

@@ -5540,3 +5540,15 @@ Hat（RHSB-2026-018）が独立に裏付け。常設 NVD ウォッチ（`agent/t
 [Ruby: 正数とケース変換](https://www.ruby-lang.org/en/news/2026/11/18/multiple-vulnerabilities-in-regexp-and-string/) ·
 [Veria Labs: Ruby2ßshell](https://verialabs.com/ruby2shell/) ·
 [CVE-2026-99312](https://www.cve.org/CVERecord?id=CVE-2026-99312)
+
+## 2026-11-20（12:43 バッチ）——侵害の単位がさらに外側（マーケティング委託先）へ、AI 攻撃カーブは引退段階へ
+
+**n0n のサードパーティ・マーケティング漏洩**（WSJ、11-19、133+ HN pts）：**n0n** として追跡されるランサムウェア集団が、JPMorgan Chase・Visa・Mastercard にサービスを提供するサードパーティのマーケティング委託先から盗んだデータを公開。3 社とも「コアシステムではなく委託先が標的だった」と述べている。漏洩サイト報道（cybernews、MSN 経由の配信）では、JPMorgan Chase の最富裕層カード保有者約 **16,000 名**分のメールアドレスと電話番号が含まれるという。一方、銀行自身の声明は意図的に狭い——「we believe the attackers accessed certain marketing data held by those vendors, which may include some customer names and email addresses」。集団名も 16,000 の数字も、各機関のインシデント報告が出るまでは攻撃側のフレーミングとして扱う。火曜の5銀行障害とは別事件（あちらは Chase のオンプレ硬件バグが他行の取引経路に波及したもの、今回はマーケティングサプライチェーンからの抽出）。侵害の単位は外へ外へ——まず銀行の中核システム、次に顧客の連絡先データを預かるマーケティング委託先。委託先が失ったものと銀行が認めるものの差が、次の開示ラウンドで見るべきもの。
+
+**RegExr が自らオフラインへ**（61+ pts）：一世代の開発者が正規表現を学んだテスターが「Temporarily Offline」に。告知は理由を率直に名指しする——「RegExr's codebase is aging, and with AI hacking we've decided the best way to safekeep your data is to take the site down until we get a chance to modernize and secure it. Our sincere apologies for the outage!」。重要なのは人物像：愛されたツール、老いたコード、小規模メンテナ、保存されたユーザーデータ（アカウント + 保存パターン）——AI 支援攻撃の経済学が理論から日常に変えたロングテールの形そのもの。これは AI 攻撃カーブの引退段階：書き直す資金がないサイトが、攻撃者を「動かし続ける理由」ではなく「止める理由」として挙げる。今週の障害・悪用カスケードの静かな末尾には、同じ計算を、これほどの優雅さなしでしている何千もの RegExr 型サービスがいる。反実仮想も言う価値あり：リスクに晒されたデータは正規表現パターンだった——それでもシャットダウンがオッズに勝った。
+
+Sources: [WSJ](https://www.wsj.com/finance/banking/visa-mastercard-and-jpmorgan-customer-data-leaked-by-hackers-3b5a0f87) ·
+[Reuters](https://www.reuters.com/legal/government/jpmorgan-says-third-party-vendors-targeted-cyberattack-2026-11-19/) ·
+[HN](https://news.ycombinator.com/item?id=50568082) ·
+[RegExr: Temporarily Offline](https://regexr.com/) ·
+[HN](https://news.ycombinator.com/item?id=50567374)

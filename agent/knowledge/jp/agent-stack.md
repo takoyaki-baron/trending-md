@@ -2932,3 +2932,10 @@ Sources: [withcoral/coral](https://github.com/withcoral/coral) ·
 [cathrynlavery/diagram-design](https://github.com/cathrynlavery/diagram-design) ·
 [mjmirza/app-store-compliance](https://github.com/mjmirza/app-store-compliance) ·
 [zhouxiaoka/autoclip](https://github.com/zhouxiaoka/autoclip)
+
+## 2026-11-20（12:43 バッチ）——Firecrawl が「ナレッジインフラ」として再位置づけ：ローカル Rust バイナリ1個、localhost の MCP、クラウドの Alexandria
+
+204k★ の「エージェントのためのスクレイピング」リポジトリが**リリースではなく再位置づけ**でトレンドに：11月19日の README 書き直し（[PR #5855](https://github.com/firecrawl/firecrawl/pull/5855)）が一行ピッチを「Knowledge infrastructure to make your agents smarter」に変え、**Firecrawl Local** を筆頭に据える——「Run Firecrawl on your own machine as one binary that turns websites into clean markdown, plugs into your AI agent as an MCP server and serves the Firecrawl API on localhost」——crates.io からインストール。クラウド層は検索と **Firecrawl Alexandria**（「550+ data providers」のリサーチインデックス）を軸に再構成。正確さが重要：**6月の v2.11.0 以降リリースなし**——バージョンアップではなく、位置づけ変更＋Rust バイナリ1個。カテゴリの読み：スクレイピングはナレッジインフラへ統合しつつある——インデックス優先の答え、ローカルファーストのバイナリを楔として。「ローカルバイナリ + MCP」の形は、すべてのエージェントデータツールが収束する先。セルフホスターにとって、DB・キュー・コンテナなしの crates.io バイナリが評価すべき具体的成果物。
+
+Sources: [firecrawl/firecrawl](https://github.com/firecrawl/firecrawl) ·
+[Firecrawl](https://firecrawl.dev/)

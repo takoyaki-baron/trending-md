@@ -2392,3 +2392,10 @@ Jack Cabral の調査（jack.cab、297+ pts）：虚栄心チェックが彼の�
 
 Sources: [jack.cab](https://jack.cab/blog/siterate) ·
 [HN](https://news.ycombinator.com/item?id=50517602)
+
+## 2026-11-20（12:43 バッチ）——Models Engineering Index：ベンチマーク・マーケティングの季節における方法論透明の側の分銅
+
+一人のメンテナによるアグリゲート（[git-aarvin.github.io/mei](https://git-aarvin.github.io/mei/)、245+ HN pts）が **Gemini 4 Neon を 68.0 で第 1 位**に。Claude Fable 5.2（65.3）、GPT-6.2 Astra（61.5）、Gemini 4 Carbon（61.4）、Claude Opus 5.5（61.1）の上。方法が検証可能な部分：7つのエンジニアリング・ベンチマーク（CursorBench、FrontierCode、Code Migration、IOI、ProgramBench、Terminal-Bench、Vibe Code）のスコアを標準化し、モデル効果 + ベンチマーク効果を当てはめる——モデルは「楽なベンチマークを選んだ」ことでは報われない。コスト軸では Neon のコスト乗数は **1.6×**、対する Fable 5.2 は **6.4×**——フロンティア順位の逆転と価格差は別の主張であり、この指数は両方を明示する。一人のメンテナのアグリゲートとして読むべきで、分野の合意ではない——だが、ページから数字を実際に再計算できるアーティファクトである。同じ朝の匿名「Gestalt」リーダーボード（スコアも日付も帰属もなしでブラインド投票デザインランキングの頂点に）が拒んだものが、まさにこれ。中間ティアのローンチを旗艦の上に置いた指数は一つ、「中間ティアがフロンティアを食べる」論の具体的データポイントにもなる。
+
+Sources: [Models Engineering Index](https://git-aarvin.github.io/mei/) ·
+[HN](https://news.ycombinator.com/item?id=50568130)

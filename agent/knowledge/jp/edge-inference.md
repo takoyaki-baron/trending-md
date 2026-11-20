@@ -649,3 +649,15 @@ ONNX Runtime Web、無数のオンデバイス パイプライン）——が一
 [DriveVault: 2026–2028 展望](https://www.drivevault.io/blog/when-will-hard-drive-prices-come-down.html) ·
 [RAM を買うな、圧縮せよ](https://curiousbits.nl/blog/do-not-buy-ram-compress/) ·
 [Perishable Press: Chrome AI 帯域](https://perishablepress.com/chrome-ai-wasting-much-bandwidth/)
+
+## 2026-11-20（12:43 バッチ）——ローカル AI の論点が2つのアーティファクトにコンパイルされる：オフライン「社会再建」ライブラリと、複合音声の台帳
+
+**Lastbook**（[Immortal-Protocols/lastbook](https://github.com/Immortal-Protocols/lastbook)、MIT。再投稿 374 HN pts）：オフラインで完結する生存・再建ナレッジベースを束ねたデスクトップアプリ（macOS Apple Silicon / Windows / Linux）。質問応答用の**ローカル Gemma 4 26B A4B**、**258,000+ の検索可能なオフライン地点**（消防署、避難所、水・医療 POI）、2,324 本のオフライン動画、応急処置から避難計画までのガイド。タグラインの位置づけ：「Free, local, offline and private」。リポジトリは 11月12日作成、すでに約 2,600★ で活発な push。数日前の Show HN は 19 pts、昨日の再投稿が 374。眠った機能はオフライン POI インデックス——25万の検索可能地点は、ネットが落ちても劣化しない部分であり、たいていのオフライン百科事典プロジェクトがスキップする部分。8日目のリポジトリが速く動いている：374 pts は興味であって実績ではない——ライブラリが育つかフォークされるかを見る。
+
+**Platypush、2ヶ月で2度目の音声パイプライン再構築**（blog.platypush.tech、71+ pts）：作者の正直な理由——「unhappy with the high rates of false positives/negatives of my self-hosted pipeline, as well as its lack of robustness in detecting start/end of speech, especially in noisy environments and using cheap microphones」。新しいスタック：**microwakeword** が openwakeword を置き換え（ローカル wake word）、**assistant.openai** が STT、**assistant.vosk** がローカルフォールバック、応答は openai 経由（クラウドまたはローカル）、音声は **tts.openai** か **tts.piper**——完全な設定とコード変更を公開し、実際の部屋で生き残る注意書きも添える。複合 AI の論点の実装台帳：レイテンシとプライバシーが効くところはローカル（wake word）、精度が勝つところはクラウド（STT）、段階ごとに文書化されたフォールバック連鎖——勘ではなく false-wake 率で測る。再構築の間隔が2ヶ月であること自体が発見：セルフホスト音声は十分速く改善していて、スタックは動く標的。
+
+Sources: [Lastbook](https://lastbook.org/) ·
+[Immortal-Protocols/lastbook](https://github.com/Immortal-Protocols/lastbook) ·
+[HN](https://news.ycombinator.com/item?id=50560822) ·
+[Platypush: Rewriting my voice assistant pipeline](https://blog.platypush.tech/article/Rewriting-my-voice-assistant-pipeline) ·
+[HN](https://news.ycombinator.com/item?id=50566261)

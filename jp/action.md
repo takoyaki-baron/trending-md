@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-11-20 05:05
+last_run: 2026-11-20 13:24
 ---
 
 # アクション
@@ -381,7 +381,8 @@ last_run: 2026-11-20 05:05
 
 - [ ] **決定インターフェースは OpenAI の外で標準化するか——第二の提供者が `predicate`/`choice`/`score` の意味論を出し、AA 意思決定指数は自らのプロトコルを公開するか？**——2026-10-23 12:45 起票。今や 2 つの製品が 1 回の共有プレフィックスで各選択肢の較正済み確率を返す（OpenAI の Decisions GA、Baseten の MIT `mammoth-1`/`elephant-1`）。Baseten のカードは「AA 指数の**レプリカ**」での順位を主張する——鋭い問いは、レプリカが指数そのものになるか、すなわち AA がハーネスを公開するかどうか。監視：第三の提供者が 3 つの質問型を名前で採用する、Jev Decision Index（0.4、208 件）が項目ごとの実行者帰属を公開する、mammoth-1 の独立再実行、`gpt-6-luna` 専用 API への第二モデル追加。→ [[system1-decision]] [[smart-routing]]
 
-- [ ] **AAIF の 10 プロジェクトは、財団が裁定する係争を生むか——そしてメンバーが気にする票を落とすことはあるか？**——2026-10-23 12:45 起票。この 4 インターフェース寄贈には財務条件も、件数以外の採用数値も、「ベンダー中立のガバナンス」以外の紛争解決手段も無い。10 の*インターフェース*を抱える財団は、寄贈者が負けうるときにだけ中立である。最初に観測できるのは、採用された文面とある寄贈者の出荷済み実装が食い違う spec 改訂。監視：記録された決定過程を伴う係争改訂、プロジェクトの離脱（またはフォーク）、AAIF 主催の最初の選挙やメンテナ任命、加盟後に競合フォーマットを出すメンバー。→ [[agent-stack]] [[agent-plugins]]
+- [~] **AAIF の 10 プロジェクトは、財団が裁定する係争を生むか——そしてメンバーが気にする票を落とすことはあるか？**——2026-10-23 12:45 起票。この 4 インターフェース寄贈には財務条件も、件数以外の採用数値も、「ベンダー中立のガバナンス」以外の紛争解決手段も無い。10 の*インターフェース*を抱える財団は、寄贈者が負けうるときにだけ中立である。最初に観測できるのは、採用された文面とある寄贈者の出荷済み実装が食い違う spec 改訂。監視：記録された決定過程を伴う係争改訂、プロジェクトの離脱（またはフォーク）、AAIF 主催の最初の選挙やメンテナ任命、加盟後に競合フォーマットを出すメンバー。→ [[agent-stack]] [[agent-plugins]]
+      **確認 11-20 13:24（act、→ ログ）——決定機構は今や名前の上で存在する。観測点はまだ一つも発火していない。** aaif.io/news の先頭は依然 10-22——一か月、係争改訂も離脱も無し。ただしガバナンスの土台は着地した（すべて aaif.io を一次読み）：**理事会（Governing Board）** 10 の具名席（Nalley/AWS 座長、Nassi/Google 会計、McCaffrey/Microsoft、Cooper/OpenAI、Irvine-Broque/Cloudflare、McCartney/Anthropic IP 弁護士、Musial/Bloomberg、Scherpelz/Block、**Zhong Wu/Shopify が Gold Member Representative**、Vasey/Gates Foundation）、そして**技術委員会（Technical Committee）** 8 席（Soria Parra/Anthropic 座長、Axen/Block「Goose Creator」、Cooper/OpenAI、Blount/Google、Faulkner/Cloudflare、Kothari/Bloomberg、Ward/AWS）。全席が企業任命——**選挙の記録は無し**、これが本項目の最初の観測点。問いは鋭くなった：10-22 の Gold 組（Ant Group、Gates Foundation、MongoDB、Nutanix、RBC、Vercel、Vultr）は Gold 席を**持たない**——Shopify が持っている——ゆえに拡大する有料ロースターの下での席配分こそ、係争が最初に顔を出す場所。起票後の新要素：ガバナンス・ワーキンググループ（`/working-groups/governance-risk-regulatory-alignment`）、MCPA 認定（09-13）、Technical Awards / Submit-a-Project / アンバサダー制度。→ [[agent-stack]] [[agent-plugins]]
 
 - [~] **Vyper は修正を出すのか——そして `-O gas` 下の `(msg.value | K)` パターンを持つデプロイ済みバイトコードはどれだけあるのか？** —— 10-22 20:20 起案、20:27 再検査：依然 `no-fix`（新しい `disclosure-lag.mjs` が勧告の `Patched versions: None` セルを PyPI の時系列に突き合わせ、`no-fix` かつ **0.5.0b1 が `>= 0.3.8` の内側**であることを返す）。オンチェーン側は手つかずで、方法もまだない。「Patched version: none listed」、影響は **>= 0.3.8**、最新タグ（v0.5.0b1、9 月 1 日）と PyPI の最新安定版（0.4.3、2025-06-18）の双方が範囲内。リポジトリはアーカイブされておらず 2026-10-22T09:48Z に push があるので、「未修正」は*保留*であり恒久ではない——Flowise と逆の極性だ。監視：v0.5.0b1 より新しいリリース、勧告における「`-O none` のみが緩和」という記述、影響する設定でコンパイルされたコントラクトのオンチェーン件数（測定可能なフィールドはコンパイラのメタデータハッシュであり、ソースの走査ではない）。→ [[disclosure-lag]] [[security]] [[fact-check]]
 
@@ -711,6 +712,16 @@ last_run: 2026-11-20 05:05
       項目ごとの方法：読み、そのウォッチ/状態
       ファイルを確認するか web 呼び出しを 1 回使い、日付付きの答えで閉じるか日付付きノートで更新する——
       偽の動きは決して作らない。次のトランチは次の act pass；build の警告が進捗メーター。
+
+- [x] **引用 span 内の Unicode × はグリフのドリフトであって、捏造された文ではない——タイトル自身の
+      span がバイト単位で忠実な引用に sev-3 を報告した。** 11-20 13:24 に立案し完了（→ log 2026-11-20
+      13:24）。項目 24 のタイトルは「up to 122× faster…」（U+00D7、数学記号）と引用し、それが引用する
+      arXiv アブストラクトは ASCII `122x` を載せている；`quoteKey` は `\p{L}\p{N}` だけを残すので、× は
+      剥ぎ落とされ、包含判定はちょうど 1 グリフで破れた——lint 自身のキャッシュには文全体がそのまま
+      あり、fetch は最初から問題ではなかった。修正：乗算記号（U+00D7/U+2715/U+2A2F）を文字フィルタの
+      前に**両側**で `x` へ写像する；この写像を着た捏造数字（`999×`）は依然として失敗する。
+      `--selftest` 467 → **470**；当日の再実行 0 findings / 31 verified。CLAUDE.md ルール 9 の引用
+      ガード一覧に **(m)** を追加。→ [[fact-check]]
 
 - [x] **バージョントークンの「末尾数字」はカウントではない——`C++23 language server` が「23 言語」と読まれた。**
       11-16 13:16 に立案し完了（→ log 2026-11-16 13:16）。12:36 バッチの lint は項目 27 に
@@ -1657,6 +1668,93 @@ last_run: 2026-11-20 05:05
       vs h3.c。→ [[edge-inference]]（→ ログ 2026-08-12 23:32）
 
 ## ログ
+
+### 2026-11-20 13:24
+
+- **計画：** 12:43 バッチ（28 項目）の生成時 claim-unit JSON を処理——13:08 の学習パスはこれを
+  "0 findings / 40 verified" と記録したが、ファイルには sev-3 が 1 件（`quote-not-found`、項目 24）と
+  レジストリ未読のアドバイザリ 3 件（項目 20/21）がある——その後アジェンダを進める：研究項目 1 件
+  （AAIF ガバナンス）とシステム項目 1 件（立案し完了）。
+- **実行：**
+  - **項目 24 `quote-not-found` → チェッカーの誤検出、ソース側で修正。** 引用は arXiv アブストラクトに
+    バイト単位でそのまま存在——一次取得（"Experiments show that Jeveration generates a 512x512 image
+    in 78 ms, up to 122x faster than existing unified models…"）。決め手は、lint 自身のキャッシュした
+    ページに同じ文がそのままあったことで、fetch は最初から問題ではなかった。壊れたのは項目の
+    **タイトル**——同じ主張を U+00D7（`122×`）で引用していた：`quoteKey` は `\p{L}\p{N}` だけを残し、×
+    は数学記号なので剥ぎ落とされ、包含判定は ASCII `x` を載せるページに対してちょうど 1 グリフで破れた。
+    修正は `agent/tools/claim-unit-lint.mjs`：乗算記号（U+00D7/U+2715/U+2A2F）を文字フィルタの前に
+    両側で `x` へ写像——グリフのドリフトには寛容、捏造された文には決して寛容でない（`999×` の負例も
+    失敗する）。`--selftest` 467 → **470**；当日の再実行 **0 findings / 31 verified**。CLAUDE.md
+    ルール 9 の引用ガード一覧に **(m)** を追加。feed の編集は不要——タイトルの × は誠実なタイポグラフィ
+    で、本文の引用は最初から逐語的。（併せて記録：13:08 学習パスの "0 findings" の行は数え間違い——
+    sev-3 はそれが読んだファイルの中にあった。）
+  - **項目 21 のレジストリ未読アドバイザリを一次解決し、一日前の不在主張を再確認：** NVD には
+    CVE-2026-120382 のレコードが依然**ない**（`totalResults: 0`、~05:20 UTC）、cveawg は
+    `CVE_RECORD_DNE` を返す——id は予約済みだが未公開であり、項目の日付付き不在主張は成立し、深まる。
+    ベンダーアドバイザリをライブ取得、**Revision 1** のまま（2026-11-19 初版）：ビルド
+    7.4.1-90080-2 / 7.3.2-86009-6 は依然 "scheduled for release by 2026-11-20"、~13:25 UTC+8 時点で
+    **未出荷**；9.8、CWE-88、完全なベクトル `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H` を
+    アドバイザリ本文から一次読み。項目 21 を en/zh/jp で日付付き再確認付きに修正；ミラーを再コピー
+    （規約 #7）；`updated:`/`last_processed` は触らず。項目 14 と 20 のアドバイザリは読んで正常と確認
+    ——#14 の文はスロット語の隣にすでに採点者を名指し（`mandiant-cve@google.com`）、#20 の
+    "nothing to install" の主語は同じ段落にある（修正を運ぶリリース済み版は存在しない）。
+  - **システム（立案し完了）：× グリフ・ドリフトの形状** —— 新しいシステム項目を参照；
+    `PAGE_CACHE_V` は不変（キャッシュは決して間違っていなかった：そのテキストは文全体を載せていた）。
+  - **研究（AAIF ガバナンス、10-23 起票）：決定機構は今や名前の上で存在する。観測点はまだ一つも
+    発火していない。** aaif.io/news の先頭は依然 10-22——一か月の沈黙。aaif.io の新しい一次読み：
+    **理事会** 10 の具名席（Nalley/AWS 座長、Nassi/Google 会計、McCaffrey/Microsoft、Cooper/OpenAI、
+    Irvine-Broque/Cloudflare、McCartney/Anthropic IP 弁護士、Musial/Bloomberg、Scherpelz/Block、
+    **Zhong Wu/Shopify が Gold Member Representative**、Vasey/Gates Foundation）、**技術委員会** 8 席
+    （Soria Parra/Anthropic 座長、Axen/Block「Goose Creator」、Cooper/OpenAI、Blount/Google、
+    Faulkner/Cloudflare、Kothari/Bloomberg、Ward/AWS）。全席が企業任命——**選挙の記録は無し**、
+    これが本項目の最初の観測点。鋭くなった点：10-22 の Gold 組（Ant Group、Gates Foundation、MongoDB、
+    Nutanix、RBC、Vercel、Vultr）は Gold 席を**持たない**——Shopify が持つ——ゆえに拡大する有料
+    ロースターの下での席配分こそ、係争が最初に顔を出せる場所。項目を `[ ]` → `[~]` に、日付付きノート付き。
+- **結果：** 今日の feed は再実行でクリーン（**0 findings / 31 verified**）；lint の引用アームは両方向で
+    測った起票事例とともに乗算記号ガードを得た；項目 21 の不在主張は再日付付けされ、そのスコア/CWE の
+    出所は一次ベンダー読みに立脚；AAIF ガバナンス・ウォッチは最初の具名機構スナップショットを得た。
+    → [[fact-check]] [[agent-stack]]
+
+### 2026-11-20 13:08
+
+- **計画：** 2026-11-20 12:43 バッチを学習（純新規 11 件、項目 18–28——`last_processed` 04:55 以降で
+  最初のパス）：純新規項目をテーゼとナレッジファイルに三言語で蒸留し、バッチが新たに引用した
+  ドメインのソースディレクトリを整備する。
+- **実行：**
+  - バッチをレーンにマッピング（en/agent.md の「バッチレーン」項目）：侵害クラスタ → テーゼ 2 +
+    [[security]]（JPMorgan/Visa/Mastercard のサードパーティ・マーケティング委託先からの n0n の
+    漏洩。「AI hacking」を理由とする RegExr の自発的シャットダウン）；アドバイザリ政策クラスタ →
+    テーゼ 20 + [[vuln-supply]]（OpenSSL `EVP_EncodeBlock()`——CVE 公開、PR #33652 はオープン未マージ、
+    修正を載せたリリースなし。Synology SA-26:21——当日緩和可能、修正ビルドは「2026-11-20 までに」の
+    約束のみ）；PostgreSQL 19 → [[dev-tools]]；ローカル AI クラスタ → テーゼ 3 + [[edge-inference]]
+    （Lastbook の 25.8万 POI オフライン・ライブラリ。Platypush の複合音声台帳）；Jeveration → テーゼ 5 +
+    [[system1-decision]]（凍結 VLM、78 ms の 1 フォワードパスで 512×512）；Firecrawl のナレッジ
+    インフラ再位置づけ → テーゼ 1 + [[agent-stack]]；Models Engineering Index → テーゼ 6 +
+    [[fact-check]]；Cerf/Tolero → [[dev-tools]]。
+  - **7 つ**のナレッジファイル（security、vuln-supply、fact-check、edge-inference、
+    system1-decision、agent-stack、dev-tools）に `## 2026-11-20 (12:43 バッチ)` セクションを追記
+    （en/zh/jp）、対応する **21** 行のインデックス行を更新（節 + 最終触達日）。
+  - en/agent.md：日付付きテーゼ行 6 本（1、2、3、5、6、20）+ レーン項目。zh/jp はミラー（テーゼ行
+    翻訳済み）。3 言語分の `last_processed` を前進——zh/jp の frontmatter は 11-18T13:22 で止まった
+    まま、レーン項目は 11-19/11-20 を既に運んでいた（表示ファイルがマーカーに遅れる。今回修正）。
+  - **ソースディレクトリ：**バッチの未キュレーション 2 ドメイン——双方 **cv:1** で追加し、今回
+    一手確認を添える：`regexr.com`（オフライン告知をライブ取得。フィードの引用と逐語一致。HN スレッド
+    50567374 を独立裏付けに）と `seremot.com`（Cerf インタビューをライブ取得——連友の引用、
+    「the speed of light is too slow」、83 歳、今年 Google 離職、Tolero がすべて逐語で頁上。
+    **Tolero Networks** は Quanta の宇宙インターネット報道と 2026 Mars Society / ISOC 登載で
+    クロスチェック。`cv-audit.mjs --check`合格）。フィード実行は blog.platypush.tech、
+    git-aarvin.github.io、lastbook.org、snowflake.com を既にキュレーション済み。
+  - このバッチの生成時 lint は **0 発見 / 40 検証済み判定**（agent/data/claim-unit-2026-11-20.json）
+    ——今回の人手再チェックの義務なし。
+  - **今回の実行自体が上げた 2 つの build-lint 発見、いずれも修正済み：**3 つのチェックイン済み
+    `latest.md` ミラーが日期ファイルと 2 つの書き直し行で漂移（項目 19/28——フィード実行の言い回し
+    修正がミラーに届いていなかった。規約 #7）——en/zh/jp を再コピー。バッチの 3 つの CVE
+    （`CVE-2026-121481`、`CVE-2026-120382`、`CVE-2026-10441`）が常設 NVD 出所ウォッチに欠けて
+    いた——3 件ともシード（ウォッチは 642 行に）。act パスへの常設積圧の観察：未キュレーション
+    単一引用ドメイン 269、30 日間動きのないアジェンダ項目 42、14 日窓を超えたログ項目 12。
+- **結果：**テーゼ 1/2/3/5/6/20 を拡張。7 つのナレッジファイルが三言語揃い（インデックス 21 行更新）。
+  `regexr.com` + `seremot.com` を cv:1 でキュレーション。en/zh/jp の `last_processed` →
+  2026-11-20T13:08+08:00。
 
 ### 2026-11-20 05:08
 

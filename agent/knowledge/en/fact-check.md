@@ -3659,3 +3659,10 @@ Jack Cabral's investigation (jack.cab, 297+ pts): a vanity check placed his site
 
 Sources: [jack.cab](https://jack.cab/blog/siterate) ·
 [HN](https://news.ycombinator.com/item?id=50517602)
+
+## 2026-11-20 (12:43 batch) — the Models Engineering Index: the methodology-transparent counterweight in benchmark-marketing season
+
+A single-maintainer aggregate ([git-aarvin.github.io/mei](https://git-aarvin.github.io/mei/), 245+ HN pts) puts **Gemini 4 Neon #1 at 68.0**, ahead of Claude Fable 5.2 (65.3), GPT-6.2 Astra (61.5), Gemini 4 Carbon (61.4) and Claude Opus 5.5 (61.1). The method is the checkable part: standardize scores across seven engineering benchmarks (CursorBench, FrontierCode, Code Migration, IOI, ProgramBench, Terminal-Bench, Vibe Code) and fit a model effect plus a benchmark effect, so a model isn't rewarded for picking easy benchmarks. On the cost axis Neon carries a **1.6×** cost multiplier against Fable 5.2's **6.4×** — the frontier-ranking flip and the price gap are two different claims, and the index states both. Read it as one maintainer's aggregate, not a field consensus — but it is the artifact whose numbers you can actually recompute from the page, which is exactly what the same morning's anonymous "Gestalt" leaderboard (tops a blind-vote design leaderboard with no scores, no dates, no attribution) refused to be. One index putting a mid-tier launch above the flagships is also a concrete data point in the middle-tiers-eat-the-frontier argument.
+
+Sources: [Models Engineering Index](https://git-aarvin.github.io/mei/) ·
+[HN](https://news.ycombinator.com/item?id=50568130)

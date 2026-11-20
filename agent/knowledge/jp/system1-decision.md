@@ -574,3 +574,11 @@ Decider v1.3 11-14、HeyGen Decision 1 11-17——いずれも先行パスで各
 [Resolve AI: SRE-1 論文](https://resolve.ai/labs/sre-1/paper) ·
 [Energy-Based Reasoners](https://energy-based-reasoners.github.io/) ·
 [arXiv 2611.08977](https://arxiv.org/abs/2611.08977)
+
+## 2026-11-20（12:43 バッチ）——Jeveration：パラダイムがピクセルを生成する——凍結 VLM、78 ミリ秒、1 回のフォワードパス
+
+Hugging Face Daily Papers の首位（arXiv 2611.24738、116+ アップボート）：**凍結された**視覚言語モデルを、意思決定モデルのパラダイム——トークンごとのデコードではなく並列予測——で生成に転用する。要旨より：「Jeveration generates a 512x512 image in 78 ms, up to 122x faster than existing unified models, while maintaining competitive image quality and dense prediction performance」。1つのチェックポイントが text-to-image・image-to-image・dense prediction をそれぞれ1回のフォワードパスで覆う。コヒーレンス問題（1つのプロンプトに有効な画像は複数あり、並列予測は収束しなければならない）は、全位置を共有ランダム状態で条件付けし、離散画像コードの学習済み分布がパスを導くことで解く——モデルは「tends to ignore this state under direct image supervision」のため。78 ms は自己回帰画像デコーダが到底届かないレイテンシ予算であり、生成と dense prediction を1つのチェックポイントに統一するのは、アーティファクトの形をした複合モデルの夢。いつもの注意書き：「competitive」は 512×512 と論文自身のベンチマーク集合が定める。系譜が物語——判断に使われてきた意思決定モデルの高速並列予測の枠組みが、ピクセルに適用された。コード：`Carol-lyh/Jeveration`。
+
+Sources: [arXiv 2611.24738](https://arxiv.org/abs/2611.24738) ·
+[Hugging Face 論文ページ](https://huggingface.co/papers/2611.24738) ·
+[Carol-lyh/Jeveration](https://github.com/Carol-lyh/Jeveration)

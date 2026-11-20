@@ -2412,3 +2412,15 @@ version-pinned sites should move is the security fix landing on both branches.
 Sources: [jQuery blog: 4.1.0 and 3.8.0 released](https://blog.jquery.com/2026/11/17/jquery-4-1-0-and-3-8-0-released-passing-the-torch/) ·
 [4.1.0 release notes](https://github.com/jquery/jquery/releases/tag/4.1.0) ·
 [HN discussion](https://news.ycombinator.com/item?id=50537156)
+
+## 2026-11-20 (12:43 batch) — PostgreSQL 19 makes bloat cleanup and plan stability first-class; Cerf states openness as geopolitical insurance
+
+**PostgreSQL 19** (released 11-19, 99+ HN pts): the headline is operational. **REPACK (CONCURRENTLY)** reclaims table bloat and can reorder a table's data to match an index without blocking reads or writes — replacing the access-blocking `VACUUM FULL`/`CLUSTER` (both kept for compatibility), i.e. `pg_repack`'s decade-old third-party dance built in-core; the REPACK command alone is an upgrade argument for busy write-heavy tables. Plan stability: **pg_plan_advice** (a "plan advice" mini-language for pinning or experimenting with plans) plus **pg_stash_advice** (advice stored by query identifier, applied automatically — fix a slow plan without touching the application). Autovacuum vacuums indexes with **parallel workers** (`autovacuum_max_parallel_workers`) under a new scoring system for which tables go first; queries mark pages all-visible during execution, shrinking future vacuum work. Also: read-your-writes consistency on standbys, logical replication initialization without a server restart (WAL level auto-raised on the first logical slot), and new monitoring views (`pg_stat_lock`, `pg_stat_recovery`, `pg_stat_autovacuum_scores`). Managed providers shipped day one (Neon and Databricks Lakebase within hours).
+
+**Vint Cerf on why TCP/IP was never patented** (seremot.com, 48+ pts — Future Stories podcast #1, João Tomé ex-Cloudflare): Cerf, 83, left Google this year after twenty-plus years and is helping start **Tolero**, building software for an Internet between planets — "the speed of light is too slow." On openness, the answer is strategic, not sentimental: "Who will our allies be 25 years from now? And we didn't know. So we thought the only way we can be assured that the allies will have access to this is to simply open it up." The openness argument gets re-litigated weekly in AI licensing fights; here it is from the protocol layer, stated as geopolitical insurance rather than ideology — and Tolero is a concrete new artifact to track, not a retrospective. Anecdotes: a two-week random crash Steve Crocker diagnosed in thirty seconds ("that's the problem" — his case for collaboration), and the 1989 CERFnet launch where a bottle of glitter met a Cisco router.
+
+Sources: [PostgreSQL 19 Released](https://www.postgresql.org/about/news/postgresql-19-released-3449/) ·
+[Snowflake: Squeezing Tables with Postgres 19 Repack](https://www.snowflake.com/en/blog/engineering/postgres-19-repack-table-bloat/) ·
+[HN](https://news.ycombinator.com/item?id=50560357) ·
+[seremot.com: Vint Cerf on why TCP/IP was never patented](https://seremot.com/p/vint-cerf-on-why-tcpip-was-never) ·
+[HN](https://news.ycombinator.com/item?id=50568861)

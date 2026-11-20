@@ -2587,3 +2587,10 @@ Sources: [withcoral/coral](https://github.com/withcoral/coral) ·
 [cathrynlavery/diagram-design](https://github.com/cathrynlavery/diagram-design) ·
 [mjmirza/app-store-compliance](https://github.com/mjmirza/app-store-compliance) ·
 [zhouxiaoka/autoclip](https://github.com/zhouxiaoka/autoclip)
+
+## 2026-11-20（12:43 批次）——Firecrawl 以「知识基础设施」重新定位：一个本地 Rust 二进制、localhost 上的 MCP、云端的 Alexandria
+
+这个 204k★ 的「为 agent 抓网页」仓库凭**重新定位**上榜、不是凭发布：11 月 19 日的 README 重写（[PR #5855](https://github.com/firecrawl/firecrawl/pull/5855)）把一句话定位改为「Knowledge infrastructure to make your agents smarter」，并以 **Firecrawl Local** 领衔——「Run Firecrawl on your own machine as one binary that turns websites into clean markdown, plugs into your AI agent as an MCP server and serves the Firecrawl API on localhost」——从 crates.io 安装。云层围绕搜索与 **Firecrawl Alexandria**（一个「550+ data providers」的研究索引）重新组织。这里的精确性很重要：**自 6 月的 v2.11.0 之后没有任何新发布**——这是定位变化加一个 Rust 二进制、不是版本升级。品类解读：抓取正在并入知识基础设施——索引优先的答案、以本地优先的二进制作楔子——而「本地二进制 + MCP」的形状正是所有 agent 数据工具收敛的方向。对自托管者，不带数据库、队列与容器的 crates.io 二进制是要评估的具体交付物。
+
+Sources: [firecrawl/firecrawl](https://github.com/firecrawl/firecrawl) ·
+[Firecrawl](https://firecrawl.dev/)

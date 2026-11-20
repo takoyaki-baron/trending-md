@@ -1734,3 +1734,15 @@ Sources: [CVE-2026-129448](https://www.cve.org/CVERecord?id=CVE-2026-129448) ·
 [Wiz: NGINX RCE](https://www.wiz.io/blog/nginx-http2-rce-vulnerabilities) ·
 [Ruby アドバイザリ](https://www.ruby-lang.org/en/news/2026/11/18/multiple-vulnerabilities-in-regexp-and-string/) ·
 [HN 議論](https://news.ycombinator.com/item?id=50558906)
+
+## 2026-11-20（12:43 バッチ）——アーティファクト欠落の2つの形：OpenSSL の修正は未マージ PR のみ、Synology の修正は今日日付の約束
+
+**OpenSSL `EVP_EncodeBlock()`**（`CVE-2026-121481`、発表 11-18、`Awaiting Analysis`）：INT_MAX に近い入力長でエンコード出力サイズの計算がオーバーフローし、呼び出し元バッファの末尾を越えて書き込む可能性。レコード上の **9.8** CVSS 3.1 は **CISA-ADP** エンリッチメント・コンテナのもの（Secondary、org `134c704f-…`）——NVD の分析でも OpenSSL 自身のスコアでもない。修正は [PR #33652](https://github.com/openssl/openssl/pull/33652) としてのみ存在：nmouha が 11-10 に起票、**現在もオープンかつ未マージ**。不正入力（NULL バッファ、負の長さ、int に収まらないエンコードサイズ）に `-1` を返す内容で、wolfSSL の互換レイヤーと整合、`EVP_DecodeBlock()` にも同様のガードが提案されている。PR 本文：「The OpenSSL SRT has asked for it to be fixed publicly; the advisory is still pending」。修正を含むリリースはまだない——最新は 4.1.0（10-23）。Base64 は遍在するが露出はアプリごと：9.8 はライブラリ影響の数字で、リスクは呼び出し箇所次第。したがって対応はアップグレードではなく呼び出し箇所の棚卸し（誰が攻撃者制御の INT_MAX 近い長さを渡しているか？）。
+
+**Synology SA-26:21**（`CVE-2026-120382`、発表 11-19 15:47 UTC+8）：DiskStation Manager の **OAuth API** における CWE-88（引数区切り文字の不適切な中和）、ベンダー自己採点 **9.8** CVSS 3.1——リモート攻撃者が任意ファイルの読み書きと DoS が可能。DSM 6.2.4 から 7.4 系（ブランチごとに具体的ビルド記載）と BeeStation OS 1.5 に影響。今すぐ効く緩和策：**「Deactivate the OAuth Service package」**。修正ビルド（DSM 7.4.1-90080-2、7.3.2-86009-6）は「scheduled for release by 2026-11-20」——今日予定、アドバイザリ公開時点では未出荷。7.2.x ユーザーはブランクを越えて 7.3.2 へ。確認時点（11-20 ~04:12 UTC）で NVD にレコードなし。Synology としては今週2件目：別の DSM バグ `CVE-2026-10441` が 11-18 に KEV 登載、連邦期限は3日。
+
+Sources: [CVE-2026-121481](https://www.cve.org/CVERecord?id=CVE-2026-121481) ·
+[OpenSSL PR #33652（オープン・未マージ）](https://github.com/openssl/openssl/pull/33652) ·
+[HN](https://news.ycombinator.com/item?id=50569226) ·
+[Synology SA-26:21](https://www.synology.com/en-uk/security/advisory/Synology_SA_26_21) ·
+[HN](https://news.ycombinator.com/item?id=50567209)

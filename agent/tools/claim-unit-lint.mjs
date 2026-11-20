@@ -4879,7 +4879,14 @@ const isCommitQuote = (raw) => COMMIT_QUOTE_RE.test(String(raw).trim());
  * check owns is an invented SENTENCE (`interpreted correctly` for `read correctly`, or a sentence
  * that exists nowhere), not glyph drift, and a reader who fixes glyphs by hand is doing work the
  * checker cannot pay for. */
-const quoteKey = (s) => s.replace(/['’`]/g, '').replace(/[^\p{L}\p{N}\s]/gu, ' ').replace(/\s+/g, ' ').trim();
+/* A DIMENSION SIGN is an x, not punctuation (added 2026-11-20, item 24's own title). The title
+ * quoted "up to 122× faster than existing unified models" — U+00D7, a Math Symbol — while the
+ * arXiv abstract it quotes carries ASCII `122x`; quoteKey keeps only \p{L}\p{N}, so the × stripped
+ * to nothing and a byte-verbatim quotation (the item's body carried the ASCII form and verified
+ * fine) filed `quote-not-found` (sev 3) on the title's span. "122×" and "122x" are the same
+ * rendered claim, so the multiplication signs (U+00D7, U+2715, U+2A2F) map to `x` on BOTH sides
+ * before the letter filter — permissive toward glyph drift, never toward an invented sentence. */
+const quoteKey = (s) => s.replace(/[×✕⨯]/g, 'x').replace(/['’`]/g, '').replace(/[^\p{L}\p{N}\s]/gu, ' ').replace(/\s+/g, ' ').trim();
 
 /** Every “…” span, paired per LINE — see guard (a) — plus a BOUNDED JOIN for a wrapped quotation.
  * Measured 2026-10-31 over 31 October feeds (1,248 items): **310 of 2,371 quoted lines (13.1%)**
@@ -6689,6 +6696,16 @@ if (SELFTEST) {
     true);
   t('apitwin: a plain-markdown twin passes through as text',
     apiTwinJsonText('# title\n\nprose body'), '# title\n\nprose body');
+  const ARXIV_ABS = 'Experiments show that Jeveration generates a 512x512 image in 78 ms, up to 122x faster than existing unified models, while maintaining competitive image quality and dense prediction performance.';
+  t('quote: a Unicode × in a quoted span matches a source rendering the dimension as ASCII x (item 24 title, 2026-11-20)',
+    quoteFragFound({ key: quoteKey(normQuote('up to 122× faster than existing unified models')) }, quoteSource('arxiv abs', ARXIV_ABS)),
+    true);
+  t('quote: the ASCII-x form still verifies after the dimension-sign mapping',
+    quoteFragFound({ key: quoteKey(normQuote('up to 122x faster than existing unified models')) }, quoteSource('arxiv abs', ARXIV_ABS)),
+    true);
+  t('quote: an invented number wearing the × mapping still fails',
+    quoteFragFound({ key: quoteKey(normQuote('up to 999× faster than existing unified models')) }, quoteSource('arxiv abs', ARXIV_ABS)),
+    false);
   t('apitwin: an HTML body is another shell, never a read',
     apiTwinJsonText('<html><body>hi</body></html>'), '');
   t('apitwin: empty bundle text yields no candidates', apiTwinCandidates('').length, 0);

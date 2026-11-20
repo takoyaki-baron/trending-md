@@ -1583,6 +1583,14 @@ underlying pages — this produced a two-layer false signal in a single item.
    only demote a verdict to `unread`, never invent a finding. `PAGE_CACHE_V` **6 → 7** (a v6 entry
    holds the 739-byte shell as its "read"); live calibration: 3 findings → **0 findings / 26
    verified**, `--selftest` 390 → **399**.
+   **(m) A Unicode multiplication sign is an x, not punctuation** (added 2026-11-20, the item's
+   own title): item 24's title quoted "up to 122× faster than existing unified models" with U+00D7
+   while the arXiv abstract it quotes carries ASCII `122x`; `quoteKey` keeps only `\p{L}\p{N}`, so
+   the × stripped to nothing and a byte-verbatim quotation (the body's ASCII-x span verified fine)
+   filed sev-3 `quote-not-found` on the title's span. Dimension signs (U+00D7/U+2715/U+2A2F) now
+   map to `x` on both sides before the letter filter — the same rendered claim, so glyph drift can
+   no longer break containment, and an invented number wearing the mapping still fails.
+   `--selftest` 467 → **470**; live re-run: 0 findings / 31 verified.
    **A quotation ABOUT a party is a claim about THAT party's bytes — the `attribution` check is
    the quotation arm's blind spot made a check** (added 2026-11-12 21:08, the item-41 correction
    turned into a seed). The essay's "carpet bomb 8,000 research problems" passed `quotation`

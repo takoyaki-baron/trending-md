@@ -1958,6 +1958,15 @@
   "zh": "Dominik Picheta 的博客（Nim 核心开发者）。交叉核验（10-19）：KillSwitch 文章的对抗性设计主张与项目排行榜（最高分 66.8）及 HN 讨论一致。",
   "jp": "Dominik Picheta のブログ（Nim コア開発者）。突合済み（10-19）：KillSwitch 記事の敵対的設計の主張がプロジェクトのリーダーボード（最高スコア 66.8）と HN 議論と一致。"
  },
+ "blog.platypush.tech": {
+  "cat": "community",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "platypush author Fabio Manganiello's blog on self-hosted automation and voice assistants. Cross-checked: the voice pipeline components in its Nov 19 post (assistant.microwakeword, assistant.openai, assistant.vosk, tts.piper) all exist as plugins in the BlackLight/platypush repo.",
+  "zh": "platypush 作者 Fabio Manganiello 的博客，写自托管自动化与语音助手。已交叉核验：其 11 月 19 日文章中的语音管线组件（assistant.microwakeword、assistant.openai、assistant.vosk、tts.piper）均作为插件存在于 BlackLight/platypush 仓库。",
+  "jp": "platypush 作者 Fabio Manganiello のブログ（セルフホスト自動化・音声アシスタント）。クロスチェック済み：11月19日記事の音声パイプライン構成要素（assistant.microwakeword、assistant.openai、assistant.vosk、tts.piper）はすべて BlackLight/platypush リポジトリにプラグインとして存在。"
+ },
  "blog.ploeh.dk": {
   "cat": "other",
   "cred": "high",
@@ -5760,6 +5769,15 @@
   "jp": "GitHub Gist —— ここでは第三者が手動で投稿した GitHub Trending スナップショット（順位、日次/累計スター）。匿名の出所を持つ二次集約：スポットチェックでは順位・スター数は github.com と一致（例：Heretic 29.3k/+485、08-31）が、リポジトリがなぜトレンドに入ったかは語らない —— 必ずリポジトリ自体を開くこと（Void の教訓）。",
   "zh": "GitHub Gist——此处指第三方手动张贴的 GitHub Trending 快照（排名、日增/总星数）。匿名出处的二手聚合：抽查时排名与星数与 github.com 一致（如 Heretic 29.3k/+485，08-31），但它不会告诉你仓库为何流行——务必打开仓库本身（Void 教训）。"
  },
+ "git-aarvin.github.io": {
+  "cat": "community",
+  "cred": "low",
+  "cv": 1,
+  "density": "high",
+  "en": "Single-maintainer aggregate index over seven public coding benchmarks (standardized scores, fitted model+benchmark effects). Cross-checked: its model roster and vendor attributions (Neon/Carbon/Hydrogen=Google, Fable 5.2/Opus 5.5=Anthropic, Astra/Sol=OpenAI) match each lab's own release announcements; the ranking itself is the site's own artifact — read as one curator's aggregate, not consensus.",
+  "zh": "单人维护的聚合指数，综合七个公开编程基准（分数标准化、拟合模型效应+基准效应）。已交叉核验：其模型名单与厂商归属（Neon/Carbon/Hydrogen=Google、Fable 5.2/Opus 5.5=Anthropic、Astra/Sol=OpenAI）与各实验室自己的发布公告一致；排名本身是该站自己的产物——当作某个策展人的聚合视图读，而非行业共识。",
+  "jp": "7つの公開コーディングベンチマークを集計する個人メンテナの指数（スコア標準化、モデル効果＋ベンチマーク効果のフィット）。クロスチェック済み：モデル名簿とベンダー帰属（Neon/Carbon/Hydrogen=Google、Fable 5.2/Opus 5.5=Anthropic、Astra/Sol=OpenAI）は各ラボ自身の発表と一致。ランキング自体は同サイト独自の成果物——業界の一致ではなく一人のキュレータの集計として読む。"
+ },
  "git.kernel.org": {
   "cat": "code",
   "cred": "high",
@@ -7648,6 +7666,15 @@
   "en": "Lasso Security's research blog (AI-security vendor) — the 'Provenance Tax' watermarking study verified on-page 2026-10-01: 6.5% average tool-call churn (BFCL v4 single-turn AST, 1,150 non-live items), gemma-3-27b refusal churn 6.0%→23.5% under injection, +12.5 net compliance; methods and datasets named (HarmBench 200 + JailbreakBench 100 controls), the authors' caveats intact — vendor research, but the careful kind.",
   "jp": "Lasso Security の研究ブログ（AI セキュリティベンダ）——「Provenance Tax」ウォーターマーキング研究を 2026-10-01 にページ上で検証：ツール呼び出し churn 平均 6.5%（BFCL v4 シングルターン AST、非ライブ 1,150 項目）、gemma-3-27b の拒否 churn は注入下で 6.0%→23.5%、純コンプライアンス +12.5pt。手法とデータセットが明記され（HarmBench 200 + JailbreakBench 100 対照）、著者の限定条件もそのまま——ベンダ研究だが、慎重な部類。",
   "zh": "Lasso Security 研究博客（AI 安全厂商）——\"Provenance Tax\"水印研究已于 2026-10-01 在页面上核实：工具调用平均 6.5% churn（BFCL v4 单轮 AST，1,150 非线上项）、gemma-3-27b 在注入下拒绝 churn 6.0%→23.5%、净合规 +12.5 分；方法与数据集俱全（HarmBench 200 + JailbreakBench 100 对照），作者自己的限定条件完整——厂商研究，但是讲究的那种。"
+ },
+ "lastbook.org": {
+  "cat": "code",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "First-party site of the Lastbook offline survival-library desktop app. Cross-checked: its library claims (local Gemma 4 26B A4B, 258k+ offline places, 2,324 videos, MIT, Mac/Win/Linux) match the Immortal-Protocols/lastbook repo (MIT confirmed via API); the site's star badge (748) lags the repo (~2.6k on 2026-11-20).",
+  "zh": "Lastbook 离线生存知识库桌面应用的第一方站点。已交叉核验：其知识库主张（本地 Gemma 4 26B A4B、25.8万+ 离线地点、2,324 个视频、MIT、Mac/Win/Linux）与 Immortal-Protocols/lastbook 仓库一致（API 确认 MIT 许可）；站点的 star 徽章（748）落后于仓库（2026-11-20 约 2.6k）。",
+  "jp": "オフライン生存ライブラリ Lastbook の一次サイト。クロスチェック済み：その主張（ローカル Gemma 4 26B A4B、25.8万+のオフライン地点、2,324本の動画、MIT、Mac/Win/Linux）は Immortal-Protocols/lastbook リポジトリと一致（API で MIT を確認）。サイトのスター数（748）はリポジトリに後れを取る（2026-11-20 で約2.6k）。"
  },
  "latimes.com": {
   "cat": "news",
@@ -11214,6 +11241,15 @@
   "jp": "Reflection AI のブログ——自社モデル発表の一次ソース。クロスチェック済み（10-06）：Beam 記事はフィードが帰属した主張をすべて逐語含む——「501Bオープンウェイトモデル」、「GLM-5.2に匹敵するスコアを3–4×少ない推論計算で」、「それらは実測推論コストではなく近似的な計算比較を表す」という重要な但し書きがベンダー自身の言葉で、「今月Apache 2.0ライセンスで重みをリリース」の承诺。HN 486pt。効率主張は重みが着地するまでベンダー枠組み——記事自体がそう述べている。",
   "zh": "Reflection AI 的博客——其自身模型发布的一手来源。已交叉核验（10-06）：Beam 文章逐字携带 feed 归属的每个主张——'501B 开放权重模型'、'推理算力比 GLM-5.2 少 3–4×、得分相当'、关键小字以厂商原话呈现（'它们代表近似的算力对比而非实测推理成本'）、以及发布承诺（'本月我们将以 Apache 2.0 许可发布权重'）。HN 486 分。效率主张在权重落地前都是厂商框架——帖子自己就这么说。"
  },
+ "regexr.com": {
+  "cat": "community",
+  "cred": "high",
+  "cv": 1,
+  "density": "low",
+  "en": "The regex tester/visualizer a generation learned on — now \"Temporarily Offline\" with the reason stated plainly: \"codebase is aging, and with AI hacking we've decided the best way to safekeep your data is to take the site down.\" Verified live 11-20: the notice serves server-side and matches the feed's quotation verbatim; the HN thread (50567374, 61+ pts) independently confirms the shutdown. A primary artifact of the AI-attack-economics retirement phase (beloved tool, aging code, stored user data); when it returns, re-check.",
+  "jp": "一世代が正規表現を学んだテスター/ビジュアライザ——現在「Temporarily Offline」。理由は本人の言葉で明示：「codebase is aging, and with AI hacking we've decided the best way to safekeep your data is to take the site down.」11-20にライブ確認：告知はサーバーサイドで配信され、フィードの引用と逐語一致。HNスレッド（50567374、61+ pts）がシャットダウンを独立裏付け。AI 攻撃経済学の引退段阶の一次アーティファクト（愛されたツール、老いたコード、保存ユーザーデータ）。復帰したら再確認。",
+  "zh": "一代人学正则用的测试器/可视化工具——现在「Temporarily Offline」，原因写得直白：「codebase is aging, and with AI hacking we've decided the best way to safekeep your data is to take the site down.」。11-20 实时核验：公告由服务端直接输出、与 feed 引用逐字一致；HN 讨论串（50567374，61+ 分）独立佐证下线。AI 攻击经济学退役阶段的一手工件（受喜爱工具、老化代码、存有用户数据）；恢复上线后需重新核查。"
+ },
  "registry.npmjs.org": {
   "cat": "data",
   "cred": "high",
@@ -11996,6 +12032,15 @@
   "jp": "SentinelLabs の一次脅威リサーチ（TraderTraitor/Jade Sleet macOS 報告）——日付付きタイムラインの一次フォレンジック。クロス検証（09-22）：キャンペーンの事実は The Hacker News の要約と一致。",
   "zh": "SentinelLabs 一线威胁研究（TraderTraitor/Jade Sleet macOS 报告）——带日期时间线的一手取证。交叉验证（09-22）：战役事实与 The Hacker News 摘要一致。"
  },
+ "seremot.com": {
+  "cat": "community",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "João Tomé's personal Substack (\"emot | Random Stories\") — host of the Future Stories podcast. The Cerf interview (published 2026-11-19T21:42Z, recorded 10-14 over Zoom) verified first-hand 11-20: the allies quote, \"the speed of light is too slow\", age 83, left Google this year, Tolero, the Crocker two-week-bug story and the CERFnet glitter anecdote all verbatim on the page. A single author's transcription of a spoken interview — treat exact phrasings as the author's rendering; transcript twin at ourfuturestories.eu/vint-cerf. Cross-checked: Tolero Networks (Cerf CEO, software for interplanetary-internet routers) independently corroborated via Quanta's space-internet coverage and the 2026 Mars Society / ISOC listings.",
+  "jp": "João Tomé の個人 Substack（「emot | Random Stories」）——Future Stories ポッドキャストのホスト。Cerf インタビュー（公開 2026-11-19T21:42Z、収録 10-14 Zoom）を 11-20 に一次確認：連友の引用、「the speed of light is too slow」、83歳、今年 Google 離職、Tolero、Crocker の2週間バグ譚、CERFnet のグリッター逸話——すべてページ上に逐語。話し言葉の一著者による書き起こし——正確な言い回しは著者のレンダリングとして扱う。文字起こしの双子は ourfuturestories.eu/vint-cerf。クロスチェック：Tolero Networks（Cerf CEO、惑星間インターネット・ルータ向けソフトウェア）は Quanta の宇宙インターネット報道と 2026 Mars Society / ISOC の登載で独立裏付け。",
+  "zh": "João Tomé 的个人 Substack（「emot | Random Stories」）——Future Stories 播客主持人。Cerf 访谈（发布于 2026-11-19T21:42Z、10-14 经 Zoom 录制）11-20 一手核验：盟友引文、「the speed of light is too slow」、83 岁……83 岁、今年离开 Google、Tolero、Crocker 两周 bug 故事、CERFnet 闪光液轶事——全部逐字在页面上。口语访谈的单作者转写——精确措辞应视作作者的转述；文字稿孪生在 ourfuturestories.eu/vint-cerf。交叉核验：Tolero Networks（Cerf 任 CEO、行星际互联网路由软件）经 Quanta 的太空互联网报道与 2026 Mars Society / ISOC 活动列表独立佐证。"
+ },
  "serotav.github.io": {
   "cat": "research",
   "cred": "high",
@@ -12265,6 +12310,15 @@
   "en": "Mark Blaszczyk's first-party disclosure site for *SMS of Death* (WAP Push → `NegativeArraySizeException` in `WapPushOverSms`), published 2026-10-29 after a 90-day Android VRP timeline. Claims are code-level and checkable, but it is one researcher's own testing with no vendor statement behind the \"Won't Fix / Non-Security\" row. Cross-checked (10-29 20:29, first-hand): its line numbers (:217 cast, :244 allocation) and its arithmetic (`88 80 80 80 00` → `0x80000000` through AOSP's own `WspTypeDecoder`) both reproduce against AOSP source on `main`, `android16-release` and `android15-release`.",
   "jp": "Mark Blaszczyk 本人による *SMS of Death*（WAP Push → `WapPushOverSms` の `NegativeArraySizeException`）の開示サイト。2026-10-29、Android VRP の 90 日を経て公開。主張はコード水準で検証できるが、単独研究者の試験であり、「Won't Fix / Non-Security」の行にベンダーの文はない。突合済み（10-29 20:29、一次）：行番号（:217 のキャスト、:244 の確保）と算術（`88 80 80 80 00` → `0x80000000`、AOSP 自身の `WspTypeDecoder` 経由）は `main`、`android16-release`、`android15-release` の AOSP ソースで再現する。",
   "zh": "Mark Blaszczyk 本人对 *SMS of Death*（WAP Push → `WapPushOverSms` 中的 `NegativeArraySizeException`）的披露站点，2026-10-29 经 90 天 Android VRP 时限后发布。其断言都在代码层面可核，但属单一研究者自测，「Won't Fix / Non-Security」那一行没有厂商原文。已交叉核验（10-29 20:29，一手）：行号（:217 的强转、:244 的分配）与算术（`88 80 80 80 00` → `0x80000000`，经 AOSP 自己的 `WspTypeDecoder`）在 `main`、`android16-release`、`android15-release` 的 AOSP 源码上均复现。"
+ },
+ "snowflake.com": {
+  "cat": "vendor",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "Snowflake engineering blog. Cross-checked: its Postgres 19 REPACK CONCURRENTLY description (online rebuild, brief lock at the end, no extension) matches postgresql.org's own 19 release notes. Note: plain fetches hit a Cloudflare JS challenge — read via server-side reader twin.",
+  "zh": "Snowflake 工程博客。已交叉核验：其对 Postgres 19 REPACK CONCURRENTLY 的描述（在线重建、末尾短暂锁、无需扩展）与 postgresql.org 自己的 19 发布说明一致。注意：直接抓取会撞 Cloudflare JS 挑战——需经服务端读者孪生页读取。",
+  "jp": "Snowflake エンジニアリングブログ。クロスチェック済み：Postgres 19 REPACK CONCURRENTLY の記述（オンライン再構築、最後に短いロック、拡張不要）は postgresql.org 自身の 19 リリースノートと一致。注意：通常のフェッチは Cloudflare JS チャレンジに当たる——サーバサイド リーダーツイン経由で読む。"
  },
  "so-net.ne.jp": {
   "cat": "vendor",

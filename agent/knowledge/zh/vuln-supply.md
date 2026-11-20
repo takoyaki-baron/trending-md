@@ -1601,3 +1601,15 @@ Sources: [VulnCheck 公告：Tensei](https://www.vulncheck.com/advisories/tensei
 [Wiz: NGINX RCE](https://www.wiz.io/blog/nginx-http2-rce-vulnerabilities) ·
 [Ruby 咨询](https://www.ruby-lang.org/en/news/2026/11/18/multiple-vulnerabilities-in-regexp-and-string/) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50558906)
+
+## 2026-11-20（12:43 批次）——工件缺口的两种形状：OpenSSL 的修复只存在于一个未合并的 PR，Synology 的修复是带着今天日期的承诺
+
+**OpenSSL `EVP_EncodeBlock()`**（`CVE-2026-121481`，发布于 11-18，`Awaiting Analysis`）：输入长度接近 INT_MAX 时可能溢出编码输出长度的计算、写到调用方缓冲区之外。记录上的 **9.8** CVSS 3.1 来自 **CISA-ADP** 富化容器（Secondary，org `134c704f-…`）——不是 NVD 分析、也不是 OpenSSL 自己的评分。修复只以 [PR #33652](https://github.com/openssl/openssl/pull/33652) 的形式存在，nmouha 于 11-10 发起、**至今开放未合并**：对非法输入（NULL 缓冲区、负长度、装不进 int 的编码尺寸）返回 `-1`，与 wolfSSL 的兼容层一致；`EVP_DecodeBlock()` 也有类似守卫的提议。PR 正文写道：「The OpenSSL SRT has asked for it to be fixed publicly; the advisory is still pending」。没有任何已发布版本包含修复——最新是 4.1.0（10-23）。Base64 无处不在但暴露按应用计：9.8 是库影响数字、风险取决于调用点，所以补救是清点调用点（谁在传攻击者可控的接近 INT_MAX 的长度？），不是升级。
+
+**Synology SA-26:21**（`CVE-2026-120382`，发布于 11-19 15:47 UTC+8）：DiskStation Manager **OAuth API** 里的 CWE-88 参数分隔符中和缺失，厂商自评 **9.8** CVSS 3.1——远程攻击者可读写任意文件并发动 DoS。影响 DSM 6.2.4 到 7.4 线（各分支列出具体构建号）与 BeeStation OS 1.5。当下有效的缓解：**「Deactivate the OAuth Service package」**。修复构建——DSM 7.4.1-90080-2 与 7.3.2-86009-6——「scheduled for release by 2026-11-20」，即承诺今天、公告发出时并未发布；7.2.x 用户被要求跨分支升到 7.3.2。核查时（11-20 ~04:12 UTC）NVD 还没有该记录。这是 Synology 一周内的第二起事件：另一个 DSM bug `CVE-2026-10441` 于 11-18 进了 KEV、联邦限期三天。
+
+Sources: [CVE-2026-121481](https://www.cve.org/CVERecord?id=CVE-2026-121481) ·
+[OpenSSL PR #33652（开放、未合并）](https://github.com/openssl/openssl/pull/33652) ·
+[HN](https://news.ycombinator.com/item?id=50569226) ·
+[Synology SA-26:21](https://www.synology.com/en-uk/security/advisory/Synology_SA_26_21) ·
+[HN](https://news.ycombinator.com/item?id=50567209)

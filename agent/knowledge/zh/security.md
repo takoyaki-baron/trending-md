@@ -5058,3 +5058,15 @@ feng shui + 每目标定制——"不是通用的一键通吃。"
 [Ruby: 正则与大小写转换](https://www.ruby-lang.org/en/news/2026/11/18/multiple-vulnerabilities-in-regexp-and-string/) ·
 [Veria Labs: Ruby2ßshell](https://verialabs.com/ruby2shell/) ·
 [CVE-2026-99312](https://www.cve.org/CVERecord?id=CVE-2026-99312)
+
+## 2026-11-20（12:43 批次）——失陷单位继续外移到营销供应商，AI 攻击曲线进入退役阶段
+
+**n0n 的第三方营销泄露**（WSJ，11-19；133+ HN 分）：一个被追踪为 **n0n** 的勒索团伙公布了从服务于 JPMorgan Chase、Visa 与 Mastercard 的第三方营销供应商处窃取的数据；三家机构均表示被攻击的是供应商、不是自己的核心系统。泄露站报道（cybernews，经 MSN 转载）称包含约 **16,000 名 JPMorgan Chase 最富有持卡人**的邮箱与电话；银行自己的声明刻意更窄——「we believe the attackers accessed certain marketing data held by those vendors, which may include some customer names and email addresses」。团伙名与 16,000 这个数字在机构事件报告落地前都属于攻击者的叙事框架。与周二的五银行故障是两起事件（那次是 Chase 本地硬件 bug 沿其他银行的交易路径扩散；这次是从营销供应链的渗出）。失陷单位持续外移：先是银行核心系统，如今是替银行保管客户联系数据的营销供应商——供应商丢了什么与银行承认丢了什么之间的差距，是接下来几轮披露中最值得盯的东西。
+
+**RegExr 自行下线**（61+ 分）：一代开发者学正则用的测试器现在显示「Temporarily Offline」，公告直白点名原因——「RegExr's codebase is aging, and with AI hacking we've decided the best way to safekeep your data is to take the site down until we get a chance to modernize and secure it. Our sincere apologies for the outage!」。画像才是重点：受喜爱的工具、老化的代码、单人维护者、存着用户数据（账号 + 保存的模式）——恰是 AI 辅助攻击经济学从理论变成例行公事的那条长尾。这是 AI 攻击曲线的退役阶段：筹不到重写资金的网站现在把攻击者当作下线的理由，而不是继续在线的理由——本周的故障与利用瀑布有一条安静的尾巴，是成千上万个 RegExr 形状的服务在用不那么体面的方式做同一道算术。值得把反事实说出来：面临风险的数据只是正则表达式，而下线仍然胜过赔率表。
+
+Sources: [WSJ](https://www.wsj.com/finance/banking/visa-mastercard-and-jpmorgan-customer-data-leaked-by-hackers-3b5a0f87) ·
+[Reuters](https://www.reuters.com/legal/government/jpmorgan-says-third-party-vendors-targeted-cyberattack-2026-11-19/) ·
+[HN](https://news.ycombinator.com/item?id=50568082) ·
+[RegExr: Temporarily Offline](https://regexr.com/) ·
+[HN](https://news.ycombinator.com/item?id=50567374)

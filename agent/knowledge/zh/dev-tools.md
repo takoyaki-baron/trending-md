@@ -1610,3 +1610,15 @@ ReDoS 修复**（灾难性回溯可能挂死页面）与新的对象式 AJAX tra
 来源：[jQuery 博客：4.1.0 and 3.8.0 released](https://blog.jquery.com/2026/11/17/jquery-4-1-0-and-3-8-0-released-passing-the-torch/) ·
 [4.1.0 release notes](https://github.com/jquery/jquery/releases/tag/4.1.0) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50537156)
+
+## 2026-11-20（12:43 批次）——PostgreSQL 19 把膨胀清理与计划稳定性变成一等公民；Cerf 把开放性讲成地缘保险
+
+**PostgreSQL 19**（11-19 发布，99+ HN 分）：头条是运维性的。**REPACK (CONCURRENTLY)** 回收表膨胀、还能按索引重排表数据且不阻塞读写——取代阻塞访问的 `VACUUM FULL`/`CLUSTER`（两者为兼容保留），也就是把 `pg_repack` 十年的第三方舞蹈做进了内核；仅 REPACK 一条命令就构成写负载高的繁忙表升级的理由。计划稳定性：**pg_plan_advice**（用于钉住或试验计划的「计划建议」迷你语言）加 **pg_stash_advice**（按查询标识符存储建议并自动应用——不改应用就能修一个变慢的计划）。autovacuum 以**并行 worker**（`autovacuum_max_parallel_workers`）清理索引、并配一套决定哪些表先做的新评分系统；查询在执行中把页标为 all-visible、缩小未来 vacuum 的工作量。另有：备库上的读己之写一致性、无需重启服务器的逻辑复制初始化（首个逻辑槽自动抬高 WAL 级别）、新监控视图（`pg_stat_lock`、`pg_stat_recovery`、`pg_stat_autovacuum_scores`）。托管厂商当天即支持（Neon 与 Databricks Lakebase 数小时内宣布）。
+
+**Vint Cerf 谈 TCP/IP 为何从未申请专利**（seremot.com，48+ 分——Future Stories 播客第 1 期，主持 João Tomé 前 Cloudflare）：83 岁的 Cerf 在效力二十多年后于今年离开 Google，正在参与创办 **Tolero**——为行星际互联网造软件——「the speed of light is too slow」。关于开放性，他的回答是战略、不是情怀：「Who will our allies be 25 years from now? And we didn't know. So we thought the only way we can be assured that the allies will have access to this is to simply open it up.」开放性论证每周都在 AI 许可证之争中被重审；这里它来自协议层、以地缘保险而非意识形态的口吻说出——而 Tolero 是一个值得追踪的具体新工件、不是一段回顾。轶事：朋友 Steve Crocker 三十秒诊出他排查两周的随机崩溃（「that's the problem」——他关于协作的论据）；1989 年 CERFnet 发布会上一瓶闪光液碎在 Cisco 路由器上。
+
+Sources: [PostgreSQL 19 Released](https://www.postgresql.org/about/news/postgresql-19-released-3449/) ·
+[Snowflake: Squeezing Tables with Postgres 19 Repack](https://www.snowflake.com/en/blog/engineering/postgres-19-repack-table-bloat/) ·
+[HN](https://news.ycombinator.com/item?id=50560357) ·
+[seremot.com: Vint Cerf on why TCP/IP was never patented](https://seremot.com/p/vint-cerf-on-why-tcpip-was-never) ·
+[HN](https://news.ycombinator.com/item?id=50568861)

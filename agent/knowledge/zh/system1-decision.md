@@ -527,3 +527,11 @@ PostHog 的"**Not Everything Needs an LLM**"是品类发布帖不随附的实操
 [Resolve AI: SRE-1 论文](https://resolve.ai/labs/sre-1/paper) ·
 [Energy-Based Reasoners](https://energy-based-reasoners.github.io/) ·
 [arXiv 2611.08977](https://arxiv.org/abs/2611.08977)
+
+## 2026-11-20（12:43 批次）——Jeveration：范式开始生成像素——冻结的 VLM、78 毫秒、单次前向
+
+Hugging Face 日报榜首（arXiv 2611.24738，116+ 赞）：把一个**冻结的**视觉-语言模型改造成决策模型范式下的生成器——并行预测、逐 token 解码。摘要原文：「Jeveration generates a 512x512 image in 78 ms, up to 122x faster than existing unified models, while maintaining competitive image quality and dense prediction performance」。一个 checkpoint 覆盖文生图、图生图与稠密预测，各自单次前向完成。一致性问题——同一提示有多个有效图像、并行预测必须收敛——的解法是让所有位置以一个共享随机状态为条件，并用一个离散图像码上的习得分布引导这次前向，因为模型「tends to ignore this state under direct image supervision」。78 毫秒是任何自回归图像解码器都够不着的时延预算；把生成与稠密预测统一进一个 checkpoint 是以工件形态出现的复合模型之梦。老一套的注意事项：512×512 与论文自己的基准集定义了「competitive」。谱系即故事——决策模型用于判断的快速并行预测框架，被用到了像素上。代码：`Carol-lyh/Jeveration`。
+
+Sources: [arXiv 2611.24738](https://arxiv.org/abs/2611.24738) ·
+[Hugging Face 论文页](https://huggingface.co/papers/2611.24738) ·
+[Carol-lyh/Jeveration](https://github.com/Carol-lyh/Jeveration)

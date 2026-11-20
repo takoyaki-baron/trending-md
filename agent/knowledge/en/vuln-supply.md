@@ -2322,3 +2322,15 @@ Sources: [OpenJDK PR #32781](https://github.com/openjdk/jdk/pull/32781) ·
 [Wiz: NGINX RCE](https://www.wiz.io/blog/nginx-http2-rce-vulnerabilities) ·
 [Ruby advisory](https://www.ruby-lang.org/en/news/2026/11/18/multiple-vulnerabilities-in-regexp-and-string/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50558906)
+
+## 2026-11-20 (12:43 batch) — the artifact gap in two shapes: OpenSSL's fix exists only as an open PR, Synology's fix is a promise with today's date on it
+
+**OpenSSL `EVP_EncodeBlock()`** (`CVE-2026-121481`, published 11-18, `Awaiting Analysis`): calling it with an input length close to INT_MAX may overflow the encoded-output-size calculation and write past the end of the caller-supplied buffer. The **9.8** CVSS 3.1 on the record comes from the **CISA-ADP** enrichment container (Secondary, org `134c704f-…`) — not NVD analysis, not OpenSSL's own score. The fix exists only as [PR #33652](https://github.com/openssl/openssl/pull/33652), opened 11-10 by nmouha and **still open and unmerged**: return `-1` for invalid inputs (NULL buffers, negative lengths, encoded sizes that don't fit an int), matching wolfSSL's compatibility layer, with a similar guard proposed for `EVP_DecodeBlock()`. Its body states: "The OpenSSL SRT has asked for it to be fixed publicly; the advisory is still pending." No shipped release contains the fix — newest is 4.1.0 (Oct 23). Base64 is everywhere but exposure is per-application: the 9.8 is a library-impact number and risk depends on call sites, so the remediation is inventory (who passes attacker-controlled, near-INT_MAX lengths?), not an upgrade.
+
+**Synology SA-26:21** (`CVE-2026-120382`, published 11-19 15:47 UTC+8): CWE-88 improper neutralization of argument delimiters in the **OAuth API** of DiskStation Manager, vendor-scored **9.8** CVSS 3.1 — remote attackers can read or write arbitrary files and conduct DoS. Affects DSM 6.2.4 through the 7.4 line (specific builds per branch) plus BeeStation OS 1.5. The mitigation that works right now: **"Deactivate the OAuth Service package."** The fixed builds — DSM 7.4.1-90080-2 and 7.3.2-86009-6 — were "scheduled for release by 2026-11-20," i.e. promised today, not shipped when the advisory went up; 7.2.x users are told to upgrade across branches to 7.3.2. NVD had no record when checked (~04:12 UTC 11-20). This is Synology's second event in a week: a *different* DSM bug, `CVE-2026-10441`, hit KEV on 11-18 with a three-day federal deadline.
+
+Sources: [CVE-2026-121481](https://www.cve.org/CVERecord?id=CVE-2026-121481) ·
+[OpenSSL PR #33652 (open, unmerged)](https://github.com/openssl/openssl/pull/33652) ·
+[HN](https://news.ycombinator.com/item?id=50569226) ·
+[Synology SA-26:21](https://www.synology.com/en-uk/security/advisory/Synology_SA_26_21) ·
+[HN](https://news.ycombinator.com/item?id=50567209)

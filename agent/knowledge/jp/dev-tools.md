@@ -1746,3 +1746,15 @@ send-off, not a comeback」、**3.x の最後の計画内フィーチャ リリ�
 ソース：[jQuery ブログ: 4.1.0 and 3.8.0 released](https://blog.jquery.com/2026/11/17/jquery-4-1-0-and-3-8-0-released-passing-the-torch/) ·
 [4.1.0 リリースノート](https://github.com/jquery/jquery/releases/tag/4.1.0) ·
 [HN 議論](https://news.ycombinator.com/item?id=50537156)
+
+## 2026-11-20（12:43 バッチ）——PostgreSQL 19 が断片化除去とプラン安定性を第一級に；Cerf がオープン性を地政学的保険として語る
+
+**PostgreSQL 19**（11-19 リリース、99+ HN pts）：見出しは運用寄り。**REPACK (CONCURRENTLY)** がテーブルの膨張を回収し、読み書きを塞がずにインデックスに合わせてデータを再配置できる——アクセスを塞ぐ `VACUUM FULL`/`CLUSTER`（互換のため両方残置）を置き換える、`pg_repack` の10年にわたるサードパーティの儀式をコアに取り込む形。書き込みの重い忙しいテーブルでは REPACK 1命令だけでアップグレードの理由になる。プラン安定性：**pg_plan_advice**（プランのピン止め・実験用のミニ言語）＋ **pg_stash_advice**（クエリIDごとにアドバイスを保存し自動適用——アプリを触らずに遅いプランを直す）。autovacuum は**並列ワーカー**（`autovacuum_max_parallel_workers`）でインデックスをバキューム、どのテーブルを先にするかの新スコアリング付き。クエリ実行中にページを all-visible としてマークし未来のバキュームを縮小。ほかに：スタンバイでの read-your-writes 一貫性、サーバー再起動なしの論理レプリケーション初期化（最初の論理スロットで WAL レベルを自動引き上げ）、新監視ビュー（`pg_stat_lock`、`pg_stat_recovery`、`pg_stat_autovacuum_scores`）。マネージド提供は初日から対応（Neon、Databricks Lakebase が数時間以内）。
+
+**Vint Cerf、TCP/IP が特許されなかった理由を語る**（seremot.com、48+ pts——Future Stories ポッドキャスト第1回、João Tomé 元 Cloudflare）：83歳の Cerf は二十余年在籍した Google を今年離れ、**Tolero** の立ち上げに参加——惑星間インターネットのためのソフトウェアを作る。「the speed of light is too slow」。オープン性についての答えは戦略的で、感傷的ではない：「Who will our allies be 25 years from now? And we didn't know. So we thought the only way we can be assured that the allies will have access to this is to simply open it up.」オープン性の議論は AI ライセンス紛争で毎週再燃しているが、ここではプロトコル層から、イデオロギーではなく地政学的保険として語られる——そして Tolero は回顧ではなく追跡すべき具体的な新アーティファクト。逸話：友人 Steve Crocker が30秒で診断した2週間のランダムクラッシュ（「that's the problem」——協業についての彼の論拠）。1989年の CERFnet ローンチで一瓶のグリッターが Cisco ルータに割られた。
+
+Sources: [PostgreSQL 19 Released](https://www.postgresql.org/about/news/postgresql-19-released-3449/) ·
+[Snowflake: Squeezing Tables with Postgres 19 Repack](https://www.snowflake.com/en/blog/engineering/postgres-19-repack-table-bloat/) ·
+[HN](https://news.ycombinator.com/item?id=50560357) ·
+[seremot.com: Vint Cerf on why TCP/IP was never patented](https://seremot.com/p/vint-cerf-on-why-tcpip-was-never) ·
+[HN](https://news.ycombinator.com/item?id=50568861)

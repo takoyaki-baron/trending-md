@@ -735,3 +735,11 @@ Sources: [Microsoft AI: Ignite 2026](https://microsoft.ai/news/microsoft-ignite-
 [Resolve AI: SRE-1 paper](https://resolve.ai/labs/sre-1/paper) ·
 [Energy-Based Reasoners](https://energy-based-reasoners.github.io/) ·
 [arXiv 2611.08977](https://arxiv.org/abs/2611.08977)
+
+## 2026-11-20 (12:43 batch) — Jeveration: the paradigm generates pixels — a frozen VLM, 78 ms, one forward pass
+
+Top of Hugging Face's daily board (arXiv 2611.24738, 116+ upvotes): repurposes a **frozen** vision-language model for generation in the decision-model paradigm — parallel prediction instead of token-by-token decode. From the abstract: "Jeveration generates a 512x512 image in 78 ms, up to 122x faster than existing unified models, while maintaining competitive image quality and dense prediction performance." One checkpoint covers text-to-image, image-to-image and dense prediction, each in a single forward pass. The coherence problem — many valid images per prompt, so parallel predictions must converge — is solved by conditioning all positions on a shared random state, with a learned distribution over discrete image codes guiding the pass because the model "tends to ignore this state under direct image supervision." 78 ms is a latency budget no autoregressive image decoder meets, and unifying generation with dense prediction in one checkpoint is the compound-model dream stated as an artifact. Usual caveat: 512×512 and the paper's own benchmark set define "competitive." The lineage is the story — the same fast-parallel-prediction framing decision models use for judgments, applied to pixels. Code: `Carol-lyh/Jeveration`.
+
+Sources: [arXiv 2611.24738](https://arxiv.org/abs/2611.24738) ·
+[Hugging Face paper page](https://huggingface.co/papers/2611.24738) ·
+[Carol-lyh/Jeveration](https://github.com/Carol-lyh/Jeveration)

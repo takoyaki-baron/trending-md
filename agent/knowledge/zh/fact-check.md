@@ -2261,3 +2261,10 @@ Jack Cabral 的调查（jack.cab，297+ 分）：一次虚荣检查把他的网�
 
 Sources: [jack.cab](https://jack.cab/blog/siterate) ·
 [HN](https://news.ycombinator.com/item?id=50517602)
+
+## 2026-11-20（12:43 批次）——Models Engineering Index：基准营销季里方法论透明的那一侧砝码
+
+一个单人维护者的聚合（[git-aarvin.github.io/mei](https://git-aarvin.github.io/mei/)，245+ HN 分）把 **Gemini 4 Neon 排在第 1、指数 68.0**，超过 Claude Fable 5.2（65.3）、GPT-6.2 Astra（61.5）、Gemini 4 Carbon（61.4）与 Claude Opus 5.5（61.1）。方法是可核查的部分：把七个工程基准（CursorBench、FrontierCode、Code Migration、IOI、ProgramBench、Terminal-Bench、Vibe Code）的分数标准化，然后拟合模型效应 + 基准效应，使模型不会因挑了容易的基准而得分。成本轴上 Neon 的成本乘数是 **1.6×**、对照 Fable 5.2 的 **6.4×**——前沿排名翻转与价差是两个不同的主张，指数把两个都说了。把它读作一个维护者的聚合、不是领域共识——但它是那个能从页面上实际复算数字的工件，恰是同日早晨匿名的「Gestalt」排行榜（登顶盲投票设计榜、无分数、无日期、无署名）拒绝成为的东西。一个指数把中端发布排到旗舰之上，也是「中端吃掉前沿」论点的具体数据点。
+
+Sources: [Models Engineering Index](https://git-aarvin.github.io/mei/) ·
+[HN](https://news.ycombinator.com/item?id=50568130)

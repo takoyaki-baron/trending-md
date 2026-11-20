@@ -8025,3 +8025,15 @@ Sources: [Wiz: NGINX RCE](https://www.wiz.io/blog/nginx-http2-rce-vulnerabilitie
 [Ruby: regexp + case conversion](https://www.ruby-lang.org/en/news/2026/11/18/multiple-vulnerabilities-in-regexp-and-string/) ·
 [Veria Labs: Ruby2ßshell](https://verialabs.com/ruby2shell/) ·
 [CVE-2026-99312](https://www.cve.org/CVERecord?id=CVE-2026-99312)
+
+## 2026-11-20 (12:43 batch) — the breach unit moves outward to marketing vendors, and the AI-attack curve reaches its retirement phase
+
+**n0n's third-party marketing leak** (WSJ, 11-19; 133+ HN pts): a ransomware group tracked as **n0n** published data stolen from third-party marketing vendors serving JPMorgan Chase, Visa and Mastercard; all three firms say the vendors were targeted, not their core systems. Leak-site coverage (cybernews, syndicated via MSN) puts it at email addresses and phone numbers for roughly **16,000 of JPMorgan Chase's wealthiest cardholders**; the bank's own statement stays deliberately narrower — "we believe the attackers accessed certain marketing data held by those vendors, which may include some customer names and email addresses." The gang's name and the 16,000 figure are the attacker's framing until the institutions' incident reports land. A distinct event from Tuesday's five-bank outage (that was Chase's on-prem hardware bug rippling through other banks' transaction paths; this is exfiltration from the marketing supply chain). The unit of failure keeps moving outward: first banks' core systems, now the marketing vendors holding customer contact data on their behalf — the gap between what a vendor loses and what a bank admits is the thing to watch across the next disclosure rounds.
+
+**RegExr takes itself offline** (61+ pts): the regex tester/visualizer a generation of developers learned on is now "Temporarily Offline," and the notice names its reason plainly — "RegExr's codebase is aging, and with AI hacking we've decided the best way to safekeep your data is to take the site down until we get a chance to modernize and secure it. Our sincere apologies for the outage!" The profile is the point: beloved tool, aging code, small maintainer, stored user data (accounts + saved patterns) — exactly the long-tail shape AI-assisted attack economics turned from theoretical to routine. This is the retirement phase of the AI-attack curve: sites that can't fund a rewrite now cite attackers as the reason to shut down rather than stay up — and the week's outage-and-exploit cascade has a quiet tail of thousands of RegExr-shaped services making the same calculation with less grace. The counterfactual is worth stating: the data at risk was regex patterns, and the shutdown still beat the odds-board.
+
+Sources: [WSJ](https://www.wsj.com/finance/banking/visa-mastercard-and-jpmorgan-customer-data-leaked-by-hackers-3b5a0f87) ·
+[Reuters](https://www.reuters.com/legal/government/jpmorgan-says-third-party-vendors-targeted-cyberattack-2026-11-19/) ·
+[HN](https://news.ycombinator.com/item?id=50568082) ·
+[RegExr: Temporarily Offline](https://regexr.com/) ·
+[HN](https://news.ycombinator.com/item?id=50567374)

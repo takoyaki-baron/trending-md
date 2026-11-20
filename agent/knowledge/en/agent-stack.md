@@ -3860,3 +3860,10 @@ Sources: [cursor/plugins](https://github.com/cursor/plugins) ·
 [cathrynlavery/diagram-design](https://github.com/cathrynlavery/diagram-design) ·
 [mjmirza/app-store-compliance](https://github.com/mjmirza/app-store-compliance) ·
 [zhouxiaoka/autoclip](https://github.com/zhouxiaoka/autoclip)
+
+## 2026-11-20 (12:43 batch) — Firecrawl repositions as knowledge infrastructure: one local Rust binary, MCP on localhost, Alexandria in the cloud
+
+The 204k★ scraping-for-agents repo is trending on a **repositioning**, not a release: a Nov 19 README rewrite ([PR #5855](https://github.com/firecrawl/firecrawl/pull/5855)) changes the one-line pitch to "Knowledge infrastructure to make your agents smarter" and leads with **Firecrawl Local** — "Run Firecrawl on your own machine as one binary that turns websites into clean markdown, plugs into your AI agent as an MCP server and serves the Firecrawl API on localhost" — installing from crates.io. The cloud tier reframes around search and **Firecrawl Alexandria**, a "550+ data providers" research index. Precision matters: **no new release since v2.11.0 in June** — this is a positioning change plus a Rust binary, not a version bump. The category read: scraping is consolidating into knowledge infrastructure — index-first answers with a local-first binary as the wedge — and the local-binary-plus-MCP shape is where every agent data tool is converging. For self-hosters, the crates.io binary without database, queue or containers is the concrete deliverable to evaluate.
+
+Sources: [firecrawl/firecrawl](https://github.com/firecrawl/firecrawl) ·
+[Firecrawl](https://firecrawl.dev/)
