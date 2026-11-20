@@ -1,8 +1,8 @@
 ---
 date: 2026-11-20
-updated: 2026-11-20T04:42:49Z
+updated: 2026-11-20T12:19:49Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 30
+sources: 42
 license: CC-BY-4.0
 ---
 
@@ -158,7 +158,7 @@ Kixelated 的续篇（今晚在 HN 传播）主张 OpenAI 的实时语音栈继�
 - **Source:** perishablepress.com · HN 86+ pts · ~3.2小时前 (~00:51 UTC+8)
 - **Tags:** `chrome` `browser` `privacy` `bandwidth` `on-device-ai`
 
-Jeff Starr（Perishable Press）报告他的服务器侧带宽用量几个月前"冲破了天花板"，在他逐一关闭 Chrome 的**"AI innovations"与端上 AI 设置**（他报告这些默认开启）后，网络监视器显示流量"几乎归零"，他将"每月字面意义上的数百 GB"归因于 Chrome。文章自己把证据基础说得很直白：一张设置页截图、一次活动监视器观察、以及一句"用你喜欢的网络监视器自己复现"的邀请。没有日志、没有前后对照表、没有设备或系统细节——这是一位管理员的轶事，不是测量研究，讨论区的反应也是如此对待的。
+Jeff Starr（Perishable Press）报告他的服务器侧带宽用量几个月前"冲破了天花板"，在他逐一关闭 Chrome 的**"AI innovations"与端上 AI 设置**（他报告这些默认开启）后，网络监视器显示流量"几乎归零"，他归因于 Chrome 的用量达到每月字面意义上的数百 GB 量级。文章自己把证据基础说得很直白：一张设置页截图、一次活动监视器观察、以及一句"用你喜欢的网络监视器自己复现"的邀请。没有日志、没有前后对照表、没有设备或系统细节——这是一位管理员的轶事，不是测量研究，讨论区的反应也是如此对待的。
 
 **Why it matters:** 无论数字能否复现，它提出的检查成本极低，而底层问题是真实存在的：会周期性同步模型的端上 AI 功能，在机器集群上能搬动可观的流量，而最终在企业出口账单里看见它的正是 IT 管理员。如果你在大规模管理 Chrome，这篇文章的价值是那页待审计的设置和一个一晚就能做完的实验——而且时机耐人寻味，恰与上文本地 AI 经济学论述同周出现。
 
@@ -456,13 +456,173 @@ João Tomé（前 Cloudflare）上线 Future Stories 播客，首位嘉宾是 Vi
 
 ---
 
+## 29. Frostbite：一套由 AI 设计的通用 CPU 宣称 4.59× 每瓦性能——细则就写在它自己的脚注里
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** architectlabs.com · HN 150+ pts · ~2.1小时前 (~18:05 UTC+8)
+- **Tags:** `ai-hardware` `chip-design` `agents` `interaction-nets` `lean`
+
+Architect Labs 继 Redwood 之后的第二步：**Frostbite**，一颗通用 CPU，其 ISA、微架构、RTL、验证与最终 GDS 全部由 agent 集群围绕一个新的执行模型产出——**交互网**（interaction nets，Lafont 1990）：用类 Rust 的 **Vine** 语言写出的程序被编译为一张图，并行性是显式的、空间性的，而不是靠乱序机制在运行时重新发现。在 7nm 版图上实测（GDS 中 500 MHz，quad + 4 个 L3 节点 = 0.792 mm²），他们报告在 25 个工作负载上（其中 10 个是 agent 调优所用的搜索集，**15 个留到最终评估才解锁**）对参照核（"TCPU"）取得 **4.59× 每瓦性能**与 **8.77× 每面积性能**的几何均值（held-out 集上为 3.83×）。能耗账目才是有意思的部分：取指/译码/发射从基线的 27% 降到 6%，代价是 26% 花在片上网络和一套硬件化的工作窃取调度器上——而按文章的说法，这套行为"从未由任何人类指定"。整个项目由一门内部形式化规范语言（ASL）撑住，最终降为 **80 万+ 行 Lean**；agent 集群在四轮搜索中提出的 58 个想法留下了 37 个。
+
+**Why it matters:** 这是"AI 设计整颗芯片"这一论点迄今最完整的公开主张（OpenAI 的 RTL 工作、Anthropic 的 Mythos-AMD 训练让本周本就是这个主题——Frostbite 走得更远，把一个工作负载一路带到 GDS）。头条倍数值得配上传言，而且文章自己带了——只要读到摘要之后：基线在开篇被称作一款现代的、流片验证过的超标量 CPU，但结果部分的脚注把 TCPU 定义为双发射、顺序执行处理器，且"出于法律原因"不能透露其身份——按现代核心的标准这是个很弱的基线，而且所有数字都是流片前的（文章自己也这么说）。诚实的读法是：一个真正新颖的执行模型、一条严肃的形式化验证主线，以及一个含义是打赢小型顺序核而非 Zen 6 的 4.59×。
+
+> 能推动这个主张的东西：文中承诺的 SPEC/PARSEC 对宽乱序大核的对比、FPGA 试验场，以及他们列为下一步的 RTL + ISA 开源——落地时都可用检查。
+
+[`🔗 Introducing Frostbite（architectlabs.com）`](https://architectlabs.com/blog/frostbite) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50572503)
+
+---
+
+## 30. GrapheneOS："Google 正在说服 OEM 合作伙伴不要支持 GrapheneOS，甚至不要支持 bootloader 解锁"
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** grapheneos.social（Mastodon）· HN 393+ pts · ~6.8小时前 (~05:20 UTC+8)
+- **Tags:** `android` `privacy` `bootloader` `grapheneos` `oem`
+
+GrapheneOS 项目官方账号昨晚（2026-11-19 20:40 UTC）发帖：**"Google 正在损害他们的 OEM 合作伙伴，把越来越多的功能和更新做成 Pixel 独占。与此同时，Google 正在说服 OEM 合作伙伴不要支持 GrapheneOS，甚至不要支持 bootloader 解锁。他们也在直接试图伤害 GrapheneOS。"** 帖子没有点名任何 OEM、没有文件、没有具体功能——这是项目自己的一家之言，这也正是 HN 讨论（393 分）在替所有人追问"哪些可验证"的原因：Pixel 独占多年来持续收紧，而整个行业允许 bootloader 解锁的手机集合也在不断缩小。
+
+**Why it matters:** GrapheneOS 是 hardened Android 的选项——沙箱化的 Play 服务、按应用的网络与权限控制、安全研究者们推荐给别人的那一套。它的硬件路径恰恰经过这篇帖子所说的 Google 正在施压的 OEM 关系与 bootloader 解锁开关。如果指控成立，实际后果落在所有运行（或推荐）去 Google 化 Android 的人身上：受支持设备的池子停止增长。这一指控目前只有项目一方——等某家 OEM 公开表态，无论哪边。
+
+> 这个模式与本周的平台守门主题押韵（Google 的"AI 要么用要么别搜"条款、Waymo 高速公路禁令）：平台的运营者同时也在卖替代品，而切换成本是你的。
+
+[`🔗 GrapheneOS on Mastodon（2026-11-19）`](https://grapheneos.social/@GrapheneOS/117645038299496084) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50570479)
+
+---
+
+## 31. "我看得出这是你自己写的"——一份工科学生的报告得到了 2026 年最意味深长的夸奖
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** em-online.bearblog.dev · HN 229+ pts · ~4.9小时前 (~15:15 UTC+8)
+- **Tags:** `education` `ai-dependence` `essays` `engineering` `writing`
+
+一位工科荣誉学位学生（Em）交了一份关于扑翼微型飞行器控制的 10 页报告——在 48 个小时的紧绷里写完，全程人写——导师的评语是：**"我看得出这是你自己写的"，**接着一句：*"最近收到了很多 AI 写的报告。"*这篇文章拆解了为什么这句话落下来像警告而不是表扬：作业说明以"强烈鼓励你探索 AI 的使用"开头，很快被读成*理所当然*；"我这个学位最难的一门课，是在一间砖墙无窗的机房里对着 AI 提示词过八小时一天"；整个行业正在把一代人训练成"高级保姆"。作者担心那个滑坡——被鼓励时用它，然后连一份要当面答辩的项目报告也外包出去——最后落在识字率、偏见识别和独立思考这些真正有风险的东西上。
+
+**Why it matters:** 这是本周人力资本主线的教育侧证词——Jane Street 的面试改革、哈佛企业级研究显示 agent 把代码产出抬高 76% 而最终产出只涨 9–11%、以及昨天的[《我们需要在乎的人》](https://violetpixel.com/blog/2026-11-17-we-need-smart-people-who-give-a-shit/)一文。如今需要被明确说出的夸奖本身就是一个可测量的文化信号：当"人写"变得可被识别，它就变得稀有，而把它变得稀缺的机构正是发放安慰的那些。
+
+> 最锋利的一句是结构性的而非感性的：学生要为一份必须当面答辩的项目评分，同时却被训练用一种从不需要为任何东西答辩的媒介来产出它。
+
+[`🔗 "I can tell you wrote this yourself"（Em's Blog）`](https://em-online.bearblog.dev/i-can-tell-you-wrote-this-yourself/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50571189)
+
+---
+
+## 32. 继 11 月 10 日我们报道 FFmpeg 的 121 条 CVE 浪潮之后：9.1 "Gauss" 今日发布——整趟修复列车之后第一条稳定分支
+
+- **Velocity:** ▮▮ rising
+- **Source:** ffmpeg.org · HN 170+ pts · ~8.1小时前 (~12:00 UTC+8)
+- **Tags:** `ffmpeg` `release` `multimedia` `open-source` `codecs`
+
+FFmpeg 9.1 "Gauss" 于**今日（2026-11-20）发布**，2026-10-24 自 master 切出——9.1 分支的首个稳定版，接在 9.0 线末端 9.0.2 "Lei"（9 月 18 日）之后。更新日志共 32 条，主打：经 libastcenc 的 **ASTC** 纹理编解码（带 `.astc` 与 KTX 1.0 的 muxer/demuxer）、**大幅改进的 AAC 编码器**、**APV Vulkan 编码器**、LCEVC 载荷合并 bitstream filter、MVR demuxer、**libcurl 协议**支持、DVD-Audio LPCM 解复用、NVIDIA 光流加速，以及 iTerm2 内联图像 muxer。各库版本号全面前进（libavutil 61.19.100、libavcodec 63.24.100）。讨论串里还有一条结构性注脚：FFmpeg 的正典 git 现在住在 **code.ffmpeg.org**——项目自己的 forge 实例。
+
+**Why it matters:** 十天前本 feed 报道过那波 121 条记录的 CVE 浪潮，其修复表述是"through 9.0.2"和"9.x before 9.0.2"——9.1 是把整条安全列车合并进一条新分支的首个次版本，外加 AAC 编码器的工作（互联网一半音频管线压身的那个编解码器）。任何在生产附近跑 FFmpeg 的人：CVE backport 和功能工作终于坐进同一棵树的版本线就是这条。
+
+> 来源披露，一如既往：发布日期、分支切点、库版本均出自 ffmpeg.org 自己的下载页；这里的更新日志亮点是 HN 讨论串里携带的 release notes。
+
+[`🔗 FFmpeg 下载页：9.1 "Gauss"`](https://ffmpeg.org/download.html#release_9.1) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50569998)
+
+---
+
+## 33. Jujutsu 入门：一篇把"工作副本本身就是一个提交"的 Git 兼容 VCS 讲明白的实战指南
+
+- **Velocity:** ▮▮ rising
+- **Source:** ethanlowman.com · HN 140+ pts · ~6.4小时前 (~13:40 UTC+8)
+- **Tags:** `jujutsu` `vcs` `developer-tools` `rust` `stacked-prs`
+
+Ethan Lowman 的 **Jujutsu Primer**（11 月 18 日）是迄今最好的单文件 `jj` 入门，今天正迎来它的 HN 时刻。它教的心智模型：在现有仓库里跑 `jj git init`，jj 与 git 并行追踪同一批对象；你的工作副本**就是一个提交**（每条 jj 命令自动快照），每个逻辑变更携带一个**变更 ID**，在 rebase 中保持稳定而提交 ID 不断换新；冲突被记录在提交上而不是叫停一切；op log 让 `jj undo`/`jj redo` 无所不能。再往后是 revsets、作为 git 分支的 bookmarks、自动生成的分支名（`push-<changeid>`）与 stacked-PR 工作流——并诚实地观察到 agent"相当擅长"用 jj-hunk 这类工具为评审拆分提交。两个值得记住的生态事实：发版很密（v0.47.1 于 11 月 5 日发布），jj 的作者 Martin von Zweigbergk 现在是为 jj 而建的新 forge **East River Source Control** 的 CTO。
+
+**Why it matters:** jj 的设计选择与 agent 时代的工程流程吻合得可疑——自动 rebase、稳定变更 ID、冲突即数据、全量撤销。一篇入门冲上 HN 首页是采用信号；其下的 forge 新闻是基础设施信号。Git 不会走，但"工作副本即提交"的模型是它十年来面对的第一次认真的工效学挑战。
+
+> 入门自己给出的尝试框架：jj 与 git 在同一仓库里并行运行，所以这个实验在构造上就是可逆的。
+
+[`🔗 Jujutsu Primer（ethanlowman.com）`](https://ethanlowman.com/posts/jj-primer/) · [`🔗 jj-vcs/jj（GitHub）`](https://github.com/jj-vcs/jj) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50570628)
+
+---
+
+## 34. 英国的秘密冰箱行动：在攻击者找到漏洞之前，几万台冷柜被拔离开放互联网
+
+- **Velocity:** ▮▮ rising
+- **Source:** BBC News · HN 54+ pts · ~2.3小时前 (~17:50 UTC+8)
+- **Tags:** `iot-security` `ot` `ncsc` `food-supply` `disclosure`
+
+BBC 网络安全记者 Joe Tidy 揭露（发布于 2026-11-20 00:02 GMT，为压低风险一直压着没发）一场协同的英国防御：10 月下旬，制冷咨询公司 **Omega Solutions** 发现英国最受欢迎的制冷控制器——**Resource Data Management（RDM）**的设备——存在**"与今年欧洲冰箱黑客浪潮中被攻击的 Danfoss 及其他控制器类似的弱口令问题"**。Pen Test Partners 验证并扩大了发现；**NCSC、Defra 与 FSA** 组织行业电话会；覆盖超市、仓库、餐馆、加油站和体育场的数千台控制器被远程或以物理拔线的方式撤出开放互联网，一家大型连锁的 IT 团队"一周里每天让几百台设备下线"。背景是：10 月 11–12 日法国数百家站点经 Danfoss 系统被攻击；11 月 1–2 日波及七个欧洲国家的数十家超市（比利时与卢森堡最重）以及法国的血站；法国将此归咎伊朗，德黑兰否认。**RDM 对严重性有异议**——称利用它需要物理接触硬件（"一个在测试环境里发现的漏洞"，且该测试"包括拆解我们的硬件"）——但已发布首批补丁，并报告未见恶意活动迹象。Pen Test Partners 的 Ken Munro 指出所需硬件在 eBay 上很便宜："罪犯或国家级黑客搞明白它，大概只是几天的事。"
+
+**Why it matters:** 这是本周中断与漏洞级联的运营技术（OT）尾巴——食品供应跑在带默认口令、暴露于互联网的控制器上，而奏效的防御朴素到极点：拔线、人工监控温度、打补丁。这也是本周引发 guardrails 之争的那类事件（第 3 条背后的冷冻柜攻击）的同一物种，只是这次附上了防御方的操作手册——以及一个罕见的、在武器化之前安静完成协同披露的公开范例。
+
+> 把严重性之争当作标准的厂商/研究者鸿沟来读——RDM 称利用它需要物理接触硬件，PTP 则指出这些硬件在 eBay 上卖得很便宜——而 NCSC 无论如何都把它当成了值得一场全国行动的事。
+
+[`🔗 数万台英国冰箱在秘密行动中获得保护（BBC）`](https://www.bbc.co.uk/news/articles/c6eq49zyx7p4o) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50572430)
+
+---
+
+## 35. GIMP 开始在每次合并时测试整个 UI——用 13 个真实窗口测试覆盖三十年的菜单
+
+- **Velocity:** ▮ steady
+- **Source:** gimp.org · HN 125+ pts · ~8.2小时前 (~11:55 UTC+8)
+- **Tags:** `gimp` `testing` `ui-automation` `open-source` `ci`
+
+GIMP 的新闻帖（11 月 16 日，Harsh Verma 撰写，今天重新浮起）描述了一套新的 **GUI 测试平台**：每个测试启动一个真实的 GIMP，点击真实的菜单与对话框，然后读回结果——目前 13 个测试，**每次合并**自动运行。文章对原因说得很精确：单元测试"并没有打开真实窗口"，所以无法判断一个对话框是否打开、一个菜单项是否完成了工作；而 GIMP 原有那些直接与核心代码交互的旧式 GUI 测试太容易坏掉——而且不是因为它们测到了 bug。覆盖面：启动与主窗口、欢迎对话框的标签页行为与"启动时显示"开关、文件→新建的尺寸、文件→导出为写出正确的 PNG、颜色交换与前景色输入、图层的增删、撤销/重做、缩放。
+
+**Why it matters:** GIMP 是教科书级的缠绕代码库噩梦——恰恰是那种改一个对话框会悄悄弄坏另一个的项目。每次合并跑 UI 级测试，与上周 Claude Code 团队描述的纪律——当代码大部分由 agent 写成，测试套件就是管理层——是同一件事，只是由一个 30 年的志愿者项目来执行——而且它正是 agent 贡献者需要的护栏：agent 现在可以弄坏 UI，并在人类注意到之前被告知。
+
+> 不起眼的数字才是故事本身：13 个测试对 GIMP 的界面而言覆盖极小，但每次合并都跑它们的平台是难的部分，而它已经完成。
+
+[`🔗 GIMP：改进的图形用户界面测试`](https://www.gimp.org/news/2026/11/16/gimp-ui-tests/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50569985)
+
+---
+
+## 36. DeepMind 研究院追问"AGI 之后是什么"——并画出通往超级智能的四条路
+
+- **Velocity:** ▮ steady
+- **Source:** institute.deepmind.com · HN 81+ pts · ~9.4小时前 (~10:40 UTC+8)
+- **Tags:** `agi` `deepmind` `ai-research` `governance` `essays`
+
+Google DeepMind 研究科学家 Tim Genewein 于 11 月 19 日在 DeepMind 研究院网站发表这篇文章，而它的前提本身就是新闻：AGI"正在变得可及"，因此后 AGI 体制"正从哲学思辨转向实证研究与治理问题"。框架是：把通用智能看作一个连续统，ASI 的定义是在耗时数年的任务上以更少资源持续胜过人类专家*群体*；**"认知工业化"**作为过渡机制；从 AGI 到 ASI 的四条路径——**扩大模型与数据、技术范式转变、改进 agent 协调、递归自我改进（RSI）**——每条都有自己的动力学与不确定性。它要的是测量："沿 whichever 成形的道路，建立严格可靠的进度追踪方法"。
+
+**Why it matters:** 当一家前沿实验室的研究院把后 AGI 路径形式化为实证议程，这个框架就从文章话语进入与基准指数、评估 harness 相同的机器——本周的 Models Engineering Index（第 19 条）与决策模型浪潮正是这张地图将来要对照的测量层。把它读成一家实验室带着自家框架的地图，而不是领域共识。
+
+> 这篇文章诚实的重心：它把"AGI 可及"当作前提而非结论——四条路是一个用来查明这个前提是否成立的研究纲领。
+
+[`🔗 What comes after AGI?（Google DeepMind Institute）`](https://institute.deepmind.com/essays/what-comes-after-agi/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50569519)
+
+---
+
+## 37. ChatGPT for SNES：跑在 Super FX 芯片上的 220 万参数语言模型，附诚实警告
+
+- **Velocity:** ▮ steady
+- **Source:** bxfoundry.com · HN 101+ pts · ~11.6小时前 (~08:30 UTC+8)
+- **Tags:** `retrocomputing` `edge-ai` `snes` `language-models` `show-case`
+
+Benj Edwards（BX Foundry）为超级任天堂做了一个聊天程序：0.7 版（标注 2026-11-02）在卡带的 **Super FX 2** 芯片上运行一个 **220 万参数**的语言模型，一次输出一个词——既能在浏览器里经 Snes9x 玩（约 4 MB），也能在真机上用 Super FX 烧录卡带（FXPak Pro / sd2snes）运行。第二个版本加了"事实书"：**15 万篇 Simple English Wikipedia 文章**的开头句存进 MSU-1 数据文件，模型可以像用搜索工具一样选择查阅。训练对话由 **gpt-oss-120b** 生成，代码由 AI agent 编写——页面上的诚实段落是设计的一部分：模型"认识约 8,000 个词，经常出错，有时还很自信"，而且整件事"非 OpenAI 制作或背书"。
+
+**Why it matters:** 这是本地 AI 曲线的极值点（第 8 条）：一个每次击键都要等一拍的界面，跑在 1995 年的硬件上——以及一个完整的 AI 造物，从合成训练数据到 agent 写的代码。按它自己的描述这是个玩具，但它对语言模型物理上能跑在哪所划出的下界，比任何基准表格都清楚。
+
+> "用键盘在游戏内屏幕键盘上打字"这个细节让设计约束变得可见：1995 年的 I/O 预算，2026 年的模型。
+
+[`🔗 ChatGPT for SNES（BX Foundry）`](https://www.bxfoundry.com/chatgpt_snes/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50568548)
+
+---
+
+## 38. 权重空间编程正在变成一个研究领域：LLM 徒手写网络权重，如今还配上了"可编辑性"训练配方
+
+- **Velocity:** ▮ steady
+- **Source:** notesbylex.com · HN 105+ pts · ~62小时前（文章 11-18；论文 11-19 新鲜出炉）
+- **Tags:** `ai-research` `interpretability` `weight-space-programming` `training` `benchmarks`
+
+"前沿 LLM 能直接读取、写入并**编辑神经网络权重**"这个想法本周正在凝聚成一个小型文献。脉络是：RikiyaT 最初的 Weight-Space Programming 帖子——GPT-6 Astra 从零构建一个下围棋的网络，再通过自我对弈后编辑权重来改进它；Lex Toumbourou 的文章（11 月 18 日）以更严格的设定重跑——Claude Fable 5.2 为 MNIST **徒手设定一个 CNN 的全部 5,994 个权重**，不许拟合、回归或搜索——发现模型伸手抓向 1990 年代的手工滤波技术（Sobel 式模板），且 Fable 在该任务上明显胜过 Opus 5.5。然后是测量层：康斯坦茨大学的 **2611.26408**（Ropinski & Kranz，11 月 19 日）把 LLM 驱动的权重空间编程在视觉模型上做成基准——五个 LLM、**2,600+ 次编辑过程**，每次都在 held-out 图像上按成功率、副作用与精度损失计分——并提出 **Edit-Ready Training（ERT）**：在训练中预演 LLM 将执行的直接闭式权重编辑，为 GPT-6 Astra 与 Claude Opus 5.5 取得最高的平均编辑分。一个能在浏览器里观看权重空间编程运行的 TabbyML WebGPU playground 踏着同一波浪上了 Show HN。
+
+**Why it matters:** 如果网络可以*被训练得可编辑*，模型改进的单位就不再是一次梯度下降运行，而是一次权重编辑——这对可解释性与安全都有双向含义（与 11 月 14 日的"权重空间错误折叠"威胁模型接上了）。早期、小网络、视觉任务——基准自己的边界——但这个方向现在有了基准、有了训练方法、有了可复现的实验日志，领域就是这样起步的。
+
+> 跨模型的细节是最挑衅的部分：ERT 对*前沿*模型的编辑成功率提升最大——可编辑性也许是一种随规模增长的能力，而不是一个 hack。
+
+[`🔗 Weight-Space Programming 像 90 年代研究者一样构建神经网络（NotesByLex）`](https://notesbylex.com/weight-space-programming-1990s) · [`🔗 arXiv：Training Vision Models for LLM-Driven Weight-Space Programming（2611.26408）`](https://arxiv.org/abs/2611.26408) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50538977)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-20T04:42:49Z |
-| Items | 28 |
-| Sources tracked | 30 (Hacker News, GitHub Trending, GitHub repos, Anthropic, hexagonmath.org, Investigatory Powers Tribunal, ounapuu.ee, cve.org, contralabs.com, misanthropicstatement.com, blog.harrison.page, thedataexchange.media, moq.dev, perishablepress.com, foolscap.works, pikuma.com, lateblt.livejournal.com, krthr.co, wsj.com, reuters.com, git-aarvin.github.io, synology.com, postgresql.org, snowflake.com, lastbook.org, huggingface.co, blog.platypush.tech, regexr.com, seremot.com, firecrawl.dev) |
+| Generated | 2026-11-20T12:19:49Z |
+| Items | 38 |
+| Sources tracked | 42 (Hacker News, GitHub Trending, GitHub repos, Anthropic, hexagonmath.org, Investigatory Powers Tribunal, ounapuu.ee, cve.org, contralabs.com, misanthropicstatement.com, blog.harrison.page, thedataexchange.media, moq.dev, perishablepress.com, foolscap.works, pikuma.com, lateblt.livejournal.com, krthr.co, wsj.com, reuters.com, git-aarvin.github.io, synology.com, postgresql.org, snowflake.com, lastbook.org, huggingface.co, arxiv.org, blog.platypush.tech, regexr.com, seremot.com, firecrawl.dev, architectlabs.com, grapheneos.social, em-online.bearblog.dev, ffmpeg.org, ethanlowman.com, bbc.co.uk, gimp.org, institute.deepmind.com, bxfoundry.com, notesbylex.com, rikiyat.github.io) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

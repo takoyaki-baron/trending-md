@@ -1,9 +1,9 @@
 {
- "generated": "2026-11-20T05:34:50.346Z",
+ "generated": "2026-11-20T12:27:53.207Z",
  "files": [
   {
    "file": "2026-11-20.md",
-   "items": 28,
+   "items": 38,
    "findings": [
     {
      "check": "cvss",
@@ -59,7 +59,7 @@
      "item": 20,
      "verdict": "ok",
      "claim": "CVE-2026-121481 `Awaiting Analysis`",
-     "detail": "Awaiting Analysis (lastModified 2026-11-20T05:18:39.390)"
+     "detail": "Awaiting Analysis (lastModified 2026-11-20T10:17:08.810)"
     },
     {
      "check": "date",
@@ -101,7 +101,7 @@
      "item": 13,
      "verdict": "ok",
      "claim": "XiaoYouChR/Ghost-Downloader-3",
-     "detail": "12942★, last push 2026-11-19"
+     "detail": "13342★, last push 2026-11-20"
     },
     {
      "check": "repo",
@@ -115,14 +115,14 @@
      "item": 23,
      "verdict": "ok-history",
      "claim": "Immortal-Protocols/lastbook",
-     "detail": "record 7d, oldest commit 2026-11-12 (~272 commits)"
+     "detail": "record 8d, oldest commit 2026-11-12 (~291 commits)"
     },
     {
      "check": "repo",
      "item": 23,
      "verdict": "ok",
      "claim": "Immortal-Protocols/lastbook",
-     "detail": "2621★, last push 2026-11-20"
+     "detail": "2671★, last push 2026-11-20"
     },
     {
      "check": "quotation",
@@ -184,7 +184,7 @@
      "check": "quotation",
      "item": 10,
      "verdict": "ok",
-     "claim": "2 quotation(s)",
+     "claim": "1 quotation(s)",
      "detail": "verbatim in 2 readable source(s)"
     },
     {
@@ -272,11 +272,67 @@
      "detail": "verbatim in 2 readable source(s)"
     },
     {
+     "check": "quotation",
+     "item": 29,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 30,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 31,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 34,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 35,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 36,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 37,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
      "check": "attribution",
      "item": 1,
      "verdict": "attribution-satisfied",
      "claim": "Anthropic",
      "detail": "a quotation is attributed to Anthropic (“in the background, with no special setup, for about six week…”) and a cited URL carries the party's token — the quotation arm's page set reaches the party's own artifact"
+    },
+    {
+     "check": "attribution",
+     "item": 34,
+     "verdict": "attribution-page-verified",
+     "claim": "Munro",
+     "detail": "a quotation is attributed to Munro (“it was likely a matter of days until criminals or nation sta…”) and the party's token appears in the fetched text of a cited page — the quotation arm's page set carries the party's statement even though no cited URL string names the party (the party lives in the prose, not the domain); the second-hand-copy risk the URL arm carries applies here too, so a load-bearing quotation still wants the party's own artifact"
     }
    ]
   }

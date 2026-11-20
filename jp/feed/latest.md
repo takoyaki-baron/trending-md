@@ -1,8 +1,8 @@
 ---
 date: 2026-11-20
-updated: 2026-11-20T04:42:49Z
+updated: 2026-11-20T12:19:49Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 30
+sources: 42
 license: CC-BY-4.0
 ---
 
@@ -158,7 +158,7 @@ Kixelated の続編（今夜 HN を回遊中）は、OpenAI のリアルタイ�
 - **Source:** perishablepress.com · HN 86+ pts · 約3.2時間前 (~00:51 UTC+8)
 - **Tags:** `chrome` `browser` `privacy` `bandwidth` `on-device-ai`
 
-Jeff Starr（Perishable Press）の報告：数ヶ月前からサーバー側の帯域使用量が「天井を突き破り」、Chrome の**「AI innovations」とオンデバイス AI 設定**（デフォルト有効と報告）を一つずつ無効化したところ、ネットワークモニタはトラフィックが「ほぼフラットライン」になったと示し、Chrome に起因するとされる使用量は「文字通り月に数百GB」に及ぶという。記事自身が証拠基盤を率直に明示している：設定ページのスクリーンショット1枚、アクティビティモニタの観察1回、「お気に入りのネットワークモニタで自分で再現してほしい」という招待。ログも前後対比表もデバイスや OS の詳細もない——これは一人の管理者の逸話であり、測定研究ではない。スレッドの議論もそれ相応に扱っている。
+Jeff Starr（Perishable Press）の報告：数ヶ月前からサーバー側の帯域使用量が「天井を突き破り」、Chrome の**「AI innovations」とオンデバイス AI 設定**（デフォルト有効と報告）を一つずつ無効化したところ、ネットワークモニタはトラフィックが「ほぼフラットライン」になったと示し、Chrome に起因するとされる使用量は、文字通り月に数百GB に及ぶ規模だという。記事自身が証拠基盤を率直に明示している：設定ページのスクリーンショット1枚、アクティビティモニタの観察1回、「お気に入りのネットワークモニタで自分で再現してほしい」という招待。ログも前後対比表もデバイスや OS の詳細もない——これは一人の管理者の逸話であり、測定研究ではない。スレッドの議論もそれ相応に扱っている。
 
 **Why it matters:** 数値が再現されるかは別として、それが提案するチェックは安価で、根っこの問いは生きている：モデルを周期的に同期するオンデバイス AI 機能は、マシンの群れの上で重大なトラフィックを動かせる——そして出口の請求書でそれを見るのは IT 管理者だ。Chrome を大規模に管理するなら、この記事の価値は監査すべき設定ページと一晩で終わる実験にある——そしてタイミングは興味深い。直前の項のローカル AI 経済論と同じ週に浮上している。
 
@@ -456,13 +456,173 @@ João Tomé（元 Cloudflare）が Future Stories ポッドキャストを開始
 
 ---
 
+## 29. Frostbite：AI が設計した汎用 CPU が 4.59 倍の性能あたり電力効率を主張——但し書きは自らの脚注に
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** architectlabs.com · HN 150+ pts · ~2.1時間前 (~18:05 UTC+8)
+- **Tags:** `ai-hardware` `chip-design` `agents` `interaction-nets` `lean`
+
+Architect Labs の Redwood に続く第二弾：**Frostbite**。ISA、マイクロアーキテクチャ、RTL、検証、最終 GDS までを、新しい実行モデル——**インタラクションネット**（Lafont 1990。Rust 風の言語 **Vine** で書かれたプログラムを、並列性が明示的かつ空間的であるグラフへコンパイルし、アウトオブオーダー機構が実行時に再発見する必要がない）——を軸に agent スウォームが生成した汎用 CPU です。7nm レイアウトでの実測（GDS で 500 MHz、quad + 4 L3 ノード = 0.792 mm²）で、比較コア（「TCPU」）に対し 25 ワークロード——agent が調整に使った 10 個の検索セットと、最終評価まで取っておいた **15 個の held-out**——で **4.59 倍の性能あたり電力**と **8.77 倍の性能あたり面積**の幾何平均を報告しています（held-out セットでは 3.83 倍）。興味深いのはエネルギーの内訳：フェッチ/デコード/発行はベースラインの 27% から 6% に落ち、代わりに 26% がオンチップネットワークとハードウェアのワークスティーリングスケジューラに費やされています——その振る舞いは「いかなる人間にも仕様化されていなかった」と投稿は述べます。全体は独自の形式仕様言語（ASL）で支えられ、最終的に **80 万行超の Lean** へ低下。スウォームは 4 回の検索で挙げた 58 のアイデアのうち 37 を採用しました。
+
+**Why it matters:** 「AI がチップ全体を設計する」というテーゼの、公開された中で最も完全な主張です（OpenAI の RTL と Anthropic の Mythos-AMD 学習で今週すでにこのテーマは温まっていました——Frostbite はさらに先へ、ワークロードを GDS まで運びます）。見出しの倍数には但し書きが要りますが、投稿自身がそれを運んでいます——要約を読み飛ばさなければ。基線は冒頭で近代的でシリコン実証済みのスーパースカラー CPU と呼ばれる一方、結果セクションの脚注は TCPU をデュアル発行、インオーダー プロセッサと定義し、その正体は「法的理由で」開示できません。近代のコアの水準では控えめな基線であり、すべての数値はシリコン前です（投稿自身が認めています）。誠実な読み方：真に新しい実行モデルと、真剣な形式検証の背骨、そして Zen 6 ではなく小さなインオーダーコアに勝つことを意味する 4.59 倍。
+
+> 主張を動かすもの：約束された SPEC/PARSEC でのワイドなアウトオブオーダーコアとの比較、FPGA プレイグラウンド、次のステップとして挙げられている RTL + ISA の公開——すべて着手時に検証可能です。
+
+[`🔗 Introducing Frostbite（architectlabs.com）`](https://architectlabs.com/blog/frostbite) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50572503)
+
+---
+
+## 30. GrapheneOS：「Google は OEM パートナーに GrapheneOS を、さらにはブートローダー アンロック自体をサポートしないよう働きかけている」
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** grapheneos.social（Mastodon）· HN 393+ pts · ~6.8時間前 (~05:20 UTC+8)
+- **Tags:** `android` `privacy` `bootloader` `grapheneos` `oem`
+
+GrapheneOS プロジェクトの公式アカウントが昨晩（2026-11-19 20:40 UTC）投稿：**「Google はます多くの機能とアップデートを Pixel 専用にすることで OEM パートナーを妨害しています。同時に、Google は OEM パートナーに GrapheneOS を、さらにはブートローダー アンロック自体をサポートしないよう働きかけています。GrapheneOS を直接傷つけようとしてもいます。」** 投稿は特定の OEM 名、文書、具体的機能を一切挙げません——プロジェクト自身の characterization であり、だからこそ HN スレッド（393 ポイント）は「何が検証可能か」を皆に代わって問うています。Pixel 排他性は何年も前から強化が続いており、ブートローダー アンロックを許す携帯の集合は業界全体で縮み続けています。
+
+**Why it matters:** GrapheneOS は hardened Android の選択肢——サンドボックス化された Play サービス、アプリごとのネットワーク/権限制御、セキュリティ研究者が人々に勧めるスタック。そのハードウェアの道は、この投稿が言う Google が圧力をかけている OEM 関係とブートローダー アンロック スイッチをそのまま通ります。主張が正しければ、実害は脱 Google Android を動かす（勧める）すべての人に届きます：対応デバイスのプールが増えなくなります。主張は今のところプロジェクト側の一方のみ——どちらにせよ、OEM が記録に残る発言をするのを待ちましょう。
+
+> このパターンは今週のプラットフォーム ゲートキーピングのテーマと韻を踏みます（Google の「AI なき検索」条項、Waymo の高速道路停止令）：プラットフォームの運営者が代替品も売っており、切り替えコストはあなたに降りかかる。
+
+[`🔗 GrapheneOS on Mastodon（2026-11-19）`](https://grapheneos.social/@GrapheneOS/117645038299496084) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50570479)
+
+---
+
+## 31. 「これが自分で書かれたのが分かる」——工科大学院生のレポートが 2026 年でいちばん意味の重い賛辞を受けた
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** em-online.bearblog.dev · HN 229+ pts · ~4.9時間前 (~15:15 UTC+8)
+- **Tags:** `education` `ai-dependence` `essays` `engineering` `writing`
+
+工学の honours 学生（Em）が、翼を羽ばたかせるマイクロ航空機の制御に関する 10 ページのレポート——緊張の 48 時間で書き上げ、すべて人間の言葉——を提出すると、指導教員の評価はこうでした：**「これが自分で書かれたのが分かる」**、続いて*「最近は AI が書いたレポートをたくさん受け取っているので」*。エッセイは、なぜこれが称賛ではなく警告として降りてきたかを解きほぐします：「AI の活用を強く推奨します」で始まり、すぐに*前提*と読まれる課題説明書。学位で最も過酷だった授業は「レンガ壁の窓のない計算機室で、AI へのプロンプティングを 1 日 8 時間続ける」ものだった。業界は世代を「高給取りのベビーシッター」へ訓練している。著者はスリップ slope を案じ——奨励されたときに使い、やがて対面で防衛しなければならないプロジェクトのレポートまで委託する——そして識字力、バイアスの識別、自ら考えることに降り着きます。
+
+**Why it matters:** 今週の人的資本スレッド——Jane Street の面接変更、agent がコード生産を 76% 引き上げながら最終成果は 9〜11% しか上げないハーバードの企業レベル研究、昨日の [We Need Smart People Who Give a Shit](https://violetpixel.com/blog/2026-11-17-we-need-smart-people-who-give-a-shit/)——の教育側の証言です。今や明示的に発行されねばならない賛辞そのものが、測定可能な文化的シグナルです：人間が書いたことが検出可能になれば、それは希少になり、それを希少にした機関こそが安心を配っています。
+
+> 最も鋭い一行は感傷ではなく構造です：学生は対面で防衛しなければならないプロジェクトで採点されながら、何も防衛する必要のない媒体を通じてそれを生産するよう訓練されています。
+
+[`🔗 "I can tell you wrote this yourself"（Em's Blog）`](https://em-online.bearblog.dev/i-can-tell-you-wrote-this-yourself/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50571189)
+
+---
+
+## 32. 11 月 10 日に報じた FFmpeg の 121 件 CVE の波を受けて：9.1 「Gauss」が本日公開——修正列車の後に切られた最初のリリース
+
+- **Velocity:** ▮▮ rising
+- **Source:** ffmpeg.org · HN 170+ pts · ~8.1時間前 (~12:00 UTC+8)
+- **Tags:** `ffmpeg` `release` `multimedia` `open-source` `codecs`
+
+FFmpeg 9.1 「Gauss」が**本日（2026-11-20）公開**されました。2026-10-24 に master からカットされた 9.1 ブランチの最初の安定版で、9.0 系の末端 9.0.2 「Lei」（9 月 18 日）に続きます。チェンジログは 32 項目：libastcenc による **ASTC** テクスチャのエンコード/デコード（`.astc` と KTX 1.0 の muxer/demuxer 付き）、**大幅に改善された AAC エンコーダ**、**APV Vulkan エンコーダ**、LCEVC ペイロード統合ビットストリームフィルタ、MVR demuxer、**libcurl プロトコル**対応、DVD-Audio LPCM の demux、NVIDIA オプティカルフロー加速、iTerm2 インライン画像 muxer など。ライブラリ バージョンは一斉に前進（libavutil 61.19.100、libavcodec 63.24.100）。スレッドには構造的な注記も：FFmpeg の正典 git は現在 **code.ffmpeg.org**——プロジェクト自身の forge インスタンスに住んでいます。
+
+**Why it matters:** 10 日前、このフィードは修正表記が「through 9.0.2」「9.x before 9.0.2」だった 121 レコードの CVE の波を扱いました——9.1 はそのセキュリティ列車全体を新しいブランチへ統合する最初のマイナー リリースであり、AAC エンコーダの仕事（インターネットの半分のオーディオ パイプラインが乗るコーデック）が加わります。プロダクション付近で FFmpeg を動かす人への結論：CVE バックポートと機能開発がついに同じ木に座るバージョン ラインがこれです。
+
+> 出所の明示、いつもの通り：リリース日、ブランチ カット、ライブラリ バージョンは ffmpeg.org 自身のダウンロード ページの記述。チェンジログのハイライトは HN スレッドが運んだリリースノートです。
+
+[`🔗 FFmpeg ダウンロード：9.1 「Gauss」`](https://ffmpeg.org/download.html#release_9.1) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50569998)
+
+---
+
+## 33. Jujutsu Primer：作業コピーがすでにコミットである Git 互換 VCS の実践ガイド
+
+- **Velocity:** ▮▮ rising
+- **Source:** ethanlowman.com · HN 140+ pts · ~6.4時間前 (~13:40 UTC+8)
+- **Tags:** `jujutsu` `vcs` `developer-tools` `rust` `stacked-prs`
+
+Ethan Lowman の **Jujutsu Primer**（11 月 18 日）は現時点で最良の単一ファイル `jj` 入門で、本日その HN の瞬間を迎えています。教えるメンタル モデル：既存リポジトリで `jj git init` を実行すれば、jj は git と並行して同じオブジェクトを追跡する。作業コピーは**それ自体がコミット**（すべての jj コマンドで自動スナップショット）であり、論理的な変更はそれぞれ rebase で生き残る**チェンジ ID** を持ち、コミット ID は入れ替わり続ける。競合はすべてを停止させる代わりにコミット上に記録され、op log が `jj undo`/`jj redo` を完全なものにします。そこからは revsets、git ブランチとしての bookmark、生成されたブランチ名（`push-<チェンジID>`）、stacked-PR ワークフロー——そして agent が jj-hunk のようなツールでレビュー用にコミットを分割するのが「かなり上手い」という率直な観察。 ecosystem の事実も 2 つ：リリースは機能が濃く（v0.47.1 は 11 月 5 日）、jj の作者 Martin von Zweigbergk は jj のために建てられる新しい forge **East River Source Control** の CTO です。
+
+**Why it matters:** jj の設計選択は agent 時代のワークフローに不審なほど噛み合います——自動 rebase、安定したチェンジ ID、データとしての競合、完全な undo。入門が HN のフロントページに届くのは採用のシグナルで、その下の forge のニュースはインフラのシグナルです。Git はどこにも行きませんが、「作業コピー＝コミット」のモデルは、この 10 年で最初の真剣なエルゴノミクスの挑戦です。
+
+> 試すための primer 自身の枠組み：jj と git は同じリポジトリで並走するので、この実験は構造的に可逆です。
+
+[`🔗 Jujutsu Primer（ethanlowman.com）`](https://ethanlowman.com/posts/jj-primer/) · [`🔗 jj-vcs/jj（GitHub）`](https://github.com/jj-vcs/jj) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50570628)
+
+---
+
+## 34. 英国の秘密の冷蔵庫作戦：攻撃者が脆弱性を見つける前に、数万台のフリーザーがオープンなインターネットから引き離された
+
+- **Velocity:** ▮▮ rising
+- **Source:** BBC News · HN 54+ pts · ~2.3時間前 (~17:50 UTC+8)
+- **Tags:** `iot-security` `ot` `ncsc` `food-supply` `disclosure`
+
+BBC のサイバー担当記者 Joe Tidy が明かした（2026-11-20 00:02 GMT 公開。リスクが過ぎるまで報じられなかった）協調的な英国の防御：10 月下旬、冷凍コンサルタント **Omega Solutions** が、英国で最も普及している冷凍制御器——**Resource Data Management（RDM）**製——に、今年のヨーロッパの冷蔵庫ハッキングの波で攻撃された Danfoss 他の制御器と**「同様の弱いパスワードの問題」**があることを見つけました。Pen Test Partners が検証・拡張し、**NCSC、Defra、FSA** が業界電話会議を運営。スーパーマーケット、倉庫、レストラン、給油所、スタジアムに及ぶ何千もの制御器デバイスが、遠隔で、あるいは物理的にケーブルを抜いてオープンなインターネットから外され、ある大手チェーンの IT チームは「1 週間、毎日何百台もオフラインにした」といいます。背景：10 月 11〜12 日にフランスの数百サイトが Danfoss 経由で被害、11 月 1〜2 日に 7 か国の数十スーパー（ベルギーとルクセンブルクが最悪）とフランスの血液銀行が被害。フランスはイランの関与を主張し、テヘランは否定。**RDM は深刻さに異議を唱えています**——悪用には物理的なハードウェア接触が要る（「テスト環境で特定された脆弱性」で、そのテストは「我々のハードウェアの解体を含んだ」）——としつつ、最初のパッチを公開し、悪意ある活動の兆候はないと報告しています。Pen Test Partners の Ken Munro は、必要なハードウェアは eBay で安く買えると指摘：「犯罪者や国家レベルのハッカーがこれを見抜くまで、おそらく数日のことだった。」
+
+**Why it matters:** 今週の障害とエクスプロイトの連鎖の OT（運用技術）側の尾です——食料供給はデフォルト パスワードのままインターネットに露出した制御器の上で動いており、うまくいった防御は驚くほど地味でした：プラグを抜き、温度を手で監視し、パッチを当てる。これは今週 guardrails 論争の引き金になったのと同じ種の事件（第 3 項の背後の冷蔵庫ハッキング）であり、今回は防御側のプレイブック付き——そして、武器化される前に静かな協調ディスクロージャを完了させた稀な公開例です。
+
+> 深刻さをめぐる論争は、標準的なベンダー/研究者の溝として読む——RDM は悪用に物理的なハードウェア接触が必要だと言い、PTP はそのハードウェアが eBay で安く買えると指摘する——そして NCSC はどちらにせよ、全国規模の作戦に値するものとして扱いました。
+
+[`🔗 数万台の英国の冷蔵庫が秘密作戦で保護された（BBC）`](https://www.bbc.co.uk/news/articles/c6eq49zyx7p4o) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50572430)
+
+---
+
+## 35. GIMP がマージのたびに UI 全体をテストし始めた——30 年分のメニューを 13 の実ウィンドウ テストで
+
+- **Velocity:** ▮ steady
+- **Source:** gimp.org · HN 125+ pts · ~8.2時間前 (~11:55 UTC+8)
+- **Tags:** `gimp` `testing` `ui-automation` `open-source` `ci`
+
+GIMP のニュース投稿（11 月 16 日、Harsh Verma 著。本日再浮上）は新しい **GUI テスト プラットフォーム**を説明します：各テストは実際の GIMP を起動し、本物のメニューとダイアログをクリックし、結果を読み戻す——現時点で 13 テスト、**マージごと**に自動実行。理由について投稿は正確です：ユニット テストは「実ウィンドウを開いていなかった」ため、ダイアログが開くか、メニュー項目が仕事をしたかを教えてくれなかった。そしてコアコードに直接触れる GIMP の旧来の GUI テストは頻繁に壊れた——しかもバグを検出したためではない。カバー範囲：起動とメイン ウィンドウ、Welcome ダイアログのタブ挙動と「起動時に表示」トグル、ファイル→新規のサイズ指定、ファイル→エクスポートの正しい PNG 出力、色の交換と前景色の入力、レイヤーの追加/削除、取り消し/やり直し、ズーム。
+
+**Why it matters:** GIMP は絡み合ったコードベースの悪夢の代名詞——あるダイアログの変更が別のダイアログを静かに壊す、まさにその種のプロジェクトです。マージごとの UI レベル テストは、先週 Claude Code チームが説明した規律——コードの大部分が agent 書きのとき、テスト スイートがマネジメントだ——と同じもので、30 年の歴史を持つボランティア プロジェクトが実行しています。そして agent 貢献者が必要とする自然なガードレールでもあります——agent は今や UI を壊せ、人間が気づく前にそれを告げられます。
+
+> 地味な数字こそが物語です：13 テストは GIMP の表面に対してごく小さなカバーですが、マージごとに走らせるプラットフォームが難しい部分で、それは完成しています。
+
+[`🔗 GIMP：グラフィカル ユーザー インターフェイス テストの改善`](https://www.gimp.org/news/2026/11/16/gimp-ui-tests/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50569985)
+
+---
+
+## 36. DeepMind の研究所が「AGI の後に何が来るか」を問い、超知能への 4 つの道を描く
+
+- **Velocity:** ▮ steady
+- **Source:** institute.deepmind.com · HN 81+ pts · ~9.4時間前 (~10:40 UTC+8)
+- **Tags:** `agi` `deepmind` `ai-research` `governance` `essays`
+
+Google DeepMind の研究科学者 Tim Genewein が 11 月 19 日に DeepMind の研究所サイトで発表したこのエッセイの前提そのものがニュースです：AGI は「手の届くところに来ており」、post-AGI の体制は「哲学的思弁から実証研究とガバナンスの問いへ移りつつある」。枠組み：一般知能を連続体として捉え、ASI を、数年かかるタスクでより少ない資源で人間の専門家の*集団*に一貫して勝るものと定義。移行のメカニズムとして**「認知の工業化」**、そして AGI から ASI への 4 つの経路——**モデルとデータのスケーリング、技術パラダイムの転換、agent 協調の改善、再帰的自己改善（RSI）**——それぞれに固有のダイナミクスと不確実性。求めているのは測定：「いずれ実現する道に沿って、進捗を追う厳密で信頼できる方法を築くこと」です。
+
+**Why it matters:** フロンティア ラボの研究所が post-AGI の経路を実証的アジェンダとして形式化するとき、この枠組みはエッセイの言説から、ベンチマーク インデックスや評価ハーネスと同じ機械へ移ります——今週の Models Engineering Index（第 19 項）やディシジョン モデルの波は、こうした地図が読まれる測定層です。これは 1 つのラボの、ラボ自身の枠組み込みの地図として読むもので、分野の合意ではありません。
+
+> エッセイの正直な重心：それは「AGI が手の届くところにある」を結論ではなく前提として扱っている——4 つの道は、その前提が成立するかを見つけるための研究プログラムです。
+
+[`🔗 What comes after AGI?（Google DeepMind Institute）`](https://institute.deepmind.com/essays/what-comes-after-agi/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50569519)
+
+---
+
+## 37. ChatGPT for SNES：Super FX チップ上の 220 万パラメータ言語モデル、正直な但し書き付き
+
+- **Velocity:** ▮ steady
+- **Source:** bxfoundry.com · HN 101+ pts · ~11.6時間前 (~08:30 UTC+8)
+- **Tags:** `retrocomputing` `edge-ai` `snes` `language-models` `show-case`
+
+Benj Edwards（BX Foundry）がスーパーファミコン用のチャット プログラムを作りました：バージョン 0.7（日付 2026-11-02）はカートリッジの **Super FX 2** チップ上で **220 万パラメータ**の言語モデルを走らせ、一度に 1 語ずつ出力します——ブラウザでは Snes9x 経由（約 4 MB）、実機では Super FX 対応フラッシュカート（FXPak Pro / sd2snes）で動きます。第 2 のビルドは「ファクト ブック」を追加：**15 万の Simple English Wikipedia 記事**の冒頭文を MSU-1 データファイルに収め、モデルは検索ツールのように参照を選べます。学習会話は **gpt-oss-120b** が生成し、コードは AI agent が書きました——ページの正直さのセクションは設計の一部です：モデルは「約 8,000 語を知り、しばしば間違え、時に自信満々に間違える」。そして全体は「OpenAI が作り、承認したものではありません」。
+
+**Why it matters:** これはローカル AI の曲線の極値です（第 8 項）：1 キーストロークごとに一瞬待つインターフェイスが 1995 年のハードウェアで走る——合成学習データから agent 書きのコードまで、完全に AI が作った成果物。自らの記述ではおもちゃですが、言語モデルが物理的にどこで動けるかの下限を、どのベンチマーク表よりも明確に刻んでいます。
+
+> 「画面上のキーボードで答えを打ち込む」という詳細が設計制約を可視化しています：1995 年の I/O 予算に、2026 年のモデル。
+
+[`🔗 ChatGPT for SNES（BX Foundry）`](https://www.bxfoundry.com/chatgpt_snes/) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50568548)
+
+---
+
+## 38. 重み空間プログラミングが研究分野になりつつある：LLM がネットワークの重みを手書きし、今や「編集可能性」の学習レシピまで
+
+- **Velocity:** ▮ steady
+- **Source:** notesbylex.com · HN 105+ pts · ~62時間前（エッセイ 11-18。論文は 11-19 の新鮮なもの）
+- **Tags:** `ai-research` `interpretability` `weight-space-programming` `training` `benchmarks`
+
+フロンティア LLM がニューラル ネットワークの重みを直接読み、書き、**編集できる**というアイデアが、今週小さな文献群へ凝縮されつつあります。系譜：RikiyaT の原典「Weight-Space Programming」——GPT-6 Astra がゼロから囲碁をプレイするネットワークを構築し、自己対局の後、重みを編集することで改善した。Lex Toumbourou のエッセイ（11 月 18 日）はもっと厳しい設定で再実行——Claude Fable 5.2 が MNIST 用 CNN の**全 5,994 個の重みを「手で」設定**（フィッティング、回帰、探索は禁止）——するとモデルは 1990 年代の手作りフィルタリング技法（Sobel 風テンプレート）に手を伸ばし、Fable はこのタスクで Opus 5.5 を明確に上回りました。そして測定層：コンスタンツ大学の **2611.26408**（Ropinski & Kranz、11 月 19 日）は、LLM が駆動する重み空間プログラミングをビジョン モデル上でベンチマーク化——5 つの LLM による **2,600 超の edit プロセス**を、held-out 画像で成功、副作用、精度低下ごとに採点——し、LLM が実行する直接の閉形式重み編集を訓練中にリハーサルする **Edit-Ready Training（ERT）** を提案、GPT-6 Astra と Claude Opus 5.5 で最高の平均編集スコアを達成しました。ブラウザで重み空間プログラミングの実行を観察できる TabbyML の WebGPU プレイグラウンドも、同じ波に乗って Show HN へ。
+
+**Why it matters:** ネットワークが*編集可能になるよう訓練できる*なら、モデル改善の単位は勾配降下の 1 回から重み編集の 1 回へ変わります——解釈可能性と安全の両方への含意があります（11 月 14 日の「Weight Space Misfolding」脅威モデルにつながります）。早期、小規模ネット、ビジョン タスク——ベンチマーク自身の範囲——ですが、この方向は今やベンチマークと、訓練手法と、再現可能な実験ログを持ちます。分野はこう始まります。
+
+> クロスモデルの詳細が最も挑発的です：ERT が編集成功率を最も引き上げたのは*フロンティア*モデルでした——編集可能性は hack ではなく、スケールとともに育つ能力かもしれません。
+
+[`🔗 Weight-Space Programming は 1990 年代の研究者のようにネットワークを構築する（NotesByLex）`](https://notesbylex.com/weight-space-programming-1990s) · [`🔗 arXiv：Training Vision Models for LLM-Driven Weight-Space Programming（2611.26408）`](https://arxiv.org/abs/2611.26408) · [`🔗 HN ディスカッション`](https://news.ycombinator.com/item?id=50538977)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-20T04:42:49Z |
-| Items | 28 |
-| Sources tracked | 30 (Hacker News, GitHub Trending, GitHub repos, Anthropic, hexagonmath.org, Investigatory Powers Tribunal, ounapuu.ee, cve.org, contralabs.com, misanthropicstatement.com, blog.harrison.page, thedataexchange.media, moq.dev, perishablepress.com, foolscap.works, pikuma.com, lateblt.livejournal.com, krthr.co, wsj.com, reuters.com, git-aarvin.github.io, synology.com, postgresql.org, snowflake.com, lastbook.org, huggingface.co, blog.platypush.tech, regexr.com, seremot.com, firecrawl.dev) |
+| Generated | 2026-11-20T12:19:49Z |
+| Items | 38 |
+| Sources tracked | 42 (Hacker News, GitHub Trending, GitHub repos, Anthropic, hexagonmath.org, Investigatory Powers Tribunal, ounapuu.ee, cve.org, contralabs.com, misanthropicstatement.com, blog.harrison.page, thedataexchange.media, moq.dev, perishablepress.com, foolscap.works, pikuma.com, lateblt.livejournal.com, krthr.co, wsj.com, reuters.com, git-aarvin.github.io, synology.com, postgresql.org, snowflake.com, lastbook.org, huggingface.co, arxiv.org, blog.platypush.tech, regexr.com, seremot.com, firecrawl.dev, architectlabs.com, grapheneos.social, em-online.bearblog.dev, ffmpeg.org, ethanlowman.com, bbc.co.uk, gimp.org, institute.deepmind.com, bxfoundry.com, notesbylex.com, rikiyat.github.io) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

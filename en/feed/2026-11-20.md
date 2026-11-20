@@ -1,8 +1,8 @@
 ---
 date: 2026-11-20
-updated: 2026-11-20T04:42:49Z
+updated: 2026-11-20T12:19:49Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 30
+sources: 42
 license: CC-BY-4.0
 ---
 
@@ -158,7 +158,7 @@ Kixelated's follow-up post (making its HN round tonight) argues OpenAI's realtim
 - **Source:** perishablepress.com · 86+ pts on HN · ~3.2h ago (~00:51 UTC+8)
 - **Tags:** `chrome` `browser` `privacy` `bandwidth` `on-device-ai`
 
-Jeff Starr (Perishable Press) reports that his server-side bandwidth usage "went thru the roof" a few months ago, and that after systematically disabling Chrome's **"AI innovations" and on-device AI settings** — which he reports are enabled by default — his network monitor showed traffic "virtually flatline," with usage he attributes to Chrome of "literally hundreds of GBs per month." The post's own evidence base is stated plainly: a screenshot of the settings page, an activity-monitor observation, and an invitation to reproduce it yourself with your favorite network monitor. No logs, no before/after tables, no device or OS specifics — this is one administrator's anecdote, not a measurement study, and the thread's discussion treats it accordingly.
+Jeff Starr (Perishable Press) reports that his server-side bandwidth usage "went thru the roof" a few months ago, and that after systematically disabling Chrome's **"AI innovations" and on-device AI settings** — which he reports are enabled by default — his network monitor showed traffic "virtually flatline," with usage he attributes to Chrome in the literally-hundreds-of-GBs-per-month range. The post's own evidence base is stated plainly: a screenshot of the settings page, an activity-monitor observation, and an invitation to reproduce it yourself with your favorite network monitor. No logs, no before/after tables, no device or OS specifics — this is one administrator's anecdote, not a measurement study, and the thread's discussion treats it accordingly.
 
 **Why it matters:** Whether or not the number survives replication, the check it proposes is cheap and the underlying question is live: on-device AI features that periodically sync models can move serious traffic on fleets of machines, and enterprise admins are the ones who'll see it in their egress bills. If you manage Chrome at scale, the post's value is the settings page to audit and a one-evening experiment to run — and the resurfacing timing matters, coming the same week as the local-AI economics argument above.
 
@@ -456,13 +456,173 @@ João Tomé (ex-Cloudflare) launches his Future Stories podcast with Vint Cerf a
 
 ---
 
+## 29. Frostbite: an AI-designed general-purpose CPU claims 4.59× perf/watt — with the fine print in its own footnote
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** architectlabs.com · 150+ pts on HN · ~2.1h ago (~18:05 UTC+8)
+- **Tags:** `ai-hardware` `chip-design` `agents` `interaction-nets` `lean`
+
+Architect Labs' second act after Redwood: **Frostbite**, a general-purpose CPU whose ISA, microarchitecture, RTL, verification and final GDS were produced by agent swarms around a new execution model — **interaction nets** (Lafont 1990), where programs in the Rust-like **Vine** language compile to a graph whose parallelism is explicit and spatial rather than rediscovered by out-of-order machinery. Measured on a 7nm layout (500 MHz in GDS, quad + 4 L3 nodes = 0.792 mm²), they report a geometric mean of **4.59× perf/watt** and **8.77× perf/area** against a comparison core ("TCPU") across 25 workloads — 10 the agents tuned on, **15 held out** until final evaluation (3.83× on the held-out set). The energy accounting is the interesting part: fetch/decode/issue drops from 27% of the baseline's budget to 6%, traded for 26% spent on on-chip network and a hardware work-stealing scheduler whose behavior, the post says, "was never specified by any human." The whole program is held together by an in-house formal spec language (ASL) that lowers to **800k+ lines of Lean**, and the swarm kept 37 of 58 proposed ideas across four searches.
+
+**Why it matters:** This is the most complete public claim yet of the AI-designs-the-whole-chip thesis (OpenAI's RTL work and Anthropic's Mythos-AMD training runs made this a theme this week — Frostbite goes further, taking a workload to GDS). The headline multiple deserves its caveat, and the post carries it if you read past the abstract: the baseline is described as a modern, silicon-proven superscalar CPU up top, but the results section's own footnote defines TCPU as a dual-issue, in-order processor whose identity they can't disclose "for legal reasons" — that is a modest baseline by modern core standards, and every number is pre-silicon (the post says so itself). The honest read: a genuinely novel execution model, a serious formal-verification spine, and a 4.59× that means beating a small in-order core, not a Zen 6.
+
+> What would move the claim: the promised SPEC/PARSEC comparisons against wide out-of-order cores, the FPGA playground, and the RTL + ISA release they list as next steps — all checkable when they land.
+
+[`🔗 Introducing Frostbite (architectlabs.com)`](https://architectlabs.com/blog/frostbite) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50572503)
+
+---
+
+## 30. GrapheneOS: "Google is trying to convince OEM partners not to support GrapheneOS or even bootloader unlocking"
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** grapheneos.social (Mastodon) · 393+ pts on HN · ~6.8h ago (~05:20 UTC+8)
+- **Tags:** `android` `privacy` `bootloader` `grapheneos` `oem`
+
+The GrapheneOS project's official account posted yesterday evening (2026-11-19 20:40 UTC): **"Google is sabotaging their OEM partners by making a growing number of features and updates exclusive to Pixels. At the same time, Google is trying to convince OEM partners not to support GrapheneOS or even bootloader unlocking. They're also trying to harm GrapheneOS directly."** The post carries no named OEM, no documents, no specific feature — it is the project's own characterization, which is exactly why the HN thread (393 points) is doing the work of asking what's verifiable: Pixel exclusivity has been tightening for years, and the set of phones that even permit bootloader unlocking keeps shrinking industry-wide.
+
+**Why it matters:** GrapheneOS is the hardened-Android option — sandboxed Play services, per-app network/permission controls, the stack security researchers point people to. Its hardware path runs through exactly the OEM relationships and bootloader-unlock switches this post says Google is leaning on. If the claim holds, the practical consequence lands on anyone who runs (or recommends) a de-Googled Android: the pool of supported devices stops growing. The claim is unverified beyond the project itself — watch for an OEM going on record, either way.
+
+> The pattern rhymes with this week's theme of platform gatekeeping (Google's AI-or-nothing search terms, the Waymo freeway suspension): the operator of the platform also sells the alternative, and the switching cost is yours.
+
+[`🔗 GrapheneOS on Mastodon (2026-11-19)`](https://grapheneos.social/@GrapheneOS/117645038299496084) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50570479)
+
+---
+
+## 31. "I can tell you wrote this yourself" — an engineering student's report draws 2026's most loaded compliment
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** em-online.bearblog.dev · 229+ pts on HN · ~4.9h ago (~15:15 UTC+8)
+- **Tags:** `education` `ai-dependence` `essays` `engineering` `writing`
+
+An engineering honours student (Em) turned in a 10-page report on flapping-wing micro aerial vehicle control — written over 48 stressed hours, human words throughout — and their supervisor's verdict was: **"I can tell you wrote this yourself,"** followed by *"I've been sent a lot of reports written by AI."* The essay unpacks why that landed as a warning rather than praise: assignment briefs that begin "you are strongly encouraged to explore the use of AI" and quickly read as *expected*; "the hardest class of my degree was spent in a brick-walled windowless computer lab prompting an AI for eight hours a day"; the sense that the industry is training a generation into "a glorified babysitter." The author worries about the slope — using it when encouraged, then outsourcing a report on a project they'll have to defend in person — and lands on literacy, bias detection, and thinking for yourself as the things actually at stake.
+
+**Why it matters:** This is the education-side witness for the week's human-capital thread — the Jane Street interview change, the Harvard firm-level study showing agents lift code output 76% while final output rises 9–11%, and yesterday's [We Need Smart People Who Give a Shit](https://violetpixel.com/blog/2026-11-17-we-need-smart-people-who-give-a-shit/) essay. The compliments that now have to be issued explicitly are a measurable cultural signal: when human-written becomes detectable, it becomes rare, and the institutions that made it rare are the ones handing out the reassurance.
+
+> The sharpest line is structural, not sentimental: students are graded on a project they must defend in person, while being trained to produce it through a medium that never has to defend anything.
+
+[`🔗 "I can tell you wrote this yourself" (Em's Blog)`](https://em-online.bearblog.dev/i-can-tell-you-wrote-this-yourself/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50571189)
+
+---
+
+## 32. Since we covered FFmpeg's 121-CVE wave on Nov 10: 9.1 "Gauss" ships today — the first release cut after the whole fix train
+
+- **Velocity:** ▮▮ rising
+- **Source:** ffmpeg.org · 170+ pts on HN · ~8.1h ago (~12:00 UTC+8)
+- **Tags:** `ffmpeg` `release` `multimedia` `open-source` `codecs`
+
+FFmpeg 9.1 "Gauss" was released **today (2026-11-20)**, cut from master on 2026-10-24 — the first stable release from the 9.1 branch, following 9.0.2 "Lei" (Sep 18) at the head of the 9.0 line. The changelog runs 32 items, led by: **ASTC** texture encode/decode via libastcenc (with `.astc` and KTX 1.0 muxers/demuxers), an **extensively improved AAC encoder**, an **APV Vulkan encoder**, LCEVC payload merging bitstream filter, an MVR demuxer, **libcurl protocol** support, DVD-Audio LPCM demuxing, NVIDIA optical-flow acceleration, and an iTerm2 inline-image muxer. Library versions stepped across the board (libavutil 61.19.100, libavcodec 63.24.100). One structural note from the thread: FFmpeg's canonical git now lives at **code.ffmpeg.org**, the project's own forge instance.
+
+**Why it matters:** Ten days ago this feed covered the 121-record CVE wave whose fixes read "through 9.0.2" and "9.x before 9.0.2" — 9.1 is the first minor release that consolidates that entire security train into a fresh branch, plus the AAC-encoder work (the codec half the internet's audio pipelines lean on). If you run FFmpeg anywhere near production, this is the version line where the CVE backports and the feature work finally sit in one tree.
+
+> Release provenance, as always: download-page facts (release date, branch cut, library versions) are stated by ffmpeg.org itself; the changelog highlights here are the release notes as carried in the HN thread.
+
+[`🔗 FFmpeg Download: 9.1 "Gauss"`](https://ffmpeg.org/download.html#release_9.1) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50569998)
+
+---
+
+## 33. The Jujutsu Primer: a working guide to the Git-compatible VCS where your working copy is already a commit
+
+- **Velocity:** ▮▮ rising
+- **Source:** ethanlowman.com · 140+ pts on HN · ~6.4h ago (~13:40 UTC+8)
+- **Tags:** `jujutsu` `vcs` `developer-tools` `rust` `stacked-prs`
+
+Ethan Lowman's **Jujutsu Primer** (Nov 18) is the best single-file introduction yet to `jj`, and it's having its HN moment today. The mental model it teaches: run `jj git init` in an existing repo and jj tracks the same objects alongside git; your working copy **is a commit** (auto-snapshotted on every jj command), each logical change carries a **change ID** that survives rebasing while commit IDs churn; conflicts are recorded on commits instead of halting everything; and the op log makes `jj undo`/`jj redo` total. From there it's revsets, bookmarks as git branches, generated branch names (`push-<changeid>`), and stacked-PR workflows — with the honest observation that agents are "quite good at" using tools like jj-hunk to split commits for review. Two ecosystem facts worth keeping: releases are feature-dense (v0.47.1 shipped Nov 5), and jj's creator Martin von Zweigbergk is now CTO of **East River Source Control**, a new forge being built for jj.
+
+**Why it matters:** jj's design choices map suspiciously well onto agent-era workflows — automatic rebase, stable change IDs, conflicts as data, total undo. A primer reaching HN's front page is the adoption signal; the forge news underneath it is the infrastructure signal. Git isn't going anywhere, but the working-copy-as-commit model is the first serious ergonomic challenge it has faced in a decade.
+
+> The primer's own framing for trying it: jj and git run side-by-side in the same repo, so the experiment is reversible by construction.
+
+[`🔗 Jujutsu Primer (ethanlowman.com)`](https://ethanlowman.com/posts/jj-primer/) · [`🔗 jj-vcs/jj (GitHub)`](https://github.com/jj-vcs/jj) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50570628)
+
+---
+
+## 34. The UK's secret fridge operation: tens of thousands of freezers pulled off the open internet before attackers found the flaw
+
+- **Velocity:** ▮▮ rising
+- **Source:** BBC News · 54+ pts on HN · ~2.3h ago (~17:50 UTC+8)
+- **Tags:** `iot-security` `ot` `ncsc` `food-supply` `disclosure`
+
+BBC cyber correspondent Joe Tidy reveals (published 2026-11-20 00:02 GMT, held back until the risk passed) a coordinated UK defense: in late October, refrigeration consultancy **Omega Solutions** found that controllers from **Resource Data Management (RDM)** — the most popular refrigeration controllers in the UK — shared **"a similar weak password problem to the Danfoss and other controllers"** hit in this year's European fridge-hack waves. Pen Test Partners verified and expanded the finding; **NCSC, Defra and the FSA** ran industry calls; thousands of controller devices — spanning supermarkets, warehouses, restaurants, petrol stations and stadiums — were taken off the open internet remotely or by physically pulling cables, with one chain's IT team taking "hundreds of devices offline every day" for a week. The background: Oct 11–12 saw hundreds of French sites hit via Danfoss systems; Nov 1–2 hit dozens of supermarkets across seven European countries (Belgium and Luxembourg worst) plus French blood-bank sites; France blamed Iran, which Tehran denies. **RDM disputes the severity** — says exploiting it would require physical hardware access ("a vulnerability identified in a test environment" whose test "included dismantling our hardware") — but has shipped first patches and reports no sign of malicious activity. Pen Test Partners' Ken Munro notes the needed hardware sells cheaply on eBay: "it was likely a matter of days until criminals or nation state hackers figured it out."
+
+**Why it matters:** This is the operational-technology tail of the week's outage-and-exploit cascade — the food supply runs on internet-exposed controllers with default passwords, and the defense that worked was profoundly unglamorous: unplug, monitor temperatures manually, patch. It's also the same incident class that triggered this week's safeguards debate (the freezer hack behind item 3), now with the defender-side playbook attached — and a rare public example of quiet, coordinated disclosure completed before weaponization.
+
+> Read the severity dispute as the standard vendor/researcher gap — RDM says exploiting it would require physical hardware access, PTP notes the hardware sells cheaply on eBay — with NCSC treating it as worth a nationwide campaign regardless.
+
+[`🔗 Tens of thousands of UK fridges secured from hackers in secret operation (BBC)`](https://www.bbc.co.uk/news/articles/c6eq49zyx7p4o) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50572430)
+
+---
+
+## 35. GIMP now tests its whole UI on every merge — 13 real-window tests for three decades of menus
+
+- **Velocity:** ▮ steady
+- **Source:** gimp.org · 125+ pts on HN · ~8.2h ago (~11:55 UTC+8)
+- **Tags:** `gimp` `testing` `ui-automation` `open-source` `ci`
+
+GIMP's news post (Nov 16, by Harsh Verma, resurfacing today) describes a new **GUI testing platform**: each test starts a real GIMP, clicks through actual menus and dialogs, and reads the result back — 13 tests so far, run automatically **on every merge**. The post is precise about why: unit tests "were not opening a real window," so they could not tell whether a dialog opens or a menu item did its job; and GIMP's legacy GUI tests, which reach directly into core code, break all too often — and not because they caught a bug. The covered surface: startup and main window, the Welcome dialog's tab behavior and "Show on Start" toggle, File→New sizing, File→Export As writing correct PNGs, color swap and foreground-color typing, layer add/delete, Undo/Redo, zoom.
+
+**Why it matters:** GIMP is the canonical intertwined-codebase nightmare — exactly the project where a change to one dialog silently breaks another. UI-level tests on every merge is the same discipline the Claude Code team described last week — when most of the code is agent-written, the test suite is the management — applied by a 30-year-old volunteer project — and it's the natural guardrail for agent contributors, who can now break the UI and get told about it before a human notices.
+
+> The unglamorous numbers are the story: 13 tests is tiny coverage for GIMP's surface, but the platform that runs them on every merge is the hard part, and it's done.
+
+[`🔗 GIMP: Improved Graphical User Interface testing`](https://www.gimp.org/news/2026/11/16/gimp-ui-tests/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50569985)
+
+---
+
+## 36. DeepMind's institute asks "What comes after AGI?" — and maps four roads to superintelligence
+
+- **Velocity:** ▮ steady
+- **Source:** institute.deepmind.com · 81+ pts on HN · ~9.4h ago (~10:40 UTC+8)
+- **Tags:** `agi` `deepmind` `ai-research` `governance` `essays`
+
+Tim Genewein (research scientist, Google DeepMind) published this essay at DeepMind's institute site on Nov 19, and its premise is the news: AGI is "coming within reach," so the post-AGI regime "is shifting from philosophical speculation to empirical research and governance questions." The framework: general intelligence as a continuum, with ASI defined as consistently outperforming *groups* of human experts on years-long tasks with fewer resources; **"cognitive industrialization"** as the transition mechanism; and four pathways from AGI to ASI — **scaling models and data, technological paradigm shifts, improving agent coordination, and recursive self-improvement (RSI)** — each with its own dynamics and uncertainties. The ask is measurement: "building rigorous, reliable ways to track progress" along whichever road materializes.
+
+**Why it matters:** When a frontier lab's research institute formalizes post-AGI pathways as an empirical agenda, the framing moves from essay discourse into the same machinery as benchmark indices and eval harnesses — this week's Models Engineering Index (item 19) and the decision-model wave are the measurement layer that such a map would be read against. Read it as one lab's map with the lab's own framing included, not a field consensus.
+
+> The essay's honest center of gravity: it treats "AGI within reach" as its premise, not its conclusion — the four roads are a research program for finding out whether the premise holds.
+
+[`🔗 What comes after AGI? (Google DeepMind Institute)`](https://institute.deepmind.com/essays/what-comes-after-agi/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50569519)
+
+---
+
+## 37. ChatGPT for SNES: a 2.2M-parameter language model on the Super FX chip, honest caveats included
+
+- **Velocity:** ▮ steady
+- **Source:** bxfoundry.com · 101+ pts on HN · ~11.6h ago (~08:30 UTC+8)
+- **Tags:** `retrocomputing` `edge-ai` `snes` `language-models` `show-case`
+
+Benj Edwards (BX Foundry) built a chat program for the Super Nintendo: version 0.7 (dated 2026-11-02) runs a **2.2M-parameter** language model on the cartridge's **Super FX 2** chip, emitting one word at a time — playable in the browser via Snes9x (~4 MB) or on real hardware with a Super FX flash cart (FXPak Pro / sd2snes). A second build adds a "fact book": the opening sentences of **150,000 Simple English Wikipedia articles** stored in the MSU-1 data file, which the model can choose to consult like a search tool. The training conversations were generated by **gpt-oss-120b**, and the code was written by AI agents — the page's honesty section is part of the design: the model "knows about 8,000 words, and often gets things wrong, sometimes confidently," and the whole thing is "not made or endorsed by OpenAI."
+
+**Why it matters:** This is the extreme end of the local-AI curve (item 8): an interface whose every keystroke costs a moment, running on 1995 hardware — and a complete AI-built artifact, from synthetic training data to agent-written code. It's a toy by its own description, but it demarcates the floor of where a language model can physically run better than any benchmark table.
+
+> The type-in-your-answers-via-on-screen-keyboard detail is the design constraint made visible: 1995's I/O budget, 2026's model.
+
+[`🔗 ChatGPT for SNES (BX Foundry)`](https://www.bxfoundry.com/chatgpt_snes/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50568548)
+
+---
+
+## 38. Weight-space programming is becoming a research area: LLMs hand-writing network weights, now with a training recipe for editability
+
+- **Velocity:** ▮ steady
+- **Source:** notesbylex.com · 105+ pts on HN · ~62h ago (essay 11-18; paper fresh 11-19)
+- **Tags:** `ai-research` `interpretability` `weight-space-programming` `training` `benchmarks`
+
+The idea that frontier LLMs can read, write and **edit neural network weights directly** is consolidating into a small literature this week. The lineage: RikiyaT's original "Weight-Space Programming" post, where GPT-6 Astra built a Go-playing network from scratch and then improved it through self-play by editing weights. Lex Toumbourou's essay (Nov 18) reran the experiment stricter — Claude Fable 5.2 setting **all 5,994 weights of a CNN "by hand"** for MNIST, no fitting, regression or search — and found the model reaches for 1990s-era hand-crafted filtering techniques (Sobel-style templates), with Fable notably outperforming Opus 5.5 on the task. Now the measurement layer: Konstanz's **2611.26408** (Ropinski & Kranz, Nov 19) benchmarks LLM-driven weight-space programming on vision models — **2,600+ edit processes** across five LLMs, each scored on held-out images for success, side effects and accuracy loss — and proposes **Edit-Ready Training (ERT)**, which rehearses the direct, closed-form weight edits LLMs perform, achieving the highest mean edit score for GPT-6 Astra and Claude Opus 5.5. A TabbyML WebGPU playground for watching weight-space programming run in the browser rode the same wave onto Show HN.
+
+**Why it matters:** If networks can be *trained to be editable*, the unit of model improvement stops being a gradient-descent run and starts being a weight edit — with interpretability and safety implications on both sides (this connects back to Nov 14's "Weight Space Misfolding" threat model). Early days, small nets, vision tasks — the benchmark's own scope — but the field now has a benchmark, a training method, and reproducible experiment logs, which is how areas start.
+
+> The cross-model detail is the provocative part: ERT lifted edit success most for the *frontier* models — editability may be a capability that scales, not a hack.
+
+[`🔗 Weight-Space Programming builds neural networks like a 1990s researcher (NotesByLex)`](https://notesbylex.com/weight-space-programming-1990s) · [`🔗 arXiv: Training Vision Models for LLM-Driven Weight-Space Programming (2611.26408)`](https://arxiv.org/abs/2611.26408) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50538977)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-20T04:42:49Z |
-| Items | 28 |
-| Sources tracked | 30 (Hacker News, GitHub Trending, GitHub repos, Anthropic, hexagonmath.org, Investigatory Powers Tribunal, ounapuu.ee, cve.org, contralabs.com, misanthropicstatement.com, blog.harrison.page, thedataexchange.media, moq.dev, perishablepress.com, foolscap.works, pikuma.com, lateblt.livejournal.com, krthr.co, wsj.com, reuters.com, git-aarvin.github.io, synology.com, postgresql.org, snowflake.com, lastbook.org, huggingface.co, blog.platypush.tech, regexr.com, seremot.com, firecrawl.dev) |
+| Generated | 2026-11-20T12:19:49Z |
+| Items | 38 |
+| Sources tracked | 42 (Hacker News, GitHub Trending, GitHub repos, Anthropic, hexagonmath.org, Investigatory Powers Tribunal, ounapuu.ee, cve.org, contralabs.com, misanthropicstatement.com, blog.harrison.page, thedataexchange.media, moq.dev, perishablepress.com, foolscap.works, pikuma.com, lateblt.livejournal.com, krthr.co, wsj.com, reuters.com, git-aarvin.github.io, synology.com, postgresql.org, snowflake.com, lastbook.org, huggingface.co, arxiv.org, blog.platypush.tech, regexr.com, seremot.com, firecrawl.dev, architectlabs.com, grapheneos.social, em-online.bearblog.dev, ffmpeg.org, ethanlowman.com, bbc.co.uk, gimp.org, institute.deepmind.com, bxfoundry.com, notesbylex.com, rikiyat.github.io) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
