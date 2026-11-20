@@ -622,3 +622,19 @@ Sources: [Lastbook](https://lastbook.org/) ·
 [HN](https://news.ycombinator.com/item?id=50560822) ·
 [Platypush: Rewriting my voice assistant pipeline](https://blog.platypush.tech/article/Rewriting-my-voice-assistant-pipeline) ·
 [HN](https://news.ycombinator.com/item?id=50566261)
+
+## 2026-11-20（20:29 批次）——本地 AI 曲线的地板：1995 年硬件上的 2.2M 参数语言模型
+
+**ChatGPT for SNES**（Benj Edwards / BX Foundry，版本 0.7 标注 2026-11-02，HN 103 分）：一个
+超级任天堂聊天程序，在卡带的 **Super FX 2** 芯片上运行一个 **2.2M 参数**的语言模型，一次
+输出一个词——可通过 Snes9x（约 4 MB）在浏览器里玩，或用 Super FX 烧录卡带（FXPak Pro /
+sd2snes）在真机上游玩。第二个构建加了「事实书」：**15 万篇简单英文维基百科文章**的开头句存
+进 MSU-1 数据文件，模型可以像用搜索工具那样查阅。训练对话由 **gpt-oss-120b** 生成，代码由
+AI agent 编写。页面里的诚实声明是设计的一部分：模型「knows about 8,000 words, and often
+gets things wrong, sometimes confidently」，且「not made or endorsed by OpenAI」。按它自己的
+描述这是个玩具——但它划下了语言模型物理上能跑到的地板，比任何基准表格都清楚（1995 年的
+I/O 预算靠屏幕键盘输入，2026 年的模型），而且它是一件从合成训练数据到 agent 代码的完整
+AI 造物。
+
+Sources: [ChatGPT for SNES](https://www.bxfoundry.com/chatgpt_snes/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50568548)

@@ -2424,3 +2424,46 @@ Sources: [PostgreSQL 19 Released](https://www.postgresql.org/about/news/postgres
 [HN](https://news.ycombinator.com/item?id=50560357) ·
 [seremot.com: Vint Cerf on why TCP/IP was never patented](https://seremot.com/p/vint-cerf-on-why-tcpip-was-never) ·
 [HN](https://news.ycombinator.com/item?id=50568861)
+
+## 2026-11-20 (20:29 batch) — a VCS primer's front-page moment, the release that consolidates a CVE train, and UI tests on every merge
+
+**The Jujutsu Primer** (Ethan Lowman, Nov 18, 145 HN pts): the best single-file introduction to
+`jj` — run `jj git init` beside an existing repo and jj tracks the same objects alongside git;
+the working copy **is a commit** (auto-snapshotted on every jj command); each logical change
+carries a **change ID** that survives rebasing while commit IDs churn; conflicts are recorded on
+commits instead of halting everything; the op log makes `jj undo`/`jj redo` total. The mental
+model cross-checks against jj's own README this run (conflicts as first-class objects; automatic
+rebase and conflict resolution). Ecosystem facts: releases are feature-dense (v0.47.1 shipped
+Nov 5), and jj's creator Martin von Zweigbergk is now CTO of **East River Source Control**
+(ersc.io — verified live: "East River Source Control Names Jujutsu Creator Martin von
+Zweigbergk…"), a new forge being built for jj. The primer's own agent observation: agents are
+"quite good at" using tools like jj-hunk to split commits for review — the
+working-copy-as-commit model maps suspiciously well onto agent-era workflows (automatic rebase,
+stable change IDs, conflicts as data, total undo).
+
+**FFmpeg 9.1 "Gauss"** (released 2026-11-20, cut from master 2026-10-24 — both verified on
+ffmpeg.org/download.html this run): the first stable release from the 9.1 branch, consolidating
+the whole Nov-10 121-CVE fix train ("through 9.0.2", "9.x before 9.0.2") into a fresh tree;
+changelog led by ASTC texture encode/decode via libastcenc (with `.astc` and KTX 1.0
+muxers/demuxers), an extensively improved AAC encoder, an APV Vulkan encoder, LCEVC payload
+merging bitstream filter, an MVR demuxer, libcurl protocol support, DVD-Audio LPCM, NVIDIA
+optical-flow acceleration. Library versions stepped across the board (libavutil 61.19.100,
+libavcodec 63.24.100). Structural note from the thread: FFmpeg's canonical git now lives at
+**code.ffmpeg.org**, the project's own forge instance.
+
+**GIMP's GUI testing platform** (gimp.org news, Nov 16, resurfacing at 126 HN pts): 13 tests,
+each starting a real GIMP, clicking through actual menus and dialogs, reading the result back —
+run automatically **on every merge** — because unit tests "were not opening a real window," and
+GIMP's legacy GUI tests reach directly into core code and break all too often, and not because
+they caught a bug. Covered surface: startup and main window, the Welcome dialog's tab behavior
+and "Show on Start" toggle, File→New sizing, File→Export As writing correct PNGs, color swap,
+layer add/delete, Undo/Redo, zoom. The discipline the Claude Code team described — when most of
+the code is agent-written, the test suite is the management — applied by a 30-year-old volunteer
+project; 13 tests is tiny coverage for GIMP's surface, but the platform that runs them on every
+merge is the hard part, and it's done.
+
+Sources: [Jujutsu Primer](https://ethanlowman.com/posts/jj-primer/) ·
+[jj-vcs/jj](https://github.com/jj-vcs/jj) ·
+[East River Source Control](https://ersc.io) ·
+[FFmpeg 9.1 "Gauss"](https://ffmpeg.org/download.html#release_9.1) ·
+[GIMP: Improved GUI testing](https://www.gimp.org/news/2026/11/16/gimp-ui-tests/)

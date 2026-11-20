@@ -946,6 +946,15 @@
   "zh": "Arcfu 的博客——「The Emperor Pelican Has No Clothes」一文是多样性坍缩研究的己方宣传（作者自述「我们做了基准」）、不是独立批评；其引用分数（GPT-6 Astra 65.5 对人类 92.3）与 arXiv 论文（2610.11539）一致。已于 2026-10-16 对照论文数字核验。",
   "jp": "Arcfu のブログ——「The Emperor Pelican Has No Clothes」は多様性コラプス研究の身内発信（著者は「我々がベンチマークした」と記述）であって独立の批評ではない；引用スコア（GPT-6 Astra 65.5 対 人間 92.3）は arXiv 論文（2610.11539）と一致。2026-10-16 に論文の数値と突合。"
  },
+ "architectlabs.com": {
+  "cat": "vendor",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "Architect Labs' engineering blog — first-party claims for the Frostbite agent-swarm CPU (interaction nets, Vine, ASL → 800k+ lines of Lean). Cross-checked (11-20): the 4.59× perf/watt claim's own baseline definition — \"a modern superscalar (dual-issue, in-order) CPU core\" — sits verbatim in the og:description and body, so the headline is bounded by the vendor itself; all numbers pre-silicon. HN 173 pts.",
+  "jp": "Architect Labs のエンジニアリングブログ——Frostbite agent スウォーム CPU（interaction nets、Vine、ASL → 80 万+ 行 Lean）の一次主張。クロスチェック済み（11-20）：4.59× perf/watt の基線定義——「a modern superscalar (dual-issue, in-order) CPU core」——が og:description と本文に逐語あり、見出しはベンダー自身が限定。全数値テープアウト前。HN 173 pts。",
+  "zh": "Architect Labs 工程博客——Frostbite agent 蜂群 CPU（interaction nets、Vine、ASL → 80 万+ 行 Lean）的第一方主张。已交叉核验（11-20）：4.59× perf/watt 的基线定义——「a modern superscalar (dual-issue, in-order) CPU core」——逐字出现在 og:description 与正文，头条被厂商自己设界；所有数字流片前。HN 173 分。"
+ },
  "arcprize.org": {
   "cat": "research",
   "cred": "high",
@@ -2401,6 +2410,15 @@
   "en": "Personal project report (Ben Swerdlow's Brood War Bench). Fetched 09-21: Codex Astra 18-0, Fable third at 15-3, $0.16-$21.07 per-game cost, \"None of the models played beyond a beginner level\", and the 11,138-token Grok run are all confirmed verbatim; match logs and methodology are published (transparency plus). One feed inaccuracy found and corrected in place 09-21: the leaderboard shows Grok low 0-16 but Grok xhigh 2-15 and medium 1-16 — 'Grok configs winless' overstated it. Cross-checked against its HN thread (id 49766966, 333 pts).",
   "jp": "個人プロジェクトのレポート（Ben Swerdlow の Brood War Bench）。09-21 に取得：Codex Astra 18-0、Fable 3位 15-3、1ゲーム $0.16-$21.07、「None of the models played beyond a beginner level」、Grok の 11,138 トークン実行をすべて逐語確認。試合ログと手法が公開されており透明性が高い。フィードの不正確さを 1 件発見し 09-21 に修正：Grok low は 0-16 だが xhigh は 2-15、medium は 1-16 で「Grok 構成は全敗」は言い過ぎ。HN スレッド（id 49766966、333 pts）とクロス検証済み。",
   "zh": "个人项目报告（Ben Swerdlow 的 Brood War Bench）。09-21 抓取确认：Codex Astra 18-0、Fable 第三 15-3、单局成本 $0.16-$21.07、原话 \"None of the models played beyond a beginner level\"，以及 Grok 11,138 推理 token 的对局，均逐字属实；对局日志和方法论公开，透明度高。发现 feed 一处不准并已于 09-21 就地更正：榜单显示 Grok low 0-16，但 xhigh 2-15、medium 1-16——『Grok 配置全败』言过其实。09-21 经其 HN 讨论串（id 49766966，333 分）交叉验证。"
+ },
+ "bxfoundry.com": {
+  "cat": "community",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "BX Foundry — Benj Edwards' personal project site (the tech historian). First-party showcase (ChatGPT for SNES). Cross-checked (11-20): the HN thread \"ChatGPT for SNES\" (103 pts) confirms the project and its honest-caveats framing; the page's own claims (2.2M params, Super FX 2, gpt-oss-120b training data) are the artifact author's statements.",
+  "jp": "BX Foundry——Benj Edwards（テクノロジー史家）の個人プロジェクトサイト。一次のショーケース（ChatGPT for SNES）。クロスチェック済み（11-20）：HN スレッド「ChatGPT for SNES」（103 pts）がプロジェクトと誠実な但書フレーミングを確認。ページ自身の主張（2.2M パラメータ、Super FX 2、gpt-oss-120b 学習データ）はアーティファクト作者の自己記述。",
+  "zh": "BX Foundry——Benj Edwards（技术史家）的个人项目站。第一方展示（ChatGPT for SNES）。已交叉核验（11-20）：HN 讨论串「ChatGPT for SNES」（103 分）确认项目及其自带诚实声明的框架；页面自己的主张（2.2M 参数、Super FX 2、gpt-oss-120b 训练数据）属工件作者自述。"
  },
  "byteiota.com": {
   "cat": "news",
@@ -4607,6 +4625,15 @@
   "jp": "Elastic Security Labs の脅威調査（REF2859 REVSTEALER レポート）。掲載済みの4モジュール・IOC・YARA については権威あるが、精読が必要：流通している二次的事実（2026年2月販売開始の年代判定、偽 Claude 誘惑アプリ、稼働ホストでの未観測という注意点）は THN/Morphisec の報道由来で、このページにはない。The Hacker News と相互検証済み。",
   "zh": "Elastic Security Labs 的威胁研究（REF2859 REVSTEALER 报告）——对其发布的四个模块、IOC 与 YARA 具权威性，但需细读：流传中的若干二手事实（2026 年 2 月起售卖的定年、假 Claude 诱饵、\"未在活跃主机上观察到\"的注意项）出自 THN/Morphisec 的报道，而非此页面。与 The Hacker News 交叉验证。"
  },
+ "em-online.bearblog.dev": {
+  "cat": "community",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "Em's blog on bearblog — a first-person engineering-student essay (\"I can tell you wrote this yourself\"). Cross-checked (11-20): the HN thread of the same title (243 pts) confirms the essay and its framing; the witness value is the author's own experience, not an independently verifiable event.",
+  "jp": "bearblog 上の Em のブログ——工学学生の一人称エッセイ（「I can tell you wrote this yourself」）。クロスチェック済み（11-20）：同タイトルの HN スレッド（243 pts）がエッセイとそのフレーミングを確認。価値は著者自身の経験であり、独立検証可能な出来事ではない。",
+  "zh": "Em 在 bearblog 上的博客——一名工科学生的第一人称随笔（「I can tell you wrote this yourself」）。已交叉核验（11-20）：同名 HN 讨论串（243 分）确认随笔及其框架；其价值在于作者亲历，而非可独立核实的事件。"
+ },
  "embracethered.com": {
   "cat": "security",
   "cred": "high",
@@ -4826,6 +4853,15 @@
   "jp": "HowToLiveBetter（エビデンス格付け人生ガイド）のオンライン検索版——リポジトリ内容のミラー。ガイド自体には権威あるが独立ではない。取得済み（10-01）。",
   "zh": "HowToLiveBetter 证据分级人生指南的在线检索版——镜像仓库自身内容；对指南本身有权威性，但非独立来源。已抓取（10-01）。"
  },
+ "ethanlowman.com": {
+  "cat": "community",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "Ethan Lowman's dev blog — technical writing (the Jujutsu Primer). Cross-checked (11-20): the primer's jj mental model (working copy as commit, conflicts as first-class objects, automatic rebase) matches jj's own README; the East River Source Control CTO claim verified live on ersc.io. HN 145 pts.",
+  "jp": "Ethan Lowman の開発ブログ——技術ライティング（Jujutsu Primer）。クロスチェック済み（11-20）：入門記事の jj メンタルモデル（作業コピー=commit、コンフリクトはファーストクラス、自動 rebase）は jj 自身の README と一致。East River Source Control CTO 主張は ersc.io でライブ確認。HN 145 pts。",
+  "zh": "Ethan Lowman 的开发博客——技术写作（Jujutsu Primer）。已交叉核验（11-20）：入门帖的 jj 心智模型（工作副本即 commit、冲突为一等对象、自动 rebase）与 jj 官方 README 一致；East River Source Control CTO 主张在 ersc.io 实测确认。HN 145 分。"
+ },
  "ethiack.com": {
   "cat": "security",
   "cred": "med",
@@ -5013,6 +5049,15 @@
   "en": "FEX-Emu team's engineering blog — the x86-TSO cost deep-dive (09-18) is per-core microbenchmarks, self-labeled: split-lock is best-effort, fixes proposed by emulator authors 'not hardware architects'. First-party primary source; numbers discussed/corroborated in the HN thread.",
   "jp": "FEX-Emu チームのエンジニアリングブログ——x86-TSO コスト深掘り（09-18）はコア別マイクロベンチで自己限定付き：split-lock はベストエフォート、修正案はエミュレータ作者による「ハードウェア設計者からではない」。一次の一次情報；数値は HN スレッドで議論・裏付け。",
   "zh": "FEX-Emu 团队工程博客——x86-TSO 成本深潜（09-18）为逐核微基准且自带限定：split-lock 是尽力而为、修复方案出自模拟器作者\"而非硬件架构师\"。第一方一手来源；数字在 HN 讨论串中被讨论与佐证。"
+ },
+ "ffmpeg.org": {
+  "cat": "vendor",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "FFmpeg's official project site — first-party release facts. Cross-checked (11-20): the download page states verbatim \"9.1 was released on 2026-11-20. It is the latest stable FFmpeg release branch, which was cut from master on 2026-10-24\", matching the feed item's release-date/branch-cut claims; HN 182 pts.",
+  "jp": "FFmpeg の公式プロジェクトサイト——一次のリリース事実。クロスチェック済み（11-20）：ダウンロードページに逐語で「9.1 was released on 2026-11-20. It is the latest stable FFmpeg release branch, which was cut from master on 2026-10-24」とあり、フィード項目のリリース日/ブランチカット主張と一致。HN 182 pts。",
+  "zh": "FFmpeg 官方项目站——第一方发布事实。已交叉核验（11-20）：下载页逐字声明「9.1 was released on 2026-11-20. It is the latest stable FFmpeg release branch, which was cut from master on 2026-10-24」，与 feed 条目的发布日/分支切出主张一致；HN 182 分。"
  },
  "fieldeffect.com": {
   "cat": "security",
@@ -5759,6 +5804,15 @@
   "en": "Japanese tech news; fast on OSS, security, and AI announcements.",
   "jp": "日本のテックニュース。OSS・セキュリティ・AI発表に速い。",
   "zh": "日本科技媒体；对开源、安全与 AI 发布跟进快。"
+ },
+ "gimp.org": {
+  "cat": "vendor",
+  "cred": "high",
+  "cv": 1,
+  "density": "med",
+  "en": "GIMP's official project site — first-party news posts. Cross-checked (11-20): the Nov 16 GUI-testing post (13 real-window tests run on every merge) is corroborated by the HN thread \"GIMP now has UI tests\" (126 pts); the covered test surface is the project's own statement.",
+  "jp": "GIMP の公式プロジェクトサイト——一次のニュース投稿。クロスチェック済み（11-20）：11-16 の GUI テスト投稿（毎マージで 13 の実ウィンドウテスト）は HN スレッド「GIMP now has UI tests」（126 pts）が裏付け。対象テスト面はプロジェクト自身の記述。",
+  "zh": "GIMP 官方项目站——第一方新闻帖。已交叉核验（11-20）：11-16 的 GUI 测试帖（每次合并跑 13 个真实窗口测试）由 HN 讨论串「GIMP now has UI tests」（126 分）佐证；覆盖的测试面是项目自己的陈述。"
  },
  "gist.github.com": {
   "cat": "community",
@@ -9468,6 +9522,15 @@
   "jp": "ノートPC／GPU報道に強いハードウェアレビュー・ニュースサイト。スペックや製品ニュースは堅実だが、カーネルレベルの技術的詳細は薄い——エンジニアリング上の主張はパッチシリーズや著者本人の記事と突合すべき。",
   "zh": "以笔记本/GPU 报道见长的硬件评测与资讯站；规格与产品新闻扎实，但内核级技术细节偏薄——工程性主张需与补丁系列或作者原文核对。"
  },
+ "notesbylex.com": {
+  "cat": "community",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "Lex Toumbourou's essays — AI experiment write-ups (the 5,994-weight rerun of weight-space programming). Cross-checked (11-20): \"5,994 weights \\\"by hand:\\\"\" verbatim on the live page, and the practice it describes is independently benchmarked by Konstanz's arXiv 2611.26408 (\"2,600 such edit processes\", ERT); the essay's own numbers are the author's runs.",
+  "jp": "Lex Toumbourou のエッセイ——AI 実験の記録（weight-space programming の 5,994 重み再実行）。クロスチェック済み（11-20）：ライブページに「5,994 weights \"by hand:\"」が逐語あり、記述される実践は Konstanz の arXiv 2611.26408 が独立にベンチマーク（「2,600 such edit processes」、ERT）。エッセイ自身の数値は著者のラン。",
+  "zh": "Lex Toumbourou 的随笔——AI 实验记录（权重空间编程的 5,994 权重复跑）。已交叉核验（11-20）：在线页面逐字可见「5,994 weights \"by hand:\"」，其所描述的实践由 Konstanz 的 arXiv 2611.26408 独立建基（「2,600 such edit processes」、ERT）；随笔自己的数字是作者的运行结果。"
+ },
  "notesfrompoland.com": {
   "cat": "news",
   "cred": "high",
@@ -11392,6 +11455,15 @@
   "en": "Ken Shirriff's reverse-engineering blog — die-level silicon analysis of vintage chips with published uncertainty. Cross-checked (09-13): the 8087 fscale microcode post matches the HN discussion; a long-established, meticulous primary source for hardware history.",
   "jp": "Ken Shirriff のリバースエンジニアリングブログ——ビンテージチップのダイレベル解析で、不確実性も公開。クロスチェック済み（09-13）：8087 fscale マイクロコードの投稿は HN の議論と一致——ハードウェア史における長年の実績ある綿密な一次ソース。",
   "zh": "Ken Shirriff 的逆向工程博客——对老芯片的介质级硅片分析，且公开不确定性。已交叉核验（09-13）：8087 fscale 微码一文与 HN 讨论一致；硬件史领域久经考验、极为严谨的一手来源。"
+ },
+ "rikiyat.github.io": {
+  "cat": "community",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "RikiyaT's personal GitHub Pages — the original \"Weight-Space Programming\" post (/blog/weight-space-programming/, fetched 200 this run). Cross-checked (11-20): the post is live and linked from the site root, and the practice it named is now benchmarked by Konstanz's arXiv 2611.26408 — the area's independent measurement layer.",
+  "jp": "RikiyaT の個人 GitHub Pages——「Weight-Space Programming」元ネタ投稿の所在地（/blog/weight-space-programming/、今回 200 を確認）。クロスチェック済み（11-20）：投稿はライブでサイトルートからリンクされ、名指しされた実践は Konstanz の arXiv 2611.26408 がベンチマーク——領域の独立測定層。",
+  "zh": "RikiyaT 的个人 GitHub Pages——「Weight-Space Programming」原始帖所在地（/blog/weight-space-programming/，本轮实测 200）。已交叉核验（11-20）：帖子在线并从站点根链接，其命名的实践已被 Konstanz 的 arXiv 2611.26408 建基——该领域的独立测量层。"
  },
  "riseproject.dev": {
   "cat": "vendor",

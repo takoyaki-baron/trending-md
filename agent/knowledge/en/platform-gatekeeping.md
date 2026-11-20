@@ -773,3 +773,21 @@ Sources: [Cloudflare: Quad9's withdrawal from France](https://blog.cloudflare.co
 [Archive Team wiki: Apple Discussions](https://wiki.archiveteam.org/index.php/Apple_Discussions) ·
 [HN — Quad9](https://news.ycombinator.com/item?id=50538994) ·
 [HN — ID.me](https://news.ycombinator.com/item?id=50540437)
+
+## 2026-11-20 — the gatekeeping claim arrives from the gated party itself, unverified beyond it
+
+**GrapheneOS's official account** (Mastodon, 2026-11-19 20:40 UTC; 401 HN pts this run): "Google
+is sabotaging their OEM partners by making a growing number of features and updates exclusive to
+Pixels. At the same time, Google is trying to convince OEM partners not to support GrapheneOS or
+even bootloader unlocking. They're also trying to harm GrapheneOS directly." No named OEM, no
+documents, no specific feature — the claim is the project's own characterization, and the HN
+thread is doing the work of asking what is verifiable. The checkable background: Pixel
+exclusivity has tightened for years and the set of phones permitting bootloader unlocking keeps
+shrinking industry-wide (GrapheneOS's own earlier measurement: "around 10%" of banking apps still
+ban a non-Google OS). The hardware path for hardened Android runs through exactly the OEM
+relationships and unlock switches the post says Google is leaning on — watch for an OEM going on
+record, either way. Sits in thesis 15's lattice beside Google's AI-or-nothing schools switch and
+the Waymo freeway suspension.
+
+Sources: [GrapheneOS on Mastodon](https://grapheneos.social/@GrapheneOS/117645038299496084) ·
+[HN discussion](https://news.ycombinator.com/item?id=50570479)

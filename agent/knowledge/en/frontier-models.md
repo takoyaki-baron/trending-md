@@ -6183,3 +6183,21 @@ Sources: [Google: Introducing Gemini 4 Neon](https://blog.google/innovation-and-
 [xinmingtu.cn: protein sequences](https://xinmingtu.cn/blog/2026/claude-opus-5-5-protein-sequences/) ·
 [Anthropic: prices IPO](https://www.anthropic.com/news/anthropic-prices-initial-public-offering) ·
 [424B4 (EDGAR)](https://www.sec.gov/Archives/edgar/data/2130357/000162828026074944/anthropicpbc-424b4.htm)
+
+## 2026-11-20 — a frontier lab's institute formalizes "what comes after AGI" as an empirical agenda
+
+**Tim Genewein (Google DeepMind Institute, Nov 19, 81 HN pts):** the premise is the news — AGI
+is "coming within reach," so the post-AGI regime "is shifting from philosophical speculation to
+empirical research and governance questions." Framework: general intelligence as a continuum;
+**ASI** defined as consistently outperforming *groups* of human experts on years-long tasks with
+fewer resources; **"cognitive industrialization"** as the transition mechanism; four pathways
+from AGI to ASI — **scaling models and data, technological paradigm shifts, improving agent
+coordination, and recursive self-improvement (RSI)** — each with its own dynamics and
+uncertainties. The ask is measurement: "building rigorous, reliable ways to track progress"
+along whichever road materializes. Read as one lab's map with the lab's own framing included,
+not field consensus — the essay treats "AGI within reach" as its premise, not its conclusion —
+landing in the same week as the measurement layer such a map would be read against (the Models
+Engineering Index, the decision-model wave).
+
+Sources: [What comes after AGI?](https://institute.deepmind.com/essays/what-comes-after-agi/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50569519)

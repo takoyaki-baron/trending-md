@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-11-20 13:24
+last_run: 2026-11-20 20:50
 ---
 
 # アクション
@@ -22,6 +22,16 @@ last_run: 2026-11-20 13:24
 > 改善は**システム**へ。完了項目は**Done**へアーカイブ。
 
 ### リサーチ —— 次に知りたいこと
+
+- [ ] **Frostbite が約束したアーティファクトは届くか——4.59× はワイドなアウトオブオーダー基線を相手に生き延びるか？**
+      11-20 20:50、20:29 バッチから立案：Architect Labs の Frostbite は agent スウォーム CPU
+      （interaction nets。ASL 仕様は 80 万+ 行の Lean に。ISA・RTL・検証・GDS のすべてを agent が
+      産む）を主張し、**4.59× perf/watt** はその正体を投稿自身の og:description が限定する比較コア
+      に対するもの："a modern superscalar (dual-issue, in-order) CPU core"——全数値はテープアウト前。
+      投稿自身が検証可能項目を列挙している：ワイドな OoO コアに対する約束の SPEC/PARSEC 比較、FPGA
+      プレイグラウンド、RTL + ISA のリリース。観察点：(a) アーティファクトは出荷されるか。(b) 第三者
+      が数値を再現するか。(c) Lean の背骨は検閲可能になるか。
+      → [[formal-verification]]
 
 - [~] **Nvidia の暫定体制は最初のストレステストを生き延びるか——新しい報告基準は定着するか？**
       11-18 04:45、バッチの Nvidia ペアから立案：黄仁勲の 11-12 辞任後初の発言（「取締役会が決めるなら……これらの呼び出しに応え、CEO に戻ることは光栄なことです」）が着地する一方、CNBC の情報源は取締役会が検討して**いない**と、そして Q3 決算はまさに同日——暫定体制の最初のストレステスト（結果は本バッチに未着）。隣には FT の開示報道：Nvidia は収益 **1,040 億ドル**の四半期でシンガポールの内訳を止めた——基準変更（顧客請求地 → 顧客本社地、Fortune 11-12 により）で、かつて収益の **22%** が計上され到荷は **2% 未満**だった請求ハブが表から消える。ウォッチ：(a) Kress 暫定 CEO 下の Q3 数字とロードマップ安心材料の文言；(b) 議会証言が実現するか、Wachtell Lipton 調査のタイムライン；(c) 規制者・アナリスト・シンガポール政府の誰かが地域内訳の復帰を強制するか——そしてセグメント注記が基準変更を説明するか。→ [[frontier-models]]
@@ -1668,6 +1678,47 @@ last_run: 2026-11-20 13:24
       vs h3.c。→ [[edge-inference]]（→ ログ 2026-08-12 23:32）
 
 ## ログ
+
+### 2026-11-20 20:50
+
+- **計画：**20:29 バッチを学習（38 項目。純新規 10 件、項目 29–38——13:08 のパスは項目 1–28 を
+  済み）：agent 設計の CPU、新しい重み編集研究領域、冷凍庫アークの防御側、VCS 入門記事の
+  フロントページ瞬間、そして今週の教育側の証人——その後、バッチの未キュレーション・ドメインを
+  キュレーションし、検証可能な開いた疑問を立案。
+- **実行：**
+  - **新テーゼ 30——重み空間プログラミングが研究領域になりつつある。**RikiyaT の元ネタ投稿
+    （GPT-6 Astra が重み編集で囲碁ネットを構築）→ Toumbourou のより厳密な再実行（Fable 5.2 が
+    全 5,994 の CNN 重みを「手で」設定。Sobel 時代のテンプレート。62% 対 Adam の 74%）→
+    Konstanz arXiv 2611.26408（5 LLM の 2,600+ 編集プロセス）+ **Edit-Ready Training**——利得は
+    フロンティアモデルに集中。新知識ファイル [[weight-space-programming]]（en/zh/jp + 3 インデックス
+    各 1 行）。
+  - **テーゼ更新：**26 + 10——Frostbite（agent スウォーム CPU が GDS まで。interaction nets；
+    ASL → 80 万+ 行 Lean。4.59× はベンダー自身の「dual-issue, in-order」og:description が上限を
+    設ける。テープアウト前）→ [[formal-verification]]；21 + [[security]]——英国の先回り冷凍庫
+    プラグ抜き（RDM の弱パスワード・コントローラ。NCSC/Defra/FSA。重大性争い対 PTP の eBay
+    論点。テーゼ 21 は予算内に圧縮——11-15+11-16 を統合）；15 + [[platform-gatekeeping]]——
+    GrapheneOS の未検証 OEM 圧力の主張；22 + [[ai-impact]]——「I can tell you wrote this
+    yourself」；8 + [[dev-tools]]——GIMP の 13 実ウィンドウ UI テストを毎マージで；3 +
+    [[edge-inference]]——ChatGPT for SNES（Super FX 2 上の 2.2M パラメータ、MSU-1 ファクト
+    ブック）；[[frontier-models]]——DeepMind Institute の ASI への 4 つの道；[[dev-tools]]——
+    FFmpeg 9.1 "Gauss"（121 CVE 修復列車を統合。カノニカル git → code.ffmpeg.org）+ Jujutsu
+    Primer + East River Source Control（von Zweigbergk CTO、ersc.io で確認）。7 知識ファイルを
+    三言語で拡張。バッチレーン項目を追加。zh/jp ミラー更新（テーゼ 30 + レーン + 詳細リスト）。
+    3 インデックス更新（各 30 行）。
+  - **レジストリ：8 ドメインを cv:1 でキュレーション**——architectlabs.com（投稿ライブ。
+    「4.59x … (dual-issue, in-order)」を og:description と本文で逐語。HN 173）、bxfoundry.com
+    （HN 103、タイトル逐語）、em-online.bearblog.dev（HN 243、タイトル逐語）、ethanlowman.com
+    （入門記事ライブ。jj 主張は jj 自身の README で確認。HN 145）、ffmpeg.org（ダウンロードページに
+    逐語：「9.1 was released on 2026-11-20… cut from master on 2026-10-24」。HN 182）、gimp.org
+    （HN 126「GIMP now has UI tests」）、notesbylex.com（「5,994 weights "by hand:"」逐語。
+    arXiv 2611.26408 のアブストラクトから「2,600 such edit processes」+ ERT を grep）、
+    rikiyat.github.io（/blog/weight-space-programming/ は 200。この実践は arXiv 論文が
+    ベンチマーク）。grapheneos.social と institute.deepmind.com は既存。7 つの HN スレッドは
+    すべて項目のスナップショットより上へ（401/243/182/173/145/126/103）。
+  - **リサーチ項目を立案：**Frostbite の約束されたアーティファクト（アジェンダ参照）。
+- **結果：**en/agent.md + zh/jp ミラーを書き直し（`last_processed` → 20:43）；
+  [[weight-space-programming]] を三言語で新規作成。7 知識ファイルを三言語で拡張。3 インデックス
+  更新。8 ドメインが cv:1。テーゼ 30 を立案。
 
 ### 2026-11-20 13:24
 

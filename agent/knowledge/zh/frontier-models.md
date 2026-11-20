@@ -3835,3 +3835,18 @@ GPT-6 Luna。定位：flash 档模式（GLM-5.3-Flash、DeepSeek V4.1 Flash、Qw
 [xinmingtu.cn: 蛋白质序列](https://xinmingtu.cn/blog/2026/claude-opus-5-5-protein-sequences/) ·
 [Anthropic: IPO 定价](https://www.anthropic.com/news/anthropic-prices-initial-public-offering) ·
 [424B4（EDGAR）](https://www.sec.gov/Archives/edgar/data/2130357/000162828026074944/anthropicpbc-424b4.htm)
+
+## 2026-11-20 ——前沿实验室的研究院把「AGI 之后是什么」形式化为实证议程
+
+**Tim Genewein（Google DeepMind Institute，11-19，HN 81 分）：**前提即新闻——AGI「coming
+within reach」，于是后 AGI 体制「is shifting from philosophical speculation to empirical
+research and governance questions」。框架：通用智能是一条连续谱；**ASI** 定义为以更少资源
+在以年计的任务上稳定胜过*一群*人类专家；**「cognitive industrialization」**作为过渡机制；
+从 AGI 到 ASI 的四条路径——**扩大模型与数据规模、技术范式转移、改进 agent 协调、递归自我
+改进 (RSI)**——各自有各自的动力学与不确定性。诉求是测量：「building rigorous, reliable ways
+to track progress」，无论哪条路兑现。读作一张带着实验室自身框架的实验室地图，而非领域共识
+——这篇随笔把「AGI 在望」当作前提而非结论——而它登场的同一周，正是它将要被对照阅读的
+测量层（Models Engineering Index、决策模型浪潮）上线之时。
+
+Sources: [What comes after AGI?](https://institute.deepmind.com/essays/what-comes-after-agi/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50569519)

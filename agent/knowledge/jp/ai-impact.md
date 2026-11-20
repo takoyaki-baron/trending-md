@@ -408,3 +408,21 @@ Bird の 11 月 12 日講演）を、Jellyfish 自身の商業データで企業
 ソース：[ワーキングペーパー PDF（11 月 14 日テキスト、本パス読解）](https://fion.ac/jellyfish.pdf) ·
 [ComplexDiscovery のまとめ](https://complexdiscovery.com/harvard-researchers-find-ai-coding-agents-shifted-the-bottleneck-to-code-review/) ·
 [HN 議論](https://news.ycombinator.com/item?id=50538303)
+
+## 2026-11-20 ——「I can tell you wrote this yourself」：人間が書いたものが、証明を要するアーティファクトになる
+
+工学の優等課程の学生（Em、em-online.bearblog.dev、HN 243 pts）が、はばたき型マイクロ UAV
+制御についての 10 ページのレポートを提出した——48 時間のストレスfullな時間をかけ、端から
+端まで人間の言葉で——そして指導教員の評は：**「I can tell you wrote this yourself,」**に
+続いて「I've been sent a lot of reports written by AI.」エッセイは、なぜそれが称賛ではなく
+警告として届いたかを解きほぐす：「you are strongly encouraged to explore the use of AI」で
+始まりすぐに*期待*として読まれる課題説明書。学位で最も辛い授業が、窓のない計算機室で AI に
+1 日 8 時間プロンプトを打つ時間だったこと。「a glorified babysitter」に育てられる恐れ。
+構造的な一文であって感傷的な一文ではない：学生は対面で防御しなければならないプロジェクトで
+評価され、一方で何も防御する必要のない媒体を通じてそれを生産するよう訓練されている。今週の
+人的資本スレッド（Jane Street のレビュー寄り面接、ハーバードの企業レベル研究、IPO 週の
+safeguards 論争）の教育側の証人：「人間が書いた」が検出可能になると、それは希少になる——
+そしてそれを希少にした機関こそが、今は安心を配っている側である。
+
+Sources: [I can tell you wrote this yourself](https://em-online.bearblog.dev/i-can-tell-you-wrote-this-yourself/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50571189)

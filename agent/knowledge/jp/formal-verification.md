@@ -370,3 +370,28 @@ Anthropic の研究ポスト（11-17 公表、11-19/20 に HN で 199+ pts）は
 出典：[Anthropic: Claude solves two open problems in the physics of black holes](https://www.anthropic.com/research/claude-black-hole-physics) ·
 [プレプリント 2611.00174](https://hexagonmath.org/2611.00174v1) ·
 [HN 議論](https://news.ycombinator.com/item?id=50563148)
+
+## 2026-11-20 ——形式手法がシリコンに届く：80 万行 Lean の背骨を持つ agent スウォーム CPU
+
+**Frostbite**（Architect Labs、HN 173 pts）：ISA、マイクロアーキテクチャ、RTL、検証、最終
+**GDS** までを agent スウォームが産んだ汎用 CPU。基盤は新しい実行モデル **interaction
+nets**（Lafont 1990）：Rust 風言語 **Vine** のプログラムは、並列性が陽で空間的なグラフに
+コンパイルされ、アウトオブオーダー機構が再発見しなくてよい。7nm レイアウトで測定（GDS で
+500 MHz。quad + 4 L3 ノード = 0.792 mm²）：比較コア（「TCPU」）に対し 25 ワークロードの
+幾何平均で **4.59× perf/watt**、**8.77× perf/area**——10 は agent が調整に使ったもの、
+**15 は最終評価までホールドアウト**（ホールドアウト集合で 3.83×）。エネルギー会計が面白い
+部分：fetch/decode/issue がベースライン予算の 27% から **6%** に下がり、代わりにオンチップ
+ネットワークと、その挙動が「was never specified by any human」というハードウェア
+work-stealing スケジューラに 26% が回る。形式の背骨：独自仕様言語（**ASL**）が **800k+ 行の
+Lean** に下がる。スウォームは 4 回の探索で 58 の提案のうち 37 を保持。
+
+**但書はベンダー自身の記述にあり、見出しに上限を設ける：**「4.59x the performance-per-watt
+of a modern superscalar (**dual-issue, in-order**) CPU core」——ページの og:description と
+本文に逐語（今回 grep）。現代のコア基準では控えめなベースラインであり、全数値はテープアウト
+前（投稿自身がそう言っている）。正直な読み：本当に新しい実行モデル、真剣な形式の背骨、そして
+小さなインオーダーコアに勝つことを意味する 4.59×——Zen 6 ではない。主張を動かすもの：
+ワイドな OoO コアに対する約束の SPEC/PARSEC 比較、FPGA プレイグラウンド、次のステップと
+して列挙されている RTL + ISA のリリース——すべて、届いたときに検証可能。
+
+Sources: [Introducing Frostbite](https://architectlabs.com/blog/frostbite) ·
+[HN discussion](https://news.ycombinator.com/item?id=50572503)

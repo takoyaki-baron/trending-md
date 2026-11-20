@@ -540,3 +540,22 @@ firm scale with Jellyfish's own commercial data.
 Sources: [Working paper PDF (Nov 14 text, read this pass)](https://fion.ac/jellyfish.pdf) ·
 [ComplexDiscovery write-up](https://complexdiscovery.com/harvard-researchers-find-ai-coding-agents-shifted-the-bottleneck-to-code-review/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50538303)
+
+## 2026-11-20 — "I can tell you wrote this yourself": human-written becomes the artifact that must be certified
+
+An engineering honours student (Em, em-online.bearblog.dev, 243 HN pts) turned in a 10-page
+report on flapping-wing micro aerial vehicle control — written over 48 stressed hours, human
+words throughout — and the supervisor's verdict was: **"I can tell you wrote this yourself,"**
+followed by "I've been sent a lot of reports written by AI." The essay unpacks why that landed
+as a warning rather than praise: assignment briefs that begin "you are strongly encouraged to
+explore the use of AI" and quickly read as *expected*; the hardest class of the degree spent in
+a windowless computer lab prompting an AI eight hours a day; the fear of training into "a
+glorified babysitter." The structural line, not the sentimental one: students are graded on a
+project they must defend in person, while being trained to produce it through a medium that
+never has to defend anything. The education-side witness for the week's human-capital thread
+(Jane Street's reviewing-focused interviews, the Harvard firm-level study, the IPO-week
+safeguards debate): when human-written becomes detectable, it becomes rare — and the
+institutions that made it rare are the ones handing out the reassurance.
+
+Sources: [I can tell you wrote this yourself](https://em-online.bearblog.dev/i-can-tell-you-wrote-this-yourself/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50571189)

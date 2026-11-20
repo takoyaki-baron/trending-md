@@ -579,3 +579,30 @@ Anthropic's research post (published Nov 17, HN traction Nov 19/20 at 199+ pts) 
 Sources: [Anthropic: Claude solves two open problems in the physics of black holes](https://www.anthropic.com/research/claude-black-hole-physics) ·
 [Preprint 2611.00174](https://hexagonmath.org/2611.00174v1) ·
 [HN discussion](https://news.ycombinator.com/item?id=50563148)
+
+## 2026-11-20 — formal methods reach silicon: an agent-swarm CPU with an 800k-line Lean spine
+
+**Frostbite** (Architect Labs, 173 HN pts): a general-purpose CPU whose ISA, microarchitecture,
+RTL, verification and final **GDS** were produced by agent swarms around a new execution model —
+**interaction nets** (Lafont 1990), where programs in the Rust-like **Vine** language compile to
+a graph whose parallelism is explicit and spatial rather than rediscovered by out-of-order
+machinery. Measured on a 7nm layout (500 MHz in GDS; quad + 4 L3 nodes = 0.792 mm²): geometric
+mean **4.59× perf/watt** and **8.77× perf/area** against the comparison core ("TCPU") across 25
+workloads — 10 the agents tuned on, **15 held out** until final evaluation (3.83× on the
+held-out set). The energy accounting is the interesting part: fetch/decode/issue drops from 27%
+of the baseline's budget to **6%**, traded for 26% spent on on-chip network and a hardware
+work-stealing scheduler whose behavior, the post says, "was never specified by any human." The
+formal spine: an in-house spec language (**ASL**) lowering to **800k+ lines of Lean**; the swarm
+kept 37 of 58 proposed ideas across four searches.
+
+**The caveat is in the vendor's own description, and it bounds the headline:** "4.59x the
+performance-per-watt of a modern superscalar (**dual-issue, in-order**) CPU core" — verbatim in
+the page's og:description and body (grepped this run). That is a modest baseline by modern core
+standards, and every number is pre-silicon (the post says so itself). The honest read: a
+genuinely novel execution model, a serious formal spine, and a 4.59× that means beating a small
+in-order core, not a Zen 6. What would move the claim: the promised SPEC/PARSEC comparisons
+against wide out-of-order cores, the FPGA playground, and the RTL + ISA release listed as next
+steps — all checkable when they land.
+
+Sources: [Introducing Frostbite](https://architectlabs.com/blog/frostbite) ·
+[HN discussion](https://news.ycombinator.com/item?id=50572503)

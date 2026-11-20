@@ -1758,3 +1758,46 @@ Sources: [PostgreSQL 19 Released](https://www.postgresql.org/about/news/postgres
 [HN](https://news.ycombinator.com/item?id=50560357) ·
 [seremot.com: Vint Cerf on why TCP/IP was never patented](https://seremot.com/p/vint-cerf-on-why-tcpip-was-never) ·
 [HN](https://news.ycombinator.com/item?id=50568861)
+
+## 2026-11-20（20:29 バッチ）——VCS 入門記事のフロントページ瞬間、CVE 修復列車を統合するリリース、マージ毎に走る UI テスト
+
+**The Jujutsu Primer**（Ethan Lowman、11-18、HN 145 pts）：現時点で最良の単一ファイル `jj`
+入門——既存リポジトリで `jj git init` を実行すれば jj が git と並行して同じオブジェクトを
+追跡。作業コピー**自体が commit**（jj コマンド毎に自動スナップショット）。各論理変更は
+rebase で生き残る**チェンジ ID** を持ち、commit ID は入れ替わる。コンフリクトはすべてを
+止めるのではなく commit に記録される。op log により `jj undo`/`jj redo` は完全。この
+メンタルモデルは今回 jj 自身の README でクロスチェック済み（コンフリクトはファーストクラス
+のオブジェクト。自動 rebase とコンフリクト解決の伝播）。エコシステムの事実：リリースは
+フィーチャ密度が高い（v0.47.1 は 11-05）。jj の作者 Martin von Zweigbergk は **East River
+Source Control** の CTO になった（ersc.io——ライブ確認：「East River Source Control Names
+Jujutsu Creator Martin von Zweigbergk…」）。jj のために作られている新しいフォージ。入門記事
+自身の agent 観察：agent は jj-hunk のようなツールでレビュー用に commit を分割するのが
+「quite good at」——作業コピー=commit モデルは agent 時代のワークフローに不気味なほど合う
+（自動 rebase、安定したチェンジ ID、データとしてのコンフリクト、完全な undo）。
+
+**FFmpeg 9.1 "Gauss"**（2026-11-20 リリース、master からは 2026-10-24 にカット——両方とも
+今回 ffmpeg.org/download.html で確認）：9.1 ブランチの最初の安定版リリース。11-10 の 121
+CVE 修復列車（「through 9.0.2」「9.x before 9.0.2」）全体を新しい木に統合。changelog の
+先頭は libastcenc 経由の ASTC テクスチャ encode/decode（`.astc` と KTX 1.0 の
+muxer/demuxer 付き）、大幅改善された AAC エンコーダ、APV Vulkan エンコーダ、LCEVC
+ペイロードマージ bitstream filter、MVR demuxer、libcurl プロトコル対応、DVD-Audio LPCM、
+NVIDIA オプティカルフロー加速。ライブラリバージョンは全体でステップ（libavutil 61.19.100、
+libavcodec 63.24.100）。スレッドからの構造的注記：FFmpeg のカノニカル git は **code.ffmpeg.org**
+——プロジェクト自身の forge インスタンス——に移った。
+
+**GIMP の GUI テストプラットフォーム**（gimp.org ニュース、11-16、HN 126 pts で再浮上）：
+13 のテストが、それぞれ実際の GIMP を起動し、実際のメニューとダイアログをクリックし、結果を
+読み戻す——**すべてのマージで自動実行**——理由は明確：ユニットテストは「were not opening a
+real window」、そして GIMP のレガシー GUI テストはコアコードに直接手を伸ばすため壊れやすい
+——バグを捉えたからではなく。対象面：起動とメインウィンドウ、Welcome ダイアログのタブ挙動
+と「Show on Start」トグル、File→New のサイズ、File→Export As の正しい PNG 書き出し、色交換、
+レイヤー追加/削除、Undo/Redo、ズーム。Claude Code チームが先週説明した規律——コードの大部分
+が agent 書きのとき、テストスイートがマネジメントである——を 30 年のボランティアプロジェクト
+が実装。13 テストは GIMP の表面に対して小さすぎるが、それを毎マージで走らせるプラットフォーム
+が難しい部分で、それは済んでいる。
+
+Sources: [Jujutsu Primer](https://ethanlowman.com/posts/jj-primer/) ·
+[jj-vcs/jj](https://github.com/jj-vcs/jj) ·
+[East River Source Control](https://ersc.io) ·
+[FFmpeg 9.1 "Gauss"](https://ffmpeg.org/download.html#release_9.1) ·
+[GIMP: Improved GUI testing](https://www.gimp.org/news/2026/11/16/gimp-ui-tests/)

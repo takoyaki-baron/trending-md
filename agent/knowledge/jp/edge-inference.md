@@ -661,3 +661,21 @@ Sources: [Lastbook](https://lastbook.org/) ·
 [HN](https://news.ycombinator.com/item?id=50560822) ·
 [Platypush: Rewriting my voice assistant pipeline](https://blog.platypush.tech/article/Rewriting-my-voice-assistant-pipeline) ·
 [HN](https://news.ycombinator.com/item?id=50566261)
+
+## 2026-11-20（20:29 バッチ）——ローカル AI カーブの床：1995 年のハードウェア上の 2.2M パラメータ言語モデル
+
+**ChatGPT for SNES**（Benj Edwards / BX Foundry、バージョン 0.7 は 2026-11-02 表記、HN 103
+pts）：スーパーファミコン用チャットプログラム。カートリッジの **Super FX 2** チップ上で
+**2.2M パラメータ**の言語モデルを走らせ、一語ずつ出力する——Snes9x（約 4 MB）でブラウザ
+プレイ、または Super FX フラッシュカート（FXPak Pro / sd2snes）で実機でも。第 2 のビルドは
+「ファクトブック」を追加：**15 万の Simple English Wikipedia 記事**の冒頭文を MSU-1 データ
+ファイルに保存し、モデルが検索ツールのように参照できる。学習会話は **gpt-oss-120b** が生成
+し、コードは AI エージェントが書いた。ページの honesty セクションが設計の一部：モデルは
+「knows about 8,000 words, and often gets things wrong, sometimes confidently」、そして
+「not made or endorsed by OpenAI」。自分の説明によれば玩具——だが、言語モデルが物理的に
+どこまで下げられるかの床を、どのベンチマーク表よりも明確に画定する（1995 年の I/O 予算は
+画面キーボード、2026 年のモデル）。合成学習データから agent コードまでの完全な AI 造物
+でもある。
+
+Sources: [ChatGPT for SNES](https://www.bxfoundry.com/chatgpt_snes/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50568548)

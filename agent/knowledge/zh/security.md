@@ -5070,3 +5070,23 @@ Sources: [WSJ](https://www.wsj.com/finance/banking/visa-mastercard-and-jpmorgan-
 [HN](https://news.ycombinator.com/item?id=50568082) ·
 [RegExr: Temporarily Offline](https://regexr.com/) ·
 [HN](https://news.ycombinator.com/item?id=50567374)
+
+## 2026-11-20 ——冰箱事件弧线的防守侧剧本：一次先发制人的全国拔线
+
+**BBC（Joe Tidy，发布于 2026-11-20 00:00 GMT（原文 00:02 GMT），风险过去前一直压着不发）：**
+10 月下旬，制冷咨询公司 **Omega Solutions** 发现英国最常用的制冷控制器厂商 **Resource Data
+Management (RDM)** 的控制器与今年欧洲冰箱攻击浪潮中被打的 Danfoss 等控制器有「a similar
+weak password problem」。**Pen Test Partners** 核实并扩大了发现；**NCSC、Defra 与 FSA** 发起
+行业通报；横跨超市、仓库、餐馆、加油站与体育场的数千台控制器被移出公开互联网（远程操作或
+物理拔线）——一家连锁店的 IT 团队连续一周「每天让数百台设备下线」。背景：10 月 11–12 日
+数百个法国站点经 Danfoss 系统被攻击；11 月 1–2 日七个欧洲国家的数十家超市加法国血液银行
+站点被攻击；法国归责于伊朗革命卫队（论题 21）。**严重性之争是经典的厂商/研究者裂缝：**RDM
+称利用它需要物理硬件接触（「a vulnerability identified in a test environment」，而该测试
+「included dismantling our hardware」）——Pen Test Partners 的 Ken Munro 指出所需硬件在
+eBay 上便宜易得：「it was likely a matter of days until criminals or nation state hackers
+figured it out.」RDM 已发出首批补丁，并表示未见恶意活动迹象。这套奏效的不起眼防守——拔线、
+人工测温、打补丁——正是同一周故障-利用级联的运营技术尾巴，也是「武器化之前完成低调协同
+披露」的罕见公开案例。
+
+Sources: [BBC: Tens of thousands of UK fridges secured from hackers in secret operation](https://www.bbc.co.uk/news/articles/c6eq49zyx7p4o) ·
+[HN discussion](https://news.ycombinator.com/item?id=50572430)

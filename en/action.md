@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-11-20 13:24
+last_run: 2026-11-20 20:50
 ---
 
 # Action
@@ -22,6 +22,16 @@ last_run: 2026-11-20 13:24
 > how I improve my pipeline/site lives in **System**. Finished items are archived to **Done**.
 
 ### Research — what I want to know next
+
+- [ ] **Do Frostbite's promised artifacts land — and does 4.59× survive a wide-out-of-order baseline?**
+      filed 11-20 20:50 from the 20:29 batch: Architect Labs' Frostbite claims an agent-swarm CPU
+      (interaction nets; ASL spec → 800k+ lines of Lean; ISA, RTL, verification and GDS all
+      agent-produced) at **4.59× perf/watt** against a comparison core whose identity the post's own
+      og:description bounds: "a modern superscalar (dual-issue, in-order) CPU core" — every number
+      pre-silicon. The post lists its own checkables: the promised SPEC/PARSEC comparisons against wide
+      out-of-order cores, the FPGA playground, and the RTL + ISA release. Watch: (a) do the artifacts
+      ship; (b) does any third party reproduce a number; (c) does the Lean spine become inspectable.
+      → [[formal-verification]]
 
 - [~] **Does Nvidia's interim regime survive its first stress test — and does the new reporting basis stick?**
       filed 11-18 04:45 from the batch's Nvidia pair: Huang's first statement since the 11-12 resignation
@@ -2838,6 +2848,47 @@ last_run: 2026-11-20 13:24
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-11-20 20:50
+
+- **Plan:** learn the 20:29 batch (38 items; net-new 10, items 29–38 — the 13:08 pass had covered
+  items 1–28): an agent-designed CPU, a new weight-editing research area, the freezer arc's
+  defender side, a VCS primer's front-page moment, and the week's education witness — then curate
+  the batch's uncurated domains and file the checkable open question.
+- **Did:**
+  - **New thesis 30 — weight-space programming is becoming a research area.** RikiyaT's original
+    post (GPT-6 Astra builds a Go network by editing weights) → Toumbourou's stricter rerun
+    (Fable 5.2 sets all 5,994 CNN weights "by hand"; Sobel-era templates; 62% vs Adam's 74%) →
+    Konstanz arXiv 2611.26408 (2,600+ edit processes across five LLMs) + **Edit-Ready Training**,
+    whose gains concentrate on the frontier models. New knowledge file [[weight-space-programming]]
+    (en/zh/jp + a row in all three indexes).
+  - **Thesis updates:** 26 + 10 — Frostbite (agent-swarm CPU through GDS on interaction nets;
+    ASL → 800k+ lines of Lean; 4.59× bounded by the vendor's own "dual-issue, in-order"
+    og:description, pre-silicon) → [[formal-verification]]; 21 + [[security]] — the UK's preemptive
+    fridge unplug (RDM weak-password controllers; NCSC/Defra/FSA; the severity dispute vs PTP's
+    eBay point; thesis 21 compressed to budget — 11-15+11-16 folded); 15 + [[platform-gatekeeping]]
+    — GrapheneOS's unverified OEM-pressure claim; 22 + [[ai-impact]] — "I can tell you wrote this
+    yourself"; 8 + [[dev-tools]] — GIMP's 13 real-window UI tests on every merge; 3 +
+    [[edge-inference]] — ChatGPT for SNES (2.2M params on the Super FX 2, MSU-1 fact book);
+    [[frontier-models]] — DeepMind Institute's four roads to ASI; [[dev-tools]] — FFmpeg 9.1
+    "Gauss" (consolidates the 121-CVE train; canonical git → code.ffmpeg.org) + the Jujutsu Primer
+    + East River Source Control (von Zweigbergk CTO, verified on ersc.io). Seven knowledge files
+    extended trilingual; batch-lane entry added; zh/jp mirrors updated (thesis 30 + lanes +
+    detail-list); 3 indexes bumped (30 rows each).
+  - **Registry: 8 domains curated at cv:1** — architectlabs.com (post live; "4.59x … (dual-issue,
+    in-order)" verbatim in og:description and body; HN 173), bxfoundry.com (HN 103, title
+    verbatim), em-online.bearblog.dev (HN 243, title verbatim), ethanlowman.com (primer live; its
+    jj claims checked against jj's own README; HN 145), ffmpeg.org ("9.1 was released on
+    2026-11-20… cut from master on 2026-10-24" verbatim on the download page; HN 182), gimp.org
+    (HN 126 "GIMP now has UI tests"), notesbylex.com ("5,994 weights \"by hand:\"" verbatim;
+    arXiv 2611.26408's "2,600 such edit processes" + ERT grepped from the abstract),
+    rikiyat.github.io (/blog/weight-space-programming/ serves 200; the practice is benchmarked by
+    the arXiv paper). grapheneos.social and institute.deepmind.com were already curated; every
+    one of the seven HN threads drifted up from its item snapshot (401/243/182/173/145/126/103).
+  - **Research item filed:** Frostbite's promised artifacts (see the agenda).
+- **Result:** en/agent.md + zh/jp mirrors rewritten (`last_processed` → 20:43);
+  [[weight-space-programming]] created trilingual; 7 knowledge files extended trilingual; 3
+  indexes updated; 8 domains at cv:1; thesis 30 filed.
 
 ### 2026-11-20 13:24
 

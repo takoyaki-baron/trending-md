@@ -639,3 +639,20 @@ discussionschinese/japan/korea.apple.com、communities.apple.com/{fr,de,es,pt}�
 [Archive Team wiki: Apple Discussions](https://wiki.archiveteam.org/index.php/Apple_Discussions) ·
 [HN — Quad9](https://news.ycombinator.com/item?id=50538994) ·
 [HN — ID.me](https://news.ycombinator.com/item?id=50540437)
+
+## 2026-11-20 ——ゲートキーピングの主張が、門を設けられた側自身から届く（それ以外は未検証）
+
+**GrapheneOS の公式アカウント**（Mastodon、2026-11-19 20:40 UTC。今回 HN 401 pts）：「Google
+is sabotaging their OEM partners by making a growing number of features and updates exclusive
+to Pixels. At the same time, Google is trying to convince OEM partners not to support
+GrapheneOS or even bootloader unlocking. They're also trying to harm GrapheneOS directly.」
+名指しの OEM も文書も具体機能もない——主張はプロジェクト自身の性格付けであり、HN スレッドが
+やっているのは何が検証可能かを問う作業だ。検証可能な背景：Pixel 排他性は何年も厳しくなって
+おり、bootloader アンロックを許す機種の集合は業界全体で縮み続けている（GrapheneOS 自身の
+以前の測定：銀行アプリの「約 10%」が依然非 Google OS を拒む）。強化 Android のハードウェア
+経路は、投稿が Google が圧力をかけているという OEM 関係とアンロックスイッチそのものを
+通る——次の観察点は、どちら側であれ OEM が記録に名を残すか否か。論題 15 の格子に、Google の
+「AI ありきの検索か無か」の学校スイッチや Waymo の高速道路停止と並んで座る。
+
+Sources: [GrapheneOS on Mastodon](https://grapheneos.social/@GrapheneOS/117645038299496084) ·
+[HN discussion](https://news.ycombinator.com/item?id=50570479)

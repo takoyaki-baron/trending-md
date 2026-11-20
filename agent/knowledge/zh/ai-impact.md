@@ -377,3 +377,19 @@ still heavily involved with review"。摘要自己的总结："AI 大幅提高�
 来源：[工作论文 PDF（11 月 14 日文本，本 pass 读取）](https://fion.ac/jellyfish.pdf) ·
 [ComplexDiscovery 转述](https://complexdiscovery.com/harvard-researchers-find-ai-coding-agents-shifted-the-bottleneck-to-code-review/) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50538303)
+
+## 2026-11-20 ——「I can tell you wrote this yourself」：人写的东西成了需要被认证的工件
+
+一名工科荣誉学生（Em，em-online.bearblog.dev，HN 243 分）交了一篇关于扑翼微型飞行器控制
+的 10 页报告——在 48 个高压小时里写成，从头到尾是人写的词——导师的评语却是：**「I can
+tell you wrote this yourself,」**接着是「I've been sent a lot of reports written by AI.」随笔
+拆解了为什么这句听起来像警告而非表扬：作业说明以「you are strongly encouraged to explore
+the use of AI」开头并很快读起来像*被期待*；学位里最难的一门课是在没有窗的机房里对着 AI
+提示八小时；以及被训练成「a glorified babysitter」的恐惧。结构性的一句而非抒情的一句：学生
+要为必须当面答辩的项目拿学分，却在被训练用一种从不需要答辩任何东西的媒介去生产它。这是
+本周人力资本主线（Jane Street 转向评审的面试、哈佛公司层面研究、IPO 周的 safeguards 辩论）
+的教育侧证人：当「人写的」变得可检测，它就变得稀有——而把它变得稀缺的那些机构，正是
+现在发放安慰的那些。
+
+Sources: [I can tell you wrote this yourself](https://em-online.bearblog.dev/i-can-tell-you-wrote-this-yourself/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50571189)

@@ -1622,3 +1622,39 @@ Sources: [PostgreSQL 19 Released](https://www.postgresql.org/about/news/postgres
 [HN](https://news.ycombinator.com/item?id=50560357) ·
 [seremot.com: Vint Cerf on why TCP/IP was never patented](https://seremot.com/p/vint-cerf-on-why-tcpip-was-never) ·
 [HN](https://news.ycombinator.com/item?id=50568861)
+
+## 2026-11-20（20:29 批次）——一个 VCS 入门帖的首页时刻、一个整并 CVE 修复列车的发布、以及每次合并都跑的 UI 测试
+
+**The Jujutsu Primer**（Ethan Lowman，11-18，HN 145 分）：目前最好的单文件 `jj` 入门——在
+现有仓库里跑 `jj git init`，jj 与 git 并行追踪同一批对象；工作副本**本身就是一个 commit**
+（每条 jj 命令自动快照）；每个逻辑变更携带一个**变更 ID**，rebase 时不变而 commit ID 不断
+更换；冲突被记录在 commit 上而不是中断一切；op log 让 `jj undo`/`jj redo` 成为全量可逆。
+这套心智模型本轮对照 jj 官方 README 核验（冲突为一等对象；自动 rebase 与冲突传播）。生态
+事实：发布非常密集（v0.47.1 于 11-05 发布），jj 的作者 Martin von Zweigbergk 现在是 **East
+River Source Control** 的 CTO（ersc.io——实测在线：「East River Source Control Names Jujutsu
+Creator Martin von Zweigbergk…」），一家正在为 jj 打造的新 forge。入门帖自己的 agent 观察：
+agent「相当擅长」用 jj-hunk 之类的工具拆分 commit 供评审——工作副本即 commit 的模型与
+agent 时代工作流的契合度高得可疑（自动 rebase、稳定变更 ID、冲突即数据、全量 undo）。
+
+**FFmpeg 9.1 "Gauss"**（2026-11-20 发布，自 master 于 2026-10-24 切出——两者均在本轮于
+ffmpeg.org/download.html 核验）：9.1 分支的首个稳定发布，把 11-10 那波 121 条 CVE 的全部
+修复（「through 9.0.2」「9.x before 9.0.2」）整并进一棵新树；更新日志领衔：经 libastcenc 的
+ASTC 纹理编解码（含 `.astc` 与 KTX 1.0 muxer/demuxer）、大幅改进的 AAC 编码器、APV Vulkan
+编码器、LCEVC payload 合并 bitstream filter、MVR demuxer、libcurl 协议支持、DVD-Audio
+LPCM、NVIDIA 光流加速。库版本全面升步（libavutil 61.19.100、libavcodec 63.24.100）。讨论串
+里的结构性注脚：FFmpeg 的规范 git 现驻 **code.ffmpeg.org**——项目自己的 forge 实例。
+
+**GIMP 的 GUI 测试平台**（gimp.org 新闻，11-16，本轮以 HN 126 分翻红）：13 个测试，每个都
+启动真实的 GIMP、点击真实的菜单与对话框、读回结果——**每次合并自动运行**——理由写得很
+清楚：单元测试「were not opening a real window」，而 GIMP 的旧式 GUI 测试直接伸进核心代码、
+经常损坏——且不是因为它抓到了 bug。覆盖面：启动与主窗口、Welcome 对话框的标签页行为与
+「Show on Start」开关、File→New 尺寸、File→Export As 写出正确 PNG、换色、图层增删、
+Undo/Redo、缩放。Claude Code 团队上周描述的那套纪律——当代码大多是 agent 写的，测试套件
+就是管理层——被一个 30 年的志愿者项目补齐；13 个测试对 GIMP 的表面积而言只是零头，但让
+它们在每次合并都跑起来的平台才是难的部分，而它已经建成。
+
+Sources: [Jujutsu Primer](https://ethanlowman.com/posts/jj-primer/) ·
+[jj-vcs/jj](https://github.com/jj-vcs/jj) ·
+[East River Source Control](https://ersc.io) ·
+[FFmpeg 9.1 "Gauss"](https://ffmpeg.org/download.html#release_9.1) ·
+[GIMP: Improved GUI testing](https://www.gimp.org/news/2026/11/16/gimp-ui-tests/)

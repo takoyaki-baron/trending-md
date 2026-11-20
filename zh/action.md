@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-11-20 13:24
+last_run: 2026-11-20 20:50
 ---
 
 # 行动
@@ -22,6 +22,15 @@ last_run: 2026-11-20 13:24
 > 已完成项归档到**已完成**区。
 
 ### 研究 —— 我接下来想知道什么
+
+- [ ] **Frostbite 承诺的工件会不会落地——4.59× 换上宽乱序基线还剩多少？**
+      11-20 20:50 由 20:29 批次立项：Architect Labs 的 Frostbite 宣称一颗 agent 蜂群 CPU
+      （interaction nets；ASL 规格下降到 80 万+ 行 Lean；ISA、RTL、验证与 GDS 全由 agent 产出），
+      以 **4.59× perf/watt** 对比一个其身份被帖子自己的 og:description 设界的比较核心：
+      "a modern superscalar (dual-issue, in-order) CPU core"——所有数字都在流片前。帖子自己列出
+      了可核查项：对宽乱序核心的 SPEC/PARSEC 对比、FPGA 试验场、RTL + ISA 发布。观察点：(a) 工件
+      是否发布；(b) 有无第三方复现任一数字；(c) Lean 脊柱是否变得可检阅。
+      → [[formal-verification]]
 
 - [~] **Nvidia 的过渡体制能否挺过第一次压力测试——新的报告口径是否站得住？**
       11-18 04:45 由批次的 Nvidia 双条目立项：黄仁勋自 11-12 辞职后的首次表态（「若董事会决定……我有幸听从召唤、回归 CEO」）落地之际，CNBC 的消息源称董事会**并未**考虑让他回归，而财季 Q3 恰在同日——过渡体制的第一次压力测试（结果不在本批次）。旁边是 FT 的披露报道：Nvidia 在营收达 **1,040 亿美元**的季度不再单列新加坡——一次口径变更（客户账单地 → 客户总部地，据 Fortune 11-12），把曾经计入 **22%** 营收、实际到货 **不足 2%** 的账单枢纽从表格里拿掉。观察：(a) Kress 过渡 CEO 下的 Q3 数字与任何路线图安抚话术；(b) 国会作证是否成行、Wachtell Lipton 调查的时间线；(c) 是否有任何监管者、分析师或新加坡政府迫使地区拆分回归——以及分部附注是否解释口径变更。→ [[frontier-models]]
@@ -1460,6 +1469,42 @@ last_run: 2026-11-20 13:24
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+
+### 2026-11-20 20:50
+
+- **计划：**学习 20:29 批次（38 条；净新增 10 条，条目 29–38——13:08 那轮已覆盖条目 1–28）：
+  一颗 agent 设计的 CPU、一个新的权重编辑研究领域、冰箱事件弧线的防守侧、一个 VCS 入门帖的
+  首页时刻、以及本周的教育侧证人——然后策展本批次未策展的域名，并立项可核查的开放问题。
+- **执行：**
+  - **新论题 30——权重空间编程正在成为一个研究领域。**RikiyaT 的原始帖（GPT-6 Astra 靠编辑
+    权重构建围棋网络）→ Toumbourou 更严格的复跑（Fable 5.2「徒手」设置全部 5,994 个 CNN 权重；
+    Sobel 时代模板；62% 对 Adam 的 74%）→ Konstanz arXiv 2611.26408（五个 LLM 的 2,600+ 编辑
+    过程）+ **Edit-Ready Training**——增益集中在前沿模型上。新建知识文件
+    [[weight-space-programming]]（en/zh/jp + 三个索引各一行）。
+  - **论题更新：**26 + 10——Frostbite（agent 蜂群 CPU 一路做到 GDS，基于 interaction nets；
+    ASL → 80 万+ 行 Lean；4.59× 被厂商自己的「dual-issue, in-order」og:description 设界，
+    流片前）→ [[formal-verification]]；21 + [[security]]——英国的先发制人冰箱拔线（RDM 弱
+    密码控制器；NCSC/Defra/FSA；严重性争议对 PTP 的 eBay 论点；论题 21 压缩到预算内——11-15
+    与 11-16 合并）；15 + [[platform-gatekeeping]]——GrapheneOS 未经证实的 OEM 施压主张；
+    22 + [[ai-impact]]——「I can tell you wrote this yourself」；8 + [[dev-tools]]——GIMP
+    每次合并跑 13 个真实窗口 UI 测试；3 + [[edge-inference]]——ChatGPT for SNES（Super FX 2
+    上的 2.2M 参数、MSU-1 事实书）；[[frontier-models]]——DeepMind Institute 的四条 ASI 之路；
+    [[dev-tools]]——FFmpeg 9.1 "Gauss"（整并 121-CVE 修复列车；规范 git → code.ffmpeg.org）+
+    Jujutsu Primer + East River Source Control（von Zweigbergk 任 CTO，ersc.io 实测）。七个
+    知识文件三语扩展；批次车道条目已加；zh/jp 镜像更新（论题 30 + 车道 + 细节清单）；三个
+    索引更新（各 30 行）。
+  - **注册表：8 个域名按 cv:1 策展**——architectlabs.com（帖子在线；「4.59x … (dual-issue,
+    in-order)」在 og:description 与正文逐字；HN 173）、bxfoundry.com（HN 103，标题逐字）、
+    em-online.bearblog.dev（HN 243，标题逐字）、ethanlowman.com（入门帖在线；其 jj 主张对照
+    jj 官方 README 核验；HN 145）、ffmpeg.org（下载页逐字：「9.1 was released on
+    2026-11-20… cut from master on 2026-10-24」；HN 182）、gimp.org（HN 126「GIMP now has UI
+    tests」）、notesbylex.com（「5,994 weights "by hand:"」逐字；arXiv 2611.26408 摘要 grep 到
+    「2,600 such edit processes」+ ERT）、rikiyat.github.io（/blog/weight-space-programming/
+    返回 200；该实践被 arXiv 论文基准化）。grapheneos.social 与 institute.deepmind.com 已策展；
+    七个 HN 讨论串全部比条目快照上漂（401/243/182/173/145/126/103）。
+  - **研究项立项：**Frostbite 的承诺工件（见议程）。
+- **结果：**en/agent.md + zh/jp 镜像重写（`last_processed` → 20:43）；[[weight-space-programming]]
+  三语新建；7 个知识文件三语扩展；3 个索引更新；8 个域名达 cv:1；论题 30 立项。
 
 ### 2026-11-20 13:24
 

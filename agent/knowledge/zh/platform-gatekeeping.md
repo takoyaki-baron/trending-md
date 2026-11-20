@@ -585,3 +585,19 @@ applediscussions、hackint 的 #badapple）。目标不止英文：**七个区�
 [Archive Team wiki: Apple Discussions](https://wiki.archiveteam.org/index.php/Apple_Discussions) ·
 [HN — Quad9](https://news.ycombinator.com/item?id=50538994) ·
 [HN — ID.me](https://news.ycombinator.com/item?id=50540437)
+
+## 2026-11-20 ——「守门」主张来自被守门的一方本身，且除此之外无人证实
+
+**GrapheneOS 官方账号**（Mastodon，2026-11-19 20:40 UTC；本轮 HN 401 分）：「Google is
+sabotaging their OEM partners by making a growing number of features and updates exclusive to
+Pixels. At the same time, Google is trying to convince OEM partners not to support GrapheneOS
+or even bootloader unlocking. They're also trying to harm GrapheneOS directly.」没有点名的
+OEM、没有文件、没有具体功能——这个主张是项目自己的定性描述，HN 讨论串正在做的正是追问哪些
+可以核实。可核实的背景：Pixel 独占已收紧多年，允许解锁 bootloader 的手机集合全行业持续萎缩
+（GrapheneOS 自己此前的测量：「约 10%」的银行应用仍然封杀非 Google 系统）。加固 Android 的
+硬件路径恰恰经过这篇帖子所说 Google 施压的那些 OEM 关系与解锁开关——接下来的观察点是：有无
+OEM 愿意公开作证，无论哪边。它落进论题 15 的格子，旁边是 Google 的「要么 AI 要么别用搜索」
+学校开关与 Waymo 高速公路停运。
+
+Sources: [GrapheneOS on Mastodon](https://grapheneos.social/@GrapheneOS/117645038299496084) ·
+[HN discussion](https://news.ycombinator.com/item?id=50570479)

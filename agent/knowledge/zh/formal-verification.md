@@ -356,3 +356,25 @@ Anthropic 的研究帖（11-17 发布，11-19/20 在 HN 获 199+ 分）描述了
 来源：[Anthropic: Claude solves two open problems in the physics of black holes](https://www.anthropic.com/research/claude-black-hole-physics) ·
 [预印本 2611.00174](https://hexagonmath.org/2611.00174v1) ·
 [HN 讨论](https://news.ycombinator.com/item?id=50563148)
+
+## 2026-11-20 ——形式方法抵达硅片：一个带 80 万行 Lean 脊柱的 agent 蜂群 CPU
+
+**Frostbite**（Architect Labs，HN 173 分）：一颗通用 CPU，其 ISA、微架构、RTL、验证与最终
+**GDS** 全部由围绕新执行模型的 agent 蜂群产出——**interaction nets**（Lafont 1990）：
+Rust 风格的 **Vine** 语言编译成一张图，其并行性是显式且空间化的，而非由乱序执行机制重新
+发现。在 7nm 版图上测量（GDS 中 500 MHz；quad + 4 个 L3 节点 = 0.792 mm²）：对比较核心
+（「TCPU」）在 25 个负载上的几何平均为 **4.59× perf/watt** 与 **8.77× perf/area**——10 个
+是 agent 调参时用过的，**15 个留出**到最终评估（留出集 3.83×）。能耗账目是最有意思的部
+分：取指/译码/发射从基线预算的 27% 降到 **6%**，换来的是片上网络与一个硬件 work-stealing
+调度器吃掉 26%——而后者「was never specified by any human」。形式脊柱：自研规格语言
+（**ASL**）下降到 **80 万+ 行 Lean**；蜂群在四轮搜索中保留了 58 个提案中的 37 个。
+
+**保留条款就写在厂商自己的描述里，并为头条数字设界：**「4.59x the performance-per-watt of
+a modern superscalar (**dual-issue, in-order**) CPU core」——页面的 og:description 与正文逐字
+可见（本轮 grep 所得）。按现代核心的标准这是一个温和的基线，且所有数字都是流片前（帖子
+自己说了）。诚实的读法：一个真正新颖的执行模型、一条严肃的形式脊柱，以及一个意味着打赢
+小型顺序核心——而非 Zen 6——的 4.59×。能让主张升级的东西：承诺中的对宽乱序核心的
+SPEC/PARSEC 对比、FPGA 试验场，以及列为后续步骤的 RTL + ISA 发布——届时都可核查。
+
+Sources: [Introducing Frostbite](https://architectlabs.com/blog/frostbite) ·
+[HN discussion](https://news.ycombinator.com/item?id=50572503)

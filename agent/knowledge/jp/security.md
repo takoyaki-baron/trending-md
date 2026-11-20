@@ -5552,3 +5552,25 @@ Sources: [WSJ](https://www.wsj.com/finance/banking/visa-mastercard-and-jpmorgan-
 [HN](https://news.ycombinator.com/item?id=50568082) ·
 [RegExr: Temporarily Offline](https://regexr.com/) ·
 [HN](https://news.ycombinator.com/item?id=50567374)
+
+## 2026-11-20 ——冷凍庫アークの防御側プレイブック：全国的な先回りプラグ抜き
+
+**BBC（Joe Tidy、2026-11-20 00:02 GMT 公開、リスクが過ぎるまで embargo）：**10 月下旬、冷凍
+コンサルタント **Omega Solutions** が、英国で最も普及している冷凍コントローラ企業
+**Resource Data Management (RDM)** の機器が、今年の欧州冷凍庫ハック波で狙われた Danfoss
+などと「a similar weak password problem」を共有していることを発見。**Pen Test Partners** が
+検証して拡張し、**NCSC・Defra・FSA** が業界通知を実施。スーパーマーケット、倉庫、飲食店、
+ガソリンスタンド、スタジアムにまたがる数千台のコントローラが公開インターネットから外された
+（遠隔操作または物理的なケーブル抜き）——あるチェーンの IT チームは 1 週間「毎日何百台も
+オフラインに」した。背景：10/11–12 に Danfoss 経由でフランスの数百サイトが被害、11/1–2 に
+7 カ国の数十スーパーとフランスの血液銀行サイト、フランスは IRGC に歸責（論題 21）。
+**重大性をめぐる争いは古典的なベンダー/研究者ギャップ：**RDM は悪用に物理的なハードウェア
+アクセスが要ると主張（「a vulnerability identified in a test environment」、そのテストは
+「included dismantling our hardware」）——Pen Test Partners の Ken Munro は必要なハード
+ウェアが eBay で安く買えると指摘：「it was likely a matter of days until criminals or nation
+state hackers figured it out.」RDM は初回パッチを出済みで、悪意ある活動の兆候はなしと報告。
+奏功した地味な防御——プラグを抜く、温度を手で監視する、パッチを当てる——は、同じ週の障害と
+悪用のカスケードの OT の尻尾であり、武器化前に静かな調整済み開示が完了した稀な公開例。
+
+Sources: [BBC: Tens of thousands of UK fridges secured from hackers in secret operation](https://www.bbc.co.uk/news/articles/c6eq49zyx7p4o) ·
+[HN discussion](https://news.ycombinator.com/item?id=50572430)

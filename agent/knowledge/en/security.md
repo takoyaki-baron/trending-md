@@ -8037,3 +8037,27 @@ Sources: [WSJ](https://www.wsj.com/finance/banking/visa-mastercard-and-jpmorgan-
 [HN](https://news.ycombinator.com/item?id=50568082) ·
 [RegExr: Temporarily Offline](https://regexr.com/) ·
 [HN](https://news.ycombinator.com/item?id=50567374)
+
+## 2026-11-20 — the freezer arc gets its defender-side playbook: a preemptive nationwide unplug
+
+**BBC (Joe Tidy, published 2026-11-20 00:02 GMT, held back until the risk passed):** in late
+October, refrigeration consultancy **Omega Solutions** found that controllers from **Resource
+Data Management (RDM)** — the most popular refrigeration controllers in the UK — shared "a
+similar weak password problem to the Danfoss and other controllers" hit in this year's European
+fridge-hack waves. **Pen Test Partners** verified and expanded the finding; **NCSC, Defra and
+the FSA** ran industry calls; thousands of controllers across supermarkets, warehouses,
+restaurants, petrol stations and stadiums were pulled off the open internet (remotely or by
+physically cutting cables) — one chain's IT team taking "hundreds of devices offline every day"
+for a week. Background: Oct 11–12 saw hundreds of French sites hit via Danfoss systems; Nov 1–2
+hit dozens of supermarkets across seven European countries plus French blood-bank sites; France
+blamed the IRGC (thesis 21). **The severity dispute is the classic vendor/researcher gap:** RDM
+says exploiting it would require physical hardware access ("a vulnerability identified in a test
+environment" whose test "included dismantling our hardware") — Pen Test Partners' Ken Munro
+notes the needed hardware sells cheaply on eBay: "it was likely a matter of days until criminals
+or nation state hackers figured it out." RDM has shipped first patches and reports no sign of
+malicious activity. The unglamorous defense that worked — unplug, monitor temperatures manually,
+patch — is the operational-technology tail of the same week's outage-and-exploit cascade, and a
+rare public example of quiet coordinated disclosure completed before weaponization.
+
+Sources: [BBC: Tens of thousands of UK fridges secured from hackers in secret operation](https://www.bbc.co.uk/news/articles/c6eq49zyx7p4o) ·
+[HN discussion](https://news.ycombinator.com/item?id=50572430)

@@ -4184,3 +4184,20 @@ flash 層は API ファースト——発表 → ホステッド → 重みは�
 [xinmingtu.cn: タンパク質配列](https://xinmingtu.cn/blog/2026/claude-opus-5-5-protein-sequences/) ·
 [Anthropic: IPO 値付け](https://www.anthropic.com/news/anthropic-prices-initial-public-offering) ·
 [424B4（EDGAR）](https://www.sec.gov/Archives/edgar/data/2130357/000162828026074944/anthropicpbc-424b4.htm)
+
+## 2026-11-20 ——フロンティアラボの研究所が「AGI の後に何が来るか」を実証アジェンダとして定式化
+
+**Tim Genewein（Google DeepMind Institute、11-19、HN 81 pts）：**前提こそがニュース——AGI
+は「coming within reach」であり、だからポスト AGI の体制は「is shifting from philosophical
+speculation to empirical research and governance questions」。フレームワーク：汎用知能は
+連続体。**ASI** は、年のスケールのタスクでより少ないリソースで*集団*の人間エキスパートに
+安定して勝ることと定義。移行のメカニズムとして **「cognitive industrialization」**。AGI から
+ASI への 4 つの経路——**モデルとデータのスケーリング、技術パラダイムシフト、agent 協調の
+改善、再帰的自己改善（RSI）**——各々が固有のダイナミクスと不確実性を持つ。要請は測定：
+どの道が実現しても「building rigorous, reliable ways to track progress」。1 ラボの地図として
+読み、ラボ自身のフレーミング込みで——エッセイは「AGI 在りき」を結論ではなく前提として扱う
+——同じ週に、そうした地図が読まれる測定層（Models Engineering Index、決定モデルの波）が
+現れたことと並んで。
+
+Sources: [What comes after AGI?](https://institute.deepmind.com/essays/what-comes-after-agi/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50569519)
