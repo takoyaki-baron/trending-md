@@ -1,9 +1,9 @@
 {
- "generated": "2026-11-19T21:32:34.266Z",
+ "generated": "2026-11-20T04:42:58.096Z",
  "files": [
   {
    "file": "2026-11-20.md",
-   "items": 17,
+   "items": 28,
    "findings": [
     {
      "check": "cvss",
@@ -55,18 +55,53 @@
      "detail": "Received (lastModified 2026-11-19T02:17:20.360)"
     },
     {
+     "check": "status",
+     "item": 20,
+     "verdict": "ok",
+     "claim": "CVE-2026-121481 `Awaiting Analysis`",
+     "detail": "Awaiting Analysis (lastModified 2026-11-19T22:17:59.503)"
+    },
+    {
+     "check": "date",
+     "item": 20,
+     "verdict": "ok",
+     "claim": "CVE-2026-121481 published 2026-11-18",
+     "detail": "NVD published 2026-11-18T12:17:04.313 (2026-11-18 UTC) · cveawg datePublished 2026-11-18T11:43:33.634Z (2026-11-18 UTC) — the two clocks differ; 2026-11-18 is the NVD published day"
+    },
+    {
+     "check": "rangeabsent",
+     "item": 20,
+     "verdict": "advisory-subject-ambiguous",
+     "claim": "CVE-2026-121481 — \"nothing to install\"",
+     "detail": "\"the advisory\" alone is ambiguous between the repo advisory and the Advisory-DB record — not scored against an artifact it does not name"
+    },
+    {
+     "check": "cvss",
+     "item": 21,
+     "verdict": "no-record",
+     "claim": "3.1 9.8",
+     "detail": "no record read for CVE-2026-120382 — absence is a registry statement, not a verdict on the score"
+    },
+    {
+     "check": "cwe",
+     "item": 21,
+     "verdict": "cwe-unreadable",
+     "claim": "CVE-2026-120382 CWE-88",
+     "detail": "neither NVD nor cveawg could be read — unverifiable is not wrong"
+    },
+    {
      "check": "repo",
      "item": 12,
      "verdict": "stale-disclosed",
      "claim": "onlook-dev/desktop",
-     "detail": "last push 2025-07-17 (490d) with 232 stars — the item states the state itself (“dormant”), so the staleness is the story rather than an unexamined number"
+     "detail": "last push 2025-07-17 (491d) with 232 stars — the item states the state itself (“dormant”), so the staleness is the story rather than an unexamined number"
     },
     {
      "check": "repo",
      "item": 13,
      "verdict": "ok",
      "claim": "XiaoYouChR/Ghost-Downloader-3",
-     "detail": "12579★, last push 2026-11-19"
+     "detail": "12942★, last push 2026-11-19"
     },
     {
      "check": "repo",
@@ -74,6 +109,20 @@
      "verdict": "not-a-repo",
      "claim": "dec/jnz",
      "detail": "named in backticks but the sentence is about a “instruction idiom: pipeline”, not a project — a model id or an endpoint path is not a repository claim, so archived/stale cannot answer here"
+    },
+    {
+     "check": "repo",
+     "item": 23,
+     "verdict": "ok-history",
+     "claim": "Immortal-Protocols/lastbook",
+     "detail": "record 7d, oldest commit 2026-11-12 (~272 commits)"
+    },
+    {
+     "check": "repo",
+     "item": 23,
+     "verdict": "ok",
+     "claim": "Immortal-Protocols/lastbook",
+     "detail": "2621★, last push 2026-11-20"
     },
     {
      "check": "quotation",
@@ -174,6 +223,62 @@
      "detail": "verbatim in 2 readable source(s)"
     },
     {
+     "check": "quotation",
+     "item": 18,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 21,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 23,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 24,
+     "verdict": "quote-not-found",
+     "claim": "“up to 122 faster than existing unified models”",
+     "detail": "7 words, 0 hits in 3 readable source(s); arXiv 2611.24738 carries 5 of 8 words (“faster than existing unified models”) and continues “while maintaining competitive image quality and dense prediction performance subjects computer” — use the source's wording, or drop the quotation marks"
+    },
+    {
+     "check": "quotation",
+     "item": 24,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 26,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 27,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 28,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
      "check": "attribution",
      "item": 1,
      "verdict": "attribution-satisfied",
@@ -183,15 +288,7 @@
    ]
   }
  ],
- "status_watch": [
-  {
-   "id": "CVE-2026-114938",
-   "from": "Analyzed",
-   "to": "Modified",
-   "regressed": false,
-   "modified": "2026-11-19T21:17:42.543"
-  }
- ],
+ "status_watch": [],
  "api_calls": 0,
  "readme_calls": 0,
  "cited_page_calls": 0,

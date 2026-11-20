@@ -1,8 +1,8 @@
 ---
 date: 2026-11-20
-updated: 2026-11-19T20:43:55Z
+updated: 2026-11-20T04:42:49Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 18
+sources: 30
 license: CC-BY-4.0
 ---
 
@@ -280,13 +280,189 @@ Wilson Tovar (krthr) explains the print-imposition problem behind his fanzines.a
 
 ---
 
+## 18. A ransomware gang leaks customer data tied to JPMorgan, Visa and Mastercard — via third-party marketing vendors
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Wall Street Journal · 133+ pts on HN · ~4.8h ago (~07:32 UTC+8)
+- **Tags:** `security` `breach` `banking` `third-party-risk` `ransomware`
+
+A ransomware group tracked as **n0n** has published data stolen from third-party marketing vendors serving JPMorgan Chase, Visa and Mastercard, the WSJ reports; all three firms say the vendors were targeted, not their core systems. Coverage of the leak (cybernews, syndicated via MSN) says it includes email addresses and phone numbers for roughly **16,000 of JPMorgan Chase's wealthiest cardholders**; the bank's own statement is deliberately narrower: "we believe the attackers accessed certain marketing data held by those vendors, which may include some customer names and email addresses." Note this is a different event from Tuesday's five-bank outage — that was Chase's on-prem hardware bug rippling through other banks' transaction paths; this is data exfiltration from the marketing supply chain, disclosed in a statement on X.
+
+**Why it matters:** The unit of failure keeps moving outward — first banks' core systems (this week's outage cascade), now the marketing vendors that hold customer contact data on their behalf. If the gang's leak-site numbers hold up while the bank's description stays at "names and email addresses," the gap between what a vendor loses and what a bank admits is the story to watch across the next rounds of disclosure.
+
+> The gang's name and the 16,000 figure trace to leak-site coverage (cybernews/MSN), not to the banks — treat them as the attacker's framing until the institutions' incident reports land.
+
+[`🔗 WSJ: Visa, Mastercard and JPMorgan Customer Data Leaked by Hackers`](https://www.wsj.com/finance/banking/visa-mastercard-and-jpmorgan-customer-data-leaked-by-hackers-3b5a0f87) · [`🔗 Reuters: JPMorgan, Visa, Mastercard say third-party vendors targeted in cyberattack`](https://www.reuters.com/legal/government/jpmorgan-says-third-party-vendors-targeted-cyberattack-2026-11-19/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50568082)
+
+---
+
+## 19. Since we covered Gemini 4 Neon yesterday: it's now #1 on the Models Engineering Index
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** git-aarvin.github.io/mei · 245+ pts on HN · ~4.7h ago (~07:35 UTC+8)
+- **Tags:** `ai-models` `benchmarks` `gemini` `engineering` `leaderboard`
+
+Yesterday's story was Neon's launch as Google's middle tier, #3 on the Intelligence Index at $3/$15. Today a different, independently-maintained artifact — the **Models Engineering Index**, a single-maintainer project — puts **Gemini 4 Neon at #1 with an index of 68.0**, ahead of Claude Fable 5.2 (65.3), GPT-6.2 Astra (61.5), Gemini 4 Carbon (61.4) and Claude Opus 5.5 (61.1). The method is the interesting part: it standardizes scores across seven engineering benchmarks (CursorBench, FrontierCode, Code Migration, IOI, ProgramBench, Terminal-Bench, Vibe Code) and fits a model effect plus a benchmark effect, so a model isn't rewarded for picking easy benchmarks. On the cost axis Neon carries a 1.6× cost multiplier against Fable 5.2's 6.4× — the frontier-ranking flip and the price gap are two different claims, and this index states both.
+
+**Why it matters:** Benchmark-marketing season is peaking (see item 5's anonymous "Gestalt" above), and the credible counterweight is methodology transparency — no lab affiliation, published fit, and every sub-benchmark shown. One index putting yesterday's mid-tier launch above the flagship models is also a concrete data point in the "middle tier eats the frontier" argument that Neon's pricing was designed for.
+
+> Read it as one maintainer's aggregate, not a field consensus — but it's the artifact whose numbers you can actually recompute from the page.
+
+[`🔗 Models Engineering Index`](https://git-aarvin.github.io/mei/) · [`🔗 Google: Introducing Gemini 4 Neon`](https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50568130)
+
+---
+
+## 20. OpenSSL buffer overflow in EVP_EncodeBlock() — CVE public, fix proposed, no release carries it
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub PR · 54+ pts on HN · ~2.2h ago (~10:01 UTC+8)
+- **Tags:** `openssl` `cve` `memory-safety` `tls` `c`
+
+CVE-2026-121481 (published 2026-11-18, `Awaiting Analysis`): "Calling EVP_EncodeBlock() with an input length close to INT_MAX may overflow the calculation of the encoded output size and write past the end of the caller-supplied output buffer." The **9.8** CVSS 3.1 on the record comes from the CISA-ADP enrichment container (a Secondary metric, org `134c704f-…`) — not an NVD analysis and not OpenSSL's own score. The proposed fix is [PR #33652](https://github.com/openssl/openssl/pull/33652), opened Nov 10 by nmouha and **still open and unmerged**: return `-1` for invalid inputs (NULL buffers, negative lengths, encoded sizes that don't fit an int), matching wolfSSL's compatibility layer, with a similar guard proposed for `EVP_DecodeBlock()`. Its body says "The OpenSSL SRT has asked for it to be fixed publicly; the advisory is still pending." No shipped OpenSSL release contains the fix — the newest is 4.1.0 from Oct 23.
+
+**Why it matters:** Base64 encoding is everywhere, but the exposure is per-application: the overflow needs a caller passing attacker-controlled, near-INT_MAX lengths into `EVP_EncodeBlock()`, so the 9.8 is a library-impact number and your risk depends on your call sites. The artifact gap is the operational fact — CVE public, PR public, advisory pending, nothing to install yet — so the remediation is inventory (who calls EVP_EncodeBlock with unvalidated lengths?), not an upgrade.
+
+> Score provenance, as always: 9.8 is CISA-ADP's, riding a record NVD hasn't analyzed — and the record can still move when OpenSSL's own advisory lands.
+
+[`🔗 CVE-2026-121481`](https://www.cve.org/CVERecord?id=CVE-2026-121481) · [`🔗 OpenSSL PR #33652 (open, unmerged)`](https://github.com/openssl/openssl/pull/33652) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50569226)
+
+---
+
+## 21. Synology drops a 9.8 in the DSM OAuth API — fix promised "by 2026-11-20", the mitigation is today's action
+
+- **Velocity:** ▮▮ rising
+- **Source:** Synology · 119+ pts on HN · ~6.1h ago (~06:13 UTC+8)
+- **Tags:** `nas` `cve` `synology` `oauth` `self-hosted`
+
+Synology advisory SA-26:21 (published 2026-11-19, 15:47 UTC+8): **CVE-2026-120382**, a CWE-88 improper neutralization of argument delimiters in the **OAuth API** of DiskStation Manager, vendor-scored **CVSS 3.1 9.8** — remote attackers can read or write arbitrary files and conduct denial-of-service attacks. It affects DSM 6.2.4 through the 7.4 line (specific builds listed per branch) and BeeStation OS 1.5, across NAS and BeeStation products. The mitigation that works right now: **"Deactivate the OAuth Service package."** The fixed builds — DSM 7.4.1-90080-2 and 7.3.2-86009-6 — were "scheduled for release by 2026-11-20," i.e. promised today, not shipped when the advisory went up; 7.2.x users are told to upgrade across branches to 7.3.2. NVD had no record for the CVE when checked (~04:12 UTC today), and this is Synology's second event in a week: a *different* DSM bug, CVE-2026-10441, hit the KEV catalog on 11-18 with a three-day federal deadline.
+
+**Why it matters:** The house-your-own-cloud fleet is enormous — Synology NAS boxes run everything from home photo archives to small-business file servers — and an unauthenticated arbitrary-file read/write in a package most installs leave enabled is exactly the class that gets weaponized fast. The mitigation is a checkbox today; the upgrade is a promise with a date.
+
+> Score provenance: 9.8 is Synology's own advisory score on a record NVD hasn't published yet — re-check before quoting it as NVD-analyzed.
+
+[`🔗 Synology SA-26:21 (DSM, BeeStation OS)`](https://www.synology.com/en-uk/security/advisory/Synology_SA_26_21) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50567209)
+
+---
+
+## 22. PostgreSQL 19 ships: REPACK (CONCURRENTLY), plan advice, and parallel autovacuum
+
+- **Velocity:** ▮▮ rising
+- **Source:** postgresql.org · 99+ pts on HN · ~14.2h ago (~22:11 UTC+8)
+- **Tags:** `postgres` `database` `release` `performance` `vacuum`
+
+The annual major release landed yesterday, and its headline is operational: **REPACK (CONCURRENTLY)** reclaims table bloat and can reorder a table's data to match an index without blocking reads or writes — replacing the access-blocking `VACUUM FULL`/`CLUSTER` (both kept for compatibility). For plan stability there's the new **pg_plan_advice** extension (a "plan advice" mini-language for pinning or experimenting with plans) plus **pg_stash_advice**, which stores advice by query identifier and applies it automatically — fix a slow plan without touching the application. Autovacuum can now vacuum indexes with **parallel workers** (`autovacuum_max_parallel_workers`) under a new scoring system for which tables go first, and queries mark pages all-visible during execution, shrinking future vacuum work. Elsewhere: read-your-writes consistency on standbys, logical replication initialization without a server restart (WAL level auto-raised on the first logical slot), and new monitoring views (`pg_stat_lock`, `pg_stat_recovery`, `pg_stat_autovacuum_scores`).
+
+**Why it matters:** Bloat cleanup has been a third-party-tool-shaped hole in Postgres for a decade (`pg_repack` users know the dance); building it in — concurrently — removes one of the last routine reasons to take a table offline. Plan advice is the quiet revolution for anyone who has watched a good plan flip bad after an stats change at 3am.
+
+> The upgrade-window read: managed providers shipped it day one (Neon and Databricks Lakebase both announced support within hours) — the REPACK command alone is an upgrade argument for busy write-heavy tables.
+
+[`🔗 PostgreSQL 19 Released (postgresql.org)`](https://www.postgresql.org/about/news/postgresql-19-released-3449/) · [`🔗 Snowflake: Squeezing Tables with Postgres 19 Repack`](https://www.snowflake.com/en/blog/engineering/postgres-19-repack-table-bloat/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50560357)
+
+---
+
+## 23. Lastbook: an offline "rebuild society" library — local Gemma, offline maps, 374 points
+
+- **Velocity:** ▮▮ rising
+- **Source:** lastbook.org · 374+ pts on HN · ~13.6h ago (~22:47 UTC+8)
+- **Tags:** `offline-first` `local-ai` `preparedness` `open-source` `maps`
+
+Lastbook is an open-source (MIT) desktop app for Mac (Apple Silicon), Windows and Linux that bundles a survival-and-rebuilding knowledge base to run fully offline: a **local Gemma 4 26B A4B** for questions, **258,000+ searchable offline places** (fire stations, shelters, water + medical POIs), 2,324 offline videos, and guides spanning first aid, safe drinking water, food preservation, critical repairs, power and evacuation planning. The tagline does the positioning: "Free, local, offline and private." The repo (`Immortal-Protocols/lastbook`) was created Nov 12 and is already at ~2,600 stars with active pushes — the Show HN a few days ago drew 19 points, yesterday's resubmission drew 374.
+
+**Why it matters:** This is the local-AI argument (item 8) compiled into one artifact: model, index, maps and video, no connectivity. The sleeper feature is the offline POI index — a quarter-million searchable places is the part that doesn't degrade when the internet does, and the part most "offline encyclopedia" projects skip.
+
+> Eight-day-old repo, moving fast — the 374 points are interest, not a track record; watch whether the library grows or forks.
+
+[`🔗 Lastbook`](https://lastbook.org/) · [`🔗 Immortal-Protocols/lastbook (GitHub)`](https://github.com/Immortal-Protocols/lastbook) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50560822)
+
+---
+
+## 24. Jeveration: a frozen VLM generates images in one forward pass — 78 ms, "up to 122× faster than existing unified models"
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hugging Face daily papers · 116+ upvotes · ~24h ago (~12:00 UTC+8, 11-19)
+- **Tags:** `ai-research` `image-generation` `arxiv` `single-forward-pass` `vlm`
+
+The top paper on Hugging Face's daily board repurposes a frozen vision-language model for generation in the System One / decision-model paradigm — parallel prediction instead of token-by-token decode. From the abstract: "Jeveration generates a 512x512 image in 78 ms, up to 122x faster than existing unified models, while maintaining competitive image quality and dense prediction performance." One checkpoint covers text-to-image, image-to-image and dense prediction, each in a single forward pass. The coherence problem — many valid images per prompt, so parallel predictions must converge — is solved by conditioning all positions on a shared random state, with a learned distribution over discrete image codes guiding the pass because the model "tends to ignore this state under direct image supervision."
+
+**Why it matters:** The decision-model camp (this week's HeyGen Decision 1, Perplexity's Decider line) just got a generation exhibit: 78 ms is a latency budget no autoregressive image decoder meets, and unifying generation with dense prediction in one checkpoint is the compound-model dream stated as an artifact. The usual caveat applies — 512×512 and the paper's own benchmark set define "competitive."
+
+> The method's lineage is the story: the same "fast, parallel prediction" framing that decision models use for judgments, applied to pixels.
+
+[`🔗 arXiv: Jeveration (2611.24738)`](https://arxiv.org/abs/2611.24738) · [`🔗 Hugging Face paper page`](https://huggingface.co/papers/2611.24738) · [`🔗 Carol-lyh/Jeveration (GitHub)`](https://github.com/Carol-lyh/Jeveration)
+
+---
+
+## 25. Firecrawl rebrands around Firecrawl Local — one Rust binary, MCP on localhost, Alexandria in the cloud
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 204k★ total (~12:10 UTC+8 check)
+- **Tags:** `agents` `web-scraping` `mcp` `rust` `open-source`
+
+The 204k-star scraping-for-agents repo is trending on the strength of a repositioning: a Nov 19 README rewrite ([PR #5855](https://github.com/firecrawl/firecrawl/pull/5855)) that changes the one-line pitch to "Knowledge infrastructure to make your agents smarter" and leads with **Firecrawl Local** — "Run Firecrawl on your own machine as one binary that turns websites into clean markdown, plugs into your AI agent as an MCP server and serves the Firecrawl API on localhost," which installs from crates.io. The cloud tier is reframed around search and **Firecrawl Alexandria**, a "550+ data providers" research index. Worth being precise about what this is: no new release has shipped since v2.11.0 in June — this is a positioning change plus a Rust binary, not a version bump.
+
+**Why it matters:** The scraping category is consolidating into knowledge infrastructure — index-first answers with a local-first binary as the wedge — and the local-binary-plus-MCP shape is where every agent data tool is converging. For self-hosters, the crates.io binary without database, queue or containers is the concrete deliverable to evaluate.
+
+> Read the trend as a strategy signal: the repo that taught agents to scrape now wants to be the layer that answers before scraping is needed.
+
+[`🔗 firecrawl/firecrawl (GitHub)`](https://github.com/firecrawl/firecrawl) · [`🔗 Firecrawl (firecrawl.dev)`](https://firecrawl.dev/)
+
+---
+
+## 26. RegExr takes itself offline "with AI hacking" in the room
+
+- **Velocity:** ▮ steady
+- **Source:** regexr.com · 61+ pts on HN · ~5.9h ago (~06:27 UTC+8)
+- **Tags:** `regex` `security` `web-history` `legacy` `ai-hacking`
+
+RegExr, the regex tester/visualizer a generation of developers learned on, is now "Temporarily Offline," and the notice names its reason plainly: "RegExr's codebase is aging, and with AI hacking we've decided the best way to safekeep your data is to take the site down until we get a chance to modernize and secure it. Our sincere apologies for the outage!" The site has accounts and user-saved patterns — exactly the long-tail profile (beloved tool, aging code, small maintainer, stored user data) that AI-assisted attack economics have turned from theoretical to routine.
+
+**Why it matters:** This is the retirement phase of the AI-attack curve: sites that can't fund a rewrite now cite attackers as the reason to shut down rather than stay up. The week's outage-and-exploit cascade has a quiet tail, and it's thousands of RegExr-shaped services making the same calculation with less grace.
+
+> The counterfactual is worth stating: the data at risk was regex patterns — and the shutdown still beat the odds-board. Scale that calculus to every hobby service with accounts.
+
+[`🔗 RegExr: Temporarily Offline`](https://regexr.com/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50567374)
+
+---
+
+## 27. Platypush rebuilds its voice pipeline — microwakeword locally, OpenAI in the middle, receipts included
+
+- **Velocity:** ▮ steady
+- **Source:** blog.platypush.tech · 71+ pts on HN · ~7.4h ago (~04:57 UTC+8)
+- **Tags:** `voice-assistant` `self-hosted` `wake-word` `home-automation` `platypush`
+
+Platypush author Fabio Manganiello's Nov 19 post rebuilds his self-hosted voice assistant for the second time in two months, and the honest part is why: he was "unhappy with the high rates of false positives/negatives of my self-hosted pipeline, as well as its lack of robustness in detecting start/end of speech, especially in noisy environments and using cheap microphones." The new stack swaps **openwakeword for microwakeword** (local wake word), uses **assistant.openai** for speech-to-text with **assistant.vosk** as the local fallback, routes responses through openai (cloud or local) and speaks via **tts.openai** or **tts.piper**. The post includes the full configuration and the code changes, plus the caveats that survive contact with a real room.
+
+**Why it matters:** The compound-AI argument (item 8) gets a working implementation ledger: local where latency and privacy bind (wake word), cloud where accuracy still wins (STT), a documented fallback chain for each stage. This is the practical middle ground between "everything local" purism and handing Amazon your kitchen — and it's measured against false-wake rates, not vibes.
+
+> The two-months-between-rebuilds cadence is itself the finding: self-hosted voice is improving fast enough that the stack is a moving target.
+
+[`🔗 Rebuilding my voice assistant pipeline (blog.platypush.tech)`](https://blog.platypush.tech/article/Rewriting-my-voice-assistant-pipeline) · [`🔗 BlackLight/platypush (GitHub)`](https://github.com/BlackLight/platypush) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50566261)
+
+---
+
+## 28. Vint Cerf on why TCP/IP was never patented — and his post-Google interplanetary startup
+
+- **Velocity:** ▮ steady
+- **Source:** seremot.com · 48+ pts on HN · ~3.2h ago (~09:06 UTC+8)
+- **Tags:** `internet-history` `tcp-ip` `openness` `interplanetary` `podcast`
+
+João Tomé (ex-Cloudflare) launches his Future Stories podcast with Vint Cerf as the first guest, and the interview carries real news: Cerf, 83, left Google this year after twenty-plus years and is helping start **Tolero**, building software for an Internet between planets — "the speed of light is too slow." On why TCP/IP was never patented, his answer is strategic, not sentimental: "Who will our allies be 25 years from now? And we didn't know. So we thought the only way we can be assured that the allies will have access to this is to simply open it up." The anecdotes earn their keep: a two-week random crash his friend Steve Crocker diagnosed in thirty seconds ("that's the problem" — his case for collaboration), and the 1989 CERFnet launch where he and the network's director smashed a bottle of glitter over a Cisco router.
+
+**Why it matters:** The openness argument gets re-litigated weekly in AI licensing fights ("All AI-generated code should be Open Source," item-level debates all month); here it is from the protocol layer, stated as geopolitical insurance rather than ideology. And the interplanetary-internet startup is a concrete new artifact to track, not a retrospective.
+
+> The naming trivia: CERFnet wanted SURFnet, lost it to the Dutch, and borrowed his name instead — he agreed on the theory that nobody blames the person a thing was named after.
+
+[`🔗 Vint Cerf on why TCP/IP was never patented (seremot.com)`](https://seremot.com/p/vint-cerf-on-why-tcpip-was-never) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50568861)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-19T20:43:55Z |
-| Items | 17 |
-| Sources tracked | 18 (Hacker News, GitHub Trending, GitHub repos, Anthropic, hexagonmath.org, Investigatory Powers Tribunal, ounapuu.ee, cve.org, contralabs.com, misanthropicstatement.com, blog.harrison.page, thedataexchange.media, moq.dev, perishablepress.com, foolscap.works, pikuma.com, lateblt.livejournal.com, krthr.co) |
+| Generated | 2026-11-20T04:42:49Z |
+| Items | 28 |
+| Sources tracked | 30 (Hacker News, GitHub Trending, GitHub repos, Anthropic, hexagonmath.org, Investigatory Powers Tribunal, ounapuu.ee, cve.org, contralabs.com, misanthropicstatement.com, blog.harrison.page, thedataexchange.media, moq.dev, perishablepress.com, foolscap.works, pikuma.com, lateblt.livejournal.com, krthr.co, wsj.com, reuters.com, git-aarvin.github.io, synology.com, postgresql.org, snowflake.com, lastbook.org, huggingface.co, blog.platypush.tech, regexr.com, seremot.com, firecrawl.dev) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

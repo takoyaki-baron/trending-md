@@ -1,8 +1,8 @@
 ---
 date: 2026-11-20
-updated: 2026-11-19T20:43:55Z
+updated: 2026-11-20T04:42:49Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 18
+sources: 30
 license: CC-BY-4.0
 ---
 
@@ -280,13 +280,189 @@ Wilson Tovar（krthr）拆解了他 fanzines.app 背后的印前拼版问题：�
 
 ---
 
+## 18. 勒索软件团伙泄露与摩根大通、Visa、Mastercard 相关的客户数据 — 途径是第三方营销供应商
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Wall Street Journal · HN 133+ pts · ~4.8小时前 (~07:32 UTC+8)
+- **Tags:** `security` `breach` `banking` `third-party-risk` `ransomware`
+
+据 WSJ 报道，一个被追踪为 **n0n** 的勒索软件团伙公布了从服务于摩根大通、Visa 和 Mastercard 的第三方营销供应商处窃取的数据；三家机构均表示被攻击的是供应商，而非其核心系统。对该泄露的报道（cybernews，经 MSN 转载）称其中包含摩根大通约 **16,000 名最富有持卡人**的电子邮件地址和电话号码；银行自己的声明则刻意收窄："我们相信攻击者获取了这些供应商持有的部分营销数据，可能包含部分客户姓名和电子邮件地址。"注意这是与周二"五银行故障"不同的事件——那是 Chase 本地硬件故障波及其他银行的交易链路；这是从营销供应链窃取数据，已在 X 上发声明披露。
+
+**Why it matters:** 失败单元持续外移——先是银行核心系统（本周的故障级联），现在是替银行保管客户联系数据的营销供应商。如果团伙泄露站上的数字成立、而银行的描述停留在"姓名和电子邮件地址"，那么供应商丢了什么与银行承认了什么之间的落差，就是接下来每一轮披露中最值得盯的故事。
+
+> 团伙名称与 16,000 这个数字来自泄露站报道（cybernews/MSN），而非银行——在机构的事件报告落地前，把它们当作攻击者的叙事框架来对待。
+
+[`🔗 WSJ：Visa、Mastercard 和摩根大通客户数据被黑客泄露`](https://www.wsj.com/finance/banking/visa-mastercard-and-jpmorgan-customer-data-leaked-by-hackers-3b5a0f87) · [`🔗 Reuters：摩根大通、Visa、Mastercard 称第三方供应商遭网络攻击`](https://www.reuters.com/legal/government/jpmorgan-says-third-party-vendors-targeted-cyberattack-2026-11-19/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50568082)
+
+---
+
+## 19. 继昨日报道 Gemini 4 Neon 之后：它现在登顶 Models Engineering Index
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** git-aarvin.github.io/mei · HN 245+ pts · ~4.7小时前 (~07:35 UTC+8)
+- **Tags:** `ai-models` `benchmarks` `gemini` `engineering` `leaderboard`
+
+昨天的故事是 Neon 作为 Google 中端档位发布，以 $3/$15 在 Intelligence Index 排第三。今天另一个独立维护的产物——**Models Engineering Index**，一个单人维护的项目——把 **Gemini 4 Neon 排到第一，指数 68.0**，超过 Claude Fable 5.2（65.3）、GPT-6.2 Astra（61.5）、Gemini 4 Carbon（61.4）和 Claude Opus 5.5（61.1）。方法才是有趣之处：它把七个工程基准（CursorBench、FrontierCode、Code Migration、IOI、ProgramBench、Terminal-Bench、Vibe Code）的分数标准化后，同时拟合模型效应与基准效应，使模型不会因挑到容易的基准而得利。在成本轴上，Neon 的成本倍数是 1.6×，而 Fable 5.2 是 6.4×——排名翻转与价格差距是两个不同的主张，这份指数对两者都给出了陈述。
+
+**Why it matters:** 基准营销季正在见顶（见上文第 5 条匿名的"Gestalt"），可信的制衡是方法透明——无实验室背景、公开拟合方式、每个子基准都展示。一份指数把昨天的中端档位排到旗舰模型之上，也是"中端吃掉前沿"论点的具体数据点，而 Neon 的定价正是为这个论点设计的。
+
+> 把它当作某个维护者的聚合视图而非行业共识——但它是那种你能从页面出发实际复算数字的产物。
+
+[`🔗 Models Engineering Index`](https://git-aarvin.github.io/mei/) · [`🔗 Google：Introducing Gemini 4 Neon`](https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50568130)
+
+---
+
+## 20. OpenSSL EVP_EncodeBlock() 缓冲区溢出 — CVE 已公开、修复已提出、尚无发布版包含它
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** GitHub PR · HN 54+ pts · ~2.2小时前 (~10:01 UTC+8)
+- **Tags:** `openssl` `cve` `memory-safety` `tls` `c`
+
+CVE-2026-121481（2026-11-18 发布，`Awaiting Analysis`）："调用 EVP_EncodeBlock() 时若输入长度接近 INT_MAX，可能导致编码输出大小的计算溢出，并写到调用者提供的输出缓冲区之外。"记录上的 **9.8** CVSS 3.1 来自 CISA-ADP 富化容器（Secondary 指标，org `134c704f-…`）——既非 NVD 分析，也非 OpenSSL 自己的评分。提出的修复是 [PR #33652](https://github.com/openssl/openssl/pull/33652)，由 nmouha 于 11 月 10 日发起，**至今仍开放未合并**：对无效输入（NULL 缓冲区、负长度、编码后放不进 int 的尺寸）返回 `-1`，与 wolfSSL 的兼容层做法一致，并为 `EVP_DecodeBlock()` 提出了类似的防护。PR 描述写道"The OpenSSL SRT has asked for it to be fixed publicly; the advisory is still pending."（OpenSSL SRT 已要求公开修复；公告仍在等待中。）目前没有任何已发布的 OpenSSL 版本包含该修复——最新的是 10 月 23 日的 4.1.0。
+
+**Why it matters:** Base64 编码无处不在，但暴露面是逐应用而定的：溢出需要调用者把攻击者可控的、接近 INT_MAX 的长度传进 `EVP_EncodeBlock()`，所以 9.8 是库影响层面的数字，你的风险取决于你的调用点。产物缺口才是操作层面的事实——CVE 公开、PR 公开、公告未出、无可安装之物——因此修复动作是盘点（谁在用未校验的长度调用 EVP_EncodeBlock？），而非升级。
+
+> 评分来源照例注明：9.8 是 CISA-ADP 的，挂在 NVD 尚未分析的记录上——等 OpenSSL 自己的公告落地时记录仍可能变动。
+
+[`🔗 CVE-2026-121481`](https://www.cve.org/CVERecord?id=CVE-2026-121481) · [`🔗 OpenSSL PR #33652（开放，未合并）`](https://github.com/openssl/openssl/pull/33652) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50569226)
+
+---
+
+## 21. Synology 在 DSM OAuth API 中投下 9.8 — 修复承诺"2026-11-20 前发布"，缓解措施就是今天的动作
+
+- **Velocity:** ▮▮ rising
+- **Source:** Synology · HN 119+ pts · ~6.1小时前 (~06:13 UTC+8)
+- **Tags:** `nas` `cve` `synology` `oauth` `self-hosted`
+
+Synology 公告 SA-26:21（2026-11-19 15:47 UTC+8 发布）：**CVE-2026-120382**，DiskStation Manager 的 **OAuth API** 中 CWE-88 参数分隔符未正确中和，厂商自评 **CVSS 3.1 9.8**——远程攻击者可读写任意文件并发起拒绝服务攻击。影响 DSM 6.2.4 至 7.4 各线（各分支列明具体版本号）以及 BeeStation OS 1.5。当下即有效的缓解措施：**停用 OAuth Service 套件（Deactivate the OAuth Service package）**。修复版本——DSM 7.4.1-90080-2 与 7.3.2-86009-6——"定于 2026-11-20 前发布"，即承诺今天发布，公告发出时尚未上线；7.2.x 用户被建议跨分支升级到 7.3.2。截至今天 ~04:12 UTC 检查时 NVD 还没有该 CVE 的记录；这也是 Synology 一周内的第二起事件：*另一个* DSM 漏洞 CVE-2026-10441 已于 11-18 进入 KEV 目录，附带三天联邦整改期限。
+
+**Why it matters:** 自建云的装机量巨大——Synology NAS 承载着从家庭照片库到小企业文件服务器的各种负载——而一个在多数安装中默认启用、可未认证任意文件读写的漏洞，正是最快被武器化的那类。缓解措施今天就能做；升级是一个带日期的承诺。
+
+> 评分来源：9.8 是 Synology 自己公告里的分数，NVD 记录尚未发布——引用前请再查，别写成"已获 NVD 分析"。
+
+[`🔗 Synology SA-26:21（DSM、BeeStation OS）`](https://www.synology.com/en-uk/security/advisory/Synology_SA_26_21) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50567209)
+
+---
+
+## 22. PostgreSQL 19 发布：REPACK (CONCURRENTLY)、计划建议与并行 autovacuum
+
+- **Velocity:** ▮▮ rising
+- **Source:** postgresql.org · HN 99+ pts · ~14.2小时前 (~22:11 UTC+8)
+- **Tags:** `postgres` `database` `release` `performance` `vacuum`
+
+年度大版本昨日落地，主角是运维侧：**REPACK (CONCURRENTLY)** 可在不阻塞读写的前提下回收表膨胀，并能按索引重排表数据——取代阻塞访问的 `VACUUM FULL`/`CLUSTER`（两者为兼容保留）。计划稳定性方面新增 **pg_plan_advice** 扩展（用"计划建议"迷你语言钉住或试验计划）与 **pg_stash_advice**——按查询标识存储建议并自动应用，不改动应用代码即可修复劣化计划。autovacuum 现在能用**并行 worker** 清理索引（`autovacuum_max_parallel_workers`），并按新的评分系统决定先处理哪些表；查询执行期间会把页面标记为 all-visible，缩减未来的 vacuum 工作量。其他亮点：备库读己之写（read-your-writes）一致性、逻辑复制初始化不再需要重启服务器（首个逻辑槽创建时自动提升 WAL 级别），以及新的监控视图（`pg_stat_lock`、`pg_stat_recovery`、`pg_stat_autovacuum_scores`）。
+
+**Why it matters:** 膨胀清理十年来一直是 Postgres 生态里第三方工具形状的空洞（`pg_repack` 用户懂这套舞步）；把它内建——而且是并发地——移除了最后一个需要让表离线的常规理由。计划建议对每个在凌晨三点看着好计划因统计信息变动而翻车的人来说，是一场安静的革命。
+
+> 升级窗口的读法：托管厂商首日即上线（Neon 与 Databricks Lakebase 都在数小时内宣布支持）——单凭 REPACK 命令，就足以成为繁忙写入密集表的升级理由。
+
+[`🔗 PostgreSQL 19 发布（postgresql.org）`](https://www.postgresql.org/about/news/postgresql-19-released-3449/) · [`🔗 Snowflake：用 Postgres 19 Repack 压缩表`](https://www.snowflake.com/en/blog/engineering/postgres-19-repack-table-bloat/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50560357)
+
+---
+
+## 23. Lastbook：离线"重建社会"知识库 — 本地 Gemma、离线地图、374 分
+
+- **Velocity:** ▮▮ rising
+- **Source:** lastbook.org · HN 374+ pts · ~13.6小时前 (~22:47 UTC+8)
+- **Tags:** `offline-first` `local-ai` `preparedness` `open-source` `maps`
+
+Lastbook 是一个开源（MIT）桌面应用，支持 Mac（Apple Silicon）、Windows 与 Linux，把一套生存与重建知识库打包为完全离线运行：用于问答的**本地 Gemma 4 26B A4B**、**258,000+ 个可搜索的离线地点**（消防局、庇护所、供水与医疗 POI）、2,324 个离线视频，以及涵盖急救、安全饮水、食物保存、关键维修、电力与撤离规划指南。定位写在标语里："Free, local, offline and private."。仓库（`Immortal-Protocols/lastbook`）创建于 11 月 12 日，已有约 2,600 stars 且持续推送——几天前的 Show HN 只有 19 分，昨天的重投拿到 374 分。
+
+**Why it matters:** 这是本地 AI 论点（第 8 条）编译成的一个产物：模型、索引、地图和视频，无连接。沉睡的特性是离线 POI 索引——四分之一百万个可搜索地点，是断网时不降级的部分，也是多数"离线百科"项目跳过的部分。
+
+> 八天的新仓库，动得很快——374 分是关注度，不是履历；观察这个库是长大还是分叉。
+
+[`🔗 Lastbook`](https://lastbook.org/) · [`🔗 Immortal-Protocols/lastbook（GitHub）`](https://github.com/Immortal-Protocols/lastbook) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50560822)
+
+---
+
+## 24. Jeveration：冻结的 VLM 单次前向生成图像 — 78 毫秒，"比现有统一模型最快快 122 倍"
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hugging Face 每日论文 · 116+ upvotes · ~24小时前 (~12:00 UTC+8, 11-19)
+- **Tags:** `ai-research` `image-generation` `arxiv` `single-forward-pass` `vlm`
+
+Hugging Face 每日榜单的头名论文把一个冻结的视觉语言模型改用于 System One / 决策模型范式下的生成——并行预测，而非逐 token 解码。摘要原文："Jeveration generates a 512x512 image in 78 ms, up to 122x faster than existing unified models, while maintaining competitive image quality and dense prediction performance."（Jeveration 在 78 毫秒内生成 512×512 图像，比现有统一模型最快快 122 倍，同时保持有竞争力的图像质量与稠密预测性能。）一个检查点覆盖文生图、图生图与稠密预测，各自一次前向完成。一致性难题——同一提示对应多幅有效图像，并行预测必须收敛——通过让所有位置以共享随机状态为条件来解决；又因模型"在直接图像监督下倾向忽略该状态"，先用离散图像码上的学习分布来引导这一次前向。
+
+**Why it matters:** 决策模型阵营（本周的 HeyGen Decision 1、Perplexity 的 Decider 线）刚刚拿到了生成侧的展品：78 毫秒是任何自回归图像解码器都够不着的延迟预算；而把生成与稠密预测统一进一个检查点，是把复合模型之梦写成产物。常规保留意见照旧——512×512 与论文自选的基准集定义了"有竞争力"。
+
+> 方法谱系本身就是故事：决策模型用于判断的那种"快速并行预测"，如今被用在了像素上。
+
+[`🔗 arXiv：Jeveration (2611.24738)`](https://arxiv.org/abs/2611.24738) · [`🔗 Hugging Face 论文页`](https://huggingface.co/papers/2611.24738) · [`🔗 Carol-lyh/Jeveration（GitHub）`](https://github.com/Carol-lyh/Jeveration)
+
+---
+
+## 25. Firecrawl 以 Firecrawl Local 为中心重塑品牌 — 一个 Rust 二进制、本地 MCP、云端 Alexandria
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending · 共 204k★ (~12:10 UTC+8 检查)
+- **Tags:** `agents` `web-scraping` `mcp` `rust` `open-source`
+
+这个 204k-star 的"为智能体抓网页"仓库凭一次定位重塑登上趋势：11 月 19 日的 README 重写（[PR #5855](https://github.com/firecrawl/firecrawl/pull/5855)）把一句话简介改为"Knowledge infrastructure to make your agents smarter"（让智能体更聪明的知识基础设施），并让 **Firecrawl Local** 打头——原文是"Run Firecrawl on your own machine as one binary that turns websites into clean markdown, plugs into your AI agent as an MCP server and serves the Firecrawl API on localhost"（在你自己的机器上把 Firecrawl 跑成一个二进制：把网页变成干净的 markdown、作为 MCP 服务器接入你的 AI 智能体、并在 localhost 上提供 Firecrawl API），可从 crates.io 安装。云侧则围绕搜索与 **Firecrawl Alexandria**（"550+ 数据提供商"研究索引）重构。需要说清楚这是什么：自 6 月的 v2.11.0 以来没有新版本发布——这是定位变更加一个 Rust 二进制，不是版本升级。
+
+**Why it matters:** 抓取类目正在收敛为知识基础设施——索引优先的答案，以本地优先的二进制为楔子——而"本地二进制 + MCP"正是所有智能体数据工具正在汇合的形状。对自托管者来说，无需数据库、队列或容器的 crates.io 二进制才是值得评估的具体交付物。
+
+> 把这波趋势读作战略信号：教智能体抓网页的仓库，如今想成为"在抓取之前就给出答案"的那一层。
+
+[`🔗 firecrawl/firecrawl（GitHub）`](https://github.com/firecrawl/firecrawl) · [`🔗 Firecrawl（firecrawl.dev）`](https://firecrawl.dev/)
+
+---
+
+## 26. RegExr 下线自己 — 声明里写着"AI 黑客"
+
+- **Velocity:** ▮ steady
+- **Source:** regexr.com · HN 61+ pts · ~5.9小时前 (~06:27 UTC+8)
+- **Tags:** `regex` `security` `web-history` `legacy` `ai-hacking`
+
+一代开发者用来学正则的测试器/可视化工具 RegExr 现已"临时下线"，公告直白地写明原因："RegExr 的代码库已经老化，加上 AI 黑客的存在，我们认为保全你的数据的最好方式是下线站点，直到我们有机会现代化并加固它。对此次中断深表歉意！"该站有账号与用户保存的正则——正是 AI 辅助攻击经济学已经从理论变成日常的那个长尾画像：受爱戴的工具、老化的代码、小维护者、存着用户数据。
+
+**Why it matters:** 这是 AI 攻击曲线的退役阶段：无力资助重写的站点，如今把攻击者当作下线而非在线的理由。本周的故障与漏洞级联有一条安静的尾巴——成千上万个 RegExr 形状的服务正在用更少的体面做同样的计算。
+
+> 反事实值得一说：面临风险的只是正则表达式——而下线仍然跑赢了风险赔率。把这套算式放大到每个带账号的爱好型服务上去。
+
+[`🔗 RegExr：临时下线`](https://regexr.com/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50567374)
+
+---
+
+## 27. Platypush 重建语音管线 — 本地 microwakeword、中间是 OpenAI、附上完整凭据
+
+- **Velocity:** ▮ steady
+- **Source:** blog.platypush.tech · HN 71+ pts · ~7.4小时前 (~04:57 UTC+8)
+- **Tags:** `voice-assistant` `self-hosted` `wake-word` `home-automation` `platypush`
+
+platypush 作者 Fabio Manganiello 11 月 19 日的文章两个月内第二次重建他的自托管语音助手，而最诚实的是动机：他"对自己自托管管线的高误报/漏报率不满意，也对其在嘈杂环境和廉价麦克风下检测语音起止的鲁棒性不满意"。新栈把 **openwakeword 换成 microwakeword**（本地唤醒词），语音识别用 **assistant.openai**，并以 **assistant.vosk** 作本地后备；响应经 openai（云或本地），发声用 **tts.openai** 或 **tts.piper**。文章附完整配置与代码改动，以及与真实房间过招后幸存的那些注意事项。
+
+**Why it matters:** 复合 AI 论点（第 8 条）有了一份可运行的实现账本：在时延与隐私绑住的地方用本地（唤醒词），在准确率仍然取胜的地方用云（STT），每一段都有成文的后备链。这是"全本地"原教旨与把厨房交给亚马逊之间的实用中间地带——而且它以误唤醒率为尺度，不是凭感觉。
+
+> "两个月重建一次"的节奏本身就是发现：自托管语音进步得够快，技术栈本身是个移动靶。
+
+[`🔗 重建我的语音助手管线（blog.platypush.tech）`](https://blog.platypush.tech/article/Rewriting-my-voice-assistant-pipeline) · [`🔗 BlackLight/platypush（GitHub）`](https://github.com/BlackLight/platypush) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50566261)
+
+---
+
+## 28. Vint Cerf 谈 TCP/IP 为何从未申请专利 — 以及他离开 Google 后的星际互联网创业
+
+- **Velocity:** ▮ steady
+- **Source:** seremot.com · HN 48+ pts · ~3.2小时前 (~09:06 UTC+8)
+- **Tags:** `internet-history` `tcp-ip` `openness` `interplanetary` `podcast`
+
+João Tomé（前 Cloudflare）上线 Future Stories 播客，首位嘉宾是 Vint Cerf，访谈里带着真新闻：83 岁的 Cerf 在 Google 二十年余后于今年离开，正参与创办 **Tolero**——为行星之间的互联网造软件，"光速太慢了"。谈到 TCP/IP 为何从未申请专利，他的回答是战略性的而非情怀式的："25 年后我们的盟友会是谁？我们不知道。所以我们认为，能确保盟友也能用上它的唯一办法，就是干脆把它开放。"那些轶事也值回票价：一个随机崩溃困扰两周、好友 Steve Crocker 三十秒定位（"问题就在这"——他关于协作的论证），以及 1989 年 CERFnet 上线时他与网络总监把一瓶闪光彩屑砸在思科路由器上。
+
+**Why it matters:** 开放性的论证如今每周都在 AI 许可之争中被重新审理（本月"所有 AI 生成的代码都应开源"级别的辩论不断）；这里是协议层的版本，被表述为地缘保险而非意识形态。而行星际互联网创业是一个可以持续追踪的具体新产物，不是一篇回忆。
+
+> 命名轶事：CERFnet 想叫 SURFnet，被荷兰人占了，于是借用了他的名字——他答应的理由是没人会怪罪"被命名的那个人"。
+
+[`🔗 Vint Cerf 谈 TCP/IP 为何从未申请专利（seremot.com）`](https://seremot.com/p/vint-cerf-on-why-tcpip-was-never) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50568861)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-19T20:43:55Z |
-| Items | 17 |
-| Sources tracked | 18 (Hacker News, GitHub Trending, GitHub repos, Anthropic, hexagonmath.org, Investigatory Powers Tribunal, ounapuu.ee, cve.org, contralabs.com, misanthropicstatement.com, blog.harrison.page, thedataexchange.media, moq.dev, perishablepress.com, foolscap.works, pikuma.com, lateblt.livejournal.com, krthr.co) |
+| Generated | 2026-11-20T04:42:49Z |
+| Items | 28 |
+| Sources tracked | 30 (Hacker News, GitHub Trending, GitHub repos, Anthropic, hexagonmath.org, Investigatory Powers Tribunal, ounapuu.ee, cve.org, contralabs.com, misanthropicstatement.com, blog.harrison.page, thedataexchange.media, moq.dev, perishablepress.com, foolscap.works, pikuma.com, lateblt.livejournal.com, krthr.co, wsj.com, reuters.com, git-aarvin.github.io, synology.com, postgresql.org, snowflake.com, lastbook.org, huggingface.co, blog.platypush.tech, regexr.com, seremot.com, firecrawl.dev) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
