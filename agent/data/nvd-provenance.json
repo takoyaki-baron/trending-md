@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-20T05:52:02.057Z",
+ "updated": "2026-11-20T13:44:13.270Z",
  "cves": {
   "CVE-2026-124724": {
    "vulnStatus": "Awaiting Analysis",
@@ -2654,7 +2654,7 @@
   "CVE-2026-109618": {
    "vulnStatus": "Analyzed",
    "published": "2026-10-21",
-   "lastModified": "2026-11-18T19:17",
+   "lastModified": "2026-11-20T12:18",
    "metrics": [
     {
      "version": "3.1",
@@ -2686,7 +2686,7 @@
   "CVE-2026-109619": {
    "vulnStatus": "Analyzed",
    "published": "2026-10-21",
-   "lastModified": "2026-11-18T19:17",
+   "lastModified": "2026-11-20T12:18",
    "metrics": [
     {
      "version": "3.1",
@@ -6814,7 +6814,7 @@
   "CVE-2026-115274": {
    "vulnStatus": "Deferred",
    "published": "2026-10-30",
-   "lastModified": "2026-10-30T19:39",
+   "lastModified": "2026-11-20T06:17",
    "metrics": [
     {
      "version": "4.0",
@@ -6835,7 +6835,7 @@
   "CVE-2026-109821": {
    "vulnStatus": "Deferred",
    "published": "2026-10-30",
-   "lastModified": "2026-10-30T19:39",
+   "lastModified": "2026-11-20T06:17",
    "metrics": [
     {
      "version": "4.0",
@@ -15377,9 +15377,9 @@
    "nvdAnalyzed": true
   },
   "CVE-2026-123633": {
-   "vulnStatus": "Analyzed",
+   "vulnStatus": "Modified",
    "published": "2026-11-18",
-   "lastModified": "2026-11-19T21:31",
+   "lastModified": "2026-11-20T12:18",
    "metrics": [
     {
      "version": "3.1",
@@ -15403,12 +15403,12 @@
    ],
    "kev": null,
    "kevDue": null,
-   "nvdAnalyzed": true
+   "nvdAnalyzed": false
   },
   "CVE-2026-123007": {
-   "vulnStatus": "Analyzed",
+   "vulnStatus": "Modified",
    "published": "2026-11-18",
-   "lastModified": "2026-11-19T21:14",
+   "lastModified": "2026-11-20T12:18",
    "metrics": [
     {
      "version": "3.1",
@@ -15433,7 +15433,7 @@
    ],
    "kev": null,
    "kevDue": null,
-   "nvdAnalyzed": true
+   "nvdAnalyzed": false
   },
   "CVE-2024-10441": {
    "vulnStatus": "Analyzed",
@@ -15609,7 +15609,7 @@
   "CVE-2026-121481": {
    "vulnStatus": "Awaiting Analysis",
    "published": "2026-11-18",
-   "lastModified": "2026-11-20T05:18",
+   "lastModified": "2026-11-20T10:17",
    "metrics": [
     {
      "version": "3.1",
@@ -15621,7 +15621,8 @@
     }
    ],
    "cwe": [
-    "CWE-122"
+    "CWE-122",
+    "CWE-190"
    ],
    "kev": null,
    "kevDue": null,

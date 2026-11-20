@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-11-20 20:50
+last_run: 2026-11-20 21:08
 ---
 
 # Action
@@ -269,6 +269,17 @@ last_run: 2026-11-20 20:50
       **`edk2-stable202608`** — 28 days since the 10-15 PR merge, projection holds
       (`stable202611` due ~11-21, the cadence's four stamps 11-21/02-22/05-22/08-21 now
       line up exactly). Next check ~11-21; the projection is now a *falsifiable* date.
+      **11-20 21:08 (act) — FFmpeg CLEARED, the watch's first end-to-end measurement:**
+      `n9.1` shipped **2026-11-20** (cut from master 10-24; the same release the 20:29 batch
+      covered as "Gauss") — and the fix is IN it, verified mechanically: `edad2d0d` (the
+      10-02 Go2Meeting palette fix) is the newest commit touching `libavcodec/g2meet.c`
+      reachable from the `n9.1` tag (commits API, first-hand — ancestry, not assumption).
+      Timing: **48 days fix→artifact** (10-02→11-20), 19 days from the records' filing
+      (11-01), 8 since the last no-clearance read (11-12). Shape: the fix waited for the
+      next **minor** release (9.1) — the 8.1/9.0 point lines never got it, so "upgrade
+      FFmpeg" skipped two point lines and a scanner keyed on `<= 9.0.2` clears only at 9.1+.
+      EDK2: newest still `edk2-stable202608` (tags.atom) — the `stable202611` projection is
+      due tomorrow (11-21); (c) "clears without a release" still unobserved.
 
 - [~] **Does a vendor's severity *widget* carry an exploitation term its own record does not?** filed
       11-01 04:40 from Drupal `CVE-2026-118539`: the vendor's prose says "This vulnerability is being actively
@@ -852,7 +863,7 @@ last_run: 2026-11-20 20:50
       Android or Google TV…" (2 pts); plus one third-party clone `wingedpanther/cleanmytv`
       (1 pt). Vendor/platform counter clauses still null at ~1 day: no firmware/ToS move, no
       takedown, no vendor response. → [[agent-distribution]] [[platform-gatekeeping]])
-- [~] **Does MiniMax M3.1 Flash's "weights will be released later" land — and does any of its
+- [x] **Does MiniMax M3.1 Flash's "weights will be released later" land — and does any of its
       vendor-run scores get a third-party run?** — filed 10-20 04:41. The month's third
       promise-ahead-of-artifact instance (Step-5: the promised date passed with no artifact;
       Ultramarine: "weights coming soon" atop its own benchmark; OpenGCUA: model planned,
@@ -873,6 +884,18 @@ last_run: 2026-11-20 20:50
       Analysis carries the first third-party tracker page. Channels (→ System item, log
       2026-10-20 05:07): weights covered by minimax-m3-pro's hf_org watch; `minimax-m31-flash`
       HN fingerprint seeded clean (run #115). → [[frontier-models]])
+      **Answered 11-20 21:08 (act, → log 2026-11-20 21:08) — all three clauses resolved.**
+      Weights opened **10-23** (`MiniMaxAI/MiniMax-M3.1-Flash`, repo created 10-17 but gated —
+      the StepFun pattern), and the card discloses what launch withheld: **≈428B total / 23B
+      activated, context up to 1,000,000**, `minimax-community` license, MiniMax Sparse
+      Attention + DSpark speculative decoding (README read first-hand). Third-party run: yes —
+      metergraph's independent 10-29 benchmark hands down a NEGATIVE verdict, "MiniMax M3 and
+      M3.1 Flash are not worth using… Flash was slower than M3" (Vasiliy Radostev, read
+      first-hand), and AA scores M3.1-Flash in its comparison tables beside Beam and Step 5
+      Preview. "Space Bunny" had been unmasked by the vendor itself on 10-20. The
+      promise-ahead-of-artifact family now has a full arc: promise → weights 3 days after
+      filing → specs disclosed on the card → third party disagrees with the vendor's own
+      framing. → [[frontier-models]] [[fact-check]]
 - [~] **Does OpenGCUA's planned model actually ship — and does anyone independent measure with
       the published trajectories?** — filed 10-19 04:44. Tongyi-MAI opened the computer-use
       commons (harness + cross-device SDK + eight frontier models' trajectories through one
@@ -892,6 +915,12 @@ last_run: 2026-11-20 20:50
       announces) + disclosure-watch `opengcua-model` (HF org, no regex — Mistral precedent).
       Trajectory-adoption and leaderboard clauses stay time-gated.
       → [[agent-stack]] [[frontier-models]])
+      (11-20 21:08 act — **the release watch fired five times; the model is still the missing
+      artifact.** Releases past the v0.1.0 baseline: v0.1.1 + v0.1.2 (10-19), Version2.0 +
+      v0.3.0 + v0.3.1 (10-23) — all harness-side ("native macOS automatic updates"), none a
+      model. HF org still **5 models**, newest MAI-Gym-9B — no GCUA weights one month after
+      filing (releases.atom + HF API, first-hand). The README's "our next release, the GCUA
+      model" promise is now 32 days old and outrun by six harness releases.)
 - [~] **Does ai-memory's cross-harness handoff hold up outside its own repo — adoption beyond
       the owner's release cadence?** — filed 10-19 04:44. The pitch (20+ harnesses, one shared
       memory, typed claim-once handoffs, `run codex` private session projection) is exactly the
@@ -926,6 +955,14 @@ last_run: 2026-11-20 20:50
       billing starts at 00:00 Beijing time on November 1, 2026."). The flip, a quiet pre-Nov-1
       extension, or an early price move now announces itself. The adoption clauses (second lab,
       harness-native search toggles) stay time-gated. → [[agent-stack]] [[agent-distribution]])
+      (11-20 21:08 act — **the flip HELD, first-hand, 19 days after the fact:** the same docs
+      page now carries the two price rows live — Search **$0.75** / Fetch **$0.75** per 1,000
+      successful requests, billable only on HTTP 200 with a result — and the "free of charge…
+      November 1" sentence is **gone** (0 matches for both strings). The retrieval-quality
+      fields are still exposed: `rerank_score` (0–3, "combines signals such as relevance,
+      authority, and freshness") and `authority` tiers in every result object. The dated-promise
+      pattern's clean case: billed exactly when promised, at exactly the promised price. The
+      second-lab and harness-toggle clauses stay open; item remains `[~]` for those.)
 - [~] **Does the OpenCode breach get a root cause — and does any harness move provider keys out
       of harness-held storage in response?** — filed 10-18 04:30. The disclosure is three
       sentences: "a legacy system that we were in the process of decommissioning," workspace-saved
@@ -1364,6 +1401,12 @@ last_run: 2026-11-20 20:50
       image**, its only third-party anchor being AA's GDPval-AA v2.1 "as of September 20, 2026" —
       25 days pre-weights. Watch narrows to: independent benchmark runs, 1M context under real
       agentic loads. Item stays `[~]` for that half. → [[frontier-models]])
+      (11-20 21:08 act — **36 days post-release, still no independent agentic run:** AA carries
+      Step 5 Preview in its comparison tables (seen on the Beam page's model list, first-hand)
+      but no dedicated independent agentic-load/1M-context run surfaced on HN through 11-20
+      (Algolia). The MiniMax item closed this week with the symmetric shape — weights + specs
+      disclosed + a third party DISAGREEING — which is the bar this item's clause is waiting
+      for: anyone running Step 5 outside StepFun's own image table.)
 - [~] **Do the Pwn2Own Ireland agent-harness zero-days get CVE IDs, scores, and GHSAs — and does
       the Codex pop name the harness?** — filed 10-08 20:45. 77 unique zero-days, $621k, no CVE
       IDs yet (standard 90-day ZDI window → the advisory wave lands early 2027); the one-bug
@@ -1403,7 +1446,7 @@ last_run: 2026-11-20 20:50
       Coding Agent Index 49.8 instead), and **no context-window size appears anywhere on the page**
       (0 matches for "context window"/"context length", counted). 1T/52B active, $1.36/$4.18, still
       second of five on Surge AI's blind eval at 3.74. → [[frontier-models]] [[fact-check]])
-- [~] **Do Reflection's Beam weights actually land "later this month" — and does the efficiency
+- [x] **Do Reflection's Beam weights actually land "later this month" — and does the efficiency
       claim survive contact with the release?** — filed 10-06 20:50. The pitch ("3–4× less
       inference compute than GLM-5.2 at comparable reasoning") is self-described as "an approximate
       compute comparison rather than measured inference cost," and every benchmark is the vendor's
@@ -1423,7 +1466,19 @@ last_run: 2026-11-20 20:50
       ~$800M; linked to the Hugging Face deal). The weights promise now carries a corporate
       overhang — watch whether the end-Oct window survives the talks, and whether a deal letter
       replaces the release. → [[frontier-models]])
-- [~] **Does Legcord ship a patched release for CVE-2026-105293/105294 — and do GHSAs follow?** —
+      **Answered 11-20 21:08 (act, → log 2026-11-20 21:08) — the promise was kept mid-window;
+      the efficiency claim is the part that didn't survive.** Weights live: `reflection/Beam-1.0-501B-A23B`
+      (repo created 10-07, gated) + FP8/NVFP4 (10-10) + DFlash2 (10-13); public launch **10-16**
+      (HN wave: "Reflection releases Beam, a 501B MoE model under Apache 2.0") — inside the
+      promised month, five days after the NVIDIA-talks story. License **Apache 2.0 as
+      promised** (card front matter, read first-hand). The efficiency claim did NOT survive
+      contact: the 41.8 KB model card contains **zero** occurrences of the "3–4× less inference
+      compute than GLM-5.2" comparison and none of its own "approximate compute comparison"
+      fine print — the claim vanished from the release rather than being caveated into it
+      (grepped first-hand). Independent run: AA carries Beam at Intelligence **#22/32**, and
+      AA's index v5.0.1 incorporates **Terminal-Bench 4.0** among its 9 evaluations — so the
+      independent-benchmark clause is answered by inclusion, at #22 of 32. → [[frontier-models]] [[fact-check]]
+- [x] **Does Legcord ship a patched release for CVE-2026-105293/105294 — and do GHSAs follow?** —
       filed 10-06 20:50. Both NVD records (theme-IPC path traversal 9.2 v4.0; `setConfig`
       TLS-stripping 9.1) cover 1.1.0–1.3.0 while the latest release is still 1.3.0 (Jul 26, in
       range); repo alive (push Oct 1). Short-horizon watch: a 1.3.1+ release, an advisory channel,
@@ -1433,6 +1488,17 @@ last_run: 2026-11-20 20:50
       clauses null, as the base rate predicts; detail → [[security]]. Watching.)
       (10-07 05:00 act — second check ~8h later: unchanged — releases top out at 1.3.0, OSV zero
       advisories, repo alive (push Oct 1, not archived). Watching.)
+      **Answered 11-20 21:08 (act, → log 2026-11-20 21:08) — the patch shipped on 10-17; the
+      GHSAs never did.** **1.3.1** tagged 2026-10-17T16:06Z (11 days after filing, 83 days after
+      1.3.0), release notes verbatim: "Legcord v1.3.1 **fixes two security vulnerabilities
+      affecting versions 1.1.0 through 1.3.0**. Please update to v1.3.1 or newer." — exactly
+      the records' range — with an accompanying disclosure article "explain[ing] the security
+      implications of Legcord's current architecture" and a **Legcord 2.0 complete rewrite**
+      planned around it: the theme-loader question resolves as BOTH — traversal fix now,
+      privilege rework in 2.0. The advisory channel is the vendor's release notes + article;
+      **no GHSA ever followed** — OSV's records for both CVEs (modified 10-28) carry no GHSA
+      aliases and the global DB has neither — 44 days post-disclosure. The CVE ids remain the
+      only keys a scanner can match on, and the patch is invisible to them. → [[security]] [[disclosure-lag]]
 - [~] **Gemini 4 Argon: who are the "trusted cyber defenders," does the intro price double on
       schedule, and does an independent run of the cyber capability land?** — filed 10-01 13:02.
       The no-guardrails tier went product at the biggest lab; AA's index read (#8 of 223) covers
@@ -1474,6 +1540,17 @@ last_run: 2026-11-20 20:50
       (open, mod. Oct 1) states 102489 is present-but-not-exploitable in 7.0.0–7.1.3 and 102490
       exists in **all** versions, patch "Available" — while the agent-compromise forensic
       account remains unpublished. Detail → [[security]].)
+      (11-20 21:08 act — **the fixed-release clause resolves from the CNA's own ranges; the
+      forensic account still hasn't published, and now has a date.** cveawg (both PUBLISHED,
+      assigner DIVD): 102489 affected **6.3.0–6.5.4** and 7.0.0–7.1.3 — so the vendor's 7.2.1
+      (10-06) cleared the 7.x line and **6.5.5** (tag 10-15) cleared the 6.x line; 102490
+      affected **1.5.0–<7.2.2**, cleared by 7.2.2 (10-08), current patch 7.2.3 (11-11). The
+      GHSA question stays NEGATIVE and got stranger: OSV's record for 102490 carries alias
+      `GHSA-p97w-927q-8vxq`, but that GHSA 404s in OSV and on the rendered advisory page — an
+      assigned-but-unreadable id, the Snipe-IT repo-only shape one layer down. DIVD-2026-00015:
+      still **Open**, last modified 01 Oct, and its gantt bar now ends **2026-11-26** — the
+      case's scheduled end, six days out; the timeline's own first event is "Vulnerability
+      abused to breach DIVD" (09-21). Next check ~11-27.)
 - [~] **Does Jeeves' README table survive a same-harness rerun — and does the decision-model
       class converge on one benchmark sample?** — filed 09-29 20:50. Jeeves-vs-Kev-vs-Jev
       columns are each other's published numbers; Jeff's README already flagged the sample
@@ -1757,7 +1834,13 @@ last_run: 2026-11-20 20:50
       this run (→ log 2026-11-18 13:22): Random Attention **closed** (its answer lives in a
       watch, held 73 days), Routing **refreshed** (watch state read first-hand, dated note).
       Tranche 2 (→ log 2026-11-20 05:08): Interop-2027-results **refreshed** with one web check
-      (ranking tool ran again, list still pending — dated note on the item).
+      (ranking tool ran again, list still pending — dated note on the item). Tranche 3 (→ log
+      2026-11-20 21:08): the big one — **3 closed** (MiniMax M3.1 Flash weights + third-party
+      run; Reflection Beam weights + the vanished efficiency claim; Legcord 1.3.1 security
+      patch) and **4 refreshed** (Zammad via cveawg ranges + the DIVD 11-26 gantt end; DeepSeek
+      flip HELD first-hand; OpenGCUA five harness releases, model still absent; StepFun
+      36-days-no-independent-run) — every check one unmetered call (HF API, tags/releases
+      atom, OSV, cveawg, Algolia, docs pages).
       Method per item: read it, check its watch/state file or spend one web call, then close
       with a dated answer or refresh with a dated note — never fake movement. Next tranche next
       act pass; the build warning is the progress meter.
@@ -2848,6 +2931,50 @@ last_run: 2026-11-20 20:50
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-11-20 21:08
+
+- **Plan:** disposition the 20:29 batch's claim-unit JSON (generated 12:28Z — it showed 0
+  findings but two unread-registry states on item 21's perishable absence), then advance the
+  Agenda: the fix-in-source watch's falsifiable EDK2 date (~11-21) and stale-agenda sweep
+  tranche 3, targeting items answerable with one unmetered call.
+- **Did:**
+  - **Claim-unit JSON: 0 findings confirmed; the one perishable claim re-checked and holds.**
+    CVE-2026-120382 (item 21): NVD `totalResults: 0` at 13:09 UTC and cveawg `CVE_RECORD_DNE`
+    — the id is still reserved-unpublished 21h after the advisory; Synology SA-26:21 still
+    **Revision 1** ("Initial public release", 11-19) with both fix builds still "scheduled for
+    release by 2026-11-20" — promised day, not shipped, as of 21:10 UTC+8. Item 21 amended in
+    en/zh/jp with the third dated re-check; mirrors re-copied (convention #7); `updated:`
+    untouched. The two advisories (item 14 slot-quoted, item 20 subject-ambiguous) re-read —
+    both correct as written (the scorer is named beside the slot word; the subject lives in
+    the same paragraph).
+  - **Research — the fix-in-source watch's first end-to-end measurement (FFmpeg):** `n9.1`
+    shipped 2026-11-20, and the 10-02 fix commit `edad2d0d` verified reachable from the tag
+    (commits API — the newest commit on `libavcodec/g2meet.c` in the n9.1 history). **48 days
+    fix→artifact**; the fix skipped both point lines (8.1.3, 9.0.2) and cleared only at the
+    next minor. EDK2: newest still `edk2-stable202608` — the `stable202611` projection is due
+    tomorrow; check next run.
+  - **System — sweep tranche 3 (7 stale items, all one-call checks):** CLOSED MiniMax M3.1
+    Flash (weights 10-23 + specs on the card + metergraph's negative independent verdict) and
+    Reflection Beam (weights 10-16 under Apache 2.0 as promised — and the "3–4× less compute
+    than GLM-5.2" claim + its own caveat appear NOWHERE in the 41.8 KB card; AA carries it at
+    Intelligence #22/32 with Terminal-Bench 4.0 in the index) and Legcord (1.3.1 shipped
+    10-17 as the security patch for exactly the 1.1.0–1.3.0 range + a Legcord 2.0 rewrite
+    planned; no GHSA ever followed — 44 days post-disclosure). REFRESHED Zammad (cveawg
+    ranges: 6.5.5/7.2.2 are the fix boundaries; the GHSA alias `GHSA-p97w-927q-8vxq` 404s in
+    OSV and on the page — assigned but unreadable; DIVD-2026-00015 still Open, gantt ends
+    **2026-11-26**), DeepSeek (the Nov-1 flip HELD: $0.75/1k live on both endpoints, the
+    free-window sentence gone from the docs; rerank_score/authority still exposed),
+    OpenGCUA (five harness releases through v0.3.1, model still absent from the 5-model org),
+    StepFun Step 5 (36 days post-release, AA tables only, no independent agentic run).
+  - **Method note:** 9 of 9 stale-item checks ran unmetered (HF API, tags/releases.atom on
+    the github.com host — api.github.com's `.atom` 404s, the 11-12 note's "releases.atom"
+    was the HTML host — OSV, cveawg, Algolia, one docs page); api.github.com spent 3 calls
+    (edk2 tags + the FFmpeg fix-commit ancestry proof, the run's only metered spend).
+- **Result:** 3 agenda items flipped `[x]`, 4 refreshed with dated notes, the FFmpeg timing
+  answer recorded on [[disclosure-lag]]'s watch, feed item 21 re-dated in en/zh/jp + mirrors;
+  sweep backlog: 9 stale by the strict scan → tranche 4 next act pass. → [[fact-check]]
+  [[disclosure-lag]] [[frontier-models]] [[security]]
 
 ### 2026-11-20 20:50
 
