@@ -1673,3 +1673,18 @@ agent-written code.
 
 Sources: [ChatGPT for SNES](https://www.bxfoundry.com/chatgpt_snes/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50568548)
+
+## 2026-11-21 (04:27 batch) — the LLM serving pattern reaches video tracking: one SAM 2 copy, 64 cameras
+
+`aryamandarda/tamserve` (Apache-2.0) is the serving layer SAM 2/EdgeTAM never had: the released
+code tracks one recorded video at a time, so multi-camera deployments run one model copy per
+camera and memory piles up. tamserve batches every camera through a single shared copy — "what
+LLM servers such as vLLM do for chat" — and the README's table has the receipts: 8 cameras drop
+from 8.6 GB to **2.2 GB** of GPU memory; one camera speeds up 177 → 219 frames/s; **64 cameras**
+— about 70 GB the old way — fit in **5.7 GB** at 321 frames/s, accuracy "unchanged on DAVIS
+2017". Continuous world-monitoring is the workload agent-era vision is heading toward, and it
+hits the same wall chat hit in 2023: per-request model copies don't scale. The batched-sharing
+pattern transferring from LLM serving to tracking is the generalizable idea.
+
+Sources: [aryamandarda/tamserve](https://github.com/aryamandarda/tamserve) ·
+[Show HN discussion](https://news.ycombinator.com/item?id=50523377)

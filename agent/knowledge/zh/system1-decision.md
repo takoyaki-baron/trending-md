@@ -535,3 +535,10 @@ Hugging Face 日报榜首（arXiv 2611.24738，116+ 赞）：把一个**冻结�
 Sources: [arXiv 2611.24738](https://arxiv.org/abs/2611.24738) ·
 [Hugging Face 论文页](https://huggingface.co/papers/2611.24738) ·
 [Carol-lyh/Jeveration](https://github.com/Carol-lyh/Jeveration)
+
+## 2026-11-21（04:27 批次）——确定性反例：不带 LLM 的自然语言地图搜索
+
+HippoMaps（Show HN，112+ 分）是一个完整的 OpenStreetMap 地图导航应用，但它真正的论点是查询解析器：「a deterministic (as in no LLMs used) parser of queries that translates them to the Overpass QL」——查询被分词，「what」/「where」从词表（已知品牌、运动、OSM 标签）解析而非模型。「cafes by the Limmat 100 m from the lake in Zurich」被编译成结构化 Overpass 查询，快到感觉即时。在所有搜索表面都在被包上 LLM 的一周里，一个能跑通的演示——最后一个 Google-Maps 级特性（自然语言找地点）可以确定性完成——是 route-before-compute 论题的成本/延迟论据：有些表面路由到词表，而不是模型。
+
+Sources: [HippoMaps](https://hippomaps.ch/) ·
+[Show HN discussion](https://news.ycombinator.com/item?id=50561199)

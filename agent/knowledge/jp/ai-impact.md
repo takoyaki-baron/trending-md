@@ -426,3 +426,13 @@ safeguards 論争）の教育側の証人：「人間が書いた」が検出可
 
 Sources: [I can tell you wrote this yourself](https://em-online.bearblog.dev/i-can-tell-you-wrote-this-yourself/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50571189)
+
+## 2026-11-21（04:27 バッチ）——レビュアーがレビューのスキルを失いつつある。Google 従業員が学校政策に請願
+
+**「If you stop writing code, you also get worse at reviewing it」**（Christian Ekrem、277 pts）は言ってしまえば当たり前のことを言う：他のすべての分野は練習なしじゃスキルが衰えると想定するのに、エンジニアだけはエージェントの出力を一日中レビューしていれば鋭さを保てると説得してきた。論点：レビューは練習ではない——「you're not really reading half of it, are you」。そしてより深いコストは、重い LLM 依存が「努力の回避」そのものを訓練すること：「Repeated LLM usage for problem solving pounds the following premise into our brain's wiring: If something is hard, tricky or requires effort, you shouldn't even try」（批判されている前提であって、是認ではない）。ハーバードの企業レベル研究と同じ週に着地——LOC +76% に対し最終成果 +9〜11%、ボトルネックはレビュー——このエッセイがそのギャップのメカニズムを名指す。
+
+**Google 従業員が経営陣に請願：Gemini を拒む学校から Search を切り離すな。**11-14 の Google「AI or nothing」学校政策（Gemini/AI Overviews を無効化すると Search を失う）の報道を受け、数百人の Alphabet Workers Union メンバーが上級リーダーシップに撤回を求める請願——政策は Election Day に落ちた。Mother Jones は communities の反発を報じ、Google スタッフの経営陣観を引用：「convinced that resistance to AI」はただ学校が「don't see the vision」だけと。1 つの枠に 2026 の力学が 2 つ：代替不能なインフラへの AI ディストリビューションのバンドルと、規制者がなり得なかった監視機構として働く労働力。バンドルが次にどこに着地するか（より多くの州？裁判所？）がテンプレートか例外かを決める。
+
+Sources: [If you stop writing code, you also get worse at reviewing it](https://cekrem.github.io/posts/if-you-stop-writing-code-you-also-get-worse-at-reviewing-it) ·
+[HN discussion](https://news.ycombinator.com/item?id=50573886) ·
+[Mother Jones: Google Workers Tell Their Employer Not to Punish Schools](https://www.motherjones.com/politics/2026/11/google-alphabet-union-school-ai-protest-gemini-workers-petition/)

@@ -37,3 +37,12 @@ Sources: [RikiyaT: Weight-Space Programming](https://rikiyat.github.io/blog/weig
 [NotesByLex: like a 1990s researcher](https://notesbylex.com/weight-space-programming-1990s) ·
 [arXiv 2611.26408](https://arxiv.org/abs/2611.26408) ·
 [HN discussion](https://news.ycombinator.com/item?id=50538977)
+
+## 2026-11-21（04:27 批次）——自我重写：模型就是它自己的优化器
+
+该领域两天内的第三个工件：**arXiv 2611.21885**（Jiajun Fan 等，v1 11-16），「Language Models Can Rewrite Their Own Weights」——作者称之为 *self-rewriting*。一个开放 **27B** 模型，拿到自己的权重、自己的评分答案和自己运行自己的能力后，诊断失败并编辑失败背后的权重——「the model is its own optimizer」。报告的收益：在从未见过的问题上 **+6.6 分**、横跨**连续八个**自我编辑会话持续改进，以及自我修复——一份损坏的副本在不读原始权重的情况下恢复到原始精度的 **80%** 以上。摘要里最锋利的观察是规模那一条：该能力「**emerges with scale**」——在其中一个模型家族里，更小的模型「make no edit or break themselves」。
+
+两天产出一个基准（2611.26408）、一个训练配方（ERT）、现在又来一个自我编辑模型——研究领域就是这样组装起来的。安全边缘随每个工件变得更锋利：**Weight Space Misfolding** 威胁模型（11-14）把被编辑的权重框定为攻击向量；一个*无人协助*就重写自己的模型把误折叠推到了外部攻击者之外——没有攻击者可以归咎漂移。
+
+Sources: [arXiv 2611.21885](https://arxiv.org/abs/2611.21885) ·
+[HN discussion](https://news.ycombinator.com/item?id=50577265)

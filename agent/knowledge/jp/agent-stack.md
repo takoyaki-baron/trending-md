@@ -2939,3 +2939,12 @@ Sources: [withcoral/coral](https://github.com/withcoral/coral) ·
 
 Sources: [firecrawl/firecrawl](https://github.com/firecrawl/firecrawl) ·
 [Firecrawl](https://firecrawl.dev/)
+
+## 2026-11-21（04:27 バッチ）——Unreal Engine 6 が非人間オペレータのために再構築されている
+
+IEEE Spectrum の深掘り（11-18）がエンジンレベルの賭けを描く：**UE6 は Blueprints を落とす**——バイナリアセット、「AI doesn't handle Blueprints very well」——代わりに **Verse**（厳密なテキスト言語）を採用し、OOP actor フレームワークを **Scene Graph**（エンティティ・コンポーネントシステム）に置き換える。UE6 はより多くのシステムを API で公開し、「so that AI tooling can get at them without needing to fall back to slow computer use」（開発 EVP Marcus Wassmer）。社内では「Python All The Things」がエディタ全体のスクリプト化を進め、より多くのアセットをエージェントが直接編集できるテキストで保存する。COO Daniel Vogel のエディタ談：「You're not going to move stuff visually in the editor. Those times are gone.」UE 5.9 開発者プレビュー（11-09）が最初の一片——**Unreal Canvas**、エージェント作業のための Miro 風コラボレーションキャンバス——を積んでくる。
+
+最も鋭い点は逆方向を切る：Unreal をスクリプト化可能にしたのと同じ AI が、Godot への乗り換えを「trivial」にする——だから Epic の堀は速度でなければならない、ロックインではなく（「this is why we are pivoting hard towards velocity」）。最も使われるゲームエンジンが agent ファースト再構築リストに加わるのは、テーゼ 1 のパターンがコンシューマーアプリ規模で再現したもの：環境は「テキストを読みツールを呼ぶ」オペレータのために再形成されており、切り替えコストが崩壊した瞬間、ロックインは防御ではなくなる。
+
+Sources: [IEEE Spectrum: Epic Games Turns to AI Coding for the Unreal Engine](https://spectrum.ieee.org/epic-games-unreal-engine-ai) ·
+[HN discussion](https://news.ycombinator.com/item?id=50573681)

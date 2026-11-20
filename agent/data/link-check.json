@@ -6805,9 +6805,63 @@
       "feeds": [
         "2026-11-20.md"
       ]
+    },
+    "https://news.ycombinator.com/item?id=50576855": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-20T21:33:34.871Z",
+      "last_seen": "2026-11-20T21:33:34.871Z",
+      "feeds": [
+        "2026-11-21.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50577265": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-20T21:33:34.871Z",
+      "last_seen": "2026-11-20T21:33:34.871Z",
+      "feeds": [
+        "2026-11-21.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50575644": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-20T21:33:34.871Z",
+      "last_seen": "2026-11-20T21:33:34.871Z",
+      "feeds": [
+        "2026-11-21.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50577901": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-20T21:33:34.871Z",
+      "last_seen": "2026-11-20T21:33:34.871Z",
+      "feeds": [
+        "2026-11-21.md"
+      ]
+    },
+    "https://access.redhat.com/security/data/cve/CVE-2026-133553": {
+      "verdict": "dead",
+      "streak": 1,
+      "first_seen": "2026-11-20T21:33:34.871Z",
+      "last_seen": "2026-11-20T21:33:34.871Z",
+      "feeds": [
+        "2026-11-21.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50526023": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-20T21:33:34.871Z",
+      "last_seen": "2026-11-20T21:33:34.871Z",
+      "feeds": [
+        "2026-11-21.md"
+      ]
     }
   },
-  "runs": 192,
+  "runs": 193,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-11-20T13:40:13.432Z"
+  "last_run": "2026-11-20T21:33:34.871Z"
 }

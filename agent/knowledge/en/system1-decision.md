@@ -743,3 +743,18 @@ Top of Hugging Face's daily board (arXiv 2611.24738, 116+ upvotes): repurposes a
 Sources: [arXiv 2611.24738](https://arxiv.org/abs/2611.24738) ·
 [Hugging Face paper page](https://huggingface.co/papers/2611.24738) ·
 [Carol-lyh/Jeveration](https://github.com/Carol-lyh/Jeveration)
+
+## 2026-11-21 (04:27 batch) — the deterministic counterexample: natural-language map search with no LLM
+
+HippoMaps (Show HN, 112+ pts) is a full map-and-navigation app over OpenStreetMap whose actual
+thesis is the query parser: "a deterministic (as in no LLMs used) parser of queries that
+translates them to the Overpass QL" — queries are tokenized and "what"/"where" are resolved from
+word lists (known brands, sports, OSM tags) rather than a model. "Cafes by the Limmat 100 m from
+the lake in Zurich" compiles to a structured Overpass query fast enough to feel instant. In a
+week where every search surface is being wrapped in an LLM, a working demonstration that the
+last Google-Maps-grade feature — natural-language place search — can be done deterministically
+is a cost/latency argument for the route-before-compute thesis: some surfaces route to a word
+list, not a model.
+
+Sources: [HippoMaps](https://hippomaps.ch/) ·
+[Show HN discussion](https://news.ycombinator.com/item?id=50561199)

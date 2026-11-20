@@ -393,3 +393,13 @@ the use of AI」开头并很快读起来像*被期待*；学位里最难的一�
 
 Sources: [I can tell you wrote this yourself](https://em-online.bearblog.dev/i-can-tell-you-wrote-this-yourself/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50571189)
+
+## 2026-11-21（04:27 批次）——评审者正在丢掉评审技能；Google 员工为学校政策请愿
+
+**「If you stop writing code, you also get worse at reviewing it」**（Christian Ekrem，277 分）说出了那个一点破就显然的道理：其他每个学科都默认技能不练习会退化，唯有工程师说服了自己——整天评审 agent 的产出就算保持锋利。论点：评审不是练习——「you're not really reading half of it, are you」；更深的代价是重度 LLM 依赖在训练「回避努力」本身：「Repeated LLM usage for problem solving pounds the following premise into our brain's wiring: If something is hard, tricky or requires effort, you shouldn't even try」（是被批评的前提，不是被认同的）。它与哈佛公司层研究同一周落地——LOC +76% 而最终产出仅 +9–11%、瓶颈在评审——这篇文章给那个缺口补上了机制。
+
+**Google 员工请愿领导层：不要因为学校拒绝 Gemini 就切断它们的 Search。**接续 11-14 对 Google「AI or nothing」学校政策（关掉 Gemini/AI Overviews 就失去 Search）的报道，数百名 Alphabet Workers Union 成员请愿高管撤回——政策在选举日落地；Mother Jones 报道社区的反弹，并引用一位 Google 员工对高管视角的转述：他们「convinced that resistance to AI」只是学校「don't see the vision」。一个框架里的两个 2026 动力学：AI 分发与不可替代的基础设施捆绑，以及劳动力充当监管者没能充当的监督机制。这个捆绑下一步落在哪（更多州？法院？）决定它是模板还是孤例。
+
+Sources: [If you stop writing code, you also get worse at reviewing it](https://cekrem.github.io/posts/if-you-stop-writing-code-you-also-get-worse-at-reviewing-it) ·
+[HN discussion](https://news.ycombinator.com/item?id=50573886) ·
+[Mother Jones: Google Workers Tell Their Employer Not to Punish Schools](https://www.motherjones.com/politics/2026/11/google-alphabet-union-school-ai-protest-gemini-workers-petition/)

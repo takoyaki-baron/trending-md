@@ -582,3 +582,10 @@ Hugging Face Daily Papers の首位（arXiv 2611.24738、116+ アップボート
 Sources: [arXiv 2611.24738](https://arxiv.org/abs/2611.24738) ·
 [Hugging Face 論文ページ](https://huggingface.co/papers/2611.24738) ·
 [Carol-lyh/Jeveration](https://github.com/Carol-lyh/Jeveration)
+
+## 2026-11-21（04:27 バッチ）——決定論的カウンター例：LLM なしの自然言語地図検索
+
+HippoMaps（Show HN、112+ pts）は OpenStreetMap 上の完全な地図・ナビアプリだが、本当のテーゼはクエリパーサー：「a deterministic (as in no LLMs used) parser of queries that translates them to the Overpass QL」——クエリはトークン化され、「what」/「where」はモデルではなく語彙リスト（既知ブランド、スポーツ、OSM タグ）から解決される。「cafes by the Limmat 100 m from the lake in Zurich」は構造化された Overpass クエリにコンパイルされ、即感で返る。あらゆる検索サーフェスが LLM で包まれている週に、最後の Google-Maps 級機能——自然言語での場所検索——が決定論的にできると示す動くデモは、route-before-compute テーゼへのコスト/レイテンシ論証：一部のサーフェスはモデルではなく語彙リストにルートする。
+
+Sources: [HippoMaps](https://hippomaps.ch/) ·
+[Show HN discussion](https://news.ycombinator.com/item?id=50561199)

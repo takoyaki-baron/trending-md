@@ -8061,3 +8061,32 @@ rare public example of quiet coordinated disclosure completed before weaponizati
 
 Sources: [BBC: Tens of thousands of UK fridges secured from hackers in secret operation](https://www.bbc.co.uk/news/articles/c6eq49zyx7p4o) ·
 [HN discussion](https://news.ycombinator.com/item?id=50572430)
+
+## 2026-11-21 (04:27 batch) — the KEV wave hits virtualization; the container boundary breaks from the inside
+
+**Four KEV adds on 11-20, all due 2026-11-23 (BOD 22-01's three-day clock):**
+`CVE-2026-123890` — VMware vCenter **Directory Service auth bypass** (9.8, CNA-assigned by
+VMware; record `Undergoing Analysis` at read time, lastModified 2026-11-20T20:16Z; fixes in
+9.1.1.0200 / 9.0.2.0200 / 8.0 U3m / 5.2.5, Telco Cloud Platform builds also affected);
+`CVE-2026-76466` — Cisco **Expressway Series root RCE**: hard-coded credentials and unvalidated
+client certificates in the database service let an unauthenticated attacker "execute arbitrary
+operating system commands as root" (9.8, Cisco CNA); `CVE-2026-129448` — Apache Roller
+**XML-RPC deserialization RCE** (9.8), KEV'd three days after its fresh advisory;
+`CVE-2025-42884` — SAP NetWeaver Enterprise Portal **JNDI injection** (6.5). A 72-hour deadline
+on a vCenter directory-service bypass is a weekend patch cycle for every VMware estate.
+
+**crun `CVE-2026-133553` (7.8, Red Hat CNA; NVD `Awaiting Analysis`)** — the OCI runtime under
+Podman: when copying files onto a tmpfs mounted with `tmpcopyup`, crun "opens the destination a
+second time by name", and a container sharing a writable volume with the container being created
+can swap that path between the two lookups — so crun "copies image files onto host files,
+including files under /proc/sys". The class breaks the container/host boundary *from the inside*
+— no kernel exploit, just a shared volume and a race. Red Hat's own fix-state data lists crun
+`Affected` on RHEL 8, 9 and 10 (OpenShift Container Platform 4/5 `Under investigation`); crun's
+newest release (1.31, Nov 12) predates the record and **no fixed version is named yet** — the
+practical mitigation is to stop sharing writable volumes across trust boundaries and watch for
+the release that closes the second lookup.
+
+Sources: [NVD: CVE-2026-123890](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE-2026-123890) ·
+[NVD: CVE-2026-76466](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE-2026-76466) ·
+[Red Hat CVE data: CVE-2026-133553](https://access.redhat.com/security/data/cve/CVE-2026-133553) ·
+[containers/crun](https://github.com/containers/crun)

@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-20T13:44:13.270Z",
+ "updated": "2026-11-20T21:37:44.756Z",
  "cves": {
   "CVE-2026-124724": {
    "vulnStatus": "Awaiting Analysis",
@@ -3166,7 +3166,7 @@
   "CVE-2026-114085": {
    "vulnStatus": "Deferred",
    "published": "2026-10-21",
-   "lastModified": "2026-10-21T16:17",
+   "lastModified": "2026-11-20T15:17",
    "metrics": [
     {
      "version": "3.1",
@@ -14562,9 +14562,9 @@
    "nvdAnalyzed": true
   },
   "CVE-2026-129349": {
-   "vulnStatus": "Received",
+   "vulnStatus": "Awaiting Analysis",
    "published": "2026-11-15",
-   "lastModified": "2026-11-17T16:17",
+   "lastModified": "2026-11-20T17:33",
    "metrics": [
     {
      "version": "4.0",
@@ -15221,9 +15221,9 @@
    "nvdAnalyzed": false
   },
   "CVE-2026-129448": {
-   "vulnStatus": "Received",
+   "vulnStatus": "Analyzed",
    "published": "2026-11-17",
-   "lastModified": "2026-11-19T05:18",
+   "lastModified": "2026-11-20T20:25",
    "metrics": [
     {
      "version": "3.1",
@@ -15237,9 +15237,9 @@
    "cwe": [
     "CWE-502"
    ],
-   "kev": null,
-   "kevDue": null,
-   "nvdAnalyzed": false
+   "kev": "2026-11-20",
+   "kevDue": "2026-11-23",
+   "nvdAnalyzed": true
   },
   "CVE-2026-105739": {
    "vulnStatus": "Awaiting Analysis",
@@ -15326,9 +15326,9 @@
    "nvdAnalyzed": false
   },
   "CVE-2026-114938": {
-   "vulnStatus": "Modified",
+   "vulnStatus": "Analyzed",
    "published": "2026-11-17",
-   "lastModified": "2026-11-19T21:17",
+   "lastModified": "2026-11-20T19:18",
    "metrics": [
     {
      "version": "3.1",
@@ -15344,7 +15344,7 @@
    ],
    "kev": null,
    "kevDue": null,
-   "nvdAnalyzed": false
+   "nvdAnalyzed": true
   },
   "CVE-2026-115731": {
    "vulnStatus": "Analyzed",
@@ -15609,19 +15609,18 @@
   "CVE-2026-121481": {
    "vulnStatus": "Awaiting Analysis",
    "published": "2026-11-18",
-   "lastModified": "2026-11-20T10:17",
+   "lastModified": "2026-11-20T20:17",
    "metrics": [
     {
      "version": "3.1",
      "type": "Secondary",
      "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
-     "baseScore": 9.8,
-     "severity": "CRITICAL",
-     "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+     "baseScore": 5.9,
+     "severity": "MEDIUM",
+     "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
     }
    ],
    "cwe": [
-    "CWE-122",
     "CWE-190"
    ],
    "kev": null,
@@ -15629,6 +15628,90 @@
    "nvdAnalyzed": false
   },
   "CVE-2026-120382": null,
-  "CVE-2026-10441": null
+  "CVE-2026-10441": null,
+  "CVE-2026-123890": {
+   "vulnStatus": "Analyzed",
+   "published": "2026-11-19",
+   "lastModified": "2026-11-20T20:52",
+   "metrics": [
+    {
+     "version": "3.1",
+     "type": "Secondary",
+     "source": "security@vmware.com",
+     "baseScore": 9.8,
+     "severity": "CRITICAL",
+     "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+    }
+   ],
+   "cwe": [
+    "CWE-288"
+   ],
+   "kev": "2026-11-20",
+   "kevDue": "2026-11-23",
+   "nvdAnalyzed": true
+  },
+  "CVE-2026-76466": {
+   "vulnStatus": "Analyzed",
+   "published": "2026-10-21",
+   "lastModified": "2026-11-20T20:27",
+   "metrics": [
+    {
+     "version": "3.1",
+     "type": "Secondary",
+     "source": "psirt@cisco.com",
+     "baseScore": 9.8,
+     "severity": "CRITICAL",
+     "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+    }
+   ],
+   "cwe": [
+    "CWE-798"
+   ],
+   "kev": "2026-11-20",
+   "kevDue": "2026-11-23",
+   "nvdAnalyzed": true
+  },
+  "CVE-2025-42884": {
+   "vulnStatus": "Analyzed",
+   "published": "2025-11-11",
+   "lastModified": "2026-11-20T20:24",
+   "metrics": [
+    {
+     "version": "3.1",
+     "type": "Secondary",
+     "source": "cna@sap.com",
+     "baseScore": 6.5,
+     "severity": "MEDIUM",
+     "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N"
+    }
+   ],
+   "cwe": [
+    "CWE-943"
+   ],
+   "kev": "2026-11-20",
+   "kevDue": "2026-11-23",
+   "nvdAnalyzed": true
+  },
+  "CVE-2026-133553": {
+   "vulnStatus": "Awaiting Analysis",
+   "published": "2026-11-20",
+   "lastModified": "2026-11-20T05:18",
+   "metrics": [
+    {
+     "version": "3.1",
+     "type": "Secondary",
+     "source": "secalert@redhat.com",
+     "baseScore": 7.8,
+     "severity": "HIGH",
+     "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:C/C:H/I:H/A:H"
+    }
+   ],
+   "cwe": [
+    "CWE-367"
+   ],
+   "kev": null,
+   "kevDue": null,
+   "nvdAnalyzed": false
+  }
  }
 }

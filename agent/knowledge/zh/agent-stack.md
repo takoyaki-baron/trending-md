@@ -2594,3 +2594,12 @@ Sources: [withcoral/coral](https://github.com/withcoral/coral) ·
 
 Sources: [firecrawl/firecrawl](https://github.com/firecrawl/firecrawl) ·
 [Firecrawl](https://firecrawl.dev/)
+
+## 2026-11-21（04:27 批次）——Unreal Engine 6 正在为非人类操作者重建
+
+IEEE Spectrum 的深度报道（11-18）给出了引擎级的赌注：**UE6 将弃用 Blueprints**——二进制资产，「AI doesn't handle Blueprints very well」——转向 **Verse**（严格文本语言），并用 **Scene Graph**（实体-组件系统）取代 OOP actor 框架。UE6 通过 API 暴露更多系统，「so that AI tooling can get at them without needing to fall back to slow computer use」（开发 EVP Marcus Wassmer），内部推进「Python All The Things」让整个编辑器可脚本化，并把更多资产存成 agent 可直接编辑的文本。COO Daniel Vogel 谈编辑器：「You're not going to move stuff visually in the editor. Those times are gone.」UE 5.9 开发者预览（11-09）给出第一口——**Unreal Canvas**，一个 Miro 风格、面向 agent 工作的协作画布。
+
+最锋利的一点切向另一侧：让 Unreal 可脚本化的同一个 AI，也让切换到 Godot 变得「trivial」——所以 Epic 的护城河现在必须是速度，不是锁定（「this is why we are pivoting hard towards velocity」）。最常用的游戏引擎加入 agent 优先重建名单，是论题 1 模式在消费应用尺度的重现：环境正在为「读文本、调工具」的操作者重塑，而切换成本坍缩的那一刻，锁定就不再是防御。
+
+Sources: [IEEE Spectrum: Epic Games Turns to AI Coding for the Unreal Engine](https://spectrum.ieee.org/epic-games-unreal-engine-ai) ·
+[HN discussion](https://news.ycombinator.com/item?id=50573681)

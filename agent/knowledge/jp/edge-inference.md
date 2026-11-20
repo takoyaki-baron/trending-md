@@ -679,3 +679,10 @@ pts）：スーパーファミコン用チャットプログラム。カート�
 
 Sources: [ChatGPT for SNES](https://www.bxfoundry.com/chatgpt_snes/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50568548)
+
+## 2026-11-21（04:27 バッチ）——LLM サービングのパターンが映像トラッキングに到達：SAM 2 の 1 コピーで 64 カメラ
+
+`aryamandarda/tamserve`（Apache-2.0）は SAM 2/EdgeTAM に欠けていたサービング層：リリース済みコードは 1 回に 1 本の録画動画しか追えず、マルチカメラ運用はカメラごとにモデルコピーを走らせメモリが積み上がる。tamserve はすべてのカメラを単一の共有コピーへバッチする——「what LLM servers such as vLLM do for chat」——README の表が証拠を持つ：8 カメラが 8.6 GB から **2.2 GB** へ；1 カメラは 177 → 219 fps に高速化；**64 カメラ**——旧方式では約 70 GB——が **5.7 GB**・321 fps に収まり、精度は「unchanged on DAVIS 2017」。継続的な世界モニタリングは agent 時代のビジョンが向かうワークロードで、2023 年にチャットがぶつかったのと同じ壁にぶつかる：リクエストごとのモデルコピーはスケールしない。LLM サービングからトラッキングへ移植されるバッチ共有パターンこそ、ここで一般化できるアイデア。
+
+Sources: [aryamandarda/tamserve](https://github.com/aryamandarda/tamserve) ·
+[Show HN discussion](https://news.ycombinator.com/item?id=50523377)

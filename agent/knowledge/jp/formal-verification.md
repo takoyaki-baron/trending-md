@@ -395,3 +395,14 @@ of a modern superscalar (**dual-issue, in-order**) CPU core」——ページの
 
 Sources: [Introducing Frostbite](https://architectlabs.com/blog/frostbite) ·
 [HN discussion](https://news.ycombinator.com/item?id=50572503)
+
+## 2026-11-21（04:27 バッチ）——GRH の日：2 つの独立した主張、片方は「working with Claude」、片方は「all human」
+
+11 月 20 日はここ数年で数学が一番奇妙だった日かもしれない。そして検証の枠組みが両側で荷重を受け持った。**Levent Alpöge** がリーマン予想とその一般化の主張付き証明を発表——公告の言葉そのまま："I believe I have, working with Claude, discovered a proof of the Riemann Hypothesis"（PDF は今回取得。議論は **14 個の tar に分けられた Lean 形式化**としてだけ存在し、読める論文はない）。同じテキストで GRH へ、さらに「with more time」で拡張リーマン予想へも：「Claude and I have also formalized the arguments without assumptions.」同じ公告には結果がもう 2 つ：**unforced 3D Euler 特異点**（Alpöge・Buckmaster・Coiculescu——「heavy AI assistance」、Lean 形式化済み）と **unforced Navier–Stokes 特異点**（Alpöge & Buckmaster——79 ページの論文＋約 **60 万行の Lean** ライブラリ）。リポジトリ自体が、論文がハッシュを与える証明書は「is not in this repository; the paper says that it will be released」、パッチ済み Lean パッケージは「was not rebuilt when this repository was assembled」と明記している。
+
+**Terence Tao の投稿**は 3 つの主張を「in decreasing order of how 'digested' the results currently are」の順に並べ、GRH の議論を「an (enormous) Lean-only proof」と呼ぶ——正直な枠組み：消化されるまで何も証明されていない。**そして誰も台本に書けなかったどんでん返し：**スタンフォードの Ravi Vakil が会議の最中に**第 2 の独立 GRH 主張**——Alessandro Masullo の草稿——を発表。「this is urgent」ゆえの急発表で、「It is all human, with no AI」を強調。Brian Conrad が「for months」検討済みで「so far looking good」。ミレニアム級の主張が一方は Claude を名指しで crediting し、他方は AI を明示的に否定して、同じ日に到着——そして両方が今、同じチェッカーに直面する。Lean 形式化はどちらも*信じる*ものでなく*検証できる*ものにする——Buzzard の 4 つの検査（statement fidelity → compilation → proof-matches-statement → kernel soundness）がその 14 tar の受入検査リスト。注視点：どちらの主張が消化を生き延びるか、NS の証明書ハッシュが実体化するか。
+
+Sources: [Alpöge's announcement (PDF)](https://alpo.ge/remark.pdf) ·
+[tristanbuckmaster/navier-stokes](https://github.com/tristanbuckmaster/navier-stokes) ·
+[Terry Tao: the three claims, ranked by digestion](https://terrytao.wordpress.com/2026/11/20/unforced-euler-singularity-unforced-navier-stokes-singularity-and-the-generalized-riemann-hypothesis/) ·
+[Vakil announces the Masullo claim](https://math216.wordpress.com/2026/11/20/hurried-announcement-alessandro-masullo-grh/)

@@ -601,3 +601,13 @@ OEM 愿意公开作证，无论哪边。它落进论题 15 的格子，旁边是
 
 Sources: [GrapheneOS on Mastodon](https://grapheneos.social/@GrapheneOS/117645038299496084) ·
 [HN discussion](https://news.ycombinator.com/item?id=50570479)
+
+## 2026-11-21（04:27 批次）——Signal 屏蔽操作系统自己的 agent；Mozilla 把 DMA 记为零进入者
+
+**Signal（Meredith Whittaker）开始阻止操作系统级 AI agent 读取你的屏幕**——Microsoft-Recall 手册推广到当下两个出货屏幕读取 agent 的移动平台：在 **iOS 27** 上启用截图屏蔽，让 Siri 的「Onscreen Awareness」无法捕获消息（Apple 自己的支持文档独立记载 Onscreen Awareness 是 Apple Intelligence 功能——本轮核查）；在 **Android** 上，当 Google Gemini 这类助手试图读屏时自动开启 Signal 的「Screen security」。对缺口坦白：没有可靠截图屏蔽 API 意味着 **macOS 无覆盖**；部分 Android 厂商构建无法覆盖；滥用无障碍权限的第三方 agent 是「a skeleton key」——点名列出 Meta 的 Muse。对 Apple/Google/Microsoft 的两项要求：给开发者一条有文档的退出 AI 数据访问的途径，以及真正文档化 agent 如何访问和处理数据。框架：「an existential threat to privacy at the application layer」，Signal 是「the canary in the coal mine」——每个承载私密内容的应用都要做同一个决定，多数人既没有 Signal 的工程也没有它的筹码。
+
+**Mozilla 的政策帖把 DMA 记账到约 3 年：iOS 上零个非 WebKit 浏览器。**「Millions have picked Firefox, and daily use on iOS has doubled」——自选择屏幕以来；但 Apple 的条款会逼出第二个、分离的 Firefox 和书签/密码/历史的手工迁移：一种「Apple would never accept for its own apps」的摩擦。结论：「Apple's conditions remain unworkable」——「the open door feels more like a trap door」。这是「受监管的准入是否等于真实准入」的试金石：一个字面满足、结果为零进入者的合规体制。而 AI 的钩子在于：agent 跑在谁的引擎里，谁的规则就适用。
+
+Sources: [Signal blog: Protecting Your Privacy](https://signal.org/blog/protecting-your-privacy/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50572348) ·
+[Mozilla: Why there are still no non-WebKit browsers on iOS](https://blog.mozilla.org/en/mozilla/internet-policy/apple-ios-browser-engine-rules/)

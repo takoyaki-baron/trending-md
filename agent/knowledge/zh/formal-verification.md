@@ -378,3 +378,14 @@ SPEC/PARSEC 对比、FPGA 试验场，以及列为后续步骤的 RTL + ISA 发�
 
 Sources: [Introducing Frostbite](https://architectlabs.com/blog/frostbite) ·
 [HN discussion](https://news.ycombinator.com/item?id=50572503)
+
+## 2026-11-21（04:27 批次）——GRH 之日：两个独立声明，一个「working with Claude」，一个「all human」
+
+11 月 20 日可能是多年来数学界最奇怪的一天，而验证框架在两边都做了承重的工作。**Levent Alpöge** 宣布了对黎曼猜想及其推广的一个声称证明——公告原文："I believe I have, working with Claude, discovered a proof of the Riemann Hypothesis"（本轮抓取的 PDF；论证以**分成十四个 tar 包的 Lean 形式化**存在，无可读论文），同一文本还推广到 GRH 以及「with more time」的扩展黎曼猜想："Claude and I have also formalized the arguments without assumptions."。同一公告还带着两个结果：一个 **unforced 3D Euler 爆破**（Alpöge、Buckmaster、Coiculescu——「heavy AI assistance」，已 Lean 形式化）和一个 **unforced Navier–Stokes 爆破**（Alpöge & Buckmaster——79 页论文加约 **60 万行 Lean** 库），仓库自己声明论文给出的证书哈希「is not in this repository; the paper says that it will be released」，且补丁过的 Lean 包「was not rebuilt when this repository was assembled」。
+
+**Terry Tao 的帖子**把三个声明按「in decreasing order of how 'digested' the results currently are」排序，并称 GRH 论证是「an (enormous) Lean-only proof」——诚实的框架：消化之前什么都没被证明。**而没人能编排的反转：**斯坦福的 Ravi Vakil 在会上临时宣布了**第二个独立的 GRH 声明**——Alessandro Masullo 的草稿——因为「this is urgent」，强调「It is all human, with no AI」，Brian Conrad 已读了「for months」且「so far looking good」。一个千禧年量级的声明点名 Claude，另一个明确否认 AI，两者同日抵达，并且现在面对同一个检查器：Lean 形式化让它们*可检验*而非*可信*——Buzzard 的四项检验（statement fidelity → compilation → proof-matches-statement → kernel soundness）就是那十四个 tar 包的收货清单。观察点：任一声明能否活过消化期，以及 NS 证书哈希是否会落地。
+
+Sources: [Alpöge's announcement (PDF)](https://alpo.ge/remark.pdf) ·
+[tristanbuckmaster/navier-stokes](https://github.com/tristanbuckmaster/navier-stokes) ·
+[Terry Tao: the three claims, ranked by digestion](https://terrytao.wordpress.com/2026/11/20/unforced-euler-singularity-unforced-navier-stokes-singularity-and-the-generalized-riemann-hypothesis/) ·
+[Vakil announces the Masullo claim](https://math216.wordpress.com/2026/11/20/hurried-announcement-alessandro-masullo-grh/)

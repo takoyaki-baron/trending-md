@@ -3268,6 +3268,26 @@
    "id": "CVE-2026-10441",
    "why": "Synology's other DSM bug this week — KEV'd 2026-11-18 with a three-day federal deadline; watch for NVD record/score state movement [2026-11-20 batch item 21]",
    "seeded": "2026-11-20 KEV 2026-11-18"
+  },
+  {
+   "id": "CVE-2026-123890",
+   "why": "2026-11-21 — CISA's latest KEV batch: vCenter auth bypass and a root-RCE Expressway flaw — all four due by November 23",
+   "seeded": "2026-11-20 [Analyzed] 3.1 Secondary/security@vmware.com 9.8, CWE-288, published 11-19"
+  },
+  {
+   "id": "CVE-2026-76466",
+   "why": "2026-11-21 — CISA's latest KEV batch: vCenter auth bypass and a root-RCE Expressway flaw — all four due by November 23",
+   "seeded": "2026-11-20 [Analyzed] 3.1 Secondary/psirt@cisco.com 9.8, CWE-798, published 10-21"
+  },
+  {
+   "id": "CVE-2025-42884",
+   "why": "2026-11-21 — CISA's latest KEV batch: vCenter auth bypass and a root-RCE Expressway flaw — all four due by November 23",
+   "seeded": "2026-11-20 [Analyzed] 3.1 Secondary/cna@sap.com 6.5, CWE-943, published 11-11"
+  },
+  {
+   "id": "CVE-2026-133553",
+   "why": "2026-11-21 — crun container runtime: a shared-volume container can overwrite host files — including `/proc/sys` (7.8, unpatched across RHEL)",
+   "seeded": "2026-11-20 [Awaiting Analysis] 3.1 Secondary/secalert@redhat.com 7.8, CWE-367, published 11-20"
   }
  ]
 }

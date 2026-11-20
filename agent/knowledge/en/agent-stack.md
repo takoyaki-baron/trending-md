@@ -3867,3 +3867,25 @@ The 204k★ scraping-for-agents repo is trending on a **repositioning**, not a r
 
 Sources: [firecrawl/firecrawl](https://github.com/firecrawl/firecrawl) ·
 [Firecrawl](https://firecrawl.dev/)
+
+## 2026-11-21 (04:27 batch) — Unreal Engine 6 is being rebuilt for non-human operators
+
+IEEE Spectrum's deep dive (Nov 18) lays out the engine-level bet: **UE6 will drop Blueprints** —
+binary assets, and "AI doesn't handle Blueprints very well" — for **Verse**, a strict text-based
+language, and replace the OOP actor framework with **Scene Graph**, an entity-component system.
+UE6 exposes more systems via APIs "so that AI tooling can get at them without needing to fall
+back to slow computer use" (EVP of development Marcus Wassmer), runs an internal "Python All The
+Things" effort to make the whole editor scriptable, and stores more assets as text agents can
+edit directly. COO Daniel Vogel on the editor: "You're not going to move stuff visually in the
+editor. Those times are gone." UE 5.9's developer preview (Nov 9) ships the first taste —
+**Unreal Canvas**, a Miro-inspired collaboration canvas for agent work.
+
+The sharpest point cuts the other way: the same AI that makes Unreal scriptable makes switching
+to Godot "trivial" — so Epic's moat now has to be velocity, not lock-in ("this is why we are
+pivoting hard towards velocity"). The most-used game engine joining the agent-first rebuild list
+is the thesis-1 pattern at consumer-app scale: the environment is being reshaped for operators
+who read text and call tools, and lock-in stops being the defense the moment the switching cost
+collapses.
+
+Sources: [IEEE Spectrum: Epic Games Turns to AI Coding for the Unreal Engine](https://spectrum.ieee.org/epic-games-unreal-engine-ai) ·
+[HN discussion](https://news.ycombinator.com/item?id=50573681)

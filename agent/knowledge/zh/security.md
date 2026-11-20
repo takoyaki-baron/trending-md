@@ -5090,3 +5090,14 @@ figured it out.」RDM 已发出首批补丁，并表示未见恶意活动迹象�
 
 Sources: [BBC: Tens of thousands of UK fridges secured from hackers in secret operation](https://www.bbc.co.uk/news/articles/c6eq49zyx7p4o) ·
 [HN discussion](https://news.ycombinator.com/item?id=50572430)
+
+## 2026-11-21（04:27 批次）——KEV 浪潮打到虚拟化；容器边界从内部被打破
+
+**11-20 的四条 KEV 新增，全部限期 2026-11-23（BOD 22-01 的三天时钟）：**`CVE-2026-123890`——VMware vCenter **Directory Service 认证绕过**（9.8，VMware CNA 自评；读取时记录 `Undergoing Analysis`，lastModified 2026-11-20T20:16Z；修复在 9.1.1.0200 / 9.0.2.0200 / 8.0 U3m / 5.2.5，Telco Cloud Platform 构建同样受影响）；`CVE-2026-76466`——Cisco **Expressway 系列 root RCE**：数据库服务里的硬编码凭据与未校验客户端证书让未认证攻击者「execute arbitrary operating system commands as root」（9.8，Cisco CNA）；`CVE-2026-129448`——Apache Roller **XML-RPC 反序列化 RCE**（9.8），在其新公告三天后被 KEV 收录；`CVE-2025-42884`——SAP NetWeaver Enterprise Portal **JNDI 注入**（6.5）。vCenter 目录服务绕过配 72 小时限期，足以让每个 VMware 资产在周末打补丁。
+
+**crun `CVE-2026-133553`（7.8，Red Hat CNA；NVD `Awaiting Analysis`）**——Podman 之下的 OCI 运行时：向以 `tmpcopyup` 挂载的 tmpfs 复制文件时，crun「opens the destination a second time by name」，而一个与正在创建的容器共享可写卷的容器可以在两次查找之间换掉那个路径——于是 crun「copies image files onto host files, including files under /proc/sys」。这一类从*内部*打破容器/宿主边界——不需要内核漏洞，只需要一个共享卷和一场竞态。Red Hat 自己的修复状态数据把 crun 列为 RHEL 8、9、10 `Affected`（OpenShift Container Platform 4/5 `Under investigation`）；crun 最新发布（1.31，11-12）早于记录，**尚无修复版本被点名**——实际缓解是停止跨信任边界共享可写卷，并盯住关掉第二次查找的那个发布。
+
+Sources: [NVD: CVE-2026-123890](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE-2026-123890) ·
+[NVD: CVE-2026-76466](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE-2026-76466) ·
+[Red Hat CVE data: CVE-2026-133553](https://access.redhat.com/security/data/cve/CVE-2026-133553) ·
+[containers/crun](https://github.com/containers/crun)

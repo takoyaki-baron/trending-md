@@ -656,3 +656,13 @@ GrapheneOS or even bootloader unlocking. They're also trying to harm GrapheneOS 
 
 Sources: [GrapheneOS on Mastodon](https://grapheneos.social/@GrapheneOS/117645038299496084) ·
 [HN discussion](https://news.ycombinator.com/item?id=50570479)
+
+## 2026-11-21（04:27 バッチ）——Signal が OS 自身のエージェントを遮断。Mozilla は DMA をゼロ参入と集計
+
+**Signal（Meredith Whittaker）が OS レベルの AI エージェントに画面を読まれる遮断を開始**——Microsoft-Recall のプレイブックを、画面読み取りエージェントを出荷した 2 つのモバイルプラットフォームに拡張：**iOS 27** ではスクリーンショット遮断を有効化し、Siri の「Onscreen Awareness」にメッセージを捕捉させない（Apple 自身のサポート文書が Onscreen Awareness を Apple Intelligence 機能として独立に記載——今回確認）；**Android** では Google Gemini のようなアシスタントが画面を読もうとした時、Signal の「Screen security」を自動的に有効化。穴については率直：信頼できるスクリーンショット遮断 API がないため **macOS は未対応**；一部の Android ベンダービルドはカバー不能；アクセシビリティ権限を乱用するサードパーティエージェントは「a skeleton key」——Meta の Muse を名指し。Apple・Google・Microsoft への 2 つの要求：AI データアクセスからの開発者のオプトアウトを文書化すること、エージェントがどうデータにアクセスし処理するかを本当に文書化すること。枠組み：「an existential threat to privacy at the application layer」、Signal は「the canary in the coal mine」——私密を扱うすべてのアプリが同じ決定に直面し、ほとんどは Signal の技術も力学も持たない。
+
+**Mozilla のポリシー投稿は DMA を約 3 年で集計：iOS 上の非 WebKit ブラウザはゼロ。**「Millions have picked Firefox, and daily use on iOS has doubled」——選択画面以降。しかし Apple の条件は 2 つ目の分離した Firefox とブックマーク・パスワード・履歴の手動移行を強いる：「Apple would never accept for its own apps」という摩擦。結論：「Apple's conditions remain unworkable」——「the open door feels more like a trap door」。規制されたアクセスが本物のアクセスかを試すケース：字面は満たされ、結果がゼロ参入の compliance レジーム。そして AI のフック：エージェントがどのエンジンで走るかが、どのルールが適用されるかを決める。
+
+Sources: [Signal blog: Protecting Your Privacy](https://signal.org/blog/protecting-your-privacy/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50572348) ·
+[Mozilla: Why there are still no non-WebKit browsers on iOS](https://blog.mozilla.org/en/mozilla/internet-policy/apple-ios-browser-engine-rules/)

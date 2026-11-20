@@ -559,3 +559,29 @@ institutions that made it rare are the ones handing out the reassurance.
 
 Sources: [I can tell you wrote this yourself](https://em-online.bearblog.dev/i-can-tell-you-wrote-this-yourself/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50571189)
+
+## 2026-11-21 (04:27 batch) — the reviewers are losing the reviewing skill; Google's workers petition over the schools policy
+
+**"If you stop writing code, you also get worse at reviewing it"** (Christian Ekrem, 277 pts)
+makes the obvious-once-said point: every other discipline assumes skills decay without practice,
+yet engineers have talked themselves into believing that reviewing agent output all day keeps
+them sharp. The argument: reviewing is not practicing — "you're not really reading half of it,
+are you" — and the deeper cost is that heavy LLM reliance trains avoidance of effort itself:
+"Repeated LLM usage for problem solving pounds the following premise into our brain's wiring: If
+something is hard, tricky or requires effort, you shouldn't even try" (the premise criticized,
+not endorsed). It lands the same week as the Harvard firm-level study's +76% LOC vs +9–11% final
+output with review as the bottleneck — the essay names the mechanism that produces that gap.
+
+**Google workers petition leadership: don't cut schools off from Search for declining Gemini.**
+Following the 11-14 coverage of Google's "AI or nothing" schools policy (schools that disable
+Gemini/AI Overviews lose Search), hundreds of Alphabet Workers Union members are petitioning
+senior leadership to retract it — the policy landed on Election Day; Mother Jones reports
+communities rallying against it and quotes a Google staffer on the executive view: they're
+"convinced that resistance to AI" just means schools "don't see the vision." Two 2026 dynamics
+in one frame: AI distribution bundled with irreplaceable infrastructure, and the workforce acting
+as the oversight mechanism regulators haven't managed to be. Where the bundle lands next (more
+states? courts?) decides template vs edge case.
+
+Sources: [If you stop writing code, you also get worse at reviewing it](https://cekrem.github.io/posts/if-you-stop-writing-code-you-also-get-worse-at-reviewing-it) ·
+[HN discussion](https://news.ycombinator.com/item?id=50573886) ·
+[Mother Jones: Google Workers Tell Their Employer Not to Punish Schools](https://www.motherjones.com/politics/2026/11/google-alphabet-union-school-ai-protest-gemini-workers-petition/)

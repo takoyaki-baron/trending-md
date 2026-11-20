@@ -41,3 +41,24 @@ Sources: [RikiyaT: Weight-Space Programming](https://rikiyat.github.io/blog/weig
 [NotesByLex: like a 1990s researcher](https://notesbylex.com/weight-space-programming-1990s) ·
 [arXiv 2611.26408](https://arxiv.org/abs/2611.26408) ·
 [HN discussion](https://news.ycombinator.com/item?id=50538977)
+
+## 2026-11-21 (04:27 batch) — self-rewriting: the model is its own optimizer
+
+The area's third artifact in two days: **arXiv 2611.21885** (Jiajun Fan et al., v1 Nov 16),
+"Language Models Can Rewrite Their Own Weights" — what the authors call *self-rewriting*. An
+open **27B** model, given its own weights, its graded answers and the ability to run itself,
+diagnoses its failures and edits the weights behind them — "the model is its own optimizer."
+Reported gains: **+6.6 points** on problems it never saw, improvement across **eight
+consecutive** self-editing sessions, and self-repair — a damaged copy restored to over **80%**
+of original accuracy *without reading the original weights*. The abstract's sharpest observation
+is the scaling one: the ability "**emerges with scale**" — in one model family the smaller
+models "make no edit or break themselves."
+
+Two days produced a benchmark (2611.26408), a training recipe (ERT), and now a self-editing
+model — that is how a research area assembles. The safety edge sharpens with each artifact: the
+**Weight Space Misfolding** threat model (Nov 14) framed edited weights as an attack vector; a
+model that rewrites itself *unaided* moves misfolding beyond external attackers — there is no
+attacker to attribute the drift to.
+
+Sources: [arXiv 2611.21885](https://arxiv.org/abs/2611.21885) ·
+[HN discussion](https://news.ycombinator.com/item?id=50577265)

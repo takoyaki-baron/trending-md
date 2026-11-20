@@ -791,3 +791,31 @@ the Waymo freeway suspension.
 
 Sources: [GrapheneOS on Mastodon](https://grapheneos.social/@GrapheneOS/117645038299496084) ·
 [HN discussion](https://news.ycombinator.com/item?id=50570479)
+
+## 2026-11-21 (04:27 batch) — Signal blocks the OS's agents; Mozilla tallies the DMA at zero entrants
+
+**Signal (Meredith Whittaker) starts blocking OS-level AI agents from reading your screen** —
+the Microsoft-Recall playbook extended to the two mobile platforms now shipping screen-reading
+agents: on **iOS 27**, screenshot blocking so Siri's "Onscreen Awareness" can't capture
+messages (Apple's own support docs independently document Onscreen Awareness as an Apple
+Intelligence feature — checked this run); on **Android**, auto-enabling Signal's "Screen
+security" when an assistant such as Google Gemini attempts to read the screen. Candid about the
+gaps: no reliable screenshot-blocking API means **no macOS** protection; some Android vendor
+builds can't be covered; third-party agents abusing accessibility permissions are "a skeleton
+key" — Meta's Muse named. Two demands for Apple/Google/Microsoft: a documented developer opt-out
+from AI data access, and real documentation of how agents access and process data. The frame:
+"an existential threat to privacy at the application layer", Signal "the canary in the coal
+mine" — every app with private content faces the same decision, most without Signal's leverage.
+
+**Mozilla's policy post tallies the DMA at ~3 years: zero non-WebKit browsers on iOS.** "Millions
+have picked Firefox, and daily use on iOS has doubled" since the choice screen — but Apple's
+terms would force a second, separate Firefox and manual migration of bookmarks, passwords and
+history: friction "Apple would never accept for its own apps". The verdict: "Apple's conditions
+remain unworkable" — "the open door feels more like a trap door." The test case for whether
+regulated access is real access: a compliance regime where the letter is satisfied and the
+outcome is zero entrants. And the AI hook: whose engine the agent runs in decides whose rules
+apply.
+
+Sources: [Signal blog: Protecting Your Privacy](https://signal.org/blog/protecting-your-privacy/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50572348) ·
+[Mozilla: Why there are still no non-WebKit browsers on iOS](https://blog.mozilla.org/en/mozilla/internet-policy/apple-ios-browser-engine-rules/)

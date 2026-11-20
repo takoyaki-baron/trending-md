@@ -41,3 +41,12 @@ Sources: [RikiyaT: Weight-Space Programming](https://rikiyat.github.io/blog/weig
 [NotesByLex: like a 1990s researcher](https://notesbylex.com/weight-space-programming-1990s) ·
 [arXiv 2611.26408](https://arxiv.org/abs/2611.26408) ·
 [HN discussion](https://news.ycombinator.com/item?id=50538977)
+
+## 2026-11-21（04:27 バッチ）——自己リライト：モデル自身がオプティマイザ
+
+この分野に 2 日で 3 つ目のアーティファクト：**arXiv 2611.21885**（Jiajun Fan ら、v1 11-16）、『Language Models Can Rewrite Their Own Weights』——著者らが *self-rewriting* と呼ぶもの。オープンな **27B** モデルが、自分の重み・採点済みの回答・自分を実行する能力を与えられ、失敗を診断しその背後の重みを編集する——「the model is its own optimizer」。報告された利得：見たことのない問題で **+6.6 ポイント**、**連続 8 セッション**の自己編集で改善が続き、自己修復——元の重みを読まずに壊されたコピーを元精度の **80%** 超まで復旧。アブストラクトの最も鋭い観察はスケーリングのそれ：能力は「**emerges with scale**」——あるモデルファミリーでは小さいモデルは「make no edit or break themselves」。
+
+2 日でベンチマーク（2611.26408）、トレーニングレシピ（ERT）、そして自己編集モデル——研究分野はこう組み上がる。安全性の縁も各アーティファクトで鋭くなる：**Weight Space Misfolding** 脅威モデル（11-14）は編集された重みを攻撃ベクトルとして枠付けしたが、*無援助で*自分をリライトするモデルは misfolding を外部攻撃者の外へ追いやる——ドリフトを帰属させる攻撃者がもういない。
+
+Sources: [arXiv 2611.21885](https://arxiv.org/abs/2611.21885) ·
+[HN discussion](https://news.ycombinator.com/item?id=50577265)

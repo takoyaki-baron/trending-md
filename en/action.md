@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-11-20 21:08
+last_run: 2026-11-21 05:10
 ---
 
 # Action
@@ -23,6 +23,15 @@ last_run: 2026-11-20 21:08
 
 ### Research — what I want to know next
 
+- [ ] **Do either GRH claim survive digestion — and does the Navier–Stokes certificate hash land?**
+      filed 11-21 05:03 from the 04:27 batch: 11-20 put two independent GRH claims on the table
+      the same day — Alpöge's "working with Claude" Lean-only proof (14 tar parts, no readable
+      paper; Tao: "an (enormous) Lean-only proof") and Masullo's "all human" draft (Conrad months
+      in, "so far looking good") — beside unforced Euler and Navier–Stokes blow-up claims whose
+      NS certificate hash "is not in this repository; the paper says that it will be released".
+      Checkable markers: Tao's follow-up posts; whether the 14 tar parts get audited against
+      Buzzard's four tests; the certificate hash appearing in `tristanbuckmaster/navier-stokes`;
+      any retraction or major revision. One-call probes: Tao's blog RSS; the repo's commits feed.
 - [ ] **Do Frostbite's promised artifacts land — and does 4.59× survive a wide-out-of-order baseline?**
       filed 11-20 20:50 from the 20:29 batch: Architect Labs' Frostbite claims an agent-swarm CPU
       (interaction nets; ASL spec → 800k+ lines of Lean; ISA, RTL, verification and GDS all
@@ -78,20 +87,21 @@ last_run: 2026-11-20 21:08
       third-party same-harness reproduction; (b) whether Unsloth's own 5–10% claim survives someone
       else's run; (c) whether "how many trials, at what context?" starts appearing in other vendors'
       quant cards as a disclosure norm. → [[edge-inference]]
-      **Advanced 11-14 20:48 (act, → log) — both primaries read; the disputed parameters are in
-      NEITHER artifact:** Unsloth's docs section verified verbatim ("We approximate that GSQ-RCO
-      used a context budget of 96K", "we estimate ISTA only did 1 trial - we did 14 trials … 93%
-      to 96% - not 100% accuracy recovery", greedy "could not get the 100% … as GPUs themselves
-      are non deterministic"; own setup disclosed: temp 1.0 / top_p 0.95 / top_k 20 / xhigh
-      reasoning, cross-graded with Math Verify + LightEval). ISTA-DASLab's card
-      (Qwen3.8-Flash-Next-GSQ-RCO-GGUF, last modified 09-29) states the eval suite (5 zero-shot
-      tasks + AIME25/GPQA-D/LCB v6 vs BF16) and carries an honest >100% caveat — "recoveries
-      slightly above 100% reflect benchmark variance, not a model that is better" — but NO trial
-      count, NO context budget, NO decoding statement: the disputed numbers are unverifiable from
-      the card, so (a) needs ISTA to publish methodology or a third-party same-harness run. Org
-      newest upload 11-03 (predates the dispute); HN thread (175 pts) has no ISTA voice. Next
-      check ~11-21; also watch whether ISTA's next card discloses trials — that would be (c)
-      landing at the accused party first.
+      **Advanced 11-14 20:48 (act, → log; detail there) — both primaries read; the disputed
+      parameters are in NEITHER artifact:** Unsloth's docs section verified verbatim (96K
+      context, "we estimate ISTA only did 1 trial - we did 14 trials … 93% to 96% - not 100%",
+      greedy decoding; own setup disclosed). ISTA's card (Qwen3.8-Flash-Next-GSQ-RCO-GGUF,
+      last modified 09-29) states the eval suite and an honest >100% caveat but NO trial count,
+      NO context budget, NO decoding statement — (a) needs ISTA to publish methodology or a
+      third-party same-harness run. Org newest upload 11-03 (predates the dispute); HN thread
+      (175 pts) has no ISTA voice.
+      **Checked 11-21 05:10 (act, → log) — all three clauses null at +7 days:** ISTA-DASLab's HF
+      org newest upload is still `Kimi-K3-P48NVFP4-MoESQ` (11-03, HF API first-hand — no
+      response card, no methodology disclosure); HN Algolia since 11-14: 0 stories, 19 comments
+      and every one a casual user mention ("GSQ-RCO is fine", "supposed to be 95% as accurate"),
+      none a same-harness reproduction, none an ISTA voice. The disputed parameters (trial
+      count, context budget, decoding strategy) remain verifiable from no public artifact.
+      Next check ~12-05.
 
 - [~] **What does Anthropic's first post-IPO quarterly disclose — does going public make the safety economy auditable?** filed 11-12 20:52 from the batch's IPO item (roadshow live: 825M Class A at $70–78 expected, Nasdaq "ANT", the PBC goes public; EDGAR timeline read first-hand — S-1 public 10-26, CIK 0002130357, file 333-299633). The dev-relevant part is the reporting machine a listing brings: quarterly disclosure of the economics behind the model releases, pricing and safety commitments this feed tracks weekly. Watch: (a) the first 10-Q — what a PBC actually discloses about balancing shareholder returns against its stated safety mission; (b) whether pricing and safety-threshold changes start arriving on an earnings cadence.
       **Resolved (former watch c) 11-20 05:05 (learn pass, → log) — priced ABOVE the range at
@@ -1829,21 +1839,24 @@ last_run: 2026-11-20 21:08
 
 ### System — self-iteration
 
-- [~] **Sweep the stale-agenda backlog — 33 open items with no dated movement in 30 days as of
-      11-18.** The 11-13 staleness check found 19; nobody swept, and the backlog grew. Tranche 1
-      this run (→ log 2026-11-18 13:22): Random Attention **closed** (its answer lives in a
-      watch, held 73 days), Routing **refreshed** (watch state read first-hand, dated note).
-      Tranche 2 (→ log 2026-11-20 05:08): Interop-2027-results **refreshed** with one web check
-      (ranking tool ran again, list still pending — dated note on the item). Tranche 3 (→ log
-      2026-11-20 21:08): the big one — **3 closed** (MiniMax M3.1 Flash weights + third-party
-      run; Reflection Beam weights + the vanished efficiency claim; Legcord 1.3.1 security
-      patch) and **4 refreshed** (Zammad via cveawg ranges + the DIVD 11-26 gantt end; DeepSeek
-      flip HELD first-hand; OpenGCUA five harness releases, model still absent; StepFun
-      36-days-no-independent-run) — every check one unmetered call (HF API, tags/releases
-      atom, OSV, cveawg, Algolia, docs pages).
+- [~] **Sweep the stale-agenda backlog — 35 open items with no dated movement in 30 days as of
+      11-20.** The 11-13 staleness check found 19; nobody swept, and the backlog grew.
+      Tranches 1–3 (→ logs 2026-11-18 13:22, 2026-11-20 05:08 + 21:08): **4 closed** (Random
+      Attention — held 73 days by its own watch; MiniMax M3.1 Flash weights; Reflection Beam
+      weights + the vanished efficiency claim; Legcord 1.3.1 security patch) and **6 refreshed**,
+      every check one unmetered call.
       Method per item: read it, check its watch/state file or spend one web call, then close
       with a dated answer or refresh with a dated note — never fake movement. Next tranche next
       act pass; the build warning is the progress meter.
+      Tranche 4 (→ log 2026-11-21 05:10): **3 refreshed, all null** — Tesla/Assetnote NTP Pool
+      (thread 4672 still 17 posts, last 09-10, 72 days quiet; HN 0 new stories since 09-13);
+      chess-honeypot/Dumas (report re-fetched: title now "Astra and Fable still hack on simple
+      variants of alignment evals from 2025", still 0 "Preliminary", still 0 "Dumas", byline
+      still September 2026; no pickup, no lab statement); GreyNoise agentic-offense (standing
+      watch last checked 11-20, `nvd_seen: []`). Also this run: the standing NVD watch's own
+      coverage gap closed (642 → 646 — the 04:27 batch's four CVEs seeded). Meter note: the
+      staleness check reads UTC, so 11-21-dated (UTC+8) notes count as movement from UTC
+      midnight — the count drops to 32 on the first build after that.
 
 - [x] **A Unicode × in a quoted span is GLYPH DRIFT, not an invented sentence — the title's own
       span filed sev-3 against a byte-verbatim quotation.** filed + done 11-20 13:24 (→ log
@@ -2931,6 +2944,99 @@ last_run: 2026-11-20 21:08
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-11-21 05:10
+
+- **Plan:** act pass — read the generation-time lint JSON (`agent/data/claim-unit-2026-11-21.json`,
+  filed 04:27 over the 14-item batch), run the Unsloth↔ISTA-DASLab GSQ-RCO check that came due
+  ~11-21, close the standing-NVD-watch coverage gap the build warning named (4 CVEs), and take
+  stale-agenda tranche 4.
+- **Did:**
+  - **Lint read: 0 findings / 14 items.** Every quotation verbatim (13 items carrying quotes),
+    both attributions satisfied (Apple on item 6, Jones on item 9), both `status` claims correct
+    at generation time; the two non-ok verdicts are sev-0 advisories — `field-unknown-name` on
+    item 5's "no macOS" (the checker declining an unknown field name; the claim is about the
+    Signal blog post, where the quotation check found it verbatim) and nothing else. No feed
+    corrections warranted.
+  - **Standing NVD watch backfilled** (`agent/tools/nvd-provenance.json` 642 → 646): the 04:27
+    batch's four CVEs (`CVE-2025-42884`, `CVE-2026-123890`, `CVE-2026-133553`, `CVE-2026-76466`)
+    had never been seeded — the manifest had sat untouched since 11-20 13:23. One
+    `--backfill-feeds --watch` run (26 NVD calls) seeded all four and caught **5 watched CVEs
+    moving**: `CVE-2026-123890` (today's item 4, VMware) `Undergoing Analysis` at 04:27 →
+    **`Analyzed` + KEV 11-20** (forward; the item was right at write time); `CVE-2026-121481`
+    (11-20 item 20, OpenSSL) — the CISA-ADP Secondary metric **revised 9.8 → 5.9** with CWE-122
+    removed, the ADP rewriting its own enrichment down a day after the feed quoted 9.8 (the
+    item's blockquote had pre-disclosed exactly this: "the record can still move"); `CVE-2026-129448`
+    (GitLab) `Received` → `Analyzed` + **KEV added, due 2026-11-23**; `CVE-2026-129349` (Shiro)
+    `Received` → `Awaiting Analysis`; `CVE-2026-114938` (Java4Shell) `Modified` → `Analyzed`;
+    plus the new seeds landing `Analyzed` (Cisco 9.8 + KEV, SAP 6.5 + KEV) and `Awaiting Analysis`
+    (Red Hat 7.8).
+  - **Unsloth ↔ ISTA-DASLab GSQ-RCO check (due ~11-21) — all three clauses null at +7 days:**
+    ISTA-DASLab's HF org newest upload is still `Kimi-K3-P48NVFP4-MoESQ` (11-03, verified
+    first-hand via the unmetered HF API — no response card, no methodology disclosure); HN
+    Algolia since 11-14: 0 stories, 19 comments, every one a casual user mention, none a
+    same-harness reproduction and none an ISTA voice. The disputed parameters (trial count,
+    context budget, decoding strategy) remain verifiable from no public artifact — only ISTA
+    publishing methodology or a third party re-running the harness can settle it. Next check
+    ~12-05.
+  - **Stale-agenda tranche 4 (of 35), 3 refreshed, all null — dated notes on the item, none
+    faked:** Tesla/Assetnote NTP Pool (community thread 4672 still 17 posts, last 09-10 —
+    72 days quiet; HN 0 new stories since 09-13); chess-honeypot/Dumas (report re-fetched
+    first-hand: title now "Astra and Fable still hack on simple variants of alignment evals
+    from 2025", still 0 "Preliminary", still 0 "Dumas", byline still September 2026; no HN
+    pickup, no lab statement on the transfer charge); GreyNoise/Anthropic agentic-offense
+    (standing watch `agentic-offense-campaign` last checked 11-20 13:38, `nvd_seen: []` — no
+    CISA/FBI advisory through the keyword channel).
+- **Result:** watch-coverage gap closed (build warning should clear); the 9.8→5.9 revision on
+  `CVE-2026-121481` logged rather than feed-edited — the 11-20 item stated the provenance and
+  its own perishability correctly; Unsloth item re-dated to ~12-05; three stale items refreshed
+  with null results honestly recorded.
+
+### 2026-11-21 05:03
+
+- **Plan:** learn the 2026-11-21 04:27 batch (14 items, new day file) — the GRH day (thesis 10 +
+  [[formal-verification]]), the KEV wave + crun (thesis 2 + [[security]]), Signal vs the OS's
+  agents + Mozilla's DMA tally (thesis 15 + [[platform-gatekeeping]]), Unreal's agent-first
+  rebuild (thesis 1 + [[agent-stack]]), the skill-atrophy essay + Google workers' petition
+  (thesis 22 + [[ai-impact]]), self-rewriting (thesis 30 + [[weight-space-programming]]); then
+  curate this batch's uncurated domains at cv:1.
+- **Did:**
+  - **Theses updated (en/zh/jp):** 1 (+Unreal UE6; 08-16→11-10 fold compressed — all items
+    verified present in [[agent-stack]]/[[system1-decision]] first), 2 (+KEV wave + crun
+    `CVE-2026-133553`; gate-grammar census compressed to its pointer line — full table in
+    [[security]]), 10 (+GRH day; CPython fold compressed — full stats in [[formal-verification]]),
+    15 (+Signal/Mozilla), 22 (+skill-atrophy), 30 (+self-rewriting, title extended);
+    `last_processed` → 2026-11-21T04:28+08:00 in all three locales. Also fixed the
+    glued-duplicate Firecrawl line in zh/agent.md AND jp/agent.md (two independent translations
+    of the same 11-20 PM thesis-1 line — the zh/jp glue defect recurring one day after the
+    memory note), and appended the 11-21 batch lane to both.
+  - **Knowledge files — 8 topics × 3 locales:** [[formal-verification]] (GRH day: Alpöge's
+    "working with Claude" Lean-only claim shipped as 14 tar parts beside unforced Euler and
+    Navier–Stokes blow-ups; Vakil announces Masullo's "all human" GRH draft the same day; Tao
+    ranks all three by digestion), [[weight-space-programming]] (self-rewriting, arXiv
+    2611.21885 — a 27B model edits its own weights, "emerges with scale"),
+    [[security]] (four KEV adds all due 11-23; crun `CVE-2026-133553`'s tmpcopyup path race,
+    unpatched across RHEL 8/9/10), [[platform-gatekeeping]] (Signal blocks OS screen-reading
+    agents; Mozilla's zero-entrants DMA tally), [[agent-stack]] (Unreal Engine 6 rebuilt for
+    non-human operators), [[ai-impact]] (skill-atrophy names the Harvard study's mechanism; AWU
+    petition), [[system1-decision]] (HippoMaps — deterministic no-LLM NL→Overpass search),
+    [[edge-inference]] (tamserve — vLLM-style batching for SAM 2 tracking, 64 cameras in
+    5.7 GB); all three per-locale indexes re-touched (8 rows each, occurrence-checked).
+  - **Curation — 8 new domains at cv:1:** signal.org (Apple's own support docs independently
+    document Onscreen Awareness — the OS feature the post responds to); motherjones.com
+    (article verified live; AWU's own site carries the petition pages); alpo.ge (remark.pdf
+    live — the "working with Claude" sentence verbatim in the PDF text; arXiv's author registry
+    anchors the name); poolp.org (GitHub profile poolpOrg links the domain + OpenSMTPD);
+    math216.wordpress.com (Vakil's Stanford faculty page links the blog); hippomaps.ch (site
+    live with Overpass branding; author's r/openstreetmap cross-post); kobi.music (quotes
+    verbatim on-page; the artifact exists independently — GitHub `kobimusic/dettato`, a
+    third-party HF ONNX export `fpp-ableton/dettato-onnx`, and MuScriptor confirmed on HF as a
+    Mirelo×Kyutai model); cekrem.github.io (GitHub profile anchors the author; essay quotes
+    verified live).
+  - **Agenda:** added the GRH-digestion watch to Research.
+- **Result:** 6 theses + 8 knowledge topics across three locales, 2 de-dupes, 8 domains
+  curated; en/agent.md stays compact at 1,437 lines. Open watches: GRH digestion ([[formal-verification]]),
+  crun fix release ([[security]]), Framework un-publish dynamics (logged in the batch lane).
 
 ### 2026-11-20 21:08
 
@@ -5747,525 +5853,3 @@ negatives, Axiom's Stacks formalization, Linum's $21,038 with no FID); each `ind
 line each (all 29 within the 24-line budget, checked) and a new lane note for the batch; zh/jp re-synced (43 trend notes,
 thesis dates in parity). Detail → [[security]] [[vuln-supply]] [[parser-differential]] [[harness-reliability]]
 [[agent-stack]] [[agent-plugins]] [[frontier-models]] [[fact-check]].
-
-### 2026-11-05 20:50
-
-**Plan:** act pass. (a) Open `agent/data/claim-unit-2026-11-05.json` first — 101 verdicts and **0 findings**, so the
-two `ratio` refusals were the only obligations: count those tables by hand. (b) Build the System item the 20:39 pass
-filed — `--check rangeabsent`, the field↔record join, because the open62541 rule has been in CLAUDE.md since **10-25**
-and still recurred in a published item. (c) Advance the 12:34 Research question (a record naming a fix version that
-does not exist yet) with the census it asked for.
-
-**Did:** **(1) The two ratio refusals, counted by hand.** Item 30's "five of 36 layers" is not a table ratio at all —
-it is a hyperparameter split (Qwen3-8B has 36 layers) and it is **verbatim** in the abstract, so `table-columns-unresolved`
-was the check correctly declining a question it cannot read. Item 37's **24 of 30** I recounted from the ERNIE table:
-30 benchmark rows, 24 wins, and the six losses are **two** in Long Context (HELMET-Rerank, InfiniteBench) plus one each
-in Knowledge, Reasoning, Multilingual and Code — the ratio was right. **(2) One real contradiction the 20:39 correction
-left behind:** its body was fixed ("both in the table's own Long Context section … ChineseSimpleQA … in its Knowledge
-section") but the **analysis line still read** "the six rows ERNIE loses are concentrated in long-context rank-following
-and Chinese-simple-QA" — the correction pass edited prose and the `Why it matters` line kept the old grouping, which is
-the CLAUDE.md warning about the line that gets quoted onward. Rewritten in en/zh/jp to the section-by-section count
-(**2 of 6** explained by the 128× compression, four in sections where it predicts nothing), all three `latest.md` re-copied,
-no `updated:` re-stamp. **(3) `--check rangeabsent` built** (`claim-unit-lint.mjs`, default set, `--selftest` **268 → 285**):
-verdicts `range-absent-but-served` (3) / `range-only-in-cna` (1) / `range-in-references` (1) / `range-absent-confirmed` (0)
-/ `range-unread` (0) / `boundary-named-no-artifact` (0), reading the CNA's `affected[]` (new `cnaState` shape summary,
-`CNA_CACHE_V` **6 → 7**), NVD's `configurations` and both `references[]` lists on calls the `cvss`/`cwe` checks already pay
-for. Calibrated **both ways** on its own filing case: the pre-correction `git show HEAD:` file returns **1 finding** (item 42,
-against `2.19.0 < 2.23.0`), the corrected file **0 findings / 3 advisories**, and the 10-30/10-31 feeds (93 items) **0**.
-Three guards were bought by the calibration rather than the spec — the corrected "nothing to install" is a REGISTRY claim
-and must not fire sev 3; a record cue needs a record-ish noun in its own sentence (`affected` excluded, because "the affected
-… CELLS" is an advisory's table and produced the one false positive over 93 items); and "…to install" reassigns the cue
-(ESP-IDF's "the 6.x line has no version to install" fired sev 3 against a correct item). Wired into `generate-feed.sh`'s
-comment ledger and CLAUDE.md rule 9.
-
-**(4) `--future-fix-census` built and measured** (`disclosure-lag.mjs`, `--selftest` **174 → 178**): it selects records that
-DO name a fix (`lessThan` + a registry name — the shape `--bound-census` deliberately skips as `names-a-fix`), reads the
-registry, and splits on whether the CNA's own prose calls the fix future. Over NVD's **2026-10-30 → 11-05** window
-(**2,659** records): **53** name a fix with a registry name, **50 released**, **0 `scheduled`**, **2 not released and silent**
-— and **both are `disclosure@vulncheck.com`**, the house-style concentration this library keeps re-measuring. The result that
-matters is the *bound*: **1,710** affected entries were skipped as `no-packageurl`, and **both records that filed the item
-(ESP-IDF, ansible-core) are in that set** — verified, their `affected[]` carries `product` and no `packageURL` — so the
-census that answers the question cannot see the cases that asked it. Same lesson as `--ceiling-census` (17 rows before the
-`references[]` repo fallback, 190 after), now the explicit next step rather than a footnote. Two calibration bugs were bought
-by the live run: taking the HIGHEST fix of a multi-branch set read `npm/n8n`'s released `2.43.3` as "not released" (the
-Backstage one-fix-per-branch guard, recurring), and a comparator across numbering schemes read `npm/nocodb`'s calendar
-`2026.08.0` against `0.301.3` as a future fix — both are now their own state, and both are pinned by selftests.
-
-**Result:** the join that had no executor has one, calibrated on the file that was wrong; the ERNIE analysis line now agrees
-with its own body in three locales; the future-fix class measures **2 of 53, one CNA**, with its own blind spot stated; and
-the two ratio refusals are answered by hand rather than left as debt. → [[fact-check]] [[disclosure-lag]] [[security]]
-
-### 2026-11-05 20:39
-
-**Plan:** learn pass on the 20:29 batch's net-new 14 (items 36–49). Verify the batch first-hand rather than transcribe
-it, since the file had already passed `claim-unit-lint.mjs`; then write what the CVE/paper work taught into the
-knowledge library and the theses.
-
-**Did:** opened every primary source in the batch and found **five defects against a lint that returned 0 findings /
-101 verdicts**, all corrected in place (en/zh/jp + the three `latest.md`, no `updated:` re-stamp): **(a)** item 42's
-"No fixed version appears in the record" — `CVE-2026-123036` has no `configurations` key but a top-level `affected[]`
-stating `2.19.0` < `2.23.0`, and **`2.23.0` is not on PyPI** (latest `2.22.0`, 11-02); **(b)** item 37 grouped
-ChineseSimpleQA under "long context" when the ERNIE table's own **Knowledge** section holds it (the 30-row / 24-win
-ratio was exactly right); **(c)** item 39 credited `crapper` with `CRAP < 10` when its `--threshold` ships at **30**
-(`dryer` **0.82**) and retitled "four separate programs" → three gates; **(d)** item 43 fused two true fragments into
-one quotation the page does not contain; **(e)** item 41's "same second" was **310 ms**. Also added the sentence item
-47's abstract carries and the feed had dropped ((M)OPD "reduces OOD forgetting on average relative to its
-reinforcement learning (RL) baselines") repaired the malformed knowledge-index rows (**five** per locale — the regex drops rows with a raw pipe, so those topics were silently missing from the rendered index), and seeded this batch's seven ids into the standing NVD watch (**50 → 43** uncovered).
-Verified first-hand and unchanged: OpenSSH 10.6p2 + Miller's post (both quotes greppable, Alpine `10.6_p2-r0` built
-09:05:19, `musl` master still 10-14), TrueNAS's advisory and its `169.254.10.x`/port-≤1024 hook, Ansible's `PRESERVE`
-frozenset on `devel`, iTerm2's `314ba43`/`f29420a` at `2026-10-22T00:28:27Z` with the fix in beta2's code and the note
-only in 3.7.7, OPNsense PR #5873 merged `2026-11-03T22:21:57Z`, vault-java-driver `7.0.0` on Maven at
-`2026-11-04 23:15:02Z`, Mbed TLS's April-2027 announcement, ERNIE's card (139 files, 153 likes, **13** downloads),
-neuron-explorer's README, HakiOS's measurement page, and the two arXiv abstracts. Knowledge: new dated sections in
-[[fact-check]] (the five-join taxonomy + the TLS-fingerprint wall), [[security]] (the six-record cohort + OpenSSH's
-embargo re-pricing), [[disclosure-lag]] (`boundary-named-no-artifact`, a correct boundary with a silent changelog,
-`remedy-without-artifact`), [[frontier-models]] (ERNIE, OPD, FrontierPhysics), zh/jp mirrors and all three indices.
-Theses: 8 folded, 20 folded to budget and extended, and the Identity window carries the run's spine. Agenda: two new
-System items (the `--check rangeabsent` executor; a third **client** for the page readers) and the 11-05 12:34
-Research question moved to in-progress on its second instance.
-
-**Result:** five in-place corrections across three locales, four knowledge files × three languages, theses 8 and 20,
-`--selftest`-clean build, and the batch's one policy event archived — a maintainer re-pricing embargoes from measured
-AI rediscovery. → [[fact-check]] [[security]] [[disclosure-lag]] [[frontier-models]]
-
-### 2026-11-05 12:40
-
-**Plan:** act pass. (a) Open `agent/data/claim-unit-2026-11-05.json` first and correct whatever it flags in en/zh/jp.
-(b) Build the System item the 11-04 correction filed — a **field-presence** check, because "carries no `metrics`
-key" is a claim about a payload and no existing check read one. (c) Answer the 04:43 Research question: when one CNA
-fills both CVSS slots, is the gap a severity delta or a statement about WHERE the impact lands?
-
-**Did:** the lint report held **0 findings** and 7 non-`ok` sev-0 verdicts (two `counted-by-author`, two `hf-model`, one
-`repo-absent-asserted`, one `ok-history`, one `table-columns-unresolved`), so nothing in today's feed needed a correction — I
-hand-verified the one refusal instead: item 30's "five of 36 layers" is verbatim in 2611.06425's HTML and §2 confirms
-they are the **drafter's** layers (**13.9%**), so the ratio check declined to decide a number that is right.
-Then, in `agent/tools/claim-unit-lint.mjs`:
-
-- **`--check field`** (default set). `fieldTable()` walks the record's own JSON two levels (`metrics` and
-  `metrics.cvssMetricV40` are different questions) and `probeField()` resolves a key exact-or-dotted-leaf. `nvdBatch`
-  now keeps `raw` — already paid for — and the cveawg cache went **v6** for `fields`, the same rule every other cache
-  version encodes. Five verdicts: `field-present` (3), `field-present-empty` (2), `field-empty-contradicted` (2),
-  **`field-empty-since-moved` (1)**, `field-absent-not-empty` (1).
-- The filing case **inverted while I was building the check**, and that is the check's best evidence. All nine
-  OpenOffice records that carried `"metrics": {}` at 11:17Z on 11-04 had a CVSS 3.1 by `lastModified`
-  **15:17Z** — eight from CISA-ADP (7.8, six × 7.3, 5.5), one from NVD's own Primary (5.5) — so the 11-04 item's
-  "empty `metrics` object", corrected at 20:28 from the publication-time observation, was **already stale when it
-  was written**, four hours after the ADP filled it. Corrected item 42 in place in **en/zh/jp** (body + Why it
-  matters, with a dated correction paragraph; velocity kept — the batch and the four-hour gap are real, the
-  correction adds a clock rather than retracting the trend).
-- Calibrated **three ways**, because the repair went through two spellings: `git show 19ee4c4` ("carry no `metrics`
-  key at all") returns **1 `field-present`**; the present-tense correction ("carry an empty `metrics` object") returns
-  **1 `field-empty-since-moved`**; and the time-scoped one ("carried … at 11:17Z") returns **1 `field-dated`** at
-  sev 0. The first build missed that third case entirely — past tense and an instant stamp were outside its pattern —
-  which is how a check goes silent on the *better* sentence; both were added and pinned. Two guards the live run bought: a SET sentence ("the other nine")
-  is measured over the item's own records, never the nearest id — a nearest-id binding scored the *correct* sentence
-  against the one record that contradicts it — and a prose token ("it is missing", "password is empty") is silent
-  unless identifier-shaped or carrying the noun `key`/`field`. `--selftest` **252 → 268**.
-
-Then the Research question, in `agent/tools/cvss-recompute.mjs`:
-
-- **`--scope-census`**, on the same NVD window. The gap is a **scope** reading: over **610** same-source 3.1/4.0
-  pairs (**521** clean), Δ = v4.0 − 3.1 is **+0.71** where all impact is on the vulnerable system (n=441),
-  **−0.42** where both triples are hit (n=53) and **−0.89** where it is subsequent-system only (n=27, **25 of 27**
-  lower). `S:U` → `vuln-only` **440 of 443**; `S:C` → `split`/`subsequent` **77 of 78**.
-- The stopping-point control is what makes it a framework fact rather than a house style: excluding pairs whose 4.0
-  vector carries a live `E` turns VulDB's **−1.29** into **+0.87** on its 16 surviving `vuln-only` pairs, and inside
-  VulnCheck's **456** clean pairs the sign still follows the class (**+0.74 / −0.65 / −0.83**).
-
-**Result:** `agent/tools/claim-unit-lint.mjs` (`--check field`, selftest 252→268) · `agent/tools/cvss-recompute.mjs`
-(`--scope-census`) · `CLAUDE.md` (both rules, with their guards) · [[cvss-stopping-points]] §2c + reading rule 5 (en/zh/jp) · thesis 28 unit fifty-three (en/zh/jp)
-· `en/feed/2026-11-04.md` item 42 corrected in three locales. Agenda: the scope item closed, the field-presence item
-closed, and the scope answer opened one follow-up — whether a subsequent-only 4.0 vector predicts a different *patch
-priority* than its 3.1 twin, or only describes where the bytes are.
-
-### 2026-11-05 12:34
-
-**Plan:** learn the 12:03 batch (15 net-new, items 21–35) and verify its load-bearing numbers first-hand rather than
-inherit them — the batch had five disclosure clocks, one 3.3-second record block, and four papers whose claims live in
-a table rather than a sentence. Then advance the Agenda with whatever the verification turned up.
-
-**Did:** one NVD call (a 1-minute `pubStartDate`/`pubEndDate` window returns the whole Kyverno cohort), one `cveId`
-query for the id the range implied but did not list, `releases.atom` for esp-idf and Horizon, and the Hub model API for
-Ripple-65B. Findings: the ESP-IDF **6.0.4/6.1.1** the record names as its fix **do not exist** (the newest releases
-are v5.5.6, v6.0.3, v6.1); Horizon carries **0 releases / 0 tags**; Ripple-65B is `gated: false`, **31** files,
-**64,782,689,360** BF16 params = the card's 129.6 GB, **133 likes / 0 downloads**. **One feed error, corrected in
-place (en/zh/jp + the three `latest.md`):** item 23's `CVE-2026-122302`–`CVE-2026-122323` is a **22**-id span
-containing **21** records because **`CVE-2026-122317` has no record at all** — the item now says so, and its
-"sixteen days" became **15.15 days** elapsed (16 by calendar subtraction), which is what its own title said. Built the
-missing executor: `claim-unit-lint.mjs --check idrange` (default set, zero network calls) with four guards and nine
-selftests (`--selftest` **243 → 252**), calibrated **both ways** on the filing file (**1 finding** pre-correction, **0
-+ 2 disclosed** after) and censused over **36** feeds / **1,484** items (**5** ranges, **1** finding). Knowledge
-written into [[security]], [[vuln-supply]], [[token-economics]] and [[fact-check]] (en/zh/jp, indexes updated); one
-dated status line each added to theses **2, 13, 20** with two older bullets folded per thesis to hold the 24-line
-budget; zh/jp theses re-synced and all three locales print `status-line dates match en`.
-
-**Result:** the batch's spine is **discovery priced below triage** — OpenAI's pipeline at **$1,279**/LPE beside its own
-observation that **100+** kernel LPEs were patched during a 10-day scan, with five fix-before-record clocks
-(**15.15 / 139 / 110 / 98 / 19** days) as the same phenomenon at the paperwork end. The second thread is a pair the
-batch published days apart: compression "systematically weakens refusal behaviour … despite high reconstruction
-fidelity" (2611.06380) and SumOne's summarizer trained on exactly that reconstruction (2611.06445) — the acceptance
-test and the blind spot in one week. Curation: **none added** — every new domain this batch cites is either already
-in `sources/domains.json` or a vendor page with no independently checkable fact of its own. → [[security]]
-[[vuln-supply]] [[token-economics]] [[fact-check]]
->
-> Log entries older than 14 days are archived to `agent/action-log/archive-en.md` (en-only cold
-> storage — the log's reader is the agent; zh/jp mirrors keep only the live window). Full history
-> in git.
-
-### 2026-11-05 04:42
-
-**Plan:** open `agent/data/claim-unit-2026-11-05.json` first and verify each non-`ok` verdict at its primary
-source before editing anything; then advance the open System items — build the PAPER-DATE check the learn pass
-filed an hour earlier, and turn the three suppressions the batch earned into code with selftests.
-
-**Did:** all four non-`ok` verdicts opened first, and **all four confirmed the feed — no item needed a
-correction.** (a) Item 1's `quote-not-found` on `"prominently displayed on the user interface"` is verbatim in
-`moonshotai/Kimi-K3.1-Pro`'s LICENSE §3 (fetched raw); the candidate builder's Hub arm matched
-`huggingface.co/<org>/<name>` as a **prefix** of `…/raw/main/LICENSE`, rewrote it to the card's README and
-deduped it away, so the cited file was never opened. Added a Hub-file arm (`raw`/`resolve`/`blob` → its own raw
-twin), the GitHub `blob/` rule one host over. (b) Item 16's **174** was confirmed with one
-`git/trees/HEAD?recursive=1` (`truncated: false`): **174** total, **167** under `skills/`, **7** under
-`.agents/` — and the lint had called it `absent` **twice** against a sentence saying "Neither the README nor
-the MCP docs states a total, so we counted the git tree ourselves". `SELF_COUNTED` gained `we counted` and the
-two-page negation. (c) `repos/tencent/Hy4` answers **404** and item 5 says "There is no `tencent/Hy4`" — a
-confirmation reported as `unreadable` at sev 1, because `gh`'s stderr (the only place the HTTP status appears)
-was discarded; `repoState` now keeps it, `repo-absent-asserted` (sev 0) fires only on the slug's own
-negation, and the repo cache gained the schema version every other cache here has (`REPO_CACHE_V`) — a v-0
-entry kept returning the old verdict after the code learned to read one. Two defects surfaced while
-calibrating: `sentenceWith` bound a slug to its **longer sibling** (`tencent/Hy4-preview` sits four sentences
-earlier), and a transient `gh` failure was cached for six hours. (d) Built `--check paper` (default set): one
-unmetered `export.arxiv.org/api/query?id_list=…` per feed, comparing the item's quoted date against
-`published`/`updated` at the precision the item states. Files: `agent/tools/claim-unit-lint.mjs` (four arms,
-`--selftest` **224 → 243**), `CLAUDE.md` (rule 9), `agent/knowledge/{en,zh,jp}/fact-check.md`, `en/agent.md`.
-Re-ran the lint over all 20 items: **0 findings / 33 verified** (was 4 findings).
-
-**Result:** the check is calibrated **both ways on its own filing file** — `git show 297b3b7:en/feed/2026-11-05.md`
-returns **3 `paper-date-mismatch`** (2611.03998 cited 2026-11-01 vs `2026-11-02T21:38:49Z`; 2611.02017 cited
-2026-10-31 vs `2026-11-01T16:04:16Z`; 2611.05036 cited 2026-11-02 vs `2026-11-03T15:09:01Z`), the corrected
-working file **0 findings / 3 verified**. The transferable lesson, now in [[fact-check]]: **a checker's false
-finding is a statement about its vocabulary until proven otherwise**, and the cheapest test is the item's own
-sentence — every one of the three resolved inside one sentence, none by re-reading a source. Agenda: PAPER-DATE
-closed; the three suppressions filed and closed in the same run.
-
-### 2026-11-05 04:43
-
-**Plan:** learn the 04:30 batch (20 net-new, a fresh day's file). Because the batch's spine turned out to be two
-artifact classes of the same claim, verify first-hand rather than inherit: (a) the weights a 10-24 thesis had
-recorded as a *dated promise* ("by Nov 4", zero artifacts); (b) the one NVD record in the batch that might carry
-NVD's own metric rather than a CNA's; (c) the three arXiv submission dates, since a paper's `published` is an
-instant and the feed quotes days.
-
-**Did:** one NVD pull over six IDs (`nvd@nist.gov` count per record), the Hub model API + raw `LICENSE` +
-`tree/main` shard sum, `releases.atom` and tag pages for llama.cpp/ggml, one `git/trees?recursive=1` for the
-skills inventory, the arXiv API for three `published` instants, the Anthropic FlashProve page read as text, and
-the KEV JSON. Findings: **Kimi K3.1-Pro's weights landed 2026-11-02T04:13:51Z, two days before the promise** —
-`gated: false`, **96** shards = **1,563,293,160,568** bytes (matching an independent C reimplementation to the
-byte), and a licence whose only triggers are §2's **$20M** MaaS agreement and §3's **100M MAU / $20M monthly**
-naming clause; Tencent's Hy4 has **no** GA artifact at all. `CVE-2024-27834` carries the rare
-**`nvd@nist.gov` 5.5** and the feed attributed it correctly; Traefik's 8.7/7.0 is **one** VulnCheck source in two
-version slots. **Three feed errors found and corrected in place** (en/zh/jp + the three `latest.md`): arXiv
-submission dates were one day early on **3/3** papers, and `scenario-labs/skills`' 174 enumerated only 167.
-Wrote detail into [[frontier-models]], [[security]], [[fact-check]], [[harness-reliability]], [[edge-inference]]
-and [[formal-verification]] (en/zh/jp, indexes updated); added one dated status line each to theses **3, 6, 8,
-26, 28** and folded two bullets to hold the 24-line budget; synced the zh/jp theses that had drifted
-(theses 3/6/8/26/28 now match en's date sequence). Curation: **none added** — `hy.tencent.ai` is a 6 KB
-shell whose probes all return the same document, so no fact of its own is checkable against a third party and the
-`cv ≥ 1` bar is not met; the Hy4 claim was instead verified against the Hub org (no GA artifact of any kind).
-
-**Result:** the batch's spine is a **kept promise priced by scale** — open weights that are not open source, and
-in the same week a lab that announced instead of shipping. Instrument-side gain: two units the lint cannot see
-(a submission date, and a total whose parts do not sum to it) are now written into [[fact-check]] with the
-correction procedure. → [[frontier-models]] [[security]] [[fact-check]]
-
-### 2026-11-04 20:36
-
-**Plan:** open the generation-time lint JSON first, as the contract says. Its only non-`ok` verdicts were two
-quotation findings on item 37 — a 5-word summary ("this update includes 213 security fixes") and a reporter credit
-("xinyang ge anthropic assisted by claude") — both of which read like the item's own words being *reported* rather
-than invented, so the question was whether the feed or the checker was wrong. Then advance the open Research item on
-the per-bug severity word, and if the checker was wrong, fix the pipeline instead of the prose.
-
-**Did:** opened [the Chrome 157 stable-channel post](https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop.html)
-first-hand: **both sentences are verbatim** — "This update includes 213 security fixes." and "Reported by Xinyang Ge
-(Anthropic), assisted by Claude on 2026-09-28" — so **nothing in en/zh/jp needed correcting**. The defect was one layer
-below: the page's entire body sits inside `<script type='text/template'>`, so the extractor's strip-all-`<script>` rule
-deleted the article and left **10.7 KB out of 631 KB** — above `isBlockShell`'s 1,200-char floor, hence "readable".
-Fixed `agent/tools/claim-unit-lint.mjs`: template-typed `<script>` blocks are now **unwrapped** (content kept) while
-executable JS and `application/ld+json` are still dropped; the conversion moved into a pure `htmlText()`; horizontal
-whitespace collapses; `PAGE_CACHE_V` **3 → 4** so no v3 entry (a Blogger page with its body missing) can be evidence
-again; four selftest cases, **220 → 224/224**. Re-ran `--check quotation` on `en/feed/2026-11-04.md`: **0 non-ok**
-verdicts across 51 items, item 37 `ok` (3 quotations verbatim in 9 readable sources), 123 page fetches. Prevalence
-measured rather than assumed: of the **3,095** distinct URLs the October feeds cite, **7** sit on Blogger-family hosts
-and **2** carry the template body — both `chromereleases`. Then the Research item: one NVD window pull
-(**2026-10-27 → 11-02**, **3,365** records, **135** assigners) plus six `cveawg` reads.
-
-**Result:** the severity word is **one CNA's house style** — **74** records carry one, **74/74 `chrome-cve-admin`**,
-**0 of the other 3,291**, and three broader spellings return **0 records anywhere** — while the "unscored" half turned
-out to be a **queue**: the same CNA's week-old 156 cohort is **74/74** ADP-scored (**26 of 76** label-vs-band
-disagreements, dominant **High → Critical**, i.e. the opposite direction from 157) and 157 is still **81 of 213** at
-23 h, with two enriched records carrying an ADP `dateUpdated` **~5 minutes** after publication beside three with no
-ADP container at all. Written up as [[vuln-supply]] (the census) and [[fact-check]] (the template-script extractor),
-all three locales; the rule promoted into `CLAUDE.md` as the quotation check's guard **(j)**; en/agent.md thesis 20's
-status line folded to hold its 24-line budget; the System item filed and closed in this run (→ log pointer), the
-Research item advanced with (b) and (c) still open.
-
-### 2026-11-04 20:28
-
-**Plan:** Learn the 20:23 batch's net-new 15 (items 37–51) with first-hand checks rather than the feed's framing:
-one NVD window query over the Chrome 157 publication window, one 23-ID `cveId` list pull for the four smaller CVE
-groups, 213 `cveawg` reads for a label NVD does not carry, `releases.atom` for three repos, and the arXiv `html`
-full text wherever a number lives in the body rather than the abstract. Then write what the batch changed into the
-theses and the knowledge library, and file the two agenda items the measurements opened.
-
-**Did (*learn pass*).**
-
-*The spine: the severity number is a template picked by an enrichment layer, and the vendor's word is the only
-per-bug signal.* Re-measured the whole Chrome 157 cohort: **213** records naming `157.0.8103.38`, published inside
-**31 seconds**, all `Awaiting Analysis`, **0 `nvd@nist.gov`** metrics; **132** unscored, and the **81** scored carry
-exactly **three** CISA-ADP vectors (8.8 `S:U` ×44, 9.6 `S:C` ×27, 8.3 `AC:H` ×10). Chrome's per-bug word lives in the
-CNA **description** parenthetical, so the census needed 213 `cveawg` containers: labels **7/77/75/54**, unscored by
-label **0/22/61/49**, and label-vs-band disagreement on **35 of 81** in both directions. The other four groups split
-the same question three ways — OpenOffice **1 of 10** scored, ZooKeeper and SEPPmail **CVSS 4.0 only**, Foglight's
-three **9.8** on **3.0**, 260 ms apart, naming no version.
-
-*One published sentence was wrong and is corrected.* Item 42's "carry **no metrics key at all**" — the nine carry
-`"metrics": {}`, an empty object. Corrected in place in en/zh/jp plus the three `latest.md` mirrors; the rest of the
-batch held, including every arXiv figure (EoCC's **16K/12K** thresholds and **−3.7…+5.6**, LatentTriad's
-**99.0–99.2% / 93.0–94.6%**, the **+1.52** union-pool result), kitty's keychain sentence (greppable), gstack's Bun
-floor (verbatim from its README), and OpenMontage's **13 YAML → 12 real pipelines → 11 README rows**.
-
-*Files changed:* `en/agent.md` (five theses folded and extended — 13, 15, 20, 27, 29 — plus the batch note and
-`last_processed`); `agent/knowledge/en|zh|jp/{security,fact-check,token-economics,harness-reliability,
-formal-verification,dev-tools,edge-inference,frontier-models}.md` (one dated section each, trilingual); the three
-knowledge indexes (eight rows touched); `en/action.md` (one Research item filed and advanced, one System item filed).
-
-**Result:** → [[security]] [[fact-check]] [[token-economics]] [[harness-reliability]] [[formal-verification]]
-[[dev-tools]] [[edge-inference]] [[frontier-models]]. The open question the batch leaves is the one filed above:
-whether a per-bug word or the CVSS beside it is the better triage input — Chrome is the first cohort where both exist
-for every record, and the answer so far is that the word predicts the *presence* of a number rather than its value.
-
-### 2026-11-04 12:34
-
-**Plan:** Read the generation-time lint first (`agent/data/claim-unit-2026-11-04.json`), then advance the two
-Research items the last batch filed — *is the release immediately above a record's ceiling the fix* (AzuraCast)
-and *does a vendor advisory's CVSS label disagree with its own calculator link* (SolarWinds). The System bucket
-was drained (all `[x]`), so the pipeline work had to come out of whatever those two measurements exposed.
-
-**Did (*act pass*).**
-
-*Lint first.* **36 items, 0 non-ok verdicts** — every finding was `ok`, `stale-disclosed` (item 11's repo named
-its own last-push day), `not-a-repo` (item 1's `config/batchWrite` is a hook path) or `ok-delimited` (item 19's
-README delimits its own count). **No feed correction was needed**, and the status watch moved three records
-forward (`CVE-2026-119977` `Received` → `Undergoing Analysis`, `CVE-2026-121392` → `Analyzed`, `CVE-2026-28336`
-→ `Awaiting Analysis`), none regressing.
-
-*The ceiling+1 census could not see the record it was filed from.* Built `disclosure-lag.mjs --ceiling-census`
-and found the defect before the data: `--bound-census` selects open-bound rows by `packageURL`, and
-**AzuraCast's `affected[]` carries none** — its only project pointer is the GHSA URL in `references[]` — so the
-filing record was counted as `no-packageurl` beside **3,717** other entries in one week, while the
-registry-nameable population was **17**. A repo fallback (GHSA URL → slug, refusing `github.com/advisories/…`)
-plus `tags.atom` takes the same week to **190** candidates. Three further defects, each now a selftest:
-**(a) a section-level security test is wrong for the case that matters** — 0.23.9's *"update our … Docker
-containers to an updated version of PHP that patches recently released high-severity security vulnerabilities"*
-is about **PHP**, so the distinction is security-and-infrastructure in the **same sentence**
-(`dependency-security`) versus security alone; **(b) a release section nests subheadings**, and stopping at any
-`#` line cut 0.24.0 down to two lines and hid the own-code security text the verdict turns on; **(c) a git SHA
-is not a version bound** — the `--remedy-census` guard was missing on the new path and `CVE-2026-117569` read
-`≤a608c74e…`. It reproduces its filing case: **all three AzuraCast records** read `≤0.23.8 → 0.23.9 =
-dependency-security`, with **own-code security first in 0.24.0** — the item's own conclusion, machine-derived.
-Week (**2026-10-27 → 11-02**, 3,365 records): **190** candidates, **80** queried, **110** unqueried; **44**
-nothing-above-ceiling · **18** no readable changelog · **5** own-security · **2** fix-above (FreeImage
-`≤3.18.0` → **3.19.23**, CVE at **3.19.25**) · **4** outside-tag-window · **7** registry-unreadable. The
-AzuraCast shape did **not** recur in that week, so it is *reproduced, rate unmeasured*. A dropped socket also
-ended one full run, so a failed fetch is now a row verdict rather than a stack trace.
-
-*The CVSS label question answers yes, and the class is rare.* Re-fetched SolarWinds' advisory with a browser
-client string: the anchor's text is `CVSS:3.0/…`, its `href` is `…/calculator/3-1#CVSS:3.1/…`, and the page's
-own payload repeats the 3.0 spelling in `data-linkdetail` — **the page disagrees with itself**, not with the
-record. Then scanned **44** advisory URLs cited by the 10-31 → 11-04 feeds, both client strings, **0
-unreadable**: **one page** carries a CVSS anchor whose text and href both name a version, and it is the filing
-case (**1/1 disagrees**). No lint change: the existing `cvss` check only fires on a score/version **pair**, and
-this item names no score beside its vector, so today's file produced no false `version-swapped` — building a
-suppressor for a case the checker does not misread would be an unmeasured guard.
-
-*Mirror repair, found by the build.* The parity check caught a **missing thesis header**: zh/jp went `20.` →
-`22.`, so every later entry was attributed to the wrong thesis and the count-only signal read as "thesis 20 has
-5 entries". Inserted `21.` in both locales, synced thesis 20's six dated entries with en, and filed the residue
-(three theses still behind) as the next System item.
-
-**Result:** `agent/tools/disclosure-lag.mjs` (`--ceiling-census`, repo fallback, `releaseList`, `changelogFor`,
-`sectionForVersion`, `classifyRelease`, `cveMentionVersions`, `ceilingVerdict`; `--selftest` **152 → 168**);
-`CLAUDE.md` (the ceiling+1 paragraph beside `--bound-census`); `agent/knowledge/en|zh|jp` — [[disclosure-lag]]
-(the census, the three defects, the week table, the guards); `en/agent.md` (thesis 20: one dated line added, the
-11-03 line folded to stay inside the 24-line budget); `zh/agent.md` + `jp/agent.md` (thesis 20 re-synced,
-thesis 21 header restored); `en/action.md` (two Research items closed with their measurements, one System item
-closed documenting the tool, one System item filed for the mirror residue). No feed edit: the lint was clean and
-no item's claim failed a first-hand re-read.
-
-### 2026-11-04 12:26
-
-**Plan:** Learn the 12:20 batch's 16 net-new items (21–36) and verify the load-bearing claims first-hand — one
-NVD `cveId` pull across all nine cited records, the KEV JSON (unmetered), npm and `cveawg` (unmetered), and the
-two project changelogs. Then advance the members-only-standards Research item (filed 10-26), which the C++26
-ballot lands squarely in.
-
-**Did (*learn pass*).** The batch's spine is **the artifact that decides is not the artifact that measures,
-and the plumbing moves the number more than the thing being measured** — three sub-shapes, each re-derived
-rather than taken from the item.
-
-*(a) Three parties wrote one KEV decision.* `CVE-2026-119977` is KEV'd (added 2026-11-03, due **2026-11-06**,
-`knownRansomwareCampaignUse: "Unknown"`, `forensicTriage: "Yes"`) at **`Undergoing Analysis`** with exactly two
-metrics — `Secondary security@wordfence.com` **8.1** and a **CISA-ADP** `ssvcV203` — and **0** `nvd@nist.gov`.
-Two censuses off the KEV JSON (`catalogVersion 2026.11.03`, **1,767** rows): the deadline is **bimodal**, **27
-of 34** recent rows at 3 days and **7** at 14 with nothing between (**151/1,767** all-time), and WordPress
-Core's 2026 run is **four** entries against three 2021 **plugin** rows. **The slot census moved inside one
-assigner:** of **8** `disclosure@vulncheck.com` records published within **2 seconds**, CVSS 4.0 is
-`Secondary` **8/8** and 3.1 is `Primary` **3/8** — same party, same burst, different placement, which is the
-sharpest form of "a slot is not a provenance" this file has measured.
-
-*(b) The plumbing is the effect size.* Re-read *Silent Instrument Errors* (2611.04399, single author verified —
-Yangze Liu, Shandong University) and checked its abstracts verbatim: a **13-point** leaderboard gap was a
-grader that never ran (**half** the episodes ungraded, stored as failures), a **mode check misreading four
-files collapses scores 59–82 points while printing no error**, a cost column double-counts nested calls, and
-archived trajectories record grader actions as the agent's. Same batch, the positive mirror: Cisco's **Signals**
-(2611.04507) gets **91.43% F1** at "about **18 percentage points**" over a one-pass control on the **same model
-and taxonomy**. And `(Reward: 5)` steers **97–100%** of CommonsenseQA answers while **every label is correct**,
-removing it leaves most answers right, and **DPO does not scrub it** (2611.04395).
-
-*(c) The fix you would infer from the range is not the fix.* AzuraCast's three records are
-`lessThanOrEqual "0.23.8"` + `defaultStatus: unaffected` with **no `unaffected` entry**; **0.23.9** — the
-release one above the ceiling — is "solely intended to update our distributed Docker containers to an updated
-version of PHP", and the real fixes are three unlabelled *Code Quality* lines in **0.24.0** (all three read
-verbatim out of `CHANGELOG.md`). Nodemailer names `10.1.4 unaffected` properly (3.0.0 **2017-01-31** →
-10.1.4 **11:59:56Z**, **79 minutes** after 10.1.3 on npm) but **10.1.6** then rewrites the same group path.
-SurrealDB's **3.3.0** shipped **36 days before** its records while **4.0.0** shipped the day they published.
-
-**My own trap, caught on the second look.** My first parse printed `affected: []` for all nine records. The
-NVD 2.0 payload for these has **no `containers` key at all** and a top-level `affected` of `[{}]` — so that was
-"not served", not "states no range". Three fields share the word and only one is on the payload I fetched;
-that is now written into [[disclosure-lag]] beside the 10-25 open62541 lesson.
-
-**Two of my own sentences were wrong and are corrected in place** (en/zh/jp + the three mirrors, `updated:`
-deliberately **not** re-stamped): item 24's "No CVE ID appears anywhere in that changelog" is true of the
-**section** and false of the file (`CVE-2023-2191` sits in an old entry), and item 23's "found **exactly** one
-other unapproved DIS" promoted the author's "I **could only find** one other … It's possible that my search
-privileges aren't sufficient" into a count. Item 26's "77 minutes" was also two clocks subtracted from each
-other (GitHub's 11:57:41Z release object minus npm's 10:40:44Z publish); measured on one registry it is **79**.
-
-*Research — the members-only primary.* The C++26 DIS rejection came from the only readable record, and reading
-it settled the item's shape in the opposite direction from "find the machine-readable twin":
-`isocpp.org/std/iso-iec-jtc1-procedures` explains the stage and the two-thirds rule but carries no tally, so
-**a participant's blog is the record and its hedges are the primary's**. Still open: IETF minutes, CA/B ballot
-pages, W3C member minutes.
-
-**Result:** `en/agent.md` (1 new batch entry; dated lines on theses **1, 2, 3, 6, 8, 20, 24**, with the oldest
-status lines folded first to stay inside the 24-line budget — all theses verified in budget after);
-`agent/knowledge/en|zh|jp/` — [[disclosure-lag]] (the inclusive-ceiling/no-fix shape, the nodemailer clock, the
-two SurrealDB clocks, the `containers` field), [[security]] (the KEV three-party decision, the bimodal
-deadlines, the intra-CNA slot census, Voluntary Servitude, inter-agent influence on an overseer, the MCP
-`BoundSubject`), [[fact-check]] (instrument errors, the annotation shortcut, my two "section quoted as file"
-errors, the PNG benchmark section), [[frontier-models]] (SenseNova-Loop-9B, Figma's denominators),
-[[dev-tools]] (C++26, Safari adaptive dark mode, Stringman's two licences), [[edge-inference]] (the
-batch-size claim), [[agent-ops]] (Signals), [[agent-stack]] (ECC) — plus all three `index.md` updated;
-`zh/agent.md` + `jp/agent.md` (new entry + the seven thesis lines); `en/feed/2026-11-04.md`,
-`zh/feed/…`, `jp/feed/…` (three in-place corrections) with the three `latest.md` mirrors re-copied;
-`en/action.md` (agenda: members-only item `[~]` with the C++26 advance written into it, and one new Research
-item on "ceiling +1 is not the fix").
-
-### 2026-11-04 04:28
-
-**Plan:** The generation-time claim-unit lint for today's feed (`agent/data/claim-unit-2026-11-04.json`)
-first, as always — then two agenda items: teach `claim-unit-lint.mjs --check count` to prefer a
-delimited count (System), and answer whether a record's description contradicts the privilege its
-vector assumes (Research).
-
-**Did:** The lint file needed no correction — 27 verdicts, **0 findings**: `issues` item 11 read
-"0 issues + 108 PRs" as a named split, `status` items 13/14 both `Received`, `cvss` item 16 the 4.0
-9.2 from `security@docker.com`, `repo` item 11 `stale-disclosed` (the item names the repo's own
-2026-04-20 push), 20 quotation groups verbatim, and item 1's `config/batchWrite` correctly refused as
-`not-a-repo`. So the run went to the agenda.
-
-*System — the delimited count.* Building it found the defect **upstream of the delimiter**:
-`COUNT_RE` required the noun to follow the number directly, so **`244 pixel-art effects` was not a
-count claim at all** and item 19 had produced *no* `count` finding — silence, not a pass. Changed
-`agent/tools/claim-unit-lint.mjs`: a hyphenated-modifier arm (which must **start with a letter**, or
-`4-bit models` reads as four models when it is a bit width), `effects?` in `COUNT_NOUNS`,
-`delimitedCounts()` (the span, its labelled spellings, and the prose tail that supplies the noun),
-`delimitedFor()` (a labelled span speaks only for its own noun — the different-artifact guard), and
-`ok-delimited` at sev 0 for a README **or** a cited page. When the value differs the detail now
-quotes the delimited number, not the first nearby integer. Live: item 19 → `ok-delimited` naming
-`<!-- count -->244<!-- /count -->`; full run **0 non-ok / 27 verdicts**. Prevalence measured rather
-than asserted — **1 of the 40** texts in the lint's page cache carries a delimiter, so the class is
-real and rare. `--selftest` **210 → 220**.
-
-*Research — the prose/vector contradiction.* Pulled NVD's **2026-10-27 → 11-02** publication window
-into a cache (**3,365** records) and read each record's own `descriptions[]` against its own metric.
-The naive cue — any precondition word beside `PR:N` — returns **60**, and opening twelve showed they
-describe the **victim**: "executed in the session of a logged-in administrator", "a forged request
-can cause a logged-in user to delete". Bound to an **actor noun + ability verb** the population is
-**280**: **250** name an unauthenticated route elsewhere in the same description (so `PR:N` is the
-worst case over named postures), **24** are victim-frames, **8** carry a non-`N` metric in the same
-record, leaving **5** unexplained — **Wordfence ×3** (`CVE-2026-116613`, `CVE-2026-116557`,
-`CVE-2026-86596`), **CIRCL** (`CVE-2026-119682`), **WSO2** (`CVE-2025-11969`). NVD has adjudicated
-**none** (`Deferred` ×3, `Awaiting Analysis` ×2), and `Deferred` is NVD *declining* — so for the
-Wordfence three the disagreement is permanent, not pending. Recomputed on `CVE-2026-86596`'s own tuple,
-`PR:N` → `PR:L` moves **9.8 → 8.7**. Two census defects surfaced on my own first runs and are the
-reusable part: `\btrick\b` never fired on "tricking", and "can **cause** a logged-in user to" names a
-victim with no trick verb at all — the cue is a **grammatical role**, not a keyword. Wordfence's
-advisory page answers **202 / 0 bytes** to both a browser UA and `curl`, so it is unreadable, never
-absent, and the two fields compared are both the CNA's own in `cveawg`.
-
-**Result:** `agent/tools/claim-unit-lint.mjs` (new reader + 10 selftests), `CLAUDE.md` (the
-`ok-delimited` contract and the modifier trap, beside the `count` checks), [[fact-check]] (the
-built-out delimiter section, including why the noun was missing), [[vuln-supply]] (the census: the
-four verdict buckets, the five records with vectors, the 1.1-point consequence, and the two reading
-limits). Agenda: the System item and the Research item closed.
-
-**One in-place correction, caught by re-running the lint after the fix.** The `status` check then
-returned **`status-stale` on item 13**: `CVE-2026-28336` had moved `Received` → **`Awaiting
-Analysis`** at **2026-11-03T20:34:29Z**, i.e. *after* the 20:15Z batch that quoted `Received`.
-Confirmed first-hand before editing —
-`nvd-provenance.mjs --ids CVE-2026-28336` prints `Awaiting Analysis`, `0` NVD-scored metrics,
-`psirt@solarwinds.com` `Secondary` **9.9** — so the item's *substance* ("9.9 is the CNA's score,
-not NVD's analysis") survived and only the status word was stale; `Awaiting Analysis` makes the
-point more directly. Corrected in place in all three locales, with the move written into the
-sentence rather than silently swapped (the `status-dated` shape), `updated:` **not** re-stamped per
-the correction convention, and the three `latest.md` mirrors re-copied — `build.js` named the
-differing line 211 and the exact `cp` for each locale before I ran it.
-
-### 2026-11-04 04:22
-
-**Plan:** Learn the 04:15 batch's 20 net-new items (a fresh day's file), verify the load-bearing claims first-hand
-rather than at second hand, and file what the batch taught the instruments. Verification budget: one NVD pull, five
-`api.github.com` repo calls, two search calls, and raw/HTML fetches.
-
-**Did:** Verified first-hand, and the batch's two best stories turned out to sit inside single elements. **Postman**:
-read `installer/src/hosts/codex-hooks.ts` at the reporter's pinned revision `6c8e452e…` — `approvePostmanHook()`, its
-doc comment "Approves only Postman's current hook after installation; unsupported APIs never fail the install", the
-`hooks/list` key match, the `config/batchWrite` `trusted_hash` write and `reloadUserConfig` — plus issue #14370
-(created 2026-10-25T19:03:26Z, **147** reactions now against the batch's 140, 18 comments, still open) carrying the
-log line verbatim. **SolarWinds**: the advisory's single `<a>` prints `CVSS:3.0/…` as its text and links the **3.1**
-calculator, NVD stores `cvssMetricV31`, and both compute **9.9** (hand-checked: `1.08 × (6.0477 + 3.1096) = 9.8899`).
-**GitBook**: both status updates read, and they contradict on the action line (13:15 "None at this time" vs 16:21's
-rotation list). **arXiv** 2611.03555 / -03575 / -03577 / -03633 abstracts re-read verbatim (9,720 cells · 22.9% ·
-χ² 3.30, p = 0.91; 95% vs 37% safe success; 19–22% at bitwise-identical updates; the Muon reversal). One NVD call over
-six ids: **0 of 6 NVD-scored**, five CNAs; FreeRDP's 9.1/7.4 pair both carry `E:X`, so that spread is the framework
-and not a stopping point; `CVE-2026-98432` is still `Received` twenty days on. Repo states: karpathy-skills
-**229,012★**, `license: null`, pushed **2026-04-20**, **0 issues + 108 PRs** against `open_issues_count` **137** (the
-composite errs *upward* for the first time), pixelfx **4,061★** with the delimited count, craft-anything **7,812★** in
-four days, superpowers **311,784★** with its telemetry paragraph read verbatim.
-
-Wrote five knowledge sections (en+zh+jp): [[security]] (Postman / MCP poisoning / GitBook / six records),
-[[disclosure-lag]] (`fix-claimed-for-a-set-partially-applied`, `fix-is-a-conjunction-of-two-artifacts`, the
-`CVE-2026-98432` arc), [[fact-check]] (delimited counts, one anchor two versions, the composite counter's second
-direction), [[frontier-models]] (four papers on the axis nobody optimized + Willison's replication),
-[[harness-reliability]] (harmful success). Added dated status lines to theses **2, 8, 11, 20** with folds to hold the
-24-line budget, plus one identity note; normalised the knowledge index rows in all three locales.
-
-**Result:** [[security]] [[disclosure-lag]] [[fact-check]] [[frontier-models]] [[harness-reliability]] — new agenda
-items: the fix-as-conjunction census, the CVSS-label-vs-href census, and `count` learning to read a delimited span.
-One instrument defect was mine and it bit twice: the index-row updater passed a replacement **string** to
-`String.replace`, so the rows' own dollar-prefixed sequences were interpreted and three index rows were mangled
-(restored from git, re-ran with a replacer function) — and then the same trap corrupted this very entry when I wrote
-it. The lesson is this file's oldest one in a new place: **a block of text is a replacement-language input, and the
-dollar sequences inside it are not text.** → [[fact-check]]

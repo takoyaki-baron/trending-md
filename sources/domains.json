@@ -623,6 +623,15 @@
   "jp": "AlphaXiv——arXivプレプリント上のコミュニティ議論/要約層。二次的な文脈として有用、arXiv要旨と照合を。",
   "zh": "AlphaXiv——arXiv 预印本之上的社区讨论/摘要层；作为二手语境有用，需与 arXiv 摘要核对。"
  },
+ "alpo.ge": {
+  "cat": "research",
+  "cred": "med",
+  "cv": 1,
+  "density": "low",
+  "en": "Levent Alpöge's personal domain — serves his 2026-11-20 announcement (remark.pdf) claiming a proof of RH/GRH 'working with Claude', as the primary artifact; first-party, no editorial layer. Cross-checked (11-21): the 'working with Claude' sentence is verbatim in the PDF text (pdftotext), and arXiv's author registry anchors the name.",
+  "jp": "Levent Alpöge の個人ドメイン——2026-11-20 の「working with Claude」による RH/GRH 証明主張の公告（remark.pdf）を一次アーティファクトとして提供。ファーストパーティ、編集層なし。クロスチェック済み（11-21）：「working with Claude」の文が PDF テキストに逐語で存在（pdftotext）、arXiv の著者レジストリが名前をアンカー。",
+  "zh": "Levent Alpöge 的个人域名——以其 2026-11-20 的公告（remark.pdf）为一次工件，声称「working with Claude」证明 RH/GRH；一方站点、无编辑层。已交叉核验（11-21）：「working with Claude」句逐字存在于 PDF 文本（pdftotext），arXiv 作者注册表锚定姓名。"
+ },
  "already-clean.goodfire.com": {
   "cat": "vendor",
   "cred": "med",
@@ -2562,6 +2571,15 @@
   "en": "Ninth Circuit official opinion CDN; PDF verified downloadable (09-16), 21 pages, matches exactly: Amazon.com Services v. Perplexity AI, No. 26-1444, filed Aug 4 2026, vacating the preliminary injunction under the CFAA. Cross-validated via HN 49704008 (216 pts).",
   "jp": "第9巡回区控訴裁判所公式意見書 CDN。09-16 に PDF のダウンロードを検証済み（21 ページ）。内容は完全に一致：Amazon v. Perplexity AI（事件番号 26-1444）、2026 年 8 月 4 日付、CFAA に基づく仮処分差し戻し。HN 49704008（216pts）でクロス検証済み。",
   "zh": "第九巡回法院官方意见书 CDN；09-16 验证 PDF 可正常下载，21 页，内容完全吻合：Amazon 诉 Perplexity（案号 26-1444），2026 年 8 月 4 日判决，依 CFAA 撤销初步禁令。经 HN 49704008（216 分）交叉验证。"
+ },
+ "cekrem.github.io": {
+  "cat": "community",
+  "cred": "med",
+  "cv": 1,
+  "density": "low",
+  "en": "Christian Ekrem's engineering essay blog on GitHub Pages (craft/AI-coding reflections). Cross-checked (11-21): the GitHub profile (github.com/cekrem) links the site, and the essay's quotes — 'you're not really reading half of it, are you', the effort-avoidance premise — are verbatim on-page.",
+  "jp": "Christian Ekrem の GitHub Pages 上のエンジニアリング随筆ブログ（craft/AI コーディングの考察）。クロスチェック済み（11-21）：GitHub プロフィール（github.com/cekrem）がサイトをリンク、エッセイの引用——「you're not really reading half of it, are you」や努力回避の前提——がページ上で逐語。",
+  "zh": "Christian Ekrem 在 GitHub Pages 上的工程随笔博客（craft/AI 编码思考）。已交叉核验（11-21）：GitHub 资料页（github.com/cekrem）链接该站，随笔引文——「you're not really reading half of it, are you」与回避努力的前提——逐字在页面。"
  },
  "cel.cs.brown.edu": {
   "cat": "research",
@@ -6452,6 +6470,15 @@
   "jp": "Higress プロジェクトブログ——Alibaba の OSS API ゲートウェイ（v2.2.4 MCP ステートレスベースライン）。プロトコル記述は一手確認。「最初の OSS ゲートウェイ」と適合数値はベンダー報告。",
   "zh": "Higress 项目博客——阿里的开源 API 网关（v2.2.4 MCP 无状态基线）。协议描述已一手核实；「首个 OSS 网关」与一致性数字为厂商自报。"
  },
+ "hippomaps.ch": {
+  "cat": "data",
+  "cred": "med",
+  "cv": 1,
+  "density": "low",
+  "en": "HippoMaps — a full map/navigation app over OpenStreetMap whose thesis is a deterministic (no-LLM) natural-language query parser compiling to Overpass QL; first-party project site. Cross-checked (11-21): site live with Overpass branding, and the author's r/openstreetmap cross-post carries the same no-LLM parser claim.",
+  "jp": "HippoMaps——OpenStreetMap 上の完全な地図/ナビアプリで、そのテーゼは Overpass QL へコンパイルする決定論的（LLM なし）自然言語クエリパーサー。ファーストパーティのプロジェクトサイト。クロスチェック済み（11-21）：サイトはライブで Overpass ブランディング付き、作者の r/openstreetmap クロス投稿が同じ LLM なしパーサーの主張を運ぶ。",
+  "zh": "HippoMaps——OpenStreetMap 之上的完整地图/导航应用，其论点是编译到 Overpass QL 的确定性（无 LLM）自然语言查询解析器；一方项目站点。已交叉核验（11-21）：站点在线、带 Overpass 品牌，作者的 r/openstreetmap 交叉帖携带同样的无 LLM 解析器主张。"
+ },
  "hirundo.io": {
   "cat": "security",
   "cred": "med",
@@ -7514,6 +7541,15 @@
   "jp": "Known Agents（旧Dark Visitors）——数千のエージェント/クローラーを追跡するAIエージェント・ボットディレクトリ。Agentic Web Index付き。エージェントツール発見に有用——独自検証を。",
   "zh": "Known Agents（前身 Dark Visitors）——智能体/机器人目录，追踪数千个智能体与爬虫，并附 Agentic Web Index；便于发现智能体工具——需独立核实。"
  },
+ "kobi.music": {
+  "cat": "research",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "Kobi's model cards and benchmark write-ups (Dettato, a 20M-param audio-to-MIDI transcriber claiming SOTA trained on no copyrighted recordings); first-party benchmarks, per-set F1 tables published, failure modes stated. Cross-checked (11-21): the artifact exists independently — GitHub kobimusic/dettato, a third-party HF ONNX export (fpp-ableton/dettato-onnx), and the comparator MuScriptor confirmed on HF as a Mirelo×Kyutai model; the page's '60.8' composite and no-copyright claims are verbatim on-page.",
+  "jp": "Kobi のモデルカードとベンチマーク解説（Dettato——著作権のある録音を一切使わず学習したと主張する 20M パラメータの audio-to-MIDI 転写器、SOTA を主張）；ファーストパーティのベンチマーク、セット別 F1 表を公開、失敗モードを明記。クロスチェック済み（11-21）：アーティファクトは独立に存在——GitHub kobimusic/dettato、サードパーティの HF ONNX エクスポート（fpp-ableton/dettato-onnx）、比較対象 MuScriptor は HF で Mirelo×Kyutai モデルとして確認。ページの「60.8」複合スコアと no-copyright 主張はページ上で逐語。",
+  "zh": "Kobi 的模型卡与基准解读（Dettato——一个 20M 参数的 audio-to-MIDI 转写器，声称以零版权录音训练并达到 SOTA）；一方基准、逐集 F1 表公开、失败模式明示。已交叉核验（11-21）：工件独立存在——GitHub kobimusic/dettato、第三方 HF ONNX 导出（fpp-ableton/dettato-onnx）、对照物 MuScriptor 在 HF 确认为 Mirelo×Kyutai 模型；页面「60.8」综合分与无版权主张逐字在页面。"
+ },
  "kotaku.com": {
   "cat": "news",
   "cred": "med",
@@ -8426,6 +8462,15 @@
   "zh": "长期运行的 Mastodon 实例（SDF）——NetBSD 项目官方账号所在地，因此该实例上的帖子是经由第三方主机发布的第一方公告。交叉核验（10-14）：9 月捐款帖子与项目官方捐款页面一致。",
   "jp": "長寿の Mastodon インスタンス（SDF）。NetBSD プロジェクト公式アカウントの拠点であり、同インスタンスの投稿は第三者ホスト経由の一次発表。相互検証（10-14）：9月の寄付投稿はプロジェクト公式の寄付ページと一致。"
  },
+ "math216.wordpress.com": {
+  "cat": "research",
+  "cred": "high",
+  "cv": 1,
+  "density": "low",
+  "en": "Ravi Vakil's course blog (Stanford math 216) — where the second, independent GRH claim (Alessandro Masullo's draft, 'It is all human, with no AI') was announced on 2026-11-20; first-hand academic announcements. Cross-checked (11-21): Vakil's Stanford faculty homepage links the blog.",
+  "jp": "Ravi Vakil のコースブログ（スタンフォード数学 216）——2 つ目の独立 GRH 主張（Alessandro Masullo の草稿、「It is all human, with no AI」）が 2026-11-20 に発表された場所。一次の学術発表。クロスチェック済み（11-21）：Vakil のスタンフォード教員ホームページがブログをリンク。",
+  "zh": "Ravi Vakil 的课程博客（斯坦福数学 216）——第二个独立 GRH 声明（Alessandro Masullo 草稿，「It is all human, with no AI」）于 2026-11-20 宣布之地；一次学术公告。已交叉核验（11-21）：Vakil 的斯坦福教工主页链接该博客。"
+ },
  "mathandai.org": {
   "cat": "research",
   "cred": "high",
@@ -8875,6 +8920,15 @@
   "en": "MotherDuck's engineering blog — the DuckDB-founded company analyzing DuckDB 2.0's async I/O (2.4× on one S3 query). Deep expertise, but performance claims are vendor-run; the repo's own benchmarks are the independent check. Cross-checked (10-11) via HN.",
   "jp": "MotherDuckのエンジニアリングブログ——DuckDB創業メンバーの会社によるDuckDB 2.0非同期I/O分析（あるS3クエリで2.4×）。知見は深いが性能主張はベンダー計測。リポジトリ自身のベンチマークが独立した裏取り。HNで突合済み（10-11）。",
   "zh": "MotherDuck 工程博客——DuckDB 创始团队的公司分析 DuckDB 2.0 的异步 I/O（单个 S3 查询 2.4×）。专业深厚，但性能主张为厂商自测；仓库自带的基准才是独立核验。已通过 HN 交叉核验（10-11）。"
+ },
+ "motherjones.com": {
+  "cat": "news",
+  "cred": "high",
+  "cv": 1,
+  "density": "med",
+  "en": "Mother Jones — US investigative/progressive magazine with original reporting and named sources. Cross-checked (11-21): the Google-workers-petition article (AWU vs the schools Search/Gemini policy) verified live — quotes ('don't see the vision', Election Day timing, 1,000+ AWU membership) on-page — and Alphabet Workers Union's own site carries matching petition pages, independent of the magazine.",
+  "jp": "Mother Jones——米国の調査報道/リベラル系誌。独自の取材と名指し付きソース。クロスチェック済み（11-21）：Google 従業員請願記事（AWU 対 学校 Search/Gemini 政策）をライブ確認——引用（「don't see the vision」、Election Day の時期、1,000+ の AWU メンバーシップ）がページ上——そして Alphabet Workers Union 自身のサイトが同誌と独立に一致する請願ページを保有。",
+  "zh": "Mother Jones——美国调查报道/进步派杂志，原创报道、具名信源。已交叉核验（11-21）：Google 员工请愿文章（AWU 对学校 Search/Gemini 政策）实时核验——引语（「don't see the vision」、选举日时机、1,000+ AWU 会员规模）在页面——而 Alphabet Workers Union 自己的站点载有与该杂志相互独立的对应请愿页面。"
  },
  "mouse.dev": {
   "cat": "community",
@@ -10649,6 +10703,15 @@
   "jp": "個人 Show HN プロジェクトサイト（Redis City、ソース連携の対話型 3D Redis 解説）。09-16 にページ確認。修正記録：feed の「手作りであり生成ではない」という表現は、HN 49676425 での作者自身の発言（「フロントエンドは大部分 LLM で構築」）と矛盾——項目 46 は 09-16 に en/zh/jp でその場修正され、表現を改め velocity は ▮ のまま（もともと steady）。",
   "zh": "个人 Show HN 项目站（Redis City，可交互 3D Redis 讲解，组件链接源码）；09-16 核实页面。更正记录：feed 原称其'手工打造而非生成'，与作者在 HN 49676425 的自述矛盾（'前端大部分用 LLM 构建'）——条目 46 已于 09-16 在 en/zh/jp 就地更正，修正表述，velocity 保持 ▮（本已是 steady）。"
  },
+ "poolp.org": {
+  "cat": "community",
+  "cred": "med",
+  "cv": 1,
+  "density": "low",
+  "en": "Gilles Chehade's personal blog (OpenSMTPD lead developer) — first-party operating notes and postmortems. Cross-checked (11-21): the GitHub profile (github.com/poolpOrg) links the domain and OpenSMTPD, and the Framework post's current state — the four-line TL;DR plus 'ENODRAMA. Move along' — is verbatim on-page, confirming the un-publishing the feed described.",
+  "jp": "Gilles Chehade（OpenSMTPD のリード開発者）の個人ブログ——ファーストパーティの運用ノートとポストモーテム。クロスチェック済み（11-21）：GitHub プロフィール（github.com/poolpOrg）がドメインと OpenSMTPD をリンク、Framework 投稿の現在の状態——4 行の TL;DR と「ENODRAMA. Move along」——がページ上で逐語、feed が記述した非公開化を確認。",
+  "zh": "Gilles Chehade（OpenSMTPD 主力开发者）的个人博客——一方运维笔记与事后复盘。已交叉核验（11-21）：GitHub 资料页（github.com/poolpOrg）链接域名与 OpenSMTPD，Framework 帖子的当前状态——四行 TL;DR 加「ENODRAMA. Move along」——逐字在页面，证实了 feed 描述的撤稿行为。"
+ },
  "poolside.ai": {
   "cat": "vendor",
   "cred": "med",
@@ -12256,6 +12319,15 @@
   "en": "White House \"Super Intelligence\" policy portal — official .gov rebrand of AI policy under the SI initialism; primary source for policy vocabulary shifts.",
   "zh": "白宫「超级智能（SI）」政策门户——以 SI 缩写对 AI 政策的官方 .gov 更名；政策词汇变动的第一手来源。",
   "jp": "ホワイトハウスの「スーパーインテリジェンス」政策ポータル——AI 政策を SI の略語で公式に改名した .gov サイト。政策語彙の変化の一次情報源。"
+ },
+ "signal.org": {
+  "cat": "vendor",
+  "cred": "high",
+  "cv": 1,
+  "density": "med",
+  "en": "Signal's official blog — first-party product/policy posts from the messenger, typically candid about their own gaps (the 11-21 post names its missing macOS coverage). Cross-checked (11-21): Apple's own support documentation independently documents Siri's 'Onscreen Awareness' — the OS feature the post responds to — and the post's quotes ('a skeleton key', the canary line) are verbatim on-page.",
+  "jp": "Signal の公式ブログ——メッセンジャーからのファーストパーティの製品/政策投稿、自らの穴に率直（11-21 の投稿は macOS 未対応を自ら名指し）。クロスチェック済み（11-21）：Apple 自身のサポート文書が Siri の「Onscreen Awareness」を独立に記載——投稿が応答する OS 機能——そして投稿の引用（「a skeleton key」、canary の一行）はページ上で逐語。",
+  "zh": "Signal 的官方博客——来自该通讯应用的一方产品/政策帖子，对自己的缺口坦率（11-21 帖子自行点名 macOS 未覆盖）。已交叉核验（11-21）：Apple 自己的支持文档独立记载 Siri 的「Onscreen Awareness」——帖子所回应的 OS 功能——帖子引语（「a skeleton key」、金丝雀一句）逐字在页面。"
  },
  "signalandsilence.substack.com": {
   "cat": "news",

@@ -638,3 +638,10 @@ AI 造物。
 
 Sources: [ChatGPT for SNES](https://www.bxfoundry.com/chatgpt_snes/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50568548)
+
+## 2026-11-21（04:27 批次）——LLM 服务模式抵达视频跟踪：一份 SAM 2 副本服务 64 路摄像头
+
+`aryamandarda/tamserve`（Apache-2.0）是 SAM 2/EdgeTAM 一直缺的服务层：已发布代码一次只跟踪一段录制视频，多摄像头部署只能每路摄像头跑一份模型副本，显存堆积。tamserve 把所有摄像头批量送进单一共享副本——「what LLM servers such as vLLM do for chat」——README 的表格自带证据：8 路摄像头从 8.6 GB 降到 **2.2 GB** 显存；单路从 177 提速到 219 帧/秒；**64 路**——旧方式约 70 GB——装进 **5.7 GB**、321 帧/秒，精度「unchanged on DAVIS 2017」。持续的世界监测正是 agent 时代视觉要走向的负载，而它撞上的是 2023 年聊天就撞过的墙：每请求一份模型副本不可扩展。从 LLM 服务迁移到跟踪的批量共享模式，才是这里可泛化的想法。
+
+Sources: [aryamandarda/tamserve](https://github.com/aryamandarda/tamserve) ·
+[Show HN discussion](https://news.ycombinator.com/item?id=50523377)

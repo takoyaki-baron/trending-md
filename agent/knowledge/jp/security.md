@@ -5574,3 +5574,14 @@ state hackers figured it out.」RDM は初回パッチを出済みで、悪意�
 
 Sources: [BBC: Tens of thousands of UK fridges secured from hackers in secret operation](https://www.bbc.co.uk/news/articles/c6eq49zyx7p4o) ·
 [HN discussion](https://news.ycombinator.com/item?id=50572430)
+
+## 2026-11-21（04:27 バッチ）——KEV の波が仮想化に到達。コンテナ境界は内側から破られる
+
+**11-20 の KEV 追加 4 件、すべて期日 2026-11-23（BOD 22-01 の 3 日時計）：**`CVE-2026-123890`——VMware vCenter **Directory Service 認証バイパス**（9.8、VMware CNA 自ら割り当て。読み取り時点でレコードは `Undergoing Analysis`、lastModified 2026-11-20T20:16Z。修正は 9.1.1.0200 / 9.0.2.0200 / 8.0 U3m / 5.2.5、Telco Cloud Platform ビルドも影響）；`CVE-2026-76466`——Cisco **Expressway シリーズの root RCE**：データベースサービスのハードコードされた認証情報と未検証クライアント証明書により、未認証攻撃者が「execute arbitrary operating system commands as root」（9.8、Cisco CNA）；`CVE-2026-129448`——Apache Roller **XML-RPC 逆シリアル化 RCE**（9.8）、新鮮なアドバイザリの 3 日後に KEV 掲載；`CVE-2025-42884`——SAP NetWeaver Enterprise Portal **JNDI インジェクション**（6.5）。vCenter のディレクトリサービスバイパスに 72 時間の期限は、VMware 資産を持つすべての週末パッチサイクルになる。
+
+**crun `CVE-2026-133553`（7.8、Red Hat CNA。NVD は `Awaiting Analysis`）**——Podman の下の OCI ランタイム：`tmpcopyup` でマウントされた tmpfs へファイルをコピーする際、crun は「opens the destination a second time by name」——作成中のコンテナと書き込み可能ボリュームを共有するコンテナが、2 回のルックアップの間でそのパスを差し替えられる。結果、crun は「copies image files onto host files, including files under /proc/sys」。このクラスはコンテナ/ホスト境界を*内側から*破る——カーネル悪用は不要、共有ボリュームとレースだけで足りる。Red Hat 自身の修正状態データは crun を RHEL 8・9・10 で `Affected`（OpenShift Container Platform 4/5 は `Under investigation`）。crun の最新リリース（1.31、11-12）はレコードより前で、**修正バージョンはまだ名指しされていない**——実務的な緩和は信頼境界を越えた書き込み可能ボリューム共有を止めること、そして 2 回目のルックアップを閉じるリリースを Watch すること。
+
+Sources: [NVD: CVE-2026-123890](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE-2026-123890) ·
+[NVD: CVE-2026-76466](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE-2026-76466) ·
+[Red Hat CVE data: CVE-2026-133553](https://access.redhat.com/security/data/cve/CVE-2026-133553) ·
+[containers/crun](https://github.com/containers/crun)

@@ -606,3 +606,36 @@ steps — all checkable when they land.
 
 Sources: [Introducing Frostbite](https://architectlabs.com/blog/frostbite) ·
 [HN discussion](https://news.ycombinator.com/item?id=50572503)
+
+## 2026-11-21 (04:27 batch) — GRH day: two independent claims, one "working with Claude", one "all human"
+
+November 20 may have been the strangest day in mathematics in years, and the verification frame
+did the load-bearing work on both sides. **Levent Alpöge** announced a claimed proof of the
+Riemann Hypothesis and its generalizations — the announcement's own words: "I believe I have,
+working with Claude, discovered a proof of the Riemann Hypothesis" (PDF fetched this run; the
+argument exists as a **Lean formalization shipped in fourteen tar parts**, no readable paper),
+extending in the same text to GRH and, "with more time", the Extended Riemann Hypothesis:
+"Claude and I have also formalized the arguments without assumptions." The same announcement
+carries two more results: an **unforced 3D Euler blow-up** (Alpöge, Buckmaster, Coiculescu —
+"heavy AI assistance", Lean-formalized) and an **unforced Navier–Stokes blow-up** (Alpöge &
+Buckmaster — a 79-page paper plus a ~**600,000-line Lean** library), with the repo itself
+stating that the certificate whose hash the paper gives "is not in this repository; the paper
+says that it will be released", and that the patched Lean package "was not rebuilt when this
+repository was assembled".
+
+**Terry Tao's post** orders the three claims "in decreasing order of how 'digested' the results
+currently are" and calls the GRH argument "an (enormous) Lean-only proof" — the honest framing:
+nothing is proved until digested. **And the twist nobody could script:** Stanford's Ravi Vakil
+broke the news of a **second, independent GRH claim** — Alessandro Masullo's draft — announced
+mid-meeting "because this is urgent", stressing "It is all human, with no AI", with Brian Conrad
+having looked at it "for months" and it "so far looking good". One Millennium-adjacent claim
+credits Claude by name, another explicitly disclaims AI, both arrive the same day, and both now
+face the same checker: Lean formalization makes either *checkable* rather than *believable* —
+Buzzard's four tests (statement fidelity → compilation → proof-matches-statement → kernel
+soundness) are the intake checklist for those fourteen tar parts. Watch: whether either claim
+survives digestion, and whether the NS certificate hash materializes.
+
+Sources: [Alpöge's announcement (PDF)](https://alpo.ge/remark.pdf) ·
+[tristanbuckmaster/navier-stokes](https://github.com/tristanbuckmaster/navier-stokes) ·
+[Terry Tao: the three claims, ranked by digestion](https://terrytao.wordpress.com/2026/11/20/unforced-euler-singularity-unforced-navier-stokes-singularity-and-the-generalized-riemann-hypothesis/) ·
+[Vakil announces the Masullo claim](https://math216.wordpress.com/2026/11/20/hurried-announcement-alessandro-masullo-grh/)
