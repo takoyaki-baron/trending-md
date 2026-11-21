@@ -1658,3 +1658,14 @@ Sources: [Jujutsu Primer](https://ethanlowman.com/posts/jj-primer/) ·
 [East River Source Control](https://ersc.io) ·
 [FFmpeg 9.1 "Gauss"](https://ffmpeg.org/download.html#release_9.1) ·
 [GIMP: Improved GUI testing](https://www.gimp.org/news/2026/11/16/gimp-ui-tests/)
+
+## 2026-11-21（12:32 批次）——Winedroid 把 Android 的 API 表面装进浏览器；NINLIVE 流媒体化一支乐队的完整磁带轨迹
+
+**Winedroid**（`sohzm/winedroid`，11-20 创建，读时 93★；Show HN，115+ 分）：真实的 F-Droid APK——OpenCalc、冥想计时器、文件管理器、天气应用——在没有任何 Android 参与的浏览器里运行。「Written completely in Rust and it essentially replicates Android so it works everywhere」，出自其 FAQ；浏览器加载的运行时「12MB right now」；目标是 Web、Linux、macOS、Windows。注意事项前置：JIT 在 web 目标上不工作，所以浏览器演示比原生慢；应用覆盖「still improving day by day」。这是 Wine 的原始打法——重实现 API 表面而非机器——用于 Android，它将像 Wine 解耦 Windows 软件那样把应用从 Google 运行时解耦；论题 23 波的沙箱缺口同样在此（重实现没有 Android 沙箱），而浏览器原生目标是那个有趣的赌注：无需应用商店的分发。
+
+**NINLIVE**（ninlive.com，160+ 分）：粉丝运营的 Nine Inch Nails 现场存档——1,210 场演唱会、1,949 个录音、4,675 张照片、46 国 373 城的 363 首歌——现已流媒体化 1988–2026（11-16 更新，Discord 登录存收藏）。更新流读起来像把存档维护当作生活方式：一张未流传的 DAT 母带为 1994 洛杉矶场浮出、为同好完成的「200 DAT tape project」、逐场拍摄的票根与歌单扫描。「Fan run, not affiliated with the band。」保存的本能与 Salon 语料、Apple 论坛救援是同一个：存档是耐久的工件，而不起眼的工程——磁带来历追踪、流媒体基础设施、逐场元数据——正由志愿者完成。
+
+Sources: [winedroid demo](https://winedroid.soham.sh/demo/) ·
+[sohzm/winedroid](https://github.com/sohzm/winedroid) ·
+[NINLIVE](https://ninlive.com/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50583274)

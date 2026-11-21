@@ -5101,3 +5101,20 @@ Sources: [NVD: CVE-2026-123890](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE
 [NVD: CVE-2026-76466](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE-2026-76466) ·
 [Red Hat CVE data: CVE-2026-133553](https://access.redhat.com/security/data/cve/CVE-2026-133553) ·
 [containers/crun](https://github.com/containers/crun)
+
+## 2026-11-21（12:32 批次）——eMudhra 链传入 pip；MCP 工具服务器层继续产出；nginx 十修发布
+
+**pip `CVE-2026-133949`（9.3 Critical，CVSS 4.0，PSF CNA；核查时 NVD `Received`）**——「pip prior to v26.2.2 the certifi bundled with pip contains the compromised eMudhra certificates。」10 月的 CA 失陷教训（论题 25）仍在沿工具链向外传播，这一跳抵达所有用旧 pip 装包的机器。记录的修复有顺序：升级「either by first upgrading Python to a version that rejects the compromised intermediates（`CVE-2026-115557`）or use hash pinning with a known-secure version of pip」——而让它可容忍的状态是：「pip is not vulnerable when using a Python version that rejects the compromised certificates。」只修 pip 未必关上它；决定者是信任源（论题 25）。
+
+**Poste.io `CVE-2026-127027`（9.2 Critical，CVSS 4.0，CERT-PL CNA——本轮已在 NVD 核实、`Received`、source `cvd@cert.pl`；2.5.22 修复）**——「Email sent to dmarc-reports@<domain> is saved without sender verification」，而「Script that runs as root unpacks the attachments using unsafe shell commands, allowing command injection through crafted attachments (e.g. file names or archive contents)」。结果：「a remote unauthenticated attacker who can send an email to the server's port 25 can execute arbitrary commands as root within the Poste.io container」——差不多是邮件服务器能有的最接近零点击远程 root；容器边界是攻击者与宿主之间唯一的东西。
+
+**MCP 服务器两连（均 8.8、均 GitHub_M 分配、均已修复）：**`CVE-2026-77329`（CVSS 4.0，tapo-mcp 0.5.0 修复）——TP-Link 智能家居设备的 Rust/Python MCP 服务器「calls disable_allowed_hosts() without replacement Host or Origin validation」，于是「a malicious website can use DNS rebinding to send same-origin browser requests to the victim's local or LAN Tapo MCP listener when it runs without an API key」——到达「control_device for smart-device actuation and take_snapshot for configured cameras」。`CVE-2026-129995`（CVSS 3.1，mcp-ssh-manager 3.8.5 修复）——备份工具「build remote shell commands from caller-controlled values」「without neutralizing shell metacharacters」，且「ssh_backup_schedule can persist execution through cron」。Phoenix/CubeSandbox/SDK 浪潮的复发模式成立：危险表面不是模型，而是绑在 localhost 或 LAN 上、带着一个没人设的可选 auth 旗标的工具服务器——能执行物理设备、能读摄像头的 listener 是赌注升级。
+
+**nginx 的 1.31.9/1.30.7 一次带十个 CVE**——昨日两条 RCE 的标题少报了它。nginx 用文字标签而非 CVSS 分数评级严重度：三条「major」——HTTP/2 流控内存损坏（`CVE-2026-123007`）、「Infinite loop while reading client request body over TLS 1.3」（`CVE-2026-118899`）、「Use-after-free in mail proxy module」（`CVE-2026-113425`）——其余中或小，含「SNI bypass when using client certificate validation in stream」（`CVE-2026-120967`）——对在 nginx 终结 mTLS 的人这是安静的那个：能匹配错 SNI 的客户端证书校验是访问控制 bug 而非崩溃，同一次升级即修复。披露次日仓库就坐上 GitHub trending：补丁浪潮就是流量。
+
+Sources: [NVD: CVE-2026-133949](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE-2026-133949) ·
+[PSF: discussion for Python users](https://discuss.python.org/t/information-for-python-users-regarding-emudhra-emsign-ca-certificate-security-incident/109576) ·
+[CERT-PL advisory](https://cert.pl/en/posts/2026/11/CVE-2026-127027) ·
+[tapo advisory GHSA-2cwc-6wwp-62q6](https://github.com/mihai-dinculescu/tapo/security/advisories/GHSA-2cwc-6wwp-62q6) ·
+[mcp-ssh-manager advisory GHSA-qwwm-vrm9-4mw8](https://github.com/bvisible/mcp-ssh-manager/security/advisories/GHSA-qwwm-vrm9-4mw8) ·
+[nginx security advisories](https://nginx.org/en/security_advisories.html)

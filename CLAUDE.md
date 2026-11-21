@@ -1069,6 +1069,16 @@ underlying pages — this produced a two-layer false signal in a single item.
    within four hours, so a claim correct at 11:17Z was false by 15:17Z — the check reads `published` vs
    `lastModified` and says which); and **a prose token is not a payload key** unless it is identifier-shaped or
    carries the noun `key`/`field` ("it is missing", "password is empty" were the live run's only noise).
+   **Both halves of that guard have now misfired themselves** (added 2026-11-21 13:10, two
+   `field-unknown-name` noise rows in one day's JSON): the noun half fired on "runs **without an API
+   key**" (the Tapo MCP listener's optional auth flag, quoted from the GHSA advisory's own prose —
+   an acronym + the noun `key` is a CREDENTIAL, and CVE 2.0/5.x names no field in all caps, so
+   all-caps tokens force `explicit=false`), and the shape half fired on "no **macOS** protection"
+   (Signal conceding the desktop platform — camelCase is how products spell themselves, so
+   `macOS` matches IDENT exactly as `cvssMetricV40` does; the shape arms now pass `explicit=false`
+   and an unknown identifier reports nothing, while a KNOWN field claim is unaffected and a new
+   camelCase field WITH the noun stays visible). The unknown-name report keeps its documented
+   contract — noun-gated, minus acronyms.
    `--selftest` **252 → 268**;
    **rangeabsent** (added 2026-11-05 20:50 — the open62541 rule's executor, 11 days after the rule was written
    and after it recurred in a *published* item: ansible-core's "No fixed version appears in the record" against
@@ -1615,9 +1625,19 @@ underlying pages — this produced a two-layer false signal in a single item.
    span silences its uncited parties. Possessive suffixes are stripped from every arm
    ("per Kotaku's testing" → token `kotaku`, which then satisfies on the cited kotaku.com URL),
    and months, acronyms, sub-4-char tokens and a tech/agent-product stoplist are not parties.
-   Pure, no network, runs under `--no-net`; first live day: 46-item feed → 1 advisory (the filing
-   case itself) + 3 satisfied, two prior feeds → 1 advisory + 3 satisfied, `--selftest` 399 →
-   **418**.
+   **`per` has TWO readings, and only one attributes** (added 2026-11-21 13:10, item 25 of that
+   day's lint JSON): "sessions **per Slack thread**" is "for each Slack thread" — a distributive
+   reading over a venue — and it filed `attribution-uncited` advising "open Slack's primary
+   artifact" for a quotation Slack never wrote (the quote was verbatim in the cited
+   `diggerhq/opencomputer` README, checked first-hand; the item's two cited URLs are a repo root
+   and an HN thread, both skipped by `citedPages`, so the page-text arm could never rescue it).
+   A venue-noun guard now sits on the `per`/`according to` arm: a venue/iteration noun directly
+   after the name (thread, channel, message, chat, session, request, run, …) makes the
+   preposition distributive and no party is built; genuine attributions keep their artifact
+   nouns ("per Kotaku's testing", "per Digger's launch write-up" — both pinned). Known residual,
+   documented not suppressed: the possessive+artifact-noun arm still reads "Slack's thread" as an
+   artifact, because "Aaronson's thread" must keep firing. `--selftest` 399 → **418**, then
+   470 → **476** with this guard.
    **A party can live in the page's PROSE and not in its URL — the page-text arm reads the cache,
    never the network** (added 2026-11-13 04:56, filed by the lint's own JSON on its second live
    day). Item 1 attributes a quotation to Mast ("has agreed to come") over three cited URLs, none

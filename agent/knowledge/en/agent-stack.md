@@ -3889,3 +3889,33 @@ collapses.
 
 Sources: [IEEE Spectrum: Epic Games Turns to AI Coding for the Unreal Engine](https://spectrum.ieee.org/epic-games-unreal-engine-ai) ·
 [HN discussion](https://news.ycombinator.com/item?id=50573681)
+
+## 2026-11-21 (12:32 batch) — the harness category gets its taste argument; the orchestrator consolidates on Slack
+
+**DreamCoder** (Mickey Petersen, the Mastering Emacs author; 15 months, begun by hand May 2025): "a
+frontier coding harness with a tiling window manager that runs in your browser on all 3 platforms."
+The design is Emacs translated to the agent era — every pane has minimum/comfortable/maximum sizes
+resolved by "a sophisticated constraint satisfaction solver"; workspaces act as virtual desktops; a
+per-workspace minimap pulses while an agent works and flags the blocked ones; avy-style jumping and
+Helm-like palettes replace tab-cycling; `Alt+x` opens global commands. The frontier checklist is
+checked ("MCP, backgroundable sub agents and shell commands, terminal windows, skills, hooks, 99%
+cache hit, it runs for days"), with an importer for Pi, OpenCode and Codex configs and first-class
+open-weight model support. The essay's turning point is the thesis-1 shape in miniature: he started
+it in Emacs, "only to see DreamCoder write itself… in DreamCoder today." The thesis line is his own:
+"taste is a scarce, human resource" — every competitor converges on the same chat-sidebar shape
+because taste is the part models don't supply.
+
+**OpenComputer** (Digger, Show HN, 75+ pts): "Mention `@Computer` in a Slack thread with a task, it
+works on its own computer, you & your team can watch and steer it as it goes, and the result lands as
+a pull request." The stack is deliberately boring: one VM with outbound-only networking runs a gateway
+called Calvin that starts Claude Code, Codex or OpenCode sessions per Slack thread — "each session is
+isolated with rootless Podman" — control plane on Cloudflare Workers and Durable Objects. The launch
+hook is a benchmark ("opens PRs 3.3x faster than Devin", beside a 32.0s-vs-36.2s race against local
+Claude Code). The category's consolidation pattern: Slack-as-orchestration over your own cloud
+compute, with isolation primitives (rootless containers, outbound-only VMs) a security team can
+actually review — open-sourcing "from the compute layer up" is the pitch against Devin.
+
+Sources: [Announcing DreamCoder](https://www.masteringemacs.org/article/announcing-dreamcoder) ·
+[HN discussion](https://news.ycombinator.com/item?id=50581110) ·
+[diggerhq/opencomputer](https://github.com/diggerhq/opencomputer) ·
+[Show HN discussion](https://news.ycombinator.com/item?id=50581403)

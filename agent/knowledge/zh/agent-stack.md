@@ -2603,3 +2603,14 @@ IEEE Spectrum 的深度报道（11-18）给出了引擎级的赌注：**UE6 将�
 
 Sources: [IEEE Spectrum: Epic Games Turns to AI Coding for the Unreal Engine](https://spectrum.ieee.org/epic-games-unreal-engine-ai) ·
 [HN discussion](https://news.ycombinator.com/item?id=50573681)
+
+## 2026-11-21（12:32 批次）——harness 类别拿到品味论点；编排器在 Slack 上收拢
+
+**DreamCoder**（Mickey Petersen，Mastering Emacs 作者；15 个月，2025 年 5 月起手工开始）：「a frontier coding harness with a tiling window manager that runs in your browser on all 3 platforms」。设计是把 Emacs 翻译进 agent 时代——每个窗格有 minimum/comfortable/maximum 尺寸、由「a sophisticated constraint satisfaction solver」求解；workspace 即虚拟桌面；agent 工作时每工作区的 minimap 脉动、标出被阻塞者；avy 式跳转与 Helm 式面板取代 tab 轮转；`Alt+x` 打开全局命令。前沿清单全勾（「MCP, backgroundable sub agents and shell commands, terminal windows, skills, hooks, 99% cache hit, it runs for days」），带 Pi/OpenCode/Codex 配置导入器与一等开放权重模型支持。文章的转折点就是论题 1 的形状缩影：他在 Emacs 里开始，「only to see DreamCoder write itself… in DreamCoder today」。论点是他自己的：「taste is a scarce, human resource」——每个竞品都收敛到同一个聊天侧栏形状，因为品味正是模型不供应的部分。
+
+**OpenComputer**（Digger，Show HN，75+ 分）：「Mention `@Computer` in a Slack thread with a task, it works on its own computer, you & your team can watch and steer it as it goes, and the result lands as a pull request。」栈刻意乏味：一台仅出站网络的 VM 跑名为 Calvin 的网关，按 Slack 线程启动 Claude Code、Codex 或 OpenCode 会话——「each session is isolated with rootless Podman」——控制平面在 Cloudflare Workers 与 Durable Objects 上。发布钩子是基准（「opens PRs 3.3x faster than Devin」，旁有对本地 Claude Code 的 32.0s 对 36.2s 竞速）。类别收拢模式：Slack 作编排、跑在你自己的云算力上，隔离原语（rootless 容器、仅出站 VM）是安全团队真的能审的东西——「from the compute layer up」开源是对 Devin 的卖点。
+
+Sources: [Announcing DreamCoder](https://www.masteringemacs.org/article/announcing-dreamcoder) ·
+[HN discussion](https://news.ycombinator.com/item?id=50581110) ·
+[diggerhq/opencomputer](https://github.com/diggerhq/opencomputer) ·
+[Show HN discussion](https://news.ycombinator.com/item?id=50581403)

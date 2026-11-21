@@ -819,3 +819,18 @@ apply.
 Sources: [Signal blog: Protecting Your Privacy](https://signal.org/blog/protecting-your-privacy/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50572348) ·
 [Mozilla: Why there are still no non-WebKit browsers on iOS](https://blog.mozilla.org/en/mozilla/internet-policy/apple-ios-browser-engine-rules/)
+
+## 2026-11-21 (12:32 batch) — GitHub suspends an account to 404 with no email, then restores it
+
+A developer's GitHub account (`0n4t3`) was suspended — profile 404, "all my personal projects are
+gone" — with "not so much as a pop up notification or email on what happened." After the thread gained
+traction the account came back, and the post now opens "Update — I'm back!", crediting "whoever undid
+my (prob automated?) deletion and/or ban on Github." The lasting lines: "I still have no idea what got
+me banished or if it'll happen again… just a random banishment then unbanishment." He's now mirroring
+locally and considering migrating. The account-side twin of Codeberg's registrar suspension (11-18):
+moderation actions that take a whole identity offline arrive through no notification channel, and the
+resolution — un-banishment by whoever happened to notice — is not a process. The platform's appeal
+path is a thread going viral; mirror your repos.
+
+Sources: [Help github just deleted me](https://nate.mecca1.net/posts/2026-11-20_help/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50583911)

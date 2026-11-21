@@ -4201,3 +4201,10 @@ ASI への 4 つの経路——**モデルとデータのスケーリング、�
 
 Sources: [What comes after AGI?](https://institute.deepmind.com/essays/what-comes-after-agi/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50569519)
+
+## 2026-11-21（12:32 バッチ）——Inkling 2 Mini：ループトランスフォーマーが results と共にオープンで出荷
+
+Thinking Machines の Inkling 2 Mini（オープンウェイト；26.4B 合計/3.4B アクティブ MoE、24 の保存レイヤが 48 回適用/トークン；約 20 GB、ネイティブ NVFP4——ローカル推論の詳細は [[edge-inference]]）は「lead every open-weights model with less than 100B total parameters」と主張——DeepSWE v1.1 **48.2%**、Vals Index v2.2 **46.5%**、SWE-bench Pro v2 Hard **77.9%**、表にハーネス名を記載。11-06 の行の Inkling 2 Small への懸念（「externally reported evaluations」、多くの行が 2 位に読める）は少なくとも公開ポスト自身の形状で部分的に答えられる：各数字の横にハーネス名があり、制限は同じポストの引用ブロックとして運ばれる——「Inkling 2 Mini is not the strongest small model for multi-turn chat or for instructions with many constraints: it scores 50.0% on MultiChallenge and 33.4% on ComplexConstraints v1.1, behind Qwen3.8-27B on both。」同時出荷の `TML-d24-varloop-research` は可変ループ研究モデル：CoT なし時間地平線 16 秒 → 37 秒（3 パス）、それでも「the chain of thought grew shorter with more loops but stayed legible throughout」——monitorability の問いが能力の出荷と同じ時に測られる。独立再現まではベンダー数字；名指されたハーネスが再現を可能にする。
+
+Sources: [Thinking Machines: Introducing Inkling 2 Mini](https://thinkingmachines.ai/news/inkling-2-mini/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50581260)

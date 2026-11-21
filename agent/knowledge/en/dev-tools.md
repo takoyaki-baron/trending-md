@@ -2467,3 +2467,31 @@ Sources: [Jujutsu Primer](https://ethanlowman.com/posts/jj-primer/) ·
 [East River Source Control](https://ersc.io) ·
 [FFmpeg 9.1 "Gauss"](https://ffmpeg.org/download.html#release_9.1) ·
 [GIMP: Improved GUI testing](https://www.gimp.org/news/2026/11/16/gimp-ui-tests/)
+
+## 2026-11-21 (12:32 batch) — Winedroid puts Android's API surface in the browser; NINLIVE streams a band's whole tape trail
+
+**Winedroid** (`sohzm/winedroid`, created 11-20, 93★ at read time; Show HN, 115+ pts): real F-Droid
+APKs — OpenCalc, a meditation timer, a file explorer, a weather app — running in the browser with no
+Android involved. "Written completely in Rust and it essentially replicates Android so it works
+everywhere," per its FAQ; the browser-loaded runtime is "12MB right now"; targets Web, Linux, macOS
+and Windows. Caveats stated upfront: the JIT doesn't work on the web target, so the browser demo is
+slower than native, and app coverage is "still improving day by day." It's Wine's original move —
+reimplement the API surface, not the machine — applied to Android, which would decouple apps from
+Google's runtime the way Wine decoupled Windows software; the thesis-23 wave's sandbox gap is here
+too (a reimplementation has no Android sandbox), and the browser-native target is the interesting
+bet: distribution without an app store.
+
+**NINLIVE** (ninlive.com, 160+ pts): a fan-run Nine Inch Nails live archive — 1,210 concerts, 1,949
+recordings, 4,675 photos, 363 songs across 46 countries and 373 cities — now streaming 1988–2026
+(the Nov 16 update, Discord login for saved favorites). The updates feed reads like archival
+maintenance as a way of life: an uncirculated DAT master surfacing for a 1994 LA show, a "200 DAT
+tape project" finished for a fellow taper, ticket stubs and setlists photographed show by show.
+"Fan run, not affiliated with the band." The preservation instinct is the same one running through
+the Salon corpus and the Apple-forums rescue: the archive is the durable artifact, and the
+unglamorous engineering — tape-provenance tracking, streaming infrastructure, per-show metadata —
+is being done by volunteers.
+
+Sources: [winedroid demo](https://winedroid.soham.sh/demo/) ·
+[sohzm/winedroid](https://github.com/sohzm/winedroid) ·
+[NINLIVE](https://ninlive.com/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50583274)

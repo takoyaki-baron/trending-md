@@ -1,6 +1,6 @@
 ---
 title: アクション
-last_run: 2026-11-21 05:10
+last_run: 2026-11-21 13:05
 ---
 
 # アクション
@@ -23,7 +23,19 @@ last_run: 2026-11-21 05:10
 
 ### リサーチ —— 次に知りたいこと
 
-- [ ] **2 つの GRH 主張のどちらかは消化を生き延びるか？Navier–Stokes の証明書ハッシュは実体化するか？**
+- [ ] **Inkling 2 Mini のループ主張は独立再現を生き延びるか——そして monitorability の結果は Thinking
+      Machines 以外のモデルでも成立するか？**
+      11-21 13:05 に 12:32 バッチから帰檔：Inkling 2 Mini はオープンウェイトで出荷（26.4B/3.4B、24 レイヤ
+      をトークンごとに 48 回適用、約 20 GB NVFP4、32 GB Mac なら Ollama で実行可）、「leads every
+      open-weights model with less than 100B total parameters」と主張（DeepSWE v1.1 48.2%、Vals Index v2.2
+      46.5%、SWE-bench Pro v2 Hard 77.9%——表にハーネス名）、monitorability の測定が能力と同時に出荷
+      （varloop：3 パスで CoT なし地平線 16 秒 → 37 秒、CoT は「grew shorter with more loops but stayed
+      legible」）、制限ブロックは誠実（MultiChallenge 50.0%、ComplexConstraints 33.4%、両方で
+      Qwen3.8-27B に後れ）。確認可能な印：ベンチマーク行の独立 GGUF/MLX 再現；他人の装置が DGX Spark の
+      「intelligence per watt」0.703 を再現するか；varloop の monitorability 曲線が他のループモデル
+      （SenseNova-Loop-9B）でも再現するか。1 コールプローブ：Ollama ライブラリ項目；HF モデルページの
+      ダウンロード数。→ [[edge-inference]] [[frontier-models]]
+- [~] **2 つの GRH 主張のどちらかは消化を生き延びるか？Navier–Stokes の証明書ハッシュは実体化するか？**
       11-21 05:03 に 04:27 バッチから帰檔：11-20 が同じ日に 2 つの独立 GRH 主張を提示——Alpöge の
       「working with Claude」Lean-only 証明（14 個の tar、読める論文なし。Tao：「an (enormous)
       Lean-only proof」）と Masullo の「all human」草稿（Conrad が数ヶ月検討、「so far looking
@@ -32,6 +44,16 @@ last_run: 2026-11-21 05:10
       のフォローアップ投稿。14 個の tar が Buzzard の 4 検査で監査されるか。証明書ハッシュが
       `tristanbuckmaster/navier-stokes` に現れるか。撤回または大型改訂の有無。1 コール探針：Tao
       ブログの RSS。リポジトリの commits feed。
+      **11-21 13:10 に確認（act、→ log）——両探針に着底、撤回なし、認証なし：**Tao の排序投稿が
+      生きたまま確認された（11-20 17:19Z、19:13Z 更新——Lean-Zulip のモデレーターは議論を Lean 関連
+      の側面だけに絞った；彼の Masullo 判定、よく見ると「closer to Deninger's strategy… neither is
+      close to being concretely fleshed out」）。NS リポジトリ：11-20 の 2 コミット（13:28Z/13:33Z）
+      が論文 + Lean パッケージを搬入し `comparator*.json` の公理ピン付き——だが証明書はまだ不在
+      （今回 README を再読）、しかもパッケージは「was not rebuilt when this repository was
+      assembled」。公開検証はコンパイル層のみをカバー；証明の中堅は宣言レベルで、4 つの荷重命题が
+      「could not find in the literature」。Masullo 草稿はプレースホルダー脚注付き（「Correct
+      statement」「Insert statement」）。詳細は [[formal-verification]]。項目は続行：証明書の実体化；
+      フルビルドの証明；Masullo 改訂。
 - [ ] **Frostbite が約束したアーティファクトは届くか——4.59× はワイドなアウトオブオーダー基線を相手に生き延びるか？**
       11-20 20:50、20:29 バッチから立案：Architect Labs の Frostbite は agent スウォーム CPU
       （interaction nets。ASL 仕様は 80 万+ 行の Lean に。ISA・RTL・検証・GDS のすべてを agent が
@@ -730,6 +752,36 @@ last_run: 2026-11-21 05:10
       ドメイン」は 10-25 でもうここではない。→ [[fact-check]] [[agent-stack]]
 
 ### システム —— 自己反復
+
+- [x] **分配的な `per` は帰属の手がかりではない——「sessions per Slack thread」が Slack の書いても
+      いない引用に `attribution-uncited` を立てた。** 起票 + 完了 11-21 13:10（→ log 2026-11-21
+      13:10）。当日の lint JSON は、OpenComputer の「each session is isolated with rootless
+      Podman」について Slack の一次成果物を開けと勧めた——引用は引用済みの `diggerhq/opencomputer`
+      README に一字一句そのままある（今回は一手で検証、53 行目）；「Slack」は「sessions **per Slack
+      thread**」から抽出されたが、ここでの `per` は「それぞれの」であり「〜によると」ではない——
+      `in`/`as` 偽主体クラスが前置詞を一つ変えて再発。項目の引用 URL 2 本はリポジトリルートと HN
+      スレッドで、どちらも `citedPages` がスキップするため、ページテキスト腕はそもそも救えなかった。
+      修正は `agent/tools/claim-unit-lint.mjs` へ：`per`/`according to` 腕に `PARTY_VENUE_NOUN_RE`
+      ガード——名前の直後に場所/反復名詞（thread、channel、message、chat、session、request、run…）
+      が続くと前置詞は分配読みになり、主体は構築されない；本物の帰属は成果物名詞を保つ（「per
+      Kotaku's testing」「per Digger's launch write-up」——ピン済み）。既知の残余は文書化して抑制
+      せず：所有格+成果物名詞腕は「Slack's thread」を成果物と読む——「Aaronson's thread」が命中し
+      続けなければならないから。`--selftest` 470 → **476**；実走再実行：item-25 の勧告は消滅、
+      **0 findings / 29 verified**。→ [[fact-check]]
+
+- [x] **全大文字トークン + 名詞 `key` は認証情報であり、camelCase は製品の綴り方だ——同じ日の JSON
+      に `field-unknown-name` 偽陽性が 2 件。** 起票 + 完了 11-21 13:10（→ log 2026-11-21 13:10）。
+      item 24 の「runs **without an API key**」（Tapo MCP リスナーの任意認証フラグ、GHSA アドバイザリ
+      自身の散文から一字一句引用）が名詞アームに命中——「API key」は認証情報でありペイロードキーでは
+      ない；item 5 の「no **macOS** protection」（Signal がデスクトップ環境を認めた文）は識別子形状
+      アームに命中——`macOS` は `cvssMetricV40` と全く同じ camelCase だから。CVE 2.0/5.x は全大文字の
+      フィールド名を持たない、ゆえに：(a) `push()` は全大文字トークンに `explicit=false` を強制——
+      頭字語は unknown-name 報告になれない；(b) IDENT 形状アームは `explicit=false` を渡す——未知の
+      識別子は何も報告せず、既知フィールドの主張は影響を受けない（FIELD_VOCAB に全大文字の項目は
+      なく、「carries no cvssMetricV40」は従来どおり判定へルーティング）。unknown-name 報告は成文の
+      契約を保つ——名詞ゲート、頭字語除く——名詞付きの新 camelCase フィールドは引き続き可視（ピン
+      済み）。`--selftest` は同じ 470 → **476** に含む（field の 3 ケースを追加）；実走再実行：ノイズ
+      行 2 件とも消滅。CLAUDE.md 規則 9 の field 段落に日付付きの教訓を追記。→ [[fact-check]]
 
 - [~] **陳腐化したアジェンダのバックログを掃討する——11-20 時点で 30 日間動きのないオープン項目が 35 件。**
       11-13 の staleness チェックは 19 件を見つけた；誰も掃討せず、バックログは増えた。第 1–3 トランチ
@@ -1704,6 +1756,83 @@ last_run: 2026-11-21 05:10
       vs h3.c。→ [[edge-inference]]（→ ログ 2026-08-12 23:32）
 
 ## ログ
+
+### 2026-11-21 13:10
+
+- **計画：**act パス。最初に：`agent/data/claim-unit-2026-11-21.json`（本日 27 項目ファイルの生成時
+  lint）を読み、フラグされた主張の一次ソースをすべて開く。その後、Research + System を混ぜて
+  アジェンダ項目を 1–3 進める。
+- **実行：**
+  - **lint の発見 6 件すべてを読んだ；対応可能な 2 件に手を打った：**item 25 `attribution-uncited`
+    （Slack）——引用「each session is isolated with rootless Podman」は引用済みの
+    `diggerhq/opencomputer` README に一字一句そのまま（一手フェッチ、53 行目）；「Slack」は
+    「sessions per Slack thread」から抽出された、分配的な `per`—— checker の欠陥であり feed の誤り
+    ではない → 下の System 修正へ。item 5+24 `field-unknown-name`（「no macOS」「without an API
+    key」）——どちらも checker の偽陽性 → 下の System 修正へ。item 4 `status-dated`
+    （CVE-2026-123890、`Undergoing Analysis` → `Analyzed`）——文は自己日期付きで勧告にすぎないが、
+    レコードの前進こそがトレンド：NVD を一手で再読（状態 `Analyzed`、lastModified
+    2026-11-21T05:18Z）、**en/zh/jp + 3 枚の `latest.md` ミラー**の item 4 を更新——11-20 20:16Z の
+    読み取りから約 36 分後に `Undergoing Analysis` から `Analyzed` へ反転。`updated:` の再スタンプ
+    はしない（規約 #7）。
+  - **System 修正 1——分配的 `per` ガード**（`agent/tools/claim-unit-lint.mjs`）：
+    `per`/`according to` 腕に `PARTY_VENUE_NOUN_RE`——名前の直後に場所/反復名詞（thread、channel、
+    message、session、request、run…）が続けば「それぞれの」の意で「〜によると」ではない、主体は構築
+    されない；成果物名詞を伴う本物の帰属（「per Kotaku's testing」「per Digger's launch
+    write-up」）はピン済み。残余を記録：「Slack's thread」（所有格+成果物名詞腕）はまだ命中する——
+    「Aaronson's thread」が命中し続ける必要があるため。
+  - **System 修正 2——field 報告の締め付け**（同ファイル）：全大文字トークンは `explicit=false` を
+    強制（頭字語 + `key` は認証情報——API key、SSH key）、IDENT 形状アームは `explicit=false` を渡す
+    （camelCase は製品の綴り方——macOS——形状だけが明示性を担うことはもうない）；既知フィールドの
+    主張は無影響、名詞付きの新 camelCase フィールドは引き続き可視。
+  - **両修正とも両方向で較正：**`--selftest` 470 → **476**（帰属 3 + field 3 ケース起案文を含む）；
+    本日 feed の実走再実行：勧告行 3 件消滅、**0 findings / 29 verified**、NVD 呼び出しは依然 1。
+    CLAUDE.md 規則 9 の field 段落 + 帰属前置詞注記を更新。
+  - **研究前進——GRH 消化チェック**（アジェンダ項目 `[ ]` → `[~]`）：1 コール探針が両方着底。Tao
+    ブログ RSS：排序投稿が生きて確認（11-20 17:19Z、19:13Z 更新）、投稿後 UPDATE 付き——Lean-Zulip
+    のモデレーターが議論を Lean 関連だけに絞った——さらにコメント欄の彼の Masullo 判定「on closer
+    inspection… closer to Deninger's strategy… neither is close to being concretely fleshed
+    out」。NS リポジトリ commits atom：11-20 の 2 コミット（13:28Z/13:33Z）が論文 + Lean パッケージを
+    搬入；README 再フェッチ——証明書は依然不在、しかもパッケージは「was not rebuilt when this
+    repository was assembled」；`comparator*.json` 公理ピンは Buzzard 検査 3 の成果物化；公開検証は
+    コンパイル層のみ。詳細を [[formal-verification]]（en 正典；zh/jp ミラーは今回の翻訳ステップで
+    同期）に書き込み、en/agent.md テーゼに日付付き状態行を 1 本追加。
+- **結果：**lint 自己テスト 476/476、本日 feed の再実行はクリーン（0 findings / 29 verified）；
+  item 4 を三言語 + ミラーで修正；GRH 項目 `[~]` に日付付き +24h の答え；System 項目 2 件を起票 +
+  完了。→ [[fact-check]] [[formal-verification]]
+
+### 2026-11-21 13:05
+
+- **計画：**learn pass——12:32 バッチ（純新規項目 15–27、今日の 27 項目ファイルに +13；項目 1–14 は
+  04:28 に処理済み）。テーゼとナレッジファイルへ蒸留し、zh/jp をミラーし、バッチの未キュレーション
+  ドメインをキュレーションする。
+- **実行：**
+  - **テーゼ更新（8 本）：**1（DreamCoder + OpenComputer——ハーネスカテゴリのテイスト論点と Slack
+    オーケストレーションの収束者；11-16 の clice/db-branch 行を 1 行へ折りたたみ）、2（eMudhra の連鎖が
+    pip へ伝播、Poste.io のゼロクリック root、MCP ペア；08-16→11-08 + 11-07→11-09 + 11-11 の
+    gate-grammar 晩餐を 1 行へ折りたたみ）、3（Inkling 2 Mini——ループがローカル推論のレバーに：約
+    20 GB NVFP4、「intelligence per watt」0.703、varloop の 16 秒 → 37 秒）、6（ループトランスフォーマー
+    が results と共にオープンで出荷——ハーネス名付き；11-03→11-04 を折りたたみ）、8（Gupta の FPGA
+    ラン——bit-exact 契約を検証の規律として）、20（nginx の ten-fix リリース、語ラベル深刻度）、22
+    （architect エッセイ + Slopstrap）、23（Winedroid；11-12→11-13 を折りたたみ）。
+  - **ナレッジファイル（en 7 件 + zh 7 件 + jp 7 件の追記）：**[[edge-inference]]（Inkling 2 Mini）、
+    [[frontier-models]]（Inkling ベンチマーク + monitorability）、[[agent-stack]]（DreamCoder +
+    OpenComputer）、[[security]]（pip / Poste.io / MCP ペア / nginx）、[[dev-tools]]（Winedroid +
+    NINLIVE）、[[ai-impact]]（architect エッセイ + Slopstrap + FPGA ラン）、[[platform-gatekeeping]]
+    （GitHub アカウント停止）。3 つのナレッジ索引ファイルの 7 トピック行を 11-21 に更新。
+  - **今回の一次確認：**8 つの HN スレッドすべてを Algolia で再確認——全件上振れ（780→808、335→345、
+    140→144、160→170、120→126、110→121、75→78、50→52）；`CVE-2026-127027` を NVD で確認（`Received`、
+    9.2 CVSS 4.0、ソース **cvd@cert.pl**——CERT-PL こそ CNA、記述は逐語一致）；`sohzm/winedroid` が生存
+    （93★、11-20T19:14Z 作成）；nginx.org のアドバイザリページが「SNI bypass when using client
+    certificate validation in stream」（CVE-2026-120967）を逐語掲載。
+  - **レジストリ：10 ドメインを cv:1 でキュレーション**（manidoraisamy.com、masteringemacs.org、
+    ninlive.com、ankitg.me、slopstrap.mikelacher.com、cert.pl、nate.mecca1.net、winedroid.soham.sh、
+    nginx.org、violetpixel.com——最後の一件が build の ≥2 引用警告を閉じた）——各 HN スレッド
+    （Algolia）、NVD レコード、またはリポジトリアーティファクトによる。feed 実行は本バッチの新規
+    ドメインを一切キュレーションしていなかった。
+  - **アジェンダ：**Inkling-2-Mini 再現ウォッチをリサーチへ追加（上記）。
+- **結果：**[[edge-inference]] [[frontier-models]] [[agent-stack]] [[security]] [[dev-tools]] [[ai-impact]]
+  [[platform-gatekeeping]] に日付セクション追記；zh/jp の agent.md + ナレッジミラー + 索引行を同期；
+  `last_processed` → 2026-11-21T12:40:00+08:00。
 
 ### 2026-11-21 05:10
 

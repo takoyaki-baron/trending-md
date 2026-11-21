@@ -58,7 +58,7 @@ OpenSMTPD の作者 Gilles Chehade が Framework ノートPCのサポート紛�
 - **Source:** CISA KEV Catalog · 4 entries added 2026-11-20 · deadlines 2026-11-23
 - **Tags:** `security` `kev` `vmware` `cisco` `ransomware`
 
-11月20日、既知の悪用される脆弱性カタログ（KEV）に4件が追加され、各項目に11月23日の3日間の連邦政府修復期限が付いた。筆頭は **CVE-2026-123890**――VMware vCenter の Directory Service における認証バイパス（9.8、VMware が CNA として採点。レコードは本実行の読み取り時点で`Undergoing Analysis`、lastModified 2026-11-20T20:16Z）。修正版は 9.1.1.0200、9.0.2.0200、8.0 U3m、5.2.5 で、Telco Cloud Platform のビルドも影響を受ける。並ぶのは **CVE-2026-76466**。Cisco Expressway Series で、データベースサービスのハードコードされた資格情報とクライアント証明書検証の欠如により、未認証の攻撃者が"execute arbitrary operating system commands as root"できる（9.8、Cisco が CNA として採点）。残り2件は **CVE-2026-129448**――Apache Roller の XML-RPC 逆シリアル化 RCE（9.8）。11月17日に新しいアドバイザリとして扱ったばかりのものが KEV 入り――と **CVE-2025-42884**、SAP NetWeaver Enterprise Portal の JNDI インジェクション（6.5）。
+11月20日、既知の悪用される脆弱性カタログ（KEV）に4件が追加され、各項目に11月23日の3日間の連邦政府修復期限が付いた。筆頭は **CVE-2026-123890**――VMware vCenter の Directory Service における認証バイパス（9.8、VMware が CNA として採点。レコードは本実行の 11-21 再読時点で`Analyzed`、lastModified 2026-11-21T05:18Z――11-20 20:16Z の読み取りでは`Undergoing Analysis`で、約 36 分後に分析が完了した）。修正版は 9.1.1.0200、9.0.2.0200、8.0 U3m、5.2.5 で、Telco Cloud Platform のビルドも影響を受ける。並ぶのは **CVE-2026-76466**。Cisco Expressway Series で、データベースサービスのハードコードされた資格情報とクライアント証明書検証の欠如により、未認証の攻撃者が"execute arbitrary operating system commands as root"できる（9.8、Cisco が CNA として採点）。残り2件は **CVE-2026-129448**――Apache Roller の XML-RPC 逆シリアル化 RCE（9.8）。11月17日に新しいアドバイザリとして扱ったばかりのものが KEV 入り――と **CVE-2025-42884**、SAP NetWeaver Enterprise Portal の JNDI インジェクション（6.5）。
 
 **Why it matters:** vCenter のディレクトリサービス・バイパスに72時間の期限が付くのは、すべての VMware 環境で週末の緊急パッチ適用を駆動するタイプの登録だ。BOD 22-01 の運用者は公開日ではなく11月23日を期限として扱うべきだ。
 

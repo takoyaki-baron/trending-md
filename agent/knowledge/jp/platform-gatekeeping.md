@@ -666,3 +666,10 @@ Sources: [GrapheneOS on Mastodon](https://grapheneos.social/@GrapheneOS/11764503
 Sources: [Signal blog: Protecting Your Privacy](https://signal.org/blog/protecting-your-privacy/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50572348) ·
 [Mozilla: Why there are still no non-WebKit browsers on iOS](https://blog.mozilla.org/en/mozilla/internet-policy/apple-ios-browser-engine-rules/)
+
+## 2026-11-21（12:32 バッチ）——GitHub がメールなしでアカウントを 404 に、その後復旧
+
+ある開発者の GitHub アカウント（`0n4t3`）が停止された——プロフィールは 404、「all my personal projects are gone」——「not so much as a pop up notification or email on what happened」。スレッドが注目を集めた後アカウントは戻り、投稿は今「Update — I'm back!」で始まり、「whoever undid my (prob automated?) deletion and/or ban on Github」に感謝する。残る一文：「I still have no idea what got me banished or if it'll happen again… just a random banishment then unbanishment。」彼は今ローカルミラーを作り移行も考えている。Codeberg のレジストラ停止（11-18）のアカウント側の双子：アイデンティティ全体をオフラインにするモデレーションが通知チャネルなしで届き、解決——偶然気づいた誰かによる解除——はプロセスではない。プラットフォームの申立て経路はスレッドが拡散すること；リポジトリをミラーせよ。
+
+Sources: [Help github just deleted me](https://nate.mecca1.net/posts/2026-11-20_help/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50583911)

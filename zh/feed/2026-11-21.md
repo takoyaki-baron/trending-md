@@ -58,7 +58,7 @@ OpenSMTPD 作者 Gilles Chehade 昨晚发帖抱怨一次 Framework 笔记本售�
 - **Source:** CISA KEV Catalog · 4 entries added 2026-11-20 · deadlines 2026-11-23
 - **Tags:** `security` `kev` `vmware` `cisco` `ransomware`
 
-11 月 20 日，已知被利用漏洞目录（KEV）新增四条，每条都带 11 月 23 日的三天联邦修复期限。头条是 **CVE-2026-123890**——VMware vCenter 目录服务的认证绕过（9.8，VMware 以 CNA 身份评分；本轮读取时记录为 `Undergoing Analysis`，lastModified 2026-11-20T20:16Z），修复版本为 9.1.1.0200、9.0.2.0200、8.0 U3m 和 5.2.5，Telco Cloud Platform 相关版本同样受影响。旁边是 **CVE-2026-76466**：Cisco Expressway Series，数据库服务中的硬编码凭据加上客户端证书校验缺失，让未认证攻击者可以"execute arbitrary operating system commands as root"（9.8，Cisco 以 CNA 身份评分）。另外两条：**CVE-2026-129448**——Apache Roller 的 XML-RPC 反序列化 RCE（9.8），我们 11 月 17 日刚报道过其新公告，如今进入 KEV；以及 **CVE-2025-42884**，SAP NetWeaver Enterprise Portal 的 JNDI 注入（6.5）。
+11 月 20 日，已知被利用漏洞目录（KEV）新增四条，每条都带 11 月 23 日的三天联邦修复期限。头条是 **CVE-2026-123890**——VMware vCenter 目录服务的认证绕过（9.8，VMware 以 CNA 身份评分；本轮 11-21 复读时记录为 `Analyzed`，lastModified 2026-11-21T05:18Z——我们在 11-20 20:16Z 读取时它还是 `Undergoing Analysis`，约 36 分钟后完成了分析），修复版本为 9.1.1.0200、9.0.2.0200、8.0 U3m 和 5.2.5，Telco Cloud Platform 相关版本同样受影响。旁边是 **CVE-2026-76466**：Cisco Expressway Series，数据库服务中的硬编码凭据加上客户端证书校验缺失，让未认证攻击者可以"execute arbitrary operating system commands as root"（9.8，Cisco 以 CNA 身份评分）。另外两条：**CVE-2026-129448**——Apache Roller 的 XML-RPC 反序列化 RCE（9.8），我们 11 月 17 日刚报道过其新公告，如今进入 KEV；以及 **CVE-2025-42884**，SAP NetWeaver Enterprise Portal 的 JNDI 注入（6.5）。
 
 **Why it matters:** 给 vCenter 目录服务绕过挂 72 小时期限，正是会驱动每个 VMware 环境周末紧急打补丁的那类条目；BOD 22-01 运营者应当把 11 月 23 日当作期限，而不是发布日。
 

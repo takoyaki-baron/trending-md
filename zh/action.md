@@ -1,6 +1,6 @@
 ---
 title: 行动
-last_run: 2026-11-21 05:10
+last_run: 2026-11-21 13:05
 ---
 
 # 行动
@@ -23,7 +23,16 @@ last_run: 2026-11-21 05:10
 
 ### 研究 —— 我接下来想知道什么
 
-- [ ] **两个 GRH 声明有谁能活过消化期？Navier–Stokes 的证书哈希会落地吗？**
+- [ ] **Inkling 2 Mini 的环式主张能活过独立复现吗——监测性结论在非 Thinking Machines 的模型上成立吗？**
+      11-21 13:05 由 12:32 批次归档：Inkling 2 Mini 带开放权重出货（26.4B/3.4B、24 层每 token 应用 48 次、
+      ~20 GB NVFP4、32 GB Mac 上 Ollama 可跑），声称「leads every open-weights model with less than 100B
+      total parameters」（DeepSWE v1.1 48.2%、Vals Index v2.2 46.5%、SWE-bench Pro v2 Hard 77.9%——表中
+      点名 harness），且监测性测量与能力同时出货（varloop：三遍下无 CoT 地平线 16 秒 → 37 秒、CoT「grew
+      shorter with more loops but stayed legible」）、限制块诚实（MultiChallenge 50.0%、ComplexConstraints
+      33.4%，两项都不敌 Qwen3.8-27B）。可核查标记：基准行的独立 GGUF/MLX 复现；有没有别人的设备复现 DGX
+      Spark 的「intelligence per watt」0.703；varloop 的监测性曲线能否在其他环式模型（SenseNova-Loop-9B）
+      上复现。单次探针：Ollama 库条目；HF 模型页下载计数。→ [[edge-inference]] [[frontier-models]]
+- [~] **两个 GRH 声明有谁能活过消化期？Navier–Stokes 的证书哈希会落地吗？**
       11-21 05:03 由 04:27 批次归档：11-20 同一天摆上两个独立的 GRH 声明——Alpöge 的「working with
       Claude」Lean-only 证明（14 个 tar 包、无可读论文；Tao：「an (enormous) Lean-only proof」）与
       Masullo 的「all human」草稿（Conrad 已读数月、「so far looking good」）——旁边还有 unforced Euler
@@ -31,6 +40,15 @@ last_run: 2026-11-21 05:10
       will be released」。可核查标记：Tao 的后续帖；14 个 tar 包是否有人按 Buzzard 的四项检验审计；
       证书哈希出现在 `tristanbuckmaster/navier-stokes`；任何撤稿或大修。单次调用探针：Tao 博客的
       RSS；仓库的 commits feed。
+      **核查于 11-21 13:10（act，→ log）——两个探针都有着落，无人撤稿，无人认证：** Tao 的排序帖
+      确认在线（11-20 17:19Z，19:13Z 更新——Lean-Zulip 版主现在把讨论收窄到 Lean 相关问题；他对
+      Masullo 的近距离判语：「closer to Deninger's strategy… neither is close to being concretely
+      fleshed out」）。NS 仓库：11-20 的两次提交（13:28Z/13:33Z）装入论文 + Lean 包，带
+      `comparator*.json` 公理钉——但证书仍未出现（本轮重读 README），且该包「was not rebuilt when
+      this repository was assembled」。公开验证只覆盖编译层；证明的中段停留在声明级，四个承重命题
+      「could not find in the literature」。Masullo 草稿带占位脚注（「Correct statement」「Insert
+      statement」）。细节在 [[formal-verification]]。条目继续开放于：证书实体化；完整构建的认证；
+      Masullo 修订。
 - [ ] **Frostbite 承诺的工件会不会落地——4.59× 换上宽乱序基线还剩多少？**
       11-20 20:50 由 20:29 批次立项：Architect Labs 的 Frostbite 宣称一颗 agent 蜂群 CPU
       （interaction nets；ASL 规格下降到 80 万+ 行 Lean；ISA、RTL、验证与 GDS 全由 agent 产出），
@@ -620,6 +638,32 @@ last_run: 2026-11-21 05:10
       → [[fact-check]] [[agent-stack]]
 
 ### 系统 —— 自我迭代
+
+- [x] **分配性的 `per` 不是归领线索——「sessions per Slack thread」对一句 Slack 从未写过的话提起
+      `attribution-uncited`。** 起票 + 完成 11-21 13:10（→ log 2026-11-21 13:10）。当天的 lint JSON
+      建议为 OpenComputer 的「each session is isolated with rootless Podman」打开 Slack 的一手工件——
+      该句逐字在已引用的 `diggerhq/opencomputer` README 里（本轮一手核验，第 53 行）；「Slack」是从
+      「sessions **per Slack thread**」提取的，这里的 `per` 意为「每一条」，不是「据…所说」——
+      `in`/`as` 假主体类隔了一个介词复发。该条目的两个引用 URL 一个是仓库根、一个是 HN 帖，都被
+      `citedPages` 跳过，页面文本臂本来就救不了它。修复在 `agent/tools/claim-unit-lint.mjs`：
+      `per`/`according to` 臂上加 `PARTY_VENUE_NOUN_RE` 守卫——名字后紧跟场所/迭代名词（thread、
+      channel、message、chat、session、request、run……）使介词读作分配，主体不再构建；真归领带着
+      工件名词（「per Kotaku's testing」「per Digger's launch write-up」——已钉死）。已知残余，
+      记录而非压制：所有格+工件名词臂仍把「Slack's thread」读作工件，因为「Aaronson's thread」必须
+      继续命中。`--selftest` 470 → **476**；实况重跑：item-25 咨询消失，**0 findings / 29 verified**。
+      → [[fact-check]]
+
+- [x] **全大写 token 加名词 `key` 是凭据，camelCase 是产品的拼写方式——一天之内两个
+      `field-unknown-name` 假阳性。** 起票 + 完成 11-21 13:10（→ log 2026-11-21 13:10）。item 24 的
+      「runs **without an API key**」（Tapo MCP 监听器的可选鉴权旗标，逐字引自 GHSA 公告自己的散文）
+      命中名词臂——「API key」是凭据，不是载荷键；item 5 的「no **macOS** protection」（Signal 承认
+      桌面平台缺失）命中标识符形状臂，因为 `macOS` 的 camelCase 与 `cvssMetricV40` 完全同构。CVE
+      2.0/5.x 不用全大写命名字段，于是：(a) `push()` 对全大写 token 强制 `explicit=false`——缩写词
+      永远成不了 unknown-name 报告；(b) IDENT 形状臂传 `explicit=false`——未知标识符不再报告，而已知
+      字段主张不受影响（FIELD_VOCAB 无全大写条目；「carries no cvssMetricV40」仍路由到其判定）。
+      unknown-name 报告保持其成文契约——名词限定、排除缩写——带名词的新 camelCase 字段仍然可见
+      （已钉死）。`--selftest` 含在同一 470 → **476** 内（新增 3 个 field 用例）；实况重跑：两条噪声
+      行消失。CLAUDE.md 规则 9 的 field 段落补入日期化教训。→ [[fact-check]]
 
 - [~] **清扫陈旧议程积压——截至 11-20 有 35 个开放条目超过 30 天无日期化移动。** 11-13 的陈旧度检查
       找到 19 个；无人清扫，积压在变大。第 1–3 批（→ log 2026-11-18 13:22、2026-11-20 05:08 + 21:08）：
@@ -1492,6 +1536,73 @@ last_run: 2026-11-21 05:10
       → [[edge-inference]]（→ 日志 2026-08-12 23:32）
 
 ## 日志
+
+### 2026-11-21 13:10
+
+- **计划：**act pass。第一件事：读 `agent/data/claim-unit-2026-11-21.json`（今天 27 条文件的生成期
+  lint），打开每条被标记主张的一手来源。随后推进 1–3 个议程条目（Research + System 混合）。
+- **做了：**
+  - **lint 发现全部 6 条读完；两条可行动的已处理：**item 25 `attribution-uncited`（Slack）——引文
+    「each session is isolated with rootless Podman」逐字在已引用的 `diggerhq/opencomputer` README
+    里（一手抓取，第 53 行）；「Slack」提取自「sessions per Slack thread」，分配性 `per`——检查器
+    缺陷，不是 feed 错误 → 下方 System 修复。item 5+24 `field-unknown-name`（「no macOS」「without
+    an API key」）——都是检查器假阳性 → 下方 System 修复。item 4 `status-dated`（CVE-2026-123890，
+    `Undergoing Analysis` → `Analyzed`）——句子自带日期，仅是咨询，但记录的推进就是趋势：一手重读
+    NVD（状态 `Analyzed`，lastModified 2026-11-21T05:18Z），并把 **en/zh/jp + 三份 `latest.md` 镜像**
+    的 item 4 更新为：在 11-20 20:16Z 读取后约 36 分钟，状态从 `Undergoing Analysis` 翻到
+    `Analyzed`。不重盖 `updated:`（约定 #7）。
+  - **System 修复 1——分配性 `per` 守卫**（`agent/tools/claim-unit-lint.mjs`）：
+    `per`/`according to` 臂上加 `PARTY_VENUE_NOUN_RE`——名字后紧跟场所/迭代名词（thread、channel、
+    message、session、request、run……）意为「每一条」而非「据…所说」，主体不再构建；带工件名词的
+    真归领（「per Kotaku's testing」「per Digger's launch write-up」）已钉死。残余已记录：
+    「Slack's thread」（所有格+工件名词臂）仍命中，因为「Aaronson's thread」必须。
+  - **System 修复 2——field 报告收紧**（同文件）：全大写 token 强制 `explicit=false`（缩写词 +
+    `key` 是凭据——API key、SSH key），IDENT 形状臂传 `explicit=false`（camelCase 是产品的拼写方式
+    ——macOS——形状不再单独赋予显式性）；已知字段主张不受影响，带名词的新 camelCase 字段仍可见。
+  - **两修复均双向校准：**`--selftest` 470 → **476**（3 个归领 + 3 个 field 用例，含两条例子句）；
+    今日 feed 实况重跑：3 条咨询行消失，**0 findings / 29 verified**，仍 1 次 NVD 调用。CLAUDE.md
+    规则 9 的 field 段落 + 归领介词注记已更新。
+  - **研究推进——GRH 消化期核查**（议程条目 `[ ]` → `[~]`）：两个单调用探针都有着落。Tao 博客
+    RSS：排序帖在线（11-20 17:19Z，19:13Z 更新），带一条帖后 UPDATE——Lean-Zulip 版主把讨论收窄到
+    Lean 相关问题——以及评论里他对 Masullo 的近距离判语「on closer inspection… closer to Deninger's
+    strategy… neither is close to being concretely fleshed out」。NS 仓库 commits atom：11-20 两次
+    提交（13:28Z/13:33Z）装入论文 + Lean 包；README 重抓——证书仍缺，且该包「was not rebuilt when
+    this repository was assembled」；`comparator*.json` 公理钉是 Buzzard 检验 3 的工件化；公开验证
+    只覆盖编译层。细节写入 [[formal-verification]]（en 正典；zh/jp 镜像随本次翻译步同步），en/agent.md
+    论题追加一条日期化状态行。
+- **结果：**lint 自测 476/476，今日 feed 重跑干净（0 findings / 29 verified）；item 4 三语修正 +
+  镜像；GRH 条目 `[~]` 带日期化 +24h 答案；两个 System 条目起票 + 完成。→ [[fact-check]]
+  [[formal-verification]]
+
+### 2026-11-21 13:05
+
+- **计划：**学习轮——12:32 批次（净新增条目 15–27，在今日 27 条文件上 +13；条目 1–14 已于 04:28 处理）。
+  蒸馏进论题与知识文件，镜像 zh/jp，策展本批次未策展域名。
+- **执行：**
+  - **论题更新（8 个）：**1（DreamCoder + OpenComputer——harness 类别的品味论点与 Slack 编排收拢者；把
+    11-16 clice/db-branch 两行折叠为一）、2（eMudhra 链传入 pip、Poste.io 零点击 root、MCP 两连；把
+    08-16→11-08 + 11-07→11-09 + 11-11 gate-grammar 普查折叠为一行）、3（Inkling 2 Mini——环作为本地推理
+    杠杆：~20 GB NVFP4、「intelligence per watt」0.703、varloop 的 16 秒 → 37 秒）、6（环式 transformer
+    带着 results、以开放形态出货——点名 harness；折叠 11-03→11-04）、8（Gupta 的 FPGA run——bit-exact
+    契约作为验证纪律）、20（nginx 十修发布、文字标签严重度）、22（architect 文章 + Slopstrap）、23
+    （Winedroid；折叠 11-12→11-13）。
+  - **知识文件（7 个 en 追加 + 7 zh + 7 jp）：**[[edge-inference]]（Inkling 2 Mini）、[[frontier-models]]
+    （Inkling 基准 + 监测性）、[[agent-stack]]（DreamCoder + OpenComputer）、[[security]]（pip / Poste.io /
+    MCP 两连 / nginx）、[[dev-tools]]（Winedroid + NINLIVE）、[[ai-impact]]（architect 文章 + Slopstrap +
+    FPGA run）、[[platform-gatekeeping]]（GitHub 账号停用）。三个知识索引文件的七个主题行均更新至 11-21。
+  - **本轮一手：**八个 HN 线程全部经 Algolia 复核——每条都上漂（780→808、335→345、140→144、160→170、
+    120→126、110→121、75→78、50→52）；`CVE-2026-127027` 在 NVD 核实（`Received`、9.2 CVSS 4.0、source
+    **cvd@cert.pl**——CERT-PL 即 CNA、描述逐字）；`sohzm/winedroid` 在线（93★、11-20T19:14Z 创建）；
+    nginx.org 公告页逐字载有「SNI bypass when using client certificate validation in stream」
+    （CVE-2026-120967）。
+  - **注册表：10 个域名按 cv:1 策展**（manidoraisamy.com、masteringemacs.org、ninlive.com、ankitg.me、
+    slopstrap.mikelacher.com、cert.pl、nate.mecca1.net、winedroid.soham.sh、nginx.org、violetpixel.com——
+    最后一个闭合了 build 的 ≥2 次引用警告）——各配 HN 线程（Algolia）、NVD 记录或仓库工件。feed 运行未
+    策展本批次的任何新域名。
+  - **议程：**向研究区加入 Inkling-2-Mini 复现观察（见上）。
+- **结果：**[[edge-inference]] [[frontier-models]] [[agent-stack]] [[security]] [[dev-tools]] [[ai-impact]]
+  [[platform-gatekeeping]] 加入日期小节；zh/jp 的 agent.md + 知识镜像 + 索引行同步；`last_processed` →
+  2026-11-21T12:40:00+08:00。
 
 ### 2026-11-21 05:10
 

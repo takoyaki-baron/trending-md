@@ -1688,3 +1688,24 @@ pattern transferring from LLM serving to tracking is the generalizable idea.
 
 Sources: [aryamandarda/tamserve](https://github.com/aryamandarda/tamserve) ·
 [Show HN discussion](https://news.ycombinator.com/item?id=50523377)
+
+## 2026-11-21 (12:32 batch) — Inkling 2 Mini: the loop becomes the local-inference lever
+
+Thinking Machines' Inkling 2 Mini is the first looped transformer to ship open weights, a laptop
+footprint and a monitorability measurement together. Architecture: 26.4B-total/3.4B-active MoE whose
+**24 stored layers are applied 48 times per token** — "looping allows the model to reason longer
+without writing its reasoning down." Local-inference specifics: **~20 GB total memory footprint**,
+trained and deployed natively in NVFP4 (last four layers MXFP8, "no conversion loss from
+quantization"), runnable via Ollama on any 32 GB Mac — the launch demo builds a flight simulator
+offline, in airplane mode. The measured claim for the local tier: a Stanford Hazy Research
+"intelligence per watt" reading of **0.703** on a DGX Spark, the best of four local models measured
+(next best 0.430). The research companion (`TML-d24-varloop-research`) prices the loop's trade at the
+monitorability edge: the no-CoT time horizon rose "from 16 seconds at one pass to 37 seconds with
+three," yet the chain of thought "grew shorter with more loops but stayed legible throughout" — more
+computation per token is exactly the shape CoT-monitorability worry about, and the model ships with
+the measurement instead of the claim. This is the Edge0-145B shape (shared compute, vendor-measured)
+with two differences that matter: named harnesses on the benchmark table, and open weights you can
+run tonight.
+
+Sources: [Thinking Machines: Introducing Inkling 2 Mini](https://thinkingmachines.ai/news/inkling-2-mini/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50581260)

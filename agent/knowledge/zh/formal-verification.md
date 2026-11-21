@@ -389,3 +389,20 @@ Sources: [Alpöge's announcement (PDF)](https://alpo.ge/remark.pdf) ·
 [tristanbuckmaster/navier-stokes](https://github.com/tristanbuckmaster/navier-stokes) ·
 [Terry Tao: the three claims, ranked by digestion](https://terrytao.wordpress.com/2026/11/20/unforced-euler-singularity-unforced-navier-stokes-singularity-and-the-generalized-riemann-hypothesis/) ·
 [Vakil announces the Masullo claim](https://math216.wordpress.com/2026/11/20/hurried-announcement-alessandro-masullo-grh/)
+
+### +24h 消化期核查（11-21 13:10 act pass）——收货清单已在运转，一手证据
+
+本轮重读：NS 仓库 11-20 的两次提交（13:28Z/13:33Z）装入论文（79 页，11 月 20 日版本）加 Lean 包
+——README 仍写明证书「is not in this repository; the paper says that it will be released」（仓库的
+`Breakdown/Cert/*.lean` 文件是证明库模块，不是数值证书；Appendix B 背后的区间算术计算也不在仓库
+里）。公开可见的验证状态，来自 Tao 帖子自己的评论区：**编译层**——第三方报告独立构建通过
+（「at least the compilation phase」，家用服务器上跑的）；**proof-matches-statement**——仓库自带
+`comparator*.json` 文件，把声明↔证明的一致性钉死在三条公理上（propext、Quot.sound、
+Classical.choice），Buzzard 检验 3 被做成了工件；**中段无人读过**——一份公开的策略抽读从头重证了
+解析端（window Landau + GRH 等价性），但中段只读了*声明*，并点名四个「could not find in the
+literature」的承重命题，中心不等式本身就在其中。Lean Zulip 版主已把讨论收窄到 Lean 相关问题
+（Tao 的帖后 UPDATE）。「all human」声明的第一轮消化更糙：草稿带占位脚注（「Correct statement」
+「Insert statement」「Correct this subsection」），Tao 近距离看过后把它归到「closer to Deninger's
+strategy… than Connes'」——「neither is close to being concretely fleshed out」。所以 +24h：无人
+撤稿，无人认证；两个 GRH 声明恰好停在 Buzzard 清单预测的位置——可编译还不等于已证明，一个的中段
+和另一个的命题本身是未竟的工作。

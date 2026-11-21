@@ -3288,6 +3288,46 @@
    "id": "CVE-2026-133553",
    "why": "2026-11-21 — crun container runtime: a shared-volume container can overwrite host files — including `/proc/sys` (7.8, unpatched across RHEL)",
    "seeded": "2026-11-20 [Awaiting Analysis] 3.1 Secondary/secalert@redhat.com 7.8, CWE-367, published 11-20"
+  },
+  {
+   "id": "CVE-2026-133949",
+   "why": "2026-11-21 — pip ships a 9.3: versions before 26.2.2 bundle certifi carrying the compromised eMudhra certificates",
+   "seeded": "2026-11-21 [Received] 4.0 Secondary/cna@python.org 9.3, CWE-295, published 11-20"
+  },
+  {
+   "id": "CVE-2026-118899",
+   "why": "2026-11-21 — Since we covered the two NGINX RCEs yesterday: the same release carried ten fixes — and the repo is on trending",
+   "seeded": "2026-11-21 [Analyzed] 3.1 Secondary/f5sirt@f5.com 7.5, 4.0 Secondary/f5sirt@f5.com 8.7, CWE-835, published 11-18"
+  },
+  {
+   "id": "CVE-2026-113425",
+   "why": "2026-11-21 — Since we covered the two NGINX RCEs yesterday: the same release carried ten fixes — and the repo is on trending",
+   "seeded": "2026-11-21 [Modified] 3.1 Secondary/f5sirt@f5.com 8.1, 4.0 Secondary/f5sirt@f5.com 9.2, CWE-416, published 11-18"
+  },
+  {
+   "id": "CVE-2026-120967",
+   "why": "2026-11-21 — Since we covered the two NGINX RCEs yesterday: the same release carried ten fixes — and the repo is on trending",
+   "seeded": "2026-11-21 [Received] 3.1 Secondary/f5sirt@f5.com 4.8, 4.0 Secondary/f5sirt@f5.com 6.3, CWE-1289, published 11-18"
+  },
+  {
+   "id": "CVE-2026-123640",
+   "why": "2026-11-21 — Since we covered the two NGINX RCEs yesterday: the same release carried ten fixes — and the repo is on trending",
+   "seeded": "2026-11-21 [Analyzed] 3.1 Secondary/f5sirt@f5.com 5.3, 4.0 Secondary/f5sirt@f5.com 6.9, CWE-1289, published 11-18"
+  },
+  {
+   "id": "CVE-2026-77329",
+   "why": "2026-11-21 — Two more CVEs land in the MCP server layer: a Tapo DNS-rebinding actuation bug and an SSH-manager cron persistence flaw",
+   "seeded": "2026-11-21 [Received] 4.0 Secondary/security-advisories@github.com 8.8, CWE-346/CWE-350, published 11-20"
+  },
+  {
+   "id": "CVE-2026-129995",
+   "why": "2026-11-21 — Two more CVEs land in the MCP server layer: a Tapo DNS-rebinding actuation bug and an SSH-manager cron persistence flaw",
+   "seeded": "2026-11-21 [Received] 3.1 Secondary/security-advisories@github.com 8.8, CWE-78, published 11-20"
+  },
+  {
+   "id": "CVE-2026-127027",
+   "why": "2026-11-21 — Poste.io ships 2.5.22 for a 9.2: unauthenticated root RCE via DMARC report attachments",
+   "seeded": "2026-11-21 [Received] 4.0 Secondary/cvd@cert.pl 9.2, CWE-78, published 11-20"
   }
  ]
 }

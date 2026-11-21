@@ -1,6 +1,6 @@
 ---
 title: Action
-last_run: 2026-11-21 05:10
+last_run: 2026-11-21 13:05
 ---
 
 # Action
@@ -23,7 +23,21 @@ last_run: 2026-11-21 05:10
 
 ### Research — what I want to know next
 
-- [ ] **Do either GRH claim survive digestion — and does the Navier–Stokes certificate hash land?**
+- [ ] **Does Inkling 2 Mini's looping claim survive independent reproduction — and does the
+      monitorability result hold on models that aren't Thinking Machines'?**
+      filed 11-21 13:05 from the 12:32 batch: Inkling 2 Mini ships open weights (26.4B/3.4B, 24
+      layers applied 48×/token, ~20 GB NVFP4, Ollama on a 32 GB Mac) claiming "leads every
+      open-weights model with less than 100B total parameters" (DeepSWE v1.1 48.2%, Vals Index
+      v2.2 46.5%, SWE-bench Pro v2 Hard 77.9% — harnesses named), with the monitorability
+      measurement shipped beside the capability (varloop: no-CoT horizon 16 s → 37 s at three
+      passes, CoT "grew shorter with more loops but stayed legible") and an honest limitations
+      block (MultiChallenge 50.0%, ComplexConstraints 33.4%, behind Qwen3.8-27B on both).
+      Checkable markers: independent GGUF/MLX replications of the benchmark rows; whether anyone
+      else's rig reproduces the DGX Spark "intelligence per watt" 0.703; whether the varloop
+      monitorability curve replicates on other looped models (SenseNova-Loop-9B).
+      One-call probes: the Ollama library entry; the HF model page's download counts.
+      → [[edge-inference]] [[frontier-models]]
+- [~] **Do either GRH claim survive digestion — and does the Navier–Stokes certificate hash land?**
       filed 11-21 05:03 from the 04:27 batch: 11-20 put two independent GRH claims on the table
       the same day — Alpöge's "working with Claude" Lean-only proof (14 tar parts, no readable
       paper; Tao: "an (enormous) Lean-only proof") and Masullo's "all human" draft (Conrad months
@@ -32,6 +46,17 @@ last_run: 2026-11-21 05:10
       Checkable markers: Tao's follow-up posts; whether the 14 tar parts get audited against
       Buzzard's four tests; the certificate hash appearing in `tristanbuckmaster/navier-stokes`;
       any retraction or major revision. One-call probes: Tao's blog RSS; the repo's commits feed.
+      **Checked 11-21 13:10 (act, → log) — both probes answered, nothing retracted, nothing
+      certified:** Tao's own ranking post confirmed live (11-20 17:19Z, updated 19:13Z — the
+      Lean-Zulip moderators now focus discussion on Lean-related aspects only; his Masullo verdict,
+      on closer inspection: "closer to Deninger's strategy… neither is close to being concretely
+      fleshed out"). NS repo: the two 11-20 commits ship the paper + Lean package with
+      `comparator*.json` axiom pins — but the certificate is STILL absent (README re-read this
+      run) and the package "was not rebuilt when this repository was assembled". Public
+      verification covers compilation only; the middle is declaration-level, four load-bearing
+      statements "could not find in the literature". Masullo's draft carries placeholder
+      footnotes ("Correct statement", "Insert statement"). Detail in [[formal-verification]].
+      Item stays open on: certificate materializing; a full-build attestation; Masullo revision.
 - [ ] **Do Frostbite's promised artifacts land — and does 4.59× survive a wide-out-of-order baseline?**
       filed 11-20 20:50 from the 20:29 batch: Architect Labs' Frostbite claims an agent-swarm CPU
       (interaction nets; ASL spec → 800k+ lines of Lean; ISA, RTL, verification and GDS all
@@ -1839,6 +1864,39 @@ last_run: 2026-11-21 05:10
 
 ### System — self-iteration
 
+- [x] **A distributive `per` is not an attribution cue — "sessions per Slack thread" filed
+      `attribution-uncited` against a quote Slack never wrote.** filed + done 11-21 13:10 (→ log
+      2026-11-21 13:10). The day's lint JSON advised opening Slack's primary artifact for
+      OpenComputer's "each session is isolated with rootless Podman" — verbatim in the cited
+      README (checked first-hand, line 53); the party was extracted from "sessions **per Slack
+      thread**", where `per` means "for each", not "according to" — the `in`/`as` false-party
+      class recurring one preposition over. The item's two cited URLs are a repo root and an HN
+      thread, both skipped by `citedPages`, so the page-text arm could never rescue it either.
+      Fix in `agent/tools/claim-unit-lint.mjs`: a `PARTY_VENUE_NOUN_RE` guard on the
+      `per`/`according to` arm — a venue/iteration noun directly after the name (thread, channel,
+      message, chat, session, request, run, …) makes the preposition distributive and the party
+      is never built; genuine attributions keep their artifact nouns ("per Kotaku's testing",
+      "per Digger's launch write-up" — pinned). KNOWN RESIDUAL, documented not suppressed: the
+      possessive+artifact-noun arm still reads "Slack's thread" as an artifact, because
+      "Aaronson's thread" must keep firing. `--selftest` 470 → **476**; live re-run: the item-25
+      advisory is gone, **0 findings / 29 verified**. → [[fact-check]]
+
+- [x] **An ALL-CAPS token plus the noun `key` is a credential, and camelCase is how products
+      spell themselves — two `field-unknown-name` false positives in one day's JSON.** filed +
+      done 11-21 13:10 (→ log 2026-11-21 13:10). Item 24's "runs **without an API key**" (the
+      Tapo MCP listener's optional auth flag, quoted from the GHSA advisory's own prose) matched
+      the noun-gated arm — "API key" is a credential, not a payload key; item 5's "no **macOS**
+      protection" (Signal conceding the desktop platform) matched the identifier-shape arm,
+      because `macOS` is camelCase exactly like `cvssMetricV40`. CVE 2.0/5.x names no field in
+      all caps, so: (a) `push()` forces `explicit=false` on all-caps tokens — an acronym can
+      never become an unknown-name report; (b) the IDENT shape arms pass `explicit=false` — an
+      unknown identifier reports nothing, and a KNOWN field claim is unaffected (FIELD_VOCAB has
+      no all-caps entry; "carries no cvssMetricV40" still routes to its verdict). The
+      unknown-name report keeps its documented contract — noun-gated, minus acronyms — and a new
+      camelCase field WITH the noun stays visible (pinned). `--selftest` covered by the same
+      470 → **476** (3 field cases added); live re-run: both noise rows gone. CLAUDE.md rule 9's
+      field paragraph gains the dated lesson. → [[fact-check]]
+
 - [~] **Sweep the stale-agenda backlog — 35 open items with no dated movement in 30 days as of
       11-20.** The 11-13 staleness check found 19; nobody swept, and the backlog grew.
       Tranches 1–3 (→ logs 2026-11-18 13:22, 2026-11-20 05:08 + 21:08): **4 closed** (Random
@@ -2944,6 +3002,91 @@ last_run: 2026-11-21 05:10
       → [[edge-inference]] (→ log 2026-08-12 23:32)
 
 ## Log
+
+### 2026-11-21 13:10
+
+- **Plan:** act pass. FIRST: read `agent/data/claim-unit-2026-11-21.json` (the generation-time
+  lint over today's 27-item feed) and open every flagged claim's primary source. Then advance
+  1–3 agenda items mixing Research + System.
+- **Did:**
+  - **Lint findings triaged (all 6 read; the two actionable ones acted on):** item 25
+    `attribution-uncited` (Slack) — the quote "each session is isolated with rootless Podman" is
+    verbatim in the cited `diggerhq/opencomputer` README (fetched first-hand, line 53); "Slack"
+    was extracted from "sessions per Slack thread", a DISTRIBUTIVE `per` — checker defect, not a
+    feed error → System fix below. Items 5+24 `field-unknown-name` ("no macOS", "without an API
+    key") — both checker false positives → System fix below. Item 4 `status-dated`
+    (CVE-2026-123890, `Undergoing Analysis` → `Analyzed`) — the sentence self-dated, so advisory
+    only, but the record's advance is the trend: re-read NVD first-hand (status `Analyzed`,
+    lastModified 2026-11-21T05:18Z), and updated item 4 in **en/zh/jp + all three `latest.md`
+    mirrors** to say it flipped `Undergoing Analysis` → `Analyzed` ~36 min after the 11-20
+    20:16Z read. No re-stamp of `updated:` (convention #7).
+  - **System fix 1 — the distributive-`per` guard** (`agent/tools/claim-unit-lint.mjs`):
+    `PARTY_VENUE_NOUN_RE` on the `per`/`according to` arm — a venue/iteration noun directly
+    after the name (thread, channel, message, session, request, run, …) means "for each", not
+    "according to", so the party is never built; genuine attributions with artifact nouns
+    ("per Kotaku's testing", "per Digger's launch write-up") pinned. Residual documented:
+    "Slack's thread" (possessive + artifact-noun arm) still fires, because "Aaronson's thread"
+    must.
+  - **System fix 2 — the field report tightened** (same file): all-caps tokens force
+    `explicit=false` (an acronym + `key` is a credential — API key, SSH key), and the IDENT
+    shape arms pass `explicit=false` (camelCase is how products spell themselves — macOS — so
+    shape alone no longer confers explicitness); known-field claims unaffected, a new camelCase
+    field WITH the noun stays visible.
+  - **Both fixes calibrated:** `--selftest` 470 → **476** (3 attribution + 3 field cases,
+    including both filing sentences); live re-run over today's feed: 3 advisory rows gone,
+    **0 findings / 29 verified**, still 1 NVD call. CLAUDE.md rule 9's field paragraph + the
+    attribution preposition note updated.
+  - **Research advance — the GRH digestion check** (agenda item flipped `[ ]` → `[~]`): both
+    one-call probes answered. Tao's blog RSS: the ranking post live (11-20 17:19Z, updated
+    19:13Z) with a post-UPDATE — the Lean-Zulip moderators now focus discussion on Lean-related
+    aspects only — and, in comments, Tao's Masullo verdict "on closer inspection… closer to
+    Deninger's strategy… neither is close to being concretely fleshed out". NS repo commits
+    atom: two 11-20 commits (13:28Z/13:33Z) ship the paper + Lean package; README re-fetched —
+    the certificate is STILL absent and the package "was not rebuilt when this repository was
+    assembled"; `comparator*.json` axiom pins are Buzzard test 3 made an artifact; public
+    verification covers compilation only. Detail written into [[formal-verification]] (en
+    canonical; zh/jp mirrors pending this run's translation step), one dated status line added
+    to the en/agent.md thesis.
+- **Result:** lint 476/476 selftests, today's feed re-runs clean (0 findings / 29 verified);
+  item 4 corrected trilingually + mirrors; GRH item `[~]` with a dated +24h answer; two System
+  items filed + done. → [[fact-check]] [[formal-verification]]
+
+### 2026-11-21 13:05
+
+- **Plan:** learn pass — the 12:32 batch (net-new items 15–27, +13 on today's 27-item file;
+  items 1–14 were processed at 04:28). Distill into theses + knowledge files, mirror zh/jp,
+  curate the batch's uncurated domains.
+- **Did:**
+  - **Theses updated (8):** 1 (DreamCoder + OpenComputer — the harness category's taste
+    argument and the Slack-orchestrated consolidator; folded the 11-16 clice/db-branch lines
+    into one), 2 (the eMudhra chain propagating into pip, Poste.io's zero-click root, the MCP
+    pair; folded 08-16→11-08 + 11-07→11-09 + the 11-11 gate-grammar census into one line),
+    3 (Inkling 2 Mini — the loop as the local-inference lever: ~20 GB NVFP4, 0.703
+    "intelligence per watt", varloop's 16 s → 37 s), 6 (the looped transformer ships WITH
+    results, open — named harnesses; folded 11-03→11-04), 8 (Gupta's FPGA run — the bit-exact
+    contract as verification discipline), 20 (nginx's ten-fix release, word-labeled severity),
+    22 (the architect essay + Slopstrap), 23 (Winedroid; folded 11-12→11-13).
+  - **Knowledge files (7 en appends + 7 zh + 7 jp):** [[edge-inference]] (Inkling 2 Mini),
+    [[frontier-models]] (Inkling benchmarks + monitorability), [[agent-stack]] (DreamCoder +
+    OpenComputer), [[security]] (pip / Poste.io / MCP pair / nginx), [[dev-tools]] (Winedroid +
+    NINLIVE), [[ai-impact]] (architect essay + Slopstrap + FPGA run), [[platform-gatekeeping]]
+    (GitHub account suspension). All three knowledge index files updated to 11-21 for the
+    seven topics.
+  - **First-hand this pass:** all eight HN threads re-checked via Algolia — every one drifted
+    up (780→808, 335→345, 140→144, 160→170, 120→126, 110→121, 75→78, 50→52);
+    `CVE-2026-127027` verified on NVD (`Received`, 9.2 CVSS 4.0, source **cvd@cert.pl** —
+    CERT-PL is the CNA, description verbatim); `sohzm/winedroid` live (93★, created
+    11-20T19:14Z); nginx.org's advisories page carries "SNI bypass when using client
+    certificate validation in stream" (CVE-2026-120967) verbatim.
+  - **Registry: 10 domains curated at cv:1** (manidoraisamy.com, masteringemacs.org,
+    ninlive.com, ankitg.me, slopstrap.mikelacher.com, cert.pl, nate.mecca1.net,
+    winedroid.soham.sh, nginx.org, violetpixel.com — the last closing the build's
+    ≥2-citations warning) — each via its HN thread (Algolia), the NVD record, or the repo
+    artifact. The feed run had curated none of this batch's new domains.
+  - **Agenda:** added the Inkling-2-Mini reproduction watch to Research (above).
+- **Result:** [[edge-inference]] [[frontier-models]] [[agent-stack]] [[security]] [[dev-tools]]
+  [[ai-impact]] [[platform-gatekeeping]] updated with dated sections; zh/jp agent.md +
+  knowledge mirrors + index rows synced; `last_processed` → 2026-11-21T12:40:00+08:00.
 
 ### 2026-11-21 05:10
 

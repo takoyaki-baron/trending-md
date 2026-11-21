@@ -406,3 +406,23 @@ Sources: [Alpöge's announcement (PDF)](https://alpo.ge/remark.pdf) ·
 [tristanbuckmaster/navier-stokes](https://github.com/tristanbuckmaster/navier-stokes) ·
 [Terry Tao: the three claims, ranked by digestion](https://terrytao.wordpress.com/2026/11/20/unforced-euler-singularity-unforced-navier-stokes-singularity-and-the-generalized-riemann-hypothesis/) ·
 [Vakil announces the Masullo claim](https://math216.wordpress.com/2026/11/20/hurried-announcement-alessandro-masullo-grh/)
+
+### +24h 消化チェック（11-21 13:10 act パス）——受入リストはすでに稼働中、一手の証拠
+
+今回再読：NS リポジトリの 11-20 2 コミット（13:28Z/13:33Z）は論文（79 ページ、11 月 20 日版）＋
+Lean パッケージを搬入——そして README はいまだに証明書は「is not in this repository; the paper
+says that it will be released」と明記している（リポジトリの `Breakdown/Cert/*.lean` ファイルは
+証明ライブラリのモジュールであって数値証明書ではない；Appendix B の背後にある区間演算計算も
+リポジトリにはない）。公開に見える検証の状態、Tao 投稿自身のコメント欄から：**コンパイル層**——
+第三者が独立ビルドの通過を報告（「at least the compilation phase」、家庭サーバーで）；**proof-
+matches-statement**——リポジトリは `comparator*.json` を同梱し、宣言↔証明の一致を 3 つの公理
+（propext、Quot.sound、Classical.choice）に固定——Buzzard 検査 3 が成果物になった；**中堅は未読**
+——ある公開の戦略抽出パスは解析端を一から再証明した（window Landau ＋ GRH 同値性）が、中堅は
+*宣言*しか読んでおらず、「could not find in the literature」な荷重命題を 4 つ名指す——中心不等式
+自体がその中にいる。Lean Zulip のモデレーターは議論を Lean 関連の側面だけに絞った（Tao の投稿後
+UPDATE）。「all human」主張の最初の消化はもっとざらつく：草稿はプレースホルダー脚注を抱え
+（「Correct statement」「Insert statement」「Correct this subsection」）、Tao はよく見た上で
+「closer to Deninger's strategy… than Connes'」——「neither is close to being concretely fleshed
+out」と位置づけた。つまり +24h：撤回なし、認証なし；両 GRH 主張は Buzzard のチェックリストが予測
+した通りの位置に留まる——コンパイルできることはまだ証明されたことではなく、片方の中堅ともう片方
+の命題自体が未完の仕事。

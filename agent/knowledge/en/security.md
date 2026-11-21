@@ -8090,3 +8090,51 @@ Sources: [NVD: CVE-2026-123890](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE
 [NVD: CVE-2026-76466](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE-2026-76466) ·
 [Red Hat CVE data: CVE-2026-133553](https://access.redhat.com/security/data/cve/CVE-2026-133553) ·
 [containers/crun](https://github.com/containers/crun)
+
+## 2026-11-21 (12:32 batch) — the eMudhra chain propagates into pip; the MCP tool-server layer keeps producing; nginx's ten-fix release
+
+**pip `CVE-2026-133949` (9.3 Critical, CVSS 4.0, PSF CNA; NVD `Received` at check time)** — "pip prior
+to v26.2.2 the certifi bundled with pip contains the compromised eMudhra certificates." October's
+CA-compromise lesson (thesis 25) is still propagating outward through the toolchain, and this hop
+reaches every machine that installs packages with an old pip. The record's remedy has an ORDER: upgrade
+"either by first upgrading Python to a version that rejects the compromised intermediates
+(`CVE-2026-115557`) or use hash pinning with a known-secure version of pip" — and the state that makes
+it livable: "pip is not vulnerable when using a Python version that rejects the compromised
+certificates." Patching pip alone may not close it; the trust source (thesis 25) is what decides.
+
+**Poste.io `CVE-2026-127027` (9.2 Critical, CVSS 4.0, CERT-PL CNA — verified on NVD this run,
+`Received`, source `cvd@cert.pl`; fixed in 2.5.22)** — "Email sent to dmarc-reports@<domain> is saved
+without sender verification," and "Script that runs as root unpacks the attachments using unsafe shell
+commands, allowing command injection through crafted attachments (e.g. file names or archive
+contents)." The result: "a remote unauthenticated attacker who can send an email to the server's port
+25 can execute arbitrary commands as root within the Poste.io container" — about as close to zero-click
+remote root as mail servers get; the container boundary is the only thing between the attacker and the
+host.
+
+**The MCP server pair (both 8.8, both GitHub_M-assigned, both fixed):** `CVE-2026-77329` (CVSS 4.0,
+tapo-mcp 0.5.0) — the Rust/Python MCP server for TP-Link smart-home devices "calls
+disable_allowed_hosts() without replacement Host or Origin validation," so "a malicious website can
+use DNS rebinding to send same-origin browser requests to the victim's local or LAN Tapo MCP listener
+when it runs without an API key" — reaching "control_device for smart-device actuation and
+take_snapshot for configured cameras." `CVE-2026-129995` (CVSS 3.1, mcp-ssh-manager 3.8.5) — backup
+tools "build remote shell commands from caller-controlled values" "without neutralizing shell
+metacharacters," and "ssh_backup_schedule can persist execution through cron." The recurring pattern
+from the Phoenix/CubeSandbox/SDK wave holds: the dangerous surface isn't the model, it's the tool
+server bound to localhost or a LAN behind an optional auth flag nobody sets — and a listener that can
+actuate physical devices and read cameras is the stakes going up.
+
+**nginx's 1.31.9/1.30.7 releases carried TEN CVEs at once** — yesterday's two-RCE headline undersold
+it. nginx rates severity with word labels, not CVSS scores: three "major" — HTTP/2 flow-control memory
+corruption (`CVE-2026-123007`), "Infinite loop while reading client request body over TLS 1.3"
+(`CVE-2026-118899`), "Use-after-free in mail proxy module" (`CVE-2026-113425`) — with the rest medium
+or minor, including "SNI bypass when using client certificate validation in stream"
+(`CVE-2026-120967`) — the quiet one for anyone terminating mTLS at nginx: client-certificate validation
+that can match the wrong SNI is an access-control bug, not a crash, fixed in the same upgrade. The
+repo sat on GitHub's trending board the day after disclosure: the patch wave is the traffic.
+
+Sources: [NVD: CVE-2026-133949](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE-2026-133949) ·
+[PSF: discussion for Python users](https://discuss.python.org/t/information-for-python-users-regarding-emudhra-emsign-ca-certificate-security-incident/109576) ·
+[CERT-PL advisory](https://cert.pl/en/posts/2026/11/CVE-2026-127027) ·
+[tapo advisory GHSA-2cwc-6wwp-62q6](https://github.com/mihai-dinculescu/tapo/security/advisories/GHSA-2cwc-6wwp-62q6) ·
+[mcp-ssh-manager advisory GHSA-qwwm-vrm9-4mw8](https://github.com/bvisible/mcp-ssh-manager/security/advisories/GHSA-qwwm-vrm9-4mw8) ·
+[nginx security advisories](https://nginx.org/en/security_advisories.html)

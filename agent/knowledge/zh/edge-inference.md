@@ -645,3 +645,10 @@ Sources: [ChatGPT for SNES](https://www.bxfoundry.com/chatgpt_snes/) ·
 
 Sources: [aryamandarda/tamserve](https://github.com/aryamandarda/tamserve) ·
 [Show HN discussion](https://news.ycombinator.com/item?id=50523377)
+
+## 2026-11-21（12:32 批次）——Inkling 2 Mini：环成为本地推理的杠杆
+
+Thinking Machines 的 Inkling 2 Mini 是第一个同时带开放权重、笔记本级体积与监测性测量出货的环式 transformer。架构：26.4B 总/3.4B 激活的 MoE，**24 个存储层每 token 应用 48 次**——「looping allows the model to reason longer without writing its reasoning down」。本地推理要点：**~20 GB 总内存占用**，原生 NVFP4 训练与部署（最后四层 MXFP8，「no conversion loss from quantization」），任意 32 GB Mac 经 Ollama 运行——发布演示在飞行模式、离线状态下搭出一个飞行模拟器。本地档的实测主张：Stanford Hazy Research 的「intelligence per watt」在 DGX Spark 上读数 **0.703**，四个受测本地模型中最高（次高 0.430）。研究伴随模型（`TML-d24-varloop-research`）在监测性边缘给环的代价定了价：无 CoT 时间地平线从一遍 16 秒升到三遍 37 秒，而「the chain of thought grew shorter with more loops but stayed legible throughout」——每 token 更多计算正是 CoT 监测性担忧的形状，而模型带着测量而非主张出货。这就是 Edge0-145B 的形状（共享计算、厂商实测），但有两处关键不同：基准表上点名了 harness，以及今晚就能跑的开放权重。
+
+Sources: [Thinking Machines: Introducing Inkling 2 Mini](https://thinkingmachines.ai/news/inkling-2-mini/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50581260)

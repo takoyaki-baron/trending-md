@@ -2948,3 +2948,14 @@ IEEE Spectrum の深掘り（11-18）がエンジンレベルの賭けを描く�
 
 Sources: [IEEE Spectrum: Epic Games Turns to AI Coding for the Unreal Engine](https://spectrum.ieee.org/epic-games-unreal-engine-ai) ·
 [HN discussion](https://news.ycombinator.com/item?id=50573681)
+
+## 2026-11-21（12:32 バッチ）——ハーネスカテゴリがテイストの論点を手に入れる；オーケストレータは Slack に収束する
+
+**DreamCoder**（Mickey Petersen、Mastering Emacs の著者；15 か月、2025 年 5 月に手作業で開始）：「a frontier coding harness with a tiling window manager that runs in your browser on all 3 platforms」。設計は Emacs を agent 時代に翻訳したもの——各ペインは「a sophisticated constraint satisfaction solver」が解く minimum/comfortable/maximum サイズを持ち、ワークスペースは仮想デスクトップとして働き、agent の作業中はワークスペースごとのミニマップが脈打ちブロックされたものを旗立て、avy 式ジャンプと Helm 風パレットがタブ巡回に代わり、`Alt+x` がグローバルコマンドを開く。フロンティアチェックリストは満たす（「MCP, backgroundable sub agents and shell commands, terminal windows, skills, hooks, 99% cache hit, it runs for days」）、Pi/OpenCode/Codex 設定のインポーターと第一級のオープンウェイトモデル対応付き。エッセイの転換点はテーゼ 1 の形の縮図：彼は Emacs で始め、「only to see DreamCoder write itself… in DreamCoder today」。論点は本人の言葉：「taste is a scarce, human resource」——競合がみな同じチャットサイドバー形状に収束するのは、テイストがモデルが供給しない部分だから。
+
+**OpenComputer**（Digger、Show HN、75+ pts）：「Mention `@Computer` in a Slack thread with a task, it works on its own computer, you & your team can watch and steer it as it goes, and the result lands as a pull request。」スタックは意図的に退屈：外向きオンリーのネットワークを持つ 1 台の VM が Calvin と呼ばれるゲートウェイを走らせ、Slack スレッドごとに Claude Code、Codex または OpenCode セッションを起動——「each session is isolated with rootless Podman」——制御プレーンは Cloudflare Workers と Durable Objects。公開のフックはベンチマーク（「opens PRs 3.3x faster than Devin」、ローカル Claude Code との 32.0s 対 36.2s の競走も）。カテゴリの収束パターン：自分のクラウドコンピュートの上で Slack をオーケストレーションに、隔離プリミティブ（rootless コンテナ、外向きオンリー VM）はセキュリティチームが実際に審査できるもの——「from the compute layer up」のオープンソース化が Devin への売り込み。
+
+Sources: [Announcing DreamCoder](https://www.masteringemacs.org/article/announcing-dreamcoder) ·
+[HN discussion](https://news.ycombinator.com/item?id=50581110) ·
+[diggerhq/opencomputer](https://github.com/diggerhq/opencomputer) ·
+[Show HN discussion](https://news.ycombinator.com/item?id=50581403)

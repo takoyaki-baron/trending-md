@@ -776,6 +776,15 @@
   "jp": "Anil Madhavapeddy の個人ブログ——OCaml メンテナによる一次のセキュリティ/OSS エッセイ（例:「rumour is the exploit」）。一次情報だが個人の見解。",
   "zh": "Anil Madhavapeddy 的个人博客——OCaml 维护者的一手安全/开源随笔（如《rumour is the exploit》）；属一手来源，但代表个人观点。"
  },
+ "ankitg.me": {
+  "cat": "community",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "Ankit Gupta's engineering writeups — 'Vibecoding an inference chip' (an AWS F2 FPGA run to bit-exact LLM inference, 6 to 213 tok/s across 14 compounding optimizations, ~3M lines for ~$10k of tokens; held to a bit-exact contract against a CPU reference). First-person account, process numbers self-reported. Cross-checked (11-21): HN thread title/points match via Algolia (126 pts, drifted up from the feed's 120).",
+  "jp": "Ankit Gupta の技術書き上げ——「Vibecoding an inference chip」（AWS F2 FPGA でビット_exactな LLM 推論へ、14 段階の最適化で 6 → 213 tok/s、約 300 万行を約 $10k のトークンで。CPU リファレンスとの bit-exact 契約を保持）。一人称の記録で、工程数値は自己報告。突合済み（11-21）：HN スレッドのタイトル/ポイントが Algolia で一致（126 pts）。",
+  "zh": "Ankit Gupta 的技术复盘——「Vibecoding an inference chip」（在 AWS F2 FPGA 上达到比特精确的 LLM 推理，14 项叠加优化从 6 到 213 tok/s，约 300 万行代码花费约 $10k token；全程以与 CPU 参考实现的 bit-exact 契約约束）。第一人称叙述，过程数字为自报。已交叉核验（11-21）：HN 讨论串标题/分数经 Algolia 一致（126 分）。"
+ },
  "anoma.ly": {
   "cat": "vendor",
   "cred": "med",
@@ -2643,6 +2652,15 @@
   "en": "CERT-EU — the EU institutions' official CERT; authoritative reproduction of vendor advisories (its NetScaler 2026-010 bulletin mirrors Citrix CTX696939). Cross-checked vs SecurityWeek (08-21).",
   "jp": "CERT-EU——EU機関の公式CERT。ベンダーアドバイザリの権威ある再掲（NetScaler 2026-010 は Citrix CTX696939 を反映）。SecurityWeek とクロスチェック済み（08-21）。",
   "zh": "CERT-EU——欧盟机构官方 CERT；权威转载厂商公告（其 NetScaler 2026-010 公告与 Citrix CTX696939 一致）。已对照 SecurityWeek 交叉核验（08-21）。"
+ },
+ "cert.pl": {
+  "cat": "security",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "Poland's NASK CERT — national CSIRT, publishes its own advisories as CNA. Cross-checked (11-21): CVE-2026-127027 (Poste.io DMARC-report root RCE, 9.2 CVSS 4.0) verified on NVD with source cvd@cert.pl and the description verbatim — cert.pl is the CNA of record, not a repeater.",
+  "jp": "ポーランド NASK の CERT——国家 CSIRT。CNA として自前のアドバイザリを公開。突合済み（11-21）：CVE-2026-127027（Poste.io の DMARC レポート根 RCE、9.2 CVSS 4.0）を NVD で確認、ソースは cvd@cert.pl で記述は逐語一致——cert.pl は転載ではなく記録上の CNA。",
+  "zh": "波兰 NASK 的 CERT——国家级 CSIRT，以 CNA 身份发布自有公告。已交叉核验（11-21）：CVE-2026-127027（Poste.io DMARC 报告根 RCE，9.2 CVSS 4.0）在 NVD 上得到确认，source 为 cvd@cert.pl 且描述逐字一致——cert.pl 是记录在案的 CNA，而非转载方。"
  },
  "cfsg.axiommath.ai": {
   "cat": "research",
@@ -8354,6 +8372,15 @@
   "jp": "AIネイティブの脅威・露出管理セキュリティベンダー。自社製品情報と脅威インテルが中心、一次情報での裏取り推奨。",
   "zh": "AI 原生威胁与暴露管理安全厂商，产品宣称与威胁情报为一手内容，结论需与原始漏洞公告核对。"
  },
+ "manidoraisamy.com": {
+  "cat": "community",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "Pandiyaraja Manidoraisamy's personal essays — the 'We promoted developers into architects without informing them' post (vibe-coded install-logging with nested try/catch fallbacks; 'AI will decide the architecture on your behalf'). Single-author opinion with a first-hand incident; vendor-neutral. Cross-checked (11-21): HN thread title/points match via Algolia (345 pts).",
+  "jp": "Pandiyaraja Manidoraisamy の個人エッセイ——「We promoted developers into architects without informing them」（入れ子 try/catch フォールバックの vibe-coded インストールロギング。「AI will decide the architecture on your behalf」）。第一手のincident付きの単一著者意見。突合済み（11-21）：HN スレッドのタイトル/ポイントが一致（345 pts）。",
+  "zh": "Pandiyaraja Manidoraisamy 的个人文章——「We promoted developers into architects without informing them」（嵌套 try/catch 回退的 vibecoded 安装日志；「AI 会替你决定架构」）。带第一手事件的单一作者观点。已交叉核验（11-21）：HN 讨论串标题/分数经 Algolia 一致（345 分）。"
+ },
  "manifold.security": {
   "cat": "security",
   "cred": "high",
@@ -8452,6 +8479,15 @@
   "en": "GitHub Pages landing for indie browser extensions (Weedout) — vendor self-description, so treat claims as the author's own; its scope confession ('unlabeled slop is out of scope') matched the HN discussion.",
   "jp": "インディーストリート拡張（Weedout）の GitHub Pages ランディング — ベンダー自己記述のため主張は著者自身のものとして扱う。範囲の自白（「無ラベルのスロップは範囲外」）は HN 議論と一致。",
   "zh": "独立浏览器扩展（Weedout）的 GitHub Pages 落地页——属厂商自述，声明应视为作者自述；其范围自白（“未标注的垃圾内容不在范围内”）与 HN 讨论一致。"
+ },
+ "masteringemacs.org": {
+  "cat": "community",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "Mickey Petersen's long-running Emacs reference blog (15 years) — now also a harness author: DreamCoder ('a frontier coding harness with a tiling window manager that runs in your browser'). First-party product claims; the Emacs-era design detail is the credible part. Cross-checked (11-21): HN thread title/points match via Algolia (144 pts).",
+  "jp": "Mickey Petersen の長年続く Emacs リファレンスブログ（15 年）——現在はハーネス作者でもある：DreamCoder（「ブラウザで動くタイリング WM 付きフロンティアコーディングハーネス」）。製品主張は一次情報。突合済み（11-21）：HN スレッドのタイトル/ポイントが一致（144 pts）。",
+  "zh": "Mickey Petersen 的长青 Emacs 参考博客（15 年）——如今也是 harness 作者：DreamCoder（「在浏览器中运行、带平铺窗口管理器的前沿编码 harness」）。产品主张为第一方；Emacs 时代的设计细节是可信部分。已交叉核验（11-21）：HN 讨论串标题/分数经 Algolia 一致（144 分）。"
  },
  "mastodon.gamedev.place": {
   "cat": "community",
@@ -9092,6 +9128,15 @@
   "jp": "個人 Notion 記事「Nine coding harnesses vs. your laptop」——1台の M4 MacBook で9つのコーディングハーネスをローカル計測し、llama-server 側の計測値のみを採用。突合済み（09-11）：HN スレッドで引用された数値は本文と一致。著者は測定対象ハーネスの一つ chad の作者であると自ら開示。",
   "zh": "个人 Notion 长文《Nine coding harnesses vs. your laptop》——在同一台 M4 MacBook 上对 9 个编码框架做本地实测，只采信 llama-server 侧记账。已交叉核验（09-11）：HN 讨论串引用的数字与原文一致；作者披露被测框架之一 chad 出自他本人。"
  },
+ "nate.mecca1.net": {
+  "cat": "community",
+  "cred": "med",
+  "cv": 1,
+  "density": "low",
+  "en": "Nate Mecca's personal blog — the 'Help github just deleted me' post (account suspended to 404 with no email; restored after the HN thread gained traction). Single-source incident report; the restoration is the author's own account. Cross-checked (11-21): HN thread title/points match via Algolia (52 pts).",
+  "jp": "Nate Mecca の個人ブログ——「Help github just deleted me」（アカウントがメール無しで 404 に；HN スレッドの注目後に復旧）。単一ソースのインシデント報告。突合済み（11-21）：HN スレッドのタイトル/ポイントが一致（52 pts）。",
+  "zh": "Nate Mecca 的个人博客——「Help github just deleted me」（账号无邮件通知即被停用至 404；HN 讨论串发酵后恢复）。单一来源的事件报告。已交叉核验（11-21）：HN 讨论串标题/分数经 Algolia 一致（52 分）。"
+ },
  "nathan.rs": {
   "cat": "community",
   "cred": "med",
@@ -9405,6 +9450,15 @@
   "jp": "The New Yorker——長編の文化/政治報道；論旨の枠付けは強く、事実は慎重。検証済み（09-09）：Flock 記事を全文取得し、『出口のない監視世界』の表現、約 13 万カメラ、米法執行機関の約 40% が契約、ICE/中絶調査の悪用事例を確認；保持期間 7 日への短縮は NYT の補完報道で本文ではない。エッセイ_register——論証と報道を分けて引用。",
   "zh": "《纽约客》——长篇文化/政治报道；观点框架鲜明、事实考究。已核验（09-09）：Flock 文全文抓取，确认『无处可逃的全面监控世界』措辞、约 13 万摄像头、约 40% 的美国执法机构签约、ICE/堕胎调查滥用案例；保留期砍到七天的让步来自 NYT 补充报道而非本文。文学随笔语域——把论证与报道分开引用。"
  },
+ "nginx.org": {
+  "cat": "vendor",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "nginx's own security advisories — the vendor of record; severity as word labels (major/medium/minor), NOT CVSS scores, so quote the label and the CVE record's separately-computed scores. Cross-checked (11-21): the advisories page carries 'SNI bypass when using client certificate validation in stream' (CVE-2026-120967) and CVE-2026-118899 verbatim; the ten-fix 1.31.9/1.30.7 release story matches the feed item.",
+  "jp": "nginx 自身のセキュリティアドバイザリ——記録上のベンダー。深刻度は CVSS スコアではなく語ラベル（major/medium/minor）なので、ラベルと CVE レコードの別算出スコアを区別して引用。突合済み（11-21）：アドバイザリページに「SNI bypass when using client certificate validation in stream」（CVE-2026-120967）と CVE-2026-118899 が逐語一致；ten-fix リリースの 1.31.9/1.30.7 の記述はフィード項目と一致。",
+  "zh": "nginx 官方安全公告——记录在案的厂商；严重度用文字标签（major/medium/minor）而非 CVSS 分数，引用时须区分标签与 CVE 记录单独计算的分数。已交叉核验（11-21）：公告页逐字载有「SNI bypass when using client certificate validation in stream」（CVE-2026-120967）与 CVE-2026-118899；ten-fix 发布的 1.31.9/1.30.7 叙述与 feed 条目一致。"
+ },
  "nginx2root.com": {
   "cat": "security",
   "cred": "med",
@@ -9440,6 +9494,15 @@
   "en": "Nimony.org — official site of the Nim 3 compiler rewrite (Andreas Rumpf/Araq): borrow checking, explicit nilability, native codegen independent of LLVM/GCC. First-party claims until the compiler ships its promised feature set. Cross-checked (11-17): the nim-lang/Nimony repo is live first-hand (README: 'a new Nim implementation that is in heavy development… production-ready compiler this year'), matching the site's Nim-3 framing; the HN thread (83 pts) carries independent builder discussion.",
   "zh": "Nimony.org——Nim 3 编译器重写（Andreas Rumpf/Araq）的官方站点：借用检查、显式可空性、独立于 LLVM/GCC 的原生代码生成。在编译器兑现承诺特性集之前均属第一方主张。交叉核验（11-17）：nim-lang/Nimony 仓库一手在线（README：「a new Nim implementation that is in heavy development… production-ready compiler this year」），与站点的 Nim-3 框架一致；HN 讨论串（83 分）有独立的构建者讨论。",
   "jp": "Nimony.org——Nim 3 コンパイラ書き直し（Andreas Rumpf/Araq）の公式サイト：借用検査、明示的 nilability、LLVM/GCC に依存しないネイティブコード生成。コンパイラが約束の機能セットを出荷するまでは、主張はプロジェクト自身のもの。クロスチェック（11-17）：nim-lang/Nimony リポジトリを一次確認（README：'a new Nim implementation that is in heavy development… production-ready compiler this year'）、サイトの Nim-3 の枠組みと一致；HN スレッド（83 pts）に独立のビルダー議論。"
+ },
+ "ninlive.com": {
+  "cat": "community",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "Fan-run Nine Inch Nails live archive — 1,210 concerts, 1,949 recordings, streaming 1988-2026 with DAT-master provenance notes. First-party archive of fan recordings; counts are the site's own. Cross-checked (11-21): HN thread title/points match via Algolia (170 pts).",
+  "jp": "ファン運営の Nine Inch Nails ライブアーカイブ——1,210 公演、1,949 録音、1988-2026 をストリーミング、DAT マスターの来歴メモ付き。ファン録音の一次アーカイブ。突合済み（11-21）：HN スレッドのタイトル/ポイントが一致（170 pts）。",
+  "zh": "粉丝运营的 Nine Inch Nails 现场存档——1,210 场演出、1,949 个录音，流媒体覆盖 1988–2026，附 DAT 母带来源记录。粉丝录音的第一方存档。已交叉核验（11-21）：HN 讨论串标题/分数经 Algolia 一致（170 分）。"
  },
  "nishantjosh.dev": {
   "cat": "community",
@@ -12446,6 +12509,15 @@
   "jp": "エージェントスキルのマーケットプレイスディレクトリ。リポジトリ発見に使用し、GitHub ソースで照合する。突合済み（08-26）：Archify の掲載は tt-a1i/archify リポジトリと一致。",
   "zh": "智能体技能市场目录，收录各类框架的技能。用于发现仓库，需对照 GitHub 源核实。已交叉核验（08-26）：Archify 条目与 tt-a1i/archify 仓库一致。"
  },
+ "slopstrap.mikelacher.com": {
+  "cat": "code",
+  "cred": "med",
+  "cv": 1,
+  "density": "low",
+  "en": "Mike Lacher's parody CSS framework — a satire kit of the generated-landing-page look (blinking status dots, bento grids, auto-testimonials) plus an /agents page. Joke artifact; its value is the taxonomy, not claims. Cross-checked (11-21): HN thread title/points match via Algolia (121 pts).",
+  "jp": "Mike Lacher のパロディ CSS フレームワーク——生成されたランディングページの外見の風刺キット（点滅するステータスドット、ベントグリッド、自動テスティモニアル）と /agents ページ。ジョークアーティファクト。突合済み（11-21）：HN スレッドのタイトル/ポイントが一致（121 pts）。",
+  "zh": "Mike Lacher 的戏仿 CSS 框架——对生成式落地页外观的讽刺套件（闪烁状态点、bento 网格、自动推荐语）外加 /agents 页面。玩笑性质的 artifact，其价值在于分类学而非主张。已交叉核验（11-21）：HN 讨论串标题/分数经 Algolia 一致（121 分）。"
+ },
  "smallcultfollowing.com": {
   "cat": "community",
   "cred": "high",
@@ -14581,6 +14653,15 @@
   "jp": "Vidu（Shengshu）の S2 リアルタイムアバター/ライブ動画編集のデモ・マーケティングページ。ベンダーマーケティングでレイテンシ/FPS 数値なし —— 主張は arXiv 2609.11638 論文とクロスチェックだが、同論文のベンチマーク記述も未定量化。",
   "zh": "Vidu（生数科技）S2 实时数字人与实时视频编辑的演示/营销页。厂商营销，无延迟/FPS 数字——主张与 arXiv 2609.11638 论文交叉核对，而后者的基准表述同样未量化。"
  },
+ "violetpixel.com": {
+  "cat": "community",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "Justin Michael's personal blog — the 'We need smart people who give a shit' essay (a defense of caring about craft in the AI-generation era; 'the compliments now have to be issued explicitly'). Single-author opinion, vendor-neutral. Cross-checked (11-21): HN thread live via Algolia at 829 pts (drifted up from the feed's 312+), title matches the essay.",
+  "jp": "Justin Michael の個人ブログ——「We need smart people who give a shit」（AI 生成時代に craft への関心を擁護するエッセイ。「称賛は今や明示的に発行されねばならない」）。単一著者の意見、ベンダー中立。突合済み（11-21）：HN スレッドが Algolia で 829 pts で存続（フィードの 312+ から上昇）、タイトルはエッセイと一致。",
+  "zh": "Justin Michael 的个人博客——「We need smart people who give a shit」（为 AI 生成时代对手艺的在乎辩护；「如今称赞必须被明确地发出」）。单一作者观点，无厂商立场。已交叉核验（11-21）：HN 讨论串经 Algolia 存续于 829 分（自 feed 的 312+ 上行），标题与文章一致。"
+ },
  "virtualizationhowto.com": {
   "cat": "news",
   "cred": "med",
@@ -14905,6 +14986,15 @@
   "en": "Windows/tech news aggregator site. Cross-checked (09-11): its MikroTik RouterOS KEV story matches the CISA KEV catalog entries (CVE-2026-67277 btest missing-auth, CVE-2026-86060 SSH policy-mask escalation) added Sep 10 — use CISA/vendor advisories as primary.",
   "jp": "Windows/テック系ニュース集約サイト。突合済み（09-11）：MikroTik RouterOS KEV 記事は9月10日追加の CISA KEV カタログ項目（CVE-2026-67277 btest 認証欠落、CVE-2026-86060 SSH ポリシーマスク昇格）と一致——一次ソースとしては CISA/ベンダー勧告を優先。",
   "zh": "Windows/科技新闻聚合站。已交叉核验（09-11）：其 MikroTik RouterOS KEV 报道与 9 月 10 日 CISA KEV 目录条目一致（CVE-2026-67277 btest 未认证、CVE-2026-86060 SSH 策略掩码提权）——请以 CISA/厂商公告为一手来源。"
+ },
+ "winedroid.soham.sh": {
+  "cat": "code",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "Demo site for Winedroid — a Rust runtime that 'essentially replicates Android' and runs F-Droid APKs in the browser (~12 MB; JIT not working on the web target). First-party project claims, early. Cross-checked (11-21): the sohzm/winedroid repo is live first-hand (93 stars, created 2026-11-20T19:14Z, description matches).",
+  "jp": "Winedroid のデモサイト——「本質的に Android を再現する」Rust ランタイムで F-Droid APK をブラウザで動かす（約 12 MB、Web ターゲットでは JIT 無効）。一次のプロジェクト主張、まだ初期段階。突合済み（11-21）：sohzm/winedroid リポジトリを実地確認（93 スター、2026-11-20T19:14Z 作成、説明一致）。",
+  "zh": "Winedroid 的演示站点——「本质上复刻 Android」的 Rust 运行时，在浏览器中运行 F-Droid APK（约 12 MB；Web 目标下 JIT 不可用）。第一方项目主张，尚处早期。已交叉核验（11-21）：sohzm/winedroid 仓库实地确认（93 星，2026-11-20T19:14Z 创建，描述一致）。"
  },
  "wired.com": {
   "cat": "news",

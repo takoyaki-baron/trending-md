@@ -611,3 +611,10 @@ Sources: [GrapheneOS on Mastodon](https://grapheneos.social/@GrapheneOS/11764503
 Sources: [Signal blog: Protecting Your Privacy](https://signal.org/blog/protecting-your-privacy/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50572348) ·
 [Mozilla: Why there are still no non-WebKit browsers on iOS](https://blog.mozilla.org/en/mozilla/internet-policy/apple-ios-browser-engine-rules/)
+
+## 2026-11-21（12:32 批次）——GitHub 无邮件即把账号停到 404，随后恢复
+
+一位开发者的 GitHub 账号（`0n4t3`）被停用——主页 404、「all my personal projects are gone」——而「not so much as a pop up notification or email on what happened」。线程发酵后账号回来了，帖子的开头现在是「Update — I'm back!」，归功于「whoever undid my (prob automated?) deletion and/or ban on Github」。留下来的句子：「I still have no idea what got me banished or if it'll happen again… just a random banishment then unbanishment。」他现在本地镜像并考虑迁移。这是 Codeberg 注册商停用（11-18）的账号侧孪生：把整个身份下线的审核动作不经任何通知渠道抵达，而解决方式——被碰巧注意到的人解除——不是一个流程。平台的申诉路径是帖子走红；镜像你的仓库。
+
+Sources: [Help github just deleted me](https://nate.mecca1.net/posts/2026-11-20_help/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50583911)

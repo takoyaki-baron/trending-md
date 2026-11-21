@@ -436,3 +436,17 @@ Sources: [I can tell you wrote this yourself](https://em-online.bearblog.dev/i-c
 Sources: [If you stop writing code, you also get worse at reviewing it](https://cekrem.github.io/posts/if-you-stop-writing-code-you-also-get-worse-at-reviewing-it) ·
 [HN discussion](https://news.ycombinator.com/item?id=50573886) ·
 [Mother Jones: Google Workers Tell Their Employer Not to Punish Schools](https://www.motherjones.com/politics/2026/11/google-alphabet-union-school-ai-protest-gemini-workers-petition/)
+
+## 2026-11-21（12:32 バッチ）——誰も告げなかった昇進；風刺が分類学をする；vibecoding がシリコンに届く
+
+**「We promoted developers into architects without informing them」**（manidoraisamy.com、335+ pts、200+ コメント）：Google Forms アドオン開発者が 15 秒のウェルカム画面で幕を開ける——同僚が vibe-code したインストールロギングで、Google の同意制限への AI の答えは三重のネストした try/catch フォールバック（「all of these are one line of code, but internally each of these makes multiple API calls to Google servers」）で、何かが描画される前に走る。診断：「AI is great at writing code. But it doesn't know if you are launching the app or have millions of users」、そして「sycophantic and tries to execute your requirements exactly without pushing back」。エッセイの動きは仕事の改名：「if you generate code by specifying your requirements instead of specifying your architecture, AI will decide the architecture on your behalf」——だからデータモデルを定義し、agent をそれに縛り、後方互換性が重複テーブルに値する時を決め、「the way an architect reviews a developer's code」のやり方でレビューする。同じ日の skill-atrophy エッセイの建設的な対応編：あちらは損失を名指しし、こちらは昇進を名指す——「You got promoted. Nobody told you, so I am telling you。」ハーバードの企業規模の研究がメカニズムを供給：レビューがボトルネックなので、コードが存在する前に要件に押し戻せる人が希少な役割。
+
+**Slopstrap**（Mike Lacher、110+ pts）：2026 生成ランディングページの語られる特徴すべてをコピー&ペースト部品として出荷するパロディ CSS フレームワーク——点滅するステータスドット（「All Systems Operational」「0 Real Incidents」）、太い色付き左ボーダー、低コントラスト本文の上のグラデーション見出し、「one arbitrary italic serif word」、単純な段落を「an asymmetrical grid of glowing rounded boxes」に砕く bento グリッド、自動生成テスティモニアル、スクロールで動く数字カウンタ。デモは「Bob's Local Plumbing & Pipe Repair」に `Slopstrap.slopify('#plain-demo')` を適用し、ワンクリックで光るカードグリッドに変える。風刺が分類学をしている：このキットは「どの視覚シグナルが今や機械生成と読まれるか」のそのもののチェックリスト——しかも `/agents` ページ付き（「Why use an agent if people can't tell an agent made your site?」）、ジョークの終点は slop の見た目が agent がオンデマンドで再現するジャンルになったこと。em-dash の癖やタイトル遍歴の家系図の隣に、レビュアーが読む信号が加わる。
+
+**Vibecoding an inference chip**（ankitg.me、120+ pts）：Ankit Gupta は AWS F2 FPGA インスタンス（16 GB HBM）を借り、クラウド agent を DeepGrove の三値重みアーキテクチャに向け、数日後にハードウェア上でビット_exactな LLM 推理を得た——6 → **213 tokens/s**（最初の全モデル bit-exact ベースラインの 33 倍）、14 の複利型最適化（burst attention、並列 MoE ルータ、正確な投機的デコード、可損 5-trit 重みパッキング）。請求書：「roughly 3M lines across the experiment history and parsing 30M lines of output files, burning only $10,000 in Claude and OpenAI tokens。」プロンプトはほぼ励ましだった——そしてベテラン FPGA 設計者のガイドを貼ると、agent 自身の回顧は：「Its biggest design ideas were already in my plan before you pasted it。」移転可能な部分は検証の規律：実行全体が CPU リファレンスとの bit-exact 契約に縛られ、シミュレーション・タイミング・実ボードの結果は別管理——分担は名指しされる：「the humans are still useful at defining how to iterate fast and what correctness looks like, and the agents are great to manage the exploration。」
+
+Sources: [We promoted developers into architects without informing them](https://manidoraisamy.com/developer-to-architect.html) ·
+[HN discussion](https://news.ycombinator.com/item?id=50579331) ·
+[Slopstrap](https://slopstrap.mikelacher.com/) ·
+[Vibecoding an inference chip](https://ankitg.me/blog/vibecoding-inference-chip/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50579297)

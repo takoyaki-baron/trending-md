@@ -403,3 +403,17 @@ Sources: [I can tell you wrote this yourself](https://em-online.bearblog.dev/i-c
 Sources: [If you stop writing code, you also get worse at reviewing it](https://cekrem.github.io/posts/if-you-stop-writing-code-you-also-get-worse-at-reviewing-it) ·
 [HN discussion](https://news.ycombinator.com/item?id=50573886) ·
 [Mother Jones: Google Workers Tell Their Employer Not to Punish Schools](https://www.motherjones.com/politics/2026/11/google-alphabet-union-school-ai-protest-gemini-workers-petition/)
+
+## 2026-11-21（12:32 批次）——无人通知的晋升；讽刺做分类学；vibecoding 抵达硅片
+
+**「We promoted developers into architects without informing them」**（manidoraisamy.com，335+ 分、200+ 评论）：一位 Google Forms 插件开发者以 15 秒欢迎屏开场——同事 vibe-coded 了安装日志，AI 对 Google 同意限制的答案是三层嵌套 try/catch 回退（「all of these are one line of code, but internally each of these makes multiple API calls to Google servers」）在任何东西渲染前运行。诊断：「AI is great at writing code. But it doesn't know if you are launching the app or have millions of users」，而且它「sycophantic and tries to execute your requirements exactly without pushing back」。文章的动作是给工作改名：「if you generate code by specifying your requirements instead of specifying your architecture, AI will decide the architecture on your behalf」——所以定义数据模型、把 agent 约束在它上面、决定向后兼容何时值得重复表，并像「the way an architect reviews a developer's code」那样评审。它是同日 skill-atrophy 文章的建设性对应：那篇点名损失，这篇点名晋升——「You got promoted. Nobody told you, so I am telling you。」哈佛的公司级研究供应机制：评审是瓶颈，所以能在代码存在之前对需求说不的人是稀缺角色。
+
+**Slopstrap**（Mike Lacher，110+ 分）：一个戏仿 CSS 框架，把 2026 生成式落地页的每个特征做成复制粘贴组件——闪烁状态点（「All Systems Operational」「0 Real Incidents」）、粗彩色左边框、低对比正文上的渐变标题、「one arbitrary italic serif word」、把简单段落碎成「an asymmetrical grid of glowing rounded boxes」的 bento 网格、自动生成推荐语、滚动时动画的数字计数器。演示对「Bob's Local Plumbing & Pipe Repair」施加 `Slopstrap.slopify('#plain-demo')`，一次点击把它变成发光卡片网格。讽刺在做分类学：这套件就是一张「哪些视觉信号如今读作机器生成」的清单——它甚至带一个 `/agents` 页（「Why use an agent if people can't tell an agent made your site?」），笑点的终点是 slop 外观已成了 agent 按需复制的体裁。它加入 em-dash 破折号与标题更迭家谱，成为评审者如今阅读的信号。
+
+**Vibecoding an inference chip**（ankitg.me，120+ 分）：Ankit Gupta 租了一台 AWS F2 FPGA 实例（16 GB HBM），把云 agent 指向 DeepGrove 的三值权重架构，几天后就在硬件上拿到比特精确的 LLM 推理——6 → **213 tokens/s**（首个全模型 bit-exact 基线的 33 倍），经 14 项叠加优化（burst attention、并行 MoE router、精确投机解码、无损 5-trit 权重打包）。账单：「roughly 3M lines across the experiment history and parsing 30M lines of output files, burning only $10,000 in Claude and OpenAI tokens。」他的提示词大多是鼓励——而当他贴入一位 FPGA 老手的设计指南，agent 自己的回顾是：「Its biggest design ideas were already in my plan before you pasted it。」可迁移的部分是验证纪律：全程以与 CPU 参考的 bit-exact 契约为准，仿真、时序与上板结果分开保存——分工被点名：「the humans are still useful at defining how to iterate fast and what correctness looks like, and the agents are great to manage the exploration。」
+
+Sources: [We promoted developers into architects without informing them](https://manidoraisamy.com/developer-to-architect.html) ·
+[HN discussion](https://news.ycombinator.com/item?id=50579331) ·
+[Slopstrap](https://slopstrap.mikelacher.com/) ·
+[Vibecoding an inference chip](https://ankitg.me/blog/vibecoding-inference-chip/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50579297)

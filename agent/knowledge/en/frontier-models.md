@@ -6201,3 +6201,22 @@ Engineering Index, the decision-model wave).
 
 Sources: [What comes after AGI?](https://institute.deepmind.com/essays/what-comes-after-agi/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50569519)
+
+## 2026-11-21 (12:32 batch) — Inkling 2 Mini: the looped transformer ships with results, open
+
+Thinking Machines' Inkling 2 Mini (open weights; 26.4B-total/3.4B-active MoE, 24 stored layers run 48
+applications per token; ~20 GB, native NVFP4 — local-inference detail in [[edge-inference]]) claims to
+"lead every open-weights model with less than 100B total parameters" — DeepSWE v1.1 **48.2%**, Vals
+Index v2.2 **46.5%**, SWE-bench Pro v2 Hard **77.9%**, harnesses named in the table. The 11-06 line's
+Inkling 2 Small concern ("externally reported evaluations", most rows reading second place) is at
+least partially answered in the launch post's own shape: named harnesses beside each number, and the
+limitations carried in the same post as a blockquote — "Inkling 2 Mini is not the strongest small
+model for multi-turn chat or for instructions with many constraints: it scores 50.0% on
+MultiChallenge and 33.4% on ComplexConstraints v1.1, behind Qwen3.8-27B on both." Beside it ships
+`TML-d24-varloop-research`, the variable-loop research model: no-CoT time horizon 16 s → 37 s at three
+passes, while the chain of thought "grew shorter with more loops but stayed legible throughout" — the
+monitorability question measured at the same time the capability ships. Vendor-numbered until
+independently reproduced; the named harnesses make that reproducible.
+
+Sources: [Thinking Machines: Introducing Inkling 2 Mini](https://thinkingmachines.ai/news/inkling-2-mini/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50581260)

@@ -1928,7 +1928,10 @@ function checkCwe(it, subjects, cna) {
  *     contradiction;
  *   - a self-dated sentence ("at publication", "as of") is the trend, not the error;
  *   - a token that is not a known record field is a prose claim about something else, reported as
- *     `field-unknown-name` (sev 0) only when the sentence uses the word key/field;
+ *     `field-unknown-name` (sev 0) only when the sentence uses the word key/field and the token is
+ *     not an all-caps acronym ("without an API key" is a credential — 2026-11-21), and identifier-
+ *     shaped tokens report nothing unknown (camelCase is how products spell themselves — macOS,
+ *     2026-11-21 — so shape alone no longer confers explicitness);
  *   - an unread record is `field-unreadable`, never an absent value.
  */
 
@@ -1971,7 +1974,15 @@ function fieldClaims(plain) {
     const before = plain.slice(Math.max(0, m.index - 40), m.index);
     if (/["“'‘]\s*$/.test(before)) return;                                        // quoted speech
     if (/\b(?:report|read|say|claim|pars|interpret|treat|render|check|test|see)\w*\b[^.]{0,24}$/i.test(before)) return; // a READER's reading
-    out.push({ kind, at: m.index, phrase: m[0], name: m[nameIdx], explicit });
+    /* An ALL-CAPS token is an acronym, and the noun after it is usually a credential, not a
+     * payload key: "runs without an API key" (filed 2026-11-21 13:10, item 24 of that day's lint
+     * JSON — the Tapo MCP listener's optional auth flag, quoted from the GHSA advisory's own
+     * prose) matched this arm's noun `key` and filed `field-unknown-name` against a sentence
+     * about authentication. CVE 2.0/5.x names no field in all caps, so an acronym token can
+     * never become an unknown-name report; a KNOWN field claim is unaffected (FIELD_VOCAB has
+     * no all-caps entry, so the explicit flag only ever gates the report, never a verdict). */
+    const explicitAdj = /^[A-Z]{2,}$/.test(String(m[nameIdx] ?? '')) ? false : explicit;
+    out.push({ kind, at: m.index, phrase: m[0], name: m[nameIdx], explicit: explicitAdj });
   };
   for (const m of plain.matchAll(new RegExp(`\\b(?:carr(?:y|ies|ying)|has|have|having|includes?|contains?|holds?)\\s+(?:no|not\\s+(?:a|an|any))\\s+(${TOKEN})\\s+(?:key|field|object|array|property|entry)\\b`, 'gi'))) push(m, 'absent', 1);
   for (const m of plain.matchAll(new RegExp(`\\b(?:no|without\\s+(?:a|an|any))\\s+(${TOKEN})\\s+(?:key|field|object|array|property|entry)\\b`, 'gi'))) push(m, 'absent', 1);
@@ -1979,11 +1990,17 @@ function fieldClaims(plain) {
   for (const m of plain.matchAll(new RegExp(`\\b(?:does|do|did)\\s+not\\s+(?:state|carry|include|have|contain)\\s+(?:a\\s+|an\\s+|any\\s+)?(${TOKEN})\\b`, 'gi'))) push(m, 'absent-soft', 1, false);
   /* An IDENTIFIER-shaped token needs no "key" after it: `cvssMetricV40`, `default_status` are
      unmistakably payload keys, while "no fixed version" is prose — so the arm is gated on the
-     token's shape rather than on a noun, which is what makes "carries no cvssMetricV40" visible
-     without turning every English sentence into a field claim. */
+     token's shape rather than on a noun, which is what makes "carries no cvssMetricV40" (a KNOWN
+     field, which still routes to its verdict) visible without turning every English sentence
+     into a field claim. For UNKNOWN identifiers the shape gate is not enough: camelCase is also
+     how products spell themselves — "no macOS protection" (filed 2026-11-21 13:10, item 5 of
+     that day's lint JSON; Signal's blog conceding the desktop platform, not a record field)
+     matches IDENT exactly as `cvssMetricV40` does — so these arms pass `explicit=false` and an
+     unknown identifier reports nothing. The unknown-name report keeps its documented contract:
+     noun-gated (the arms above), minus all-caps acronyms. */
   const IDENT = '([A-Za-z][A-Za-z0-9]*_[A-Za-z0-9_]+|[a-z][a-z0-9]*[A-Z][A-Za-z0-9]*)';
-  for (const m of plain.matchAll(new RegExp(`\\b(?:carr(?:y|ies|ying)|has|have|includes?|contains?|holds?)\\s+(?:no|not\\s+(?:a|an|any))\\s+${IDENT}\\b`, 'g'))) push(m, 'absent', 1);
-  for (const m of plain.matchAll(new RegExp(`\\bno\\s+${IDENT}\\b`, 'g'))) push(m, 'absent', 1);
+  for (const m of plain.matchAll(new RegExp(`\\b(?:carr(?:y|ies|ying)|has|have|includes?|contains?|holds?)\\s+(?:no|not\\s+(?:a|an|any))\\s+${IDENT}\\b`, 'g'))) push(m, 'absent', 1, false);
+  for (const m of plain.matchAll(new RegExp(`\\bno\\s+${IDENT}\\b`, 'g'))) push(m, 'absent', 1, false);
   /* `carried` is the tense a TIME-SCOPED claim is written in ("the other nine carried an empty
      `metrics` object at 11:17Z"), and the first version omitted it — so the corrected filing case
      produced NO claim at all, and a check that goes silent on the better sentence is worse than one
@@ -5427,6 +5444,22 @@ const PARTY_ARTIFACT_NOUN_RE = /([A-Z][A-Za-z0-9.'-]*)'s\s+(?:(?:dump|blog|resea
  * Estrada-Belli et al. 2025" (a citation). A place, a month and a paper's authors are not parties
  * a quotation is attributed to; `per` and `according to` are the attribution prepositions. */
 const PARTY_REPORTING_RE = /(?:\b(?:per|according to)\s+([A-Z][A-Za-z0-9.'-]{3,})|([A-Z][A-Za-z0-9.'-]{3,})\s+(?:writes|wrote|reports|reported|says|said|puts it|describes|described|notes|noted|clarifies|clarified|corrects|corrected|discloses|disclosed|terms|dubbed|called it)\b)/g;
+/* `per` has TWO readings, and only one attributes: "per Aaronson" is "according to Aaronson",
+ * but "sessions per Slack thread" is "for each Slack thread" — a DISTRIBUTIVE reading over a
+ * venue. Filed 2026-11-21 13:10 by that day's own lint JSON (item 25): the OpenComputer item
+ * quotes Digger's README ("each session is isolated with rootless Podman" — verbatim there,
+ * checked first-hand) beside "sessions per Slack thread", and the `per` arm captured Slack as
+ * the party; `attribution-uncited` then advised opening Slack's primary artifact for a sentence
+ * Slack never wrote. The tell is what FOLLOWS the name: a venue/iteration noun (thread, channel,
+ * message, chat, session, request, run, …) makes the preposition distributive. A genuine
+ * attribution keeps its artifact noun after the name ("per Kotaku's testing" — testing; "per
+ * The Verge's summary" — summary), so the guard never fires there. KNOWN RESIDUAL, deliberately
+ * unsuppressed: the possessive+artifact-noun arm still reads "per Slack's thread conventions" as
+ * "Slack's thread" (the artifact-noun list contains thread), because "Aaronson's thread" — his
+ * own artifact — must keep firing, and a compound-noun test ("thread conventions" vs "thread
+ * says") cannot tell them apart without risking real attributions. The preposition arm is where
+ * the live misread came from; the possessive shape can earn its own guard the day it fires live. */
+const PARTY_VENUE_NOUN_RE = /^\s*[`"“']*\s*(?:threads?|channels?|messages?|chats?|conversations?|sessions?|workspaces?|rooms?|inbox|dms?|requests?|calls?|runs?|tasks?|turns?|iterations?|epochs?|minutes?|hours?|days?|weeks?|months?|years?|pages?|screens?|tabs?|windows?)\b/i;
 /* Tokens that look like parties but are not: acronyms (API's docs), tech nouns a capitalization
  * rule alone would admit (Rust's), agent products whose documentation the item covers wholesale
  * (Claude's, Codex's — the item's SUBJECT, not an external attribution source), roles whose
@@ -5457,11 +5490,17 @@ function attributionClaims(plain) {
       const pre = sent.slice(Math.max(0, open - 160), open);
       const post = sent.slice(close + 1, Math.min(sent.length, close + 91));
       const found = new Map();
+      const hay = pre + ' ‸ ' + post;
       for (const re of [PARTY_ARTIFACT_NOUN_RE, PARTY_REPORTING_RE]) {
-        for (const m of (pre + ' ‸ ' + post).matchAll(re)) {
+        for (const m of hay.matchAll(re)) {
           // the verb/preposition arm can capture a possessive whole ("per Kotaku's testing" →
           // "Kotaku's"), so the suffix comes off here, before the token is built
           const raw = (m[1] ?? m[2] ?? '').replace(/['’]s$/, '').replace(/[.'-]+$/, '');
+          /* the DISTRIBUTIVE `per` guard (2026-11-21, item 25): only the preposition arm can
+           * read distributively — "Slack reports" is always a party, "per Slack thread" is a
+           * venue — so the venue-noun test is gated on m[1] (the `per`/`according to`
+           * capture) and reads what follows the name in the same window. */
+          if (m[1] && PARTY_VENUE_NOUN_RE.test(hay.slice(m.index + m[0].length))) continue;
           // cue 1 captures only the possessive word ("Aaronson's" → Aaronson); a multi-word name
           // contributes its possessive part, which is the distinctive token either way.
           const token = raw.toLowerCase();
@@ -6232,6 +6271,12 @@ if (SELFTEST) {
     fld('The record carries no fixed version.', ['CVE-2026-90630'], [RS(noMetricsKey)]), []);
   t('field: an unknown token is reported rather than silently skipped',
     fld('It carries no flibbertigibbet field.', ['CVE-2026-90627'], [RS(emptyMetrics)]), ['field-unknown-name']);
+  t('field: an all-caps token + noun `key` is a credential, not a payload key (2026-11-21 item 24)',
+    fld('The listener runs without an API key when unconfigured.', ['CVE-2026-90627'], [RS(emptyMetrics)]), []);
+  t('field: an unknown identifier-shaped token reports nothing — camelCase is how products spell themselves (2026-11-21 item 5)',
+    fld('No reliable API means no macOS protection on the desktop.', ['CVE-2026-90627'], [RS(emptyMetrics)]), []);
+  t('field: a new camelCase field name WITH the noun stays visible (the report contract holds)',
+    fld('The record carries no flibbertigibbetField key.', ['CVE-2026-90627'], [RS(emptyMetrics)]), ['field-unknown-name']);
   t('field: an unread record is not an absent value',
     fld('CVE-2026-90627 carries no metrics key.', ['CVE-2026-90627'], [undefined]), ['field-unreadable']);
   t('field: the CNA container arm reads the container it names',
@@ -7133,6 +7178,15 @@ if (SELFTEST) {
     ['attribution-satisfied']);
   t('attribution: a reporting-verb cue fires — "per <Name>"',
     att(`The paper's bound is "two to the power of the square root of n", per Aaronson.`),
+    ['attribution-uncited']);
+  t('attribution: a distributive `per` over a venue is not a party (2026-11-21 item 25, the filing case)',
+    att(`The gateway starts Claude Code sessions per Slack thread — "each session is isolated with rootless Podman" — while the control plane runs on Workers.`),
+    []);
+  t('attribution: the distributive guard covers a venue phrase after `according to` too',
+    att(`Work is assigned according to Slack thread rotation — "each batch is flushed every thirty seconds" — before hitting the API.`),
+    []);
+  t('attribution: a genuine `per <Name>` attribution with an artifact noun after the name still fires',
+    att(`The benchmark numbers are "3.3x faster than the incumbent", per Digger's launch write-up.`),
     ['attribution-uncited']);
   t('attribution: a reporting-verb cue fires — "<Name> reports"',
     att(`Stalwart "carried 35 of the 38 headline comparisons" on its own hardware, Stalwart reports.`),

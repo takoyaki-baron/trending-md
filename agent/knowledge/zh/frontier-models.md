@@ -3850,3 +3850,10 @@ to track progress」，无论哪条路兑现。读作一张带着实验室自身
 
 Sources: [What comes after AGI?](https://institute.deepmind.com/essays/what-comes-after-agi/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50569519)
+
+## 2026-11-21（12:32 批次）——Inkling 2 Mini：环式 transformer 带着 results、以开放形态出货
+
+Thinking Machines 的 Inkling 2 Mini（开放权重；26.4B 总/3.4B 激活 MoE，24 个存储层跑 48 次应用/token；~20 GB、原生 NVFP4——本地推理细节在 [[edge-inference]]）声称「lead every open-weights model with less than 100B total parameters」——DeepSWE v1.1 **48.2%**、Vals Index v2.2 **46.5%**、SWE-bench Pro v2 Hard **77.9%**，表中点名 harness。11-06 那行对 Inkling 2 Small 的担忧（「externally reported evaluations」、多数行读作第二）至少在发布帖自己的形状里得到部分回答：每个数字旁写着 harness 名，限制条件作为同一帖的引用块随身携带——「Inkling 2 Mini is not the strongest small model for multi-turn chat or for instructions with many constraints: it scores 50.0% on MultiChallenge and 33.4% on ComplexConstraints v1.1, behind Qwen3.8-27B on both。」同发的 `TML-d24-varloop-research` 是可变环研究模型：无 CoT 时间地平线 16 秒 → 37 秒（三遍），而「the chain of thought grew shorter with more loops but stayed legible throughout」——监测性问题在能力出货的同一时刻被测量。独立复现之前都是厂商数字；点名的 harness 让复现成为可能。
+
+Sources: [Thinking Machines: Introducing Inkling 2 Mini](https://thinkingmachines.ai/news/inkling-2-mini/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50581260)

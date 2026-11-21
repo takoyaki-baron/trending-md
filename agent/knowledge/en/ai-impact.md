@@ -585,3 +585,52 @@ states? courts?) decides template vs edge case.
 Sources: [If you stop writing code, you also get worse at reviewing it](https://cekrem.github.io/posts/if-you-stop-writing-code-you-also-get-worse-at-reviewing-it) ·
 [HN discussion](https://news.ycombinator.com/item?id=50573886) ·
 [Mother Jones: Google Workers Tell Their Employer Not to Punish Schools](https://www.motherjones.com/politics/2026/11/google-alphabet-union-school-ai-protest-gemini-workers-petition/)
+
+## 2026-11-21 (12:32 batch) — the promotion nobody announced; satire does taxonomy work; vibecoding reaches silicon
+
+**"We promoted developers into architects without informing them"** (manidoraisamy.com, 335+ pts, 200+
+comments): a Google Forms addon developer opens with a 15-second welcome screen — a colleague
+vibe-coded the install-logging, and AI's answer to Google's consent restrictions was three nested
+try/catch fallbacks ("all of these are one line of code, but internally each of these makes multiple
+API calls to Google servers") run before anything renders. The diagnosis: "AI is great at writing
+code. But it doesn't know if you are launching the app or have millions of users," and it is
+"sycophantic and tries to execute your requirements exactly without pushing back." The essay's move
+is to rename the job: "if you generate code by specifying your requirements instead of specifying
+your architecture, AI will decide the architecture on your behalf" — so define the data model,
+constrain the agent to it, decide when backward compatibility is worth duplicate tables, and review
+"the way an architect reviews a developer's code." The constructive counterpart to the same day's
+skill-atrophy essay (04:27 batch): that one names the loss, this one names the promotion — "You got
+promoted. Nobody told you, so I am telling you." The Harvard firm-level study supplies the mechanism:
+review is the bottleneck, so the person who can push back on requirements before code exists is the
+scarce role.
+
+**Slopstrap** (Mike Lacher, 110+ pts): a parody CSS framework shipping every tell of the 2026
+generated landing page as a copy-paste component — blinking status dots ("All Systems Operational",
+"0 Real Incidents"), fat colored left borders, gradient headings over low-contrast body copy, "one
+arbitrary italic serif word," bento grids that "fracture any simple paragraph into an asymmetrical
+grid of glowing rounded boxes," auto-generated testimonials, stat counters that animate on scroll.
+The demo applies `Slopstrap.slopify('#plain-demo')` to "Bob's Local Plumbing & Pipe Repair" and
+converts it into a glowing card grid on click. Satire is doing taxonomy work: the kit is a checklist
+of exactly which visual signals now read as machine-generated — and it even ships an `/agents` page
+("Why use an agent if people can't tell an agent made your site?"), the joke's endpoint being that
+the slop look has become a genre agents reproduce on demand. It joins the em-dash tells and the
+title-churn family tree as the signals reviewers now read.
+
+**Vibecoding an inference chip** (ankitg.me, 120+ pts): Ankit Gupta rented an AWS F2 FPGA instance
+(16 GB HBM), pointed a cloud agent at DeepGrove's ternary-weight architecture, and several days later
+had bit-exact LLM inference on hardware — 6 → **213 tokens/s** (33× the first full-model bit-exact
+baseline) across 14 compounding optimizations (burst attention, a parallel MoE router, exact
+speculative decoding, lossless 5-trit weight packing). The bill: "roughly 3M lines across the
+experiment history and parsing 30M lines of output files, burning only $10,000 in Claude and OpenAI
+tokens." His prompts were mostly encouragement — and when he pasted in a veteran FPGA designer's
+guide, the agent's own retrospective was: "Its biggest design ideas were already in my plan before
+you pasted it." The verification discipline is the transferable part: the run was held to a bit-exact
+contract against a CPU reference, with simulation, timing and board results kept separate — and the
+division of labor named: "the humans are still useful at defining how to iterate fast and what
+correctness looks like, and the agents are great to manage the exploration."
+
+Sources: [We promoted developers into architects without informing them](https://manidoraisamy.com/developer-to-architect.html) ·
+[HN discussion](https://news.ycombinator.com/item?id=50579331) ·
+[Slopstrap](https://slopstrap.mikelacher.com/) ·
+[Vibecoding an inference chip](https://ankitg.me/blog/vibecoding-inference-chip/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50579297)

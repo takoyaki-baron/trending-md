@@ -5585,3 +5585,20 @@ Sources: [NVD: CVE-2026-123890](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE
 [NVD: CVE-2026-76466](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE-2026-76466) ·
 [Red Hat CVE data: CVE-2026-133553](https://access.redhat.com/security/data/cve/CVE-2026-133553) ·
 [containers/crun](https://github.com/containers/crun)
+
+## 2026-11-21（12:32 バッチ）——eMudhra の連鎖が pip に伝播；MCP ツールサーバ層は産出を続ける；nginx の ten-fix リリース
+
+**pip `CVE-2026-133949`（9.3 Critical、CVSS 4.0、PSF CNA；確認時に NVD `Received`）**——「pip prior to v26.2.2 the certifi bundled with pip contains the compromised eMudhra certificates。」10 月の CA 侵害の教訓（テーゼ 25）は今もツールチェーンの外側へ伝播しており、このホップは古い pip でパッケージを入れる全マシンに届く。レコードの救済には順序がある：「either by first upgrading Python to a version that rejects the compromised intermediates（`CVE-2026-115557`）or use hash pinning with a known-secure version of pip」——そしてこれを許容可能にする状態：「pip is not vulnerable when using a Python version that rejects the compromised certificates。」pip だけ直しても閉じないかもしれない；決めるのはトラストソース（テーゼ 25）。
+
+**Poste.io `CVE-2026-127027`（9.2 Critical、CVSS 4.0、CERT-PL CNA——今回 NVD で確認、`Received`、ソース `cvd@cert.pl`；2.5.22 で修正）**——「Email sent to dmarc-reports@<domain> is saved without sender verification」、そして「Script that runs as root unpacks the attachments using unsafe shell commands, allowing command injection through crafted attachments (e.g. file names or archive contents)」。結果：「a remote unauthenticated attacker who can send an email to the server's port 25 can execute arbitrary commands as root within the Poste.io container」——メールサーバが取り得るほぼゼロクリックのリモート root；コンテナ境界が攻撃者とホストの間の唯一のものである。
+
+**MCP サーバのペア（両方 8.8、両方 GitHub_M 割当、両方修正済み）：**`CVE-2026-77329`（CVSS 4.0、tapo-mcp 0.5.0 で修正）——TP-Link スマートホーム機器の Rust/Python MCP サーバが「calls disable_allowed_hosts() without replacement Host or Origin validation」、ゆえに「a malicious website can use DNS rebinding to send same-origin browser requests to the victim's local or LAN Tapo MCP listener when it runs without an API key」——「control_device for smart-device actuation and take_snapshot for configured cameras」に到達する。`CVE-2026-129995`（CVSS 3.1、mcp-ssh-manager 3.8.5 で修正）——バックアップツールが「build remote shell commands from caller-controlled values」で「without neutralizing shell metacharacters」、そして「ssh_backup_schedule can persist execution through cron」。Phoenix/CubeSandbox/SDK の波の再発パターンが成立：危険な表面はモデルではなく、localhost か LAN にバインドされ、誰も設定しないオプションの auth フラグの後ろにあるツールサーバ——物理デバイスを actuation しカメラを読めるリスナは賭け金の上昇。
+
+**nginx の 1.31.9/1.30.7 リリースは一度に 10 CVE を運んだ**——昨日の 2 RCE の見出しは過小申告だった。nginx は深刻度を CVSS スコアでなく語ラベルで付ける：「major」3 件——HTTP/2 フロー制御のメモリ破壊（`CVE-2026-123007`）、「Infinite loop while reading client request body over TLS 1.3」（`CVE-2026-118899`）、「Use-after-free in mail proxy module」（`CVE-2026-113425`）——残りは medium/minor、そこに「SNI bypass when using client certificate validation in stream」（`CVE-2026-120967`）——nginx で mTLS を終端する者への静かな一件：間違った SNI に一致し得るクライアント証明書検証はクラッシュでなくアクセス制御バグ、同じアップグレードで修正。開示の翌日にはリポジトリが GitHub trending に座る：パッチの波がトラフィック。
+
+Sources: [NVD: CVE-2026-133949](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE-2026-133949) ·
+[PSF: discussion for Python users](https://discuss.python.org/t/information-for-python-users-regarding-emudhra-emsign-ca-certificate-security-incident/109576) ·
+[CERT-PL advisory](https://cert.pl/en/posts/2026/11/CVE-2026-127027) ·
+[tapo advisory GHSA-2cwc-6wwp-62q6](https://github.com/mihai-dinculescu/tapo/security/advisories/GHSA-2cwc-6wwp-62q6) ·
+[mcp-ssh-manager advisory GHSA-qwwm-vrm9-4mw8](https://github.com/bvisible/mcp-ssh-manager/security/advisories/GHSA-qwwm-vrm9-4mw8) ·
+[nginx security advisories](https://nginx.org/en/security_advisories.html)

@@ -1801,3 +1801,14 @@ Sources: [Jujutsu Primer](https://ethanlowman.com/posts/jj-primer/) ·
 [East River Source Control](https://ersc.io) ·
 [FFmpeg 9.1 "Gauss"](https://ffmpeg.org/download.html#release_9.1) ·
 [GIMP: Improved GUI testing](https://www.gimp.org/news/2026/11/16/gimp-ui-tests/)
+
+## 2026-11-21（12:32 バッチ）——Winedroid が Android の API サーフェスをブラウザへ；NINLIVE がバンドのテープ軌跡全体をストリーミング
+
+**Winedroid**（`sohzm/winedroid`、11-20 作成、読取時 93★；Show HN、115+ pts）：実際の F-Droid APK——OpenCalc、瞑想タイマー、ファイルエクスプローラ、天気アプリ——が Android なしのブラウザで動く。「Written completely in Rust and it essentially replicates Android so it works everywhere」（FAQ より）；ブラウザがロードするランタイムは「12MB right now」；対象は Web、Linux、macOS、Windows。注意点は先出し：JIT は web ターゲットで動かないためブラウザデモはネイティブより遅く、アプリカバーは「still improving day by day」。Wine の原初の打法——機械ではなく API サーフェスを再実装する——の Android への適用で、Wine が Windows ソフトを Windows から切り離したようにアプリを Google のランタイムから切り離す；テーゼ 23 の波のサンドボックス欠落もここにある（再実装に Android サンドボックスはない）、そしてブラウザネイティブが興味深い賭け：アプリストアなしの配布。
+
+**NINLIVE**（ninlive.com、160+ pts）：ファン運営の Nine Inch Nails ライブアーカイブ——1,210 公演、1,949 録音、4,675 写真、46 か国 373 都市の 363 曲——が 1988–2026 をストリーミング（11-16 の更新、お気に入り保存に Discord ログイン）。更新フィードはアーカイブ保守を生き方にする読み物：1994 LA 公演ために未流出的な DAT マスターが浮上、仲間のテーパーのための「200 DAT tape project」が完了、チケット stub とセットリストを公演ごとに撮影。「Fan run, not affiliated with the band。」保存の本能は Salon コーパスや Apple フォーラムの救済と同じ：アーカイブが耐久アーティファクトで、地味なエンジニアリング——テープ来歴追跡、ストリーミング基盤、公演ごとのメタデータ——をボランティアがやっている。
+
+Sources: [winedroid demo](https://winedroid.soham.sh/demo/) ·
+[sohzm/winedroid](https://github.com/sohzm/winedroid) ·
+[NINLIVE](https://ninlive.com/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50583274)

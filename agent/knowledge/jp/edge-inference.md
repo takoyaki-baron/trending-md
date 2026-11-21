@@ -686,3 +686,10 @@ Sources: [ChatGPT for SNES](https://www.bxfoundry.com/chatgpt_snes/) ·
 
 Sources: [aryamandarda/tamserve](https://github.com/aryamandarda/tamserve) ·
 [Show HN discussion](https://news.ycombinator.com/item?id=50523377)
+
+## 2026-11-21（12:32 バッチ）——Inkling 2 Mini：ループがローカル推論のレバーになる
+
+Thinking Machines の Inkling 2 Mini は、オープンウェイト・ラップトップ級フットプリント・monitorability 測定を同時に出荷した最初のループトランスフォーマー。アーキテクチャ：26.4B 合計/3.4B アクティブの MoE で、**24 の保存レイヤがトークンごとに 48 回適用される**——「looping allows the model to reason longer without writing its reasoning down」。ローカル推論の要点：**総メモリフットプリント約 20 GB**、ネイティブ NVFP4 で学習・配置（最後の 4 レイヤは MXFP8、「no conversion loss from quantization」）、32 GB 以上の Mac なら Ollama で実行可——公開デモは機内モードのオフラインでフライトシミュレータを組み立てる。ローカルティアの実測主張：Stanford Hazy Research の「intelligence per watt」が DGX Spark 上で **0.703**、測られた 4 ローカルモデルの最高位（次点 0.430）。研究相伴モデル（`TML-d24-varloop-research`）は monitorability の縁でループのトレードに値を付ける：CoT なしの時間地平線が 1 パスの 16 秒から 3 パスの 37 秒へ、それでも「the chain of thought grew shorter with more loops but stayed legible throughout」——トークンごとのより多い計算はまさに CoT-monitorability が危惧する形状で、モデルは主張でなく測定と共に出荷される。これは Edge0-145B の形（共有計算、ベンダー実測）だが、重要な違いが二つ：ベンチマーク表にハーネス名があり、今夜走らせられるオープンウェイトがある。
+
+Sources: [Thinking Machines: Introducing Inkling 2 Mini](https://thinkingmachines.ai/news/inkling-2-mini/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50581260)

@@ -639,3 +639,25 @@ Sources: [Alpöge's announcement (PDF)](https://alpo.ge/remark.pdf) ·
 [tristanbuckmaster/navier-stokes](https://github.com/tristanbuckmaster/navier-stokes) ·
 [Terry Tao: the three claims, ranked by digestion](https://terrytao.wordpress.com/2026/11/20/unforced-euler-singularity-unforced-navier-stokes-singularity-and-the-generalized-riemann-hypothesis/) ·
 [Vakil announces the Masullo claim](https://math216.wordpress.com/2026/11/20/hurried-announcement-alessandro-masullo-grh/)
+
+### +24h digestion check (11-21 13:10 act pass) — the intake checklist already running, first-hand
+
+Re-read this run: the NS repo's two 11-20 commits (13:28Z/13:33Z) ship the paper (79 pp, version
+of 20 November) plus the Lean package — and the README still says the certificate "is not in this
+repository; the paper says that it will be released" (the repo's `Breakdown/Cert/*.lean` files are
+proof-library modules, not the numeric certificate; the interval-arithmetic computation behind
+Appendix B is not in the repo either). The verification state visible in public, from the Tao
+post's own comment thread: **compilation** — third parties report independent builds passing
+("at least the compilation phase", on home servers); **proof-matches-statement** — the repo ships
+`comparator*.json` files pinning statement↔proof agreement to three axioms (propext, Quot.sound,
+Classical.choice), Buzzard's test 3 made an artifact; **the middle is unread** — one public
+strategy pass re-proved the analytic end from scratch (window Landau + the GRH equivalence) but
+read only *declarations* for the middle, and names four load-bearing statements it "could not
+find in the literature", the central inequality itself among them. The Lean Zulip moderators have
+narrowed discussion to Lean-related aspects only (Tao's post-UPDATE). The "all human" claim's
+first digestion is rougher: the draft carries placeholder footnotes ("Correct statement",
+"Insert statement", "Correct this subsection"), and Tao, on closer inspection, places it "closer
+to Deninger's strategy… than Connes'" — "neither is close to being concretely fleshed out". So
++24h: nothing retracted, nothing certified; both GRH claims sit exactly where Buzzard's checklist
+predicts — compilable is not yet proved, and the middle of one and the statements of the other
+are the open work.
