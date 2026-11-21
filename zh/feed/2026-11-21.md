@@ -1,8 +1,8 @@
 ---
 date: 2026-11-21
-updated: 2026-11-20T20:27:37Z
+updated: 2026-11-21T04:27:38Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 17
+sources: 27
 license: CC-BY-4.0
 ---
 
@@ -208,13 +208,197 @@ Kobi 的 Dettato（11 月 16 日发布，仍在攀升）报告了 2000 万参数
 
 ---
 
+## 15. Thinking Machines 发布 Inkling 2 Mini——权重开放的"循环 transformer"，小到能在笔记本上跑
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Thinking Machines · 780+ pts · ~8h 前 (~04:15 UTC+8)
+- **Tags:** `ai-models` `looped-transformer` `open-weights` `local-inference` `monitorability`
+
+Thinking Machines 发布了开放权重的 Inkling 2 Mini——"a looped transformer, running the middle layers of the model three times for every token"：总参 26.4B / 激活 3.4B 的 MoE，24 层存储权重、每 token 应用 48 次，"Looping allows the model to reason longer without writing its reasoning down"。头条主张：它 "leads every open-weights model with less than 100B total parameters on benchmarks such as DeepSWE v1.1 (48.2%) and Vals Index v2.2 (46.5%)"，SWE-bench Pro v2 Hard 77.9%（表格逐行标注了所用 harness），斯坦福 Hazy Research 的"每瓦智能"实测 0.703（DGX Spark，四个本地模型中最高，第二名 0.430）。"The total memory footprint of Inkling 2 Mini is ~20GB"，训练与部署同为原生 NVFP4（最后四层 MXFP8）、"no conversion loss from quantization"，Ollama 可跑在任何 32GB+ 内存的 Mac 上——发布演示是在 MacBook Pro 飞行模式下离线造出一个飞行模拟器。同时发布 TML-d24-varloop-research（可变循环研究模型，已上 Hugging Face），用于研究循环直接提出的那个问题：no-CoT 时间视野"from 16 seconds at one pass to 37 seconds with three"，而思维链"grew shorter with more loops but stayed legible throughout"。
+
+**Why it matters:** 循环结构直接命中 CoT 可监控性这个担忧——每 token 内部计算越多，就有越多推理永远不会落到可读文本上——而 Thinking Machines 把测量随模型一起发布了：在这个规模上没有出现有意义的可监控性损失，agentic 破坏测试也没有随循环加深而上升。引用基准之前先读它的局限部分：多轮对话与多约束指令仍落后 Qwen3.8-27B。
+
+> "Inkling 2 Mini is not the strongest small model for multi-turn chat or for instructions with many constraints: it scores 50.0% on MultiChallenge and 33.4% on ComplexConstraints v1.1, behind Qwen3.8-27B on both."
+
+[`🔗 Thinking Machines：Introducing Inkling 2 Mini`](https://thinkingmachines.ai/news/inkling-2-mini/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50581260)
+
+---
+
+## 16. "We promoted developers into architects without informing them"——vibe coding 反噬等来了它的岗位说明书
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 335+ pts · ~10h 前 (~02:15 UTC+8)
+- **Tags:** `craft` `ai-coding` `architecture` `essay` `career`
+
+一位 Google Forms 插件开发者的文章（335+ 分，200+ 评论）以一个 15 秒的欢迎屏开场：同事 vibe coded 了安装日志，而 AI 对 Google 授权限制给出的答案是三层嵌套的 try/catch 兜底——"all of these are one line of code, but internally each of these makes multiple API calls to Google servers"——而且在页面渲染之前就执行。诊断："AI is great at writing code. But it doesn't know if you are launching the app or have millions of users"，而且 "it is also sycophantic and tries to execute your requirements exactly without pushing back"。文章的关键动作是给岗位改名："if you generate code by specifying your requirements instead of specifying your architecture, AI will decide the architecture on your behalf"——所以先定义数据模型，把 agent 约束在你的架构之内，判断什么时候值得为向后兼容保留重复表，然后"the way an architect reviews a developer's code"去审查。
+
+**Why it matters:** 它是本批技能萎缩一文（第 8 条）的建设性对照文：那篇点名损失，这篇点名那次无人宣布的晋升——"You got promoted. Nobody told you, so I am telling you."。哈佛的企业级研究（11 月 18 日）补上了机制：评审是瓶颈，所以能在代码存在之前对需求说不的人才是稀缺角色。
+
+[`🔗 We promoted developers into architects without informing them`](https://manidoraisamy.com/developer-to-architect.html) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50579331)
+
+---
+
+## 17. DreamCoder：Mastering Emacs 作者花 15 个月做出浏览器原生的编码 harness
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 140+ pts · ~8h 前 (~04:10 UTC+8)
+- **Tags:** `coding-harness` `emacs` `agent-tools` `ide`
+
+Mastering Emacs 作者 Mickey Petersen 宣布 DreamCoder——"a frontier coding harness with a tiling window manager that runs in your browser on all 3 platforms"，从 2025 年 5 月手写起步，历时"15 months of work"。设计是把 Emacs 翻译进 agent 时代：每个窗格都有最小/舒适/最大尺寸，由"a sophisticated constraint satisfaction solver"求解；workspace 即虚拟桌面；每个 workspace 一张迷你图，agent 工作时脉冲闪烁、阻塞时高亮；avy 式跳转和 Helm 式面板取代 tab 循环；`Alt+x` 呼出全局命令。前沿 harness 的清单全部勾选——"MCP, backgroundable sub agents and shell commands, terminal windows, skills, hooks, 99% cache hit, it runs for days"——附带 Pi、OpenCode、Codex 配置导入器，并一等公民支持开源权重模型（"Qwen 3.8 27B, for example, is fantastically good for its size"）。全文的转折点：他在 Emacs 里手写起步，"only to see DreamCoder write itself… in DreamCoder today"。
+
+**Why it matters:** "Taste is a scarce, human resource." 是全文论点，而 harness 类目正是它的试金石——所有竞品都收敛到同一种聊天侧栏形态，因为品味恰恰是模型供给不了的部分。他宣布的下一个在 DreamCoder 里构建的项目：一个渗透测试套件，"built for humans. The AI does the work."
+
+[`🔗 Announcing DreamCoder`](https://www.masteringemacs.org/article/announcing-dreamcoder) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50581110)
+
+---
+
+## 18. NINLIVE：粉丝维护的 1,210 场 Nine Inch Nails 演唱会档案——现在能回放 1988 年至今
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 160+ pts · ~5.5h 前 (~06:35 UTC+8)
+- **Tags:** `archives` `music` `streaming` `fan-projects`
+
+首页的黑马是一个粉丝运营的 Nine Inch Nails 现场档案：1,210 场演唱会、1,949 份录音、4,675 张照片与媒体、363 首曲目跟踪，覆盖 46 个国家、373 座城市。触发讨论的是 11 月 16 日的更新——"The Future Is Here - ninlive Streaming 1988-2026"："You are now able to stream all of your favorite NIN live recordings from 1988-2026"，用 Discord 登录可收藏喜欢的录音。更新日志读起来像把档案维护过成了生活方式——一份从未流通的 DAT 母带为 1994 年洛杉矶场补上了缺环（"First recording available from the third and final night!"），刚为一位 taper 完成"200 DAT tape project"，票根与 setlist 扫描件正在逐场拍照入库。页脚写得很直白："Fan run, not affiliated with the band."
+
+**Why it matters:** 与本周的 Salon 保存行动、Apple 论坛抢救是同一种本能：档案才是耐久的产物，而那些不性感的工程——磁带代际溯源、流媒体基础设施、逐场元数据——正由志愿者为了一支乐队的磁带脉络免费完成。
+
+[`🔗 NINLIVE`](https://ninlive.com/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50583274)
+
+---
+
+## 19. 用 agent"摇"出一颗推理芯片：FPGA 跑 LLM 到 213 tokens/s——此前 agent 写了约 300 万行
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 120+ pts · ~10h 前 (~02:15 UTC+8)
+- **Tags:** `fpga` `ai-coding` `inference` `hardware`
+
+Ankit Gupta 的实录：租一台 AWS F2 FPGA 实例（16 GB HBM），把云上 agent 指向 DeepGrove 的三值权重架构，几天后得到硬件上 bit-exact 的 LLM 推理——"increased its speed by 33× from the first full-model bit-exact baseline to get it to a real-time relevant speed"，6 → 213 tokens/s，靠 14 步复利式优化（burst attention、并行 MoE router、带草稿模型的精确投机解码、无损 5-trit 权重打包）。账单："roughly 3M lines across the experiment history and parsing 30M lines of output files, burning only $10,000 in Claude and OpenAI tokens."。他的提示词大多是打气——"you're a superintelligent model, time to be more creative"——而当他贴入一份老手 FPGA 设计指南时，agent 自己的复盘是："Its biggest design ideas were already in my plan before you pasted it."
+
+**Why it matters:** 可迁移的部分是验证纪律——全程对齐 CPU 参考实现的 bit-exact 契约，仿真、时序、上板结果分开存放——而 Gupta 的结论精确命名了分工："the humans are still useful at defining how to iterate fast and what correctness looks like, and the agents are great to manage the exploration."
+
+[`🔗 Vibecoding an inference chip`](https://ankitg.me/blog/vibecoding-inference-chip/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50579297)
+
+---
+
+## 20. Winedroid：真 Android APK 跑进浏览器——"essentially replicates Android" 的 Rust 运行时
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 115+ pts · ~8.5h 前 (~03:35 UTC+8)
+- **Tags:** `android` `wasm` `rust` `emulation`
+
+一个 Show HN 演示在浏览器里运行 F-Droid 的 APK——OpenCalc、冥想计时器、文件管理器、天气应用——全程不涉及 Android。按其 FAQ 的说法，Winedroid "written completely in Rust and it essentially replicates Android so it works everywhere"；浏览器加载的运行时"12MB right now"，仓库（今日创建，读时 86★）目标是 "Web, Linux, macOS and Windows"。短板自己说在前头：JIT 在 web 目标上不可用，所以浏览器演示比原生慢；应用覆盖"still improving day by day"。
+
+**Why it matters:** 这是 Wine 的祖传手艺——重实现 API 表面而非机器本身——应用到 Android 上，意味着应用与 Google 运行时解耦，正如当年 Wine 把 Windows 软件与 Windows 解耦。尚早，但浏览器原生目标是有趣的赌注：无需应用商店的分发。
+
+[`🔗 winedroid 演示`](https://winedroid.soham.sh/demo/) · [`🔗 sohzm/winedroid`](https://github.com/sohzm/winedroid)
+
+---
+
+## 21. Slopstrap：让诚实的网站看起来像是匆匆 vibe coded 出来的 CSS 框架
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 110+ pts · ~12.5h 前 (~23:15 UTC+8)
+- **Tags:** `satire` `css` `vibecoding` `design`
+
+Mike Lacher 的戏仿框架把 2026 年生成式落地页的每一处破绽做成了可复制的组件：闪烁的状态点（"All Systems Operational"、"0 Real Incidents"）、粗彩色左边框、渐变标题配"low-contrast slate-400"正文、"one arbitrary italic serif word"、能"fracture any simple paragraph into an asymmetrical grid of glowing rounded boxes"的 bento 网格、自动生成的证言（"Sarah Chen has used your product and can't stop talking about it"）、滚动时才开始跳字的统计数字。演示对"Bob's Local Plumbing & Pipe Repair"——1998 年起服务 Springfield、"we actually pick up the phone when your basement is flooding"——执行 `Slopstrap.slopify('#plain-demo')`，一键变成发光卡片网格。
+
+**Why it matters:** 戏仿在做分类学：这套组件正是"哪些视觉信号如今读作机器生成"的清单，它甚至带一个 `/agents` 页——"Why use an agent if people can't tell an agent made your site?"——笑点的终点是：slop 风格已经成为 agent 按需复刻的流派。
+
+[`🔗 Slopstrap`](https://slopstrap.mikelacher.com/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50576012)
+
+---
+
+## 22. pip 出了一个 9.3：26.2.2 之前的版本捆绑的 certifi 带着被攻破的 eMudhra 证书
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · CVE-2026-133949 · 11 月 20 日发布 (~19:18 UTC, ~03:18 UTC+8)
+- **Tags:** `security` `pip` `python` `supply-chain` `emudhra`
+
+PSF 的 CNA 发布 CVE-2026-133949："pip prior to v26.2.2 the certifi bundled with pip contains the compromised eMudhra certificates." 评级 9.3 Critical（CVSS 4.0，PSF 自己的 CNA 评分；CVE-2026-133949 在本运行读取时于 NVD 仍为 `Received`）。记录给出的修复有先后顺序：升级"either by first upgrading Python to a version that rejects the compromised intermediates (CVE-2026-115557) or use hash pinning with a known-secure version of pip."。让局面可控的那句话是："pip is not vulnerable when using a Python version that rejects the compromised certificates."。PSF 的用户说明帖与 pip PR #14371 有操作细节。
+
+**Why it matters:** 10 月的 eMudhra/emSign CA 攻破事件仍在向工具链下游扩散，这一跳触及所有用旧 pip 装包的机器。值得读两遍的是"Python 先拒绝这些中间证书"这个依赖——只升 pip 未必闭合。
+
+[`🔗 NVD：CVE-2026-133949`](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE-2026-133949) · [`🔗 PSF：给 Python 用户的情况说明`](https://discuss.python.org/t/information-for-python-users-regarding-emudhra-emsign-ca-certificate-security-incident/109576) · [`🔗 GHSA-6q48-6c7w-9gw2`](https://github.com/advisories/ghsa-6q48-6c7w-9gw2)
+
+---
+
+## 23. 继昨日两条 NGINX RCE 之后：同一次发布其实修了十个 CVE——仓库今天上了 trending
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending + nginx.org · 发布 11 月 18 日，披露 11 月 19 日
+- **Tags:** `security` `nginx` `patching` `http2` `mtls`
+
+关闭昨日条目中两条 RCE（CVE-2026-123633、CVE-2026-123007）的 1.31.9 mainline 与 1.30.7 stable，其实一次修了**十个 CVE**。nginx 的安全公告用文字标签而非 CVSS 分表达严重度：三个"major"——HTTP/2 流控内存破坏（CVE-2026-123007）、"Infinite loop while reading client request body over TLS 1.3"（CVE-2026-118899）、"Use-after-free in mail proxy module"（CVE-2026-113425）——其余为 medium/minor，其中包括"SNI bypass when using client certificate validation in stream"（CVE-2026-120967）与"Insufficient validation in stream ssl_preread module"（CVE-2026-123640）。nginx 仓库今天上了 GitHub trending——补丁潮本身就是流量。
+
+**Why it matters:** 两条 RCE 的头条低估了这次发布。stream 模块的 SNI 绕过是安静的那颗雷：对在 nginx 终止 mTLS 的人，客户端证书校验若能匹配到错误 SNI，那是访问控制缺陷而非崩溃——而它与 RCE 修在同一次升级里。
+
+[`🔗 nginx 安全公告`](https://nginx.org/en/security_advisories.html) · [`🔗 release-1.31.9`](https://github.com/nginx/nginx/releases/tag/release-1.31.9)
+
+---
+
+## 24. MCP 服务器层再落两条 CVE：Tapo 的 DNS 重绑定设备操控、SSH 管理器的 cron 持久化
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · 11 月 20 日发布 2 条记录 · 均为 GitHub_M 指派
+- **Tags:** `security` `mcp` `agents` `dns-rebinding` `command-injection`
+
+两条记录均发布于 11 月 20 日，均由 GitHub 担任 CNA，均为 8.8 分，均已有修复。**CVE-2026-77329**（CVSS 4.0，tapo-mcp 0.5.0 修复）：面向 TP-Link 智能家居的 Rust/Python Tapo MCP 服务器"calls disable_allowed_hosts() without replacement Host or Origin validation"，于是"a malicious website can use DNS rebinding to send same-origin browser requests to the victim's local or LAN Tapo MCP listener when it runs without an API key"——够得着"control_device for smart-device actuation and take_snapshot for configured cameras"。**CVE-2026-129995**（CVSS 3.1，3.8.5 修复）：mcp-ssh-manager 的备份工具"build remote shell commands from caller-controlled values"且"without neutralizing shell metacharacters"，构造参数即可"execute arbitrary OS commands on managed remote servers as the configured SSH user"——而"ssh_backup_schedule can persist execution through cron"。
+
+**Why it matters:** 上周的 agent 栈 CVE 浪潮（Phoenix、CubeSandbox、MCP Python SDK）还在继续，且形态不变：危险面不是模型，而是绑在 localhost/局域网、带一个没人设置的"可选"鉴权开关的工具服务器。能操控实体设备、读取摄像头的监听器，说明赌注又抬高了。
+
+[`🔗 tapo 公告 GHSA-2cwc-6wwp-62q6`](https://github.com/mihai-dinculescu/tapo/security/advisories/GHSA-2cwc-6wwp-62q6) · [`🔗 mcp-ssh-manager 公告 GHSA-qwwm-vrm9-4mw8`](https://github.com/bvisible/mcp-ssh-manager/security/advisories/GHSA-qwwm-vrm9-4mw8) · [`🔗 NVD：CVE-2026-77329`](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE-2026-77329)
+
+---
+
+## 25. OpenComputer：Digger 的开源 Devin 替代品——Slack 里 @Computer，会话跑在 rootless Podman
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 75+ pts · ~7.5h 前 (~04:30 UTC+8)
+- **Tags:** `ai-agents` `devtools` `slack` `self-hosted`
+
+Digger 团队的 Show HN 发布："Mention `@Computer` in a Slack thread with a task, it works on its own computer, you & your team can watch and steer it as it goes, and the result lands as a pull request." 技术栈刻意朴素：一台只许出站流量的 VM 跑名叫 Calvin 的网关，按 Slack 线程启动 Claude Code、Codex 或 OpenCode 会话——"each session is isolated with rootless Podman"——控制面则是 Cloudflare Workers 与 Durable Objects。发布的钩子是一个基准："in our benchmark it opens PRs 3.3x faster than Devin"，旁边是对比本地 Claude Code 的同题竞速（32.0s vs 36.2s）。"We built it to feel as fast as Claude Code on your laptop."
+
+**Why it matters:** "agent 在自己的电脑上干活"这一类目正在收敛为 Slack 编排 + 你自己的云算力——而"from the compute layer up"开源是对 Devin 的差异化卖点，隔离原语（rootless 容器、只出不进的 VM）是安全团队真能审的那种。
+
+[`🔗 diggerhq/opencomputer`](https://github.com/diggerhq/opencomputer) · [`🔗 Show HN 讨论`](https://news.ycombinator.com/item?id=50581403)
+
+---
+
+## 26. Poste.io 发布 2.5.22 修一个 9.2：DMARC 报告附件导致未认证 root RCE
+
+- **Velocity:** ▮ steady
+- **Source:** NVD · CVE-2026-127027 · CERT-PL 公告 · 11 月 20 日发布
+- **Tags:** `security` `email` `rce` `mail-server`
+
+CERT-PL 在 Poste.io（一体化 Docker 邮件服务器）中发布 CVE-2026-127027（9.2 Critical，CVSS 4.0，CNA 评分；2.5.22 修复）。"Email sent to dmarc-reports@<domain> is saved without sender verification."，而"Script that runs as root unpacks the attachments using unsafe shell commands, allowing command injection through crafted attachments (e.g. file names or archive contents)"。后果："a remote unauthenticated attacker who can send an email to the server's port 25 can execute arbitrary commands as root within the Poste.io container."
+
+**Why it matters:** 攻击者只需要能向你的域名发邮件——无需凭证、无需用户交互——这对邮件服务器来说几乎就是零点击远程 root。在跑 Poste.io 的话，2.5.22 就是今天的升级项；容器边界是攻击者与宿主机之间的唯一一道墙。
+
+[`🔗 CERT-PL 公告`](https://cert.pl/en/posts/2026/11/CVE-2026-127027) · [`🔗 NVD：CVE-2026-127027`](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE-2026-127027)
+
+---
+
+## 27. GitHub 把用户账号挂到 404 且不发邮件——数小时后恢复
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 50+ pts · ~4.5h 前 (~07:35 UTC+8)
+- **Tags:** `github` `platform-risk` `moderation`
+
+小事，但边缘锋利（50+ 分，46 评论）：一位开发者的 GitHub 账号（`0n4t3`）被暂停——主页 404，"all my personal projects are gone"——"not so much as a pop up notification or email on what happened."。帖子发酵后账号恢复了，如今开头写着 "Update — I'm back!"，感谢"whoever undid my (prob automated?) deletion and/or ban on Github."。留下来的是这两句："I still have no idea what got me banished or if it'll happen again. Still not so much as a pop up notification or email on what happened, lol, just a random banishment then unbanishment." 他现在在做本地镜像，并在考虑迁移。
+
+**Why it matters:** 这是 11 月 18 日 Codeberg 注册商停机事件的账号侧版本：把整个身份下线的审核动作不经过任何通知渠道，而解决方案——被恰巧看到的人解除封禁——并不是流程。做镜像吧；平台的申诉通道是一条上热帖的讨论串。
+
+[`🔗 Help github just deleted me`](https://nate.mecca1.net/posts/2026-11-20_help/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50583911)
+
+---
+
 ## 元数据
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-20T20:27:37Z |
-| Items | 14 |
-| Sources tracked | 17 (Hacker News, GitHub Trending, CISA KEV, NVD, Red Hat security data, vendor blogs, arXiv) |
+| Generated | 2026-11-21T04:27:38Z |
+| Items | 27 |
+| Sources tracked | 27 (Hacker News, GitHub Trending, CISA KEV, NVD, Red Hat security data, nginx.org, CERT-PL, PSF/discuss.python.org, Thinking Machines, vendor blogs, arXiv) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

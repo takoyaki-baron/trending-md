@@ -1,16 +1,16 @@
 {
- "generated": "2026-11-20T20:27:41.659Z",
+ "generated": "2026-11-21T04:23:52.290Z",
  "files": [
   {
    "file": "2026-11-21.md",
-   "items": 14,
+   "items": 27,
    "findings": [
     {
      "check": "status",
      "item": 4,
-     "verdict": "ok",
+     "verdict": "status-dated",
      "claim": "CVE-2026-123890 `Undergoing Analysis`",
-     "detail": "Undergoing Analysis (lastModified 2026-11-20T20:16:32.093)"
+     "detail": "CVE-2026-123890 is `Analyzed` (lastModified 2026-11-20T20:52:33.710), not `Undergoing Analysis` — the record has advanced since; a status is NVD's queue position and it moves without the feed changing — the sentence dates itself, so the drift is the TREND rather than an error: re-read and say when"
     },
     {
      "check": "field",
@@ -25,6 +25,27 @@
      "verdict": "ok",
      "claim": "CVE-2026-133553 `Awaiting Analysis`",
      "detail": "Awaiting Analysis (lastModified 2026-11-20T05:18:54.487)"
+    },
+    {
+     "check": "status",
+     "item": 22,
+     "verdict": "ok",
+     "claim": "CVE-2026-133949 `Received`",
+     "detail": "Received (lastModified 2026-11-20T20:17:37.170)"
+    },
+    {
+     "check": "field",
+     "item": 24,
+     "verdict": "field-unknown-name",
+     "claim": "“without an API key”",
+     "detail": "“API” is not a CVE record field this check knows — the claim is about something else, or FIELD_VOCAB needs the name"
+    },
+    {
+     "check": "repo",
+     "item": 20,
+     "verdict": "ok",
+     "claim": "sohzm/winedroid",
+     "detail": "90★, last push 2026-11-20"
     },
     {
      "check": "quotation",
@@ -118,6 +139,97 @@
      "detail": "verbatim in 2 readable source(s)"
     },
     {
+     "check": "quotation",
+     "item": 15,
+     "verdict": "ok",
+     "claim": "8 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 16,
+     "verdict": "ok",
+     "claim": "7 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 17,
+     "verdict": "ok",
+     "claim": "7 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 18,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 19,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 20,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 21,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 22,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 6 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 23,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 15 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 24,
+     "verdict": "ok",
+     "claim": "7 quotation(s)",
+     "detail": "verbatim in 9 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 25,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 26,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 4 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 27,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
      "check": "attribution",
      "item": 6,
      "verdict": "attribution-satisfied",
@@ -130,19 +242,18 @@
      "verdict": "attribution-satisfied",
      "claim": "Jones",
      "detail": "a quotation is attributed to Jones (“convinced that resistance to AI”) and a cited URL carries the party's token — the quotation arm's page set reaches the party's own artifact"
+    },
+    {
+     "check": "attribution",
+     "item": 25,
+     "verdict": "attribution-uncited",
+     "claim": "Slack",
+     "detail": "a quotation is attributed to Slack (“each session is isolated with rootless Podman”), but no cited URL names the party — a quotation ABOUT a party is a claim about THAT party's bytes, and the cited page can be a second-hand copy whose figures the party has since corrected (the 11-12 item-41 lesson: the essay quoted the earlier version of Aaronson's dump post). Open Slack's primary artifact before publishing, or drop the quotation marks"
     }
    ]
   }
  ],
- "status_watch": [
-  {
-   "id": "CVE-2026-129448",
-   "from": "Received",
-   "to": "Analyzed",
-   "regressed": false,
-   "modified": "2026-11-20T20:25:11.360"
-  }
- ],
+ "status_watch": [],
  "api_calls": 0,
  "readme_calls": 0,
  "cited_page_calls": 0,

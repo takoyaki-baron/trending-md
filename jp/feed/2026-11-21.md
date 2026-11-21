@@ -1,8 +1,8 @@
 ---
 date: 2026-11-21
-updated: 2026-11-20T20:27:37Z
+updated: 2026-11-21T04:27:38Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 17
+sources: 27
 license: CC-BY-4.0
 ---
 
@@ -208,13 +208,197 @@ Kobi の Dettato（11月16日発表、まだ伸びている）は 20M パラメ�
 
 ---
 
+## 15. Thinking Machines が Inkling 2 Mini を公開——重み公開の「ループした transformer」、ラップトップで動くサイズ
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Thinking Machines · 780+ pts · ~8h 前 (~04:15 UTC+8)
+- **Tags:** `ai-models` `looped-transformer` `open-weights` `local-inference` `monitorability`
+
+Thinking Machines が重み公開の Inkling 2 Mini をリリースした。"a looped transformer, running the middle layers of the model three times for every token"——total 26.4B / active 3.4B の MoE で、保存は 24 层・トークンごとに 48 回適用する。"Looping allows the model to reason longer without writing its reasoning down"。目玉の主張はこれだ："leads every open-weights model with less than 100B total parameters on benchmarks such as DeepSWE v1.1 (48.2%) and Vals Index v2.2 (46.5%)"。SWE-bench Pro v2 Hard は 77.9%（表には各評価の harness が明記してある）。スタンフォード Hazy Research の「ワットあたり知能」実測は DGX Spark 上で 0.703——測定した 4 つのローカルモデルの最高で、2 番手は 0.430。"The total memory footprint of Inkling 2 Mini is ~20GB"。学習もデプロイもネイティブ NVFP4（最後の 4 层は MXFP8）で "no conversion loss from quantization"。Ollama なら 32GB+ RAM の Mac で動く——公開デモは MacBook Pro の機内モードでオフラインのままフライトシミュレータを組み上げるというもの。同時に TML-d24-varloop-research（可変ループの研究用モデル、Hugging Face 公開）も出した。ループが直接突きつける問いのためだ：no-CoT タイムホライズンは "from 16 seconds at one pass to 37 seconds with three" に伸びたが、思考連鎖は "grew shorter with more loops but stayed legible throughout"。
+
+**Why it matters:** ループ構造は CoT モニタリングの懸念に真っ向から挑む——トークンあたりの内部計算が増えるほど、テキスト化されない推論が増える——なのに Thinking Machines は測定をモデルと一緒に出した：このスケールでは有意なモニタリング劣化は見られず、agentic 破壊テストもループ数とともに上昇しなかった。ベンチマークの前に限界節を読むべきだ：マルチターン対話と多制約指示は依然 Qwen3.8-27B に後れを取っている。
+
+> "Inkling 2 Mini is not the strongest small model for multi-turn chat or for instructions with many constraints: it scores 50.0% on MultiChallenge and 33.4% on ComplexConstraints v1.1, behind Qwen3.8-27B on both."
+
+[`🔗 Thinking Machines：Introducing Inkling 2 Mini`](https://thinkingmachines.ai/news/inkling-2-mini/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50581260)
+
+---
+
+## 16. 「We promoted developers into architects without informing them」——vibe coding 反発に、ようやく職務記述書が届いた
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 335+ pts · ~10h 前 (~02:15 UTC+8)
+- **Tags:** `craft` `ai-coding` `architecture` `essay` `career`
+
+Google Forms アドオン開発者の投稿（335+ ポイント、200+ コメント）は、15 秒かかるウェルカム画面から始まる。同僚がインストールロギングを vibe coding し、Google の同意制限に対する AI の答えが三重の try/catch フォールバックだった——"all of these are one line of code, but internally each of these makes multiple API calls to Google servers"——しかも描画より先に実行される。診断はこうだ："AI is great at writing code. But it doesn't know if you are launching the app or have millions of users"。そして "it is also sycophantic and tries to execute your requirements exactly without pushing back"。エッセイの一手は仕事の改名だ："if you generate code by specifying your requirements instead of specifying your architecture, AI will decide the architecture on your behalf"——だからデータモデルを先に定義し、agent を自分のアーキテクチャに拘束し、後方互換のために重複テーブルを残すかを自分で決め、"the way an architect reviews a developer's code" レビューしろという。
+
+**Why it matters:** 今バッチのスキル萎縮エッセイ（第 8 項）の建設的な対だ。あちらは喪失を名指しし、こちらは誰も告げなかった昇進を名指す——"You got promoted. Nobody told you, so I am telling you."。ハーバードの企業レベル研究（11 月 18 日）がメカニズムを補う：レビューがボトルネックなら、コードが存在する前に要件に「ノー」と言える人が希少な役割になる。
+
+[`🔗 We promoted developers into architects without informing them`](https://manidoraisamy.com/developer-to-architect.html) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50579331)
+
+---
+
+## 17. DreamCoder：Mastering Emacs の作者が 15 か月かけてブラウザネイティブのコーディングハーネスを作った
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 140+ pts · ~8h 前 (~04:10 UTC+8)
+- **Tags:** `coding-harness` `emacs` `agent-tools` `ide`
+
+Mastering Emacs の作者 Mickey Petersen が DreamCoder を発表した。"a frontier coding harness with a tiling window manager that runs in your browser on all 3 platforms"。2025 年 5 月に手書きで始め、掛かったのは "15 months of work"。設計は agent 時代への Emacs の翻訳だ：すべてのペインに minimum/comfortable/maximum サイズがあり "a sophisticated constraint satisfaction solver" が解く。workspace は仮想デスクトップとして振る舞い、workspace ごとのミニマップは agent の稼働中に脈打ち、詰まったものを浮かび上がらせる。avy 式ジャンプと Helm 的パレットが tab 循環を置き換え、`Alt+x` がグローバルコマンドを呼ぶ。フロンティアハーネスのチェックリストは埋まった——"MCP, backgroundable sub agents and shell commands, terminal windows, skills, hooks, 99% cache hit, it runs for days"——Pi・OpenCode・Codex 設定のインポーター付きで、オープンウェイトモデルを一等公民で支える（"Qwen 3.8 27B, for example, is fantastically good for its size"）。エッセイの転換点：Emacs で書き始めたのに、"only to see DreamCoder write itself… in DreamCoder today" になった。
+
+**Why it matters:** "Taste is a scarce, human resource." が論点で、ハーネスというカテゴリはその検証場だ——競合はみな同じチャットサイドバー形に収束する。味覚だけはモデルが供給しないからだ。彼が次に DreamCoder 内で作ると宣言しているのはペネストレートスイートで、"built for humans. The AI does the work."
+
+[`🔗 Announcing DreamCoder`](https://www.masteringemacs.org/article/announcing-dreamcoder) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50581110)
+
+---
+
+## 18. NINLIVE：ファン運営の Nine Inch Nails ライブアーカイブ 1,210 公演——1988 年からストリーミング可能に
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 160+ pts · ~5.5h 前 (~06:35 UTC+8)
+- **Tags:** `archives` `music` `streaming` `fan-projects`
+
+フロントページの伏兵はファン運営の Nine Inch Nails ライブアーカイブだ：1,210 公演、1,949 録音、4,675 の写真とメディア、363 曲をトラッキング、46 か国・373 都市をカバー。スレッドの引き金になったのは 11 月 16 日の更新 "The Future Is Here - ninlive Streaming 1988-2026" だ："You are now able to stream all of your favorite NIN live recordings from 1988-2026"。お気に入り保存には Discord ログイン。更新ログはアーカイブ管理を生きがいにした人の日誌のように読める——1994 年 LA 公演に未流通の DAT マスターが現れ（"First recording available from the third and final night!"）、同じ taper のために "200 DAT tape project" を仕上げたばかり、チケットの半券とセットリストのスキャンが公演ごとに撮影されている。フッターは簡潔だ："Fan run, not affiliated with the band."
+
+**Why it matters:** 今週の Salon 保存や Apple フォーラム救出と同じ本能だ：耐久物はアーカイブであり、地味な工学——テープの世代トレーサビリティ、ストリーミング基盤、公演ごとのメタデータ——は、一つのバンドのテープの系譜のためにボランティアが無償でやっている。
+
+[`🔗 NINLIVE`](https://ninlive.com/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50583274)
+
+---
+
+## 19. 推論チップを vibecoding する：FPGA が LLM を 213 tokens/s で実行——その前に agent が約 300 万行書いた
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 120+ pts · ~10h 前 (~02:15 UTC+8)
+- **Tags:** `fpga` `ai-coding` `inference` `hardware`
+
+Ankit Gupta の実録：AWS F2 FPGA インスタンス（16 GB HBM）を借り、クラウド agent を DeepGrove の ternary ウェイト設計に向け、数日後にハードウェア上の bit-exact な LLM 推理を得た——"increased its speed by 33× from the first full-model bit-exact baseline to get it to a real-time relevant speed"。6 → 213 tokens/s は 14 段の複利型最適化の積み重ね（burst attention、並列 MoE ルーター、ドラフトモデル付きの正確な投機デコード、可損 5-trit ウェイトパッキング）。請求書："roughly 3M lines across the experiment history and parsing 30M lines of output files, burning only $10,000 in Claude and OpenAI tokens."。彼のプロンプトはたいてい励ましだった——"you're a superintelligent model, time to be more creative"——そしてベテランの FPGA 設計ガイドを貼り込んだとき、agent 自身の回顧はこうだった："Its biggest design ideas were already in my plan before you pasted it."
+
+**Why it matters:** 移植可能なのは検証の規律だ——CPU リファレンスに対する bit-exact 契約を貫き、シミュレーション、タイミング、実ボードの結果を別々に保管——そして Gupta の結論が分業を正確に名指す："the humans are still useful at defining how to iterate fast and what correctness looks like, and the agents are great to manage the exploration."
+
+[`🔗 Vibecoding an inference chip`](https://ankitg.me/blog/vibecoding-inference-chip/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50579297)
+
+---
+
+## 20. Winedroid：本物の Android APK がブラウザで動く——「essentially replicates Android」な Rust ランタイム
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 115+ pts · ~8.5h 前 (~03:35 UTC+8)
+- **Tags:** `android` `wasm` `rust` `emulation`
+
+Show HN のデモが F-Droid の APK——OpenCalc、瞑想タイマー、ファイルエクスプローラ、天気アプリ——を Android なしでブラウザ上で動かしている。FAQ によれば Winedroid は "written completely in Rust and it essentially replicates Android so it works everywhere"。ブラウザがロードするランタイムは "12MB right now"。リポジトリ（本日作成、読み取り時 86★）の対象は "Web, Linux, macOS and Windows"。弱点も先に自白してある：JIT は web ターゲットで動かないためブラウザデモはネイティブより遅く、アプリ対応は "still improving day by day"。
+
+**Why it matters:** Wine の元祖の技——機械ではなく API サーフェスを再実装する——を Android に適用すると、アプリを Google のランタイムから切り離せる。かつて Wine が Windows ソフトを Windows から切り離したように。まだ早いが、ブラウザネイティブというターゲットが面白い賭けだ：アプリストアなしの配布。
+
+[`🔗 winedroid デモ`](https://winedroid.soham.sh/demo/) · [`🔗 sohzm/winedroid`](https://github.com/sohzm/winedroid)
+
+---
+
+## 21. Slopstrap：誠実なウェブサイトを「雑に vibe coded した風」に見せる CSS フレームワーク
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 110+ pts · ~12.5h 前 (~23:15 UTC+8)
+- **Tags:** `satire` `css` `vibecoding` `design`
+
+Mike Lacher のパロディフレームワークは、2026 年の生成系ランディングページの破綻パターンをすべてコピペ部品にした：点滅するステータスドット（"All Systems Operational"、"0 Real Incidents"）、太い彩色左ボーダー、"low-contrast slate-400" の本文に載るグラデーション見出し、"one arbitrary italic serif word"、"fracture any simple paragraph into an asymmetrical grid of glowing rounded boxes" な bento グリッド、自動生成の推薦文（"Sarah Chen has used your product and can't stop talking about it"）、スクロールで数字を数え始める統計カード。デモは "Bob's Local Plumbing & Pipe Repair"——1998 年から Springfield で営業、"we actually pick up the phone when your basement is flooding"——に `Slopstrap.slopify('#plain-demo')` を実行し、ワンクリックで光るカードグリッドに変える。
+
+**Why it matters:** パロディが分類学の仕事をしている：このキットは「どの視覚シグナルが今や機械生成と読まれるか」のチェックリストそのもので、`/agents` ページまで備える——"Why use an agent if people can't tell an agent made your site?"——オチは、slop ルックが agent がオンデマンドで再現するジャンルになった、ということだ。
+
+[`🔗 Slopstrap`](https://slopstrap.mikelacher.com/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50576012)
+
+---
+
+## 22. pip に 9.3 が：26.2.2 未満がバンドルする certifi に漏えいした eMudhra 証明書が入ったまま
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · CVE-2026-133949 · 11 月 20 日公開 (~19:18 UTC, ~03:18 UTC+8)
+- **Tags:** `security` `pip` `python` `supply-chain` `emudhra`
+
+PSF の CNA が CVE-2026-133949 を公開した："pip prior to v26.2.2 the certifi bundled with pip contains the compromised eMudhra certificates." 評価は 9.3 Critical（CVSS 4.0、PSF 自身の CNA スコア；CVE-2026-133949 は本実行の読み取り時点で NVD ではまだ `Received`）。レコードの救済手順には順番がある："either by first upgrading Python to a version that rejects the compromised intermediates (CVE-2026-115557) or use hash pinning with a known-secure version of pip." 状況を耐えられるものにしている一文："pip is not vulnerable when using a Python version that rejects the compromised certificates." PSF のユーザー向け説明スレッドと pip PR #14371 に運用詳細がある。
+
+**Why it matters:** 10 月の eMudhra/emSign CA 漏えい事件はまだツールチェーンの下流へ伝播していて、この一手は古い pip でパッケージを入れる全マシンに届く。「Python が先に中間証明書を拒絶する」という依存関係を二度読むべきだ——pip だけ直しても閉じない可能性がある。
+
+[`🔗 NVD：CVE-2026-133949`](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE-2026-133949) · [`🔗 PSF：Python ユーザーへの説明`](https://discuss.python.org/t/information-for-python-users-regarding-emudhra-emsign-ca-certificate-security-incident/109576) · [`🔗 GHSA-6q48-6c7w-9gw2`](https://github.com/advisories/ghsa-6q48-6c7w-9gw2)
+
+---
+
+## 23. 昨日の NGINX RCE 2 件に続報：同じリリースは実は 10 件を修えていた——リポジトリは今日 trending に
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending + nginx.org · リリース 11 月 18 日、開示 11 月 19 日
+- **Tags:** `security` `nginx` `patching` `http2` `mtls`
+
+昨日の項の 2 つの RCE（CVE-2026-123633、CVE-2026-123007）を閉じた 1.31.9 mainline と 1.30.7 stable は、実際には一度に **10 個の CVE** を修めていた。nginx のアドバイザリは CVSS スコアではなく言葉のラベルで重大度を表す："major" が 3 つ——HTTP/2 フロー制御のメモリ破壊（CVE-2026-123007）、"Infinite loop while reading client request body over TLS 1.3"（CVE-2026-118899）、"Use-after-free in mail proxy module"（CVE-2026-113425）——残りは medium/minor で、"SNI bypass when using client certificate validation in stream"（CVE-2026-120967）と "Insufficient validation in stream ssl_preread module"（CVE-2026-123640）を含む。nginx リポジトリは今日 GitHub の trending ボードに乗っている——パッチ波そのものがトラフィックだ。
+
+**Why it matters:** RCE 2 件の見出しはリリースを過小評価していた。stream モジュールの SNI バイパスは静かな雷だ：nginx で mTLS を終端する者にとって、クライアント証明書検証が誤った SNI に一致しうるのはアクセス制御の欠陥であってクラッシュではない——しかも RCE と同じアップグレードで直る。
+
+[`🔗 nginx セキュリティアドバイザリ`](https://nginx.org/en/security_advisories.html) · [`🔗 release-1.31.9`](https://github.com/nginx/nginx/releases/tag/release-1.31.9)
+
+---
+
+## 24. MCP サーバー層にさらに 2 つの CVE：Tapo の DNS リバインディングによるデバイス操作、SSH マネージャの cron 永続化
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · 11 月 20 日公開の 2 レコード · いずれも GitHub_M が CNA
+- **Tags:** `security` `mcp` `agents` `dns-rebinding` `command-injection`
+
+両レコードとも 11 月 20 日公開、CNA は GitHub、両方 8.8、両方修正済み。**CVE-2026-77329**（CVSS 4.0、tapo-mcp 0.5.0 で修正）：TP-Link スマートホーム向け Rust/Python の Tapo MCP サーバーは "calls disable_allowed_hosts() without replacement Host or Origin validation"。"a malicious website can use DNS rebinding to send same-origin browser requests to the victim's local or LAN Tapo MCP listener when it runs without an API key"——届くのは "control_device for smart-device actuation and take_snapshot for configured cameras"。**CVE-2026-129995**（CVSS 3.1、3.8.5 で修正）：mcp-ssh-manager のバックアップツールは "build remote shell commands from caller-controlled values" し "without neutralizing shell metacharacters"。細工した引数で "execute arbitrary OS commands on managed remote servers as the configured SSH user" ができ、"ssh_backup_schedule can persist execution through cron"。
+
+**Why it matters:** 先週の agent スタック CVE の波（Phoenix、CubeSandbox、MCP Python SDK）は続いていて、型は変わらない：危険なのはモデルではなく、localhost/LAN に束縛され、誰も設定しない「任意の」認証フラグの後ろにいるツールサーバーだ。物理デバイスを操作しカメラを読めるリスナーは、賭け金が上がったことを意味する。
+
+[`🔗 tapo アドバイザリ GHSA-2cwc-6wwp-62q6`](https://github.com/mihai-dinculescu/tapo/security/advisories/GHSA-2cwc-6wwp-62q6) · [`🔗 mcp-ssh-manager アドバイザリ GHSA-qwwm-vrm9-4mw8`](https://github.com/bvisible/mcp-ssh-manager/security/advisories/GHSA-qwwm-vrm9-4mw8) · [`🔗 NVD：CVE-2026-77329`](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE-2026-77329)
+
+---
+
+## 25. OpenComputer：Digger のオープンソース Devin 代替——Slack で @Computer、セッションは rootless Podman
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 75+ pts · ~7.5h 前 (~04:30 UTC+8)
+- **Tags:** `ai-agents` `devtools` `slack` `self-hosted`
+
+Digger チームの Show HN ローンチ："Mention `@Computer` in a Slack thread with a task, it works on its own computer, you & your team can watch and steer it as it goes, and the result lands as a pull request." スタックは意図的に退屈だ： outbound-only ネットワークの 1 台の VM が Calvin というゲートウェイを走らせ、Slack スレッドごとに Claude Code・Codex・OpenCode のセッションを起動する——"each session is isolated with rootless Podman"——コントロールプレーンは Cloudflare Workers と Durable Objects。ローンチのフックはベンチマークだ："in our benchmark it opens PRs 3.3x faster than Devin"、ローカル Claude Code との並走レース（32.0s vs 36.2s）を添えて。"We built it to feel as fast as Claude Code on your laptop."
+
+**Why it matters:** 「agent が自分のコンピュータで働く」カテゴリは、Slack をオーケストレーションに使い自分のクラウド計算資源を使う形へ収束しつつある——"from the compute layer up" のオープンソース化が Devin への差別化の売りで、隔離のプリミティブ（rootless コンテナ、outbound-only VM）はセキュリティチームが実際に審査できる類のものだ。
+
+[`🔗 diggerhq/opencomputer`](https://github.com/diggerhq/opencomputer) · [`🔗 Show HN 議論`](https://news.ycombinator.com/item?id=50581403)
+
+---
+
+## 26. Poste.io が 9.2 を修めて 2.5.22 をリリース：DMARC レポート添付経由の未認証 root RCE
+
+- **Velocity:** ▮ steady
+- **Source:** NVD · CVE-2026-127027 · CERT-PL アドバイザリ · 11 月 20 日公開
+- **Tags:** `security` `email` `rce` `mail-server`
+
+CERT-PL が Poste.io（オールインワンの Docker メールサーバー）に CVE-2026-127027 を公開した（9.2 Critical、CVSS 4.0、CNA スコア；2.5.22 で修正）。"Email sent to dmarc-reports@<domain> is saved without sender verification." そして "Script that runs as root unpacks the attachments using unsafe shell commands, allowing command injection through crafted attachments (e.g. file names or archive contents)"。結果："a remote unauthenticated attacker who can send an email to the server's port 25 can execute arbitrary commands as root within the Poste.io container."
+
+**Why it matters:** 攻撃者に必要なのはあなたのドメインにメールを送れることだけ——資格情報もユーザー操作も要らない。メールサーバーとしてはほぼゼロクリックのリモート root だ。Poste.io を動かしているなら、2.5.22 が今日のアップグレード；コンテナ境界が攻撃者とホストの間の唯一の壁になる。
+
+[`🔗 CERT-PL アドバイザリ`](https://cert.pl/en/posts/2026/11/CVE-2026-127027) · [`🔗 NVD：CVE-2026-127027`](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE-2026-127027)
+
+---
+
+## 27. GitHub がユーザーアカウントを通知なしで 404 に——数時間後に復旧
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 50+ pts · ~4.5h 前 (~07:35 UTC+8)
+- **Tags:** `github` `platform-risk` `moderation`
+
+小さい話、しかし縁が鋭い（50+ ポイント、46 コメント）：ある開発者の GitHub アカウント（`0n4t3`）が停止され——プロフィールは 404、"all my personal projects are gone"——"not so much as a pop up notification or email on what happened." だった。スレッドが伸びるとアカウントは戻り、投稿は今 "Update — I'm back!" で始まり "whoever undid my (prob automated?) deletion and/or ban on Github." に感謝している。残るのはこの二文だ："I still have no idea what got me banished or if it'll happen again. Still not so much as a pop up notification or email on what happened, lol, just a random banishment then unbanishment." 彼は今ローカルミラーを作り、移行も考えている。
+
+**Why it matters:** 11 月 18 日の Codeberg レジストラ停止をアカウント側から見た版だ：アイデンティティごとオフラインにするモデレーションが通知経路なしで届き、解決は「たまたま見た誰かによる解除」——それはプロセスではない。リポジトリをミラーせよ。プラットフォームの申し立て経路とは、バズるスレッドのことだ。
+
+[`🔗 Help github just deleted me`](https://nate.mecca1.net/posts/2026-11-20_help/) · [`🔗 HN 議論`](https://news.ycombinator.com/item?id=50583911)
+
+---
+
 ## メタデータ
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-20T20:27:37Z |
-| Items | 14 |
-| Sources tracked | 17 (Hacker News, GitHub Trending, CISA KEV, NVD, Red Hat security data, vendor blogs, arXiv) |
+| Generated | 2026-11-21T04:27:38Z |
+| Items | 27 |
+| Sources tracked | 27 (Hacker News, GitHub Trending, CISA KEV, NVD, Red Hat security data, nginx.org, CERT-PL, PSF/discuss.python.org, Thinking Machines, vendor blogs, arXiv) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

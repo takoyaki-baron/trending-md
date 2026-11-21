@@ -9,7 +9,7 @@ All daily trending feeds, ranked by velocity. Click any date for the full styled
 
 | Date | Items | Web (human) | Raw (agent) |
 |------|-------|-------------|-------------|
-| Nov 21, 2026 | 14 | [**View →**](/en/feed/2026-11-21/) | [`2026-11-21.md`](/en/feed/2026-11-21.md) |
+| Nov 21, 2026 | 27 | [**View →**](/en/feed/2026-11-21/) | [`2026-11-21.md`](/en/feed/2026-11-21.md) |
 | Nov 20, 2026 | 38 | [**View →**](/en/feed/2026-11-20/) | [`2026-11-20.md`](/en/feed/2026-11-20.md) |
 | Nov 19, 2026 | 17 | [**View →**](/en/feed/2026-11-19/) | [`2026-11-19.md`](/en/feed/2026-11-19.md) |
 | Nov 18, 2026 | 40 | [**View →**](/en/feed/2026-11-18/) | [`2026-11-18.md`](/en/feed/2026-11-18.md) |

@@ -4160,6 +4160,15 @@
   "zh": "HashiCorp 的安全公告论坛（HCSEC-*）；Consul/Vault/Terraform 通告的一手文本，包含受影响与修复版本范围。",
   "jp": "HashiCorpのセキュリティbulletinフォーラム（HCSEC-*）。Consul/Vault/Terraformのアドバイザリ本文で、影響版と修正版の範囲を含む。"
  },
+ "discuss.python.org": {
+  "cat": "community",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "The PSF's official Discourse forum — core developers post first-hand, user-facing security guidance here (the Nov 2026 pip/eMudhra thread names the upgrade order: Python that rejects the compromised intermediates first, then pip ≥ 26.2.2). Cross-checked (11-21): the underlying supply-chain fact is confirmed by an independent party's reviewed record — GitHub Advisory DB GHSA-6q48-6c7w-9gw2 states certifi before 2026.10.18 bundles the eMudhra intermediates whose keys were compromised and revoked.",
+  "jp": "PSF公式のDiscourseフォーラム——コア開発者がユーザー向けセキュリティガイダンスを一次発信する場（2026年11月の pip/eMudhra スレッドはアップグレード順序を明示：まず中間証明書を拒否する Python、次に pip ≥ 26.2.2）。突合済み（11-21）：根底のサプライチェーン事実は独立した第三者のレビュー済みレコードで確認——GitHub Advisory DB GHSA-6q48-6c7w-9gw2 が、certifi 2026.10.18 未満が鍵が漏えい・失効済みの eMudhra 中間証明書をバンドルすると明記。",
+  "zh": "PSF 官方 Discourse 论坛——核心开发者在此一手发布面向用户的安全指引（2026 年 11 月的 pip/eMudhra 帖写明升级顺序：先换上拒绝被攻破中间证书的 Python，再升 pip ≥ 26.2.2）。已交叉核验（11-21）：底层供应链事实已由独立第三方的已审记录确认——GitHub Advisory DB GHSA-6q48-6c7w-9gw2 明确 certifi 2026.10.18 之前捆绑的 eMudhra 中间证书私钥已泄露并被吊销。"
+ },
  "discuss.rubyonrails.org": {
   "cat": "vendor",
   "cred": "high",
@@ -13787,6 +13796,15 @@
   "en": "Zero Day Initiative's advisory blog — read the scoring and 'wormable' counts first-hand; also publishes honest negative framings (exploit spike not materializing).",
   "jp": "Zero Day Initiative のアドバイザリブログ——スコアリングや「ワーム可能」件数を一次で読める;誠実な否定的枠付け（活用急増未出現）も公表。",
   "zh": "Zero Day Initiative 的公告博客——评分与\"蠕虫级\"计数可直接一手阅读；也会给出诚实的反面定性（利用激增尚未出现）。"
+ },
+ "thinkingmachines.ai": {
+  "cat": "vendor",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "Thinking Machines Lab's news blog (Mira Murati's lab) — model releases (Inkling line) and research posts with unusually honest benchmark tables: harness versions named per row, a Limitations section that concedes losses to rivals, and monitorability measurements shipped alongside the model. Cross-checked (11-21): the page's \"GGUF versions are available via Unsloth and llama.cpp\" confirmed against Unsloth's own artifact (unsloth/Inkling-2-Mini-GGUF on HF, created 11-20) — third-party repackaging, not downstream prose. Caveat: the Stanford \"intelligence per watt\" 0.703 figure is TML-run with Stanford's methodology — Hazy Research's own post predates the model and carries no such number, so treat it as the vendor's measurement, not Stanford's publication.",
+  "jp": "Thinking Machines Lab（Mira Murati のラボ）のニュースブログ——モデルリリース（Inkling 系）とリサーチ投稿。ベンチマーク表が異例なほど誠実：行ごとに harness バージョンを明記、敵対モデルへの敗北を認める Limitations 節、モデルと同時のモニタリング計測。突合済み（11-21）：ページの「GGUF versions are available via Unsloth and llama.cpp」を Unsloth 自身の成果物で確認（HF 上の unsloth/Inkling-2-Mini-GGUF、11-20 作成）——第三者による再パッケージで、下流の文章ではない。注意：スタンフォード「intelligence per watt」0.703 はスタンフォードの手法を使った TML 自身の測定——Hazy Research の自前記事はモデルより先行し当該数値を持たないため、Stanford の出版物ではなくベンダーの測定として扱うこと。",
+  "zh": "Thinking Machines Lab（Mira Murati 的实验室）的新闻博客——模型发布（Inkling 系）与研究文章，基准表罕见地诚实：每行标注所用 harness，Limitations 一节承认输给对手的项，模型与可监控性测量同时发布。已交叉核验（11-21）：页面的「GGUF versions are available via Unsloth and llama.cpp」已对 Unsloth 自己的工件核实（HF 上的 unsloth/Inkling-2-Mini-GGUF，创建于 11-20）——是第三方重打包，不是下游文字。注意：斯坦福「intelligence per watt」0.703 是 TML 用斯坦福方法自己测的——Hazy Research 自家文章早于该模型、并无此数字，应视为厂商测量而非斯坦福发表。"
  },
  "thinkrail.ai": {
   "cat": "vendor",

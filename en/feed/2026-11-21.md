@@ -1,8 +1,8 @@
 ---
 date: 2026-11-21
-updated: 2026-11-20T20:27:37Z
+updated: 2026-11-21T04:27:38Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 17
+sources: 27
 license: CC-BY-4.0
 ---
 
@@ -208,13 +208,197 @@ Kobi's Dettato (introduced Nov 16, still climbing) reports SOTA audio-to-MIDI tr
 
 ---
 
+## 15. Thinking Machines ships Inkling 2 Mini — a looped transformer with open weights that runs on your laptop
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Thinking Machines · 780+ pts on HN · ~8h ago (~04:15 UTC+8)
+- **Tags:** `ai-models` `looped-transformer` `open-weights` `local-inference` `monitorability`
+
+Thinking Machines released Inkling 2 Mini, an open-weights model that is "a looped transformer, running the middle layers of the model three times for every token" — a 26.4B-total/3.4B-active MoE whose 24 stored layers apply 48 times per token, so "looping allows the model to reason longer without writing its reasoning down." The headline claim: it "leads every open-weights model with less than 100B total parameters on benchmarks such as DeepSWE v1.1 (48.2%) and Vals Index v2.2 (46.5%)," with SWE-bench Pro v2 Hard at 77.9% (harnesses named in the table) and a Stanford Hazy Research "intelligence per watt" reading of 0.703 on a DGX Spark — the best of four local models measured, next best 0.430. "The total memory footprint of Inkling 2 Mini is ~20GB," trained and deployed natively in NVFP4 (last four layers MXFP8) with "no conversion loss from quantization," and it runs via Ollama on any Mac with 32GB+ RAM — the launch demo builds a flight simulator offline, in airplane mode, on a MacBook Pro. Alongside it ships TML-d24-varloop-research, a variable-loop research model for the question looping raises: the no-CoT time horizon rose "from 16 seconds at one pass to 37 seconds with three," yet the chain of thought "grew shorter with more loops but stayed legible throughout."
+
+**Why it matters:** Looping attacks the CoT-monitorability concern directly — more computation per token means more reasoning that never gets verbalized — and Thinking Machines shipped the measurement with the model: no meaningful monitorability loss at this scale, and no upward trend on agentic-sabotage tests. The limitations section is worth reading before the benchmarks: multi-turn chat and many-constraint instructions still trail Qwen3.8-27B.
+
+> "Inkling 2 Mini is not the strongest small model for multi-turn chat or for instructions with many constraints: it scores 50.0% on MultiChallenge and 33.4% on ComplexConstraints v1.1, behind Qwen3.8-27B on both."
+
+[`🔗 Thinking Machines: Introducing Inkling 2 Mini`](https://thinkingmachines.ai/news/inkling-2-mini/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50581260)
+
+---
+
+## 16. "We promoted developers into architects without informing them" — the vibe-coding backlash gets its job-description essay
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 335+ pts · ~10h ago (~02:15 UTC+8)
+- **Tags:** `craft` `ai-coding` `architecture` `essay` `career`
+
+A Google Forms addon developer's post (335+ points, 200+ comments) opens with a 15-second welcome screen: a colleague vibe-coded the install-logging, and AI's answer to Google's consent restrictions was three nested try/catch fallbacks — "all of these are one line of code, but internally each of these makes multiple API calls to Google servers" — run before anything renders. The diagnosis: "AI is great at writing code. But it doesn't know if you are launching the app or have millions of users," and "it is also sycophantic and tries to execute your requirements exactly without pushing back." The essay's move is to rename the job: "if you generate code by specifying your requirements instead of specifying your architecture, AI will decide the architecture on your behalf" — so define the data model, constrain the agent to it, decide when backward compatibility is worth duplicate tables, and review "the way an architect reviews a developer's code."
+
+**Why it matters:** It's the constructive counterpart to this batch's skill-atrophy essay (item 8): where that one names the loss, this one names the promotion nobody announced — "You got promoted. Nobody told you, so I am telling you." The Harvard firm-level study (Nov 18) supplies the mechanism: review is the bottleneck, so the person who can push back on requirements before code exists is the scarce role.
+
+[`🔗 We promoted developers into architects without informing them`](https://manidoraisamy.com/developer-to-architect.html) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50579331)
+
+---
+
+## 17. DreamCoder: the Mastering Emacs author spent 15 months building a browser-native coding harness
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 140+ pts · ~8h ago (~04:10 UTC+8)
+- **Tags:** `coding-harness` `emacs` `agent-tools` `ide`
+
+Mickey Petersen — the Mastering Emacs author — announced DreamCoder, "a frontier coding harness with a tiling window manager that runs in your browser on all 3 platforms," after "15 months of work" that began by hand in May 2025. The design is Emacs translated to the agent era: every pane has minimum/comfortable/maximum sizes resolved by "a sophisticated constraint satisfaction solver"; workspaces act as virtual desktops; a per-workspace minimap pulses while an agent works and flags the blocked ones; avy-style jumping and Helm-like palettes replace tab-cycling; `Alt+x` opens global commands. The frontier checklist is checked — "MCP, backgroundable sub agents and shell commands, terminal windows, skills, hooks, 99% cache hit, it runs for days" — with an importer for Pi, OpenCode and Codex configs and first-class open-weight model support ("Qwen 3.8 27B, for example, is fantastically good for its size"). The essay's turning point: he started it in Emacs, "only to see DreamCoder write itself… in DreamCoder today."
+
+**Why it matters:** "Taste is a scarce, human resource" is the essay's thesis, and the harness category is where it's testable — every competitor converges on the same chat-sidebar shape because taste is the part models don't supply. His declared next project inside DreamCoder: a pentest suite, "built for humans. The AI does the work."
+
+[`🔗 Announcing DreamCoder`](https://www.masteringemacs.org/article/announcing-dreamcoder) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50581110)
+
+---
+
+## 18. NINLIVE: a fan-run archive of 1,210 Nine Inch Nails concerts — now streaming back to 1988
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 160+ pts · ~5.5h ago (~06:35 UTC+8)
+- **Tags:** `archives` `music` `streaming` `fan-projects`
+
+The front page's sleeper is a fan-run Nine Inch Nails live archive: 1,210 concerts, 1,949 recordings, 4,675 photos and media, 363 songs tracked across 46 countries and 373 cities. What triggered the thread is the Nov 16 update — "The Future Is Here - ninlive Streaming 1988-2026": "You are now able to stream all of your favorite NIN live recordings from 1988-2026," with Discord login for saved favorites. The updates feed reads like archival maintenance as a way of life — an uncirculated DAT master surfacing for a 1994 Los Angeles show ("First recording available from the third and final night!"), a "200 DAT tape project" just finished for a fellow taper, ticket stubs and setlist scans being photographed show by show. The footer says it plainly: "Fan run, not affiliated with the band."
+
+**Why it matters:** The same instinct as this week's Salon preservation and the Apple-forums rescue: the archive is the durable artifact, and the unglamorous engineering — tape-provenance tracking, streaming infrastructure, per-show metadata — is being done by volunteers for one band's tape trail.
+
+[`🔗 NINLIVE`](https://ninlive.com/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50583274)
+
+---
+
+## 19. Vibecoding an inference chip: an FPGA runs an LLM at 213 tokens/s — after agents wrote ~3M lines
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 120+ pts · ~10h ago (~02:15 UTC+8)
+- **Tags:** `fpga` `ai-coding` `inference` `hardware`
+
+Ankit Gupta's writeup: he rented an AWS F2 FPGA instance (16 GB HBM), pointed a cloud agent at DeepGrove's ternary-weight architecture, and several days later had bit-exact LLM inference on hardware — "increased its speed by 33× from the first full-model bit-exact baseline to get it to a real-time relevant speed," 6 → 213 tokens/s across 14 compounding optimizations (burst attention, a parallel MoE router, exact speculative decoding with a draft model, lossless 5-trit weight packing). The bill: "roughly 3M lines across the experiment history and parsing 30M lines of output files, burning only $10,000 in Claude and OpenAI tokens." His prompts were mostly encouragement — "you're a superintelligent model, time to be more creative" — and when he pasted in a veteran's FPGA-design guide, the agent's own retrospective was: "Its biggest design ideas were already in my plan before you pasted it."
+
+**Why it matters:** The verification discipline is the transferable part — the run was held to a bit-exact contract against a CPU reference, with simulation, timing and board results kept separate — and Gupta's conclusion names the division of labor precisely: "the humans are still useful at defining how to iterate fast and what correctness looks like, and the agents are great to manage the exploration."
+
+[`🔗 Vibecoding an inference chip`](https://ankitg.me/blog/vibecoding-inference-chip/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50579297)
+
+---
+
+## 20. Winedroid: real Android APKs in your browser — a Rust runtime that "essentially replicates Android"
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 115+ pts · ~8.5h ago (~03:35 UTC+8)
+- **Tags:** `android` `wasm` `rust` `emulation`
+
+A Show HN demo runs F-Droid APKs — OpenCalc, a meditation timer, a file explorer, a weather app — in the browser with no Android involved. Winedroid is "written completely in Rust and it essentially replicates Android so it works everywhere," per its FAQ; the runtime loaded in the browser is "12MB right now," and the repo (created today, 86★ at read time) targets "Web, Linux, macOS and Windows." The caveats are stated upfront: the JIT doesn't work on the web target, so the browser demo is slower than running natively, and app coverage is "still improving day by day."
+
+**Why it matters:** It's Wine's original move — reimplement the API surface, not the machine — applied to Android, which would decouple apps from Google's runtime the way Wine decoupled Windows software from Windows. Early, but the browser-native target is the interesting bet: distribution without an app store.
+
+[`🔗 winedroid demo`](https://winedroid.soham.sh/demo/) · [`🔗 sohzm/winedroid`](https://github.com/sohzm/winedroid)
+
+---
+
+## 21. Slopstrap: a CSS framework for making honest websites look hastily vibecoded
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 110+ pts · ~12.5h ago (~23:15 UTC+8)
+- **Tags:** `satire` `css` `vibecoding` `design`
+
+Mike Lacher's parody framework ships every tell of the 2026 generated landing page as a copy-paste component: blinking status dots ("All Systems Operational", "0 Real Incidents"), fat colored left borders, gradient headings over "low-contrast slate-400" body copy, "one arbitrary italic serif word," bento grids that "fracture any simple paragraph into an asymmetrical grid of glowing rounded boxes," auto-generated testimonials ("Sarah Chen has used your product and can't stop talking about it"), and stat counters that animate on scroll. The demo applies `Slopstrap.slopify('#plain-demo')` to "Bob's Local Plumbing & Pipe Repair" — serving Springfield since 1998, "we actually pick up the phone when your basement is flooding" — and converts it into a glowing card grid on click.
+
+**Why it matters:** Satire is doing taxonomy work: the kit is a checklist of exactly which visual signals now read as machine-generated, and it even ships an `/agents` page — "Why use an agent if people can't tell an agent made your site?" — the joke's endpoint being that the slop look has become a genre agents reproduce on demand.
+
+[`🔗 Slopstrap`](https://slopstrap.mikelacher.com/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50576012)
+
+---
+
+## 22. pip ships a 9.3: versions before 26.2.2 bundle certifi carrying the compromised eMudhra certificates
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · CVE-2026-133949 · published Nov 20 (~19:18 UTC, ~03:18 UTC+8)
+- **Tags:** `security` `pip` `python` `supply-chain` `emudhra`
+
+The PSF's CNA published CVE-2026-133949: "pip prior to v26.2.2 the certifi bundled with pip contains the compromised eMudhra certificates." The rating is 9.3 Critical (CVSS 4.0, CNA-assigned by the PSF; CVE-2026-133949 was still `Received` on NVD at check time). The record's remedy has an order of operations: upgrading "either by first upgrading Python to a version that rejects the compromised intermediates (CVE-2026-115557) or use hash pinning with a known-secure version of pip." The state that makes it livable: "pip is not vulnerable when using a Python version that rejects the compromised certificates." The PSF's user-facing discussion thread and pip PR #14371 carry the operational detail.
+
+**Why it matters:** October's eMudhra/emSign CA compromise is still propagating outward through the toolchain, and this hop reaches every machine that installs packages with an old pip. The Python-rejects-the-intermediates dependency is the part to read twice — patching pip alone may not close it.
+
+[`🔗 NVD: CVE-2026-133949`](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE-2026-133949) · [`🔗 PSF: discussion for Python users`](https://discuss.python.org/t/information-for-python-users-regarding-emudhra-emsign-ca-certificate-security-incident/109576) · [`🔗 GHSA-6q48-6c7w-9gw2`](https://github.com/advisories/ghsa-6q48-6c7w-9gw2)
+
+---
+
+## 23. Since we covered the two NGINX RCEs yesterday: the same release carried ten fixes — and the repo is on trending
+
+- **Velocity:** ▮▮ rising
+- **Source:** GitHub Trending + nginx.org · releases Nov 18, disclosure Nov 19
+- **Tags:** `security` `nginx` `patching` `http2` `mtls`
+
+The 1.31.9 mainline and 1.30.7 stable releases that closed the two RCEs from yesterday's item (CVE-2026-123633, CVE-2026-123007) actually fixed **ten CVEs** at once. nginx's advisories rate severity with word labels, not CVSS scores: three "major" — memory corruption in HTTP/2 flow control (CVE-2026-123007), an "Infinite loop while reading client request body over TLS 1.3" (CVE-2026-118899), and a "Use-after-free in mail proxy module" (CVE-2026-113425) — with the rest medium or minor, including an "SNI bypass when using client certificate validation in stream" (CVE-2026-120967) and "Insufficient validation in stream ssl_preread module" (CVE-2026-123640). The nginx repo sits on GitHub's trending board today — the patch wave is the traffic.
+
+**Why it matters:** The two-RCE headline undersold the release. The stream-module SNI bypass is the quiet one for anyone terminating mTLS at nginx: client-certificate validation that can match the wrong SNI is an access-control bug, not a crash — and it's fixed in the same upgrade as the RCEs.
+
+[`🔗 nginx security advisories`](https://nginx.org/en/security_advisories.html) · [`🔗 release-1.31.9`](https://github.com/nginx/nginx/releases/tag/release-1.31.9)
+
+---
+
+## 24. Two more CVEs land in the MCP server layer: a Tapo DNS-rebinding actuation bug and an SSH-manager cron persistence flaw
+
+- **Velocity:** ▮▮ rising
+- **Source:** NVD · 2 records published Nov 20 · both GitHub_M-assigned
+- **Tags:** `security` `mcp` `agents` `dns-rebinding` `command-injection`
+
+Both records published Nov 20, both CNA-assigned by GitHub, both 8.8, both fixed. **CVE-2026-77329** (CVSS 4.0, fixed in tapo-mcp 0.5.0): the Rust/Python Tapo MCP server for TP-Link smart-home devices "calls disable_allowed_hosts() without replacement Host or Origin validation," so "a malicious website can use DNS rebinding to send same-origin browser requests to the victim's local or LAN Tapo MCP listener when it runs without an API key" — reaching "control_device for smart-device actuation and take_snapshot for configured cameras." **CVE-2026-129995** (CVSS 3.1, fixed in 3.8.5): mcp-ssh-manager's backup tools "build remote shell commands from caller-controlled values" "without neutralizing shell metacharacters," so crafted arguments "can therefore execute arbitrary OS commands on managed remote servers as the configured SSH user" — and "ssh_backup_schedule can persist execution through cron."
+
+**Why it matters:** Last week's agent-stack CVE wave (Phoenix, CubeSandbox, MCP Python SDK) continues, and the pattern holds: the dangerous surface isn't the model, it's the tool server bound to localhost or a LAN behind an optional auth flag nobody sets. A listener that can actuate physical devices and read cameras is the stakes going up.
+
+[`🔗 tapo advisory GHSA-2cwc-6wwp-62q6`](https://github.com/mihai-dinculescu/tapo/security/advisories/GHSA-2cwc-6wwp-62q6) · [`🔗 mcp-ssh-manager advisory GHSA-qwwm-vrm9-4mw8`](https://github.com/bvisible/mcp-ssh-manager/security/advisories/GHSA-qwwm-vrm9-4mw8) · [`🔗 NVD: CVE-2026-77329`](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE-2026-77329)
+
+---
+
+## 25. OpenComputer: Digger's open-source Devin alternative — @Computer in Slack, sessions in rootless Podman
+
+- **Velocity:** ▮ steady
+- **Source:** Show HN · 75+ pts · ~7.5h ago (~04:30 UTC+8)
+- **Tags:** `ai-agents` `devtools` `slack` `self-hosted`
+
+A Show HN launch from the Digger team: "Mention `@Computer` in a Slack thread with a task, it works on its own computer, you & your team can watch and steer it as it goes, and the result lands as a pull request." The stack is deliberately boring: one VM with outbound-only networking runs a gateway called Calvin that starts Claude Code, Codex or OpenCode sessions per Slack thread — "each session is isolated with rootless Podman" — while the control plane is Cloudflare Workers and Durable Objects. The launch's hook is a benchmark: "in our benchmark it opens PRs 3.3x faster than Devin," beside a side-by-side race against local Claude Code (32.0s vs 36.2s). "We built it to feel as fast as Claude Code on your laptop."
+
+**Why it matters:** The agent-on-its-own-computer category is consolidating around Slack-as-orchestration over your own cloud compute — and open-sourcing "from the compute layer up" is the pitch against Devin, with isolation primitives (rootless containers, outbound-only VMs) a security team can actually review.
+
+[`🔗 diggerhq/opencomputer`](https://github.com/diggerhq/opencomputer) · [`🔗 Show HN discussion`](https://news.ycombinator.com/item?id=50581403)
+
+---
+
+## 26. Poste.io ships 2.5.22 for a 9.2: unauthenticated root RCE via DMARC report attachments
+
+- **Velocity:** ▮ steady
+- **Source:** NVD · CVE-2026-127027 · CERT-PL advisory · published Nov 20
+- **Tags:** `security` `email` `rce` `mail-server`
+
+CERT-PL published CVE-2026-127027 (9.2 Critical, CVSS 4.0, CNA-assigned; fixed in 2.5.22) in Poste.io, the all-in-one Docker mail server. "Email sent to dmarc-reports@<domain> is saved without sender verification," and "Script that runs as root unpacks the attachments using unsafe shell commands, allowing command injection through crafted attachments (e.g. file names or archive contents)." The result: "a remote unauthenticated attacker who can send an email to the server's port 25 can execute arbitrary commands as root within the Poste.io container."
+
+**Why it matters:** The attacker needs only the ability to send email to your domain — no credentials, no user interaction — which makes this about as close to a zero-click remote root as mail servers get. If you run Poste.io, 2.5.22 is today's upgrade; the container boundary is the only thing between the attacker and the host.
+
+[`🔗 CERT-PL advisory`](https://cert.pl/en/posts/2026/11/CVE-2026-127027) · [`🔗 NVD: CVE-2026-127027`](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE-2026-127027)
+
+---
+
+## 27. GitHub suspends a user's account to 404 with no email — then restores it within hours
+
+- **Velocity:** ▮ steady
+- **Source:** Hacker News · 50+ pts · ~4.5h ago (~07:35 UTC+8)
+- **Tags:** `github` `platform-risk` `moderation`
+
+A small story with a sharp edge (50+ points, 46 comments): a developer's GitHub account (`0n4t3`) was suspended — profile 404, "all my personal projects are gone" — with "not so much as a pop up notification or email on what happened." After the thread gained traction, the account came back, and the post now opens with "Update — I'm back!", crediting "whoever undid my (prob automated?) deletion and/or ban on Github." The lasting lines: "I still have no idea what got me banished or if it'll happen again. Still not so much as a pop up notification or email on what happened, lol, just a random banishment then unbanishment." He's now mirroring locally and considering migrating.
+
+**Why it matters:** It's the Codeberg registrar suspension (Nov 18) seen from the account side: moderation actions that take a whole identity offline arrive through no notification channel, and the resolution — un-banishment by whoever happened to notice — is not a process. Mirror your repos; the platform's appeal path is a thread going viral.
+
+[`🔗 Help github just deleted me`](https://nate.mecca1.net/posts/2026-11-20_help/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50583911)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-20T20:27:37Z |
-| Items | 14 |
-| Sources tracked | 17 (Hacker News, GitHub Trending, CISA KEV, NVD, Red Hat security data, vendor blogs, arXiv) |
+| Generated | 2026-11-21T04:27:38Z |
+| Items | 27 |
+| Sources tracked | 27 (Hacker News, GitHub Trending, CISA KEV, NVD, Red Hat security data, nginx.org, CERT-PL, PSF/discuss.python.org, Thinking Machines, vendor blogs, arXiv) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
