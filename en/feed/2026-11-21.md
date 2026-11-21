@@ -1,6 +1,6 @@
 ---
 date: 2026-11-21
-updated: 2026-11-21T12:25:51Z
+updated: 2026-11-21T12:46:45Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 40
 license: CC-BY-4.0
@@ -536,7 +536,7 @@ A single-author measurement study (Ilya Gusev) quantifies what the peer-review d
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-21T12:25:51Z |
+| Generated | 2026-11-21T12:46:45Z |
 | Items | 37 |
 | Sources tracked | 40 (Hacker News, GitHub Trending, CISA KEV, NVD, Red Hat security data, nginx.org, CERT-PL, PSF/discuss.python.org, Thinking Machines, vendor blogs, arXiv, gnupg-announce, backblaze.com, ruv.is, status.1984.is, bbc.com, france24.com, a90.com, restofworld.org, techdirt.com, documentcloud.org, ricapar.net, github.com, huggingface.co) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
