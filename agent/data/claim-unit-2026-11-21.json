@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-21T04:23:52.290Z",
+ "generated": "2026-11-21T04:32:09.108Z",
  "files": [
   {
    "file": "2026-11-21.md",
@@ -253,7 +253,29 @@
    ]
   }
  ],
- "status_watch": [],
+ "status_watch": [
+  {
+   "id": "CVE-2026-123007",
+   "from": "Received",
+   "to": "Modified",
+   "regressed": false,
+   "modified": "2026-11-20T12:18:20.763"
+  },
+  {
+   "id": "CVE-2026-123633",
+   "from": "Received",
+   "to": "Modified",
+   "regressed": false,
+   "modified": "2026-11-20T12:18:21.030"
+  },
+  {
+   "id": "CVE-2026-123890",
+   "from": "Undergoing Analysis",
+   "to": "Analyzed",
+   "regressed": false,
+   "modified": "2026-11-20T20:52:33.710"
+  }
+ ],
  "api_calls": 0,
  "readme_calls": 0,
  "cited_page_calls": 0,

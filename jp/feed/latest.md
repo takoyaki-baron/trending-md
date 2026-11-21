@@ -1,6 +1,6 @@
 ---
 date: 2026-11-21
-updated: 2026-11-21T04:27:38Z
+updated: 2026-11-21T04:32:02Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 27
 license: CC-BY-4.0
@@ -396,7 +396,7 @@ CERT-PL が Poste.io（オールインワンの Docker メールサーバー）�
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-21T04:27:38Z |
+| Generated | 2026-11-21T04:32:02Z |
 | Items | 27 |
 | Sources tracked | 27 (Hacker News, GitHub Trending, CISA KEV, NVD, Red Hat security data, nginx.org, CERT-PL, PSF/discuss.python.org, Thinking Machines, vendor blogs, arXiv) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
