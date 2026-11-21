@@ -147,6 +147,16 @@
   "jp": "個人ハードウェア工作ブログ——エージェント製 PCB の一次記録（Fable 5 + KiCad MCP）、失敗台帳も完備（DRC エラー 65、フットプリント誤り、手動配線）。未検証部分に正直だが、主張はすべて単一ソース。",
   "zh": "个人硬件改装博客——AI 建造 PCB 的第一手记录（Fable 5 + KiCad MCP），失败清单齐全（65 个 DRC 错误、封装错误、手工布线）。对未经本人验证之处坦诚；所有主张均为单一来源。"
  },
+ "a90.com": {
+  "cat": "research",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "Cody Collier's independent AI-behavior experiment site — the \"AI is giving everyone the same advice\" study (127,918 asks to 65 models from 30 companies, 11-20) publishes its full appendix here; single-author with methods stated inline but not peer-reviewed, so read the numbers as one careful measurement, not a field result. Cross-checked (11-21): the HN discussion (92 pts) quotes the same figures.",
+  "jp": "Cody Collier による独立系 AI 挙動実験のサイト。「AI is giving everyone the same advice」の研究（11-20、30 社 65 モデルに 127,918 回の質問）が全文付録込みでここにある。単著で手法は本文内に明記されているが査読はない。数字は一つの丁寧な測定として読むべきで、分野全体の結果ではない。クロスチェック済み（11-21）：HN ディスカッション（92pt）が同じ数値を引用。",
+  "zh": "Cody Collier 的独立 AI 行为实验站点——\"AI is giving everyone the same advice\"研究（11-20，向 30 家公司的 65 个模型发问 127,918 次）连同完整附录发布于此；单作者、方法在文中写明但未经同行评审，数字应读作一次谨慎的测量而非领域结论。已交叉核验（11-21）：HN 讨论（92 分）引用相同数字。"
+ },
+
  "abc.net.au": {
   "cat": "news",
   "cred": "high",
@@ -4388,6 +4398,16 @@
   "jp": "N-able の公式製品ドキュメント。09-16 に取得を検証し、HF4 リリースノートで CVE-2026-86218（pre-auth RCE）と build 2026.3.1.14 を確認。本文の上に古い「ページが存在しません」バナーが表示される点に注意。CISA KEV カタログと強く交叉検証済み：CVE-2026-86218、N-able N-central、静的コード注入（CWE-96）、2026-09-08 掲載、期限 2026-09-11、フォレンジック・トリアージ要求あり。",
   "zh": "N-able 官方产品文档，09-16 实际抓取：HF4 发行说明确认 CVE-2026-86218（预认证 RCE）及 build 2026.3.1.14；注意页面在正文上方渲染了一个过期的\"页面不存在\"横幅。已与 CISA KEV 目录强交叉验证：CVE-2026-86218、N-able N-central、静态代码注入（CWE-96）、2026-09-08 收录、截止 2026-09-11、要求取证排查。"
  },
+ "documentcloud.org": {
+  "cat": "data",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "DocumentCloud — hosting platform for primary source documents (court filings, FOIA releases); the domain's credibility is the uploader's, so verify each document's provenance. Cross-checked (11-21): the Osorio facial-recognition decision (doc 28909866) is the primary for the Fourth Amendment quotes Techdirt excerpts — the court PDF itself is unreadable to automated fetchers, verify via the reporting outlet's reader text.",
+  "jp": "DocumentCloud——一次資料（裁判資料、FOIA 公開文書）のホスティング基盤。ドメインの信頼性はアップロード者依存なので、各文書の出所を確認すること。クロスチェック済み（11-21）：Osorio 顔認識判決（doc 28909866）は Techdirt が引用する第四修正条項の引用の一次資料。判決 PDF 自体は自動フェッチには読めず、報道側のリーダーテキストで確認した。",
+  "zh": "DocumentCloud——一手文件（法院文书、FOIA 信息公开）的托管平台；域名可信度取决于上传方，需核实每份文件的出处。已交叉核验（11-21）：Osorio 人脸识别判决（doc 28909866）是 Techdirt 所引第四修正段落的原始出处；判决 PDF 本身对自动抓取不可读，需经报道媒体的读取文本核实。"
+ },
+
  "dogwood-policy.github.io": {
   "cat": "code",
   "cred": "med",
@@ -5463,6 +5483,16 @@
   "jp": "FoxDev Studio公式サイト——Visual FoxPro 9再実装プロジェクト（Rust/WASMランタイム、64ビットテーブル）。突合済み（09-23）：実裂数・未達リスト・2GBの「一方通行の扉」警告はGitHubリポジトリとリリースと一致。",
   "zh": "FoxDev Studio 官网——Visual FoxPro 9 重实现项目（Rust/WASM 运行时、64 位表）。已交叉核验（09-23）：实现数量、缺口清单与 2 GB“单行门”警告与 GitHub 仓库及其发布一致。"
  },
+ "france24.com": {
+  "cat": "news",
+  "cred": "high",
+  "cv": 1,
+  "density": "med",
+  "en": "France 24 — international newsroom; its aggregation pieces name the original outlets (NBC, CNN) rather than absorbing them. Cross-checked (11-21): the FBI/USDA piece matched the BBC's first-hand quotes and correctly attributed each incident to its reporting outlet — use it as the corroborating second source, not the primary.",
+  "jp": "France 24——国際ニュースルーム。集約記事は元の報道機関（NBC、CNN）を名指しする。クロスチェック済み（11-21）：FBI/USDA 記事は BBC の一次引用と一致し、各事件を正しく報道機関に帰属させた。裏付けの第二ソースとして使い、一次にはしない。",
+  "zh": "France 24——国际新闻室；聚合报道会点名原始媒体（NBC、CNN）而非吞并信息来源。已交叉核验（11-21）：FBI/USDA 报道与 BBC 的一手引语一致，且正确把每起事件归属到报道媒体——用作佐证性第二来源，不作一手来源。"
+ },
+
  "frandroid.com": {
   "cat": "news",
   "cred": "med",
@@ -8081,6 +8111,16 @@
   "jp": "Debian セキュリティアナウンスのメーリングリスト——SPIP の DSA-6456-1 アドバイザリ；権威あるディストロのセキュリティ情報源で、NVD と相互に裏付けられる。",
   "zh": "Debian 安全公告邮件列表——SPIP 的 DSA-6456-1 公告；权威发行版安全来源，与 NVD 相互印证。"
  },
+ "lists.gnupg.org": {
+  "cat": "vendor",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "The GnuPG project's announcement mailing list — first-party primary source for GnuPG/GPGME security advisories. Cross-checked (11-21): the GPGME 2.3.1 advisory (CVE-2026-129975, 11-20) carries the full double-free mechanics, the affected-software list (mail clients, XMPP, Samba, Flatpak) and the disclosure-timeline story verbatim; matched by the HN thread discussion.",
+  "jp": "GnuPG プロジェクトのアナウンス用メーリングリスト。GnuPG/GPGME のセキュリティ勧告の一次情報。クロスチェック済み（11-21）：GPGME 2.3.1 勧告（CVE-2026-129975、11-20）はダブルフリーの機構、影響ソフト一覧（メールクライアント、XMPP、Samba、Flatpak）、開示経緯をそのまま載せる。HN スレッドの議論と一致。",
+  "zh": "GnuPG 项目的公告邮件列表——GnuPG/GPGME 安全公告的一手来源。已交叉核验（11-21）：GPGME 2.3.1 公告（CVE-2026-129975，11-20）完整载有双重释放机制、受影响软件清单（邮件客户端、XMPP、Samba、Flatpak）与披露时间线原文；与 HN 讨论一致。"
+ },
+
  "liveandletsfly.com": {
   "cat": "news",
   "cred": "med",
@@ -11528,6 +11568,16 @@
   "jp": "Benjamin Breen のデジタル人文エッセイブログ——現役歴史家による LLM アーカイブ実験の一次記録、自説に自ら採点。クロスチェック済み（09-25）: 暗号解読の文脈は同日引用の Crypto Cellar Research による独立 Enigma 解説と一致。",
   "zh": "Benjamin Breen 的数字人文随笔博客——一线历史学家的 LLM 档案实验第一手记录，对自己的结论记分。已交叉核验（09-25）：其密码破译背景与同日引用的 Crypto Cellar Research 独立 Enigma 解读一致。"
  },
+ "restofworld.org": {
+  "cat": "news",
+  "cred": "high",
+  "cv": 1,
+  "density": "high",
+  "en": "Rest of World — nonprofit international tech publication focused on labor and platform effects outside the West; reported features with named authors and sources. Cross-checked (11-21): the Outlier/Scale AI rates in the 11-19 gig-work essay ($180/h US physicians, $7.50/h Tagalog, $12.50/h Swahili) are stated verbatim on the page and matched by the HN discussion.",
+  "jp": "Rest of World——西欧以外の労働とプラットフォームの影響に特化した非営利の国際テック報道。著者とソースを明記した報道型記事。クロスチェック済み（11-21）：11-19 のギグワーク論説にある Outlier/Scale AI のレート（米国医師 $180/h、タガログ $7.50/h、スワヒリ $12.50/h）はページにそのまま記載され、HN ディスカッションと一致。",
+  "zh": "Rest of World——专注西方之外的劳动与平台影响的非营利国际科技媒体；有署名作者与信息来源的报道型文章。已交叉核验（11-21）：11-19 零工经济文中的 Outlier/Scale AI 费率（美国医生 $180/小时、他加禄语 $7.50/小时、斯瓦希里语 $12.50/小时）在页面逐字载明，与 HN 讨论一致。"
+ },
+
  "retrocomputing.stackexchange.com": {
   "cat": "community",
   "cred": "high",
@@ -11564,6 +11614,16 @@
   "jp": "Rheinmetall のニュースルーム — Battlesuite Onboard/Tactical API 仕様公開の一次情報だが、企業広報である：公開されたのはドキュメントのみで、コードやライセンス条項の検証、独立評価はない。HN トップページの議論および公式 GitHub 組織と突合済み。",
   "zh": "Rheinmetall 新闻室——Battlesuite Onboard/Tactical API 规范发布的一手来源，但属于企业宣传：实际发布的只是文档，没有代码，许可条款未查证，也无独立评估。已与 HN 首页讨论及官方 GitHub 组织交叉核验。"
  },
+ "ricapar.net": {
+  "cat": "code",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "First-party project site (Ricapar's ClawDOS write-up) — an artifact check earns cv, not standing: the site's claims (100% written by Claude, 176 KB HARNESS.EXE speaking the Claude Messages API, Turbo C toolchain) appear verbatim in its own GitHub repo README (Ricapar/ClawDOS), verified 11-21. A hobbyist primary — med cred per the first-party rule even though the artifact checks out.",
+  "jp": "一次プロジェクトサイト（Ricapar の ClawDOS 解説）——アーティファクト検証は cv を得るが、サイトの地位は得ない。サイトの主張（100% Claude 生成、Claude Messages API を直接話す 176 KB の HARNESS.EXE、Turbo C ツールチェーン）は自リポジトリの README（Ricapar/ClawDOS）にそのままあり、11-21 に確認。ホビストの一次情報——検証が通っても第一方ルールにより cred は med。",
+  "zh": "第一方项目站点（Ricapar 的 ClawDOS 说明）——工件核验能挣得 cv，但不能挣得地位：站点的说法（100% 由 Claude 编写、176 KB 的 HARNESS.EXE 直接讲 Claude Messages API、Turbo C 工具链）在其 GitHub 仓库 README（Ricapar/ClawDOS）中逐字出现，11-21 已验证。爱好者的一手来源——按第一方规则，即使工件核验通过 cred 仍为 med。"
+ },
+
  "rickmanelius.com": {
   "cat": "community",
   "cred": "med",
@@ -11798,6 +11858,16 @@
   "jp": "Ruurtjan Pul の個人ブログ——実務者によるエンジニアリング解説。2.4 億ドメインを対象にした『P99 0 ms* autocomplete』で引用。誠実なアスタリスク注記（単一ヨーロッパサーバー近傍でのみ成立）が見出し自体にある。",
   "zh": "Ruurtjan Pul 的个人博客——一线工程随笔；因《P99 0 ms* autocomplete》（覆盖 2.4 亿域名）被引用，其诚实的星号说明（仅在单一欧洲服务器附近成立）就写在标题里。"
  },
+ "ruv.is": {
+  "cat": "news",
+  "cred": "high",
+  "cv": 1,
+  "density": "med",
+  "en": "RÚV — Iceland's national public broadcaster; the primary outlet for Icelandic infrastructure stories. Cross-checked (11-21): the 1984 hosting cyberattack coverage (11-20) carries the managing director's quotes verbatim (verified via reader twin — the plain fetch returns only navigation) and is corroborated by the provider's own status page.",
+  "jp": "RÚV——アイスランドの国営公共放送。アイスランドのインフラ関連の一次メディア。クロスチェック済み（11-21）：1984 hosting のサイバー攻撃報道（11-20）は常務取締役の発言をそのまま載せ（リーダーツインで確認——通常フェッチはナビゲーションのみ返す）、事業者自身のステータスページと整合する。",
+  "zh": "RÚV——冰岛国家公共广播电台，冰岛基础设施报道的一手媒体。已交叉核验（11-21）：1984 托管商网络攻击报道（11-20）逐字载有常务董事引语（经读取孪生核实——普通抓取只返回导航），并与服务商自己的状态页相互印证。"
+ },
+
  "ryan.science": {
   "cat": "security",
   "cred": "high",
@@ -12877,6 +12947,16 @@
   "jp": "Andrew Gelman のグループブログ（コロンビア大学統計学科）——長年続く学術ディスカッションブログ。クロスチェック済み（10-06）：Polson258論文記事の存在と内容はHNスレッド（152pt/110c——feedが引用した「フォレンジック・セミナー」そのもの）と独立报道（economistwritingeveryday.com）で確認。注意：同サイトはプレーンなフェッチにCloudflare 403（ボット壁）——キャッシュかHN引用で読むこと。ボット壁≠死 link。",
   "zh": "Andrew Gelman 的团体博客（哥伦比亚大学统计系）——长期运行的学术讨论博客。已交叉核验（10-06）：Polson 258 篇论文一文的存在与内容经其 HN 帖证实（152 分/110 评，该帖本身就是 feed 所引的取证研讨），另有独立报道（economistwritingeveryday.com）。注意：该站对普通抓取返回 Cloudflare 403 机器人墙——请经缓存或 HN 引用阅读；机器人墙≠死链。"
  },
+ "status.1984.is": {
+  "cat": "vendor",
+  "cred": "med",
+  "cv": 1,
+  "density": "med",
+  "en": "1984.hosting's public service status page — first-party incident state, the operational mirror of RÚV's 11-20 coverage (full shutdown after the cyberattack, gradual restoration starting with email and DNS). Med cred per the first-party rule; cross-checked (11-21) against the broadcaster's report.",
+  "jp": "1984.hosting の公開ステータスページ。一次のインシデント状態であり、RÚV の 11-20 報道（サイバー攻撃後の全面停止、メールと DNS からの段階的復旧）の運用側の鏡。第一方ルールにより cred は med。クロスチェック済み（11-21）放送局の報道と突き合わせ。",
+  "zh": "1984.hosting 的公开服务状态页——一手事件状态，是 RÚV 11-20 报道（攻击后全面停机、从邮件与 DNS 开始渐进恢复）的运维侧镜像。按第一方规则 cred 为 med；已交叉核验（11-21）对照广播公司的报道。"
+ },
+
  "status.claude.com": {
   "cat": "data",
   "cred": "high",
@@ -13446,6 +13526,16 @@
   "jp": "スタートアップニュース。資金調達・買収・新製品ローンチに強い。",
   "zh": "创业新闻；对融资、并购与新品发布覆盖强。"
  },
+ "techdirt.com": {
+  "cat": "news",
+  "cred": "med",
+  "cv": 1,
+  "density": "high",
+  "en": "Techdirt — tech-policy blog with strong legal analysis; the framing is opinionated, but its court-document excerpts are reliable. Cross-checked (11-21): the Osorio decision quotes in the 11-19 piece match the DocumentCloud primary — read the case document itself for the holding, and expect the site behind a JS challenge on direct fetch (the reader twin carries the full text).",
+  "jp": "Techdirt——法律分析の強いテックポリシーブログ。論調は主観的だが、裁判文書の引用は信頼できる。クロスチェック済み（11-21）：11-19 記事の Osorio 判決引用は DocumentCloud の一次資料と一致。判断内容は判決文自体で確認すること。直接フェッチには JS チャレンジが立つ（リーダーツインが全文を運ぶ）。",
+  "zh": "Techdirt——法律分析扎实的科技政策博客；论调有立场，但其法院文书摘录可靠。已交叉核验（11-21）：11-19 文章中的 Osorio 判决引语与 DocumentCloud 一手文件一致；判决主文请读判决书本身；直接抓取会遇 JS 质询（读取孪生载有全文）。"
+ },
+
  "techmonitor.ai": {
   "cat": "news",
   "cred": "high",

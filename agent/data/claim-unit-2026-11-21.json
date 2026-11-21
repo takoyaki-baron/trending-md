@@ -1,24 +1,10 @@
 {
- "generated": "2026-11-21T04:32:09.108Z",
+ "generated": "2026-11-21T12:36:01.477Z",
  "files": [
   {
    "file": "2026-11-21.md",
-   "items": 27,
+   "items": 37,
    "findings": [
-    {
-     "check": "status",
-     "item": 4,
-     "verdict": "status-dated",
-     "claim": "CVE-2026-123890 `Undergoing Analysis`",
-     "detail": "CVE-2026-123890 is `Analyzed` (lastModified 2026-11-20T20:52:33.710), not `Undergoing Analysis` — the record has advanced since; a status is NVD's queue position and it moves without the feed changing — the sentence dates itself, so the drift is the TREND rather than an error: re-read and say when"
-    },
-    {
-     "check": "field",
-     "item": 5,
-     "verdict": "field-unknown-name",
-     "claim": "“no macOS”",
-     "detail": "“macOS” is not a CVE record field this check knows — the claim is about something else, or FIELD_VOCAB needs the name"
-    },
     {
      "check": "status",
      "item": 7,
@@ -34,18 +20,18 @@
      "detail": "Received (lastModified 2026-11-20T20:17:37.170)"
     },
     {
-     "check": "field",
-     "item": 24,
-     "verdict": "field-unknown-name",
-     "claim": "“without an API key”",
-     "detail": "“API” is not a CVE record field this check knows — the claim is about something else, or FIELD_VOCAB needs the name"
+     "check": "repo",
+     "item": 20,
+     "verdict": "star-surge",
+     "claim": "86 quoted vs 143 now",
+     "detail": "sohzm/winedroid: 86 → 143 (+40%, 57 stars) since the batch was written on a 1-day-old record (launch window) — a rising count is not a wrong one; date the reading if the number will be re-used"
     },
     {
      "check": "repo",
      "item": 20,
      "verdict": "ok",
      "claim": "sohzm/winedroid",
-     "detail": "90★, last push 2026-11-20"
+     "detail": "143★, last push 2026-11-20"
     },
     {
      "check": "quotation",
@@ -230,6 +216,83 @@
      "detail": "verbatim in 2 readable source(s)"
     },
     {
+     "check": "quotation",
+     "item": 28,
+     "verdict": "ok",
+     "claim": "6 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 29,
+     "verdict": "ok",
+     "claim": "8 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 30,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 31,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 32,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 33,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 34,
+     "verdict": "ok",
+     "claim": "8 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 35,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 36,
+     "verdict": "quote-not-read",
+     "claim": "“the fourth amendment does not allow a detective to delegate to ai the task of assessing probable…”",
+     "detail": "17 words, 0 hits in 2 readable source(s), but 1 cited page(s) went unread — unread is not absent, so this is not called a fabrication; open those page(s) before publishing"
+    },
+    {
+     "check": "quotation",
+     "item": 36,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 37,
+     "verdict": "ok",
+     "claim": "4 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
      "check": "attribution",
      "item": 6,
      "verdict": "attribution-satisfied",
@@ -245,40 +308,25 @@
     },
     {
      "check": "attribution",
-     "item": 25,
-     "verdict": "attribution-uncited",
-     "claim": "Slack",
-     "detail": "a quotation is attributed to Slack (“each session is isolated with rootless Podman”), but no cited URL names the party — a quotation ABOUT a party is a claim about THAT party's bytes, and the cited page can be a second-hand copy whose figures the party has since corrected (the 11-12 item-41 lesson: the essay quoted the earlier version of Aaronson's dump post). Open Slack's primary artifact before publishing, or drop the quotation marks"
+     "item": 29,
+     "verdict": "attribution-satisfied",
+     "claim": "GnuPG",
+     "detail": "a quotation is attributed to GnuPG (“can't be ruled out”) and a cited URL carries the party's token — the quotation arm's page set reaches the party's own artifact"
+    },
+    {
+     "check": "attribution",
+     "item": 31,
+     "verdict": "attribution-page-verified",
+     "claim": "Washington",
+     "detail": "a quotation is attributed to Washington (“hacked for the second time since September,”) and the party's token appears in the fetched text of a cited page — the quotation arm's page set carries the party's statement even though no cited URL string names the party (the party lives in the prose, not the domain); the second-hand-copy risk the URL arm carries applies here too, so a load-bearing quotation still wants the party's own artifact"
     }
    ]
   }
  ],
- "status_watch": [
-  {
-   "id": "CVE-2026-123007",
-   "from": "Received",
-   "to": "Modified",
-   "regressed": false,
-   "modified": "2026-11-20T12:18:20.763"
-  },
-  {
-   "id": "CVE-2026-123633",
-   "from": "Received",
-   "to": "Modified",
-   "regressed": false,
-   "modified": "2026-11-20T12:18:21.030"
-  },
-  {
-   "id": "CVE-2026-123890",
-   "from": "Undergoing Analysis",
-   "to": "Analyzed",
-   "regressed": false,
-   "modified": "2026-11-20T20:52:33.710"
-  }
- ],
+ "status_watch": [],
  "api_calls": 0,
  "readme_calls": 0,
- "cited_page_calls": 0,
+ "cited_page_calls": 1,
  "repo_page_calls": 0,
  "nvd_calls": 1,
  "nvd_failed_chunks": 0,

@@ -1,6 +1,6 @@
 ---
 date: 2026-11-21
-updated: 2026-11-21T04:32:02Z
+updated: 2026-11-21T12:25:51Z
 schedule: 04:03, 12:03, 20:03 UTC+8
 sources: 27
 license: CC-BY-4.0
@@ -392,13 +392,153 @@ CERT-PL が Poste.io（オールインワンの Docker メールサーバー）�
 
 ---
 
+## 28. Backblaze の新しいプライバシー通知、ターゲット広告目的で個人情報を「販売・共有」しうると明記――それがバックアップ企業で
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 201+ pts · ~9h 前 (~11:20 UTC+8)
+- **Tags:** `privacy` `backup` `data-rights` `industry`
+
+Backblaze――「あなたのデータは何年もここで安全」という売り文句一本で勝負してきたバックアッププロバイダー――が新しい "Notice at Collection and Privacy Policy" を公開し、それを受けて立ったスレッド（201ポイント）が事実上の信任投票になった。通知によれば、個人情報――カテゴリ一覧は "Internet or Other Similar Network Activity; Commercial Information; Geolocation Data" を含む――が "cross-context behavioral advertising" のために販売・共有されうる。オプトアウトの道も明記されている："You have the right to direct us to stop selling or sharing your personal information for cross-context behavioral advertising"。経路は "Your Privacy Choices" リンクか Global Privacy Control シグナル。正確に読むべき点が2つある。この通知はバックアップ**ファイルの中身**が売られるとは言っていない――対象カテゴリはアカウントや利用行動に関する個人情報で、"We do not sell or share sensitive personal information" と、正確な位置情報の欄は "No" と同時に明記している。そしてそれはオプト**アウト**だ――別の設定フォームへの誘導であり、既定で無効にはならない。スレッドはこれをダークパターンと読んだ。
+
+**Why it matters:** スレッドの代表的なまとめを借りれば "Backup is a trust business. The entire product promise is 'your data is safe with us for years'"。同じ顧客関係を広告データ共有で収益化するのは、約束の逆方向だ。やるべきことは具体的：次のバックアップ前に設定を見直すか GPC を有効にし、更新の前にバックアップ業者の通知を読む。
+
+[`🔗 Backblaze Notice at Collection and Privacy Policy`](https://www.backblaze.com/company/policy/privacy) · [`🔗 HNディスカッション（201ポイント）`](https://news.ycombinator.com/item?id=50585593)
+
+---
+
+## 29. GnuPG が GPGME の重大なダブルフリーを開示――署名メール経由のデータ持ち出し、RCE "can't be ruled out"――開示を前倒し
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** gnupg-announce · HN 43+ pts · ~3.6h 前 (~16:35 UTC+8)
+- **Tags:** `security` `gnupg` `cve` `memory-safety`
+
+Werner Koch が GPGME 2.3.1 を発表した。全先行バージョンに存在する "a critical security bug found in all prior versions" の修正である。CVE-2026-129975（内部番号 T8557）。"a crafted very long user id" を持つ OpenPGP 鍵が引き金になるダブルフリーだ。メカニズムは stale ポインタ型の古典：再割り当て後のバッファポインタは "is only assigned back to the context object at the end of the function"、つまり読み込みエラーでの早期リターン時にコンテキストが解放済みメモリを保持し続け、最終的に二度目の free が起きる。しかも "due to other allocations in between"、アロケータのダブルフリー検査に引っかからない場合がある。影響の連鎖は実用的だ："This double free can be used exfiltrate data from applications by sending for example signed data"。さらに "Exploiting this bug to mount an Remote Code Execution attack (RCE) can't be ruled out. Thus an immediate update is highly suggested."。影響範囲は OpenPGP デスクトップ世界の大半――Gpg4win、GnuPG Desktop と VS-Desktop、"Most mail clients"、多くの XMPP クライアント、Samba、Flatpak。開示自体にも物語がある。研究者 Johan Carlsson の発見は GitLab 経由で 2026-11-25 の調整済み開示を予定していたが、"due to the new Ruby2Shell bug GitLab had to update earlier"――昨日の Ruby 緊急リリースと同じ波で 11月20日に前倒しされた。今回の実行時点（12:09Z）で NVD のレコードはまだ存在しない。
+
+**Why it matters:** GPGME はアプリケーションと gpg の間のライブラリだ。つまりこれは悪意ある鍵が普通の署名メールで届けられる、アプリケーション側のメモリバグである。パッチの難所は依存ツリー側：静的リンクされたバイナリは 2.3.1 での再ビルドが必要で、ディストリの更新は発表から数日遅れる。
+
+[`🔗 GnuPG セキュリティ勧告（gnupg-announce）`](https://lists.gnupg.org/pipermail/gnupg-announce/2026q4/000517.html) · [`🔗 HNディスカッション`](https://news.ycombinator.com/item?id=50587208)
+
+---
+
+## 30. アイスランド最大のホスティング業者が攻撃を受け全サービスを停止――常務取締役は「tens of millions in artificial intelligence costs」を焼いた攻撃だと
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 94+ pts · ~12.7h 前 (~07:30 UTC+8)
+- **Tags:** `security` `hosting` `iceland` `ai-powered-attack`
+
+1984 ehf――常務取締役いわく "probably by far the largest provider of website and email hosting services in Iceland"――はフロントエンド系システムへのサイバー攻撃を受け、全サービスを停止した。影響は数万人規模の顧客に及び、CERT-IS とアイスランド電子通信局が対応に参加している。広く引用された細部は、常務取締役 Mörður Áslaugarson による攻撃者の描写だ。"These are professionals, and this was probably an enormously well-funded attack. We're talking about tens of millions in artificial intelligence costs. It happened at a speed unlike anything anyone has ever even heard of." 復旧は段階的で、まずメールと DNS から――状況は同社の公開ステータスページで追える。彼はさらに "There are certain theories about which groups were behind this, but none of them has been confirmed." と付け加えている。
+
+**Why it matters:** "tens of millions in artificial intelligence costs"という数字が精査に耐えるかは別の話として、この主張自体が今週のセキュリティ連鎖の縮図だ。巨大な計算予算だけが買える実行速度で、国が実際に載っているインフラが狙われた。国家規模のホスティング業者が完全停止を選んだのは、今月の一連の障害譚の防御側の鏡像だ。
+
+[`🔗 RÚV：Serious cyberattack thought backed by wealthy operators`](https://www.ruv.is/english/2026-11-20-serious-cyberattack-thought-backed-by-wealthy-operators-493411) · [`🔗 1984 ステータスページ`](https://status.1984.is/status/public) · [`🔗 HNディスカッション`](https://news.ycombinator.com/item?id=50583856)
+
+---
+
+## 31. FBI が犯罪データベース（NCIC）への侵入を調査か――同時に USDA の農家支払いシステムもサイバー攻撃を受けていた
+
+- **Velocity:** ▮▮ rising
+- **Source:** BBC + France24（NBC、CNN 経由）· HN 40+ pts · ~1.6h 前 (~18:35 UTC+8)
+- **Tags:** `security` `fbi` `breach` `ncic`
+
+米メディアが関係者2人の話として伝えるところでは、FBI は "an apparent breach of its criminal information database" を調査中だ。NCIC――連邦と地方の法執行機関が逮捕状やバックグラウンドチェックの情報を共有するシステムである。今秋これで2件目になる。9月には ShinyHunters グループが FBI 職員全員約38,000人分のデータ窃取を主張した。別件として、USDA は職員に農家への支払いシステムが "had been targeted" と伝えた（NBC、元 USDA 職員2人の話）。同省はまだコメントしていない。両件は、障害後の議会追及の真っ只中に落ちてきた――同じ週、ホワイトハウスは国家サイバー担当ディレクター Sean Cairncross を解雇している。CNN は FBI が "hacked for the second time since September" だと伝え、2件の関連性と犯人は依然不明としている。
+
+**Why it matters:** NCIC のレコードは逮捕と警察官の安全確認に直結する。ここの漏えいは統計の漏えいではない。そして背景はどちらの事件と同じくらい重要だ。「公式にはサイバー攻撃ではない」障害が一か月続いた後、連邦の侵入調査が同時2件となれば、「今回はどうか？」が今後すべての障害への既定の問いになる。
+
+[`🔗 BBC：FBI reportedly investigating apparent hack of its criminal database`](https://www.bbc.com/news/articles/cvze7de86pk3o) · [`🔗 France24：US Agriculture Department and FBI hit by cyberattacks`](https://www.france24.com/en/americas/20261121-us-agriculture-department-fbi-hit-by-cyberattacks-media-report) · [`🔗 HNディスカッション`](https://news.ycombinator.com/item?id=50587859)
+
+---
+
+## 32. ClawDOS：DOS 用の AI コーディングエージェント――本物の 1981 年 IBM PC XT で動く
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 84+ pts · ~6.5h 前 (~13:40 UTC+8)
+- **Tags:** `ai-agents` `dos` `retro` `coding-agent`
+
+名前の通りの Show HN だ。オリジナルのハードウェア――IBM PC 5160、 "an 8088 at 4.77 MHz, 640K of RAM, a CGA card"――で動く DOS 用チャット＆コーディングハーネス。HARNESS.EXE は 176 KB の DOS プログラムで、Claude Messages API を自力で話す。リクエストを書き、ストリーミングされる応答を解析し、ツールを実行し、会話ごとに独立ディレクトリへ保存する。セッションをまたぐノートも維持し、エージェントは "picks up where it left off"。ディスク上のファイルを読み書きし、プログラムを書き、Turbo C でコンパイルし、実行して "looks at what they draw on the screen"。TLS は別の "bridge" PC にオフロードされる。8088 では無理だからだ。作者の注記は率直だ："100% of this repo is written by Claude, with the exception of the text within this box"。サイト自体もエージェントの次の課題だった："can that something it built then build other somethings?"
+
+**Why it matters:** 制約駆動のハーネス工学は、この職人の技が進歩する道だ。ここにあるアイデア（ストリーミングパーサ、ファイルシステム単位のワークスペース、セッション横断のメモリ）はすべて 640K のマシン向けに作り直された。エージェントループに本当に必要なものは何か、という圧力テストになる。「エージェントがエージェントを書く」シリーズの今年のベストエントリでもある。
+
+[`🔗 ClawDOS`](http://ricapar.net/ClawDOS/) · [`🔗 Ricapar/ClawDOS`](https://github.com/Ricapar/ClawDOS) · [`🔗 HNディスカッション`](https://news.ycombinator.com/item?id=50586292)
+
+---
+
+## 33. Apple のチームが Depth Pro 2 を公開：画像*と*動画のメトリック深度が鋭さと時間一貫性を両立――コードと重みは初日から
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 2611.26603 · コードと重みは 11月20日リリース
+- **Tags:** `computer-vision` `depth-estimation` `open-weights` `apple`
+
+Depth Pro 2（11月19日提出、Vladlen Koltun らのチーム）は、単眼深度の決定的なトレードオフを攻撃している。マルチフレーム方式は時間一貫性を買い、境界の鋭さを失う。シングルフレーム方式はその逆だ。チームは "a single, scalable network that processes both images and video and predicts depth maps at native resolution" を訓練し、メトリック精度・鋭さ・時間一貫性を "all at once, outperforming prior work in all of these dimensions" と主張する。モデル群は "a new Pareto frontier in terms of metric accuracy, sharpness, temporal consistency, and runtime" を定めるという。コードと重みはリリースと同時に、新しい `apple-aiml-research` org に公開された（旧 `apple/ml-depth-pro` の URL はリダイレクトされる）。エコシステムは一日で動いた。11月20日には ComfyUI ノードと ONNX/TensorRT ポートが現れている。
+
+**Why it matters:** メトリックな動画深度は、ロボティクス、AR、エージェントの知覚のためのインフラだ。この公開は今後みんなが向かって構築するオープンウェイトのベースラインになる。翌朝にはもう ComfyUI/ONNX ポートが出ていた、というのも「オープンリリースがどれだけ速く再パッケージされるか」の小さな事例研究だ。
+
+[`🔗 arXiv：Depth Pro 2`](https://arxiv.org/abs/2611.26603) · [`🔗 apple-aiml-research/ml-depth-pro-2`](https://github.com/apple-aiml-research/ml-depth-pro-2)
+
+---
+
+## 34. 「AI is giving everyone the same advice」：65モデルに127,918回の質問でデフォルト回答を測り、その出所を突き止めた
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 92+ pts · ~19h 前 (~00:50 UTC+8)
+- **Tags:** `ai-research` `homogenization` `evaluation`
+
+Cody Collier の独立実験は、人々が実際に尋ねる質問――"65 AIs from 30 companies… 127,918 times"――を投げて、その均質さを測った。"Recommend one book that will change my life" には 100回中73回 『Man's Search for Meaning』が返る。起業案は 100回中76回がサブスクボックス。何を学ぶべきか→コンピュータサイエンスが90%。1万ドルの投資先→インデックスファンドが98%。際どい細部："3,151 people the AIs made up" の69%がちょうど34歳。各社には看板の名前がある（"Claude invents Marisol, Gemini invents Elena"）。無害な質問だけでも "59% of AIs answer most like another AI from the same company, against 4% by chance"。メカニズムの主張が一番使える部分だ。学習の各段階を測れるオープンモデルでは、お気に入りの答えは "when it's taught to be an assistant" の一歩で現れる。そしてデフォルトは現実に漏れ出している（"Elena Vance… is named in 684 new GitHub projects this year. Before 2025: none"）。
+
+**Why it matters:** 均質化は主張されてきた。これは測定であり、原因をプレ学習データではなくアシスタントチューニングに局所化している。実用の助言も検証に耐える：「be original」と頼んでも無駄。文脈を渡すことだ。
+
+[`🔗 AI is giving everyone the same advice`](https://a90.com/experiments/same-advice/) · [`🔗 HNディスカッション`](https://news.ycombinator.com/item?id=50577872)
+
+---
+
+## 35. 「The gig economy has arrived for cardiologists」：Scale AI の Outlier は医師に時給180ドルを提示――その後、データワーカーの型を適用する
+
+- **Velocity:** ▮ steady
+- **Source:** Rest of World · HN 146+ pts · ~43h 前
+- **Tags:** `labor` `data-work` `gig-economy` `industry`
+
+Julián Posada（イェール大学、『Platform Extractivism』の著者）が記録したのは、AI の労働力供給の次の層だ：データ作業に勧誘される医師、弁護士、博士たち。Scale AI が運営する Outlier は "up to $180 an hour for physicians in the U.S. to design complex cardiac scenarios, review artificial intelligence-generated reports, and rank model outputs" を広告しながら、同じ仕事を "up to $7.50 an hour for Tagalog work in the Philippines"、"up to $12.50 an hour for Swahili in Tanzania" で提示する。論点はレートではなくパターンだ。グローバルのデータ労働者で記録されてきた手口――減給、タスク不足、突然のアカウント停止、音信不通――が、自分には関係ないと思っていた資格職にそのまま適用されている。
+
+**Why it matters:** フロンティア労働市場は、地域係数つきの一枚の世界レート表に収束しつつある。プレミアムな役割がプレミアムなのは、まさに自分たちを値付けから追い出すモデルを訓練しているからだ。「AI 評価」を副収入に考えている人には、この記事がそのデューデリジェンスだ。
+
+[`🔗 Rest of World：AI isn't replacing your job. It's turning it into low-paid gig work`](https://restofworld.org/2026/ai-jobs-skills-gig-work/) · [`🔗 HNディスカッション`](https://news.ycombinator.com/item?id=50562500)
+
+---
+
+## 36. 顔認識の一致だけでの逮捕――AI に判断を委ねた刑事に裁判所が qualified immunity を認めず――"the Fourth Amendment does not permit an individual to be arrested based on nothing more than an uncorroborated conclusion by AI"
+
+- **Velocity:** ▮ steady
+- **Source:** Techdirt · HN 69+ pts · ~37h 前 · 判決は DocumentCloud
+- **Tags:** `policy` `facial-recognition` `fourth-amendment` `law-enforcement`
+
+判決の背景は、崩れた小切手詐欺の逮捕だ。ケンタッキー州 Florence 警察の Ryan Kilmer 刑事は銀行 CCTV の静止画を顔認識に通し、判決文の言葉を借りれば "Relying solely on the AI identification… concluded that 'Yony' was actually Alain Vizcay Osorio"――Facebook のアカウントを "for an unknown reason" 被告人と結びつけた。Osorio は勾留され、事件発生時にネブラスカにいたことを証明して起訴は取り下げられた。その後の民事訴訟で裁判所は qualified immunity を否認し、"the Fourth Amendment does not allow a detective to delegate to AI the task of assessing probable cause"、かつ "no reasonable detective in the Defendant's position could conclude otherwise" と述べた。判決はさらに、Florence 警察自身の方針がすでに顔認識単独では probable cause を構成しないと定めていたことも指摘する。Techdirt が波及半径の読み方でバズった理由はここだ。同じ論理は予測ポリシングや AI 生成の警察報告書にも届く。
+
+**Why it matters:** 検証されていないモデルの出力が国家権力の根拠として失敗する判例法だ。法執行機関に AI トリアージを売るベンダーは全員、これを超えなくてはならない。immunity の否認は、静かな和解ではなく上訴への道を意味する。
+
+[`🔗 判決文（DocumentCloud PDF）`](https://www.documentcloud.org/documents/28909866-ai-isnt-pc/) · [`🔗 Techdirt 解説`](https://www.techdirt.com/2026/11/19/court-tells-cops-that-the-4th-amendment-doesnt-cover-ai-generated-probable-cause/) · [`🔗 HNディスカッション`](https://news.ycombinator.com/item?id=50567735)
+
+---
+
+## 37. Twice-Told Critiques：ICLR のレビュー間における主張レベルの重複率が1年で 12.0% → 21.3% に上昇
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 2611.26286 · 11月19日提出
+- **Tags:** `peer-review` `llm-detection` `ai-research`
+
+単著の測定研究（Ilya Gusev）が、ピアレビューを巡る議論が断言してきたことを数字にした：同じ論文のレビューは、同じ問題を見つけるようになってきている。"in reviews from the same stage of the review process" の条件で主張レベルの重複を測ると、ICLR は 12.0%（2026）から 21.3%（2027）へ上昇。NeurIPS、ICML、F1000 と PLOS のジャーナルでも年々上昇している。2027年の ICLR で、3本目のレビューが最初の2本に対して新たに追加した問題は 5.46件で、2026年の 6.12件から減った。MELD（LLMテキスト検出器）とのクロスチェック："two reviews that MELD flags overlap more than two unflagged reviews: by 3.0 points at ICLR in 2024-2025, by 4.5 points in 2026-2027, and by 5.4 points across five journal sources"。フラグされたレビュー同士は "less distinct from each other" という証拠だ。
+
+**Why it matters:** 11月18日の「Can Peer Review Survive AI-Generated Text?」提案に、最初の具体的な数字を与えるものだ。AI っぽいテキストではなく、一人のレビュアーが書いたかのように振る舞うレビュー集合の話である。レビュアー割り当て、リファラル制度、メタレビューがすべてこの問題を引き受けることになる。
+
+[`🔗 arXiv：Twice-Told Critiques`](https://arxiv.org/abs/2611.26286) · [`🔗 Hugging Face papers`](https://huggingface.co/papers/2611.26286) · [`🔗 Fernández-Villaverde：Can Peer Review Survive AI-Generated Text?（PDF）`](https://www.sas.upenn.edu/~jesusfv/Peer_Review.pdf)
+
+---
+
 ## メタデータ
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-21T04:32:02Z |
-| Items | 27 |
-| Sources tracked | 27 (Hacker News, GitHub Trending, CISA KEV, NVD, Red Hat security data, nginx.org, CERT-PL, PSF/discuss.python.org, Thinking Machines, vendor blogs, arXiv) |
+| Generated | 2026-11-21T12:25:51Z |
+| Items | 37 |
+| Sources tracked | 40 (Hacker News, GitHub Trending, CISA KEV, NVD, Red Hat security data, nginx.org, CERT-PL, PSF/discuss.python.org, Thinking Machines, vendor blogs, arXiv, gnupg-announce, backblaze.com, ruv.is, status.1984.is, bbc.com, france24.com, a90.com, restofworld.org, techdirt.com, documentcloud.org, ricapar.net, github.com, huggingface.co) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

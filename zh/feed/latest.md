@@ -1,8 +1,8 @@
 ---
 date: 2026-11-21
-updated: 2026-11-21T04:32:02Z
+updated: 2026-11-21T12:25:51Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 27
+sources: 40
 license: CC-BY-4.0
 ---
 
@@ -392,13 +392,153 @@ CERT-PL 在 Poste.io（一体化 Docker 邮件服务器）中发布 CVE-2026-127
 
 ---
 
+## 28. Backblaze 新隐私声明称可能出售或共享个人信息用于定向广告——出现在一家备份公司
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 201+ pts · ~9h 前 (~11:20 UTC+8)
+- **Tags:** `privacy` `backup` `data-rights` `industry`
+
+Backblaze——一家以"你的数据会在我们这里安全保存多年"为全部卖点的备份服务商——发布了新的"Notice at Collection and Privacy Policy"，由此引发的讨论帖（201 分）成了一场公投。声明写道，个人信息——类别列表包括 "Internet or Other Similar Network Activity; Commercial Information; Geolocation Data"——可能被出售或共享用于 "cross-context behavioral advertising"，退出路径也写得很清楚："You have the right to direct us to stop selling or sharing your personal information for cross-context behavioral advertising"，可通过"Your Privacy Choices"链接或 Global Privacy Control 信号行使。两个精确的解读很重要。声明**没有**说备份文件内容会被出售——涉及的类别是账户与使用行为类的个人信息，且同时写明 "We do not sell or share sensitive personal information"、精确地理位置一栏为 "No"。而且它是 opt-OUT——一个单独的偏好设置表单而非默认加入，讨论帖将其读作暗黑模式。
+
+**Why it matters:** 正如讨论帖的高赞总结："Backup is a trust business. The entire product promise is 'your data is safe with us for years'"——把同一份客户关系拿去做广告数据变现，是与承诺相反的方向。具体动作：下次备份前设置隐私偏好或开启 GPC；续费前先读备份服务商的收集声明。
+
+[`🔗 Backblaze Notice at Collection and Privacy Policy`](https://www.backblaze.com/company/policy/privacy) · [`🔗 HN 讨论（201 分）`](https://news.ycombinator.com/item?id=50585593)
+
+---
+
+## 29. GnuPG 披露 GPGME 关键双重释放漏洞——可经签名邮件外泄数据，RCE "can't be ruled out"——并提前拉闸披露
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** gnupg-announce · HN 43+ pts · ~3.6h 前 (~16:35 UTC+8)
+- **Tags:** `security` `gnupg` `cve` `memory-safety`
+
+Werner Koch 宣布 GPGME 2.3.1，修复"a critical security bug found in all prior versions"——CVE-2026-129975（内部编号 T8557），由携带"a crafted very long user id"的 OpenPGP 密钥触发的双重释放。机制属于陈旧指针一类：缓冲区重分配后的新指针"is only assigned back to the context object at the end of the function"，因此读错误导致的提前返回会让上下文继续持有已释放的内存并再次释放——而且"due to other allocations in between"，分配器的双重释放检查可能不触发。影响链条异常实际："This double free can be used exfiltrate data from applications by sending for example signed data"，而"Exploiting this bug to mount an Remote Code Execution attack (RCE) can't be ruled out. Thus an immediate update is highly suggested。"受影响名单几乎覆盖整个 OpenPGP 桌面世界——Gpg4win、GnuPG Desktop 与 VS-Desktop、"Most mail clients"、众多 XMPP 客户端、Samba、Flatpak。披露本身也有故事：研究者 Johan Carlsson 的发现原定经 GitLab 协调于 2026-11-25 披露，因"due to the new Ruby2Shell bug GitLab had to update earlier"而提前到 11 月 20 日——与昨天的 Ruby 紧急修复同一波。本次运行核查时（12:09Z）NVD 尚无记录。
+
+**Why it matters:** GPGME 是应用程序与 gpg 之间的那层库，这使它成为一个应用侧内存漏洞，恶意密钥可以通过普通签名邮件触达。补丁难点在依赖树：静态链接的二进制需要重新构建到 2.3.1，而发行版的更新会晚于公告数日。
+
+[`🔗 GnuPG 安全公告（gnupg-announce）`](https://lists.gnupg.org/pipermail/gnupg-announce/2026q4/000517.html) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50587208)
+
+---
+
+## 30. 冰岛最大托管服务商在攻击后关闭全部服务——其常务董事称攻击烧掉了"tens of millions in artificial intelligence costs"
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 94+ pts · ~12.7h 前 (~07:30 UTC+8)
+- **Tags:** `security` `hosting` `iceland` `ai-powered-attack`
+
+1984 ehf——按其常务董事的说法"probably by far the largest provider of website and email hosting services in Iceland"——在前端系统遭网络攻击后关闭了全部服务，影响数万名客户，CERT-IS 与冰岛电子通信办公室正协同处置。被广泛转引的细节是 Mörður Áslaugarson 对攻击者的描述："These are professionals, and this was probably an enormously well-funded attack. We're talking about tens of millions in artificial intelligence costs. It happened at a speed unlike anything anyone has ever even heard of." 恢复是渐进式的——先恢复邮件和 DNS——进度在公司的公开状态页跟踪；他还补充"There are certain theories about which groups were behind this, but none of them has been confirmed."
+
+**Why it matters:** "tens of millions in artificial intelligence costs"这个数字能否经得起推敲另说，但这个说法本身就是本周安全级联的缩影：只有巨额算力预算才买得到的执行速度，瞄准的是一个国家真实运转所依赖的基础设施。一家国家级托管服务商选择全面停机，是本月一连串宕机故事的防御侧镜像。
+
+[`🔗 RÚV：Serious cyberattack thought backed by wealthy operators`](https://www.ruv.is/english/2026-11-20-serious-cyberattack-thought-backed-by-wealthy-operators-493411) · [`🔗 1984 状态页`](https://status.1984.is/status/public) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50583856)
+
+---
+
+## 31. FBI 据报正在调查其犯罪数据库（NCIC）遭入侵——同时 USDA 的农民支付系统也遭到网络攻击
+
+- **Velocity:** ▮▮ rising
+- **Source:** BBC + France24（经 NBC、CNN）· HN 40+ pts · ~1.6h 前 (~18:35 UTC+8)
+- **Tags:** `security` `fbi` `breach` `ncic`
+
+据美国媒体援引两名知情人士的说法，FBI 正在调查"an apparent breach of its criminal information database"——即 NCIC，联邦与地方执法部门共享通缉令和背景调查信息的系统。这将是该局今秋的第二起事件：9 月，ShinyHunters 组织声称窃取了全部约 38,000 名 FBI 员工的数据。另一起：USDA 告知员工其农民支付系统"had been targeted"（NBC，经两名前 USDA 官员）；该部门尚未置评。两起事件都发生在华盛顿对上周宕机的追问之中——同一周白宫解雇了国家网络主任 Sean Cairncross——CNN 指出 FBI 是"hacked for the second time since September"，并报道两起事件是否相关、责任人是谁目前仍不清楚。
+
+**Why it matters:** NCIC 记录直接支撑逮捕和警员安全核查，这里的失守不是统计泄露。背景与事件本身同样重要：在一个月"官方否认是网络攻击"的宕机之后，两起并行的联邦入侵调查会让"这次是吗？"成为未来每次宕机的默认问题。
+
+[`🔗 BBC：FBI reportedly investigating apparent hack of its criminal database`](https://www.bbc.com/news/articles/cvze7de86pk3o) · [`🔗 France24：US Agriculture Department and FBI hit by cyberattacks`](https://www.france24.com/en/americas/20261121-us-agriculture-department-fbi-hit-by-cyberattacks-media-report) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50587859)
+
+---
+
+## 32. ClawDOS：给 DOS 用的 AI 编码代理——跑在真实的 1981 年 IBM PC XT 上
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 84+ pts · ~6.5h 前 (~13:40 UTC+8)
+- **Tags:** `ai-agents` `dos` `retro` `coding-agent`
+
+一个名副其实的 Show HN：在原始硬件上运行的 DOS 聊天与编码 harness——一台 IBM PC 5160，"an 8088 at 4.77 MHz, 640K of RAM, a CGA card"。HARNESS.EXE 是一个 176 KB 的 DOS 程序，自己直接讲 Claude Messages API：写请求、解析流式回复、运行工具，把每个对话保存在独立目录里，并在会话之间维护笔记，让代理"picks up where it left off"。它读写磁盘文件、写程序、用 Turbo C 编译、运行后"looks at what they draw on the screen"。TLS 被卸载到另一台"bridge" PC，因为 8088 扛不住。作者的自述很坦白："100% of this repo is written by Claude, with the exception of the text within this box"——网站本身也是代理的下一个练习："can that something it built then build other somethings?"
+
+**Why it matters:** 约束驱动的 harness 工程是这门手艺进步的方式——这里的每个想法（流式解析器、文件系统级工作区、跨会话记忆）都为 640K 的机器重建了一遍，等于对"代理循环真正需要什么"做了一次压力测试。它也是今年"代理写代理"系列里最好的一个条目。
+
+[`🔗 ClawDOS`](http://ricapar.net/ClawDOS/) · [`🔗 Ricapar/ClawDOS`](https://github.com/Ricapar/ClawDOS) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50586292)
+
+---
+
+## 33. Apple 团队发布 Depth Pro 2：图像*和*视频的度量深度，既锐利又时序一致——代码与权重同日开放
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 2611.26603 · 代码与权重 11 月 20 日发布
+- **Tags:** `computer-vision` `depth-estimation` `open-weights` `apple`
+
+Depth Pro 2（11 月 19 日提交，来自 Vladlen Koltun 所在团队）直击单目深度的核心权衡：多帧方法买到时序一致性却牺牲边界锐度，单帧方法正相反。团队训练了"a single, scalable network that processes both images and video and predicts depth maps at native resolution"，并主张度量精度、锐度与时序一致性"all at once, outperforming prior work in all of these dimensions"——一族据称在"a new Pareto frontier in terms of metric accuracy, sharpness, temporal consistency, and runtime"上的模型。代码与权重随论文一同发布在新的 `apple-aiml-research` 组织下（旧的 `apple/ml-depth-pro` 链接现已重定向），生态一天内跟进：11 月 20 日即出现 ComfyUI 节点和 ONNX/TensorRT 移植。
+
+**Why it matters:** 视频度量深度是机器人、AR 与代理感知的基础设施，这个发布就是接下来大家要对着构建的开源权重基线。隔夜出现的 ComfyUI/ONNX 移植，也是"开源发布如今多快被重新打包"的小案例。
+
+[`🔗 arXiv：Depth Pro 2`](https://arxiv.org/abs/2611.26603) · [`🔗 apple-aiml-research/ml-depth-pro-2`](https://github.com/apple-aiml-research/ml-depth-pro-2)
+
+---
+
+## 34. "AI is giving everyone the same advice"：向 65 个模型发问 127,918 次，量化默认答案——并找到它们的来源
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 92+ pts · ~19h 前 (~00:50 UTC+8)
+- **Tags:** `ai-research` `homogenization` `evaluation`
+
+Cody Collier 的独立实验把人们真正会问的问题问了一遍——"65 AIs from 30 companies… 127,918 times"——然后度量同质化。请它"Recommend one book that will change my life"，100 次里有 73 次推荐《Man's Search for Meaning》；要商业点子，100 次里 76 次给订阅盒；学什么→计算机科学 90%；一万美元投哪→指数基金 98%。锋利的细节：在"3,151 people the AIs made up"中，69% 恰好是 34 岁；每家公司都有招牌人名（"Claude invents Marisol, Gemini invents Elena"）；而只用无害的问题，"59% of AIs answer most like another AI from the same company, against 4% by chance." 机制层面的主张是全文最有用的部分：在一个他能在每个训练阶段度量的开源模型里，那个最受欢迎的答案出现在"when it's taught to be an assistant"的那一步——而且默认值正在泄漏到现实世界（"Elena Vance… is named in 684 new GitHub projects this year. Before 2025: none"）。
+
+**Why it matters:** 同质化一直有人论证，这次是测量，而且把成因定位到助手调优而非预训练数据。它的实用建议也经得起检验：让 AI"be original"没有用——给上下文才有用。
+
+[`🔗 AI is giving everyone the same advice`](https://a90.com/experiments/same-advice/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50577872)
+
+---
+
+## 35. "The gig economy has arrived for cardiologists"：Scale AI 旗下 Outlier 给医生开 180 美元时薪——然后套用数据工人那一套
+
+- **Velocity:** ▮ steady
+- **Source:** Rest of World · HN 146+ pts · ~43h 前
+- **Tags:** `labor` `data-work` `gig-economy` `industry`
+
+Julián Posada（耶鲁大学，《Platform Extractivism》作者）记录了 AI 劳动力供给的下一层：被招募进数据工作的医生、律师和博士。Scale AI 旗下的 Outlier 广告写着"up to $180 an hour for physicians in the U.S. to design complex cardiac scenarios, review artificial intelligence-generated reports, and rank model outputs"，而同样的工作"up to $7.50 an hour for Tagalog work in the Philippines"、"up to $12.50 an hour for Swahili in Tanzania"。文章的重点是模式而非价格：全球数据劳动力身上早已记录在案的那些手段——降薪、任务稀缺、突然封号与已读不回——如今落在了以为这套路数与自己无关的高学历专业人士头上。
+
+**Why it matters:** 前沿劳动力市场正在收敛成一张带地区乘数的全球价目表——而高端角色之所以高端，恰恰是因为他们在训练那批终将把自己定价出局的模型。对任何想把"AI 评估"当副业收入的人，这篇文章就是尽职调查。
+
+[`🔗 Rest of World：AI isn't replacing your job. It's turning it into low-paid gig work`](https://restofworld.org/2026/ai-jobs-skills-gig-work/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50562500)
+
+---
+
+## 36. 法院拒绝给仅凭人脸识别匹配就执行逮捕的警探合格豁免——"the Fourth Amendment does not permit an individual to be arrested based on nothing more than an uncorroborated conclusion by AI"
+
+- **Velocity:** ▮ steady
+- **Source:** Techdirt · HN 69+ pts · ~37h 前 · 判决见 DocumentCloud
+- **Tags:** `policy` `facial-recognition` `fourth-amendment` `law-enforcement`
+
+判决背后的故事是一起崩塌的空头支票逮捕案：Florence（肯塔基州）警局的警探 Ryan Kilmer 将银行监控截图送入人脸识别，并按判决书的表述"Relying solely on the AI identification… concluded that 'Yony' was actually Alain Vizcay Osorio"——把一个 Facebook 账号"for an unknown reason"匹配到了被告身上。Osorio 被羁押；在他证明案发时人在内布拉斯加后，指控被撤销。在随后的民事诉讼中，法院拒绝了合格豁免，裁定"the Fourth Amendment does not allow a detective to delegate to AI the task of assessing probable cause"，且"no reasonable detective in the Defendant's position could conclude otherwise." 判决还指出 Florence 警局自己的政策早已写明，人脸识别不能单独构成 probable cause。Techdirt 对冲击半径的解读是它刷屏的原因：同样的逻辑会延伸到预测式警务和 AI 代写的警方报告。
+
+**Why it matters:** 这是模型未经证实的说法在国家权力面前失效的判例法——每个向执法机构出售 AI 分诊的供应商都得迈过这道坎；拒绝豁免意味着它将走向上诉，而不是悄悄和解。
+
+[`🔗 判决书（DocumentCloud PDF）`](https://www.documentcloud.org/documents/28909866-ai-isnt-pc/) · [`🔗 Techdirt 分析`](https://www.techdirt.com/2026/11/19/court-tells-cops-that-the-4th-amendment-doesnt-cover-ai-generated-probable-cause/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50567735)
+
+---
+
+## 37. Twice-Told Critiques：ICLR 同一论文各审稿意见的主张级重合率一年内从 12.0% 升至 21.3%
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 2611.26286 · 11 月 19 日提交
+- **Tags:** `peer-review` `llm-detection` `ai-research`
+
+一项单人作者（Ilya Gusev）的测量研究，把同行评审辩论中一直被断言的事变成了数字：同一篇论文的审稿意见越来越倾向找出同样的问题。在"in reviews from the same stage of the review process"的口径下度量主张级重合率，ICLR 从 12.0%（2026）升至 21.3%（2027），NeurIPS、ICML 与 F1000、PLOS 期刊也逐年上升；2027 年，第三份 ICLR 审稿意见在前两份之外新增 5.46 个问题，低于 2026 年的 6.12。与 MELD（一个 LLM 文本检测器）交叉核对："two reviews that MELD flags overlap more than two unflagged reviews: by 3.0 points at ICLR in 2024-2025, by 4.5 points in 2026-2027, and by 5.4 points across five journal sources"——被标记的审稿意见彼此"less distinct from each other"的证据。
+
+**Why it matters:** 它给 11 月 18 日的"Can Peer Review Survive AI-Generated Text?"提案提供了第一个具体数字——不是看起来像 AI 写的文字，而是表现得像同一个人写完的审稿意见集合。审稿人分配、转投系统与 meta-review 全部继承这个问题。
+
+[`🔗 arXiv：Twice-Told Critiques`](https://arxiv.org/abs/2611.26286) · [`🔗 Hugging Face papers`](https://huggingface.co/papers/2611.26286) · [`🔗 Fernández-Villaverde：Can Peer Review Survive AI-Generated Text?（PDF）`](https://www.sas.upenn.edu/~jesusfv/Peer_Review.pdf)
+
+---
+
 ## 元数据
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-21T04:32:02Z |
-| Items | 27 |
-| Sources tracked | 27 (Hacker News, GitHub Trending, CISA KEV, NVD, Red Hat security data, nginx.org, CERT-PL, PSF/discuss.python.org, Thinking Machines, vendor blogs, arXiv) |
+| Generated | 2026-11-21T12:25:51Z |
+| Items | 37 |
+| Sources tracked | 40 (Hacker News, GitHub Trending, CISA KEV, NVD, Red Hat security data, nginx.org, CERT-PL, PSF/discuss.python.org, Thinking Machines, vendor blogs, arXiv, gnupg-announce, backblaze.com, ruv.is, status.1984.is, bbc.com, france24.com, a90.com, restofworld.org, techdirt.com, documentcloud.org, ricapar.net, github.com, huggingface.co) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

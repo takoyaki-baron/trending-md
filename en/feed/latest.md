@@ -1,8 +1,8 @@
 ---
 date: 2026-11-21
-updated: 2026-11-21T04:32:02Z
+updated: 2026-11-21T12:25:51Z
 schedule: 04:03, 12:03, 20:03 UTC+8
-sources: 27
+sources: 40
 license: CC-BY-4.0
 ---
 
@@ -392,13 +392,153 @@ A small story with a sharp edge (50+ points, 46 comments): a developer's GitHub 
 
 ---
 
+## 28. Backblaze's new privacy notice says it may sell or share personal information for targeted advertising — at a backup company
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 201+ pts · ~9h ago (~11:20 UTC+8)
+- **Tags:** `privacy` `backup` `data-rights` `industry`
+
+Backblaze — the backup provider whose entire pitch is that your data is safe with it for years — published a new "Notice at Collection and Privacy Policy," and the resulting thread (201 points) is a referendum on it. The notice states that personal information — the category list includes "Internet or Other Similar Network Activity; Commercial Information; Geolocation Data" — may be sold or shared for "cross-context behavioral advertising," with the opt-out spelled out: "You have the right to direct us to stop selling or sharing your personal information for cross-context behavioral advertising" via a "Your Privacy Choices" link or a Global Privacy Control signal. Two precise readings matter. The notice does **not** say backup file contents are sold — the categories in question are account and usage personal information, and it states both "We do not sell or share sensitive personal information" and "No" beside precise geolocation. And it is opt-OUT — a separate preferences form rather than opt-in, which the thread read as a dark pattern.
+
+**Why it matters:** "Backup is a trust business. The entire product promise is 'your data is safe with us for years,'" as the thread's top framing puts it — monetizing that same customer relationship through advertising data-sharing is the opposite promise. The concrete actions: set your privacy choices or enable GPC before your next backup, and read any backup vendor's notice at collection before renewal.
+
+[`🔗 Backblaze Notice at Collection and Privacy Policy`](https://www.backblaze.com/company/policy/privacy) · [`🔗 HN discussion (201 points)`](https://news.ycombinator.com/item?id=50585593)
+
+---
+
+## 29. GnuPG discloses a critical GPGME double-free — data exfiltration via signed mail, RCE "can't be ruled out" — and pulls the disclosure forward
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** gnupg-announce · 43+ pts on HN · ~3.6h ago (~16:35 UTC+8)
+- **Tags:** `security` `gnupg` `cve` `memory-safety`
+
+Werner Koch announced GPGME 2.3.1, fixing "a critical security bug found in all prior versions" — CVE-2026-129975 (internal T8557), a double-free triggered by an OpenPGP key carrying "a crafted very long user id." The mechanics are a stale-pointer class bug: the buffer-realloc path "is only assigned back to the context object at the end of the function," so an early return on a read error leaves the context holding freed memory that gets freed again — and allocator double-free checks may miss it "due to other allocations in between." The impact chain is unusually practical: "This double free can be used exfiltrate data from applications by sending for example signed data," and "Exploiting this bug to mount an Remote Code Execution attack (RCE) can't be ruled out. Thus an immediate update is highly suggested." The affected list is most of the OpenPGP desktop world — Gpg4win, GnuPG Desktop and VS-Desktop, "Most mail clients," many XMPP clients, Samba, Flatpak. The disclosure itself has a story: researcher Johan Carlsson's finding, coordinated via GitLab for 2026-11-25, moved up to Nov 20 because "due to the new Ruby2Shell bug GitLab had to update earlier" — the same wave as yesterday's Ruby emergency releases. No NVD record existed yet at this run's check (12:09Z).
+
+**Why it matters:** GPGME is the library between applications and gpg, which makes this an application-side memory bug that a hostile key can reach through ordinary signed email. The patch problem is the dependency tree: statically linked binaries need rebuilding against 2.3.1, and distro updates will trail the announcement by days.
+
+[`🔗 GnuPG advisory (gnupg-announce)`](https://lists.gnupg.org/pipermail/gnupg-announce/2026q4/000517.html) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50587208)
+
+---
+
+## 30. Iceland's largest hosting provider shuts everything down after an attack its managing director says burned "tens of millions in artificial intelligence costs"
+
+- **Velocity:** ▮▮▮ trending
+- **Source:** Hacker News · 94+ pts · ~12.7h ago (~07:30 UTC+8)
+- **Tags:** `security` `hosting` `iceland` `ai-powered-attack`
+
+1984 ehf — per its managing director "probably by far the largest provider of website and email hosting services in Iceland" — took all of its services offline after a cyberattack on its front-end systems, affecting tens of thousands of customers, with CERT-IS and Iceland's Electronic Communications Office working the incident. The detail that traveled is Mörður Áslaugarson's characterization of the attacker: "These are professionals, and this was probably an enormously well-funded attack. We're talking about tens of millions in artificial intelligence costs. It happened at a speed unlike anything anyone has ever even heard of." Restoration is gradual — email and DNS first — tracked on the company's public status page; he adds "There are certain theories about which groups were behind this, but none of them has been confirmed."
+
+**Why it matters:** Whether the "tens of millions in artificial intelligence costs" figure survives scrutiny or not, the claim is this week's security cascade in miniature: attacks whose execution speed only large compute budgets buy, aimed at infrastructure a country actually runs on. A national-scale hosting provider choosing complete shutdown is the defensive mirror of the month's outage stories.
+
+[`🔗 RÚV: Serious cyberattack thought backed by wealthy operators`](https://www.ruv.is/english/2026-11-20-serious-cyberattack-thought-backed-by-wealthy-operators-493411) · [`🔗 1984 status page`](https://status.1984.is/status/public) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50583856)
+
+---
+
+## 31. The FBI is reportedly investigating a breach of its criminal database (NCIC) — while USDA's farmer-payment system absorbed a cyberattack
+
+- **Velocity:** ▮▮ rising
+- **Source:** BBC + France24 (via NBC, CNN) · 40+ pts on HN · ~1.6h ago (~18:35 UTC+8)
+- **Tags:** `security` `fbi` `breach` `ncic`
+
+Per US media citing two people briefed on the issue, the FBI is investigating "an apparent breach of its criminal information database" — NCIC, the system federal and local law enforcement use to share warrants and background checks. It would be the bureau's second incident this fall: in September the ShinyHunters group claimed it had stolen data on all ~38,000 FBI staff. Separately, USDA told employees that its farm payment system "had been targeted" (NBC, via two former USDA officials); the department hasn't commented. Both land amid Washington's post-outage scrutiny — the same week the White House fired National Cyber Director Sean Cairncross — with CNN noting the FBI was "hacked for the second time since September," and reporting that it remains unclear whether the two incidents are related or who is responsible.
+
+**Why it matters:** NCIC records feed arrests and officer-safety checks; a breach there is not a statistics leak. And the context matters as much as either incident: after a month of officially-not-cyberattack outages, two simultaneous federal breach investigations will make "was this one?" the default question for every future outage.
+
+[`🔗 BBC: FBI reportedly investigating apparent hack of its criminal database`](https://www.bbc.com/news/articles/cvze7de86pk3o) · [`🔗 France24: US Agriculture Department and FBI hit by cyberattacks`](https://www.france24.com/en/americas/20261121-us-agriculture-department-fbi-hit-by-cyberattacks-media-report) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50587859)
+
+---
+
+## 32. ClawDOS: an AI coding agent for DOS — running on a real 1981 IBM PC XT
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 84+ pts · ~6.5h ago (~13:40 UTC+8)
+- **Tags:** `ai-agents` `dos` `retro` `coding-agent`
+
+A Show HN that is exactly what it says: a chat-and-coding harness for DOS on original hardware — an IBM PC 5160 with "an 8088 at 4.77 MHz, 640K of RAM, a CGA card." HARNESS.EXE is a 176 KB DOS program that speaks the Claude Messages API itself: it writes the requests, parses the streamed reply, runs the tools and keeps each conversation in its own directory, maintaining notes between sessions so the agent "picks up where it left off." It reads and edits disk files, writes programs, compiles them with Turbo C, runs them "and looks at what they draw on the screen." TLS is offloaded to a separate "bridge" PC, since an 8088 can't manage it. The author's note is candid: "100% of this repo is written by Claude, with the exception of the text within this box" — and the site itself was the agent's next exercise: "can that something it built then build other somethings?"
+
+**Why it matters:** Constraint-driven harness engineering is how the craft improves — every idea here (streaming parser, filesystem-scoped workspaces, cross-session memory) had to be rebuilt for a 640K machine, which is a stress test of what an agent loop actually needs. It's also the year's best entry in the agents-writing-agents series.
+
+[`🔗 ClawDOS`](http://ricapar.net/ClawDOS/) · [`🔗 Ricapar/ClawDOS`](https://github.com/Ricapar/ClawDOS) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50586292)
+
+---
+
+## 33. Apple's team releases Depth Pro 2: metric depth for images *and* video that is sharp and temporally consistent — code and weights on day one
+
+- **Velocity:** ▮▮ rising
+- **Source:** arXiv · 2611.26603 · code + weights released Nov 20
+- **Tags:** `computer-vision` `depth-estimation` `open-weights` `apple`
+
+Depth Pro 2 (submitted Nov 19, from the team around Vladlen Koltun) attacks monocular depth's defining trade-off: multi-frame methods buy temporal consistency and lose boundary sharpness; single-frame methods do the reverse. The team trains "a single, scalable network that processes both images and video and predicts depth maps at native resolution," and claims metric accuracy, sharpness and temporal consistency "all at once, outperforming prior work in all of these dimensions" — a family of models it says defines "a new Pareto frontier in terms of metric accuracy, sharpness, temporal consistency, and runtime." Code and weights shipped at release into a new `apple-aiml-research` org (the old `apple/ml-depth-pro` URL now redirects), and the ecosystem moved within a day: ComfyUI nodes and ONNX/TensorRT ports appeared Nov 20.
+
+**Why it matters:** Metric video depth is infrastructure for robotics, AR and agent perception, and this is now the open-weights baseline others will build against. The overnight ComfyUI/ONNX ports are also a small case study in how fast open releases get repackaged.
+
+[`🔗 arXiv: Depth Pro 2`](https://arxiv.org/abs/2611.26603) · [`🔗 apple-aiml-research/ml-depth-pro-2`](https://github.com/apple-aiml-research/ml-depth-pro-2)
+
+---
+
+## 34. "AI is giving everyone the same advice": 127,918 questions to 65 models measure the defaults — and find where they come from
+
+- **Velocity:** ▮▮ rising
+- **Source:** Hacker News · 92+ pts · ~19h ago (~00:50 UTC+8)
+- **Tags:** `ai-research` `homogenization` `evaluation`
+
+Cody Collier's independent experiment asked the questions people actually ask — "65 AIs from 30 companies… 127,918 times" — and measured the sameness. "Recommend one book that will change my life" returned *Man's Search for Meaning* 73 times in 100; business ideas converged on subscription boxes 76 in 100; what to study → computer science 90%; where to invest $10,000 → index fund 98%. The sharp edges: of "3,151 people the AIs made up," 69% were exactly 34; each company has signature names ("Claude invents Marisol, Gemini invents Elena"); and using only harmless questions, "59% of AIs answer most like another AI from the same company, against 4% by chance." The mechanism claim is the most useful part: in an open model he could measure at every training stage, the favorite answer appears "when it's taught to be an assistant" — and the defaults leak into the world ("Elena Vance… is named in 684 new GitHub projects this year. Before 2025: none").
+
+**Why it matters:** Homogenization has been argued; this is a measurement, with the cause localized to assistant tuning rather than pretraining data. Its practical advice also survives scrutiny: asking the AI to "be original" doesn't work — context does.
+
+[`🔗 AI is giving everyone the same advice`](https://a90.com/experiments/same-advice/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50577872)
+
+---
+
+## 35. "The gig economy has arrived for cardiologists": Scale AI's Outlier pays doctors $180/hour — then applies the data-worker playbook
+
+- **Velocity:** ▮ steady
+- **Source:** Rest of World · 146+ pts on HN · ~43h ago
+- **Tags:** `labor` `data-work` `gig-economy` `industry`
+
+Julián Posada (Yale, author of "Platform Extractivism") documents the next tier of AI's labor supply: physicians, lawyers and Ph.D.s recruited into data work. Outlier — run by Scale AI — advertises "up to $180 an hour for physicians in the U.S. to design complex cardiac scenarios, review artificial intelligence-generated reports, and rank model outputs," while the same job pays "up to $7.50 an hour for Tagalog work in the Philippines" and "up to $12.50 an hour for Swahili in Tanzania." The essay's point is the pattern, not the rates: the tactics documented across the global data workforce — pay cuts, task scarcity, sudden deactivation and ghosting — are now applied to credentialed professionals who assumed the playbook wasn't for them.
+
+**Why it matters:** The frontier-labor market is converging on one global rate card with regional multipliers — and the premium roles are premium precisely because they're training the models that price them out. For anyone considering "AI evaluation" as side income, this essay is the due diligence.
+
+[`🔗 Rest of World: AI isn't replacing your job. It's turning it into low-paid gig work`](https://restofworld.org/2026/ai-jobs-skills-gig-work/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50562500)
+
+---
+
+## 36. A court denies qualified immunity to a detective who arrested on a facial-recognition match alone — "the Fourth Amendment does not permit an individual to be arrested based on nothing more than an uncorroborated conclusion by AI"
+
+- **Velocity:** ▮ steady
+- **Source:** Techdirt · 69+ pts on HN · ~37h ago · ruling on DocumentCloud
+- **Tags:** `policy` `facial-recognition` `fourth-amendment` `law-enforcement`
+
+The story behind the ruling is a bad-check arrest that fell apart: Alain Osorio was arrested after Florence (KY) PD Detective Ryan Kilmer ran bank CCTV stills through facial recognition and — in the decision's words — "Relying solely on the AI identification… concluded that 'Yony' was actually Alain Vizcay Osorio," a match to a Facebook profile "for an unknown reason." Osorio sat in custody; the charges were dismissed after he proved he was in Nebraska at the time. In the resulting civil suit, the court denied qualified immunity, holding that "the Fourth Amendment does not allow a detective to delegate to AI the task of assessing probable cause" — and that "no reasonable detective in the Defendant's position could conclude otherwise." The decision also notes Florence PD's own policy already said facial recognition alone can't establish probable cause. Techdirt's read on the blast radius is why it went viral: the same logic reaches predictive policing and AI-written police reports.
+
+**Why it matters:** This is case law where the model's uncorroborated word fails as a basis for state power — a precedent every vendor selling AI triage to law enforcement now has to clear, and the no-immunity holding means it's headed to appeal rather than settling quietly.
+
+[`🔗 The decision (DocumentCloud PDF)`](https://www.documentcloud.org/documents/28909866-ai-isnt-pc/) · [`🔗 Techdirt analysis`](https://www.techdirt.com/2026/11/19/court-tells-cops-that-the-4th-amendment-doesnt-cover-ai-generated-probable-cause/) · [`🔗 HN discussion`](https://news.ycombinator.com/item?id=50567735)
+
+---
+
+## 37. Twice-Told Critiques: at ICLR, claim-level overlap between reviews rose 12.0% → 21.3% in one year
+
+- **Velocity:** ▮ steady
+- **Source:** arXiv · 2611.26286 · submitted Nov 19
+- **Tags:** `peer-review` `llm-detection` `ai-research`
+
+A single-author measurement study (Ilya Gusev) quantifies what the peer-review debate has been asserting: reviews of the same paper increasingly find the same problems. Measuring claim-level overlap "in reviews from the same stage of the review process," ICLR rose from 12.0% (2026) to 21.3% (2027), with year-on-year rises at NeurIPS, ICML and the F1000 and PLOS journals; a third ICLR review added 5.46 new problems beyond the first two in 2027, down from 6.12 in 2026. Cross-checking with MELD (an LLM-text detector): "two reviews that MELD flags overlap more than two unflagged reviews: by 3.0 points at ICLR in 2024-2025, by 4.5 points in 2026-2027, and by 5.4 points across five journal sources" — evidence that flagged reviews are "less distinct from each other."
+
+**Why it matters:** It gives the "Can Peer Review Survive AI-Generated Text?" proposal (Nov 18) its first concrete number — not text that looks AI-written, but review sets that behave as if one reviewer wrote them. Reviewer assignment, referral systems and meta-reviewing all inherit the problem.
+
+[`🔗 arXiv: Twice-Told Critiques`](https://arxiv.org/abs/2611.26286) · [`🔗 Hugging Face papers`](https://huggingface.co/papers/2611.26286) · [`🔗 Fernández-Villaverde: Can Peer Review Survive AI-Generated Text? (PDF)`](https://www.sas.upenn.edu/~jesusfv/Peer_Review.pdf)
+
+---
+
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Generated | 2026-11-21T04:32:02Z |
-| Items | 27 |
-| Sources tracked | 27 (Hacker News, GitHub Trending, CISA KEV, NVD, Red Hat security data, nginx.org, CERT-PL, PSF/discuss.python.org, Thinking Machines, vendor blogs, arXiv) |
+| Generated | 2026-11-21T12:25:51Z |
+| Items | 37 |
+| Sources tracked | 40 (Hacker News, GitHub Trending, CISA KEV, NVD, Red Hat security data, nginx.org, CERT-PL, PSF/discuss.python.org, Thinking Machines, vendor blogs, arXiv, gnupg-announce, backblaze.com, ruv.is, status.1984.is, bbc.com, france24.com, a90.com, restofworld.org, techdirt.com, documentcloud.org, ricapar.net, github.com, huggingface.co) |
 | Update schedule | 04:03, 12:03, 20:03 UTC+8 (3x daily) |
 | Ranking | Velocity-weighted (recency × engagement acceleration × source authority) |
 | License | [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
