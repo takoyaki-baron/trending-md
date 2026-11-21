@@ -1,0 +1,194 @@
+{
+ "generated": "2026-11-21T20:30:42.760Z",
+ "files": [
+  {
+   "file": "2026-11-22.md",
+   "items": 15,
+   "findings": [
+    {
+     "check": "cvss",
+     "item": 3,
+     "verdict": "ok",
+     "claim": "4.0 8.5",
+     "detail": "CVE-2026-125396 · Secondary/disclosure@vulncheck.com"
+    },
+    {
+     "check": "cvss",
+     "item": 3,
+     "verdict": "ok",
+     "claim": "3.1 7.8",
+     "detail": "CVE-2026-125396 · Secondary/disclosure@vulncheck.com · vector reproduces 7.8"
+    },
+    {
+     "check": "cvss",
+     "item": 3,
+     "verdict": "slot-quoted",
+     "claim": "Primary/Secondary",
+     "detail": "a metric slot is not a provenance — name the source (CNA / nvd@nist.gov / CISA-ADP) instead"
+    },
+    {
+     "check": "status",
+     "item": 3,
+     "verdict": "ok",
+     "claim": "CVE-2026-125396 `Awaiting Analysis`",
+     "detail": "Awaiting Analysis (lastModified 2026-11-12T20:57:59.173)"
+    },
+    {
+     "check": "cvss",
+     "item": 13,
+     "verdict": "ok",
+     "claim": "4.0 9.3",
+     "detail": "CVE-2026-126054 · Secondary/f45cbf4e-4146-4068-b7e1-655ffc2c548c"
+    },
+    {
+     "check": "cvss",
+     "item": 13,
+     "verdict": "ok",
+     "claim": "4.0 9.1",
+     "detail": "CVE-2026-101340 · Secondary/sep@nlnetlabs.nl"
+    },
+    {
+     "check": "status",
+     "item": 13,
+     "verdict": "ok",
+     "claim": "CVE-2026-126054 `Received`",
+     "detail": "Received (lastModified 2026-11-20T19:18:39.637)"
+    },
+    {
+     "check": "status",
+     "item": 13,
+     "verdict": "ok",
+     "claim": "CVE-2026-126054 `Received`",
+     "detail": "Received (lastModified 2026-11-20T19:18:39.637)"
+    },
+    {
+     "check": "repo",
+     "item": 7,
+     "verdict": "ok",
+     "claim": "alibaba/open-code-review",
+     "detail": "55047★, last push 2026-11-21"
+    },
+    {
+     "check": "repo",
+     "item": 8,
+     "verdict": "ok",
+     "claim": "backnotprop/plannotator",
+     "detail": "14125★, last push 2026-11-21"
+    },
+    {
+     "check": "repo",
+     "item": 10,
+     "verdict": "ok-history",
+     "claim": "jespino/gopgext",
+     "detail": "record 2d, oldest commit 2026-11-19 (~14 commits)"
+    },
+    {
+     "check": "repo",
+     "item": 10,
+     "verdict": "ok",
+     "claim": "jespino/gopgext",
+     "detail": "16★, last push 2026-11-21"
+    },
+    {
+     "check": "repo",
+     "item": 15,
+     "verdict": "ok",
+     "claim": "we-promise/sure",
+     "detail": "17107★, last push 2026-11-21"
+    },
+    {
+     "check": "quotation",
+     "item": 1,
+     "verdict": "ok",
+     "claim": "5 quotation(s)",
+     "detail": "verbatim in 4 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 4,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 5,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 7,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 8,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 10,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 3 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 11,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 12,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 13,
+     "verdict": "ok",
+     "claim": "3 quotation(s)",
+     "detail": "verbatim in 9 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 14,
+     "verdict": "ok",
+     "claim": "2 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "quotation",
+     "item": 15,
+     "verdict": "ok",
+     "claim": "1 quotation(s)",
+     "detail": "verbatim in 2 readable source(s)"
+    },
+    {
+     "check": "attribution",
+     "item": 1,
+     "verdict": "attribution-satisfied",
+     "claim": "Aaronson",
+     "detail": "a quotation is attributed to Aaronson (“these issues can and should urgently be fixed”) and a cited URL carries the party's token — the quotation arm's page set reaches the party's own artifact"
+    }
+   ]
+  }
+ ],
+ "status_watch": [],
+ "api_calls": 0,
+ "readme_calls": 0,
+ "cited_page_calls": 0,
+ "repo_page_calls": 0,
+ "nvd_calls": 1,
+ "nvd_failed_chunks": 0,
+ "cna_calls": 0
+}
