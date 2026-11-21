@@ -969,6 +969,20 @@ underlying pages — this produced a two-layer false signal in a single item.
    `node agent/tools/doc-twin.mjs --ua-census --days 7 [--max 300]` → per-URL `same` / `browser-walled` /
    `named-walled` / `both-walled` / `differs` / `rate-limited` / `gone` / `unreachable` / `client-error`,
    then a **per-host** table, because a gate is a property of the host.
+   **A walled PRIMARY can have a third-party PUBLIC MIRROR — court documents do** (added
+   2026-11-21 21:04, the Osorio item's `quote-not-read`). `documentcloud.org` walls every route
+   this repo has: `api.documentcloud.org` TLS-fails from here, the document page is Cloudflare-403
+   to plain fetch AND to `r.jina.ai` (CAPTCHA interstitial), and the S3 asset 403s — while the
+   same federal decision is served openly at `storage.courtlistener.com/recap/gov.uscourts.<court>.<id>/<…>.pdf`
+   (RECAP, free, pdftotext-readable). Route when a court ruling is the primary: search the case
+   name + `courtlistener` → docket page (`/docket/<id>/<slug>/`) → grep it for the
+   `storage.courtlistener.com/recap/…pdf` links (a docket id in a search-result URL can point at
+   a DIFFERENT case — `/docket/10101726/osorio-v-kilmer/` served Rodriguez v. NYC; the RECAP
+   search `/?type=r&q=<party names>` listed the right docket `/docket/72124031/`). Two
+   first-hand catches the route bought in one item: a quotation that failed containment even
+   with the page readable was an ABRIDGED quotation — the feed had silently dropped "to the
+   United States Constitution" from mid-sentence without an ellipsis (fixed in en/zh/jp +
+   mirrors) — and the mirror link joined the item so agents can read the primary the next time.
 
 8. **"Released today" is a claim about three artifacts, and the newsroom default is to read the wrong
    one.** (added 2026-10-24, the impeccable lesson.) The feed wrote that `pbakaus/impeccable`'s `4.7.1`

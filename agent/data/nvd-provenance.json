@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-21T05:52:46.709Z",
+ "updated": "2026-11-21T13:40:37.499Z",
  "cves": {
   "CVE-2026-124724": {
    "vulnStatus": "Awaiting Analysis",
@@ -15913,6 +15913,7 @@
    "kev": null,
    "kevDue": null,
    "nvdAnalyzed": false
-  }
+  },
+  "CVE-2026-129975": null
  }
 }

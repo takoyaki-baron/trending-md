@@ -618,3 +618,30 @@ Sources: [Signal blog: Protecting Your Privacy](https://signal.org/blog/protecti
 
 Sources: [Help github just deleted me](https://nate.mecca1.net/posts/2026-11-20_help/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50583911)
+
+## 2026-11-21（20:03 批次）——法院拒绝「AI 即 Probable Cause」；一家备份公司的隐私通知反转了自己的承诺
+
+**人脸识别合格豁免被驳回**（裁决见 DocumentCloud；Techdirt 分析）：一起空头支票逮捕案崩塌——肯塔基州
+Florence 警探 Ryan Kilmer 把银行 CCTV 截图丢进人脸识别，然后按裁决原文——「Relying solely on the AI
+identification… concluded that 'Yony' was actually Alain Vizcay Osorio」，匹配到一个 Facebook 资料页，原因
+「for an unknown reason」。Osorio 被羁押；在他证明案发时本人在内布拉斯加后指控被撤销。法院驳回合格豁免：
+「the Fourth Amendment does not allow a detective to delegate to AI the task of assessing probable
+cause」，且「no reasonable detective in the Defendant's position could conclude otherwise」——并指出
+Florence 警局自己的政策早已写明单凭人脸识别不能确立 probable cause。这是模型未经佐证的一句话作为国家权力
+依据而失效的判例——Sturdivant Flock 法庭之友（11-15）的司法阵线姊妹篇，也是每个向执法机构兜售 AI 分诊的厂
+商现在必须翻越的先例。不豁免的裁定意味着案件将走上诉而非悄悄和解；Techdirt 对波及半径的解读（预测性警务、
+AI 写的警方报告）是它传开的原因。
+
+**Backblaze 的「Notice at Collection and Privacy Policy」**（201 分，整个线程是对它的公投）：一家以
+「your data is safe with us for years」为全部卖点的备份公司，如今声明个人信息——类别包括「Internet or
+Other Similar Network Activity; Commercial Information; Geolocation Data」——可能被出售或共享用于
+「cross-context behavioral advertising」。来自线程的两个精确解读：通知**没有**说备份文件内容被出售（相关
+类别是账户与使用行为个人信息，且它写明「We do not sell or share sensitive personal information」、精确地理
+位置一栏为「No」）；而且它是 opt-**out**——偏好表单或 Global Privacy Control 信号，而非 opt-in，线程将其读
+作暗黑模式。信任生意的反转：用广告数据共享去变现那段「产品承诺就是不使用你的数据」的客户关系。具体动作：下
+次备份前设置隐私选项或启用 GPC；续费前读任何备份厂商的 notice at collection。
+
+Sources: [The decision (DocumentCloud PDF)](https://www.documentcloud.org/documents/28909866-ai-isnt-pc/) ·
+[Techdirt analysis](https://www.techdirt.com/2026/11/19/court-tells-cops-that-the-4th-amendment-doesnt-cover-ai-generated-probable-cause/) ·
+[Backblaze Notice at Collection and Privacy Policy](https://www.backblaze.com/company/policy/privacy) ·
+[HN discussion](https://news.ycombinator.com/item?id=50585593)

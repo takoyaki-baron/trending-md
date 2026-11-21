@@ -4208,3 +4208,34 @@ Thinking Machines の Inkling 2 Mini（オープンウェイト；26.4B 合計/3
 
 Sources: [Thinking Machines: Introducing Inkling 2 Mini](https://thinkingmachines.ai/news/inkling-2-mini/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50581260)
+
+## 2026-11-21（20:03 バッチ）——Apple が論文と公開重みを同日出荷；均質化のデフォルトが測定を手に入れる
+
+**Depth Pro 2**（arXiv 2611.26603、2026-11-19T18:55:41Z 提出——今回確認；Vladlen Koltun 周辺のチーム）は単
+眼深度の決定的なトレードオフを攻める：マルチフレーム方式は時間的一貫性を買い境界の鋭さを失い、単一フレーム方
+式はその逆。チームは「a single, scalable network that processes both images and video and predicts depth
+maps at native resolution」を学習させ、メトリック精度・鋭さ・時間的一貫性を「all at once」で達成すると主張
+——メトリック精度・鋭さ・時間的一貫性・ランタイムで「a new Pareto frontier」を定義する一族だと述べる。コード
+と重みはリリース時に新しい `apple-aiml-research` 組織へ出荷（旧 `apple/ml-depth-pro` URL はリダイレクト）；
+一次確認：`apple-aiml-research/ml-depth-pro-2` が生存——2026-11-03T16:27Z 作成（論文公開の 1 週間半前）、
+2026-11-20T04:47Z プッシュ、255★。エコシステムは一日で追いついた：ComfyUI ノードと ONNX/TensorRT ポートが
+11-20 に登場。メトリック動画深度はロボティクス、AR、エージェント知覚のためのインフラで、これが他が築く公開重
+みのベースラインになる——歴史的に重みを閉じてきた会社から（テーゼ 6 の「weights later」パターンが逆転：重み
+が初日から）。
+
+**「AI is giving everyone the same advice」**（Cody Collier、a90.com）——30 社 65 モデルに 127,918 回、人々
+が実際に尋ねる質問を投げた。均質化：「Recommend one book that will change my life」は 100 回中 **73** 回
+*Man's Search for Meaning* を返す；起業アイデア → サブスクボックス 76/100；何を学ぶか → コンピュータサイエ
+ンス 90%；1 万ドルをどこに投資 → インデックスファンド 98%。鋭い縁：AI が作り上げた「3,151 people」の 69% が
+ちょうど 34 歳；会社ごとに署名的な名前（「Claude invents Marisol, Gemini invents Elena」）；無害な質問だけ
+で「59% of AIs answer most like another AI from the same company, against 4% by chance」。メカニズム主張が
+最も有用：すべての訓練段階で測れるオープンモデルでは、お気に入りの答えは「when it's taught to be an
+assistant」に現れる——均質化は**アシスタントチューニング**に局在し、事前学習データではない。そしてデフォル
+トは世界へ漏れる（「Elena Vance… is named in 684 new GitHub projects this year. Before 2025: none」）。実
+務的アドバイスは精査に耐える：AI に「be original」と頼んでも効かない——コンテキストが効く。独立した単著実
+験、自己公開——方法論（質問ごとのカウント、訓練段階内プローブ）は書き込みから再現可能。
+
+Sources: [arXiv: Depth Pro 2](https://arxiv.org/abs/2611.26603) ·
+[apple-aiml-research/ml-depth-pro-2](https://github.com/apple-aiml-research/ml-depth-pro-2) ·
+[AI is giving everyone the same advice](https://a90.com/experiments/same-advice/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50577872)

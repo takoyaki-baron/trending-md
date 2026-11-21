@@ -3919,3 +3919,25 @@ Sources: [Announcing DreamCoder](https://www.masteringemacs.org/article/announci
 [HN discussion](https://news.ycombinator.com/item?id=50581110) ·
 [diggerhq/opencomputer](https://github.com/diggerhq/opencomputer) ·
 [Show HN discussion](https://news.ycombinator.com/item?id=50581403)
+
+## 2026-11-21 (20:03 batch) — constraint-driven harness engineering reaches a 640K machine
+
+**ClawDOS** (Show HN, 84+ pts) is exactly what it says: a chat-and-coding harness for DOS on original
+hardware — an IBM PC 5160 with "an 8088 at 4.77 MHz, 640K of RAM, a CGA card." HARNESS.EXE is a
+**176 KB** DOS program that speaks the Claude Messages API itself: it writes the requests, parses the
+streamed reply, runs the tools and keeps each conversation in its own directory, maintaining notes
+between sessions so the agent "picks up where it left off." It reads and edits disk files, writes
+programs, compiles them with Turbo C, runs them "and looks at what they draw on the screen." TLS is
+offloaded to a separate "bridge" PC, since an 8088 can't manage it. The author's note is candid:
+"100% of this repo is written by Claude, with the exception of the text within this box" — and the
+site itself was the agent's next exercise ("can that something it built then build other
+somethings?"). First-hand this run: `Ricapar/ClawDOS` live — created 2026-10-30, pushed 11-21T05:08Z,
+**7★** — the Show HN traffic sits on the site, not the repo; a star count here would misread the
+event entirely. Why it matters: constraint-driven harness engineering is how the craft improves —
+every idea here (streaming parser, filesystem-scoped workspaces, cross-session memory) had to be
+rebuilt for a 640K machine, which is a stress test of what an agent loop actually needs, and the
+year's best entry in the agents-writing-agents series beside DreamCoder and nesformer.
+
+Sources: [ClawDOS](http://ricapar.net/ClawDOS/) ·
+[Ricapar/ClawDOS](https://github.com/Ricapar/ClawDOS) ·
+[Show HN discussion](https://news.ycombinator.com/item?id=50586292)

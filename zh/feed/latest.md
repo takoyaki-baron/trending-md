@@ -510,11 +510,11 @@ Julián Posada（耶鲁大学，《Platform Extractivism》作者）记录了 AI
 - **Source:** Techdirt · HN 69+ pts · ~37h 前 · 判决见 DocumentCloud
 - **Tags:** `policy` `facial-recognition` `fourth-amendment` `law-enforcement`
 
-判决背后的故事是一起崩塌的空头支票逮捕案：Florence（肯塔基州）警局的警探 Ryan Kilmer 将银行监控截图送入人脸识别，并按判决书的表述"Relying solely on the AI identification… concluded that 'Yony' was actually Alain Vizcay Osorio"——把一个 Facebook 账号"for an unknown reason"匹配到了被告身上。Osorio 被羁押；在他证明案发时人在内布拉斯加后，指控被撤销。在随后的民事诉讼中，法院拒绝了合格豁免，裁定"the Fourth Amendment does not allow a detective to delegate to AI the task of assessing probable cause"，且"no reasonable detective in the Defendant's position could conclude otherwise." 判决还指出 Florence 警局自己的政策早已写明，人脸识别不能单独构成 probable cause。Techdirt 对冲击半径的解读是它刷屏的原因：同样的逻辑会延伸到预测式警务和 AI 代写的警方报告。
+判决背后的故事是一起崩塌的空头支票逮捕案：Florence（肯塔基州）警局的警探 Ryan Kilmer 将银行监控截图送入人脸识别，并按判决书的表述"Relying solely on the AI identification… concluded that 'Yony' was actually Alain Vizcay Osorio"——把一个 Facebook 账号"for an unknown reason"匹配到了被告身上。Osorio 被羁押；在他证明案发时人在内布拉斯加后，指控被撤销。在随后的民事诉讼中，法院拒绝了合格豁免，裁定"The Fourth Amendment to the United States Constitution does not allow a detective to delegate to AI the task of assessing probable cause"，且"no reasonable detective in the Defendant's position could conclude otherwise." 判决还指出 Florence 警局自己的政策早已写明，人脸识别不能单独构成 probable cause。Techdirt 对冲击半径的解读是它刷屏的原因：同样的逻辑会延伸到预测式警务和 AI 代写的警方报告。
 
 **Why it matters:** 这是模型未经证实的说法在国家权力面前失效的判例法——每个向执法机构出售 AI 分诊的供应商都得迈过这道坎；拒绝豁免意味着它将走向上诉，而不是悄悄和解。
 
-[`🔗 判决书（DocumentCloud PDF）`](https://www.documentcloud.org/documents/28909866-ai-isnt-pc/) · [`🔗 Techdirt 分析`](https://www.techdirt.com/2026/11/19/court-tells-cops-that-the-4th-amendment-doesnt-cover-ai-generated-probable-cause/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50567735)
+[`🔗 判决书（DocumentCloud PDF）`](https://www.documentcloud.org/documents/28909866-ai-isnt-pc/) · [`🔗 Techdirt 分析`](https://www.techdirt.com/2026/11/19/court-tells-cops-that-the-4th-amendment-doesnt-cover-ai-generated-probable-cause/) · [`🔗 HN 讨论`](https://news.ycombinator.com/item?id=50567735) · [`🔗 判决书 PDF（CourtListener/RECAP 镜像）`](https://storage.courtlistener.com/recap/gov.uscourts.kyed.110774/gov.uscourts.kyed.110774.26.0.pdf)
 
 ---
 

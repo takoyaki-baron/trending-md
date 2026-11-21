@@ -5118,3 +5118,39 @@ Sources: [NVD: CVE-2026-133949](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE
 [tapo advisory GHSA-2cwc-6wwp-62q6](https://github.com/mihai-dinculescu/tapo/security/advisories/GHSA-2cwc-6wwp-62q6) ·
 [mcp-ssh-manager advisory GHSA-qwwm-vrm9-4mw8](https://github.com/bvisible/mcp-ssh-manager/security/advisories/GHSA-qwwm-vrm9-4mw8) ·
 [nginx security advisories](https://nginx.org/en/security_advisories.html)
+
+## 2026-11-21（20:03 批次）——GPGME 吃下一个敌意密钥内存 bug；一家国家级主机商选择全面停机；两起联邦入侵调查同日落地
+
+**GPGME `CVE-2026-129975`（内部编号 T8557；本轮 12:49Z 核查时 NVD 尚无记录——易腐缺失）**——Werner
+Koch 发布 GPGME 2.3.1，修复「a critical security bug found in all prior versions」：由携带「a crafted
+very long user id」的 OpenPGP 密钥触发的 double-free。机制是陈旧指针类：buffer-realloc 路径「is only
+assigned back to the context object at the end of the function」，读取错误时的提前返回让上下文持有已释放
+内存并被再次释放——且分配器的 double-free 检查可能「due to other allocations in between」而漏检。影响链异常
+实用：「This double free can be used exfiltrate data from applications by sending for example signed
+data」，且「Exploiting this bug to mount an Remote Code Execution attack (RCE) can't be ruled out. Thus
+an immediate update is highly suggested」。受影响名单几乎覆盖整个 OpenPGP 桌面世界——Gpg4win、GnuPG
+Desktop 与 VS-Desktop、「Most mail clients」、多数 XMPP 客户端、Samba、Flatpak。补丁难点在依赖树：静态链接
+的二进制需要针对 2.3.1 重新构建，发行版更新要滞后公告数日。GPGME 是应用与 gpg 之间的那层库——一个应用侧内存
+bug，敌意密钥通过普通签名邮件即可触及。（披露日期的故事见 → [[disclosure-lag]]。）
+
+**冰岛 1984 ehf——一家国家级主机商选择「全面停机」。**该国最大的网站/邮件托管商（总经理 Mörður
+Áslaugarson：「probably by far the largest provider… in Iceland」）在前端系统遭攻击后将全部服务下线，数万
+客户受影响，CERT-IS 与电子通信办公室在处置；恢复渐进，邮件与 DNS 先行，状态页公开跟踪。传开来的细节是他的
+定性：「These are professionals, and this was probably an enormously well-funded attack. We're talking
+about tens of millions in artificial intelligence costs. It happened at a speed unlike anything anyone
+has ever even heard of.」**这个成本数字是厂商未经证实的说法**——没有第三方给它定过价，也没有任何团体归因
+（「certain theories… none of them has been confirmed」）——但防御形态是真实的：以全面停机作为响应，正是本
+月宕机叙事的镜像。
+
+**FBI NCIC + USDA 一对。**据美国媒体援引两名知情人士，FBI 正在调查「an apparent breach of its criminal
+information database」——NCIC，向逮捕与警官安全检查供给数据的通缉令/背景调查系统——这是今秋第二起（9 月：
+ShinyHunters 宣称窃取全部约 38,000 名 FBI 员工数据）。另 USDA 告知员工其农业支付系统「had been
+targeted」（NBC 经两名前官员）。两者是否相关、能否归因均不清楚。背景：此事落在断电潮后的审视期——同一周白宫
+解雇国家网络总监 Sean Cairncross——在一个月「官方口径皆非网络攻击」的宕机之后，两起并行的联邦入侵调查让
+「这次是不是？」成为每起未来宕机的默认问题。
+
+Sources: [GnuPG advisory (gnupg-announce)](https://lists.gnupg.org/pipermail/gnupg-announce/2026q4/000517.html) ·
+[RÚV: Serious cyberattack thought backed by wealthy operators](https://www.ruv.is/english/2026-11-20-serious-cyberattack-thought-backed-by-wealthy-operators-493411) ·
+[1984 status page](https://status.1984.is/status/public) ·
+[BBC: FBI reportedly investigating apparent hack of its criminal database](https://www.bbc.com/news/articles/cvze7de86pk3o) ·
+[France24: US Agriculture Department and FBI hit by cyberattacks](https://www.france24.com/en/americas/20261121-us-agriculture-department-fbi-hit-by-cyberattacks-media-report)

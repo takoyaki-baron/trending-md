@@ -6220,3 +6220,38 @@ independently reproduced; the named harnesses make that reproducible.
 
 Sources: [Thinking Machines: Introducing Inkling 2 Mini](https://thinkingmachines.ai/news/inkling-2-mini/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50581260)
+
+## 2026-11-21 (20:03 batch) — Apple ships open weights day-one; the homogenization defaults get their measurement
+
+**Depth Pro 2** (arXiv 2611.26603, submitted 2026-11-19T18:55:41Z — verified this run; the team
+around Vladlen Koltun) attacks monocular depth's defining trade-off: multi-frame methods buy temporal
+consistency and lose boundary sharpness; single-frame methods do the reverse. The team trains "a
+single, scalable network that processes both images and video and predicts depth maps at native
+resolution," claiming metric accuracy, sharpness and temporal consistency "all at once" — a family it
+says defines "a new Pareto frontier in terms of metric accuracy, sharpness, temporal consistency, and
+runtime." Code and weights shipped at release into a new `apple-aiml-research` org (the old
+`apple/ml-depth-pro` URL now redirects); first-hand: `apple-aiml-research/ml-depth-pro-2` live —
+created 2026-11-03T16:27Z (a week and a half before the paper went public), pushed 2026-11-20T04:47Z,
+255★. The ecosystem moved within a day: ComfyUI nodes and ONNX/TensorRT ports appeared Nov 20.
+Metric video depth is infrastructure for robotics, AR and agent perception, and this is now the
+open-weights baseline others build against — from a company that historically kept weights closed
+(thesis 6's "weights later" pattern, inverted: weights ON day one).
+
+**"AI is giving everyone the same advice"** (Cody Collier, a90.com) — 127,918 questions to 65 models
+from 30 companies, asked the questions people actually ask. The sameness: "Recommend one book that
+will change my life" returned *Man's Search for Meaning* **73** times in 100; business ideas →
+subscription boxes 76/100; what to study → computer science 90%; where to invest $10,000 → index fund
+98%. The sharp edges: of "3,151 people the AIs made up," 69% were exactly 34; each company has
+signature names ("Claude invents Marisol, Gemini invents Elena"); and using only harmless questions,
+"59% of AIs answer most like another AI from the same company, against 4% by chance." The mechanism
+claim is the useful part: in an open model he could measure at every training stage, the favorite
+answer appears "when it's taught to be an assistant" — homogenization localized to **assistant
+tuning**, not pretraining data. And the defaults leak into the world ("Elena Vance… is named in 684
+new GitHub projects this year. Before 2025: none"). Practical advice survives scrutiny: asking the AI
+to "be original" doesn't work — context does. Independent single-author experiment, self-published —
+the methodology (per-question counts, in-training-stage probe) is reproducible from the write-up.
+
+Sources: [arXiv: Depth Pro 2](https://arxiv.org/abs/2611.26603) ·
+[apple-aiml-research/ml-depth-pro-2](https://github.com/apple-aiml-research/ml-depth-pro-2) ·
+[AI is giving everyone the same advice](https://a90.com/experiments/same-advice/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50577872)

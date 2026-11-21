@@ -450,3 +450,32 @@ Sources: [We promoted developers into architects without informing them](https:/
 [Slopstrap](https://slopstrap.mikelacher.com/) ·
 [Vibecoding an inference chip](https://ankitg.me/blog/vibecoding-inference-chip/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50579297)
+
+## 2026-11-21（20:03 バッチ）——データワーカーのプレイブックが医師に届く；ピアレビューが均質化の数字を手に入れる
+
+**「The gig economy has arrived for cardiologists」**（Julián Posada、エール——Rest of World）：AI の労働力
+供給の次の層は医師、弁護士、博士たち。Scale AI の Outlier は「up to $180 an hour for physicians in the U.S.
+to design complex cardiac scenarios, review artificial intelligence-generated reports, and rank model
+outputs」を広告し——同じ仕事が「up to $7.50 an hour for Tagalog work in the Philippines」「up to $12.50 an
+hour for Swahili in Tanzania」。エッセイの要点はレートではなくパターン：グローバルデータ労働力で文書化され
+た戦術——賃下げ、タスクの希少性、突然の非活性化、ゴースティング——が、このプレイブックは自分たちに適用され
+ないと思っていた資格職に適用されるようになった。地域乗数付きの一つのグローバルレートカード、そしてプレミアム
+ロールがプレミアムなのは、まさに自分に価格をつけるモデルを訓練しているから。「AI 評価」を副収入と考えたい人
+には、このエッセイがデューデリジェンス。
+
+**Twice-Told Critiques**（arXiv 2611.26286、2026-11-19T15:45:51Z 提出——今回確認；Ilya Gusev、単著）は、
+ピアレビュー議論が主張し続けてきたことを定量化する：同じ論文へのレビューがますます同じ問題を発見する。「in
+reviews from the same stage of the review process」でのクレームレベルの重複を測ると：ICLR は一年で
+**12.0%**（2026）から **21.3%**（2027）へ上昇、NeurIPS、ICML、F1000 と PLOS ジャーナルでも年次上昇；2027 年
+の第三の ICLR レビューが最初の二つを超えて追加する新問題は **5.46**、2026 年の 6.12 から減少。MELD（LLM テ
+キスト検出器）とのクロスチェック：「two reviews that MELD flags overlap more than two unflagged reviews: by
+3.0 points at ICLR in 2024-2025, by 4.5 points in 2026-2027, and by 5.4 points across five journal
+sources」——フラグされたレビューは「less distinct from each other」。「Can Peer Review Survive
+AI-Generated Text?」提案（Caldara & Fernández-Villaverde、11-18）に最初の具体的数字を与える——AI 書きに見え
+るテキストではなく、一人のレビュアーが書いたかのように振る舞うレビュー集合。レビュアー割り当て、紹介システ
+ム、メタレビューがすべてこの問題を継承する。→ テーゼ 22 の学術側面：レビュー均質化がレビュー容量衝突のピア
+レビューの顔。
+
+Sources: [Rest of World: AI isn't replacing your job. It's turning it into low-paid gig work](https://restofworld.org/2026/ai-jobs-skills-gig-work/) ·
+[arXiv: Twice-Told Critiques](https://arxiv.org/abs/2611.26286) ·
+[Fernández-Villaverde: Can Peer Review Survive AI-Generated Text? (PDF)](https://www.sas.upenn.edu/~jesusfv/Peer_Review.pdf)

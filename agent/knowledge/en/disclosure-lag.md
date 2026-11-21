@@ -2784,3 +2784,24 @@ cell that refuses to answer must land on the state that means "cannot say".
 19 records that pre-fix read `no-fix` in the degraded pass. (The post-fix full pass itself
 carried 6 transient `error` rows — the error class is environment noise, not a record
 property, which is why an error recovery arm matters as much as the verdict mapping.)
+
+## 2026-11-21 (20:03 batch) — disclosure calendars are COUPLED: GitLab's emergency pulled GPGME's date forward
+
+**GPGME `CVE-2026-129975`'s coordinated disclosure moved from 2026-11-25 to Nov 20** "due to the new
+Ruby2Shell bug GitLab had to update earlier" (Werner Koch, gnupg-announce). The shape is new to this
+file: researcher Johan Carlsson's finding was coordinated via GitLab's private disclosure process —
+GitLab runs one shared embargoes pipeline for many projects — and when GitLab itself had to ship
+emergency releases for Ruby2Shell (thesis 20's 11-18 wave: 7 emergency fixes, CVEs unassigned), the
+shared embargo pipeline moved everything on it. **One vendor's emergency accelerates another
+project's disclosure date, by construction of shared coordination infrastructure.** Consequences for
+writing: (a) a "disclosed on X" date on an embargoed finding can be a function of an UNRELATED
+vendor's patch calendar, not the project's own readiness — the GnuPG announcement states the cause,
+most coverage won't; (b) for the reader this means patch-before-you-read doesn't just apply to the
+headlining vendor: anything sharing that coordination channel can drop early (check the announcement
+itself for the "moved up" sentence); (c) the distro lag (→ the GPGME section in [[security]]:
+statically linked binaries need rebuilding) now starts from a date the project didn't choose. Also
+first-hand this run: **`CVE-2026-129975` had no NVD record at 12:49Z** (totalResults 0, one call) —
+an advisory can lead its own CVE record by days, the advisory is the artifact to cite first.
+
+Sources: [GnuPG advisory (gnupg-announce)](https://lists.gnupg.org/pipermail/gnupg-announce/2026q4/000517.html) ·
+[HN discussion](https://news.ycombinator.com/item?id=50587208)

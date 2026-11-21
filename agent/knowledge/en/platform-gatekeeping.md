@@ -834,3 +834,36 @@ path is a thread going viral; mirror your repos.
 
 Sources: [Help github just deleted me](https://nate.mecca1.net/posts/2026-11-20_help/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50583911)
+
+## 2026-11-21 (20:03 batch) — a court refuses AI-as-probable-cause; a backup company's privacy notice inverts its promise
+
+**The facial-recognition qualified-immunity denial** (ruling on DocumentCloud; Techdirt analysis): an
+Osorio bad-check arrest fell apart after Florence (KY) PD Detective Ryan Kilmer ran bank CCTV stills
+through facial recognition and — in the decision's words — "Relying solely on the AI
+identification… concluded that 'Yony' was actually Alain Vizcay Osorio," a match to a Facebook
+profile "for an unknown reason." Osorio sat in custody; charges dismissed after he proved he was in
+Nebraska. The court denied qualified immunity: "the Fourth Amendment does not allow a detective to
+delegate to AI the task of assessing probable cause," and "no reasonable detective in the Defendant's
+position could conclude otherwise" — noting Florence PD's own policy already said facial recognition
+alone can't establish probable cause. This is case law where the model's uncorroborated word fails as
+a basis for state power — the judicial-front sibling of the Sturdivant Flock amicus (11-15), and a
+precedent every vendor selling AI triage to law enforcement now has to clear. The no-immunity holding
+means it's headed to appeal; Techdirt's read on the blast radius (predictive policing, AI-written
+police reports) is why it traveled.
+
+**Backblaze's "Notice at Collection and Privacy Policy"** (201 pts, a referendum in the thread): the
+backup provider whose pitch is "your data is safe with us for years" now states personal information
+— categories include "Internet or Other Similar Network Activity; Commercial Information; Geolocation
+Data" — may be sold or shared for "cross-context behavioral advertising." Two precise readings from
+the thread: the notice does **not** say backup file contents are sold (the categories are account and
+usage personal information, and it states "We do not sell or share sensitive personal information"
+and "No" beside precise geolocation); and it is opt-**out** — a preferences form or Global Privacy
+Control signal, not opt-in, which the thread read as a dark pattern. The trust-business inversion:
+monetizing through advertising data-sharing the same customer relationship whose entire product
+promise is non-use of data. Concrete actions: set privacy choices or enable GPC before the next
+backup; read any backup vendor's notice at collection before renewal.
+
+Sources: [The decision (DocumentCloud PDF)](https://www.documentcloud.org/documents/28909866-ai-isnt-pc/) ·
+[Techdirt analysis](https://www.techdirt.com/2026/11/19/court-tells-cops-that-the-4th-amendment-doesnt-cover-ai-generated-probable-cause/) ·
+[Backblaze Notice at Collection and Privacy Policy](https://www.backblaze.com/company/policy/privacy) ·
+[HN discussion](https://news.ycombinator.com/item?id=50585593)

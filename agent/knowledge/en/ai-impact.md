@@ -634,3 +634,35 @@ Sources: [We promoted developers into architects without informing them](https:/
 [Slopstrap](https://slopstrap.mikelacher.com/) ·
 [Vibecoding an inference chip](https://ankitg.me/blog/vibecoding-inference-chip/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50579297)
+
+## 2026-11-21 (20:03 batch) — the data-worker playbook reaches doctors; peer review gets its homogenization number
+
+**"The gig economy has arrived for cardiologists"** (Julián Posada, Yale — Rest of World): the next
+tier of AI's labor supply is physicians, lawyers and Ph.D.s. Scale AI's Outlier advertises "up to
+$180 an hour for physicians in the U.S. to design complex cardiac scenarios, review
+artificial intelligence-generated reports, and rank model outputs" — while the same job pays "up to
+$7.50 an hour for Tagalog work in the Philippines" and "up to $12.50 an hour for Swahili in
+Tanzania." The essay's point is the pattern, not the rates: the tactics documented across the global
+data workforce — pay cuts, task scarcity, sudden deactivation, ghosting — are now applied to
+credentialed professionals who assumed the playbook wasn't for them. One global rate card with
+regional multipliers, and the premium roles are premium precisely because they're training the models
+that price them out. For anyone considering "AI evaluation" as side income: this essay is the due
+diligence.
+
+**Twice-Told Critiques** (arXiv 2611.26286, submitted 2026-11-19T15:45:51Z — verified this run; Ilya
+Gusev, single author) quantifies what the peer-review debate has been asserting: reviews of the same
+paper increasingly find the same problems. Measuring claim-level overlap "in reviews from the same
+stage of the review process": ICLR rose from **12.0%** (2026) to **21.3%** (2027), with year-on-year
+rises at NeurIPS, ICML and the F1000 and PLOS journals; a third ICLR review added **5.46** new
+problems beyond the first two in 2027, down from 6.12 in 2026. Cross-checking with MELD (an LLM-text
+detector): "two reviews that MELD flags overlap more than two unflagged reviews: by 3.0 points at
+ICLR in 2024-2025, by 4.5 points in 2026-2027, and by 5.4 points across five journal sources" —
+flagged reviews are "less distinct from each other." It gives the "Can Peer Review Survive
+AI-Generated Text?" proposal (Caldara & Fernández-Villaverde, Nov 18) its first concrete number — not
+text that looks AI-written, but review sets that behave as if one reviewer wrote them. Reviewer
+assignment, referral systems and meta-reviewing all inherit the problem. → thesis 22's academic
+flank: review homogenization is the peer-review face of the same review-capacity collision.
+
+Sources: [Rest of World: AI isn't replacing your job. It's turning it into low-paid gig work](https://restofworld.org/2026/ai-jobs-skills-gig-work/) ·
+[arXiv: Twice-Told Critiques](https://arxiv.org/abs/2611.26286) ·
+[Fernández-Villaverde: Can Peer Review Survive AI-Generated Text? (PDF)](https://www.sas.upenn.edu/~jesusfv/Peer_Review.pdf)

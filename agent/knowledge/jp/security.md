@@ -5602,3 +5602,43 @@ Sources: [NVD: CVE-2026-133949](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE
 [tapo advisory GHSA-2cwc-6wwp-62q6](https://github.com/mihai-dinculescu/tapo/security/advisories/GHSA-2cwc-6wwp-62q6) ·
 [mcp-ssh-manager advisory GHSA-qwwm-vrm9-4mw8](https://github.com/bvisible/mcp-ssh-manager/security/advisories/GHSA-qwwm-vrm9-4mw8) ·
 [nginx security advisories](https://nginx.org/en/security_advisories.html)
+
+## 2026-11-21（20:03 バッチ）——GPGME が敵意ある鍵のメモリバグを食らう；国立規模のホスティング事業者が全面停止を選ぶ；二つの連邦侵害調査が同時に着地
+
+**GPGME `CVE-2026-129975`（内部 T8557；今回の 12:49Z 時点で NVD レコードなし——腐りやすい不在）**——
+Werner Koch が GPGME 2.3.1 を発表、「a critical security bug found in all prior versions」を修正：「a
+crafted very long user id」を持つ OpenPGP 鍵が引き起こす double-free。メカニズムは stale-pointer クラス：
+buffer-realloc 経路は「is only assigned back to the context object at the end of the function」のため、読み
+取りエラーでの早期リターンがコンテキストに解放済みメモリを持たせ、それが再度解放される——しかもアロケータの
+double-free チェックは「due to other allocations in between」で見逃しうる。影響チェーンが異様に実用的：
+「This double free can be used exfiltrate data from applications by sending for example signed data」、
+さらに「Exploiting this bug to mount an Remote Code Execution attack (RCE) can't be ruled out. Thus an
+immediate update is highly suggested」。影響リストは OpenPGP デスクトップ世界のほぼ全体——Gpg4win、GnuPG
+Desktop と VS-Desktop、「Most mail clients」、多くの XMPP クライアント、Samba、Flatpak。パッチ問題は依存ツ
+リーにある：静的リンクされたバイナリは 2.3.1 に対する再ビルドが必要で、ディストロ更新は公告に数日遅れる。
+GPGME はアプリケーションと gpg の間のライブラリ——敵意ある鍵が普通の署名メールを通じて届くアプリケーション
+側のメモリバグ。（披露日の話は → [[disclosure-lag]]。）
+
+**アイスランドの 1984 ehf——国立規模のホスティング事業者が「全面停止」を選ぶ。**同国最大のウェブ/メールホス
+ト（MD Mörður Áslaugarson：「probably by far the largest provider… in Iceland」）がフロントエンドシステムへ
+のサイバー攻撃後、全サービスをオフラインに。数万の顧客が影響を受け、CERT-IS と電気通信庁が対応；復旧は段階
+的で、メールと DNS が先行、公開ステータスページで追跡。広まった詳細は彼の評価：「These are professionals,
+and this was probably an enormously well-funded attack. We're talking about tens of millions in
+artificial intelligence costs. It happened at a speed unlike anything anyone has ever even heard of.」
+**このコスト数字はベンダーの未検証主張**——第三者は誰も価格づけておらず、グループ帰属も存在しない（「certain
+theories… none of them has been confirmed」）——しかし防御の形は本物：全面的停止を応答とする、今月のアウテ
+ージ物語の鏡像。
+
+**FBI NCIC + USDA のペア。**米メディアが briefing を受けた二人の証言として伝えるところでは、FBI が「an
+apparent breach of its criminal information database」を調査中——NCIC、逮捕と警察官の安全確認にデータを供
+給する手配書/バックグラウンドチェックシステム——今秋二件目（9 月：ShinyHunters が全約 38,000 人の FBI スタ
+ッフデータを主張）。別に USDA が農業支払いシステムが「had been targeted」と従業員に通知（NBC、元職員二人経
+由）。両者の関連性も帰属も不明。背景：これはアウテージ後の精査期に着地——同じ週にホワイトハウスが国家サイバ
+ー監督官 Sean Cairncross を解雇——一か月「公式見解は皆サイバー攻撃ではない」のアウテージの後、同時に二つの
+連邦侵害調査が、「今回はどうか？」をあらゆる将来のアウテージのデフォルトの疑問にする。
+
+Sources: [GnuPG advisory (gnupg-announce)](https://lists.gnupg.org/pipermail/gnupg-announce/2026q4/000517.html) ·
+[RÚV: Serious cyberattack thought backed by wealthy operators](https://www.ruv.is/english/2026-11-20-serious-cyberattack-thought-backed-by-wealthy-operators-493411) ·
+[1984 status page](https://status.1984.is/status/public) ·
+[BBC: FBI reportedly investigating apparent hack of its criminal database](https://www.bbc.com/news/articles/cvze7de86pk3o) ·
+[France24: US Agriculture Department and FBI hit by cyberattacks](https://www.france24.com/en/americas/20261121-us-agriculture-department-fbi-hit-by-cyberattacks-media-report)

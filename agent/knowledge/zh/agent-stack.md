@@ -2614,3 +2614,21 @@ Sources: [Announcing DreamCoder](https://www.masteringemacs.org/article/announci
 [HN discussion](https://news.ycombinator.com/item?id=50581110) ·
 [diggerhq/opencomputer](https://github.com/diggerhq/opencomputer) ·
 [Show HN discussion](https://news.ycombinator.com/item?id=50581403)
+
+## 2026-11-21（20:03 批次）——约束驱动的 harness 工程抵达一台 640K 的机器
+
+**ClawDOS**（Show HN，84+ 分）名副其实：跑在真实硬件上的 DOS 聊天兼编码 harness——一台 IBM PC 5160，「an
+8088 at 4.77 MHz, 640K of RAM, a CGA card」。HARNESS.EXE 是一个 **176 KB** 的 DOS 程序，自己说 Claude
+Messages API：写请求、解析流式回复、运行工具，把每段对话保存在自己的目录里、跨会话维护笔记，让 agent「picks
+up where it left off」。它读写磁盘文件、写程序、用 Turbo C 编译、运行它们「and looks at what they draw on
+the screen」。TLS 卸载到单独的一台「bridge」PC——8088 扛不动。作者注记很坦诚：「100% of this repo is
+written by Claude, with the exception of the text within this box」——而站点本身是 agent 的下一道练习
+（「can that something it built then build other somethings?」）。本轮一手核查：`Ricapar/ClawDOS` 在线——
+2026-10-30 创建、11-21T05:08Z 推送、**7★**——Show HN 的流量落在站点而非仓库；在这里星星数会完全误读事件。
+为何重要：约束驱动的 harness 工程是这门手艺进步的方式——这里每个想法（流式解析器、文件系统作用域的工作区、
+跨会话记忆）都必须为 640K 的机器重建，这是对「一个 agent 循环到底需要什么」的压力测试，也是 DreamCoder 和
+nesformer 旁边 agents-writing-agents 系列今年最好的条目。
+
+Sources: [ClawDOS](http://ricapar.net/ClawDOS/) ·
+[Ricapar/ClawDOS](https://github.com/Ricapar/ClawDOS) ·
+[Show HN discussion](https://news.ycombinator.com/item?id=50586292)

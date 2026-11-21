@@ -417,3 +417,29 @@ Sources: [We promoted developers into architects without informing them](https:/
 [Slopstrap](https://slopstrap.mikelacher.com/) ·
 [Vibecoding an inference chip](https://ankitg.me/blog/vibecoding-inference-chip/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50579297)
+
+## 2026-11-21（20:03 批次）——数据工人手册抵达医生；同行评审拿到同质化数字
+
+**「The gig economy has arrived for cardiologists」**（Julián Posada，耶鲁——Rest of World）：AI 劳动力
+供给的下一层级是医生、律师与博士。Scale AI 的 Outlier 广告开价「up to $180 an hour for physicians in the
+U.S. to design complex cardiac scenarios, review artificial intelligence-generated reports, and rank
+model outputs」——而同样的活计「up to $7.50 an hour for Tagalog work in the Philippines」「up to $12.50
+an hour for Swahili in Tanzania」。文章的要点是模式而非费率：全球数据劳动力身上记录在案的策略——降薪、任务
+稀缺、突然停用、已读不回——如今施加到那些以为这套手册轮不到自己的持证专业人士身上。一张带地区乘数的全球价目
+表，而溢价角色之所以溢价，恰是因为他们在训练将来给其定价的模型。对任何想把「AI 评估」当副业收入的人：这篇
+文章就是尽职调查。
+
+**Twice-Told Critiques**（arXiv 2611.26286，2026-11-19T15:45:51Z 提交——本轮已核实；Ilya Gusev，单一作
+者）把同行评审辩论一直在断言的事量化了：同一篇论文的评审越来越发现同样的问题。测量「in reviews from the
+same stage of the review process」的 claim-level 重叠：ICLR 一年内从 **12.0%**（2026）升到 **21.3%**
+（2027），NeurIPS、ICML 与 F1000、PLOS 期刊逐年上升；2027 年第三份 ICLR 评审在前两份之外新增 **5.46** 个
+问题，低于 2026 年的 6.12。用 MELD（LLM 文本检测器）交叉验证：「two reviews that MELD flags overlap more
+than two unflagged reviews: by 3.0 points at ICLR in 2024-2025, by 4.5 points in 2026-2027, and by 5.4
+points across five journal sources」——被标记的评审「less distinct from each other」。它给「Can Peer
+Review Survive AI-Generated Text?」提案（Caldara & Fernández-Villaverde，11-18）带来了第一个具体数字——
+不是看起来像 AI 写的文本，而是行为上像同一个人写出来的评审集合。评审分配、转审制度与 meta-review 全部继承
+这个问题。→ 论题 22 的学术侧：评审同质化是评审容量碰撞在同行评审上的面孔。
+
+Sources: [Rest of World: AI isn't replacing your job. It's turning it into low-paid gig work](https://restofworld.org/2026/ai-jobs-skills-gig-work/) ·
+[arXiv: Twice-Told Critiques](https://arxiv.org/abs/2611.26286) ·
+[Fernández-Villaverde: Can Peer Review Survive AI-Generated Text? (PDF)](https://www.sas.upenn.edu/~jesusfv/Peer_Review.pdf)

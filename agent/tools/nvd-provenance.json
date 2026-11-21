@@ -3328,6 +3328,11 @@
    "id": "CVE-2026-127027",
    "why": "2026-11-21 — Poste.io ships 2.5.22 for a 9.2: unauthenticated root RCE via DMARC report attachments",
    "seeded": "2026-11-21 [Received] 4.0 Secondary/cvd@cert.pl 9.2, CWE-78, published 11-20"
+  },
+  {
+   "id": "CVE-2026-129975",
+   "why": "GnuPG GPGME 2.3.1 critical double-free via crafted very long OpenPGP user id (internal T8557); data exfiltration via signed mail, RCE not ruled out; disclosure pulled forward to 11-20 from 11-25 [11-21 batch item 29]",
+   "seeded": "2026-11-21 [no NVD record yet — totalResults 0 at 13:07Z; cveawg 404 (reserved, unpublished); advisory leads the record]"
   }
  ]
 }

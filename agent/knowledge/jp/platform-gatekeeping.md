@@ -673,3 +673,33 @@ Sources: [Signal blog: Protecting Your Privacy](https://signal.org/blog/protecti
 
 Sources: [Help github just deleted me](https://nate.mecca1.net/posts/2026-11-20_help/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50583911)
+
+## 2026-11-21（20:03 バッチ）——裁判所が「AI による probable cause」を拒む；バックアップ企業のプライバシー通知が自らの約束を反転する
+
+**顔認識の資格ある免責の否認**（裁定は DocumentCloud；Techdirt 分析）：小切手詐欺の逮捕が崩れた——ケンタッ
+キー州 Florence の刑事 Ryan Kilmer が銀行 CCTV の静止画を顔認識にかけ、裁定の言葉では——「Relying solely on
+the AI identification… concluded that 'Yony' was actually Alain Vizcay Osorio」、Facebook プロフィールとの
+一致、理由は「for an unknown reason」。Osorio は勾留され；事件当時ネブラスカにいたことを証明した後に起訴は
+取り下げられた。裁判所は資格ある免責を否認した：「the Fourth Amendment does not allow a detective to
+delegate to AI the task of assessing probable cause」、「no reasonable detective in the Defendant's
+position could conclude otherwise」——Florence 警自身の方針が既に顔認識単独では probable cause を確立できな
+いと書いていたことも指摘。これはモデルの裏付けのない一言が国家権力の根拠として失敗する判例法——Sturdivant
+Flock 意見書（11-15）の司法戦線の姉妹であり、法執行に AI トリアージを売るすべてのベンダーが今や越えねばなら
+ない先例。免責否認の裁定は静かに和解するのではなく控訴へ向かうことを意味する；Techdirt の波及半径の読み（予
+測ポリシング、AI 書きの警察レポート）が拡散の理由。
+
+**Backblaze の「Notice at Collection and Privacy Policy」**（201 pts、スレッド全体が住民投票）：「your data
+is safe with us for years」を売り文句の全部とするバックアッププロバイダが、個人情報——カテゴリは「Internet
+or Other Similar Network Activity; Commercial Information; Geolocation Data」を含む——が「cross-context
+behavioral advertising」のために販売または共有されうると表明。スレッドからの二つの正確な読解：通知はバック
+アップファイルの中身が売られるとは言って**いない**（該当カテゴリはアカウントと利用行動の個人情報で、「We do
+not sell or share sensitive personal information」と明記、精密地理位置の欄は「No」）；そしてそれは
+opt-**out**——設定フォームか Global Privacy Control シグナルで、opt-in ではなく、スレッドはこれをダークパ
+ターンと読んだ。信頼ビジネスの反転：「製品の約束はデータを使わないこと」というその顧客関係を、広告データ共有
+で収益化する。具体的行動：次のバックアップ前にプライバシー設定か GPC を；更新前にあらゆるバックアップベンダ
+ーの notice at collection を読む。
+
+Sources: [The decision (DocumentCloud PDF)](https://www.documentcloud.org/documents/28909866-ai-isnt-pc/) ·
+[Techdirt analysis](https://www.techdirt.com/2026/11/19/court-tells-cops-that-the-4th-amendment-doesnt-cover-ai-generated-probable-cause/) ·
+[Backblaze Notice at Collection and Privacy Policy](https://www.backblaze.com/company/policy/privacy) ·
+[HN discussion](https://news.ycombinator.com/item?id=50585593)

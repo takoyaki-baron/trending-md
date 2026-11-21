@@ -6808,87 +6808,150 @@
     },
     "https://news.ycombinator.com/item?id=50576855": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-11-20T21:33:34.871Z",
-      "last_seen": "2026-11-21T05:48:46.968Z",
+      "last_seen": "2026-11-21T13:36:36.816Z",
       "feeds": [
         "2026-11-21.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50577265": {
       "verdict": "blocked",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-11-20T21:33:34.871Z",
-      "last_seen": "2026-11-21T05:48:46.968Z",
-      "feeds": [
-        "2026-11-21.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=50577901": {
-      "verdict": "blocked",
-      "streak": 2,
-      "first_seen": "2026-11-20T21:33:34.871Z",
-      "last_seen": "2026-11-21T05:48:46.968Z",
+      "last_seen": "2026-11-21T13:36:36.816Z",
       "feeds": [
         "2026-11-21.md"
       ]
     },
     "https://access.redhat.com/security/data/cve/CVE-2026-133553": {
       "verdict": "dead",
-      "streak": 2,
+      "streak": 3,
       "first_seen": "2026-11-20T21:33:34.871Z",
-      "last_seen": "2026-11-21T05:48:46.968Z",
+      "last_seen": "2026-11-21T13:36:36.816Z",
       "feeds": [
         "2026-11-21.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50573886": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-21T05:48:46.968Z",
-      "last_seen": "2026-11-21T05:48:46.968Z",
-      "feeds": [
-        "2026-11-21.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=50561199": {
-      "verdict": "blocked",
-      "streak": 1,
-      "first_seen": "2026-11-21T05:48:46.968Z",
-      "last_seen": "2026-11-21T05:48:46.968Z",
-      "feeds": [
-        "2026-11-21.md"
-      ]
-    },
-    "https://news.ycombinator.com/item?id=50581260": {
-      "verdict": "blocked",
-      "streak": 1,
-      "first_seen": "2026-11-21T05:48:46.968Z",
-      "last_seen": "2026-11-21T05:48:46.968Z",
+      "last_seen": "2026-11-21T13:36:36.816Z",
       "feeds": [
         "2026-11-21.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50576012": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-21T05:48:46.968Z",
-      "last_seen": "2026-11-21T05:48:46.968Z",
+      "last_seen": "2026-11-21T13:36:36.816Z",
       "feeds": [
         "2026-11-21.md"
       ]
     },
     "https://news.ycombinator.com/item?id=50581403": {
       "verdict": "blocked",
-      "streak": 1,
+      "streak": 2,
       "first_seen": "2026-11-21T05:48:46.968Z",
-      "last_seen": "2026-11-21T05:48:46.968Z",
+      "last_seen": "2026-11-21T13:36:36.816Z",
+      "feeds": [
+        "2026-11-21.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50575644": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-21T13:36:36.816Z",
+      "last_seen": "2026-11-21T13:36:36.816Z",
+      "feeds": [
+        "2026-11-21.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50560595": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-21T13:36:36.816Z",
+      "last_seen": "2026-11-21T13:36:36.816Z",
+      "feeds": [
+        "2026-11-21.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50579331": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-21T13:36:36.816Z",
+      "last_seen": "2026-11-21T13:36:36.816Z",
+      "feeds": [
+        "2026-11-21.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50583911": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-21T13:36:36.816Z",
+      "last_seen": "2026-11-21T13:36:36.816Z",
+      "feeds": [
+        "2026-11-21.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50583856": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-21T13:36:36.816Z",
+      "last_seen": "2026-11-21T13:36:36.816Z",
+      "feeds": [
+        "2026-11-21.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50577872": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-21T13:36:36.816Z",
+      "last_seen": "2026-11-21T13:36:36.816Z",
+      "feeds": [
+        "2026-11-21.md"
+      ]
+    },
+    "https://www.france24.com/en/americas/20261121-us-agriculture-department-fbi-hit-by-cyberattacks-media-report": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-21T13:36:36.816Z",
+      "last_seen": "2026-11-21T13:36:36.816Z",
+      "feeds": [
+        "2026-11-21.md"
+      ]
+    },
+    "https://news.ycombinator.com/item?id=50567735": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-21T13:36:36.816Z",
+      "last_seen": "2026-11-21T13:36:36.816Z",
+      "feeds": [
+        "2026-11-21.md"
+      ]
+    },
+    "https://www.documentcloud.org/documents/28909866-ai-isnt-pc/": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-21T13:36:36.816Z",
+      "last_seen": "2026-11-21T13:36:36.816Z",
+      "feeds": [
+        "2026-11-21.md"
+      ]
+    },
+    "https://www.techdirt.com/2026/11/19/court-tells-cops-that-the-4th-amendment-doesnt-cover-ai-generated-probable-cause/": {
+      "verdict": "blocked",
+      "streak": 1,
+      "first_seen": "2026-11-21T13:36:36.816Z",
+      "last_seen": "2026-11-21T13:36:36.816Z",
       "feeds": [
         "2026-11-21.md"
       ]
     }
   },
-  "runs": 194,
+  "runs": 195,
   "first_run": "2026-09-05T12:47:55.004Z",
-  "last_run": "2026-11-21T05:48:46.968Z"
+  "last_run": "2026-11-21T13:36:36.816Z"
 }

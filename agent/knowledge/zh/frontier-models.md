@@ -3857,3 +3857,31 @@ Thinking Machines 的 Inkling 2 Mini（开放权重；26.4B 总/3.4B 激活 MoE�
 
 Sources: [Thinking Machines: Introducing Inkling 2 Mini](https://thinkingmachines.ai/news/inkling-2-mini/) ·
 [HN discussion](https://news.ycombinator.com/item?id=50581260)
+
+## 2026-11-21（20:03 批次）——Apple 论文与开放权重同日发布；同质化默认值拿到测量
+
+**Depth Pro 2**（arXiv 2611.26603，2026-11-19T18:55:41Z 提交——本轮已核实；Vladlen Koltun 团队）攻击单目
+深度的核心取舍：多帧方法买到时间一致性却丢边界锐度；单帧方法相反。团队训练「a single, scalable network that
+processes both images and video and predicts depth maps at native resolution」，宣称度量精度、锐度与时间
+一致性「all at once」——一族模型，据其自述定义了「a new Pareto frontier in terms of metric accuracy,
+sharpness, temporal consistency, and runtime」。代码与权重随论文发布进新的 `apple-aiml-research`
+组织（旧 `apple/ml-depth-pro` URL 现已重定向）；一手核查：`apple-aiml-research/ml-depth-pro-2` 在线——
+2026-11-03T16:27Z 创建（比论文公开早一周半）、2026-11-20T04:47Z 推送、255★。生态一天内跟上：ComfyUI 节点与
+ONNX/TensorRT 移植 11-20 当天出现。度量视频深度是机器人、AR 与 agent 感知的基础设施，这是别人将围绕它构建
+的开放权重基线——来自一家历史上扣着权重的公司（论题 6 的「weights later」模式被反转：权重第一天就到）。
+
+**「AI is giving everyone the same advice」**（Cody Collier，a90.com）——向 30 家公司的 65 个模型问了
+127,918 次人们真实会问的问题。同质化：「Recommend one book that will change my life」100 次里 **73** 次
+返回 *Man's Search for Meaning*；创业点子 → 订阅盒 76/100；学什么 → 计算机科学 90%；一万美元投哪 → 指数
+基金 98%。锋利的边缘：AI 编造的「3,151 people」里 69% 恰好 34 岁；每家公司有签名式名字（「Claude invents
+Marisol, Gemini invents Elena」）；只用无害问题，就有「59% of AIs answer most like another AI from the
+same company, against 4% by chance」。机制主张是最有用的部分：在一个他能在每个训练阶段测量的开放模型里，最
+受偏爱的答案出现在「when it's taught to be an assistant」——同质化定位于**助手调优**，而非预训练数据。而且
+默认值漏进了世界（「Elena Vance… is named in 684 new GitHub projects this year. Before 2025: none」）。
+实用建议经得起推敲：让 AI「be original」没用——上下文才有用。独立单人实验、自发发布——方法论（逐问题计数、
+训练阶段内探针）可以从原文复现。
+
+Sources: [arXiv: Depth Pro 2](https://arxiv.org/abs/2611.26603) ·
+[apple-aiml-research/ml-depth-pro-2](https://github.com/apple-aiml-research/ml-depth-pro-2) ·
+[AI is giving everyone the same advice](https://a90.com/experiments/same-advice/) ·
+[HN discussion](https://news.ycombinator.com/item?id=50577872)

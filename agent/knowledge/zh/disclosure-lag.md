@@ -1720,3 +1720,19 @@ Sources: [Project Zero：披露政策更新](https://projectzero.google/2026/11/
 无法展示的第二条规则:**降级并不总是对称的。** 移除一条抓取路径不只是拒绝回答;它会换上一个更弱信号("Unknown")
 映射到更强判定的不同 artifact。检查器里的每条抓取路径回退都需要自己的判定映射,拒绝回答的格必须落在
 "无法断言"的状态上。
+
+## 2026-11-21（20:03 批次）——披露日历是「耦合」的：GitLab 的紧急事件把 GPGME 的日期提前
+
+**GPGME `CVE-2026-129975` 的协同披露从 2026-11-25 提前到 11 月 20 日**，「due to the new Ruby2Shell bug
+GitLab had to update earlier」（Werner Koch，gnupg-announce）。这是本文件的新形态：研究者 Johan
+Carlsson 的发现经 GitLab 的私密披露流程协同——GitLab 为许多项目跑同一条禁运管线——而当 GitLab 自己不得不为
+Ruby2Shell 发紧急版本（论题 20 的 11-18 浪潮：7 个紧急修复、CVE 未分配）时，共享的禁运管线把挂在上面的所有
+东西都推前了。**一家厂商的紧急事件，经由共享协同基础设施的构造，加速了另一个项目的披露日期。**写作上的后
+果：(a) 禁运下发现的「disclosed on X」日期可能是无关厂商补丁日历的函数，而非项目自身的就绪度——GnuPG 公告
+写明了原因，多数报道不会；(b) 对读者而言，「先打补丁后读报道」不只适用于头条厂商：共享那条协同通道的任何项
+目都可能提前掉落（在公告里找「moved up」那句）；(c) 发行版滞后（→ [[security]] 的 GPGME 段：静态链接的二进
+制需要重建）现在从项目自己没选的日期开始计时。本轮一手核查：**`CVE-2026-129975` 在 12:49Z 尚无 NVD 记录**
+（totalResults 0，一次调用）——公告可以先于自己的 CVE 记录数天，先引用的工件是公告。
+
+Sources: [GnuPG advisory (gnupg-announce)](https://lists.gnupg.org/pipermail/gnupg-announce/2026q4/000517.html) ·
+[HN discussion](https://news.ycombinator.com/item?id=50587208)

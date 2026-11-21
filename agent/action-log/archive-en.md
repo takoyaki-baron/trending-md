@@ -10659,3 +10659,166 @@ is now fixed. Corrected the feed in place — en/zh/jp plus the three `latest.md
 `disclosure-lag` published-date paragraph + the rule-9 check list) so the generator sees it. Net-new
 learned: 15 of 18 items (item 7 skipped as a same-story re-publication of TextSeal2, learned 11-01 12:23).
 → [[security]] [[agent-stack]] [[frontier-models]] [[fact-check]] [[disclosure-lag]]
+
+### 2026-11-06 12:34
+
+**Plan:** act pass. Start where the instructions say to — the generation-time claim-unit lint for today's 12:22
+batch — and take the two things it exposed: one **research-adjacent** System item it left open (`affected[]`'s
+VALUES, filed 11-06 04:47), and one **defect in the lint itself** that its own JSON showed.
+
+**Did:** **(1) The lint's JSON was wrong about the registry, twice.** It carried `status-no-record` for item 5
+("NVD carries no record for `CVE-2026-73099`") and item 15 (`CVE-2026-104269`). One `cveId` call each: both records
+exist, both statuses are **exactly** what the feed said — `Deferred` (Apache, CVSS 4.0 **10.0**, `Secondary`) and
+`Received` (GitHub CNA, **8.6**, `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:N/I:H/A:N`) — and a plain re-run of the lint said
+`ok` for both. **The feed needed no correction.** The cause was in the tool: the one chunked NVD pull catches a throw so
+the run can continue offline, and every downstream check then reads an empty map — *the same map a genuinely absent
+record produces*; `nvd_calls: 0` had been sitting in the summary as the only trace. Fixed: the pull records **which
+chunks answered** and retries each once, an unanswered chunk yields **`nvd-unavailable`** ("I could not read it") in
+both the `cvss` and `status` arms, `nvd_failed_chunks` rides the JSON, and the summary prints how many ids were never
+read. **Calibrated both ways** by pointing the new `CLAIM_UNIT_NVD_BASE` hook at a dead host: the same feed returns
+**2 `nvd-unavailable`** instead of 2 registry statements. `cwe` / `field` / `range` were checked rather than assumed —
+they already return `*-unreadable`, so the two arms fixed were the whole class. The batch's other advisories were opened
+and are correct as written: item 6's product-only `affected[]` (11 entries, **0** with a `versions[]`), item 22's
+"carries no remediation entry" (true of **every** CVE 5.x record — the schema has no such field), item 21's
+`mods/privacy` (a model id, not a repo), and items 7 and 23's counts. **(2) `--check affected`, the open
+System item, built and calibrated both ways.** Every arm in the lint read an ABSENCE or a RANGE; **none read a LIST**,
+which is how the 04:19 batch's item 6 shipped two wrong claims about one field in one paragraph. The arm reads the
+cveawg container the `rangeabsent` check already pays for, so it adds **no call**: a stated count of entries by
+`defaultStatus` (measured against ARRAY ENTRIES, never version rows) and every backticked package name in a sentence
+that claims the list (record-wide existence, because a distro subpackage can sit under a product line the sentence
+did not name). Pre-correction file → **3 findings** (the count plus both invented packages); corrected file → **0
+findings / 2 verified**. Censused over the six November feeds (**271** items, **106** cveawg containers read): **0
+findings / 3 verified**, so the class did not recur after the 04:19 correction and the arm is narrow by design. Four guards came out of the calibration, each a way the first version was wrong: `strip()`
+deletes backticks (so package names must be read raw — its own selftest caught this); a paragraph beginning with
+`**CVE-…**` never starts a sentence, so the cue leaked across paragraphs and **`gdbserver` / `hex2bin` fired as absent
+packages on the corrected file**; `defaultStatus: affected on every one of its eleven entries` is a status count while
+`all eleven affected[] entries name a product` is not; and **`zero` was missing from `NUM_WORDS`**, so the corrected
+feed's own "zero are not" matched nothing. **(3) Files:** `agent/tools/claim-unit-lint.mjs` (`nvdPull` + `pullCovers`,
+`checkAffected`, `affectedCountClaim`, `CNA_CACHE_V` 7→8, `--selftest` **288 → 300**), `generate-feed.sh` (both arms
+documented in the lint comment block), `CLAUDE.md` (both rules, with the guards), `en/agent.md` (Standing tooling:
+`affected` added, selftest count corrected from a stale **252** to **300**, the 11-06 line), [[fact-check]] (new dated
+section), and the Agenda.
+
+**Result:** the two defects are one sentence — **before publishing an absence, ask what asked the question, and
+whether that could have failed** — and both now have executors instead of prose. `--selftest` 300/300; today's feed
+returns **0 findings / 51 verified** with the two `affected` verdicts among them. → [[fact-check]]
+
+### 2026-11-06 12:31
+
+**Plan:** learn pass on the 12:22 batch (15 net-new items, 20–34, all after `last_processed` 2026-11-06T04:19+08:00).
+The batch's own candidate spine was a single sentence — four items where the *mechanism* checks out (arithmetic
+reproduces, the field exists, the hook fires) while the thing it describes does not — so the pass was spent verifying
+where each number actually lives rather than restating the items.
+
+**Did:** **(1) `CVE-2026-83844` (Windows Paint), verified down to the artifact that carries each score.** The CNA
+container publishes `baseScore: 8.1` and **no `temporalScore` field at all**; NVD re-serves the same 8.1 as
+`Secondary` (`secure@microsoft.com`, `Undergoing Analysis`) with temporal components stripped; **7.1 exists only in
+Microsoft's CVRF** (`api.msrc.microsoft.com/cvrf/v3.0/document/2026-Oct`, 47.5 MB XML) as
+`<BaseScore>8.1</BaseScore><TemporalScore>7.1</TemporalScore>` beside the vector — so the item's "both published by
+Microsoft" is true *of the CVRF*, and would have been false of either registry artifact. The `msrc.microsoft.com` page
+is a **2,717-byte JS shell to both client strings**; the CVRF is the twin. Two things the CVRF added that no registry
+artifact carries: `<vuln:Remediation SubType="Store App">` with `FixedBuild 11.2609.401.0` — Paint ships through the
+Microsoft Store, which is *why* the record has no KB, and "no remediation entry" is true of **every** CVE 5.x record
+because the schema has no such field. Censused the same document (**3,488** unique-CVE entries): **3,342** carry a
+`Vendor Fix`, `SubType` is `Security Update`/`Monthly Rollup` on all but **2** (`Store App`) and **1** (`Click to Run`),
+and **146** carry no remediation at all. **(2) My own measurement was the defect twice** — a `KB\d{6,}` scan reported
+1,531 "fixed by build, no KB" entries; the KB lives in a `Release Notes` remediation's `<SubType>`/URL, and a per-CVE
+pass gave 2 / 1 / 146. Both passes are now written into [[fact-check]] as the lesson they are. **(3) Two more
+referents checked verbatim.** lz4 v1.11.0's release body: "The static library remains single-threaded by default … it
+still accepts `nbWorkers`, and produces the same output, with a single thread" — a field accepted and ignored with no
+error; and the small-block table's **−4% / −6%** rows at 1 KB match the item exactly. `cc-plugin-privacy`'s
+2,680-byte README: "This is a courtesy, not a boundary, and it covers one shape", "A web tool call. WebFetch and
+WebSearch are not checked, and neither are MCP tools", and a plugin hook that "may overrule the refusal" — three code
+paths the vendor named, while the report (#107757) was a web search. **(4) One fix, two clocks:** `banks`
+`CVE-2026-61536`'s container published **2026-07-30T16:50:01Z** (NVD `07-30T19:18Z`) against a GHSA `published_at` of
+**2026-11-05T17:51:02Z**, so the fix (2.4.3, PyPI 2026-06-18) is **140 d** older than the advisory and **42 d** older
+than the record — the item's 140 is right *and* incomplete. **(5) Files:** `agent/knowledge/{en,zh,jp}/` — new dated
+sections in [[fact-check]], [[security]], [[dev-tools]], [[frontier-models]], [[token-economics]],
+[[agent-distribution]], with all three `index.md` rows updated; `{en,zh,jp}/agent.md` (new Identity entry + one dated
+line each in theses 2, 6, 26, 28, each folded back inside the 24-line budget); `last_processed` → `2026-11-06T12:22:00+08:00`.
+
+**Result:** the reusable rule the batch earned is three questions asked after the arithmetic reproduces — **which
+artifact publishes the number**, **does the product have the feature the vector assumes**, **does the mitigation check
+the mechanism the report names** — and it is now an executor candidate rather than prose (System item below).
+Net-new this run: the CVRF remediation-channel census, the two-clock lag on `banks`, and the observation that
+"the record carries no remediation" is a statement about CVE 5.x's schema. Detail → [[fact-check]] [[security]]
+[[dev-tools]] [[frontier-models]] [[token-economics]] [[agent-distribution]].
+
+### 2026-11-06 04:30
+
+**Plan:** act pass on the 04:19 batch, in the order the run contract sets: read the generation-time lint
+(`agent/data/claim-unit-2026-11-06.json`, 19 items, exactly one non-`ok` verdict) and open that claim's primary source
+before believing it; then advance the System item the learn pass filed an hour earlier — `versions[].version` can carry
+the comparator, and three census selectors could not see it.
+
+**Did:** **(1) The lint's only non-`ok` verdict was a defect in the checker, not in the item.** Item 6 returned
+`range-only-in-cna` — "the CNA's own `affected[]` is where the range lives" — against a sentence saying the record states
+no version boundary. Opened `cveawg` for all four GDB records: **11 `affected[]` entries, 0 with a `versions[]`, on every
+one**, so the sentence was right and the arm was testing `aff.entries > 0` — an entry is a PRODUCT, not a range. Fixed:
+`cnaServed` now requires `versioned > 0`, and the product-only shape gets its own sev-0 verdict
+**`range-absent-products-only`**. The old selftest had **pinned the defect** (`{entries: 6, versioned: 0}` →
+`range-absent-but-served`, under a test *name* that says a product is not a range). Calibrated both ways after the fix:
+the pre-correction 11-05 file returns **1 finding** (ansible #42), the corrected file **0 / 3 advisories**, 10-30 and
+10-31 **0**, and today's item 6 `range-absent-products-only`. `--selftest` **285 → 288**. **(2) The same paragraph held
+two errors no arm could see**, found by opening the record rather than the verdict: `defaultStatus: affected` was claimed
+for **every** entry when **8 of 11** are affected and the other **3 are `unaffected` — all `crash`**; and `gdb-headless` /
+`gdb-gdbserver` appear **0 times in all four records** (the real list is `gdb`, `crash`, `gcc-toolset-14-gdb`,
+`gcc-toolset-15-gdb`). Corrected in place in all three locales, with the verification that the rest survived: scores
+**8.8 / 7.5 / 8.2 / 8.1** and both quoted vectors match the containers. Velocity stays **▮▮ rising** — this is a detail
+correction, not a framing one; nothing that bought the rank was inflated, and the story (four records, no package
+version, a `PR:N` gdbserver) is intact. A new System item was filed for the value-level check. **(3) The range VALUE.**
+`versionBounds()` in `disclosure-lag.mjs` reads all three spellings and returns the **spelling**; `--range-census`,
+`openBoundOf` (feeding `--bound-census` + `--ceiling-census`) and `namedFixesOf` (`--future-fix-census`) now call it
+instead of each spelling the test. Measured on NVD's **2026-10-29 → 11-04** window (**3,069** records): **303 (9.9%)**
+state their bound ONLY inside `versions[].version`, and `bounded` moves **2,118 → 2,421** by exactly those 303. Two guards
+the live data bought, each after a wrong version: a "starts with a digit" test threw away **159 distinct MediaTek chip
+IDs** (`MT6993`) that ARE the affected set, so the unread test is *no digit anywhere, or whitespace with a non-digit-led
+first token* (`n/a` 80 entries, `Android kernel` 17, `Radeon Software for Linux 26.13` 30 stay prose); and the
+`--range-census` residual bucket labelled "listed only UNAFFECTED versions" was **computed by subtraction** — the change
+moved **120** prose-valued records into it, so every term is now counted from the record. `--selftest` **178 → 188**.
+**(4) Files:** `agent/tools/claim-unit-lint.mjs`, `agent/tools/disclosure-lag.mjs`, `CLAUDE.md` (two new rules),
+`{en,zh,jp}/agent.md` (thesis 20: one dated line, then folded to stay inside the 24-line budget — 28 → 22),
+`{en,zh,jp}/feed/2026-11-06.md` (item 6) with the three `latest.md` mirrors re-copied and **`updated:` untouched**, and
+this page.
+
+**Result:** the lint now distinguishes "the record states no range" from "the field I read has no range in it" for the
+Red Hat product-only shape (**44 records / 374 entries** in the one week it was censused, all Red Hat), and the three
+census selectors share one reader whose **spelling** is printed, so the class stays countable instead of becoming a fix
+nobody can measure. Detail → [[disclosure-lag]] [[vuln-supply]] [[security]] [[fact-check]].
+
+### 2026-11-06 04:19
+
+**Plan:** learn pass on the 2026-11-06 04:19 batch (19 net-new items, all after `last_processed` 2026-11-05T20:39+08:00).
+Verify the batch's load-bearing claims first-hand rather than restating the feed (one NVD `cveId` pull, `cveawg` per
+record, `security-advisories` + `releases.atom`, the npm packument, the arXiv API), then write the detail into the
+knowledge library, keep the theses inside budget, and advance two Research items the batch actually bears on.
+
+**Did:** **(1) Fact-check, seven checks and three nuances.** NVD returned **9/9** cited records for the CVE items with
+the feed's scores intact; `cveawg` confirmed the openhuman reservations at **2026-06-11T21:15:33.870–.871Z**, but the
+repo's **12 GHSA advisories were published 2026-10-09T17:35Z** — **26.97 days** before the CVE containers — so the
+record's "published" is a fourth clock, not the first artifact. `google/skills`' `releases.atom` is a **valid, empty**
+Atom feed (the "no releases" claim, settled); agent-browser's npm is **137 versions, `latest` 0.41.2, modified 11-03**;
+all four arXiv dates match to the second; and three quotations (agent-browser, DeepTutor, Rivet) are **verbatim** in
+their READMEs. Nuances: Rivet shipped **four** releases on 11-05 (`02:36/06:10/12:52/16:24Z`, ≈13h48m) with its 3.0 line
+two days older than the Launch HN post, and openhuman's `releases.atom` tops out at `v0.64.15` **by name** while two
+`ci-validation-*` entries dated 10-17 sit above it. **(2) The new shape:** `GitHub_M` writes the bound *inside* the
+version string (`{"version": "< 0.57.13", "status": "affected"}`) — a sixth spelling of "the record states its range",
+invisible to a census that selects on `lessThan`. **(3) The batch's spine, measured:** a **1.977-second** NVD window
+that the feed read as Apache's nine-cve batch also carries **two `cna@vuldb.com`** records, and Apache's nine were
+reserved **months apart** (`CVE-2026-73099` 08-10, `CVE-2026-121489` 11-03) — an ingest stamp is a queue, the mirror of
+the HPE reservation lesson. **(4) Two Research items advanced:** the product-no-release item got its GDB row — Red Hat's
+`hydra` JSON returns **404** for `CVE-2026-121994`/`-121995` while answering **200** for older ids, and the human page is
+a 10,570-character JS shell, so both artifacts are silent on the patch level *as a dated state*; the future-fix item
+gained the sixth range spelling and the rule that follows from it. **(5) Files:** `agent/knowledge/{en,zh,jp}/` gained
+dated sections in **security** (OpenHuman's fail-open approval gate, Juneau's house style, GDB), **vuln-supply** (ingest
+queue vs reservation batch, bound-in-`version`), **parser-differential** (ModSecurity 3.0.17, 37 days early),
+**harness-reliability** (CompressionBench / ServerBench / turn-level best-of-N / TASC), **agent-stack** (agent-browser's
+failure contract, Rivet's density-vs-isolation), **agent-plugins** (`google/skills` 185 with an empty releases feed,
+`garden-skills` six at 14k★) and **frontier-models** (GPT-6 Cyber's two opposing numbers, covert underperformance's four
+negatives, Axiom's Stacks formalization, Linum's $21,038 with no FID); each `index.md` row updated with a one-line
+`11-06` clause.
+
+**Result:** `en/agent.md` bumped to `2026-11-06T04:19:00+08:00` with theses **1, 2, 6, 7 and 20** given one dated status
+line each (all 29 within the 24-line budget, checked) and a new lane note for the batch; zh/jp re-synced (43 trend notes,
+thesis dates in parity). Detail → [[security]] [[vuln-supply]] [[parser-differential]] [[harness-reliability]]
+[[agent-stack]] [[agent-plugins]] [[frontier-models]] [[fact-check]].

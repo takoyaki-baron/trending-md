@@ -510,11 +510,11 @@ Julián Posada（イェール大学、『Platform Extractivism』の著者）が
 - **Source:** Techdirt · HN 69+ pts · ~37h 前 · 判決は DocumentCloud
 - **Tags:** `policy` `facial-recognition` `fourth-amendment` `law-enforcement`
 
-判決の背景は、崩れた小切手詐欺の逮捕だ。ケンタッキー州 Florence 警察の Ryan Kilmer 刑事は銀行 CCTV の静止画を顔認識に通し、判決文の言葉を借りれば "Relying solely on the AI identification… concluded that 'Yony' was actually Alain Vizcay Osorio"――Facebook のアカウントを "for an unknown reason" 被告人と結びつけた。Osorio は勾留され、事件発生時にネブラスカにいたことを証明して起訴は取り下げられた。その後の民事訴訟で裁判所は qualified immunity を否認し、"the Fourth Amendment does not allow a detective to delegate to AI the task of assessing probable cause"、かつ "no reasonable detective in the Defendant's position could conclude otherwise" と述べた。判決はさらに、Florence 警察自身の方針がすでに顔認識単独では probable cause を構成しないと定めていたことも指摘する。Techdirt が波及半径の読み方でバズった理由はここだ。同じ論理は予測ポリシングや AI 生成の警察報告書にも届く。
+判決の背景は、崩れた小切手詐欺の逮捕だ。ケンタッキー州 Florence 警察の Ryan Kilmer 刑事は銀行 CCTV の静止画を顔認識に通し、判決文の言葉を借りれば "Relying solely on the AI identification… concluded that 'Yony' was actually Alain Vizcay Osorio"――Facebook のアカウントを "for an unknown reason" 被告人と結びつけた。Osorio は勾留され、事件発生時にネブラスカにいたことを証明して起訴は取り下げられた。その後の民事訴訟で裁判所は qualified immunity を否認し、"The Fourth Amendment to the United States Constitution does not allow a detective to delegate to AI the task of assessing probable cause"、かつ "no reasonable detective in the Defendant's position could conclude otherwise" と述べた。判決はさらに、Florence 警察自身の方針がすでに顔認識単独では probable cause を構成しないと定めていたことも指摘する。Techdirt が波及半径の読み方でバズった理由はここだ。同じ論理は予測ポリシングや AI 生成の警察報告書にも届く。
 
 **Why it matters:** 検証されていないモデルの出力が国家権力の根拠として失敗する判例法だ。法執行機関に AI トリアージを売るベンダーは全員、これを超えなくてはならない。immunity の否認は、静かな和解ではなく上訴への道を意味する。
 
-[`🔗 判決文（DocumentCloud PDF）`](https://www.documentcloud.org/documents/28909866-ai-isnt-pc/) · [`🔗 Techdirt 解説`](https://www.techdirt.com/2026/11/19/court-tells-cops-that-the-4th-amendment-doesnt-cover-ai-generated-probable-cause/) · [`🔗 HNディスカッション`](https://news.ycombinator.com/item?id=50567735)
+[`🔗 判決文（DocumentCloud PDF）`](https://www.documentcloud.org/documents/28909866-ai-isnt-pc/) · [`🔗 Techdirt 解説`](https://www.techdirt.com/2026/11/19/court-tells-cops-that-the-4th-amendment-doesnt-cover-ai-generated-probable-cause/) · [`🔗 HNディスカッション`](https://news.ycombinator.com/item?id=50567735) · [`🔗 判決文 PDF（CourtListener/RECAP ミラー）`](https://storage.courtlistener.com/recap/gov.uscourts.kyed.110774/gov.uscourts.kyed.110774.26.0.pdf)
 
 ---
 

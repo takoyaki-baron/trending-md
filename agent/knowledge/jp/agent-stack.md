@@ -2959,3 +2959,24 @@ Sources: [Announcing DreamCoder](https://www.masteringemacs.org/article/announci
 [HN discussion](https://news.ycombinator.com/item?id=50581110) ·
 [diggerhq/opencomputer](https://github.com/diggerhq/opencomputer) ·
 [Show HN discussion](https://news.ycombinator.com/item?id=50581403)
+
+## 2026-11-21（20:03 バッチ）——制約駆動のハーネスエンジニアリングが 640K のマシンに届く
+
+**ClawDOS**（Show HN、84+ pts）は見出しの通り：オリジナルハードウェア上の DOS で動くチャット兼コーディング
+ハーネス——「an 8088 at 4.77 MHz, 640K of RAM, a CGA card」の IBM PC 5160。HARNESS.EXE は **176 KB** の DOS
+プログラムで、Claude Messages API 自身を喋る：リクエストを書き、ストリームされる返信をパースし、ツールを実行
+し、会話ごとに専用ディレクトリを保ち、セッション間でノートを維持して agent が「picks up where it left off」
+ようにする。ディスクファイルを読み書きし、プログラムを書き、Turbo C でコンパイルし、実行して「and looks at
+what they draw on the screen」。TLS は 8088 には無理なので、別の「bridge」PC にオフロード。著者の注記は率直：
+「100% of this repo is written by Claude, with the exception of the text within this box」——そしてサイ
+ト自体が agent の次の演習だった（「can that something it built then build other somethings?」）。今回の一
+次確認：`Ricapar/ClawDOS` が生存——2026-10-30 作成、11-21T05:08Z プッシュ、**7★**——Show HN のトラフィック
+はリポジトリではなくサイトに乗っている。ここでスター数を読むとイベントを完全に誤読する。なぜ重要か：制約駆動
+のハーネスエンジニアリングは職人技が改善する方法——ここにあるすべてのアイデア（ストリーミングパーサ、ファイ
+ルシステムスコープのワークスペース、セッション横断メモリ）は 640K マシン用に作り直されることを強いられ、エー
+ジェントループに実際に何が必要かのストレステストになる。DreamCoder と nesformer に並ぶ、agents-writing-
+agents シリーズの今年最高のエントリ。
+
+Sources: [ClawDOS](http://ricapar.net/ClawDOS/) ·
+[Ricapar/ClawDOS](https://github.com/Ricapar/ClawDOS) ·
+[Show HN discussion](https://news.ycombinator.com/item?id=50586292)

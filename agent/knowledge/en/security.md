@@ -8138,3 +8138,48 @@ Sources: [NVD: CVE-2026-133949](https://nvd.nist.gov/view/vuln/detail?vulnId=CVE
 [tapo advisory GHSA-2cwc-6wwp-62q6](https://github.com/mihai-dinculescu/tapo/security/advisories/GHSA-2cwc-6wwp-62q6) ·
 [mcp-ssh-manager advisory GHSA-qwwm-vrm9-4mw8](https://github.com/bvisible/mcp-ssh-manager/security/advisories/GHSA-qwwm-vrm9-4mw8) ·
 [nginx security advisories](https://nginx.org/en/security_advisories.html)
+
+## 2026-11-21 (20:03 batch) — GPGME takes a hostile-key memory bug; a national host chooses total shutdown; two federal breach probes land together
+
+**GPGME `CVE-2026-129975` (internal T8557; no NVD record at this run's 12:49Z check — perishable
+absence)** — Werner Koch announced GPGME 2.3.1, fixing "a critical security bug found in all prior
+versions": a double-free triggered by an OpenPGP key carrying "a crafted very long user id." The
+mechanics are the stale-pointer class: the buffer-realloc path "is only assigned back to the context
+object at the end of the function," so an early return on a read error leaves the context holding
+freed memory that gets freed again — and allocator double-free checks may miss it "due to other
+allocations in between." The impact chain is unusually practical: "This double free can be used
+exfiltrate data from applications by sending for example signed data," and "Exploiting this bug to
+mount an Remote Code Execution attack (RCE) can't be ruled out. Thus an immediate update is highly
+suggested." The affected list is most of the OpenPGP desktop world — Gpg4win, GnuPG Desktop and
+VS-Desktop, "Most mail clients," many XMPP clients, Samba, Flatpak. The patch problem is the
+dependency tree: statically linked binaries need rebuilding against 2.3.1, and distro updates trail
+the announcement by days. GPGME is the library between applications and gpg — an application-side
+memory bug a hostile key reaches through ordinary signed email. (→ [[disclosure-lag]] for the
+disclosure-date story.)
+
+**Iceland's 1984 ehf — a national hosting provider chooses TOTAL shutdown.** The country's largest
+website/email host ("probably by far the largest provider… in Iceland" — MD Mörður Áslaugarson) took
+all services offline after a cyberattack on its front-end systems, tens of thousands of customers
+affected, CERT-IS + the Electronic Communications Office working it; restoration gradual, email and
+DNS first, tracked on a public status page. The detail that traveled is his characterization:
+"These are professionals, and this was probably an enormously well-funded attack. We're talking about
+tens of millions in artificial intelligence costs. It happened at a speed unlike anything anyone has
+ever even heard of." **The cost figure is a vendor's unverified claim** — no third party has priced
+it, no group attribution exists ("certain theories… none of them has been confirmed") — but the
+defensive shape is real: complete shutdown as the response, the mirror of this month's outage arc.
+
+**The FBI NCIC + USDA pair.** Per US media citing two people briefed, the FBI is investigating "an
+apparent breach of its criminal information database" — NCIC, the warrant/background-check system
+feeding arrests and officer-safety checks — its second incident this fall (September: ShinyHunters
+claimed data on all ~38,000 FBI staff). Separately USDA told employees its farm-payment system "had
+been targeted" (NBC, via two former officials). Whether the two are related or attributable is
+unclear. The context: this lands amid post-outage scrutiny — the same week the White House fired
+National Cyber Director Sean Cairncross — and after a month of officially-not-cyber outages, two
+simultaneous federal breach investigations make "was this one?" the default question for every
+future outage.
+
+Sources: [GnuPG advisory (gnupg-announce)](https://lists.gnupg.org/pipermail/gnupg-announce/2026q4/000517.html) ·
+[RÚV: Serious cyberattack thought backed by wealthy operators](https://www.ruv.is/english/2026-11-20-serious-cyberattack-thought-backed-by-wealthy-operators-493411) ·
+[1984 status page](https://status.1984.is/status/public) ·
+[BBC: FBI reportedly investigating apparent hack of its criminal database](https://www.bbc.com/news/articles/cvze7de86pk3o) ·
+[France24: US Agriculture Department and FBI hit by cyberattacks](https://www.france24.com/en/americas/20261121-us-agriculture-department-fbi-hit-by-cyberattacks-media-report)
